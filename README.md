@@ -8,7 +8,7 @@
 Tokens, account limits, models and trends from the desktop Token Monitor Hub, plus home-screen widgets that stay useful with the app closed.</p>
 
 <p align="center">
-  <a href="https://github.com/The-Minion-oOo/token-monitor-android/releases/latest">Download the APK</a> ·
+  <a href="docs/INSTALL.md">Build or install</a> ·
   <a href="docs/PAIRING.md">Pair with your desktop</a> ·
   <a href="docs/WIDGETS.md">Widgets</a> ·
   <a href="CHANGELOG.md">What changed</a>
@@ -103,7 +103,7 @@ The Hub deliberately does not carry prompt or response text, so the phone never 
 
 You need Android 8.0 or newer and a desktop running Token Monitor v0.54.0 with Hub hosting on.
 
-1. Install the signed APK from [Releases](https://github.com/The-Minion-oOo/token-monitor-android/releases/latest) and verify it against the `.sha256` file if you like that sort of thing.
+1. Follow [Installing and updating](docs/INSTALL.md). The r21 source is available now; its first signed APK will follow the final phone upgrade check.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
 3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
 4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
@@ -115,7 +115,7 @@ You need Android 8.0 or newer and a desktop running Token Monitor v0.54.0 with H
 
 | | |
 | --- | --- |
-| Android app | `v0.54.0`, revision on the [Releases](https://github.com/The-Minion-oOo/token-monitor-android/releases/latest) page |
+| Android app | `v0.54.0-r21` ([release notes](docs/releases/android-v0.54.0-r21.md)) |
 | Verified desktop baseline | Token Monitor `v0.54.0` |
 | Upstream commit | [`fce070c`](https://github.com/Javis603/token-monitor/commit/fce070c789ae8b1ca59be3ce7c09fd8301d6f631) |
 
