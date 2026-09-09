@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/widget_refresh_container" android:layout_width="48dp" android:layout_height="48dp">
+    <ImageView android:id="@+id/widget_refresh_fill" android:layout_width="30dp" android:layout_height="30dp" android:layout_gravity="center" android:src="@drawable/widget_button_fill" android:importantForAccessibility="no" />
+    <ImageView android:id="@+id/widget_refresh_border" android:layout_width="30dp" android:layout_height="30dp" android:layout_gravity="center" android:src="@drawable/widget_button_border" android:importantForAccessibility="no" />
+    <TextView android:id="@+id/widget_refresh" style="@style/WidgetButton" android:textSize="15sp" android:autoSizeTextType="none" android:text="@string/widget_refresh_short" android:contentDescription="@string/widget_refresh_description" />
+</FrameLayout>

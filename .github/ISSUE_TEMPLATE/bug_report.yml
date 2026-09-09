@@ -1,0 +1,32 @@
+name: Bug report
+description: Report unexpected dashboard, connection or widget behavior.
+title: ""
+body:
+  - type: markdown
+    attributes:
+      value: "Please don't paste your Hub secret, private addresses, account email, or real device and project names. For vulnerabilities, read SECURITY.md."
+  - type: input
+    id: version
+    attributes:
+      label: Android app and desktop versions
+      description: Include the Android revision shown in Settings → App updates.
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Phone, Android version and launcher
+      description: For widgets, include home-screen grid and text-size settings.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps, expected result and actual result
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshot or test-data reproduction
+      description: Check the image before attaching it. Share no private connection details.

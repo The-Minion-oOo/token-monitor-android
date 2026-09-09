@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/widget_root" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:paddingTop="4dp" android:paddingBottom="10dp" android:paddingStart="10dp" android:paddingEnd="10dp" android:background="@drawable/widget_background">
+    <LinearLayout android:id="@+id/widget_header" android:layout_width="match_parent" android:layout_height="48dp" android:gravity="center_vertical" android:baselineAligned="false">
+        <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@drawable/token_monitor_icon" android:importantForAccessibility="no" />
+        <TextView android:id="@+id/widget_date" style="@style/WidgetLabel" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:text="@string/widget_sample_date" />
+        <FrameLayout android:layout_width="56dp" android:layout_height="48dp">
+            <ImageView android:layout_width="40dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/widget_button_fill" android:tint="#2B4A41" android:importantForAccessibility="no" />
+            <ImageView android:layout_width="40dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/widget_button_border" android:tint="#B7EAD4" android:importantForAccessibility="no" />
+            <ImageView android:layout_width="14dp" android:layout_height="14dp" android:layout_gravity="center_vertical|end" android:layout_marginEnd="12dp" android:src="@drawable/widget_button_fill" android:tint="#B7EAD4" android:importantForAccessibility="no" />
+        </FrameLayout>
+    </LinearLayout>
+    <include layout="@layout/widget_counter_preview" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
+    <TextView style="@style/WidgetLabel" android:layout_width="match_parent" android:layout_height="16dp" android:gravity="center_vertical" android:text="@string/widget_sample_cost" />
+</LinearLayout>

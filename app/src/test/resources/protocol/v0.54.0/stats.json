@@ -1,0 +1,92 @@
+{
+  "updatedAt": "2026-09-04T15:35:10.000Z",
+  "periods": {
+    "today": {
+      "totalTokens": 125430,
+      "costUsd": 4.821,
+      "clients": { "codex": 81300, "claude": 44130 },
+      "clientCosts": { "codex": 3.79, "claude": 1.031 },
+      "clientCacheReads": { "codex": 60000, "claude": 30000 },
+      "clientCacheWrites": { "codex": 5000, "claude": 4000 },
+      "clientOutputs": { "codex": 9000, "claude": 7000 },
+      "clientUnclassifiedTokens": { "codex": 1000, "claude": 500 },
+      "models": { "gpt-5": 81300, "claude-sonnet-4-5": 44130 },
+      "modelCosts": { "gpt-5": 3.79, "claude-sonnet-4-5": 1.031 },
+      "modelCacheReads": { "gpt-5": 60000, "claude-sonnet-4-5": 30000 },
+      "modelCacheWrites": { "gpt-5": 5000, "claude-sonnet-4-5": 4000 },
+      "modelOutputs": { "gpt-5": 9000, "claude-sonnet-4-5": 7000 },
+      "modelUnclassifiedTokens": { "gpt-5": 1000, "claude-sonnet-4-5": 500 },
+      "projects": {
+        "github.com/example/token-monitor": {
+          "projectId": "github.com/example/token-monitor",
+          "projectLabel": "Token Monitor",
+          "tokens": 95700,
+          "costUsd": 3.91,
+          "sessionCount": 3,
+          "clients": { "codex": 81300, "claude": 14400 }
+        }
+      },
+      "sessions": {
+        "codex:session-001": {
+          "sessionId": "session-001",
+          "client": "codex",
+          "projectLabel": "Token Monitor",
+          "totalTokens": 55200,
+          "costUsd": 2.33,
+          "messageCount": 3,
+          "startedAt": "2026-09-04T14:30:00.000Z",
+          "models": { "gpt-5": 55200 },
+          "lastUsedAt": "2026-09-04T15:34:00.000Z"
+        }
+      },
+      "aNewUpstreamField": { "safe": true }
+    },
+    "month": { "totalTokens": 981233, "costUsd": 31.44, "clients": { "codex": 700000 }, "models": { "gpt-5": 700000 } },
+    "allTime": { "totalTokens": 4021451, "costUsd": 152.18, "clients": { "codex": 3100000 }, "models": { "gpt-5": 3100000 } }
+  },
+  "devices": [
+    {
+      "deviceId": "desktop-a",
+      "hostname": "Studio",
+      "platform": "win32",
+      "osName": "Windows",
+      "osVersion": "11 24H2",
+      "updatedAt": "2026-09-04T15:35:09.000Z",
+      "receivedAt": "2026-09-04T15:35:10.000Z",
+      "ageMs": 1000,
+      "stale": false,
+      "syncUploadIntervalMs": 0,
+      "trackedClients": ["codex", "claude"],
+      "periods": {
+        "today": { "totalTokens": 125430, "costUsd": 4.821, "clients": { "codex": 81300 }, "models": { "gpt-5": 81300 } }
+      }
+    }
+  ],
+  "limits": {
+    "updatedAt": "2026-09-04T15:34:59.000Z",
+    "providers": [
+      {
+        "provider": "codex",
+        "accountName": "Personal",
+        "accountEmail": "redacted@example.com",
+        "status": "ok",
+        "sourceDeviceId": "desktop-a",
+        "windows": [
+          { "kind": "weekly", "usedPercent": 36.0, "remainingPercent": 64.0, "resetsAt": "2026-09-09T00:00:00.000Z", "metric": "percent" }
+        ]
+      }
+    ]
+  },
+  "historyPreview": {
+    "daily": [
+      { "date": "2026-09-03", "tokens": 89120, "cost": 3.21, "activeTimeMs": 7200000 },
+      { "date": "2026-09-04", "tokens": 125430, "cost": 4.821, "activeTimeMs": 10800000 }
+    ],
+    "monthly": [ { "month": "2026-09", "tokens": 981233, "cost": 31.44, "activeTimeMs": 43200000 } ],
+    "summary": { "totalTokens": 4021451, "totalCost": 152.18 }
+  },
+  "historyRevision": "demo-history-revision",
+  "deviceHistoryRevision": "demo-device-history-revision",
+  "subscriptionsUpdatedAt": "2026-09-03T12:00:00.000Z",
+  "staleAfterMs": 300000
+}

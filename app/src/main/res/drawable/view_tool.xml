@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Geometry imported from Token Monitor v0.54.0 renderer/icons/views/tool.svg. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="@android:color/transparent" android:strokeColor="#FF000000" android:strokeWidth="2" android:strokeLineCap="round" android:strokeLineJoin="round" android:pathData="M5,7h14 M5,12h10 M5,17h7" />
+    <path android:fillColor="#FF000000" android:pathData="M18,15.5a1.5,1.5 0,1 0,0 3a1.5,1.5 0,1 0,0 -3" />
+</vector>

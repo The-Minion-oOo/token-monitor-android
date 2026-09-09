@@ -1,0 +1,16 @@
+name: Feature request
+description: Suggest an improvement to the Android companion.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What task are you trying to complete?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested behavior
+      description: Explain the benefit and any relevant desktop Hub support.
+    validations:
+      required: true

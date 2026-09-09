@@ -1,0 +1,17 @@
+<resources>
+    <string name="widget_brand">TOKEN MONITOR</string>
+    <string name="widget_placeholder">—</string>
+    <string name="widget_today">TODAY</string>
+    <string name="widget_refresh_short">↻</string>
+    <string name="widget_refresh_description">Refresh widget now</string>
+    <string name="widget_live_short">LIVE</string>
+    <string name="widget_live_description">Turn widget Live on for one hour</string>
+    <string name="widget_limits">LIMITS</string>
+    <string name="widget_no_limits">No quota windows reported</string>
+    <string name="widget_description">Starts small. Resize for limits and a seven-day chart. Refresh or turn Live on without opening the dashboard.</string>
+    <string name="widget_sample_tokens">3,474,544</string>
+    <string name="widget_sample_date">TUE, SEP 8</string>
+    <string name="widget_sample_cost">$1.67 · 1.8K msgs</string>
+    <string name="widget_week">7 DAYS</string>
+    <string name="widget_open_app">OPEN APP</string>
+</resources>

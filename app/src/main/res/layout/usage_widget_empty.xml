@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/widget_background" android:clipToOutline="true">
+    <ImageView android:id="@+id/widget_surface_color" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="fitXY" android:importantForAccessibility="no" />
+    <LinearLayout android:id="@+id/widget_root" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:paddingTop="4dp" android:paddingBottom="10dp" android:paddingStart="10dp" android:paddingEnd="10dp" android:baselineAligned="false">
+        <LinearLayout android:id="@+id/widget_header" android:layout_width="match_parent" android:layout_height="48dp" android:gravity="center_vertical" android:baselineAligned="false">
+            <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@drawable/token_monitor_icon" android:importantForAccessibility="no" />
+            <TextView android:id="@+id/widget_title" style="@style/WidgetBrand" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="6dp" android:text="@string/widget_brand" />
+            <TextView android:id="@+id/widget_status" style="@style/WidgetStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" />
+            <include layout="@layout/widget_toggle" android:layout_width="56dp" android:layout_height="48dp" android:layout_marginStart="2dp" />
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:paddingHorizontal="2dp">
+            <TextView android:id="@+id/widget_empty_title" style="@style/WidgetRow" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:textStyle="bold" android:maxLines="2" />
+            <TextView android:id="@+id/widget_empty_detail" style="@style/WidgetLabel" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:gravity="center" android:maxLines="3" />
+        </LinearLayout>
+        <FrameLayout android:layout_width="match_parent" android:layout_height="48dp">
+            <ImageView android:id="@+id/widget_refresh_fill" android:layout_width="match_parent" android:layout_height="36dp" android:layout_gravity="center_vertical" android:src="@drawable/widget_button_fill" android:importantForAccessibility="no" />
+            <ImageView android:id="@+id/widget_refresh_border" android:layout_width="match_parent" android:layout_height="36dp" android:layout_gravity="center_vertical" android:src="@drawable/widget_button_border" android:importantForAccessibility="no" />
+            <TextView android:id="@+id/widget_refresh" style="@style/WidgetCompactButton" android:text="@string/widget_open_app" android:contentDescription="@string/widget_open_app" />
+        </FrameLayout>
+    </LinearLayout>
+    <ImageView android:id="@+id/widget_surface_border" android:layout_width="match_parent" android:layout_height="match_parent" android:src="@drawable/widget_border" android:importantForAccessibility="no" />
+</FrameLayout>

@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="40dp">
+    <TextView android:id="@+id/widget_tokens" style="@style/WidgetNumber" android:text="@string/widget_sample_tokens"/>
+    <ViewFlipper android:id="@+id/widget_counter" android:layout_width="match_parent" android:layout_height="match_parent" android:animateFirstView="false" android:autoStart="false" android:inAnimation="@anim/widget_roll_in" android:outAnimation="@anim/widget_roll_out" android:visibility="gone">
+        <TextView android:id="@+id/widget_count_a" style="@style/WidgetNumber"/>
+        <TextView android:id="@+id/widget_count_b" style="@style/WidgetNumber"/>
+    </ViewFlipper>
+</FrameLayout>

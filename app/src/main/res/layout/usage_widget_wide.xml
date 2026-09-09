@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/widget_background" android:clipToOutline="true">
+    <ImageView android:id="@+id/widget_surface_color" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="fitXY" android:importantForAccessibility="no" />
+    <LinearLayout android:id="@+id/widget_root" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:paddingTop="4dp" android:paddingBottom="10dp" android:paddingStart="10dp" android:paddingEnd="10dp" android:baselineAligned="false">
+        <include layout="@layout/widget_header_brand"  />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:baselineAligned="false">
+            <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center_vertical">
+        <include layout="@layout/widget_counter" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:layout_marginTop="0dp" />
+        <TextView android:id="@+id/widget_cost" style="@style/WidgetLabel" android:layout_width="match_parent" android:layout_height="16dp" android:layout_marginTop="0dp" android:gravity="center_vertical" android:text="" />
+            </LinearLayout>
+            <include layout="@layout/widget_stats" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="10dp" android:layout_gravity="center_vertical" />
+        </LinearLayout>
+    </LinearLayout>
+    <ImageView android:id="@+id/widget_surface_border" android:layout_width="match_parent" android:layout_height="match_parent" android:src="@drawable/widget_border" android:importantForAccessibility="no" />
+</FrameLayout>

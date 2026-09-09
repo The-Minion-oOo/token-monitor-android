@@ -1,0 +1,45 @@
+name: Android interaction checks
+
+on:
+  push:
+    branches: [main]
+    paths: ['app/**', 'gradle/**', '*.gradle.kts', 'gradle.properties', '.github/workflows/emulator.yml']
+  pull_request:
+    paths: ['app/**', 'gradle/**', '*.gradle.kts', 'gradle.properties', '.github/workflows/emulator.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  interaction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v6
+      - name: Free disk space for the AVD
+        run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android/sdk/ndk /opt/ghc /usr/local/share/boost "$AGENT_TOOLSDIRECTORY/CodeQL"
+      - name: Enable emulator acceleration
+        run: sudo chmod 666 /dev/kvm
+      - name: Exercise synthetic dashboard and cache flows
+        uses: ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808 # v2
+        with:
+          api-level: 36
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          disk-size: 4096M
+          script: ./gradlew :app:connectedDebugAndroidTest -PtokenMonitorPreview=true --no-daemon --console=plain
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: android-interaction-results
+          path: |
+            app/build/reports/androidTests/
+            app/build/outputs/androidTest-results/
+          retention-days: 14

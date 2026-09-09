@@ -1,0 +1,350 @@
+package io.github.theminionooo.tokenmonitor.data
+
+import android.content.Context
+import io.github.theminionooo.tokenmonitor.data.network.BackoffPolicy
+import io.github.theminionooo.tokenmonitor.data.network.EndpointFailover
+import io.github.theminionooo.tokenmonitor.data.network.HubAddressValidation
+import io.github.theminionooo.tokenmonitor.data.network.HubAddressValidator
+import io.github.theminionooo.tokenmonitor.data.network.HubApiClient
+import io.github.theminionooo.tokenmonitor.data.network.HubApiException
+import io.github.theminionooo.tokenmonitor.data.network.WireHubSnapshot
+import io.github.theminionooo.tokenmonitor.data.protocol.HubProtocolParser
+import io.github.theminionooo.tokenmonitor.data.storage.SecureConnectionStore
+import io.github.theminionooo.tokenmonitor.data.storage.SerialDiskQueue
+import io.github.theminionooo.tokenmonitor.data.storage.SnapshotCache
+import io.github.theminionooo.tokenmonitor.domain.HubConnection
+import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
+import io.github.theminionooo.tokenmonitor.domain.HubStats
+import io.github.theminionooo.tokenmonitor.domain.DeviceUsage
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.ensureActive
+import kotlin.coroutines.coroutineContext
+import io.github.theminionooo.tokenmonitor.data.network.HubNetworkObserver
+import io.github.theminionooo.tokenmonitor.widget.UsageWidgetProvider
+
+internal data class HubRepositoryState(
+    val hasConnection: Boolean = false,
+    /** The saved Hub base address, for display only. The secret never enters UI state. */
+    val connectionUrl: String? = null,
+    /** The optional home Wi-Fi address tried when [connectionUrl] does not answer. */
+    val fallbackUrl: String? = null,
+    /** Whichever saved address answered most recently. */
+    val activeUrl: String? = null,
+    val allowLocalNetwork: Boolean = false,
+    val snapshot: HubSnapshot? = null,
+    val refreshing: Boolean = false,
+    val streamActive: Boolean = false,
+    val widgetLiveActive: Boolean = false,
+    val message: String? = null,
+)
+
+internal fun retainDeviceHistory(streamed: HubStats, previous: List<DeviceUsage>): HubStats = streamed.copy(
+    devices = streamed.devices.map { incoming ->
+        val existing = previous.firstOrNull { it.id == incoming.id }
+        if (existing != null && incoming.history.daily.isEmpty() && incoming.history.monthly.isEmpty()) {
+            incoming.copy(
+                historyAvailable = incoming.historyAvailable ?: existing.historyAvailable,
+                history = existing.history,
+            )
+        } else {
+            incoming
+        }
+    },
+)
+
+internal enum class HubWorkMode { Idle, WidgetPolling, DashboardStreaming }
+
+internal const val WIDGET_POLL_INTERVAL_MS = 30_000L
+
+internal fun selectHubWorkMode(dashboardVisible: Boolean, widgetActive: Boolean): HubWorkMode = when {
+    dashboardVisible -> HubWorkMode.DashboardStreaming
+    widgetActive -> HubWorkMode.WidgetPolling
+    else -> HubWorkMode.Idle
+}
+
+/** Owns state on the main dispatcher; socket and disk work run on IO dispatchers. */
+internal class HubRepository(context: Context) {
+    private val appContext = context.applicationContext
+    private val connectionStore = SecureConnectionStore(appContext)
+    private val cache = SnapshotCache(appContext)
+    private val backoff = BackoffPolicy()
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private val diskScope = CoroutineScope(SupervisorJob() + Dispatchers.IO.limitedParallelism(1))
+    private val diskQueue = SerialDiskQueue(diskScope)
+    private val network = HubNetworkObserver(appContext) { scope.launch { if (workAllowed) refreshNow() } }
+    private var connection: HubConnection? = connectionStore.read()
+    private var activeUrl: String? = connection?.baseUrl
+    private var lastWireSnapshot: WireHubSnapshot? = cache.read()
+    private val _state = MutableStateFlow(initialState())
+    val state: StateFlow<HubRepositoryState> = _state.asStateFlow()
+    private var pendingCacheWrite: WireHubSnapshot? = null
+    private var lastCacheWriteAt = 0L
+    private var foregroundJob: Job? = null
+    private var activeWorkMode = HubWorkMode.Idle
+    private var subscriptionJob: Job? = null
+    private var activeApi: HubApiClient? = null
+    private var dashboardVisible = false
+    private var widgetActive = false
+    private val desiredWorkMode get() = selectHubWorkMode(dashboardVisible, widgetActive)
+    private val workAllowed get() = desiredWorkMode != HubWorkMode.Idle
+    private var generation = 0L
+    private var lastSubscriptionAttemptAt = 0L
+    private var attemptedSubscriptionVersion = ""
+
+    fun setDashboardVisible(visible: Boolean) {
+        dashboardVisible = visible
+        reconcileWork()
+    }
+
+    fun setWidgetActive(active: Boolean) {
+        widgetActive = active
+        reconcileWork()
+    }
+
+    private fun reconcileWork() {
+        val desired = desiredWorkMode
+        if (desired == HubWorkMode.Idle) {
+            network.stop()
+            stopForegroundWork()
+            return
+        }
+        network.start()
+        if (foregroundJob?.isActive != true || activeWorkMode != desired) {
+            stopForegroundWork()
+            startForegroundWork(desired)
+        }
+    }
+
+    fun refreshNow() {
+        val desired = desiredWorkMode
+        if (connection == null || desired == HubWorkMode.Idle) return
+        stopForegroundWork()
+        startForegroundWork(desired)
+    }
+
+    suspend fun validateAndSave(rawUrl: String, rawFallbackUrl: String, secret: String, allowLocalNetwork: Boolean): String? {
+        val primary = when (val result = HubAddressValidator.validate(rawUrl, secret, allowLocalNetwork)) {
+            is HubAddressValidation.Allowed -> result.connection
+            is HubAddressValidation.Rejected -> return result.reason
+        }
+        val fallback = if (rawFallbackUrl.isBlank()) null else {
+            when (val result = HubAddressValidator.validate(rawFallbackUrl, secret, true)) {
+                is HubAddressValidation.Allowed -> result.connection.baseUrl
+                is HubAddressValidation.Rejected -> return "Home Wi-Fi address: ${result.reason}"
+            }
+        }
+        stopForegroundWork()
+        val token = generation
+        val candidate = primary.copy(fallbackUrl = fallback?.takeIf { it != primary.baseUrl })
+        val api = HubApiClient().also { activeApi = it }
+        return try {
+            val (url, wire) = withContext(Dispatchers.IO) {
+                EndpointFailover.run(EndpointFailover.candidates(candidate, null)) { api.loadSnapshot(candidate.copy(baseUrl = it)) }
+            }
+            coroutineContext.ensureActive()
+            if (generation != token) return "Connection check cancelled. Try again."
+            val snapshot = withContext(Dispatchers.IO) { parse(wire) }
+            if (generation != token) return "Connection check cancelled. Try again."
+            connectionStore.save(candidate)
+            connection = candidate
+            activeUrl = url
+            applySuccess(wire, snapshot)
+            null
+        } catch (cancelled: CancellationException) { throw cancelled }
+        catch (error: HubApiException) { error.presentation }
+        catch (_: Exception) { "The Hub could not be verified. Check the private address and try again." }
+        finally { api.close(); if (activeApi === api) activeApi = null }
+    }
+
+    fun disconnect() {
+        stopForegroundWork()
+        connection = null
+        activeUrl = null
+        lastWireSnapshot = null
+        pendingCacheWrite = null
+        connectionStore.clear()
+        diskQueue.enqueue { cache.clear(); UsageWidgetProvider.refresh(appContext) }
+        _state.value = HubRepositoryState()
+    }
+
+    fun close() {
+        network.stop()
+        stopForegroundWork()
+        scope.cancel()
+        diskQueue.closeWhenIdle()
+    }
+
+    private fun initialState(): HubRepositoryState = HubRepositoryState(
+        hasConnection = connection != null,
+        connectionUrl = connection?.baseUrl,
+        fallbackUrl = connection?.fallbackUrl,
+        activeUrl = activeUrl,
+        allowLocalNetwork = connection?.allowLocalNetwork ?: false,
+        snapshot = if (connection == null) null else lastWireSnapshot?.let { runCatching { parse(it, true) }.getOrNull() },
+    )
+
+    private fun startForegroundWork(mode: HubWorkMode = desiredWorkMode) {
+        val saved = connection ?: return
+        if (mode == HubWorkMode.Idle || mode != desiredWorkMode || foregroundJob?.isActive == true) return
+        val token = generation
+        val api = HubApiClient().also { activeApi = it }
+        activeWorkMode = mode
+        foregroundJob = scope.launch {
+            var attempt = 0
+            try {
+                while (desiredWorkMode == mode && generation == token) {
+                    try {
+                        _state.update { it.copy(refreshing = true, message = null) }
+                        val (url, wire) = withContext(Dispatchers.IO) {
+                            EndpointFailover.run(EndpointFailover.candidates(saved, activeUrl)) { api.loadSnapshot(saved.copy(baseUrl = it)) }
+                        }
+                        ensureActive()
+                        if (generation != token) break
+                        val snapshot = withContext(Dispatchers.IO) { parse(wire) }
+                        if (generation != token) break
+                        activeUrl = url
+                        applySuccess(wire, snapshot)
+                        when (mode) {
+                            HubWorkMode.DashboardStreaming -> withContext(Dispatchers.IO) {
+                                api.streamStats(saved.copy(baseUrl = url),
+                                    onOpen = { withContext(Dispatchers.Main.immediate) {
+                                        if (generation == token) _state.update { it.copy(streamActive = true, widgetLiveActive = false) }
+                                    } },
+                                    onData = { raw -> withContext(Dispatchers.Main.immediate) {
+                                        if (generation == token) {
+                                            if (applyStatsUpdate(raw, token, streamEnvelope = true)) attempt = 0
+                                            refreshSubscriptions(saved, api, token)
+                                        }
+                                    } },
+                                )
+                            }
+                            HubWorkMode.WidgetPolling -> {
+                                _state.update { it.copy(streamActive = false, widgetLiveActive = true) }
+                                while (desiredWorkMode == mode && generation == token) {
+                                    delay(WIDGET_POLL_INTERVAL_MS)
+                                    val raw = withContext(Dispatchers.IO) {
+                                        api.getStats(saved.copy(baseUrl = url))
+                                    }
+                                    ensureActive()
+                                    if (generation != token || desiredWorkMode != mode) break
+                                    if (applyStatsUpdate(raw, token, streamEnvelope = false)) attempt = 0
+                                    refreshSubscriptions(saved, api, token)
+                                }
+                            }
+                            HubWorkMode.Idle -> Unit
+                        }
+                        if (generation == token) _state.update { it.copy(streamActive = false, widgetLiveActive = false, message = "Live updates paused. Retrying...") }
+                    } catch (cancelled: CancellationException) { throw cancelled }
+                    catch (error: Exception) {
+                        if (generation != token) break
+                        val rejected = error is HubApiException && error.statusCode == 401
+                        _state.update { it.copy(refreshing = false, streamActive = false, widgetLiveActive = false,
+                            message = if (error is HubApiException) error.presentation else "Hub unavailable. Showing the last successful snapshot; retrying...") }
+                        if (rejected) break
+                        activeUrl = EndpointFailover.candidates(saved, activeUrl).getOrNull(1) ?: activeUrl
+                    }
+                    delay(backoff.delayForAttempt(attempt++))
+                }
+            } finally {
+                api.close()
+                if (generation == token) {
+                    activeWorkMode = HubWorkMode.Idle
+                    _state.update { it.copy(refreshing = false, streamActive = false, widgetLiveActive = false) }
+                }
+            }
+        }
+    }
+
+    private fun stopForegroundWork() {
+        generation++
+        activeApi?.close()
+        activeApi = null
+        foregroundJob?.cancel()
+        foregroundJob = null
+        activeWorkMode = HubWorkMode.Idle
+        subscriptionJob?.cancel()
+        subscriptionJob = null
+        _state.update { it.copy(refreshing = false, streamActive = false, widgetLiveActive = false) }
+        pendingCacheWrite?.let { persist(it, force = true) }
+    }
+
+    private fun persist(wire: WireHubSnapshot, force: Boolean) {
+        val now = System.currentTimeMillis()
+        if (force || now - lastCacheWriteAt >= 60_000L) {
+            pendingCacheWrite = null
+            lastCacheWriteAt = now
+            diskQueue.enqueue { cache.save(wire); UsageWidgetProvider.refresh(appContext) }
+        } else pendingCacheWrite = wire
+    }
+
+    private fun parse(wire: WireHubSnapshot, cached: Boolean = false): HubSnapshot = HubProtocolParser.decodeSnapshot(
+        wire.health, wire.stats, wire.devices, wire.history, wire.subscriptions, wire.capturedAt, cached,
+    ).also { if (!it.health.ok || it.health.role != "hub") throw HubApiException(200, "The address is not a Token Monitor Hub.") }
+
+    private fun applySuccess(wire: WireHubSnapshot, snapshot: HubSnapshot) {
+        lastWireSnapshot = wire
+        persist(wire, true)
+        _state.value = HubRepositoryState(
+            hasConnection = connection != null, connectionUrl = connection?.baseUrl,
+            fallbackUrl = connection?.fallbackUrl, activeUrl = activeUrl,
+            allowLocalNetwork = connection?.allowLocalNetwork ?: false, snapshot = snapshot,
+        )
+    }
+
+    private suspend fun applyStatsUpdate(raw: String, token: Long, streamEnvelope: Boolean): Boolean {
+        val previous = _state.value.snapshot ?: return false
+        val wire = lastWireSnapshot ?: return false
+        val parsed = withContext(Dispatchers.IO) {
+            val stats = if (streamEnvelope) HubProtocolParser.decodeStatsStreamEvent(raw)
+            else runCatching { HubProtocolParser.decodeStats(raw) }.getOrNull()
+            stats ?: return@withContext null
+            val updatedWire = wire.copy(stats = HubProtocolParser.normalizeStatsJson(raw), capturedAt = System.currentTimeMillis())
+            val decoded = parse(updatedWire)
+            updatedWire to decoded.copy(stats = retainDeviceHistory(stats, previous.stats.devices))
+        } ?: return false
+        if (generation != token) return false
+        // A subscription request may complete while this event is being parsed.
+        val updatedWire = parsed.first.copy(subscriptions = lastWireSnapshot?.subscriptions)
+        val next = parsed.second.copy(subscriptions = _state.value.snapshot?.subscriptions ?: parsed.second.subscriptions)
+        lastWireSnapshot = updatedWire
+        _state.update { it.copy(snapshot = next, message = null) }
+        persist(updatedWire, false)
+        return true
+    }
+
+    private fun refreshSubscriptions(saved: HubConnection, api: HubApiClient, token: Long) {
+        val snapshot = _state.value.snapshot ?: return
+        val version = snapshot.stats.subscriptionsUpdatedAt
+        if (version.isBlank() || version == snapshot.subscriptions.updatedAt || subscriptionJob?.isActive == true) return
+        val now = System.currentTimeMillis()
+        if (version == attemptedSubscriptionVersion && now - lastSubscriptionAttemptAt < 60_000L) return
+        attemptedSubscriptionVersion = version
+        lastSubscriptionAttemptAt = now
+        val route = activeUrl ?: saved.baseUrl
+        subscriptionJob = scope.launch {
+            try {
+                val raw = withContext(Dispatchers.IO) { api.getSubscriptions(saved.copy(baseUrl = route)) }
+                ensureActive()
+                if (generation != token) return@launch
+                val current = _state.value.snapshot ?: return@launch
+                val subscriptions = HubProtocolParser.decodeSubscriptions(raw)
+                _state.update { it.copy(snapshot = current.copy(subscriptions = subscriptions)) }
+                lastWireSnapshot?.copy(subscriptions = raw)?.let { lastWireSnapshot = it; persist(it, true) }
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (_: Exception) { /* Keep the last good list; retry the same version after a minute. */ }
+        }
+    }
+
+}

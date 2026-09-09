@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.TokenMonitor.Base" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:windowBackground">@color/shell</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@color/shell</item>
+        <item name="android:statusBarColor">@color/shell</item>
+    </style>
+    <style name="Theme.TokenMonitor" parent="Theme.TokenMonitor.Base" />
+</resources>

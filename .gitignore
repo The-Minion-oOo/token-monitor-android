@@ -1,0 +1,16 @@
+*.iml
+.gradle/
+.idea/
+.kotlin/
+.bootstrap-gradle/
+local.properties
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+app/build/
+*.jks
+*.keystore
+secrets.properties
+
+node_modules/

@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/widget_stats" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="end" android:layout_marginStart="10dp">
+    <LinearLayout android:id="@+id/widget_stat_1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="end">
+        <TextView android:id="@+id/widget_stat_1_value" style="@style/WidgetRow" android:layout_width="wrap_content" android:layout_height="14dp" android:gravity="end|center_vertical" android:textSize="13sp" android:textStyle="bold" />
+        <TextView android:id="@+id/widget_stat_1_label" style="@style/WidgetStatus" android:layout_width="wrap_content" android:layout_height="11dp" android:gravity="end|center_vertical" android:textSize="8sp" android:textStyle="normal" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/widget_stat_2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="end" android:layout_marginTop="2dp">
+        <TextView android:id="@+id/widget_stat_2_value" style="@style/WidgetRow" android:layout_width="wrap_content" android:layout_height="14dp" android:gravity="end|center_vertical" android:textSize="13sp" android:textStyle="bold" />
+        <TextView android:id="@+id/widget_stat_2_label" style="@style/WidgetStatus" android:layout_width="wrap_content" android:layout_height="11dp" android:gravity="end|center_vertical" android:textSize="8sp" android:textStyle="normal" />
+    </LinearLayout>
+    <LinearLayout android:id="@+id/widget_stat_3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:gravity="end" android:layout_marginTop="2dp">
+        <TextView android:id="@+id/widget_stat_3_value" style="@style/WidgetRow" android:layout_width="wrap_content" android:layout_height="14dp" android:gravity="end|center_vertical" android:textSize="13sp" android:textStyle="bold" />
+        <TextView android:id="@+id/widget_stat_3_label" style="@style/WidgetStatus" android:layout_width="wrap_content" android:layout_height="11dp" android:gravity="end|center_vertical" android:textSize="8sp" android:textStyle="normal" />
+    </LinearLayout>
+</LinearLayout>

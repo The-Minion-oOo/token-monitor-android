@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/widget_background" android:clipToOutline="true">
+    <ImageView android:id="@+id/widget_surface_color" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="fitXY" android:importantForAccessibility="no" />
+    <LinearLayout android:id="@+id/widget_root" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:paddingTop="4dp" android:paddingBottom="10dp" android:paddingStart="10dp" android:paddingEnd="10dp" android:baselineAligned="false">
+        <include layout="@layout/widget_header_date"  />
+        <include layout="@layout/widget_counter" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:layout_marginTop="0dp" />
+        <TextView android:id="@+id/widget_cost" style="@style/WidgetLabel" android:layout_width="match_parent" android:layout_height="16dp" android:layout_marginTop="0dp" android:gravity="center_vertical" android:text="" />
+        <include layout="@layout/widget_tools" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="6dp" />
+        <LinearLayout android:id="@+id/widget_limits" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="2dp">
+        <LinearLayout android:id="@+id/widget_quota_1" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginTop="4dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="16dp" android:gravity="center_vertical" android:baselineAligned="false">
+                <ImageView android:id="@+id/widget_logo_1" android:layout_width="12dp" android:layout_height="12dp" android:layout_marginEnd="6dp" android:importantForAccessibility="no" />
+                <TextView android:id="@+id/widget_provider_1" style="@style/WidgetRow" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" />
+                <TextView android:id="@+id/widget_percent_1" style="@style/WidgetRow" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="8dp" />
+            </LinearLayout>
+            <ImageView android:id="@+id/widget_bar_1" android:layout_width="match_parent" android:layout_height="4dp" android:layout_marginTop="3dp" android:scaleType="fitXY" android:importantForAccessibility="no" />
+        </LinearLayout>
+
+        <TextView android:id="@+id/widget_no_limits" style="@style/WidgetLabel" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/widget_no_limits" android:visibility="gone" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/widget_footer" android:layout_width="match_parent" android:layout_height="48dp" android:gravity="center_vertical" android:baselineAligned="false">
+            <include layout="@layout/widget_refresh_icon" android:layout_width="48dp" android:layout_height="48dp" />
+            <TextView android:id="@+id/widget_time" style="@style/WidgetLabel" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:text="" />
+        </LinearLayout>
+    </LinearLayout>
+    <ImageView android:id="@+id/widget_surface_border" android:layout_width="match_parent" android:layout_height="match_parent" android:src="@drawable/widget_border" android:importantForAccessibility="no" />
+</FrameLayout>

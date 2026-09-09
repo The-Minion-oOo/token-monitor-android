@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/widget_chart" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:orientation="vertical">
+    <LinearLayout android:id="@+id/widget_chart_head" android:layout_width="match_parent" android:layout_height="16dp" android:gravity="center_vertical" android:baselineAligned="false">
+        <TextView android:id="@+id/widget_chart_title" style="@style/WidgetSection" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="@string/widget_week" />
+        <TextView android:id="@+id/widget_chart_total" style="@style/WidgetLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="end" />
+    </LinearLayout>
+    <ImageView android:id="@+id/widget_chart_bars" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:layout_marginTop="4dp" android:scaleType="fitXY" android:importantForAccessibility="no" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="14dp" android:layout_marginTop="2dp" android:baselineAligned="false">
+        <TextView android:id="@+id/widget_day_0" style="@style/WidgetLabel" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:gravity="center" android:textSize="10sp" />
+        <TextView android:id="@+id/widget_day_1" style="@style/WidgetLabel" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:gravity="center" android:textSize="10sp" />
+        <TextView android:id="@+id/widget_day_2" style="@style/WidgetLabel" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:gravity="center" android:textSize="10sp" />
+        <TextView android:id="@+id/widget_day_3" style="@style/WidgetLabel" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:gravity="center" android:textSize="10sp" />
+        <TextView android:id="@+id/widget_day_4" style="@style/WidgetLabel" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:gravity="center" android:textSize="10sp" />
+        <TextView android:id="@+id/widget_day_5" style="@style/WidgetLabel" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:gravity="center" android:textSize="10sp" />
+        <TextView android:id="@+id/widget_day_6" style="@style/WidgetLabel" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:gravity="center" android:textSize="10sp" />
+    </LinearLayout>
+</LinearLayout>

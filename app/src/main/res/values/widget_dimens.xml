@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Launchers before Android 12 have no shared widget radius; 24dp sits between Pixel and One UI. -->
+    <dimen name="widget_corner_radius">24dp</dimen>
+    <dimen name="widget_control_radius">18dp</dimen>
+</resources>

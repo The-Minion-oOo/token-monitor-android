@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/widget_live_container" android:layout_width="56dp" android:layout_height="48dp">
+    <ImageView android:id="@+id/widget_live_fill" android:layout_width="40dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/widget_button_fill" android:importantForAccessibility="no" />
+    <ImageView android:id="@+id/widget_live_border" android:layout_width="40dp" android:layout_height="22dp" android:layout_gravity="center" android:src="@drawable/widget_button_border" android:importantForAccessibility="no" />
+    <ImageView android:id="@+id/widget_live_glow" android:layout_width="34dp" android:layout_height="34dp" android:layout_gravity="center_vertical|end" android:layout_marginEnd="2dp" android:importantForAccessibility="no" />
+    <ImageView android:id="@+id/widget_knob_off" android:layout_width="14dp" android:layout_height="14dp" android:layout_gravity="center_vertical|start" android:layout_marginStart="12dp" android:src="@drawable/widget_button_fill" android:importantForAccessibility="no" />
+    <ImageView android:id="@+id/widget_knob_on" android:layout_width="14dp" android:layout_height="14dp" android:layout_gravity="center_vertical|end" android:layout_marginEnd="12dp" android:src="@drawable/widget_button_fill" android:importantForAccessibility="no" />
+    <TextView android:id="@+id/widget_live" style="@style/WidgetButton" android:text="" android:contentDescription="@string/widget_live_description" />
+</FrameLayout>

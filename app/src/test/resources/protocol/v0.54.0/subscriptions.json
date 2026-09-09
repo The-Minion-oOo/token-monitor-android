@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "updatedAt": "2026-09-03T12:00:00.000Z",
+  "subscriptions": [
+    {
+      "id": "sub_redacted_codex",
+      "provider": "codex",
+      "planName": "Plus",
+      "amountMinor": 2000,
+      "currency": "USD",
+      "startDate": "2026-08-01",
+      "interval": "month",
+      "autoRenew": true,
+      "accountKey": "redacted"
+    }
+  ]
+}

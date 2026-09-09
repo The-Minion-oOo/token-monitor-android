@@ -1,0 +1,29 @@
+{
+  "daily": [
+    {
+      "date": "2026-09-02",
+      "tokens": 71310,
+      "cost": 2.98,
+      "messages": 7,
+      "activeTimeMs": 5400000,
+      "cacheReadTokens": 50000,
+      "cacheWriteTokens": 2500,
+      "outputTokens": 6310,
+      "unclassifiedTokens": 0,
+      "tokenComponentsAvailable": true,
+      "perClient": {
+        "codex": { "tokens": 71310, "cost": 2.98, "cacheReadTokens": 50000, "cacheWriteTokens": 2500, "outputTokens": 6310, "unclassifiedTokens": 0 }
+      },
+      "perModel": {
+        "gpt-5": { "tokens": 71310, "cost": 2.98, "cacheReadTokens": 50000, "cacheWriteTokens": 2500, "outputTokens": 6310, "unclassifiedTokens": 0 }
+      }
+    },
+    { "date": "2026-09-03", "tokens": 89120, "cost": 3.21, "activeTimeMs": 7200000 },
+    { "date": "2026-09-04", "tokens": 125430, "cost": 4.821, "activeTimeMs": 10800000 }
+  ],
+  "monthly": [
+    { "month": "2026-08", "tokens": 3015120, "cost": 120.74, "activeTimeMs": 140400000 },
+    { "month": "2026-09", "tokens": 981233, "cost": 31.44, "activeTimeMs": 43200000 }
+  ],
+  "summary": { "totalTokens": 4021451, "totalCost": 152.18 }
+}

@@ -1,0 +1,2 @@
+event: snapshot
+data: {"type":"stats","reason":"snapshot","stats":{"updatedAt":"2026-09-04T15:35:10.000Z","periods":{"today":{"totalTokens":125430,"costUsd":4.821,"clients":{"codex":81300},"models":{"gpt-5":81300}},"month":{"totalTokens":981233,"costUsd":31.44},"allTime":{"totalTokens":4021451,"costUsd":152.18}},"devices":[],"limits":{"updatedAt":"2026-09-04T15:34:59.000Z","providers":[]},"historyPreview":{"daily":[],"monthly":[]},"subscriptionsUpdatedAt":"2026-09-03T12:00:00.000Z","staleAfterMs":300000},"at":"2026-09-04T15:35:10.000Z"}

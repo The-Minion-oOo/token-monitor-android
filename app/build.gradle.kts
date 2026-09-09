@@ -1,0 +1,102 @@
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.compose.compiler)
+}
+
+val appVersionCode = providers.gradleProperty("tokenMonitorVersionCode").get().toInt()
+val appVersionName = providers.gradleProperty("tokenMonitorVersionName").get()
+val upstreamVersion = providers.gradleProperty("tokenMonitorUpstreamVersion").get()
+val upstreamTag = providers.gradleProperty("tokenMonitorUpstreamTag").get()
+val upstreamCommit = providers.gradleProperty("tokenMonitorUpstreamCommit").get()
+val releaseStoreFile = providers.environmentVariable("ANDROID_KEYSTORE_FILE").orNull
+val releaseStorePassword = providers.environmentVariable("ANDROID_KEYSTORE_PASSWORD").orNull
+val releaseKeyAlias = providers.environmentVariable("ANDROID_KEY_ALIAS").orNull
+val releaseKeyPassword = providers.environmentVariable("ANDROID_KEY_PASSWORD").orNull
+val hasReleaseSigning = listOf(releaseStoreFile, releaseStorePassword, releaseKeyAlias, releaseKeyPassword).all { !it.isNullOrBlank() }
+// `-PtokenMonitorPreview=true` installs a side-by-side debug copy for fixture screenshots
+// without touching the real pairing stored by the normally installed app.
+val previewInstall = providers.gradleProperty("tokenMonitorPreview").orNull == "true"
+
+android {
+    namespace = "io.github.theminionooo.tokenmonitor"
+    compileSdk = 37
+
+    defaultConfig {
+        applicationId = "io.github.theminionooo.tokenmonitor"
+        minSdk = 26
+        targetSdk = 37
+        versionCode = appVersionCode
+        versionName = appVersionName
+
+        buildConfigField("String", "UPSTREAM_VERSION", "\"$upstreamVersion\"")
+        buildConfigField("String", "UPSTREAM_TAG", "\"$upstreamTag\"")
+        buildConfigField("String", "UPSTREAM_COMMIT", "\"$upstreamCommit\"")
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("release") {
+                storeFile = file(requireNotNull(releaseStoreFile))
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+                enableV1Signing = true
+                enableV2Signing = true
+                enableV3Signing = true
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            if (previewInstall) applicationIdSuffix = ".preview"
+        }
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            signingConfig = signingConfigs.findByName("release")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    sourceSets.getByName("androidTest").assets.directories.add("src/test/resources")
+
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+
+    packaging {
+        resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
+    }
+}
+
+dependencies {
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.kotlinx.serialization.json)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    androidTestImplementation("androidx.test:runner:1.7.0")
+}

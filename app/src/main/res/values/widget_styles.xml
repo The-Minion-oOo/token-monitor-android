@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+<resources>
+    <!-- Dashboard type: monospace labels and sections, a tabular sans figure. Colors are set at render time. -->
+    <style name="WidgetLabel">
+        <item name="android:textColor">#A3ADBB</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="WidgetRow" parent="WidgetLabel">
+        <item name="android:textColor">#EEF5FB</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="WidgetSection" parent="WidgetLabel">
+        <item name="android:textColor">#EEF5FB</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.06</item>
+    </style>
+    <style name="WidgetBrand" parent="WidgetSection">
+        <item name="android:textSize">13sp</item>
+    </style>
+    <style name="WidgetStatus" parent="WidgetLabel">
+        <item name="android:textSize">10sp</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="WidgetNumber">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">#EEF5FB</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:autoSizeTextType">uniform</item>
+        <item name="android:autoSizeMinTextSize">5sp</item>
+        <item name="android:autoSizeMaxTextSize">44sp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:autoSizeStepGranularity">1sp</item>
+    </style>
+    <style name="WidgetButton" parent="WidgetLabel">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.06</item>
+        <item name="android:textColor">#EEF5FB</item>
+        <item name="android:autoSizeTextType">uniform</item>
+        <item name="android:autoSizeMinTextSize">9sp</item>
+        <item name="android:autoSizeMaxTextSize">12sp</item>
+        <item name="android:paddingHorizontal">6dp</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    <style name="WidgetCompactButton" parent="WidgetButton">
+        <item name="android:textSize">11sp</item>
+        <item name="android:autoSizeMaxTextSize">11sp</item>
+        <item name="android:paddingHorizontal">2dp</item>
+    </style>
+    <style name="Theme.WidgetControl" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+</resources>
