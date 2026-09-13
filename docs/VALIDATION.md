@@ -1,10 +1,10 @@
 # Validation
 
-The current public pre-release is Android **v0.56.0 r4** (`560004`). The latest
+The current public release is Android **v0.56.0 r4** (`560004`). The latest
 phone-verified build is **v0.54.0 r20** (`540020`). r4 is based on desktop Token
 Monitor v0.56.0 while retaining explicit v0.54.0 and v0.55.0 compatibility
-coverage. Its final stable-release gate is installation and launcher inspection
-on the Galaxy S25 Ultra; emulator results are not presented as One UI verification.
+coverage. Installation and launcher inspection on the Galaxy S25 Ultra remain
+pending; emulator results are not presented as One UI verification.
 
 ## Current development checks
 
@@ -118,7 +118,7 @@ The signed r4 APK reports version code `560004`, matches certificate SHA-256
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`,
 and has file SHA-256
 `5aee9e2bd59582f08abab295c76272b8cbc994b346e55b1f79a7d7ec009216e4`.
-It is published as GitHub pre-release `android-v0.56.0-r4` with that APK and
+It is published as GitHub release `android-v0.56.0-r4` with that APK and
 checksum file.
 Physical-phone installation and One UI inspection remain pending because only
 the API 36 emulator was visible over ADB during final packaging.
