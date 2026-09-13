@@ -9,9 +9,9 @@
 ## Install
 
 A signed v0.56.0 r4 APK is available from the public
-[pre-release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.56.0-r4).
-Its automated, emulator, and signing checks pass. It remains a pre-release until
-installation and launcher inspection on the physical Galaxy S25 Ultra are complete.
+[release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.56.0-r4).
+Its automated, emulator, and signing checks pass. Samsung-specific installation
+and launcher inspection status is recorded in [Validation](VALIDATION.md).
 
 To build the current source, install JDK 17 and Android SDK 37, then run:
 

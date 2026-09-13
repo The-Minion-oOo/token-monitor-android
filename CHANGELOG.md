@@ -6,7 +6,7 @@ release that first shipped it.
 
 ## v0.56.0 — September 13, 2026
 
-### r4 (pre-release)
+### r4
 
 - Verify protocol compatibility with desktop Token Monitor v0.56.0, including
   typed reset/expiry boundaries and background-review session metadata. Older
