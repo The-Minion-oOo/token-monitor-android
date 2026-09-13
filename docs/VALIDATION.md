@@ -39,7 +39,7 @@ notification rendered and operated on the phone.
 r20 also completed a 25-minute screen-off widget Live measurement on the same
 phone. Android attributed about 1.54 mAh to the app and reported 52.7 MB PSS, but
 the session received 104.19 MB and posted 698 notification updates. Those results
-led to r21's 30-second stats refresh and notification deduplication.
+led to the current source's 30-second stats refresh and notification deduplication.
 
 The signed v0.55.0 r1 candidate was installed in place on the Galaxy S25 Ultra
 on September 10, 2026. Its certificate matched the installed app, and Android

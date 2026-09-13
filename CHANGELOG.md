@@ -22,11 +22,6 @@ release that first shipped it.
   the same wide proportions and information hierarchy as the installed widget.
 - Replace the widget refresh text glyph with a vector icon in a transparent
   48 dp touch target while retaining the existing five responsive widget sizes.
-
-## v0.54.0 — September 9, 2026
-
-### r21
-
 - Keep immediate streaming while the dashboard is open, and use a lighter
   30-second stats refresh during an explicit widget Live session.
 - Repost the Live notification only when its visible content changes.
