@@ -13,6 +13,6 @@
 Compatible with Android 8.0+ and desktop Token Monitor v0.56.0. Install over the
 existing release to preserve pairing. See [Install and update](../INSTALL.md).
 
-This release remains a signed candidate until its exact APK is installed and the
+This build is published as a pre-release until its exact APK is installed and the
 four pages are inspected on the Galaxy S25 Ultra. Automated and emulator evidence
 is recorded in [Validation](../VALIDATION.md).

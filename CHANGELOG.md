@@ -4,7 +4,9 @@ Android releases use the desktop protocol version plus an Android revision. Only
 published revisions appear below; unreleased candidate work is folded into the
 release that first shipped it.
 
-## Unreleased
+## v0.56.0 — September 13, 2026
+
+### r4 (pre-release)
 
 - Verify protocol compatibility with desktop Token Monitor v0.56.0, including
   typed reset/expiry boundaries and background-review session metadata. Older
