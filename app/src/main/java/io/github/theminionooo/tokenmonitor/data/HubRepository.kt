@@ -32,7 +32,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.ensureActive
 import kotlin.coroutines.coroutineContext
 import io.github.theminionooo.tokenmonitor.data.network.HubNetworkObserver
-import io.github.theminionooo.tokenmonitor.widget.UsageWidgetProvider
+import io.github.theminionooo.tokenmonitor.widget.WidgetUpdateCoordinator
 
 internal data class HubRepositoryState(
     val hasConnection: Boolean = false,
@@ -175,7 +175,7 @@ internal class HubRepository(context: Context) {
         lastWireSnapshot = null
         pendingCacheWrite = null
         connectionStore.clear()
-        diskQueue.enqueue { cache.clear(); UsageWidgetProvider.refresh(appContext) }
+        diskQueue.enqueue { cache.clear(); WidgetUpdateCoordinator.refresh(appContext) }
         _state.value = HubRepositoryState()
     }
 
@@ -285,7 +285,7 @@ internal class HubRepository(context: Context) {
         if (force || now - lastCacheWriteAt >= 60_000L) {
             pendingCacheWrite = null
             lastCacheWriteAt = now
-            diskQueue.enqueue { cache.save(wire); UsageWidgetProvider.refresh(appContext) }
+            diskQueue.enqueue { cache.save(wire); WidgetUpdateCoordinator.refresh(appContext) }
         } else pendingCacheWrite = wire
     }
 

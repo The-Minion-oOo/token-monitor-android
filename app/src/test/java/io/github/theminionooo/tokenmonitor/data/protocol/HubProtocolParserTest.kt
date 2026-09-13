@@ -21,6 +21,8 @@ class HubProtocolParserTest {
         assertTrue(snapshot.health.ok)
         assertEquals("node-hub", snapshot.health.runtime)
         assertEquals(125_430, snapshot.today.totalTokens)
+        assertFalse(snapshot.today.throughputAvailable)
+        assertEquals(0, snapshot.today.timedTokens)
         assertEquals(2, snapshot.today.clients.size)
         assertEquals(60_000, snapshot.today.clientCacheReads.getValue("codex"))
         assertEquals(9_000, snapshot.today.clientOutputs.getValue("codex"))
@@ -51,6 +53,48 @@ class HubProtocolParserTest {
         assertTrue(stats.devices.isEmpty())
         assertTrue(stats.limits.providers.isEmpty())
         assertTrue(stats.historyPreview.daily.isEmpty())
+        assertFalse(stats.periods.getValue("today").throughputAvailable)
+    }
+
+    @Test
+    fun `v0 55 throughput counters preserve capability provenance`() {
+        val stats = HubProtocolParser.decodeStats(resource("stats.json", "v0.55.0"))
+        val today = stats.periods.getValue("today")
+
+        assertTrue(today.throughputAvailable)
+        assertEquals(118_000, today.timedTokens)
+        assertEquals(14_500, today.timedOutputTokens)
+        assertEquals(58_000, today.timedDurationMs)
+
+        val legacy = HubProtocolParser.decodeStats(resource("stats.json", "v0.54.0"))
+        assertFalse(legacy.periods.getValue("today").throughputAvailable)
+
+        val explicitlyUnavailable = HubProtocolParser.decodeStats(
+            """{"periods":{"today":{"capabilities":{"throughput":false},"timedTokens":9,"timedOutputTokens":3,"timedDurationMs":100}}}""",
+        ).periods.getValue("today")
+        assertFalse(explicitlyUnavailable.throughputAvailable)
+        assertEquals(9, explicitlyUnavailable.timedTokens)
+    }
+
+    @Test
+    fun `v0 55 stream carries throughput without changing older envelopes`() {
+        val data = resource("stats-stream.sse", "v0.55.0")
+            .lineSequence()
+            .filter { it.startsWith("data:") }
+            .joinToString("\n") { it.removePrefix("data:").trimStart() }
+
+        val today = checkNotNull(HubProtocolParser.decodeStatsStreamEvent(data)).periods.getValue("today")
+        assertTrue(today.throughputAvailable)
+        assertEquals(14_750, today.timedOutputTokens)
+    }
+
+    @Test
+    fun `v0 56 boundary and background review metadata are preserved`() {
+        val stats = HubProtocolParser.decodeStats(resource("stats.json", "v0.56.0"))
+
+        assertEquals("background-review", stats.periods.getValue("today").sessions.single().sessionKind)
+        assertEquals("expiry", stats.limits.providers.first().windows.last().boundaryKind)
+        assertEquals("mixed", stats.limits.providers.last().windows.single().boundaryKind)
     }
 
     @Test
@@ -72,7 +116,7 @@ class HubProtocolParserTest {
         assertEquals(null, HubProtocolParser.decodeStatsStreamEvent("not json"))
     }
 
-    private fun resource(name: String): String = checkNotNull(
-        javaClass.classLoader?.getResourceAsStream("protocol/v0.54.0/$name"),
+    private fun resource(name: String, version: String = "v0.54.0"): String = checkNotNull(
+        javaClass.classLoader?.getResourceAsStream("protocol/$version/$name"),
     ).bufferedReader().use { it.readText() }
 }

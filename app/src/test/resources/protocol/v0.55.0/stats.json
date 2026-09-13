@@ -1,0 +1,105 @@
+{
+  "updatedAt": "2026-09-10T12:03:24.000Z",
+  "periods": {
+    "today": {
+      "capabilities": { "tokenComponents": true, "throughput": true },
+      "totalTokens": 125430,
+      "costUsd": 4.821,
+      "timedTokens": 118000,
+      "timedOutputTokens": 14500,
+      "timedDurationMs": 58000,
+      "clients": { "codex": 81300, "claude": 44130 },
+      "clientCosts": { "codex": 3.79, "claude": 1.031 },
+      "clientCacheReads": { "codex": 60000, "claude": 30000 },
+      "clientCacheWrites": { "codex": 5000, "claude": 4000 },
+      "clientOutputs": { "codex": 9000, "claude": 7000 },
+      "clientUnclassifiedTokens": { "codex": 1000, "claude": 500 },
+      "models": { "gpt-5": 81300, "claude-sonnet-4-5": 44130 },
+      "modelCosts": { "gpt-5": 3.79, "claude-sonnet-4-5": 1.031 },
+      "modelCacheReads": { "gpt-5": 60000, "claude-sonnet-4-5": 30000 },
+      "modelCacheWrites": { "gpt-5": 5000, "claude-sonnet-4-5": 4000 },
+      "modelOutputs": { "gpt-5": 9000, "claude-sonnet-4-5": 7000 },
+      "modelUnclassifiedTokens": { "gpt-5": 1000, "claude-sonnet-4-5": 500 },
+      "projects": {
+        "github.com/example/token-monitor": {
+          "projectId": "github.com/example/token-monitor",
+          "projectLabel": "Token Monitor",
+          "tokens": 95700,
+          "costUsd": 3.91,
+          "sessionCount": 3,
+          "clients": { "codex": 81300, "claude": 14400 }
+        }
+      },
+      "sessions": {
+        "codex:session-001": {
+          "sessionId": "session-001",
+          "client": "codex",
+          "projectLabel": "Token Monitor",
+          "totalTokens": 55200,
+          "costUsd": 2.33,
+          "messageCount": 3,
+          "startedAt": "2026-09-10T01:00:00.000Z",
+          "models": { "gpt-5": 55200 },
+          "lastUsedAt": "2026-09-10T02:02:00.000Z"
+        }
+      }
+    },
+    "month": {
+      "capabilities": { "tokenComponents": true, "throughput": true },
+      "totalTokens": 981233,
+      "costUsd": 31.44,
+      "timedTokens": 870000,
+      "timedOutputTokens": 106000,
+      "timedDurationMs": 442000,
+      "clients": { "codex": 700000 },
+      "models": { "gpt-5": 700000 }
+    },
+    "allTime": {
+      "capabilities": { "tokenComponents": true, "throughput": true },
+      "totalTokens": 4021451,
+      "costUsd": 152.18,
+      "timedTokens": 3600000,
+      "timedOutputTokens": 438000,
+      "timedDurationMs": 1815000,
+      "clients": { "codex": 3100000 },
+      "models": { "gpt-5": 3100000 }
+    }
+  },
+  "devices": [],
+  "limits": {
+    "updatedAt": "2026-09-10T02:03:20.000Z",
+    "providers": [
+      {
+        "provider": "codex",
+        "accountName": "Personal",
+        "status": "ok",
+        "sourceDeviceId": "desktop-a",
+        "windows": [
+          { "kind": "weekly", "usedPercent": 42.0, "remainingPercent": 58.0, "resetsAt": "2026-09-12T03:03:24.000Z", "metric": "percent" },
+          { "kind": "session", "usedPercent": 12.0, "remainingPercent": 88.0, "resetsAt": "2026-09-10T02:03:24.000Z", "metric": "percent" }
+        ]
+      },
+      {
+        "provider": "claude",
+        "accountName": "Team",
+        "status": "ok",
+        "sourceDeviceId": "desktop-a",
+        "windows": [
+          { "kind": "weekly", "usedPercent": 31.0, "remainingPercent": 69.0, "resetsAt": "2026-09-13T22:03:24.000Z", "metric": "percent" },
+          { "kind": "session", "usedPercent": 18.0, "remainingPercent": 82.0, "resetsAt": "2026-09-10T02:03:24.000Z", "metric": "percent" }
+        ]
+      }
+    ]
+  },
+  "historyPreview": {
+    "daily": [
+      { "date": "2026-09-09", "tokens": 89120, "cost": 3.21, "activeTimeMs": 7200000 },
+      { "date": "2026-09-10", "tokens": 125430, "cost": 4.821, "activeTimeMs": 10800000, "messages": 18 }
+    ],
+    "monthly": [ { "month": "2026-09", "tokens": 981233, "cost": 31.44, "activeTimeMs": 43200000 } ],
+    "summary": { "totalTokens": 4021451, "totalCost": 152.18 }
+  },
+  "historyRevision": "demo-history-revision-v055",
+  "subscriptionsUpdatedAt": "2026-09-10T02:03:20.000Z",
+  "staleAfterMs": 300000
+}

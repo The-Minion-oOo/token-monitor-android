@@ -7,9 +7,9 @@ Android-only releases keep `versionName` and increment the final three digits of
 `versionCode` and the GitHub tag revision.
 
 ```text
-versionName: v0.54.0
-versionCode: 540021
-release tag: android-v0.54.0-r21
+versionName: v0.56.0
+versionCode: 560004
+release tag: android-v0.56.0-r4
 ```
 
 A newly verified desktop version updates the visible version and starts its
@@ -21,6 +21,8 @@ protocol fixtures aligned.
 Before publishing:
 
 - Bump version metadata and add concise notes under `docs/releases/`.
+- Update README compatibility and widget marketing from production captures;
+  do not replace the established hero for a widget-only release.
 - Run JVM tests, lint, debug assembly, and release assembly.
 - Wait for Android checks and Android interaction checks on the exact `main`
   commit being released.

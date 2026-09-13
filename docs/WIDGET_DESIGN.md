@@ -1,8 +1,9 @@
 # Widget design
 
-The widget is the dashboard's Home module shrunk to a card. It should read as the
-same product: same type, same palette, same labels, same countdowns. Resizing changes
-which sections fit, not how they are styled.
+The responsive widget is the dashboard's Home module shrunk to a card. The separate
+pages widget extends that language across Overview, Limits, Breakdown, and
+Activity pages. Both should read as the same product: same type, palette, labels,
+and countdowns.
 
 ## Type and color
 
@@ -41,8 +42,9 @@ drawn bitmap matches the view it lands in.
 | Overview | Brand header, figure with two stats, tool split, one window from 190 dp and a second from 221 dp, and a fixed-height seven-day chart once the launcher gives 301 dp. |
 | Detailed | Overview content plus a third stat, every window with its reset in two columns per provider, and the week total on the chart. |
 
-There is no button row. Live is a toggle and Refresh a round icon, both in the header,
-both on 48 dp touch targets although the visible track is 40×22 dp and the ring 30 dp.
+There is no button row. Live is a toggle and Refresh a vector icon, both in the
+header and both on 48 dp touch targets. The visible Live track is 40×22 dp; Refresh
+has no visible enclosing circle.
 Spare height goes to one place per layout instead of into gaps: the figure in Compact,
 Wide, Portrait and Overview; the chart in Detailed. What a size shows is decided from
 the height the launcher reports, so nothing is clipped at a declared minimum.
@@ -55,6 +57,28 @@ waiting for its first data the Stop control stays available. Missing quota data 
 labeled, and a missing calendar day is a dash rather than a zero bar. Reduced motion
 leaves the digits still; otherwise they roll when the total changes.
 
+## Full-size pages
+
+The provider sends one `RemoteViews` card to the launcher and stores the selected
+page locally for each widget. It loads the newer of the in-process session snapshot
+and private cache, then draws the selected page into a fixed 1.82:1 bitmap. The alpha
+bitmap is capped below the RemoteViews transfer limit and scaled as one unit, so
+launchers cannot apply collection-card depth, remeasure page rows, or expose rear
+cards. Changing pages performs no network work. Pages do not auto-advance or
+schedule their own updates.
+
+Each page retains the same header controls. Forty-eight-dp left and right edge targets
+cycle the pages and four dots show the current position; tapping the content opens
+the app. Overview prioritizes the total, three operating stats, tool share, and week
+summary. Limits shows up to four tightest windows. Breakdown compares tools and
+models. Activity combines a seven-day chart with a compact recent-history heatmap.
+Missing snapshot, limits, breakdown, or history data produces a named empty state
+instead of zero-filled evidence.
+
+The four pages share one type scale for section headings, primary values, body
+rows, and secondary labels. The overview token total is the only deliberate size
+exception. Long names are ellipsized rather than rendered with a smaller font.
+
 ## Verification
 
 `WidgetDesignTest` renders the production RemoteViews from test data in Live,
@@ -62,7 +86,11 @@ Saved, Connecting, empty and waiting states across all five shapes and extra hei
 and asserts the chart bitmap matches its view size. `WidgetControlsTest` checks the
 minimum dimensions at normal and 130 percent text, long counts, 48 dp targets, picker
 metadata and the switch between widget polling and dashboard streaming. `WidgetThemeTest` covers the three presets
-and a custom code, plus a real AppWidgetHost recolor on theme change. The gallery
+and a custom code, plus a real AppWidgetHost recolor on theme change.
+`WidgetDeckDesignTest` renders all four pages at medium and large sizes in dark
+and light themes, checks provider metadata, page-state wrapping, identical bitmap
+dimensions and aspect ratios, accessible controls, and covers saved, stale, offline,
+empty, and v0.54-compatible snapshots. The gallery
 images come from the same layouts through `tools/capture-showcase.ps1`.
 
 Physical-phone coverage is recorded separately in [Validation](VALIDATION.md).

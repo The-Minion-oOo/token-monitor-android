@@ -60,6 +60,23 @@
         <item name="android:autoSizeMaxTextSize">11sp</item>
         <item name="android:paddingHorizontal">2dp</item>
     </style>
+    <style name="WidgetDeckFigure" parent="WidgetNumber">
+        <item name="android:autoSizeMinTextSize">16sp</item>
+        <item name="android:autoSizeMaxTextSize">42sp</item>
+    </style>
+    <style name="WidgetDeckValue" parent="WidgetRow">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+    </style>
+    <style name="WidgetDeckStatLabel" parent="WidgetLabel">
+        <item name="android:textSize">9sp</item>
+    </style>
+    <style name="WidgetDeckPercent" parent="WidgetRow">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+    </style>
     <style name="Theme.WidgetControl" parent="android:style/Theme.Material.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>

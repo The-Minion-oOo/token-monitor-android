@@ -1,8 +1,10 @@
 # Home-screen widgets
 
-Add Token Monitor from your launcher's widget picker or from Settings → Home-screen
-widget. The first request is 2×2 cells. Long-press the widget and use the launcher's
-resize handles to change its shape; the content reflows for the space it gets.
+Add Token Monitor from your launcher's widget picker. The existing responsive widget
+starts at 2×2 cells and is also available from Settings → Home-screen widget. A
+separate **Token Monitor · Pages** entry requests 4×2 and shows four manually
+selectable information pages. Long-press either widget and use the launcher's
+resize handles to change its shape.
 
 ## What fits where
 
@@ -13,6 +15,25 @@ resize handles to change its shape; the content reflows for the space it gets.
 | Portrait | 110×240 dp | Compact content plus a second provider window |
 | Overview | 240×190 dp | Brand header, count with two stats beside it, tool split, the tightest window (a second from 221 dp), and the seven-day chart from 301 dp |
 | Detailed | 250×384 dp | Overview content plus three stats, every limit window with its reset in two columns, and the week total on the chart |
+
+The pages widget is intended for medium and large placements from 250×180 dp.
+Its fixed manual order is **Overview → Limits → Breakdown → Activity**. All four
+pages are rendered from one saved or Live snapshot into identical 1.82:1 full-card
+images. The launcher receives only the selected image, so it cannot shrink or fan
+the pages as a collection. Tap the left or right edge to change the active page;
+the four dots show its position. Page changes never start a request, timer,
+auto-rotation loop, or wake lock.
+
+| Page | Content |
+| --- | --- |
+| Overview | Total tokens, estimated cost, messages, active time, streak, tool share, and week summary |
+| Limits | Up to four tightest account windows with remaining quota and reset or expiry wording |
+| Breakdown | Ranked tool and model totals with proportional bars and provider colors |
+| Activity | Seven-day token and cost summary, daily bars, recent-history heatmap, active days, and messages |
+
+![Pages widget Overview, Limits, Breakdown and Activity](images/widget-pages-overview.png)
+
+The complete four-page gallery is shown in the project [README](../README.md#four-views-one-steady-footprint).
 
 These are content dimensions, not launcher cells. Pixel, One UI and other launchers
 size their cells differently and add their own padding, so the same 2×2 request can
@@ -41,7 +62,8 @@ marks a day with no recorded data rather than a measured zero.
 
 ## Saved, Refresh and Live
 
-The controls live in the header: a small round Refresh icon and a Live toggle. The
+The controls live in the header: a refresh icon with no visible button circle and a
+Live toggle. Both retain 48 dp touch targets. The
 toggle's knob sits left and grey while Live is off, and right with a soft glow in the
 accent color while a session is connected. Tapping anywhere else on the card opens
 the app.
@@ -72,7 +94,7 @@ widgets there. Whether yours does depends on the launcher, not the app.
 On Android 13 and newer, starting Live or Refresh asks for notification permission
 once, so the Stop control has somewhere to live. Declining leaves the dashboard and
 saved widgets working. A killed process, the hour expiring, or removing the last
-widget ends the session. There is no automatic restart, wake lock, or updating
+widget ends the session. There is no automatic restart, wake lock, page rotation, or updating
 outside the explicit foreground session.
 
 ## Troubleshooting

@@ -20,9 +20,9 @@ internal fun limitAttention(snapshot: HubSnapshot, now: Long): List<String> = sn
         val reset = runCatching { Instant.parse(window.resetsAt).toEpochMilli() }.getOrNull()
         val label = window.label.ifBlank { window.kind }
         when {
-            reset != null && reset <= now -> "$provider $label: reset time passed; awaiting updated quota"
+            reset != null && reset <= now -> "$provider $label: ${formatBoundary(window.resetsAt, window.boundaryKind, now)}; awaiting updated quota"
             remaining != null && remaining <= 20 -> "$provider $label: ${formatPercent(remaining.coerceAtLeast(0.0))} left"
-            reset != null && reset - now <= 3_600_000L -> "$provider $label: ${formatReset(window.resetsAt, now)}"
+            reset != null && reset - now <= 3_600_000L -> "$provider $label: ${formatBoundary(window.resetsAt, window.boundaryKind, now)}"
             else -> null
         }
     }

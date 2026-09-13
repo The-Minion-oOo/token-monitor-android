@@ -32,7 +32,7 @@ data/       HubRepository
   protocol/ HubDtos, HubProtocolParser          wire → domain
   network/  HubApiClient, HubAddressValidator, EndpointFailover, HubDiscovery, BackoffPolicy, ServiceStatusClient
   storage/  SecureConnectionStore, SnapshotCache, DisplayPreferences
-widget/     Responsive RemoteViews, explicit Live service and controls
+widget/     Responsive RemoteViews, cached-snapshot pages, explicit Live service and controls
 ```
 
 Screens receive domain models and callbacks;
@@ -106,10 +106,16 @@ repository shutdown behind the final save or clear operation.
 
 Cache readers and writers share a process lock around `AtomicFile`. Cache reads
 accept older SSE envelopes, and foreground writes store the normalized stats
-object. The widget updates after a saved snapshot, when resized, and after each
-stats refresh during an explicit Live session; Android 12+ selects compact,
-medium, or large RemoteViews using responsive size mappings. Older Android
-versions receive portrait and landscape layouts. No periodic update is registered.
+object. The responsive widget updates after a saved snapshot, when resized, and
+after each stats refresh during an explicit Live session; Android 12+ selects
+compact, medium, or large RemoteViews using responsive size mappings. Older
+Android versions receive portrait and landscape layouts. A separate pages
+provider renders Overview, Limits, Breakdown, and Activity from one current
+cache/session snapshot. It sends the launcher one complete 1.82:1 page bitmap
+plus transparent native touch targets for Previous, Next, Open, Refresh, and
+Live. The selected page is stored locally per widget. This avoids launcher
+collection transforms and keeps page changes local without fetching.
+Neither provider registers a periodic update.
 See [Android widget layouts](https://developer.android.com/develop/ui/views/appwidgets/layouts).
 
 ## Presentation

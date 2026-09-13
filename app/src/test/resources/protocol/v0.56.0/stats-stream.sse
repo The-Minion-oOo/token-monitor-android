@@ -1,0 +1,2 @@
+event: stats
+data: {"stats":{"updatedAt":"2026-09-11T14:25:00.000Z","periods":{"today":{"capabilities":{"throughput":true},"totalTokens":126000,"timedTokens":118500,"timedOutputTokens":14750,"timedDurationMs":58500,"sessions":{"codex:review":{"sessionId":"review","client":"codex","sessionKind":"background-review"}}}},"limits":{"providers":[{"provider":"codex","windows":[{"kind":"weekly","remainingPercent":58,"resetsAt":"2026-09-14T00:00:00.000Z","boundaryKind":"reset"}]}]}}}

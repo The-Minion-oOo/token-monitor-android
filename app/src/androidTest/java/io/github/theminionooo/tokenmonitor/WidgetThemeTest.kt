@@ -100,7 +100,7 @@ class WidgetThemeTest {
             val deadline = System.currentTimeMillis() + 5_000
             while (!changed && System.currentTimeMillis() < deadline) {
                 instrumentation.runOnMainSync {
-                    changed = hostView?.findViewById<TextView>(R.id.widget_refresh)?.currentTextColor == Palette.from(InterfaceTheme.Porcelain).ink.toArgb()
+                    changed = hostView?.findViewById<TextView>(R.id.widget_title)?.currentTextColor == Palette.from(InterfaceTheme.Porcelain).ink.toArgb()
                 }
                 if (!changed) Thread.sleep(25)
             }

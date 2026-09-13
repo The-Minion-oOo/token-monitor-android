@@ -9,6 +9,8 @@ captures/
 .externalNativeBuild/
 .cxx/
 app/build/
+*.apk
+*.apk.sha256
 *.jks
 *.keystore
 secrets.properties

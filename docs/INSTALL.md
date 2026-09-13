@@ -3,14 +3,15 @@
 ## Requirements
 
 - Android 8.0 or newer.
-- Token Monitor desktop v0.54.0 with Hub hosting enabled and a shared secret.
+- Token Monitor desktop v0.56.0 with Hub hosting enabled and a shared secret.
 - A private route to the desktop: Tailscale is recommended; home Wi-Fi is optional.
 
 ## Install
 
-No signed r21 APK has been published yet. The current source has passed the
-automated build and emulator checks; the signed release will follow the final
-physical-phone upgrade check.
+No signed v0.56.0 APK has been published yet. The current source is the r4
+development candidate. Its automated, emulator, and signing checks pass;
+publishing still requires installation and launcher inspection on the physical
+Galaxy S25 Ultra.
 
 To build the current source, install JDK 17 and Android SDK 37, then run:
 
@@ -37,7 +38,7 @@ There is no Play Store or F-Droid listing.
 Each signed release will include an APK and a `.sha256` file. Compare the hash:
 
 ```powershell
-Get-FileHash .\token-monitor-android-v0.54.0-r21.apk -Algorithm SHA256
+Get-FileHash .\token-monitor-android-v0.56.0-r4.apk -Algorithm SHA256
 ```
 
 A matching checksum detects download corruption; download both files from the

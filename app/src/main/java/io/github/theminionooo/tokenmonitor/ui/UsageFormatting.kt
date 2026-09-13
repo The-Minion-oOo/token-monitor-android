@@ -67,6 +67,18 @@ internal fun formatReset(resetsAt: String, now: Long): String {
     return if (remaining <= 0) "Reset now" else "Reset ${formatDuration(remaining)}"
 }
 
+/** v0.56 keeps one timestamp but tells readers whether it resets, expires, or does both. */
+internal fun formatBoundary(resetsAt: String, boundaryKind: String, now: Long): String {
+    val target = runCatching { Instant.parse(resetsAt).toEpochMilli() }.getOrNull() ?: return ""
+    val remaining = target - now
+    val suffix = if (remaining <= 0) "now" else formatDuration(remaining)
+    return when (boundaryKind.lowercase()) {
+        "expiry" -> "Expires $suffix"
+        "mixed" -> "Changes${if (remaining <= 0) "" else " in"} $suffix"
+        else -> "Reset $suffix"
+    }
+}
+
 /** Desktop-style age such as `38s ago`, `5m ago`, `2h 10m ago`, or `3d 4h ago`. */
 internal fun formatRelativeAge(timestamp: Long, now: Long): String {
     if (timestamp <= 0) return ""
