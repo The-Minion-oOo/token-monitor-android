@@ -48,7 +48,7 @@ pairing and preferences. Never use the preview flag for a release.
 
 ## Fixture Hub
 
-The local fixture serves sanitized v0.54.0 responses on port 17321 with the
+The local fixture serves sanitized v0.56.0 responses on port 17321 with the
 secret `fixture-secret`:
 
 ```powershell
@@ -72,6 +72,11 @@ Pair the preview app with `http://10.0.2.2:17322` and secret `showcase`. Capture
 the rendered app or widget; do not assemble screens from design mockups. The
 source dataset is `tools/showcase-data.mjs` and the image compositor is
 `tools/build-showcase.mjs`. Unset both environment variables afterwards.
+
+For the Pages widget, capture Overview, Limits, Breakdown, and Activity at the
+same launcher allocation. Keep all four production renders together in README
+marketing so typography, card geometry, navigation controls, and empty-space
+handling can be compared directly.
 
 Never put a real Hub secret, address, account, device, project, or usage response
 in a fixture or screenshot.

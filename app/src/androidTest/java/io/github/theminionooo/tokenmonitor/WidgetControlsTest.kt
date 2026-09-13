@@ -82,13 +82,13 @@ class WidgetControlsTest {
                     for (id in listOf(R.id.widget_refresh, R.id.widget_live)) {
                         // The narrow layouts keep Refresh in a footer that only fits from 150 dp up.
                         if (id == R.id.widget_refresh && view.findViewById<View>(R.id.widget_footer)?.visibility == View.GONE) continue
-                        val button = view.findViewById<TextView>(id)
+                        val button = view.findViewById<View>(id)
                         val bounds = android.graphics.Rect()
                         button.getDrawingRect(bounds)
                         (view as android.view.ViewGroup).offsetDescendantRectToMyCoords(button, bounds)
                         assertTrue("$layout at $scale control $id must fit: $bounds in ${width}x$height with padding ${view.findViewById<View>(R.id.widget_root).paddingRight},${view.findViewById<View>(R.id.widget_root).paddingBottom}", bounds.bottom <= height - view.findViewById<View>(R.id.widget_root).paddingBottom && bounds.right <= width - view.findViewById<View>(R.id.widget_root).paddingRight)
                         assertTrue("$layout needs usable control targets", button.width >= 48 * density - 1 && button.height >= 48 * density - 1)
-                        assertTrue("$layout control label must fit", button.paint.measureText(button.text.toString()) <= button.width)
+                        if (button is TextView) assertTrue("$layout control label must fit", button.paint.measureText(button.text.toString()) <= button.width)
                     }
                     val total = view.findViewById<TextView>(R.id.widget_tokens)
                     assertTrue("$layout at $scale: full digits ${total.paint.measureText(total.text.toString())} must fit ${total.width} at ${total.textSize}", total.paint.measureText(total.text.toString()) <= total.width)
@@ -116,10 +116,11 @@ class WidgetControlsTest {
         instrumentation.runOnMainSync {
             val preview = android.widget.RemoteViews(context.packageName, info.previewLayout).apply(context, FrameLayout(context))
             val side = (160 * density).toInt()
-            preview.measure(View.MeasureSpec.makeMeasureSpec(side, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(side, View.MeasureSpec.EXACTLY))
-            preview.layout(0, 0, side, side)
+            preview.measure(View.MeasureSpec.makeMeasureSpec(side, View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(side, View.MeasureSpec.AT_MOST))
+            preview.layout(0, 0, preview.measuredWidth, preview.measuredHeight)
+            assertEquals(preview.width, preview.height)
             assertEquals("3,474,544", preview.findViewById<TextView>(R.id.widget_tokens).text.toString())
-            val bitmap = Bitmap.createBitmap(side, side, Bitmap.Config.ARGB_8888)
+            val bitmap = Bitmap.createBitmap(preview.width, preview.height, Bitmap.Config.ARGB_8888)
             drawWidget(preview, bitmap)
             context.openFileOutput("widget-picker-preview.png", 0).use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         }

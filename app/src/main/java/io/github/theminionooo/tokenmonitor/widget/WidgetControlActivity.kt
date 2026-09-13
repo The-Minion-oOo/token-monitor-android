@@ -9,13 +9,20 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
+import io.github.theminionooo.tokenmonitor.MainActivity
 
 /** A user-visible activity supplies the foreground-start gesture and first-use permission prompt. */
 class WidgetControlActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (intent.action == WidgetLiveService.ACTION_LIVE && WidgetRuntime.session.enabled) {
+        val action = requestedAction()
+        if (action == ACTION_OPEN) {
+            startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
+            finish()
+        } else if (action == WidgetLiveService.ACTION_LIVE && WidgetRuntime.session.enabled) {
             WidgetLiveService.stop(this)
+            finish()
+        } else if (action !in listOf(WidgetLiveService.ACTION_LIVE, WidgetLiveService.ACTION_REFRESH)) {
             finish()
         } else if (Build.VERSION.SDK_INT >= 33 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             if (savedInstanceState == null) requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
@@ -33,11 +40,17 @@ class WidgetControlActivity : Activity() {
 
     private fun startUpdates() {
         try {
-            startForegroundService(Intent(this, WidgetLiveService::class.java).setAction(intent.action))
+            startForegroundService(Intent(this, WidgetLiveService::class.java).setAction(requestedAction()))
         } catch (_: RuntimeException) {
             Toast.makeText(this, "Android could not start widget updates. Tap again to retry.", Toast.LENGTH_LONG).show()
         }
         finish()
+    }
+
+    private fun requestedAction(): String? = intent.action
+
+    companion object {
+        internal const val ACTION_OPEN = "widget.OPEN"
     }
 }
 

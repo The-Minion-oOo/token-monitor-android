@@ -28,11 +28,11 @@ Public IP addresses and ordinary public hostnames are rejected for both fields. 
 
 ## No QR code in the current desktop release
 
-Token Monitor v0.54.0 lists Hub URLs and the secret but does not generate a pairing QR code. Manual copy is therefore the supported first pairing flow. A future QR flow should be added only when both apps can keep the payload local and clearly warn that the code contains the Hub secret.
+Token Monitor v0.56.0 lists Hub URLs and the secret but does not generate a pairing QR code. Manual copy is therefore the supported first pairing flow. A future QR flow should be added only when both apps can keep the payload local and clearly warn that the code contains the Hub secret.
 
 ## Troubleshooting
 
-- **The address labeled "Tailscale" starts with `169.254`:** the desktop v0.54.0 list can pick up a Windows placeholder address on an adapter with no real address. A Tailscale address always starts with `100.`; use the one shown in the Tailscale app or by `ipconfig`.
+- **The address labeled "Tailscale" starts with `169.254`:** the desktop address list can pick up a Windows placeholder address on an adapter with no real address. A Tailscale address always starts with `100.`; use the one shown in the Tailscale app or by `ipconfig`.
 - **Connection refused:** Token Monitor desktop is not running, the Hub is not in host mode, or a local firewall is blocking it.
 - **Unauthorized:** replace the saved Android connection with the current desktop Hub secret.
 - **Works at home but not away:** confirm both devices appear online in Tailscale and use the listed Tailscale address as the Hub URL, keeping the home-only LAN address in the Home Wi-Fi field.

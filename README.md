@@ -17,7 +17,7 @@ Tokens, account limits, models and trends from the desktop Token Monitor Hub, pl
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/badge/Android_checks-CI-73bdf5?style=flat-square&logo=githubactions&logoColor=10221c"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.54.0" src="https://img.shields.io/badge/Desktop-v0.54.0-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.56.0" src="https://img.shields.io/badge/Desktop-v0.56.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
 </p>
@@ -52,10 +52,28 @@ The desktop stays the collector and the source of truth. The phone reads its Hub
 
 <img src="docs/images/widget-gallery.png" alt="The five widget layouts: compact, wide, portrait, overview and detailed" width="100%">
 
-The widget is the dashboard shrunk to a card, not a different app that happens to share a name. Same type, same palette, same `Reset 1d 13h` countdowns. It starts at 2×2 and reflows as you resize it, from a count you can read across the room to a detailed panel with limits and a seven-day chart. Bars and charts are drawn at the exact size your launcher hands over, so they stay sharp instead of being stretched.
+The original widget is the dashboard shrunk to a card, not a different app that happens to share a name. Same type, same palette, same `Reset 1d 13h` countdowns. It starts at 2×2 and reflows as you resize it, from a count you can read across the room to a detailed panel with limits and a seven-day chart. A separate medium/large widget uses left and right edge controls to move through Overview, Limits, Breakdown, and Activity from one saved snapshot. The launcher always receives one full-size card, so One UI cannot shrink the pages into its collection fan. Bars and charts are drawn at the exact size your launcher hands over, so they stay sharp instead of being stretched.
+
+### Four views. One steady footprint.
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="docs/images/widget-pages-overview.png" alt="Pages widget Overview with total tokens, activity, streak and tool share" width="100%"><br><sub><b>Overview</b> · Total, cost, activity and weekly mix</sub></td>
+    <td align="center" width="50%"><img src="docs/images/widget-pages-limits.png" alt="Pages widget Limits with four account quota windows" width="100%"><br><sub><b>Limits</b> · Four account windows and reset times</sub></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><img src="docs/images/widget-pages-breakdown.png" alt="Pages widget Breakdown comparing tools and models" width="100%"><br><sub><b>Breakdown</b> · Tools and models side by side</sub></td>
+    <td align="center" width="50%"><img src="docs/images/widget-pages-activity.png" alt="Pages widget Activity with a seven-day chart and heatmap" width="100%"><br><sub><b>Activity</b> · Seven-day bars and recent history</sub></td>
+  </tr>
+</table>
+
+Tap either edge to move between pages. The card itself stays at the same 1.82:1
+shape, the type scale stays consistent, and the page dots keep your place. Moving
+between pages is entirely local: it does not wake the Hub, start Live, or schedule
+background work.
 
 - **Full numbers.** Every digit, comma-separated, rolling when the total changes. Never "3.5M".
-- **Refresh once.** A small round icon in the header fetches a fresh snapshot without opening the app.
+- **Refresh once.** A compact refresh icon in a transparent 48 dp touch target fetches a fresh snapshot without opening the app.
 - **Live for an hour.** A toggle in the header checks the Hub every 30 seconds while you do other things; the knob glows while it is connected. Tap it again, or Stop in the notification, to end early.
 - **More than the count.** Messages, active time and streak beside the figure, today's split by tool, every limit window with its reset, and the week total on the chart, as space allows.
 - **Saved when offline.** The last snapshot stays on the home screen with its time, so `SAVED` never pretends to be live.
@@ -101,9 +119,9 @@ The Hub deliberately does not carry prompt or response text, so the phone never 
 
 ## Get connected
 
-You need Android 8.0 or newer and a desktop running Token Monitor v0.54.0 with Hub hosting on.
+You need Android 8.0 or newer and a desktop running Token Monitor v0.56.0 with Hub hosting on.
 
-1. Follow [Installing and updating](docs/INSTALL.md). The r21 source is available now; its first signed APK will follow the final phone upgrade check.
+1. Follow [Installing and updating](docs/INSTALL.md). The v0.56.0 r4 source and signed candidate are ready; publishing still requires the physical-phone release gate.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
 3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
 4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
@@ -115,13 +133,14 @@ You need Android 8.0 or newer and a desktop running Token Monitor v0.54.0 with H
 
 | | |
 | --- | --- |
-| Android app | `v0.54.0-r21` ([release notes](docs/releases/android-v0.54.0-r21.md)) |
-| Verified desktop baseline | Token Monitor `v0.54.0` |
-| Upstream commit | [`fce070c`](https://github.com/Javis603/token-monitor/commit/fce070c789ae8b1ca59be3ce7c09fd8301d6f631) |
+| Android source | `v0.56.0-r4` signed candidate (not published) |
+| Latest published Android release | `v0.54.0-r20` ([release notes](docs/releases/android-v0.54.0-r20.md)) |
+| Verified desktop baseline | Token Monitor `v0.56.0` |
+| Upstream commit | [`2f60827`](https://github.com/Javis603/token-monitor/commit/2f60827e3028d283969dd74cde5b3f5664220442) |
 
 The visible version matches the desktop release the phone understands. Android-only
 builds bump the release revision and internal version code while the compatibility
-line stays `v0.54.0`. When desktop Token Monitor moves past that, the phone
+line stays on its verified desktop version. When desktop Token Monitor moves past that, the phone
 continues using the verified endpoints until a follow-up Android release checks
 the new protocol. Details are in [`upstream.json`](upstream.json) and
 [`RELEASING.md`](docs/RELEASING.md).

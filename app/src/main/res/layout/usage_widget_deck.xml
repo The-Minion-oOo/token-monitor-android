@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipe_card"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false">
+
+    <ImageView
+        android:id="@+id/swipe_page_bitmap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:importantForAccessibility="yes"
+        android:scaleType="fitCenter" />
+
+    <TextView
+        android:id="@+id/swipe_page_open"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/app_name" />
+
+    <TextView
+        android:id="@+id/swipe_page_previous"
+        android:layout_width="48dp"
+        android:layout_height="96dp"
+        android:layout_gravity="start|center_vertical"
+        android:background="@android:color/transparent" />
+
+    <TextView
+        android:id="@+id/swipe_page_next"
+        android:layout_width="48dp"
+        android:layout_height="96dp"
+        android:layout_gravity="end|center_vertical"
+        android:background="@android:color/transparent" />
+
+    <TextView
+        android:id="@+id/widget_refresh"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="top|end"
+        android:layout_marginEnd="96dp"
+        android:background="@android:color/transparent" />
+
+    <TextView
+        android:id="@+id/widget_live"
+        android:layout_width="72dp"
+        android:layout_height="48dp"
+        android:layout_gravity="top|end"
+        android:background="@android:color/transparent" />
+</FrameLayout>

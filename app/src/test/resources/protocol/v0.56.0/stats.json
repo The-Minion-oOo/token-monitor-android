@@ -1,0 +1,57 @@
+{
+  "updatedAt": "2026-09-11T14:24:29.000Z",
+  "periods": {
+    "today": {
+      "capabilities": { "tokenComponents": true, "throughput": true },
+      "totalTokens": 125430,
+      "costUsd": 4.821,
+      "timedTokens": 118000,
+      "timedOutputTokens": 14500,
+      "timedDurationMs": 58000,
+      "clients": { "codex": 81300, "claude": 44130 },
+      "clientCosts": { "codex": 3.79, "claude": 1.031 },
+      "models": { "gpt-5": 81300, "claude-sonnet-4-5": 44130 },
+      "modelCosts": { "gpt-5": 3.79, "claude-sonnet-4-5": 1.031 },
+      "sessions": {
+        "codex:review": {
+          "sessionId": "review",
+          "client": "codex",
+          "projectLabel": "Token Monitor",
+          "sessionKind": "background-review",
+          "totalTokens": 55200,
+          "costUsd": 2.33,
+          "messageCount": 3,
+          "models": { "gpt-5": 55200 },
+          "lastUsedAt": "2026-09-11T14:20:00.000Z"
+        }
+      }
+    }
+  },
+  "limits": {
+    "updatedAt": "2026-09-11T14:24:29.000Z",
+    "providers": [
+      {
+        "provider": "codex",
+        "status": "ok",
+        "windows": [
+          { "kind": "weekly", "remainingPercent": 58.0, "resetsAt": "2026-09-14T00:00:00.000Z", "boundaryKind": "reset", "metric": "percent" },
+          { "kind": "session", "remainingPercent": 88.0, "resetsAt": "2026-09-11T16:00:00.000Z", "boundaryKind": "expiry", "metric": "percent" }
+        ]
+      },
+      {
+        "provider": "claude",
+        "status": "ok",
+        "windows": [
+          { "kind": "weekly", "remainingPercent": 69.0, "resetsAt": "2026-09-14T00:00:00.000Z", "boundaryKind": "mixed", "metric": "percent" }
+        ]
+      }
+    ]
+  },
+  "historyPreview": {
+    "daily": [
+      { "date": "2026-09-10", "tokens": 89120, "cost": 3.21, "activeTimeMs": 7200000 },
+      { "date": "2026-09-11", "tokens": 125430, "cost": 4.821, "activeTimeMs": 10800000, "messages": 18 }
+    ]
+  },
+  "staleAfterMs": 300000
+}

@@ -17,7 +17,7 @@ import io.github.theminionooo.tokenmonitor.MainActivity
 import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
 import io.github.theminionooo.tokenmonitor.ui.formatCompactTokens
 import io.github.theminionooo.tokenmonitor.ui.formatMoney
-import io.github.theminionooo.tokenmonitor.ui.formatReset
+import io.github.theminionooo.tokenmonitor.ui.formatBoundary
 import io.github.theminionooo.tokenmonitor.ui.providerLabel
 import io.github.theminionooo.tokenmonitor.ui.windowTitle
 import java.time.Instant
@@ -61,7 +61,7 @@ internal fun widgetNotificationContent(
     val headline = snapshot?.let { "${widgetTokens(it.today.totalTokens)} tokens · ${formatMoney(it.today.costUsd)} today" }
         ?: if (live) "Waiting for the Hub" else "Fetching a fresh Hub snapshot"
     val windows = snapshot?.let(::quotaRows).orEmpty().joinToString("\n") { row ->
-        val reset = formatReset(row.window.resetsAt, now)
+        val reset = formatBoundary(row.window.resetsAt, row.window.boundaryKind, now)
         "${row.provider.providerLabel()} ${windowTitle(row.window, row.siblings)} ${row.remainingPercent.toInt()}% left" +
             if (reset.isNotBlank()) " · $reset" else ""
     }
@@ -131,7 +131,7 @@ class WidgetLiveService : Service() {
                     connected = state.streamActive || state.widgetLiveActive, refreshing = state.refreshing,
                     snapshot = state.snapshot, note = if (state.message != null) "Hub offline · retrying" else null,
                 )
-                withContext(Dispatchers.IO) { UsageWidgetProvider.refresh(this@WidgetLiveService) }
+                withContext(Dispatchers.IO) { WidgetUpdateCoordinator.refresh(this@WidgetLiveService) }
                 showNotification()
                 if (!live && ((state.snapshot !== before && state.snapshot?.fromCache == false) || state.message != null)) {
                     finishSession(if (state.message != null) "Refresh failed · showing saved data" else null)
@@ -225,7 +225,7 @@ class WidgetLiveService : Service() {
         }
 
         private fun refreshAsync(context: Context) {
-            kotlin.concurrent.thread(name = "widget-status") { UsageWidgetProvider.refresh(context) }
+            kotlin.concurrent.thread(name = "widget-status") { WidgetUpdateCoordinator.refresh(context) }
         }
     }
 }

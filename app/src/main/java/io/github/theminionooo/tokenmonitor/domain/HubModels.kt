@@ -22,6 +22,10 @@ data class HubHealth(
 )
 
 data class UsagePeriod(
+    val throughputAvailable: Boolean = false,
+    val timedTokens: Long = 0,
+    val timedOutputTokens: Long = 0,
+    val timedDurationMs: Long = 0,
     val totalTokens: Long = 0,
     val costUsd: Double = 0.0,
     val clients: Map<String, Long> = emptyMap(),
@@ -61,6 +65,7 @@ data class SessionUsage(
     val messageCount: Int,
     val startedAt: String,
     val lastUsedAt: String,
+    val sessionKind: String = "",
 )
 
 data class DeviceUsage(
@@ -91,6 +96,7 @@ data class LimitWindow(
     val currency: String,
     val detail: String,
     val showMeter: Boolean?,
+    val boundaryKind: String = "",
 )
 
 data class LimitAccount(

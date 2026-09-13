@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.theminionooo.tokenmonitor.data.HubRepositoryPool
 import io.github.theminionooo.tokenmonitor.widget.WidgetLiveService
+import io.github.theminionooo.tokenmonitor.widget.WidgetUpdateCoordinator
 import io.github.theminionooo.tokenmonitor.data.HubRepositoryState
 import io.github.theminionooo.tokenmonitor.data.network.HubDiscovery
 import io.github.theminionooo.tokenmonitor.data.network.ServiceStatusClient
@@ -124,13 +125,13 @@ internal class DashboardViewModel(application: Application) : AndroidViewModel(a
     fun setFollowSystemTheme(enabled: Boolean) {
         displayPreferences.setFollowSystemTheme(enabled)
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-            io.github.theminionooo.tokenmonitor.widget.UsageWidgetProvider.refresh(getApplication())
+            WidgetUpdateCoordinator.refresh(getApplication())
         }
     }
     fun setThemeCode(code: String?) {
         displayPreferences.setThemeCode(code)
         viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-            io.github.theminionooo.tokenmonitor.widget.UsageWidgetProvider.refresh(getApplication())
+            WidgetUpdateCoordinator.refresh(getApplication())
         }
     }
     fun setShowLiveIndicator(enabled: Boolean) = displayPreferences.setShowLiveIndicator(enabled)

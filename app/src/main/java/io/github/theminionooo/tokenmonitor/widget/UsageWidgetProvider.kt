@@ -45,7 +45,7 @@ import io.github.theminionooo.tokenmonitor.ui.displayName
 import io.github.theminionooo.tokenmonitor.ui.formatActiveDuration
 import io.github.theminionooo.tokenmonitor.ui.formatCompactTokens
 import io.github.theminionooo.tokenmonitor.ui.formatMoney
-import io.github.theminionooo.tokenmonitor.ui.formatReset
+import io.github.theminionooo.tokenmonitor.ui.formatBoundary
 import io.github.theminionooo.tokenmonitor.ui.formatTokens
 import io.github.theminionooo.tokenmonitor.ui.originalToolColor
 import io.github.theminionooo.tokenmonitor.ui.providerLabel
@@ -153,7 +153,7 @@ internal fun widgetStats(history: List<HistoryPoint>, date: LocalDate?): List<Pa
 class UsageWidgetProvider : AppWidgetProvider() {
     override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = updateAsync(context)
     override fun onAppWidgetOptionsChanged(context: Context, manager: AppWidgetManager, id: Int, options: Bundle) = updateAsync(context)
-    override fun onDisabled(context: Context) = WidgetLiveService.stop(context)
+    override fun onDisabled(context: Context) = WidgetUpdateCoordinator.stopLiveIfUnused(context)
     override fun onDeleted(context: Context, ids: IntArray) { synchronized(frames) { ids.forEach { frames.remove(it) } } }
 
     private fun updateAsync(context: Context) {
@@ -316,7 +316,8 @@ class UsageWidgetProvider : AppWidgetProvider() {
             }
             views.setContentDescription(R.id.widget_header, "Token Monitor. $count tokens. $detail. Open dashboard")
             views.setContentDescription(R.id.widget_live, if (enabled) "Turn widget Live off" else "Turn widget Live on for one hour")
-            views.setTextViewText(R.id.widget_refresh, if (session.refreshing) "…" else "↻")
+            views.setImageViewResource(R.id.widget_refresh_image, R.drawable.ic_widget_refresh)
+            views.setInt(R.id.widget_refresh_image, "setImageAlpha", if (session.refreshing) 130 else 255)
             views.setContentDescription(R.id.widget_refresh, if (session.refreshing) "Refreshing widget" else "Refresh widget now")
             if (narrow) {
                 val footer = layout == WidgetLayout.Portrait || heightDp >= 150
@@ -386,7 +387,7 @@ class UsageWidgetProvider : AppWidgetProvider() {
                         views.setTextViewText(cell[2], "${remaining.toInt()}% left")
                         views.setTextColor(cell[2], if (tone == palette.success) ink else tone.toArgb())
                         views.setImageViewBitmap(cell[3], quotaBar(palette, tone.toArgb(), remaining, if (windows.size == 1) contentWidth else cellWidth, (4 * density).roundToInt().coerceAtLeast(2)))
-                        val reset = formatReset(window.resetsAt, now)
+                        val reset = formatBoundary(window.resetsAt, window.boundaryKind, now)
                         views.setTextViewText(cell[4], reset)
                         views.setTextColor(cell[4], muted)
                         views.setContentDescription(cell[0], "$label, $title, ${remaining.toInt()} percent remaining, $reset")
@@ -524,11 +525,15 @@ class UsageWidgetProvider : AppWidgetProvider() {
             views.setInt(R.id.widget_surface_border, "setColorFilter", edge)
             views.setInt(R.id.widget_surface_border, "setImageAlpha", edgeAlpha)
 
-            // Refresh: a small ring with the arrow; in the empty state it is the Open app pill.
-            views.setInt(R.id.widget_refresh_fill, "setColorFilter", controlFill)
-            views.setInt(R.id.widget_refresh_border, "setColorFilter", edge)
-            views.setInt(R.id.widget_refresh_border, "setImageAlpha", edgeAlpha)
-            views.setTextColor(R.id.widget_refresh, ink)
+            // Refresh is an icon on an invisible 48 dp target. The empty state keeps its Open app pill.
+            if (empty) {
+                views.setInt(R.id.widget_refresh_fill, "setColorFilter", controlFill)
+                views.setInt(R.id.widget_refresh_border, "setColorFilter", edge)
+                views.setInt(R.id.widget_refresh_border, "setImageAlpha", edgeAlpha)
+                views.setTextColor(R.id.widget_refresh, ink)
+            } else {
+                views.setInt(R.id.widget_refresh_image, "setColorFilter", ink)
+            }
 
             // Live: a track with a knob at either end, and a soft glow behind the knob while on.
             views.setInt(R.id.widget_live_fill, "setColorFilter", if (enabled) palette.accent.copy(alpha = 0.22f).compositeOver(palette.shell).toArgb() else controlFill)

@@ -177,7 +177,7 @@ internal fun LimitAccountRow(account: LimitAccount, displayOptions: DisplayOptio
                             val risk = ((usedPercent ?: 0.0).coerceIn(0.0, 100.0) / 100.0).toFloat()
                             if (window.showMeter != false && meterPercent != null) UsageBar(meter, quotaColor(risk))
                             if (window.detail.isNotBlank()) Text(window.detail, color = Muted, style = MaterialTheme.typography.labelSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                            formatReset(window.resetsAt, LocalNow.current).takeIf { it.isNotBlank() }?.let { Text(it, color = Muted, style = MaterialTheme.typography.labelSmall, maxLines = 1) }
+                            formatBoundary(window.resetsAt, window.boundaryKind, LocalNow.current).takeIf { it.isNotBlank() }?.let { Text(it, color = Muted, style = MaterialTheme.typography.labelSmall, maxLines = 1) }
                         }
                     }
                     if (windows.size == 1) Spacer(Modifier.weight(1f))

@@ -115,6 +115,10 @@ private fun MutableMap<String, HistoryAttribution>.mergeAttribution(key: String,
 }
 
 private operator fun UsagePeriod.plus(other: UsagePeriod): UsagePeriod = UsagePeriod(
+    throughputAvailable = throughputAvailable && other.throughputAvailable,
+    timedTokens = timedTokens + other.timedTokens,
+    timedOutputTokens = timedOutputTokens + other.timedOutputTokens,
+    timedDurationMs = timedDurationMs + other.timedDurationMs,
     totalTokens = totalTokens + other.totalTokens,
     costUsd = costUsd + other.costUsd,
     clients = clients.plusCounts(other.clients),

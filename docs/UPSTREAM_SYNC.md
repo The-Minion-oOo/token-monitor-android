@@ -2,7 +2,7 @@
 
 ## Version rule
 
-The Android app displays `v0.54.0` when it is verified against desktop Token Monitor `v0.54.0`. The Gradle properties and `upstream.json` must identify the same tag and peeled commit.
+The Android app displays `v0.56.0` when it is verified against desktop Token Monitor `v0.56.0`. The Gradle properties and `upstream.json` identify tag `v0.56.0` and peeled commit `2f60827e3028d283969dd74cde5b3f5664220442`.
 
 An Android-only fix increments `versionCode` and the GitHub release revision,
 for example `android-vX.Y.Z-rN`, without changing the visible compatibility

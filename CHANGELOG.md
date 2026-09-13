@@ -6,7 +6,22 @@ release that first shipped it.
 
 ## Unreleased
 
-- Nothing yet.
+- Verify protocol compatibility with desktop Token Monitor v0.56.0, including
+  typed reset/expiry boundaries and background-review session metadata. Older
+  v0.54.0 and v0.55.0 Hub responses remain supported.
+- Add a separate medium/large pages widget with Overview, Limits, Breakdown,
+  and Activity backed by one cached snapshot. The launcher receives one fixed
+  1.82:1 card instead of a collection, preventing One UI from shrinking and
+  fanning the pages.
+- Add accessible left and right edge controls plus four page dots. Changing a
+  page is local and adds no timer, network request, or background work.
+- Use one shared typography scale across all four pages. Only the headline token
+  total is intentionally larger; long provider and model names truncate instead
+  of forcing smaller text.
+- Replace the generic deck picker art with a fixed, populated preview that uses
+  the same wide proportions and information hierarchy as the installed widget.
+- Replace the widget refresh text glyph with a vector icon in a transparent
+  48 dp touch target while retaining the existing five responsive widget sizes.
 
 ## v0.54.0 — September 9, 2026
 

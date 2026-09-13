@@ -18,6 +18,16 @@ class DesktopLabelFormattingTest {
     }
 
     @Test
+    fun boundaryCountdownUsesV056LifecycleWording() {
+        val timestamp = isoAfter(hours = 2)
+        assertEquals("Reset 2h 0m", formatBoundary(timestamp, "reset", now))
+        assertEquals("Expires 2h 0m", formatBoundary(timestamp, "expiry", now))
+        assertEquals("Changes in 2h 0m", formatBoundary(timestamp, "mixed", now))
+        assertEquals("Changes now", formatBoundary(isoAfter(minutes = -1), "mixed", now))
+        assertEquals("Reset 2h 0m", formatBoundary(timestamp, "", now))
+    }
+
+    @Test
     fun relativeAgeMatchesDesktopScale() {
         assertEquals("just now", formatRelativeAge(now - 2_000, now))
         assertEquals("38s ago", formatRelativeAge(now - 38_000, now))

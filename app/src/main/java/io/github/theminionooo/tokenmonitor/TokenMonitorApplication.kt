@@ -2,7 +2,7 @@ package io.github.theminionooo.tokenmonitor
 
 import android.app.Application
 import android.content.res.Configuration
-import io.github.theminionooo.tokenmonitor.widget.UsageWidgetProvider
+import io.github.theminionooo.tokenmonitor.widget.WidgetUpdateCoordinator
 import kotlin.concurrent.thread
 
 /**
@@ -22,7 +22,7 @@ class TokenMonitorApplication : Application() {
         val next = newConfig.uiMode and Configuration.UI_MODE_NIGHT_MASK
         if (next != nightMode) {
             nightMode = next
-            thread(name = "widget-night-mode") { UsageWidgetProvider.refresh(applicationContext) }
+            thread(name = "widget-night-mode") { WidgetUpdateCoordinator.refresh(applicationContext) }
         }
     }
 }

@@ -1,6 +1,6 @@
-# Desktop parity for v0.54.0
+# Desktop parity for v0.56.0
 
-The Android app is verified against desktop Token Monitor v0.54.0. It mirrors
+The Android app is verified against desktop Token Monitor v0.56.0. It mirrors
 the desktop information that the Hub can safely provide while keeping the phone
 read-only and lightweight.
 
@@ -31,7 +31,7 @@ is not treated as a parity failure. Android keeps a touch-oriented native theme
 and preserves the desktop app's translucent segmented controls with their
 sliding selection, recessed panels, hierarchy, spacing, and semantic accents.
 Time-based labels follow the desktop wording: limit windows count down with
-`Reset 1h 59m`, and devices, providers, and limit accounts show ages such as
+`Reset 1h 59m`, `Expires 1h 59m`, or `Changes in 1h 59m` for a mixed boundary, and devices, providers, and limit accounts show ages such as
 `Updated 5m ago`, refreshed on a slow clock between Hub events. Desktop
 glass/backdrop, window opacity, zoom, title-bar layout, and desktop font
 controls are window-specific rather than Hub dashboard features.
@@ -39,7 +39,7 @@ controls are window-specific rather than Hub dashboard features.
 ## Intentional boundaries
 
 The following remain on desktop because they collect data, control a desktop
-window, or require information the v0.54.0 Hub does not transmit:
+window, or require information the v0.56.0 Hub does not transmit:
 
 - tool discovery, account sign-in, collection cadence, diagnostics, export, and
   subscription editing;
@@ -48,6 +48,8 @@ window, or require information the v0.54.0 Hub does not transmit:
 - prompt and response transcript bodies, absolute project paths, local
   credential state, and collector logs;
 - exact renderer-only attribution that is not present in the Hub response.
+- live token-rate presentation. The v0.55.0 throughput capability and timed
+  counters are parsed compatibly, but Android does not display a rate yet.
 
 The Android app does not replace these with remote commands. It reads only the
 documented Hub endpoints listed in [`SECURITY.md`](SECURITY.md).
@@ -68,6 +70,9 @@ documented Hub endpoints listed in [`SECURITY.md`](SECURITY.md).
 - Pull down on any dashboard view to request a fresh snapshot.
 - A light haptic tick on tab and view changes.
 - A direct link to signed Android releases without a background updater.
+- A four-page home-screen widget for Overview, Limits, Breakdown, and Activity.
+  It changes pages locally inside one fixed 1.82:1 card, without adding a network
+  request, timer, or background task.
 
 When upstream changes, update the fixtures and compatibility adapter first.
 See [`UPSTREAM_SYNC.md`](UPSTREAM_SYNC.md) for the repeatable process.

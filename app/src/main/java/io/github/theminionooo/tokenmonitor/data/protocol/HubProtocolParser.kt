@@ -31,7 +31,7 @@ import kotlinx.serialization.json.longOrNull
  * Android client renders and intentionally ignores unknown fields.
  */
 object HubProtocolParser {
-    const val SUPPORTED_UPSTREAM_VERSION = "v0.54.0"
+    const val SUPPORTED_UPSTREAM_VERSION = "v0.56.0"
 
     private val json = Json {
         ignoreUnknownKeys = true
@@ -148,7 +148,17 @@ object HubProtocolParser {
                 },
             )
         }
+        val throughputCapability = objectField("capabilities")?.boolean("throughput")
+        val hasThroughputShape = listOf(
+            "timedTokens" to "timed_tokens",
+            "timedOutputTokens" to "timed_output_tokens",
+            "timedDurationMs" to "timed_duration_ms",
+        ).all { (camel, snake) -> long(camel) != null || long(snake) != null }
         return HubPeriodDto(
+            throughputAvailable = throughputCapability ?: hasThroughputShape,
+            timedTokens = (long("timedTokens") ?: long("timed_tokens") ?: 0).coerceAtLeast(0),
+            timedOutputTokens = (long("timedOutputTokens") ?: long("timed_output_tokens") ?: 0).coerceAtLeast(0),
+            timedDurationMs = (long("timedDurationMs") ?: long("timed_duration_ms") ?: 0).coerceAtLeast(0),
             totalTokens = long("totalTokens") ?: long("total_tokens") ?: 0,
             costUsd = double("costUsd") ?: double("cost_usd") ?: double("cost") ?: 0.0,
             clients = longMap("clients"),
@@ -189,6 +199,7 @@ object HubProtocolParser {
         messageCount = (long("messageCount") ?: 0).toIntSafely(),
         startedAt = string("startedAt"),
         lastUsedAt = string("lastUsedAt"),
+        sessionKind = string("sessionKind"),
     )
 
     private fun JsonObject.toDeviceDto() = HubDeviceDto(
@@ -232,6 +243,7 @@ object HubProtocolParser {
         currency = string("currency"),
         detail = string("detail"),
         showMeter = boolean("showMeter"),
+        boundaryKind = string("boundaryKind"),
     )
 
     private fun JsonObject.toHistoryDto() = HubHistoryDto(
@@ -306,6 +318,10 @@ object HubProtocolParser {
     )
 
     private fun HubPeriodDto.toDomain() = UsagePeriod(
+        throughputAvailable = throughputAvailable,
+        timedTokens = timedTokens,
+        timedOutputTokens = timedOutputTokens,
+        timedDurationMs = timedDurationMs,
         totalTokens = totalTokens.coerceAtLeast(0),
         costUsd = costUsd.coerceAtLeast(0.0),
         clients = clients,
@@ -345,6 +361,7 @@ object HubProtocolParser {
         messageCount = messageCount.coerceAtLeast(0),
         startedAt = startedAt,
         lastUsedAt = lastUsedAt,
+        sessionKind = sessionKind,
     )
 
     private fun HubDeviceDto.toDomain() = DeviceUsage(
@@ -386,6 +403,7 @@ object HubProtocolParser {
         currency = currency,
         detail = detail,
         showMeter = showMeter,
+        boundaryKind = boundaryKind,
     )
 
     private fun HubHistoryDto.toDomain() = HubHistory(

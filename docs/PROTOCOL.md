@@ -4,7 +4,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The baseline is upstream Token Monitor **v0.54.0**, released 2026-09-04. The
+The baseline is upstream Token Monitor **v0.56.0**, released 2026-09-11. The
 release and source were checked directly from the `Javis603/token-monitor`
 tag before this implementation. The older local desktop checkout was not
 changed and is not the protocol authority.
@@ -48,14 +48,25 @@ with the current `/api/devices` result.
 
 ## Fixtures
 
-Sanitized v0.54.0 examples live in
-`app/src/test/resources/protocol/v0.54.0/`. They contain no user secrets,
+Sanitized v0.56.0 examples live in
+`app/src/test/resources/protocol/v0.56.0/`; the retained v0.54.0 and v0.55.0 fixtures prove
+backward compatibility. They contain no user secrets,
 machine paths, account identifiers, or real usage. Parser tests cover every
 read surface, the SSE envelope, omitted optional fields, and a future unknown
 field. The compatibility parser maps only the fields the dashboard needs and
 ignores the rest. v0.54.0 coverage includes project `tokens`, session counts
 and times, device OS/cadence/history, limit labels and balances, and history
 component provenance inside `perClient` and `perModel`.
+
+v0.55.0 adds `capabilities.throughput` and the optional period fields
+`timedTokens`, `timedOutputTokens`, and `timedDurationMs`. Android maps and tests
+those values, treats absent or explicitly unavailable throughput as unknown,
+and does not currently claim a visible token rate.
+
+v0.56.0 adds optional `windows[].boundaryKind` lifecycle wording and
+`periods.*.sessions[].sessionKind` metadata. Android preserves both, renders
+reset, expiry, and mixed boundaries accurately, and keeps older omitted fields
+on their legacy behavior.
 
 When the desktop protocol changes, add a new versioned fixture directory and
 tests before changing the Android mapping.
