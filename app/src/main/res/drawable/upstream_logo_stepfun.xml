@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Path data imported unchanged from Token Monitor's assets/icons/stepfun.svg. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M8.762,19.614H4.376v-4.386h4.386v4.386zm5.423,0H9.798v-4.386h4.387v4.386zm0,-5.42H9.798V9.81h4.387v4.386zm0,-5.418H9.798V4.39h4.387v4.386zm5.422,-0.004h-4.386V4.386h4.386v4.386z" />
+</vector>

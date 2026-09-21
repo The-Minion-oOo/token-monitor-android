@@ -1,0 +1,83 @@
+{
+  "updatedAt": "2026-09-21T01:05:05.000Z",
+  "periods": {
+    "today": {
+      "capabilities": { "tokenComponents": true, "throughput": true },
+      "totalTokens": 312000,
+      "costUsd": 8.42,
+      "timedTokens": 286000,
+      "timedOutputTokens": 32000,
+      "timedDurationMs": 125000,
+      "clients": { "codex": 210000, "dsh": 72000, "opencode": 30000 },
+      "clientCosts": { "codex": 5.9, "dsh": 1.72, "opencode": 0.8 },
+      "models": { "gpt-6-astra": 210000, "deepseek-v3.2": 72000, "qmodel_latest": 30000 },
+      "modelCosts": { "gpt-6-astra": 5.9, "deepseek-v3.2": 1.72, "qmodel_latest": 0.8 },
+      "sessions": {
+        "codex:active": {
+          "sessionId": "active",
+          "client": "codex",
+          "projectLabel": "Token Monitor",
+          "totalTokens": 210000,
+          "costUsd": 5.9,
+          "messageCount": 14,
+          "models": { "gpt-6-astra": 210000 },
+          "startedAt": "2026-09-21T00:20:00.000Z",
+          "lastUsedAt": "2026-09-21T01:04:50.000Z",
+          "contextTokens": 170000,
+          "contextWindow": 200000,
+          "turnEnded": false
+        },
+        "dsh:finished": {
+          "sessionId": "finished",
+          "client": "dsh",
+          "projectLabel": "Research",
+          "totalTokens": 72000,
+          "costUsd": 1.72,
+          "messageCount": 8,
+          "models": { "deepseek-v3.2": 72000 },
+          "startedAt": "2026-09-21T00:30:00.000Z",
+          "lastUsedAt": "2026-09-21T01:04:40.000Z",
+          "contextTokens": 96000,
+          "contextWindow": 128000,
+          "turnEnded": true
+        },
+        "opencode:unknown": {
+          "sessionId": "unknown",
+          "client": "opencode",
+          "projectLabel": "Scratch",
+          "totalTokens": 30000,
+          "costUsd": 0.8,
+          "messageCount": 2,
+          "models": { "qmodel_latest": 30000 },
+          "lastUsedAt": "2026-09-21T01:04:30.000Z"
+        }
+      }
+    }
+  },
+  "limits": {
+    "updatedAt": "2026-09-21T01:05:00.000Z",
+    "providers": [
+      {
+        "provider": "factory",
+        "status": "ok",
+        "windows": [
+          { "kind": "weekly", "label": "Standard", "remainingPercent": 76.0, "resetsAt": "2026-09-28T00:00:00.000Z", "boundaryKind": "reset", "metric": "percent" }
+        ]
+      },
+      {
+        "provider": "opencode",
+        "status": "ok",
+        "windows": [
+          { "kind": "credits", "label": "Zen balance", "remaining": 42.50, "currency": "USD", "metric": "balance", "showMeter": false }
+        ]
+      }
+    ]
+  },
+  "historyPreview": {
+    "daily": [
+      { "date": "2026-09-20", "tokens": 188000, "cost": 5.14, "activeTimeMs": 6400000, "messages": 11 },
+      { "date": "2026-09-21", "tokens": 312000, "cost": 8.42, "activeTimeMs": 12500000, "messages": 24 }
+    ]
+  },
+  "staleAfterMs": 300000
+}

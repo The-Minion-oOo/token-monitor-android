@@ -2,7 +2,7 @@
 
 ## Token Monitor desktop assets
 
-Tool-logo vector paths are imported from [Token Monitor](https://github.com/Javis603/token-monitor/tree/v0.54.0/assets/icons).
+Tool-logo vector paths are imported from [Token Monitor v0.60.0](https://github.com/Javis603/token-monitor/tree/v0.60.0/assets/icons).
 The original source is identified in the drawable comments. The Token Monitor
 app mark and project relationship are credited to that upstream project.
 

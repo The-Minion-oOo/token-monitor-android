@@ -7,11 +7,13 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RadialGradient
 import android.graphics.Shader
+import android.graphics.Typeface
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.toArgb
 import io.github.theminionooo.tokenmonitor.domain.HistoryPoint
 import io.github.theminionooo.tokenmonitor.ui.Palette
+import java.time.DayOfWeek
 import java.time.LocalDate
 import kotlin.math.min
 
@@ -89,7 +91,8 @@ internal object WidgetDeckDrawing {
             val paint = Paint(Paint.ANTI_ALIAS_FLAG)
             val column = safeWidth / 7f
             val barWidth = column * 0.56f
-            val floor = safeHeight.toFloat()
+            val labelHeight = 11f * density
+            val floor = (safeHeight - labelHeight).coerceAtLeast(4f * density)
             val radius = 2f * density
             days.forEachIndexed { index, day ->
                 val left = index * column + (column - barWidth) / 2
@@ -102,8 +105,28 @@ internal object WidgetDeckDrawing {
                     val barHeight = (value.toDouble() / maximum * (floor - 3f * density)).toFloat().coerceAtLeast(2f * density)
                     canvas.drawRoundRect(left, floor - barHeight, left + barWidth, floor, radius, radius, paint)
                 }
+                paint.color = palette.muted.compositeOver(palette.shell).toArgb()
+                paint.textSize = 6.5f * density
+                paint.typeface = Typeface.create("monospace", Typeface.NORMAL)
+                paint.textAlign = Paint.Align.CENTER
+                canvas.drawText(
+                    day.dayOfWeek.widgetLabel(),
+                    left + barWidth / 2f,
+                    safeHeight - 1.5f * density,
+                    paint,
+                )
             }
         }
+    }
+
+    private fun DayOfWeek.widgetLabel(): String = when (this) {
+        DayOfWeek.MONDAY -> "MO"
+        DayOfWeek.TUESDAY -> "TU"
+        DayOfWeek.WEDNESDAY -> "WE"
+        DayOfWeek.THURSDAY -> "TH"
+        DayOfWeek.FRIDAY -> "FR"
+        DayOfWeek.SATURDAY -> "SA"
+        DayOfWeek.SUNDAY -> "SU"
     }
 
     fun heatmap(points: List<HistoryPoint>, end: LocalDate, palette: Palette, width: Int, height: Int, density: Float): Bitmap {

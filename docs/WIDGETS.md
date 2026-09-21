@@ -29,7 +29,7 @@ auto-rotation loop, or wake lock.
 | Overview | Total tokens, estimated cost, messages, active time, streak, tool share, and week summary |
 | Limits | Up to four tightest account windows with remaining quota and reset or expiry wording |
 | Breakdown | Ranked tool and model totals with proportional bars and provider colors |
-| Activity | Seven-day token and cost summary, daily bars, recent-history heatmap, active days, and messages |
+| Activity | Labeled seven-day token and cost bars, a labeled 13-week heatmap, active days, and messages |
 
 ![Pages widget Overview, Limits, Breakdown and Activity](images/widget-pages-overview.png)
 
@@ -48,6 +48,9 @@ a tabular sans-serif figure, and the same `Reset 1d 13h` countdowns the app show
 The card takes the launcher's system corner radius on Android 12 and newer. Quota
 bars and the seven-day chart are drawn at the exact pixel size the launcher reports
 for the widget, so nothing is scaled after the fact and edges stay sharp at any size.
+All four pages share the same text roles and supporting-label contrast. Long names
+truncate instead of forcing a smaller page-specific type scale, and sparse Breakdown
+data remains top-aligned rather than stretching across the card.
 
 Stats beside the figure are today's messages and active time from the Hub's history,
 the current streak, and the week's tokens when a day has none of those. The tool bar

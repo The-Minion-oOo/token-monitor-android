@@ -209,17 +209,19 @@ class WidgetDeckDesignTest {
         }
     }
 
-    @Test fun v054AndEmptyOfflineAndStaleStatesRemainTruthful() {
+    @Test fun v054AndSavedEmptyOfflineAndStaleStatesRemainTruthful() {
         val old = snapshot("v0.54.0")
         assertTrue(!old.today.throughputAvailable)
+        val saved = prepareWidgetDeck(old, WidgetSession(), now = old.capturedAt)
         val stale = prepareWidgetDeck(old, WidgetSession(), now = old.capturedAt + (old.stats.staleAfterMs ?: 300_000L) + 1)
         val offline = prepareWidgetDeck(old, WidgetSession(note = "Connection refused"), now = old.capturedAt)
         val empty = prepareWidgetDeck(null, WidgetSession(), now = old.capturedAt)
+        assertEquals("SAVED", saved.status)
         assertEquals("STALE", stale.status)
         assertEquals("OFFLINE", offline.status)
         assertEquals("NO DATA", empty.status)
         instrumentation.runOnMainSync {
-            listOf(stale, offline).forEach { data ->
+            listOf(saved, stale, offline).forEach { data ->
                 val view = WidgetDeckRenderer.render(context, WidgetDeckPage.Overview, data, InterfaceTheme.Default, SizeF(320f, 220f)).apply(context, FrameLayout(context))
                 layout(view, SizeF(320f, 220f))
                 assertTrue(view.findViewById<ImageView>(R.id.swipe_page_bitmap).contentDescription.contains(data.status, ignoreCase = true))

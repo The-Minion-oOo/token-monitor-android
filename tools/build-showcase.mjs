@@ -13,6 +13,7 @@ const muted = '#a3adbb';
 const mint = '#b7ead4';
 const sans = 'Segoe UI, Helvetica, Arial, sans-serif';
 const mono = 'Consolas, Menlo, monospace';
+const preserveHero = process.env.TOKEN_MONITOR_PRESERVE_HERO === '1';
 
 const text = (x, y, value, { size = 24, color = muted, weight = 400, family = sans, spacing = 0, anchor = 'start' } = {}) =>
   `<text x="${x}" y="${y}" font-family="${family}" font-size="${size}" font-weight="${weight}" fill="${color}" letter-spacing="${spacing}" text-anchor="${anchor}">${value}</text>`;
@@ -83,7 +84,7 @@ async function board(name, width, height, copy, layers) {
 }
 
 // Hero: the pitch on the left, the phone with two widgets floating in front of it on the right.
-{
+if (!preserveHero) {
   const home = await phone('home', 340);
   const large = await rounded('widget-large', 300, 28);
   // One grid: the phone's top sits on the kicker's cap line, and the phone, the widget and the
@@ -98,7 +99,7 @@ async function board(name, width, height, copy, layers) {
     text(72, top + 258, 'Token Monitor Hub on your own desktop.', { size: 23 }) +
     text(72, top + 292, 'Live when you look. Sharp on the home screen.', { size: 23 }) +
     text(72, top + 364, 'PRIVATE HUB  ·  READ ONLY  ·  RESIZABLE WIDGETS', { size: 16, color: mint, weight: 700, family: mono, spacing: 2 }) +
-    text(72, bottom, 'v0.54.0  ·  Android 8+  ·  synthetic demonstration data', { size: 16, family: mono, color: '#7d8794' }),
+    text(72, bottom, 'v0.60.0  ·  Android 8+  ·  synthetic demonstration data', { size: 16, family: mono, color: '#7d8794' }),
     [
       { item: home, left: 1440 - 72 - home.width, top, shadow: true, radius: 50 },
       { item: large, left: 1440 - 72 - home.width - 40 - large.width, top: bottom - large.height, shadow: true, radius: 28 },
@@ -117,7 +118,7 @@ async function board(name, width, height, copy, layers) {
     text(64, top + 156, 'In your pocket.', { size: 54, color: ink, weight: 700 }) +
     text(64, top + 216, 'Live totals, account limits, models and trends', { size: 22 }) +
     text(64, top + 248, 'over your own private Hub. Read-only by design.', { size: 22 }) +
-    text(64, bottom, 'v0.54.0  ·  Android 8+  ·  synthetic demonstration data', { size: 15, family: mono, color: '#7d8794' }),
+    text(64, bottom, 'v0.60.0  ·  Android 8+  ·  synthetic demonstration data', { size: 15, family: mono, color: '#7d8794' }),
     [
       { item: home, left: 1280 - 64 - home.width, top, shadow: true, radius: 36 },
       { item: large, left: 1280 - 64 - home.width - 36 - large.width, top: bottom - large.height, shadow: true, radius: 24 },
@@ -162,4 +163,6 @@ for (const name of ['home', 'filtered-models', 'trends', 'devices', 'projects', 
     themes);
 }
 
-console.log('Rendered hero, social preview, framed captures, widget gallery and widget themes.');
+console.log(preserveHero
+  ? 'Preserved hero; rendered social preview, framed captures, widget gallery and widget themes.'
+  : 'Rendered hero, social preview, framed captures, widget gallery and widget themes.');

@@ -1,17 +1,42 @@
 # Validation
 
-The current public release is Android **v0.56.0 r4** (`560004`). The latest
-phone-verified build is **v0.54.0 r20** (`540020`). r4 is based on desktop Token
-Monitor v0.56.0 while retaining explicit v0.54.0 and v0.55.0 compatibility
-coverage. Installation and launcher inspection on the Galaxy S25 Ultra remain
-pending; emulator results are not presented as One UI verification.
+The current public release is Android **v0.56.0 r4** (`560004`). The current
+source candidate is **v0.60.0 r1** (`600001`), and the latest phone-verified
+build remains **v0.54.0 r20** (`540020`). Installation and launcher inspection
+on the Galaxy S25 Ultra remain pending; emulator results are not presented as
+One UI verification.
+
+## v0.60.0 r1 candidate
+
+The candidate is based on desktop Token Monitor v0.60.0 commit
+`8031cf3b75c7f354db8a990a983999c69086da28`. It retains v0.54.0, v0.55.0,
+and v0.56.0 fixtures and adds a sanitized v0.60.0 fixture for session context,
+tri-state activity, current limit shapes, and stream-v2 events.
+
+On September 21, 2026:
+
+- all 76 JVM tests passed;
+- Android lint, debug assembly, R8 release assembly, and local documentation-link
+  checks passed;
+- all 31 instrumentation tests passed on the API 36
+  `TokenMonitor_API36_Pixel10ProXL` emulator (`emulator-5554`), including the
+  stream-v2 request header, dashboard/widget ownership switching, fixed widget
+  geometry, 48 dp controls, saved/offline/stale states, and page cycling;
+- production renders of Overview, Limits, Breakdown, and Activity were captured
+  together at 360×220 dp in Default and Porcelain. The final pass removed an
+  Overview footer collision, strengthened secondary labels, kept sparse rows
+  top-aligned, raised the page dots, and labeled the 7-day and 13-week activity
+  periods without changing the 1.82:1 card;
+- the release build is unsigned because release credentials were not used during
+  this source validation. Signed in-place phone installation, One UI launcher
+  inspection, and the physical battery gate remain required before publication.
 
 ## Current development checks
 
 The local suite uses the isolated preview package on the API 36
 `TokenMonitor_API36_Pixel10ProXL` emulator (`emulator-5554`).
 
-- 72 JVM tests cover v0.54.0 through v0.56.0 protocol parsing, throughput capability
+- 76 JVM tests cover v0.54.0 through v0.60.0 protocol parsing, throughput capability
   boundaries, network boundaries, storage and shutdown, history aggregation,
   widget data, and presentation rules.
 - 31 instrumentation tests exercise navigation, filtering, period changes, day

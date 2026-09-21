@@ -11,6 +11,7 @@ import android.graphics.Typeface
 import android.util.SizeF
 import android.widget.RemoteViews
 import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.toArgb
 import io.github.theminionooo.tokenmonitor.R
 import io.github.theminionooo.tokenmonitor.ui.InterfaceTheme
@@ -94,13 +95,14 @@ private class DeckCanvas(
     private val monoBold = Typeface.create("monospace", Typeface.BOLD)
     private val sansBold = Typeface.create("sans-serif-medium", Typeface.NORMAL)
     private val compact = width < 300f || height < 150f
-    private val sectionSize = if (compact) 8f else 10f
-    private val primarySize = if (compact) 11f else 13f
-    private val bodySize = if (compact) 7f else 9f
-    private val secondarySize = if (compact) 6.5f else 8f
+    private val sectionSize = if (compact) 8.25f else 10.5f
+    private val primarySize = if (compact) 11.25f else 13.5f
+    private val bodySize = if (compact) 7.25f else 9.5f
+    private val secondarySize = if (compact) 6.75f else 8.5f
     private val contentEdge = if (compact) 16f else 24f
     private val ink = palette.ink.toArgb()
     private val muted = palette.muted.toArgb()
+    private val readableMuted = lerp(palette.muted, palette.ink, 0.18f).toArgb()
     private val line = palette.line.compositeOver(palette.shell).toArgb()
     private val strongLine = palette.strongLine.compositeOver(palette.shell).toArgb()
 
@@ -123,13 +125,13 @@ private class DeckCanvas(
         drawChevron(width - if (compact) 6.5f else 8f, centerY, pointsLeft = false, color = chevronColor)
 
         val gap = if (compact) 6f else 7f
-        val dotY = height - if (compact) 3.5f else 5.5f
+        val dotY = height - if (compact) 6f else 9f
         val startX = width / 2f - gap * (WidgetDeckPage.entries.size - 1) / 2f
         WidgetDeckPage.entries.forEachIndexed { index, candidate ->
             circle(
                 startX + index * gap,
                 dotY,
-                if (candidate == page) 1.9f else 1.45f,
+                if (candidate == page) 2f else 1.5f,
                 if (candidate == page) palette.accent.toArgb() else strongLine,
             )
         }
@@ -189,7 +191,7 @@ private class DeckCanvas(
         val refreshLeft = toggleLeft - if (compact) 55f else 78f
         drawDrawable(R.drawable.ic_widget_refresh, refreshLeft, toggleTop, refreshSize, refreshSize, ink)
         if (!compact) {
-            text(data.status, toggleLeft - 8f, toggleTop + 15.5f, 9f, if (data.liveEnabled && data.status == "LIVE") palette.accent.toArgb() else muted, monoBold, Paint.Align.RIGHT, 58f)
+            text(data.status, toggleLeft - 8f, toggleTop + 15.5f, 9.5f, if (data.liveEnabled && data.status == "LIVE") palette.accent.toArgb() else readableMuted, monoBold, Paint.Align.RIGHT, 58f)
         }
         val activeColor = palette.accent.toArgb()
         val fillColor = if (data.liveEnabled) palette.accent.copy(alpha = 0.18f).compositeOver(palette.shell).toArgb() else palette.overlay.compositeOver(palette.shell).toArgb()
@@ -197,7 +199,7 @@ private class DeckCanvas(
         strokeRoundRect(toggleLeft, toggleTop, toggleRight, toggleTop + toggleHeight, toggleHeight / 2f, if (data.liveEnabled) activeColor else strongLine)
         val knobRadius = toggleHeight * 0.31f
         val knobX = if (data.liveEnabled) toggleRight - toggleHeight / 2f else toggleLeft + toggleHeight / 2f
-        circle(knobX, toggleTop + toggleHeight / 2f, knobRadius, if (data.liveEnabled) activeColor else muted)
+        circle(knobX, toggleTop + toggleHeight / 2f, knobRadius, if (data.liveEnabled) activeColor else readableMuted)
     }
 
     private fun drawOverview(data: WidgetDeckData) {
@@ -212,24 +214,24 @@ private class DeckCanvas(
         val rightColumn = width - 118f
         text("TOTAL TOKENS", left, 70f, sectionSize, ink, monoBold)
         fitText(formatTokens(snapshot.today.totalTokens), left, 116f, 31f, 20f, ink, sansBold, rightColumn - left - 12f)
-        text("${formatMoney(snapshot.today.costUsd)} estimated cost", left, 137f, bodySize, muted, mono, width = rightColumn - left - 12f)
+        text("${formatMoney(snapshot.today.costUsd)} estimated cost", left, 137f, bodySize, readableMuted, mono, width = rightColumn - left - 12f)
         line(rightColumn, 61f, rightColumn, 145f, strongLine)
         data.stats.take(3).forEachIndexed { index, stat ->
             val top = 65f + index * 25f
             text(stat.first, rightColumn + 12f, top + 12f, primarySize, ink, monoBold, width = width - rightColumn - contentEdge - 12f)
-            text(stat.second, rightColumn + 12f, top + 22f, secondarySize, muted, mono, width = width - rightColumn - contentEdge - 12f)
+            text(stat.second, rightColumn + 12f, top + 22f, secondarySize, readableMuted, mono, width = width - rightColumn - contentEdge - 12f)
         }
         val colors = listOf(palette.blue, palette.orange, palette.yellow)
         val colored = data.tools.take(3).mapIndexed { index, row -> row to originalToolColor(row.name, colors[index]).toArgb() }
-        drawSegmentedBar(contentEdge, 153f, width - contentEdge, 159f, colored.map { it.first.share to it.second })
+        drawSegmentedBar(contentEdge, 145f, width - contentEdge, 151f, colored.map { it.first.share to it.second })
         val slot = (width - contentEdge * 2) / 3f
         colored.forEachIndexed { index, entry ->
             val label = "${entry.first.name.displayName().substringBefore(' ')} ${(entry.first.share * 100).roundToInt()}%"
-            text(label, contentEdge + index * slot, 174f, secondarySize, entry.second, mono, width = slot - 5f)
+            text(label, contentEdge + index * slot, 163f, secondarySize, entry.second, mono, width = slot - 5f)
         }
         val weekTokens = data.week.sumOf { it.tokens }
         val weekCost = data.week.sumOf { it.costUsd }
-        text("THIS WEEK  ${formatCompactTokens(weekTokens)} · ${formatMoney(weekCost)}", contentEdge, height - 14f, bodySize, if (weekTokens > 0) ink else muted, mono, width = width - contentEdge * 2)
+        text("THIS WEEK  ${formatCompactTokens(weekTokens)} · ${formatMoney(weekCost)}", contentEdge, height - 20f, bodySize, if (weekTokens > 0) ink else muted, mono, width = width - contentEdge * 2)
     }
 
     private fun drawLimits(data: WidgetDeckData) {
@@ -255,7 +257,7 @@ private class DeckCanvas(
             text("${row.remainingPercent.roundToInt()}% left", cellLeft, cellTop + if (compact) 25f else 29f, primarySize, if (row.remainingPercent > 35) ink else color, monoBold, width = cellRight - cellLeft)
             val barTop = cellTop + if (compact) 29f else 35f
             drawBar(cellLeft, barTop, cellRight, barTop + 4f, row.remainingPercent / 100.0, color)
-            text(row.reset.ifBlank { "Reset not reported" }, cellLeft, barTop + 14f, secondarySize, muted, mono, width = cellRight - cellLeft)
+            text(row.reset.ifBlank { "Reset not reported" }, cellLeft, barTop + 14f, secondarySize, readableMuted, mono, width = cellRight - cellLeft)
         }
     }
 
@@ -271,24 +273,26 @@ private class DeckCanvas(
         text("TOOLS", contentEdge, top + 10f, sectionSize, ink, monoBold)
         text("MODELS", middle + 12f, top + 10f, sectionSize, ink, monoBold)
         val toolsTop = top + 17f
-        val toolRow = (bottom - toolsTop) / 3f
+        val toolSlots = data.tools.take(3).size.coerceAtLeast(2)
+        val toolRow = (bottom - toolsTop) / toolSlots
         data.tools.take(3).forEachIndexed { index, row ->
             val y = toolsTop + index * toolRow
             val color = originalToolColor(row.name, listOf(palette.blue, palette.orange, palette.yellow)[index]).toArgb()
             drawMark(row.name, contentEdge, y + 2f, if (compact) 10f else 14f, color, R.drawable.view_tool)
-            text(row.name.displayName(), contentEdge + if (compact) 14f else 19f, y + 12f, bodySize, ink, mono, width = middle - contentEdge - 62f)
-            text("${formatCompactTokens(row.tokens)}·${(row.share * 100).roundToInt()}%", middle - 12f, y + 12f, secondarySize, muted, mono, Paint.Align.RIGHT, 62f)
+            text(row.name.displayName(), contentEdge + if (compact) 14f else 19f, y + 12f, bodySize + if (compact) 0f else 0.5f, ink, mono, width = middle - contentEdge - 62f)
+            text("${formatCompactTokens(row.tokens)} · ${(row.share * 100).roundToInt()}%", middle - 12f, y + 12f, secondarySize, readableMuted, mono, Paint.Align.RIGHT, 66f)
             drawBar(contentEdge, y + if (compact) 17f else 20f, middle - 12f, y + if (compact) 20f else 24f, row.share, color)
         }
         val modelsTop = top + 17f
-        val modelRow = (bottom - modelsTop) / 4f
+        val modelSlots = data.models.take(4).size.coerceAtLeast(2)
+        val modelRow = (bottom - modelsTop) / modelSlots
         data.models.take(4).forEachIndexed { index, row ->
             val y = modelsTop + index * modelRow
             val fallback = listOf(palette.blue, palette.orange, palette.purple, palette.yellow)[index]
             val color = originalToolColor(row.name, fallback).toArgb()
             drawMark(row.name, middle + 12f, y + 1f, if (compact) 9f else 13f, color, R.drawable.view_model)
-            text(row.name, middle + if (compact) 25f else 30f, y + 11f, bodySize, ink, mono, width = width - middle - if (compact) 96f else 105f)
-            text("${formatCompactTokens(row.tokens)}·${(row.share * 100).roundToInt()}%", width - contentEdge, y + 11f, secondarySize, muted, mono, Paint.Align.RIGHT, 68f)
+            text(row.name, middle + if (compact) 25f else 30f, y + 11f, bodySize + if (compact) 0f else 0.5f, ink, mono, width = width - middle - if (compact) 100f else 111f)
+            text("${formatCompactTokens(row.tokens)} · ${(row.share * 100).roundToInt()}%", width - contentEdge, y + 11f, secondarySize, readableMuted, mono, Paint.Align.RIGHT, 74f)
             drawBar(middle + 12f, y + if (compact) 15f else 18f, width - contentEdge, y + if (compact) 18f else 22f, row.share, color)
         }
     }
@@ -306,20 +310,20 @@ private class DeckCanvas(
         val weekCost = data.week.sumOf { it.costUsd }
         val peak = data.week.maxOfOrNull { it.tokens } ?: 0
         fun compactTokens(value: Long) = formatCompactTokens(value).replace(".0K", "K").replace(".0M", "M")
-        text("${compactTokens(weekTokens)} · ${formatMoney(weekCost)}", contentEdge, top + 11f, bodySize, ink, monoBold, width = middle - contentEdge - 79f)
-        text("PEAK ${compactTokens(peak)}", middle - 10f, top + 11f, secondarySize, muted, mono, Paint.Align.RIGHT, 78f)
+        text("7D ${compactTokens(weekTokens)} · ${formatMoney(weekCost)}", contentEdge, top + 11f, bodySize, ink, monoBold, width = middle - contentEdge - 86f)
+        text("DAY PEAK ${compactTokens(peak)}", middle - 10f, top + 11f, secondarySize, readableMuted, mono, Paint.Align.RIGHT, 84f)
         val chartTop = top + 18f
         drawBitmap(WidgetDeckDrawing.weekChart(data.history, data.date, palette, ceil(middle - contentEdge - 12f).toInt(), ceil(bottom - chartTop).toInt(), 1f), contentEdge, chartTop, middle - 12f, bottom)
         val rightLeft = middle + 12f
-        text("ACTIVITY", rightLeft, top + 11f, sectionSize, ink, monoBold)
+        text("13 WEEKS", rightLeft, top + 11f, sectionSize, ink, monoBold)
         val heatTop = top + 18f
         val statsTop = bottom - if (compact) 27f else 35f
         drawBitmap(WidgetDeckDrawing.heatmap(data.history, data.date, palette, ceil(width - rightLeft - contentEdge).toInt(), ceil(statsTop - heatTop - 5f).toInt(), 1f), rightLeft, heatTop, width - contentEdge, statsTop - 5f)
         val statWidth = (width - rightLeft - contentEdge) / 2f
         text(data.activeDays.toString(), rightLeft, statsTop + 13f, primarySize, ink, monoBold)
-        text("ACTIVE DAYS", rightLeft, statsTop + 24f, secondarySize, muted, mono, width = statWidth - 3f)
+        text("ACTIVE DAYS", rightLeft, statsTop + 24f, secondarySize, readableMuted, mono, width = statWidth - 3f)
         text(formatCompactTokens(data.messagesToday), rightLeft + statWidth, statsTop + 13f, primarySize, ink, monoBold)
-        text("MESSAGES", rightLeft + statWidth, statsTop + 24f, secondarySize, muted, mono, width = statWidth)
+        text("MESSAGES", rightLeft + statWidth, statsTop + 24f, secondarySize, readableMuted, mono, width = statWidth)
     }
 
     private fun drawCentered(message: String) {

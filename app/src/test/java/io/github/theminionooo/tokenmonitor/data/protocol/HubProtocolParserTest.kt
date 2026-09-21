@@ -3,6 +3,7 @@ package io.github.theminionooo.tokenmonitor.data.protocol
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -95,6 +96,24 @@ class HubProtocolParserTest {
         assertEquals("background-review", stats.periods.getValue("today").sessions.single().sessionKind)
         assertEquals("expiry", stats.limits.providers.first().windows.last().boundaryKind)
         assertEquals("mixed", stats.limits.providers.last().windows.single().boundaryKind)
+    }
+
+    @Test
+    fun `v0 60 preserves session activity context and new limit shapes`() {
+        val stats = HubProtocolParser.decodeStats(resource("stats.json", "v0.60.0"))
+        val sessions = stats.periods.getValue("today").sessions.associateBy { it.id }
+
+        assertEquals(false, sessions.getValue("active").turnEnded)
+        assertEquals(170_000, sessions.getValue("active").contextTokens)
+        assertEquals(200_000, sessions.getValue("active").contextWindow)
+        assertEquals(true, sessions.getValue("finished").turnEnded)
+        assertNull(sessions.getValue("unknown").turnEnded)
+        assertEquals("factory", stats.limits.providers.first().provider)
+        val credits = stats.limits.providers.last().windows.single()
+        assertEquals(42.50, credits.remaining!!, 0.001)
+        assertEquals("USD", credits.currency)
+        assertEquals(false, credits.showMeter)
+        assertEquals("v0.60.0", HubProtocolParser.SUPPORTED_UPSTREAM_VERSION)
     }
 
     @Test

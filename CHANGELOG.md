@@ -1,8 +1,23 @@
 # Changelog
 
-Android releases use the desktop protocol version plus an Android revision. Only
-published revisions appear below; unreleased candidate work is folded into the
-release that first shipped it.
+Android releases use the desktop protocol version plus an Android revision.
+Unreleased work stays under **Next release** until its signed APK is published.
+
+## Next release — v0.60.0 r1
+
+- Verify the desktop Token Monitor v0.60.0 Hub contract while retaining the
+  v0.54.0, v0.55.0, and v0.56.0 compatibility fixtures.
+- Negotiate stream protocol v2 and merge lightweight freshness events into the
+  last complete snapshot without dropping periods, limits, devices, or history.
+- Show a session as Running, Finished, or Idle from the new tri-state turn signal,
+  and show recent context-window use when both token values are available.
+- Recognize the current Factory credit/allowance limit shapes and add Qwen,
+  NVIDIA, and StepFun provider presentation without changing the read-only boundary.
+- Refine all four fixed-size widget pages with one stronger supporting-text scale,
+  clearer Saved state, raised page dots, better sparse Breakdown spacing, and
+  labeled seven-day and 13-week Activity charts. Card geometry stays 1.82:1.
+- Split stream delivery and session display rules into focused modules so future
+  desktop upgrades remain fixture-and-adapter work instead of screen rewrites.
 
 ## v0.56.0 — September 13, 2026
 

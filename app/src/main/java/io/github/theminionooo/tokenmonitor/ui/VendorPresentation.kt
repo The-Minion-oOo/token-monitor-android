@@ -21,7 +21,9 @@ private val modelVendorRules = listOf(
     Regex("deepseek") to "deepseek",
     Regex("llama|meta") to "meta",
     Regex("mistral|mixtral|codestral") to "mistral",
-    Regex("qwen|qwq|qvq") to "qwen",
+    Regex("qwen|qwq|qvq|qmodel") to "qwen",
+    Regex("nemotron|nvidia") to "nvidia",
+    Regex("stepfun|step-") to "stepfun",
     Regex("kimi|moonshot|k2d6-agent|k3-agent") to "kimi",
     Regex("chatglm|\\bglm-|\\bzai\\b|z\\.ai|zhipu") to "zai",
     Regex("cohere|command-r") to "cohere",
@@ -58,6 +60,8 @@ internal fun originalToolColor(name: String, fallback: Color): Color = when (ven
     "minimax" -> Color(0xFFF23F5D)
     "doubao" -> Color(0xFF1E37FC)
     "hunyuan" -> Color(0xFF0053E0)
+    "nvidia" -> Color(0xFF74B71B)
+    "stepfun" -> fallback
     "openrouter" -> Color(0xFF6566F1)
     "zed" -> Color(0xFF4173E7)
     else -> fallback
@@ -80,6 +84,8 @@ internal fun upstreamToolAsset(name: String): Int? = when (vendorOf(name)) {
     "minimax" -> R.drawable.upstream_logo_minimax
     "doubao" -> R.drawable.upstream_logo_doubao
     "hunyuan" -> R.drawable.upstream_logo_hunyuan
+    "nvidia" -> R.drawable.upstream_logo_nvidia
+    "stepfun" -> R.drawable.upstream_logo_stepfun
     "opencode" -> R.drawable.upstream_logo_opencode
     "openrouter" -> R.drawable.upstream_logo_openrouter
     "zed" -> R.drawable.upstream_logo_zed

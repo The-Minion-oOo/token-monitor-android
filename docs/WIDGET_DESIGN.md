@@ -12,6 +12,9 @@ and countdowns.
   uppercase and letter-spaced, like `LIMITS` and `TOTAL TOKENS` in the app.
 - The figure is the app's display face: sans-serif medium with tabular numerals. It
   auto-sizes down to keep every digit; it is never abbreviated.
+- The four pages use one shared scale for section, primary, body, and secondary
+  text. Supporting labels use a slightly stronger muted tone so they remain
+  readable on a launcher without competing with primary values.
 - Every color comes from the dashboard `Palette` at render time. The layouts carry no
   colors of their own beyond placeholders, so Default, Obsidian, Porcelain and custom
   desktop codes all apply, and a theme change redraws saved widgets immediately.
@@ -68,16 +71,19 @@ cards. Changing pages performs no network work. Pages do not auto-advance or
 schedule their own updates.
 
 Each page retains the same header controls. Forty-eight-dp left and right edge targets
-cycle the pages and four dots show the current position; tapping the content opens
+cycle the pages and four dots, inset above the lower edge, show the current position; tapping the content opens
 the app. Overview prioritizes the total, three operating stats, tool share, and week
 summary. Limits shows up to four tightest windows. Breakdown compares tools and
-models. Activity combines a seven-day chart with a compact recent-history heatmap.
+models and keeps sparse results top-aligned without shrinking their type. Activity
+labels its daily seven-day bars and identifies the heatmap as thirteen weeks.
 Missing snapshot, limits, breakdown, or history data produces a named empty state
 instead of zero-filled evidence.
 
 The four pages share one type scale for section headings, primary values, body
 rows, and secondary labels. The overview token total is the only deliberate size
 exception. Long names are ellipsized rather than rendered with a smaller font.
+The Saved state keeps its off switch but uses a clearer label and knob contrast than
+ordinary metadata.
 
 ## Verification
 

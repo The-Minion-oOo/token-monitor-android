@@ -17,7 +17,7 @@ Tokens, account limits, models and trends from the desktop Token Monitor Hub, pl
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/badge/Android_checks-CI-73bdf5?style=flat-square&logo=githubactions&logoColor=10221c"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.56.0" src="https://img.shields.io/badge/Desktop-v0.56.0-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.60.0" src="https://img.shields.io/badge/Desktop-v0.60.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
 </p>
@@ -68,7 +68,7 @@ The original widget is the dashboard shrunk to a card, not a different app that 
 </table>
 
 Tap either edge to move between pages. The card itself stays at the same 1.82:1
-shape, the type scale stays consistent, and the page dots keep your place. Moving
+shape, the type scale stays consistent, and the raised page dots keep your place. Moving
 between pages is entirely local: it does not wake the Hub, start Live, or schedule
 background work.
 
@@ -100,6 +100,7 @@ is no public server, vendor relay, or separate Token Monitor account.
 - Day, week, month, rolling 7, 30 and 90 days, one year, all history and total.
 - Account limits with the desktop's reset countdowns.
 - Tools, devices, models, projects, sessions, subscriptions, service status, activity and trends, each with an `updated 5m ago` freshness.
+- Session activity and context-window use when desktop v0.60.0 reports them, without reading prompt or response text.
 - Trends by tool or model, shown as bars or a K-line chart.
 - Cache hit, cache miss, output and unclassified token details where the Hub provides them.
 - The desktop's Default, Obsidian and Porcelain themes, theme codes pasted as-is, an option to follow the phone's light and dark setting, three text sizes, motion controls, and reorderable views and Home modules.
@@ -119,9 +120,9 @@ The Hub deliberately does not carry prompt or response text, so the phone never 
 
 ## Get connected
 
-You need Android 8.0 or newer and a desktop running Token Monitor v0.56.0 with Hub hosting on.
+You need Android 8.0 or newer and a desktop running Token Monitor v0.60.0 with Hub hosting on.
 
-1. Follow [Installing and updating](docs/INSTALL.md). The signed v0.56.0 r4 APK is available from GitHub Releases; Samsung-specific launcher verification is still recorded separately.
+1. Follow [Installing and updating](docs/INSTALL.md). The signed v0.56.0 r4 APK remains the latest public release while the v0.60.0 r1 source candidate completes its release gate.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
 3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
 4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
@@ -134,9 +135,10 @@ You need Android 8.0 or newer and a desktop running Token Monitor v0.56.0 with H
 | | |
 | --- | --- |
 | Current Android release | [`v0.56.0-r4`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.56.0-r4) |
+| Current source candidate | `v0.60.0-r1` ([candidate notes](docs/releases/android-v0.60.0-r1.md)) |
 | Latest phone-verified build | `v0.54.0-r20` ([historical notes](docs/releases/android-v0.54.0-r20.md)) |
-| Verified desktop baseline | Token Monitor `v0.56.0` |
-| Upstream commit | [`2f60827`](https://github.com/Javis603/token-monitor/commit/2f60827e3028d283969dd74cde5b3f5664220442) |
+| Verified desktop baseline | Token Monitor `v0.60.0` |
+| Upstream commit | [`8031cf3`](https://github.com/Javis603/token-monitor/commit/8031cf3b75c7f354db8a990a983999c69086da28) |
 
 The visible version matches the desktop release the phone understands. Android-only
 builds bump the release revision and internal version code while the compatibility

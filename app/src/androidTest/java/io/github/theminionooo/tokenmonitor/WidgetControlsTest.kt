@@ -20,6 +20,7 @@ import org.junit.Test
 import java.net.Inet4Address
 import java.net.NetworkInterface
 import java.net.ServerSocket
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.concurrent.thread
 
@@ -133,6 +134,7 @@ class WidgetControlsTest {
         val streams = AtomicInteger()
         val opened = AtomicInteger()
         val statsReads = AtomicInteger()
+        val requestedStreamV2 = AtomicBoolean()
         val server = ServerSocket(0)
         val serverThread = thread(isDaemon = true) {
             while (!server.isClosed) {
@@ -142,7 +144,11 @@ class WidgetControlsTest {
                         runCatching {
                             val reader = socket.getInputStream().bufferedReader()
                             val path = reader.readLine().split(' ')[1]
-                            while (!reader.readLine().isNullOrEmpty()) { }
+                            while (true) {
+                                val header = reader.readLine() ?: break
+                                if (header.isEmpty()) break
+                                if (header.equals("x-token-monitor-stream: 2", ignoreCase = true)) requestedStreamV2.set(true)
+                            }
                             val output = socket.getOutputStream()
                             if (path == "/api/stats/stream") {
                                 streams.incrementAndGet(); opened.incrementAndGet()
@@ -181,6 +187,7 @@ class WidgetControlsTest {
                 hub.setDashboardVisible(true)
             }
             await { opened.get() == 1 && streams.get() == 1 }
+            assertTrue("Dashboard streams must negotiate protocol v2", requestedStreamV2.get())
             instrumentation.runOnMainSync {
                 hub.setDashboardVisible(false)
                 HubRepositoryPool.release(hub)
