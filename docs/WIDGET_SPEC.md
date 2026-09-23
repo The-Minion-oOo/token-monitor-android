@@ -152,6 +152,28 @@ empty state.
 
 ## Breakdown
 
+When both reported lists contain at most one row, the page uses the sparse
+feature layout below. This is the common installed state and must not look like
+an almost-empty dense table.
+
+| Sparse element | Position (units) |
+| --- | --- |
+| Tool identity mark | 18×18 at (18, 72) |
+| Tool identity | x 42, baseline 87, body strong, ellipsized at x 168 |
+| Model identity mark | 18×18 at (192, 72) |
+| Model identity | x 216, baseline 87, body strong, ellipsized at x 346 |
+| Token figure | column left edge, baseline 118, figure type |
+| Share figure | column right edge, baseline 118, figure type, right aligned |
+| "TOKENS" caption | column left edge, baseline 132 |
+| "SHARE" caption | column right edge, baseline 132, right aligned |
+| Share bar | full column width, y 142 … 148, radius 3 |
+| Tool cost | x 18, baseline 163, secondary type |
+
+The token and share figures use opposite edges of the same column, so neither
+can read as part of the other. Both halves use identical baselines and type.
+
+When either list contains more than one row, use the dense table:
+
 | Element | Position (units) |
 | --- | --- |
 | Column divider | x 181, y 54 … 186, line color |
@@ -159,10 +181,9 @@ empty state.
 | "MODELS" section | x 192, baseline 60 |
 | Tool rows | up to 3, tops at 68, 108, 148 |
 | Tool mark | 16×16 at (18, row top − 1) |
-| Tool name (body) | x 40, baseline row top + 11, ellipsized 6 units before the tokens |
+| Tool name (body) | x 40, baseline row top + 11, ellipsized 8 units before the share |
 | Tool share (body strong) | right edge 168, baseline row top + 11 |
-| Tool tokens (body) | right edge is the measured left edge of the share minus 8 units, baseline row top + 11 |
-| Tool cost (secondary) | same right edge as the tokens, baseline row top + 20 |
+| Tool detail (secondary) | x 40, baseline row top + 20; token total followed by cost when reported |
 | Tool bar | x 18 … 168, y row top + 24 … row top + 28, radius 2 |
 | Model rows | up to 4, tops at 68, 98, 128, 158 |
 | Model mark | 14×14 at (192, row top) |
@@ -171,11 +192,11 @@ empty state.
 | Model tokens (secondary) | x 212, baseline row top + 19 |
 | Model bar | x 192 … 346, y row top + 23 … row top + 26.5, radius 1.75 |
 
-The tool share column always reserves its measured width plus an 8-unit gap, so
-three-digit shares such as 100 percent cannot run into the token figure. Model
-names are long, so the models column keeps the whole name on the first
-line and moves the token figure under it; the tools column keeps the concept's
-single line because tool names are short.
+Tool and model rows use the same two-line hierarchy: identity and share on the
+first line, supporting figures on the second. The tools column prints the token
+total followed by cost when cost is reported; the models column prints the token
+total. This removes the ambiguous token/share run at One UI's installed widget
+size without shrinking text or truncating ordinary tool names.
 
 Shares under one percent print as "<1%". Bars use the row's vendor color.
 Fewer rows leave the remaining space empty; row pitch never changes.

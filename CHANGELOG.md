@@ -3,7 +3,11 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
-## Next release — v0.60.0 r5
+## Next release — v0.60.0 r6
+
+- Give the common one-tool/one-model Breakdown state a dedicated feature
+  layout with large, aligned token and share figures, explicit captions, and
+  full-width bars. Dense multi-row data keeps the compact table layout.
 
 - Verify the desktop Token Monitor v0.60.0 Hub contract while retaining the
   v0.54.0, v0.55.0, and v0.56.0 compatibility fixtures.

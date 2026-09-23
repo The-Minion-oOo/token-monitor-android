@@ -92,12 +92,21 @@ internal object WidgetDeckGrid {
         const val DIVIDER_BOTTOM = 186f
         const val SECTION_BASELINE = 60f
         const val MODELS_X = 192f
+        const val SPARSE_MARK_TOP = 72f
+        const val SPARSE_MARK_SIZE = 18f
+        const val SPARSE_TOOL_NAME_X = 42f
+        const val SPARSE_MODEL_NAME_X = 216f
+        const val SPARSE_IDENTITY_BASELINE = 87f
+        const val SPARSE_VALUE_BASELINE = 118f
+        const val SPARSE_CAPTION_BASELINE = 132f
+        const val SPARSE_BAR_TOP = 142f
+        const val SPARSE_BAR_BOTTOM = 148f
+        const val SPARSE_COST_BASELINE = 163f
         val TOOL_ROW_TOPS = floatArrayOf(68f, 108f, 148f)
         const val TOOL_MARK_SIZE = 16f
         const val TOOL_NAME_X = 40f
         const val TOOL_RIGHT = 168f
-        const val TOOL_VALUE_GAP = 8f
-        const val TOOL_COST_OFFSET = 20f
+        const val TOOL_DETAIL_OFFSET = 20f
         const val TOOL_BAR_TOP_OFFSET = 24f
         const val TOOL_BAR_BOTTOM_OFFSET = 28f
         val MODEL_ROW_TOPS = floatArrayOf(68f, 98f, 128f, 158f)
@@ -107,8 +116,6 @@ internal object WidgetDeckGrid {
         const val MODEL_BAR_TOP_OFFSET = 23f
         const val MODEL_BAR_BOTTOM_OFFSET = 26.5f
         const val NAME_BASELINE_OFFSET = 11f
-
-        fun toolValueRight(shareWidth: Float): Float = TOOL_RIGHT - shareWidth - TOOL_VALUE_GAP
     }
 
     object Activity {

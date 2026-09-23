@@ -311,17 +311,38 @@ private class DeckCanvas(
         vline(g.DIVIDER_X, g.DIVIDER_TOP, g.DIVIDER_BOTTOM, line)
         text("Tools", left, g.SECTION_BASELINE, section, label)
         text("Models", g.MODELS_X, g.SECTION_BASELINE, section, label)
+        if (data.tools.size <= 1 && data.models.size <= 1) {
+            data.tools.firstOrNull()?.let { row ->
+                val color = vendorColor(row.name, 0)
+                drawMark(row.name, left, g.SPARSE_MARK_TOP, g.SPARSE_MARK_SIZE, color, R.drawable.view_tool)
+                text(row.name.displayName(), g.SPARSE_TOOL_NAME_X, g.SPARSE_IDENTITY_BASELINE, bodyStrong, ink, maxWidth = g.TOOL_RIGHT - g.SPARSE_TOOL_NAME_X)
+                fitText(compactFigure(row.tokens), left, g.SPARSE_VALUE_BASELINE, figure, Type.STAT, ink, 72f)
+                text(sharePercent(row.share), g.TOOL_RIGHT, g.SPARSE_VALUE_BASELINE, figure, ink, Paint.Align.RIGHT, 68f)
+                text("Tokens", left, g.SPARSE_CAPTION_BASELINE, caption, muted)
+                text("Share", g.TOOL_RIGHT, g.SPARSE_CAPTION_BASELINE, caption, muted, Paint.Align.RIGHT)
+                drawBar(RectF(left, g.SPARSE_BAR_TOP, g.TOOL_RIGHT, g.SPARSE_BAR_BOTTOM), row.share, color)
+                if (row.costUsd > 0) text("${formatMoney(row.costUsd)} estimated cost", left, g.SPARSE_COST_BASELINE, secondary, muted)
+            }
+            data.models.firstOrNull()?.let { row ->
+                val color = vendorColor(row.name, 0)
+                drawMark(row.name, g.MODELS_X, g.SPARSE_MARK_TOP, g.SPARSE_MARK_SIZE, color, R.drawable.view_model)
+                text(row.name, g.SPARSE_MODEL_NAME_X, g.SPARSE_IDENTITY_BASELINE, bodyStrong, ink, maxWidth = right - g.SPARSE_MODEL_NAME_X)
+                fitText(compactFigure(row.tokens), g.MODELS_X, g.SPARSE_VALUE_BASELINE, figure, Type.STAT, ink, 72f)
+                text(sharePercent(row.share), right, g.SPARSE_VALUE_BASELINE, figure, ink, Paint.Align.RIGHT, 68f)
+                text("Tokens", g.MODELS_X, g.SPARSE_CAPTION_BASELINE, caption, muted)
+                text("Share", right, g.SPARSE_CAPTION_BASELINE, caption, muted, Paint.Align.RIGHT)
+                drawBar(RectF(g.MODELS_X, g.SPARSE_BAR_TOP, right, g.SPARSE_BAR_BOTTOM), row.share, color)
+            }
+            return
+        }
         data.tools.take(g.TOOL_ROW_TOPS.size).forEachIndexed { index, row ->
             val top = g.TOOL_ROW_TOPS[index]
             val color = vendorColor(row.name, index)
             drawMark(row.name, left, top - 1f, g.TOOL_MARK_SIZE, color, R.drawable.view_tool)
-            val shareText = sharePercent(row.share)
-            val valueRight = g.toolValueRight(measure(shareText, bodyStrong))
-            val tokenText = compactFigure(row.tokens)
-            text(shareText, g.TOOL_RIGHT, top + g.NAME_BASELINE_OFFSET, bodyStrong, ink, Paint.Align.RIGHT)
-            text(tokenText, valueRight, top + g.NAME_BASELINE_OFFSET, body, ink, Paint.Align.RIGHT)
-            text(row.name.displayName(), g.TOOL_NAME_X, top + g.NAME_BASELINE_OFFSET, body, ink, maxWidth = valueRight - measure(tokenText, body) - g.TOOL_NAME_X - 6f)
-            if (row.costUsd > 0) text(formatMoney(row.costUsd), valueRight, top + g.TOOL_COST_OFFSET, secondary, muted, Paint.Align.RIGHT)
+            val shareWidth = text(sharePercent(row.share), g.TOOL_RIGHT, top + g.NAME_BASELINE_OFFSET, bodyStrong, ink, Paint.Align.RIGHT)
+            text(row.name.displayName(), g.TOOL_NAME_X, top + g.NAME_BASELINE_OFFSET, body, ink, maxWidth = g.TOOL_RIGHT - shareWidth - 8f - g.TOOL_NAME_X)
+            val detail = compactFigure(row.tokens) + if (row.costUsd > 0) " · ${formatMoney(row.costUsd)}" else ""
+            text(detail, g.TOOL_NAME_X, top + g.TOOL_DETAIL_OFFSET, secondary, muted, maxWidth = g.TOOL_RIGHT - g.TOOL_NAME_X)
             drawBar(RectF(left, top + g.TOOL_BAR_TOP_OFFSET, g.TOOL_RIGHT, top + g.TOOL_BAR_BOTTOM_OFFSET), row.share, color)
         }
         data.models.take(g.MODEL_ROW_TOPS.size).forEachIndexed { index, row ->

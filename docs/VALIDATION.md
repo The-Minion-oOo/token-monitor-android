@@ -1,8 +1,41 @@
 # Validation
 
 The current public release is Android **v0.56.0 r4** (`560004`). The current
-source candidate and latest phone-verified build is **v0.60.0 r5** (`600005`).
+source candidate and latest phone-verified build is **v0.60.0 r6** (`600006`).
 It remains unpublished pending maintainer approval.
+
+## v0.60.0 r6 candidate
+
+The owner's final r5 One UI screenshot showed that the common one-tool/one-model
+state still looked like a mostly empty dense table: small figures clustered at
+the top and the token total could read into the share. r6 gives this sparse state
+a dedicated feature layout with large token and share figures on opposite column
+edges, explicit captions, matching baselines, and full-width bars. Multi-row data
+continues to use the dense table. The card ratio and the other three pages do not
+change.
+
+The written grid specification was updated before the renderer. All 82 JVM
+tests, all 31 API 36 instrumentation tests, lint, debug assembly, signed release
+assembly, documentation links, and the final diff check pass. The independent
+review found no material issue.
+
+The signed r6 APK reports package `io.github.theminionooo.tokenmonitor`, version
+code `600006`, certificate SHA-256
+`eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`, and file
+SHA-256 `0f73f96da54087481ec416b486e35b8cd90833fc1bb5d7b289ae15e896fb7ef6`.
+
+The APK was installed over the existing r5/r6 candidate on a Galaxy S25 Ultra
+(SM-S938U) without uninstalling. The original first-install timestamp
+(`2026-09-21 11:03:41`) and One UI widget ID `42` were preserved. Physical
+captures of Overview, Limits, Breakdown, and Activity are in
+`local-private/widget-r6-phone-2026-09-22/`. The sparse Breakdown capture shows
+the token and share figures separated and aligned at the installed 5×2 widget
+size; the other three pages remain visually consistent with the approved r5
+phone-size comparison.
+
+The bounded battery gate found no active Token Monitor service or wake lock and
+no Android CLI test instrumentation. This is an idle-state check, not a
+multi-hour battery soak.
 
 ## v0.60.0 r5 candidate
 

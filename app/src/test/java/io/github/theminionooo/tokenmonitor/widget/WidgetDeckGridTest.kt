@@ -39,9 +39,18 @@ class WidgetDeckGridTest {
         assertTrue(overview.STAT_CAPTION_OFFSET - overview.STAT_VALUE_OFFSET >= WidgetDeckGrid.Type.CAPTION)
     }
 
-    @Test fun `breakdown tool values keep a fixed gap from the measured share`() {
+    @Test fun `breakdown tool rows keep supporting figures below the identity line`() {
         val breakdown = WidgetDeckGrid.Breakdown
-        assertEquals(136f, breakdown.toolValueRight(24f), 0.0001f)
-        assertEquals(breakdown.TOOL_VALUE_GAP, breakdown.TOOL_RIGHT - 24f - breakdown.toolValueRight(24f), 0.0001f)
+        assertTrue(breakdown.TOOL_DETAIL_OFFSET > breakdown.NAME_BASELINE_OFFSET)
+        assertTrue(breakdown.TOOL_DETAIL_OFFSET < breakdown.TOOL_BAR_TOP_OFFSET)
+        assertTrue(breakdown.TOOL_RIGHT - breakdown.TOOL_NAME_X >= 100f)
+    }
+
+    @Test fun `sparse breakdown gives aligned figures the full column width`() {
+        val breakdown = WidgetDeckGrid.Breakdown
+        assertTrue(breakdown.SPARSE_VALUE_BASELINE > breakdown.SPARSE_IDENTITY_BASELINE)
+        assertTrue(breakdown.SPARSE_CAPTION_BASELINE > breakdown.SPARSE_VALUE_BASELINE)
+        assertTrue(breakdown.SPARSE_BAR_TOP > breakdown.SPARSE_CAPTION_BASELINE)
+        assertTrue(breakdown.SPARSE_COST_BASELINE < WidgetDeckGrid.Header.DOTS_Y)
     }
 }
