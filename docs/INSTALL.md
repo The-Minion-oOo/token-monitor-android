@@ -8,11 +8,11 @@
 
 ## Install
 
-The current public build is the signed v0.60.0 r7 APK on the
-[Releases page](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.60.0-r7).
-v0.61.0 r1 is the current source candidate and will be added there only after
-its signed in-place phone upgrade gate passes. Exact completed and pending
-evidence is recorded in [Validation](VALIDATION.md).
+Download the signed v0.61.0 r1 APK from the public
+[release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.61.0-r1).
+Automated, emulator, signing, and packaging checks pass. A physical in-place
+phone upgrade was not available before publication; that limitation and the
+completed evidence are recorded in [Validation](VALIDATION.md).
 
 To build the current source, install JDK 17 and Android SDK 37, then run:
 
@@ -39,7 +39,7 @@ There is no Play Store or F-Droid listing.
 Each signed release will include an APK and a `.sha256` file. Compare the hash:
 
 ```powershell
-Get-FileHash .\token-monitor-android-v0.60.0-r7.apk -Algorithm SHA256
+Get-FileHash .\token-monitor-android-v0.61.0-r1.apk -Algorithm SHA256
 ```
 
 A matching checksum detects download corruption; download both files from the

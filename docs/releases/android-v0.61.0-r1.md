@@ -27,5 +27,5 @@ removes pairing, preferences, and the saved snapshot. See
 
 ## Verification
 
-The exact test, signing, upgrade, and device evidence for the release candidate
+The exact test, signing, upgrade, and device evidence for the release
 is recorded in [Validation](../VALIDATION.md).

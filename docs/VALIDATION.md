@@ -1,12 +1,12 @@
 # Validation
 
-The current source is Android **v0.61.0 r1** (`610001`). The current public and
-latest phone-verified release remains v0.60.0 r7 until this candidate completes
-its signed in-place upgrade gate and is published.
+The current public release and source version is Android **v0.61.0 r1**
+(`610001`). The latest build verified by an in-place physical-phone upgrade
+remains v0.60.0 r7.
 
-## v0.61.0 r1 candidate
+## v0.61.0 r1 release
 
-The candidate is pinned to desktop Token Monitor v0.61.0 tag commit
+The release is pinned to desktop Token Monitor v0.61.0 tag commit
 `dc3cc1321d9490873ff96abb662e07eecea75751`. The released Hub keeps the same
 five read endpoints and stream envelope used by v0.60.0. A sanitized v0.61.0
 fixture covers health, stats, devices, history, subscriptions, complete stream
@@ -30,12 +30,12 @@ GitHub release or phone gate existed. Both now distinguish the published
 v0.60.0 r7 build from the v0.61.0 r1 source candidate. The final regression
 pass found no remaining material issue.
 
-The signed APK reports package `io.github.theminionooo.tokenmonitor`, version
+The published APK reports package `io.github.theminionooo.tokenmonitor`, version
 code `610001`, certificate SHA-256
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`, and file
 SHA-256 `cc52c84aa519d72de65465ed39224043ef8e1cd044dc6abda013c1e27882f705`.
-Its certificate matches v0.60.0 r7. The in-place phone gate remains pending
-until a device is connected; this candidate has not been published.
+Its certificate matches v0.60.0 r7. No device was connected for the final
+physical in-place upgrade gate, so that result remains explicitly unverified.
 
 ## v0.60.0 r7 release
 
