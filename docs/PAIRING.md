@@ -28,7 +28,7 @@ Public IP addresses and ordinary public hostnames are rejected for both fields. 
 
 ## No QR code in the current desktop release
 
-Token Monitor v0.60.0 lists Hub URLs and the secret but does not generate a pairing QR code. Manual copy is therefore the supported first pairing flow. A future QR flow should be added only when both apps can keep the payload local and clearly warn that the code contains the Hub secret.
+Token Monitor v0.61.0 lists Hub URLs and the secret but does not generate a pairing QR code. Manual copy is therefore the supported first pairing flow. A future QR flow should be added only when both apps can keep the payload local and clearly warn that the code contains the Hub secret.
 
 ## Troubleshooting
 

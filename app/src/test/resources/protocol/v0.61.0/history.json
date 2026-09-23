@@ -1,0 +1,31 @@
+{
+  "daily": [
+    {
+      "date": "2026-09-21",
+      "tokens": 246000,
+      "cost": 7.10,
+      "messages": 12,
+      "activeTimeMs": 6200000,
+      "cacheReadTokens": 171000,
+      "cacheWriteTokens": 9000,
+      "outputTokens": 31000,
+      "unclassifiedTokens": 35000,
+      "tokenComponentsAvailable": true,
+      "perClient": {
+        "codex": { "tokens": 160000, "cost": 4.50, "cacheReadTokens": 120000, "cacheWriteTokens": 6000, "outputTokens": 18000, "unclassifiedTokens": 16000 },
+        "mimo": { "tokens": 50000, "cost": 1.00, "cacheReadTokens": 31000, "cacheWriteTokens": 2000, "outputTokens": 8000, "unclassifiedTokens": 9000 },
+        "devin": { "tokens": 36000, "cost": 1.60, "cacheReadTokens": 20000, "cacheWriteTokens": 1000, "outputTokens": 5000, "unclassifiedTokens": 10000 }
+      },
+      "perModel": {
+        "gpt-6-astra": { "tokens": 160000, "cost": 4.50, "cacheReadTokens": 120000, "cacheWriteTokens": 6000, "outputTokens": 18000, "unclassifiedTokens": 16000 }
+      }
+    },
+    { "date": "2026-09-22", "tokens": 228000, "cost": 6.14, "messages": 13, "activeTimeMs": 7400000 },
+    { "date": "2026-09-23", "tokens": 370000, "cost": 10.50, "messages": 24, "activeTimeMs": 14200000 }
+  ],
+  "monthly": [
+    { "month": "2026-08", "tokens": 3015120, "cost": 120.74, "activeTimeMs": 140400000 },
+    { "month": "2026-09", "tokens": 982000, "cost": 28.34, "activeTimeMs": 43200000 }
+  ],
+  "summary": { "totalTokens": 3997120, "totalCost": 149.08 }
+}

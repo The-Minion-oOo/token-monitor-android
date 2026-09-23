@@ -3,6 +3,18 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
+## v0.61.0 r1 — 2026-09-23
+
+- Verify every Android read endpoint against desktop Token Monitor v0.61.0 and
+  add a sanitized full-endpoint fixture while retaining the v0.54.0 through
+  v0.60.0 compatibility cases.
+- Recognize the canonical Xiaomi MiMo and Devin clients, the Cline and Devin
+  limit providers, GitHub Copilot, and the desktop's current provider names.
+- Add the upstream Cline and Devin marks and keep older MiMo client IDs readable
+  after the desktop's normalization to `mimo`.
+- Preserve the r7 Pages widget geometry and type scale; this compatibility
+  release changes data identity and presentation only.
+
 ## v0.60.0 r7 — 2026-09-22
 
 - Give both dense Breakdown columns one two-line row with room between the

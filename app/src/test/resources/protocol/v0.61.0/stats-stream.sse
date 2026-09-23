@@ -1,0 +1,3 @@
+event: stats
+data: {"stats":{"updatedAt":"2026-09-23T12:05:30.000Z","periods":{"today":{"totalTokens":371000,"clients":{"codex":210000,"mimo":61000,"devin":45000,"copilot":35000,"cline":20000},"sessions":{"codex:active":{"sessionId":"active","client":"codex","lastUsedAt":"2026-09-23T12:05:29.000Z","contextTokens":171000,"contextWindow":200000,"turnEnded":false}}}},"limits":{"updatedAt":"2026-09-23T12:05:30.000Z","providers":[]}}}
+

@@ -95,7 +95,7 @@ if (!preserveHero) {
     text(72, top + 258, 'the Token Monitor Hub on your own desktop.', { size: 23 }) +
     text(72, top + 292, 'The phone reads. The desktop stays in control.', { size: 23 }) +
     text(72, top + 364, 'PRIVATE HUB  ·  READ ONLY  ·  NO ANALYTICS', { size: 16, color: mint, weight: 700, family: mono, spacing: 2 }) +
-    text(72, bottom, 'v0.60.0 r7  ·  Android 8+  ·  synthetic demonstration data', { size: 16, family: mono, color: '#7d8794' }),
+    text(72, bottom, 'v0.61.0 r1  ·  Android 8+  ·  synthetic demonstration data', { size: 16, family: mono, color: '#7d8794' }),
     [
       { item: home, left: 1440 - 72 - home.width, top, shadow: true, radius: 50 },
     ]);
@@ -111,7 +111,7 @@ if (!preserveHero) {
     text(64, 230, 'One fixed footprint.', { size: 54, color: ink, weight: 700 }) +
     text(64, 300, 'Overview, limits, breakdown and activity', { size: 22 }) +
     text(64, 332, 'from one saved desktop snapshot.', { size: 22 }) +
-    text(64, 574, 'v0.60.0 r7  ·  Android 8+  ·  synthetic demonstration data', { size: 15, family: mono, color: '#7d8794' }),
+    text(64, 574, 'v0.61.0 r1  ·  Android 8+  ·  synthetic demonstration data', { size: 15, family: mono, color: '#7d8794' }),
     [
       { item: pages[0], left: 650, top: 92, shadow: true, radius: 16 },
       { item: pages[1], left: 946, top: 92, shadow: true, radius: 16 },

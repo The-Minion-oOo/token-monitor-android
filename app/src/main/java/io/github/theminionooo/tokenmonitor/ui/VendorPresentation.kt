@@ -28,6 +28,8 @@ private val modelVendorRules = listOf(
     Regex("chatglm|\\bglm-|\\bzai\\b|z\\.ai|zhipu") to "zai",
     Regex("cohere|command-r") to "cohere",
     Regex("mimo|xiaomi") to "xiaomi",
+    Regex("^cline$") to "cline",
+    Regex("^swe[-_]|devin|cognition") to "devin",
     Regex("minimax|\\babab") to "minimax",
     Regex("doubao|\\bseed(?:-|$)") to "doubao",
     Regex("hy3|hunyuan") to "hunyuan",
@@ -57,6 +59,8 @@ internal fun originalToolColor(name: String, fallback: Color): Color = when (ven
     "kimi", "zai", "opencode" -> fallback
     "cohere" -> Color(0xFF39594D)
     "xiaomi" -> Color(0xFFFF6700)
+    "cline" -> Color(0xFF9D4EDD)
+    "devin" -> fallback
     "minimax" -> Color(0xFFF23F5D)
     "doubao" -> Color(0xFF1E37FC)
     "hunyuan" -> Color(0xFF0053E0)
@@ -81,6 +85,8 @@ internal fun upstreamToolAsset(name: String): Int? = when (vendorOf(name)) {
     "zai" -> R.drawable.upstream_logo_zai
     "cohere" -> R.drawable.upstream_logo_cohere
     "xiaomi" -> R.drawable.upstream_logo_xiaomi
+    "cline" -> R.drawable.upstream_logo_cline
+    "devin" -> R.drawable.upstream_logo_devin
     "minimax" -> R.drawable.upstream_logo_minimax
     "doubao" -> R.drawable.upstream_logo_doubao
     "hunyuan" -> R.drawable.upstream_logo_hunyuan

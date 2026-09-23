@@ -1,0 +1,134 @@
+{
+  "updatedAt": "2026-09-23T12:05:05.000Z",
+  "periods": {
+    "today": {
+      "capabilities": { "tokenComponents": true, "throughput": true },
+      "totalTokens": 370000,
+      "costUsd": 10.50,
+      "timedTokens": 342000,
+      "timedOutputTokens": 41000,
+      "timedDurationMs": 142000,
+      "clients": { "codex": 210000, "mimo": 60000, "devin": 45000, "copilot": 35000, "cline": 20000 },
+      "clientCosts": { "codex": 5.90, "mimo": 1.20, "devin": 1.60, "copilot": 1.00, "cline": 0.80 },
+      "models": { "gpt-6-astra": 210000, "mimo-v2": 60000, "claude-sonnet-4-5": 45000, "gpt-5": 35000, "qwen3-coder": 20000 },
+      "modelCosts": { "gpt-6-astra": 5.90, "mimo-v2": 1.20, "claude-sonnet-4-5": 1.60, "gpt-5": 1.00, "qwen3-coder": 0.80 },
+      "clientModels": {
+        "codex": { "gpt-6-astra": 210000 },
+        "mimo": { "mimo-v2": 60000 },
+        "devin": { "claude-sonnet-4-5": 45000 },
+        "copilot": { "gpt-5": 35000 },
+        "cline": { "qwen3-coder": 20000 }
+      },
+      "sessions": {
+        "codex:active": {
+          "sessionId": "active",
+          "client": "codex",
+          "projectLabel": "Token Monitor",
+          "totalTokens": 210000,
+          "costUsd": 5.90,
+          "messageCount": 14,
+          "models": { "gpt-6-astra": 210000 },
+          "startedAt": "2026-09-23T11:20:00.000Z",
+          "lastUsedAt": "2026-09-23T12:04:50.000Z",
+          "contextTokens": 170000,
+          "contextWindow": 200000,
+          "turnEnded": false
+        },
+        "mimo:finished": {
+          "sessionId": "finished",
+          "client": "mimo",
+          "projectLabel": "Mobile client",
+          "totalTokens": 60000,
+          "costUsd": 1.20,
+          "messageCount": 6,
+          "models": { "mimo-v2": 60000 },
+          "lastUsedAt": "2026-09-23T12:04:40.000Z",
+          "turnEnded": true
+        },
+        "devin:local": {
+          "sessionId": "local",
+          "client": "devin",
+          "projectLabel": "Release checks",
+          "totalTokens": 45000,
+          "costUsd": 1.60,
+          "messageCount": 4,
+          "models": { "claude-sonnet-4-5": 45000 },
+          "lastUsedAt": "2026-09-23T12:04:30.000Z"
+        }
+      },
+      "projects": {
+        "token-monitor": {
+          "projectId": "token-monitor",
+          "projectLabel": "Token Monitor",
+          "totalTokens": 210000,
+          "costUsd": 5.90,
+          "sessionCount": 1,
+          "clients": { "codex": 210000 }
+        }
+      }
+    },
+    "month": {
+      "totalTokens": 982000,
+      "costUsd": 28.34,
+      "clients": { "codex": 610000, "mimo": 142000, "devin": 95000, "copilot": 80000, "cline": 55000 },
+      "clientCosts": { "codex": 17.12, "mimo": 2.84, "devin": 3.40, "copilot": 2.28, "cline": 2.70 }
+    }
+  },
+  "devices": [
+    {
+      "deviceId": "desktop-a",
+      "hostname": "Studio",
+      "platform": "win32",
+      "osName": "Windows",
+      "osVersion": "11 24H2",
+      "updatedAt": "2026-09-23T12:05:04.000Z",
+      "receivedAt": "2026-09-23T12:05:05.000Z",
+      "ageMs": 1000,
+      "stale": false,
+      "historyAvailable": true,
+      "trackedClients": ["codex", "mimo", "devin", "copilot", "cline"],
+      "periods": {
+        "today": {
+          "totalTokens": 370000,
+          "costUsd": 10.50,
+          "clients": { "codex": 210000, "mimo": 60000, "devin": 45000, "copilot": 35000, "cline": 20000 }
+        }
+      }
+    }
+  ],
+  "limits": {
+    "updatedAt": "2026-09-23T12:05:00.000Z",
+    "providers": [
+      {
+        "provider": "cline",
+        "status": "ok",
+        "plan": "Pro",
+        "windows": [
+          { "kind": "weekly", "label": "Weekly", "remainingPercent": 68.0, "resetsAt": "2026-09-28T00:00:00.000Z", "boundaryKind": "reset", "metric": "percent" }
+        ]
+      },
+      {
+        "provider": "devin",
+        "status": "ok",
+        "windows": [
+          { "kind": "credits", "label": "Credits", "remaining": 82.50, "currency": "USD", "metric": "credits", "showMeter": false }
+        ]
+      },
+      {
+        "provider": "mimo",
+        "status": "ok",
+        "windows": [
+          { "kind": "monthly", "label": "Monthly", "remainingPercent": 74.0, "resetsAt": "2026-10-01T00:00:00.000Z", "boundaryKind": "reset", "metric": "percent" }
+        ]
+      }
+    ]
+  },
+  "historyPreview": {
+    "daily": [
+      { "date": "2026-09-22", "tokens": 228000, "cost": 6.14, "activeTimeMs": 7400000, "messages": 13 },
+      { "date": "2026-09-23", "tokens": 370000, "cost": 10.50, "activeTimeMs": 14200000, "messages": 24 }
+    ]
+  },
+  "subscriptionsUpdatedAt": "2026-09-23T12:00:00.000Z",
+  "staleAfterMs": 300000
+}

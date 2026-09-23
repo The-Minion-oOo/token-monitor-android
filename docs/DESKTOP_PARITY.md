@@ -1,6 +1,6 @@
-# Desktop parity for v0.60.0
+# Desktop parity for v0.61.0
 
-The Android app is verified against desktop Token Monitor v0.60.0. It mirrors
+The Android app is verified against desktop Token Monitor v0.61.0. It mirrors
 the desktop information that the Hub can safely provide while keeping the phone
 read-only and lightweight.
 
@@ -39,7 +39,7 @@ controls are window-specific rather than Hub dashboard features.
 ## Intentional boundaries
 
 The following remain on desktop because they collect data, control a desktop
-window, or require information the v0.60.0 Hub does not transmit:
+window, or require information the v0.61.0 Hub does not transmit:
 
 - tool discovery, account sign-in, collection cadence, diagnostics, export, and
   subscription editing;
@@ -50,8 +50,13 @@ window, or require information the v0.60.0 Hub does not transmit:
 - exact renderer-only attribution that is not present in the Hub response.
 - live token-rate presentation. The v0.55.0 throughput capability and timed
   counters are parsed compatibly, but Android does not display a rate yet.
-- the v0.60.0 Edge Dock and its pin, edge, hover, drag, and desktop-window
+- the Edge Dock, floating AI bubble, macOS haptics, and their desktop-window
   behavior. Sessions remain a normal mobile dashboard destination.
+
+v0.61.0 presentation parity includes canonical Xiaomi MiMo and Devin usage,
+Cline and Devin limits, GitHub Copilot labeling, and the desktop provider names.
+Those are display mappings over the existing Hub data, not new phone-side
+collection.
 
 The Android app does not replace these with remote commands. It reads only the
 documented Hub endpoints listed in [`SECURITY.md`](SECURITY.md).
