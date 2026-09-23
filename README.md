@@ -22,7 +22,7 @@ Tokens, account limits, models and trends from the desktop Token Monitor Hub, pl
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
 </p>
 
-<img src="docs/images/hero.png" alt="Token Monitor's Android dashboard showing synthetic usage data" width="100%">
+<img src="docs/images/hero.png?v=0.60.0-r7-readme" alt="Token Monitor's Android dashboard showing synthetic usage data" width="100%">
 
 Your desktop [Token Monitor](https://github.com/Javis603/token-monitor) already
 tracks the usage. This app brings the same dashboard, visual language, and
