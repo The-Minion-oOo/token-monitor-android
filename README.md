@@ -165,5 +165,6 @@ Add `-PtokenMonitorPreview=true` to install a separate `.preview` build next to 
 This project is independent of the upstream Token Monitor maintainers and of the services whose marks appear in the app. [MIT License](LICENSE) · [Third-party notices](THIRD_PARTY_NOTICES.md).
 
 <p align="center">
-  Maintained by <a href="https://github.com/The-Minion-oOo"><b>The_Minion_oOo</b></a>
+  Made with ❤️ by <a href="https://github.com/The-Minion-oOo"><b>The_Minion_oOo</b></a><br>
+  <sub>...: Thanks to Codex and Claude :...</sub>
 </p>
