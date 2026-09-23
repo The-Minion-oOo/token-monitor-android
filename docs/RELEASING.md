@@ -8,8 +8,8 @@ Android-only releases keep `versionName` and increment the final three digits of
 
 ```text
 versionName: v0.60.0
-versionCode: 600006
-release tag: android-v0.60.0-r6
+versionCode: 600007
+release tag: android-v0.60.0-r7
 ```
 
 A newly verified desktop version updates the visible version and starts its

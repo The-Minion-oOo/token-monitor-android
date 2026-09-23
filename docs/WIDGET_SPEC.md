@@ -83,7 +83,7 @@ All colors come from the dashboard `Palette` for the active theme.
 
 | Element | Position (units) |
 | --- | --- |
-| App icon | 22×22 at (18, 16) |
+| App icon | 22×22 at (18, 20), centered on the brand and page lines |
 | Brand "TOKEN MONITOR" | x 48, baseline 30 |
 | Page "OVERVIEW · 1/4" | x 48, baseline 43 |
 | Refresh icon | 16×16 at (238, 20) |
@@ -135,7 +135,7 @@ left. At most two providers.
 | Row 1 top | 52 |
 | Row 2 top | 122 |
 | Horizontal rule between rows | y 117.5, x 18 … 346 |
-| Provider mark | 22×22 at (18, row top + 2), vendor color |
+| Provider mark | 22×22 at (18, row top + 10), centered on the title and percentage lines, vendor color |
 | Left cell text x | 46 |
 | Right cell text x | 197 |
 | Left cell right edge | 162 |
@@ -179,24 +179,20 @@ When either list contains more than one row, use the dense table:
 | Column divider | x 181, y 54 … 186, line color |
 | "TOOLS" section | x 18, baseline 60 |
 | "MODELS" section | x 192, baseline 60 |
-| Tool rows | up to 3, tops at 68, 108, 148 |
-| Tool mark | 16×16 at (18, row top − 1) |
-| Tool name (body) | x 40, baseline row top + 11, ellipsized 8 units before the share |
-| Tool share (body strong) | right edge 168, baseline row top + 11 |
-| Tool detail (secondary) | x 40, baseline row top + 20; token total followed by cost when reported |
-| Tool bar | x 18 … 168, y row top + 24 … row top + 28, radius 2 |
-| Model rows | up to 4, tops at 68, 98, 128, 158 |
-| Model mark | 14×14 at (192, row top) |
-| Model name (body) | x 212, baseline row top + 11, ellipsized 8 units before the share |
-| Model share (body strong) | right edge 346, baseline row top + 11 |
-| Model tokens (secondary) | x 212, baseline row top + 19 |
-| Model bar | x 192 … 346, y row top + 23 … row top + 26.5, radius 1.75 |
+| Rows, both columns | up to 3, tops at 68, 108, 148 |
+| Mark | 16×16 at (column left, row top + 4), centered on the two text lines; tools column left 18, models column left 192 |
+| Name (body) | x 40 for tools, x 214 for models, baseline row top + 10, ellipsized 8 units before the share |
+| Share (body strong) | right edge 168 for tools, 346 for models, baseline row top + 10 |
+| Detail "2.5M · $1.18" (secondary) | same x as the name, baseline row top + 24; the cost is omitted when it is not reported |
+| Bar | column left … column right, y row top + 29 … row top + 33, radius 2 |
 
-Tool and model rows use the same two-line hierarchy: identity and share on the
-first line, supporting figures on the second. The tools column prints the token
-total followed by cost when cost is reported; the models column prints the token
-total. This removes the ambiguous token/share run at One UI's installed widget
-size without shrinking text or truncating ordinary tool names.
+Both columns use the same two-line row: identity and share on the first line,
+tokens and cost on the second. The concept put tokens and share on one line,
+but JetBrains Mono is wider than the concept's face and the phone showed that
+line crowded; a second line fourteen units below the first keeps the name's
+descenders clear of the figures, and the row sits high in its slot so the air
+is under the bar, not above the name. Three rows per column keep the rows aligned
+across the divider; a fourth model is not shown.
 
 Shares under one percent print as "<1%". Bars use the row's vendor color.
 Fewer rows leave the remaining space empty; row pitch never changes.
@@ -223,8 +219,8 @@ Fewer rows leave the remaining space empty; row pitch never changes.
 | Active days (stat) | x 226, baseline 172 |
 | "ACTIVE DAYS" caption, or "DAYS" when it does not fit | x 226, baseline 184 |
 | Stat divider | x 286, y 158 … 186 |
-| Messages today (stat) | x 292, baseline 172 |
-| "MESSAGES TODAY" caption, or "MESSAGES" when it does not fit | x 292, baseline 184 |
+| Messages today (stat), or today's cost when the Hub reports no messages | x 292, baseline 172 |
+| "MESSAGES TODAY" caption, or "MESSAGES" when it does not fit; "COST TODAY" or "COST" for the cost fallback | x 292, baseline 184 |
 
 A day with no observation draws no bar and a dash-length stub in the strong
 line color. The axis top is three times the clean step nearest above a third of

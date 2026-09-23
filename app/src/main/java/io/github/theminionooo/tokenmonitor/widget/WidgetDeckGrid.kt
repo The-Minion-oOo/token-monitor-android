@@ -20,7 +20,8 @@ internal object WidgetDeckGrid {
 
     object Header {
         const val ICON_X = 18f
-        const val ICON_Y = 16f
+        /** Centered on the brand and page lines together, not on the brand alone. */
+        const val ICON_Y = 20f
         const val ICON_SIZE = 22f
         const val TEXT_X = 48f
         const val BRAND_BASELINE = 30f
@@ -73,7 +74,8 @@ internal object WidgetDeckGrid {
         val ROW_TOPS = floatArrayOf(52f, 122f)
         const val RULE_Y = 117.5f
         const val MARK_SIZE = 22f
-        const val MARK_OFFSET = 2f
+        /** Centered on the title and percentage lines together. */
+        const val MARK_OFFSET = 10f
         const val LEFT_TEXT_X = 46f
         const val LEFT_RIGHT_EDGE = 162f
         const val RIGHT_TEXT_X = 197f
@@ -102,20 +104,19 @@ internal object WidgetDeckGrid {
         const val SPARSE_BAR_TOP = 142f
         const val SPARSE_BAR_BOTTOM = 148f
         const val SPARSE_COST_BASELINE = 163f
-        val TOOL_ROW_TOPS = floatArrayOf(68f, 108f, 148f)
-        const val TOOL_MARK_SIZE = 16f
+        /** Both columns share one row rhythm so rows line up across the divider. */
+        val ROW_TOPS = floatArrayOf(68f, 108f, 148f)
+        const val MARK_SIZE = 16f
         const val TOOL_NAME_X = 40f
         const val TOOL_RIGHT = 168f
-        const val TOOL_DETAIL_OFFSET = 20f
-        const val TOOL_BAR_TOP_OFFSET = 24f
-        const val TOOL_BAR_BOTTOM_OFFSET = 28f
-        val MODEL_ROW_TOPS = floatArrayOf(68f, 98f, 128f, 158f)
-        const val MODEL_MARK_SIZE = 14f
-        const val MODEL_NAME_X = 212f
-        const val MODEL_TOKENS_OFFSET = 19f
-        const val MODEL_BAR_TOP_OFFSET = 23f
-        const val MODEL_BAR_BOTTOM_OFFSET = 26.5f
-        const val NAME_BASELINE_OFFSET = 11f
+        const val MODEL_NAME_X = 214f
+        /** The mark is centered on the two text lines, not on the name alone. */
+        const val MARK_OFFSET = 4f
+        const val NAME_BASELINE_OFFSET = 10f
+        const val DETAIL_BASELINE_OFFSET = 24f
+        const val SHARE_GAP = 8f
+        const val BAR_TOP_OFFSET = 29f
+        const val BAR_BOTTOM_OFFSET = 33f
     }
 
     object Activity {

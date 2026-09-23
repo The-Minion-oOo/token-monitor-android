@@ -3,8 +3,15 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
-## Next release — v0.60.0 r6
+## Next release — v0.60.0 r7
 
+- Give both dense Breakdown columns one two-line row with room between the
+  lines: name and share, then tokens and cost, then the bar. Rows line up
+  across the divider and nothing touches its neighbour.
+- Center the app icon, the Limits provider marks and the Breakdown vendor
+  marks on the text lines beside them instead of on the first line alone.
+- Show today's cost in the Activity stat slot when the Hub reports no message
+  count for the day, instead of a false "0 messages".
 - Give the common one-tool/one-model Breakdown state a dedicated feature
   layout with large, aligned token and share figures, explicit captions, and
   full-width bars. Dense multi-row data keeps the compact table layout.

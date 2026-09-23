@@ -122,7 +122,7 @@ The Hub deliberately does not carry prompt or response text, so the phone never 
 
 You need Android 8.0 or newer and a desktop running Token Monitor v0.60.0 with Hub hosting on.
 
-1. Follow [Installing and updating](docs/INSTALL.md). The signed v0.56.0 r4 APK remains the latest public release; v0.60.0 r6 is the current phone-verified candidate and remains unpublished.
+1. Follow [Installing and updating](docs/INSTALL.md). The signed v0.56.0 r4 APK remains the latest public release; v0.60.0 r7 is the current phone-verified candidate and remains unpublished.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
 3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
 4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
@@ -135,8 +135,8 @@ You need Android 8.0 or newer and a desktop running Token Monitor v0.60.0 with H
 | | |
 | --- | --- |
 | Current Android release | [`v0.56.0-r4`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.56.0-r4) |
-| Current source candidate | `v0.60.0-r6` ([candidate notes](docs/releases/android-v0.60.0-r6.md)) |
-| Latest phone-verified build | `v0.60.0-r6` ([candidate notes](docs/releases/android-v0.60.0-r6.md)) |
+| Current source candidate | `v0.60.0-r7` ([candidate notes](docs/releases/android-v0.60.0-r7.md)) |
+| Latest phone-verified build | `v0.60.0-r7` ([candidate notes](docs/releases/android-v0.60.0-r7.md)) |
 | Verified desktop baseline | Token Monitor `v0.60.0` |
 | Upstream commit | [`8031cf3`](https://github.com/Javis603/token-monitor/commit/8031cf3b75c7f354db8a990a983999c69086da28) |
 

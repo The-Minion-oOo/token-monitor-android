@@ -335,24 +335,22 @@ private class DeckCanvas(
             }
             return
         }
-        data.tools.take(g.TOOL_ROW_TOPS.size).forEachIndexed { index, row ->
-            val top = g.TOOL_ROW_TOPS[index]
+        drawBreakdownRows(data.tools, left, g.TOOL_NAME_X, g.TOOL_RIGHT, R.drawable.view_tool) { it.displayName() }
+        drawBreakdownRows(data.models, g.MODELS_X, g.MODEL_NAME_X, right, R.drawable.view_model) { it }
+    }
+
+    /** One dense column: mark, name and share on the first line, tokens and cost on the second, then the bar. */
+    private fun drawBreakdownRows(rows: List<WidgetDeckUsageRow>, columnLeft: Float, nameX: Float, columnRight: Float, fallbackMark: Int, label: (String) -> String) {
+        val g = WidgetDeckGrid.Breakdown
+        rows.take(g.ROW_TOPS.size).forEachIndexed { index, row ->
+            val top = g.ROW_TOPS[index]
             val color = vendorColor(row.name, index)
-            drawMark(row.name, left, top - 1f, g.TOOL_MARK_SIZE, color, R.drawable.view_tool)
-            val shareWidth = text(sharePercent(row.share), g.TOOL_RIGHT, top + g.NAME_BASELINE_OFFSET, bodyStrong, ink, Paint.Align.RIGHT)
-            text(row.name.displayName(), g.TOOL_NAME_X, top + g.NAME_BASELINE_OFFSET, body, ink, maxWidth = g.TOOL_RIGHT - shareWidth - 8f - g.TOOL_NAME_X)
+            drawMark(row.name, columnLeft, top + g.MARK_OFFSET, g.MARK_SIZE, color, fallbackMark)
+            val shareWidth = text(sharePercent(row.share), columnRight, top + g.NAME_BASELINE_OFFSET, bodyStrong, ink, Paint.Align.RIGHT)
+            text(label(row.name), nameX, top + g.NAME_BASELINE_OFFSET, body, ink, maxWidth = columnRight - shareWidth - g.SHARE_GAP - nameX)
             val detail = compactFigure(row.tokens) + if (row.costUsd > 0) " · ${formatMoney(row.costUsd)}" else ""
-            text(detail, g.TOOL_NAME_X, top + g.TOOL_DETAIL_OFFSET, secondary, muted, maxWidth = g.TOOL_RIGHT - g.TOOL_NAME_X)
-            drawBar(RectF(left, top + g.TOOL_BAR_TOP_OFFSET, g.TOOL_RIGHT, top + g.TOOL_BAR_BOTTOM_OFFSET), row.share, color)
-        }
-        data.models.take(g.MODEL_ROW_TOPS.size).forEachIndexed { index, row ->
-            val top = g.MODEL_ROW_TOPS[index]
-            val color = vendorColor(row.name, index)
-            drawMark(row.name, g.MODELS_X, top, g.MODEL_MARK_SIZE, color, R.drawable.view_model)
-            val shareWidth = text(sharePercent(row.share), right, top + g.NAME_BASELINE_OFFSET, bodyStrong, ink, Paint.Align.RIGHT)
-            text(row.name, g.MODEL_NAME_X, top + g.NAME_BASELINE_OFFSET, body, ink, maxWidth = right - shareWidth - 8f - g.MODEL_NAME_X)
-            text(compactFigure(row.tokens), g.MODEL_NAME_X, top + g.MODEL_TOKENS_OFFSET, secondary, muted)
-            drawBar(RectF(g.MODELS_X, top + g.MODEL_BAR_TOP_OFFSET, right, top + g.MODEL_BAR_BOTTOM_OFFSET), row.share, color)
+            text(detail, nameX, top + g.DETAIL_BASELINE_OFFSET, secondary, muted, maxWidth = columnRight - nameX)
+            drawBar(RectF(columnLeft, top + g.BAR_TOP_OFFSET, columnRight, top + g.BAR_BOTTOM_OFFSET), row.share, color)
         }
     }
 
@@ -382,8 +380,14 @@ private class DeckCanvas(
         vline(g.STAT_DIVIDER_X, g.STAT_DIVIDER_TOP, g.STAT_DIVIDER_BOTTOM, line)
         text(data.activeDays.toString(), g.RIGHT_X, g.STAT_VALUE_BASELINE, stat, ink)
         fitCaption("Active days", "Days", g.RIGHT_X, g.STAT_DIVIDER_X - g.RIGHT_X - 6f)
-        text(compactFigure(data.messagesToday), g.STAT_RIGHT_X, g.STAT_VALUE_BASELINE, stat, ink)
-        fitCaption("Messages today", "Messages", g.STAT_RIGHT_X, right - g.STAT_RIGHT_X)
+        if (data.messagesToday > 0) {
+            text(compactFigure(data.messagesToday), g.STAT_RIGHT_X, g.STAT_VALUE_BASELINE, stat, ink)
+            fitCaption("Messages today", "Messages", g.STAT_RIGHT_X, right - g.STAT_RIGHT_X)
+        } else {
+            // The Hub reports no message count for today; a zero here would be a false figure.
+            text(formatMoney(data.snapshot?.today?.costUsd ?: 0.0), g.STAT_RIGHT_X, g.STAT_VALUE_BASELINE, stat, ink)
+            fitCaption("Cost today", "Cost", g.STAT_RIGHT_X, right - g.STAT_RIGHT_X)
+        }
     }
 
     private fun drawWeekChart(history: List<HistoryPoint>, end: LocalDate) {

@@ -1,8 +1,38 @@
 # Validation
 
 The current public release is Android **v0.56.0 r4** (`560004`). The current
-source candidate and latest phone-verified build is **v0.60.0 r6** (`600006`).
+source candidate and latest phone-verified build is **v0.60.0 r7** (`600007`).
 It remains unpublished pending maintainer approval.
+
+## v0.60.0 r7 candidate
+
+A phone inspection of r6 on September 22, 2026 with real two-tool, three-model
+data showed the dense Breakdown rows crowded: the model names' descenders
+touched the token line beneath them, and the tool line packed name, tokens and
+share together. r7 gives both columns one two-line row with fourteen units
+between the lines and aligns three rows across the divider. The same inspection
+showed "0 MESSAGES" on Activity because the Hub reported no message count for
+the day; r7 shows today's cost in that slot instead of a false zero.
+
+The specification was updated before the renderer. 83 JVM tests, lint with no
+errors, the debug build, the seven-test emulator design run, the sixteen-test
+gallery capture and the documentation link check pass.
+
+The signed r7 APK reports package `io.github.theminionooo.tokenmonitor`, version
+code `600007`, certificate SHA-256
+`eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c` (unchanged
+since r3), and file SHA-256
+`562d28d63902f86e55079d56120c30398dbbbd03914d19bf1328d41d48747f96`. It was
+installed over r6 on the Galaxy S25 Ultra without uninstalling; the first-install
+time (`2026-09-21 11:03:41`) and the placed widget were preserved. All four
+pages were captured on One UI at the 406×216 dp allocation and are in
+`local-private/widget-r7-phone-2026-09-22/`. Breakdown shows the two-tool,
+three-model state with clear rows in both columns; Activity shows the cost
+fallback in place of the missing message count; Overview and Limits are
+unchanged from r6. The owner reviewed the Breakdown render twice during the work: the row
+spacing was widened, then the vendor mark was lowered to center on the two
+text lines, and the same centering was applied to the header app icon and the
+Limits provider marks, each time before a signed rebuild and phone install.
 
 ## v0.60.0 r6 candidate
 
