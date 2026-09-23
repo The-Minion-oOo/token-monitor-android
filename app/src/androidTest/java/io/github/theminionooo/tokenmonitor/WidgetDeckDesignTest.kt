@@ -25,6 +25,7 @@ import io.github.theminionooo.tokenmonitor.widget.prepareWidgetDeck
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import kotlin.math.roundToInt
 
 class WidgetDeckDesignTest {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
@@ -32,6 +33,22 @@ class WidgetDeckDesignTest {
 
     private fun asset(version: String, name: String): String =
         instrumentation.context.assets.open("protocol/$version/$name").bufferedReader().use { it.readText() }
+
+    /** The dense showcase fixture: three tools, four models, four quota windows and 65 days of history. */
+    private fun showcaseSnapshot() = HubProtocolParser.decodeSnapshot(
+        showcase("health"),
+        showcase("stats"),
+        showcase("devices"),
+        showcase("history"),
+        showcase("subscriptions"),
+        showcaseNow,
+        false,
+    )
+
+    private val showcaseNow = java.time.Instant.parse("2026-09-07T12:00:00Z").toEpochMilli()
+
+    private fun showcase(name: String): String =
+        instrumentation.context.assets.open("showcase/$name.json").bufferedReader().use { it.readText() }
 
     private fun snapshot(version: String = "v0.55.0") = HubProtocolParser.decodeSnapshot(
         asset("v0.54.0", "health.json"),
@@ -82,7 +99,8 @@ class WidgetDeckDesignTest {
             }
             assertEquals(1, sizes.distinct().size)
             assertEquals(WidgetDeckRenderer.CARD_ASPECT, sizes.first().first / sizes.first().second.toFloat(), 0.01f)
-            assertTrue("bitmap must stay below the RemoteViews transaction cap", sizes.first().first <= 560)
+            val density = context.resources.displayMetrics.density
+            assertEquals("bitmap must render at launcher density", (size.width * density).roundToInt(), sizes.first().first)
         }
     }
 
@@ -149,9 +167,9 @@ class WidgetDeckDesignTest {
 
 
     @Test fun sparseBreakdownRowsStayAtTheTopOfTheCard() {
-        val now = java.time.Instant.parse("2026-09-10T12:00:00Z").toEpochMilli()
+        val now = showcaseNow
         val full = prepareWidgetDeck(
-            snapshot(),
+            showcaseSnapshot(),
             WidgetSession(enabled = true, connected = true, expiresAt = now + 3_600_000L),
             now = now,
         )
@@ -168,12 +186,16 @@ class WidgetDeckDesignTest {
     }
 
     @Test fun allPagesRenderAtMediumAndLargeSizesInBothThemes() {
-        val now = java.time.Instant.parse("2026-09-10T12:00:00Z").toEpochMilli()
+        val now = showcaseNow
         val data = prepareWidgetDeck(
-            snapshot(),
+            showcaseSnapshot(),
             WidgetSession(enabled = true, connected = true, expiresAt = now + 3_600_000L),
             now = now,
         )
+        assertEquals("the gallery fixture must be dense", 3, data.tools.size)
+        assertEquals(4, data.models.size)
+        assertEquals(2, data.limitGroups.size)
+        assertEquals(7, data.week.size)
         instrumentation.runOnMainSync {
             for (theme in listOf(InterfaceTheme.Default, InterfaceTheme.Porcelain)) {
                 for (size in listOf(SizeF(250f, 110f), SizeF(320f, 180f), SizeF(360f, 220f))) {
@@ -209,17 +231,19 @@ class WidgetDeckDesignTest {
         }
     }
 
-    @Test fun v054AndEmptyOfflineAndStaleStatesRemainTruthful() {
+    @Test fun v054AndSavedEmptyOfflineAndStaleStatesRemainTruthful() {
         val old = snapshot("v0.54.0")
         assertTrue(!old.today.throughputAvailable)
+        val saved = prepareWidgetDeck(old, WidgetSession(), now = old.capturedAt)
         val stale = prepareWidgetDeck(old, WidgetSession(), now = old.capturedAt + (old.stats.staleAfterMs ?: 300_000L) + 1)
         val offline = prepareWidgetDeck(old, WidgetSession(note = "Connection refused"), now = old.capturedAt)
         val empty = prepareWidgetDeck(null, WidgetSession(), now = old.capturedAt)
+        assertEquals("SAVED", saved.status)
         assertEquals("STALE", stale.status)
         assertEquals("OFFLINE", offline.status)
         assertEquals("NO DATA", empty.status)
         instrumentation.runOnMainSync {
-            listOf(stale, offline).forEach { data ->
+            listOf(saved, stale, offline).forEach { data ->
                 val view = WidgetDeckRenderer.render(context, WidgetDeckPage.Overview, data, InterfaceTheme.Default, SizeF(320f, 220f)).apply(context, FrameLayout(context))
                 layout(view, SizeF(320f, 220f))
                 assertTrue(view.findViewById<ImageView>(R.id.swipe_page_bitmap).contentDescription.contains(data.status, ignoreCase = true))

@@ -4,7 +4,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The baseline is upstream Token Monitor **v0.56.0**, released 2026-09-11. The
+The baseline is upstream Token Monitor **v0.60.0**, released 2026-09-21. The
 release and source were checked directly from the `Javis603/token-monitor`
 tag before this implementation. The older local desktop checkout was not
 changed and is not the protocol authority.
@@ -21,7 +21,7 @@ never prints it.
 | `GET /api/devices` | Bearer secret | Device periods, platform metadata, tracked tools, cadence, and retained per-device history. |
 | `GET /api/history` | Bearer secret | Daily/monthly totals and per-tool/per-model trend attribution. |
 | `GET /api/subscriptions` | Bearer secret | Subscription dashboard. |
-| `GET /api/stats/stream` | Bearer secret | SSE `snapshot` and `stats` frames while a dashboard is visible. |
+| `GET /api/stats/stream` | Bearer secret | SSE `snapshot`, `stats`, and v2 `freshness` frames while a dashboard is visible. |
 
 The Hub also accepts `X-Token-Monitor-Secret`; this app intentionally uses one
 authentication style only. It does not call the Hub's ingest, subscription
@@ -34,22 +34,25 @@ protected read without a valid secret, and `{ "error": "not_found" }` with
 HTTP 404 for an unknown route. The app gives a specific safe message for those
 conditions and does not surface request headers or the secret.
 
-`/api/stats/stream` sends an initial `snapshot` event followed by `stats`
-events whose data envelope contains `stats` and `at`. The Hub emits an SSE
-comment heartbeat every 30 seconds. The app closes the underlying stream in
+Android sends `x-token-monitor-stream: 2` when it opens `/api/stats/stream`.
+The Hub sends an initial `snapshot`, complete `stats` events when values change,
+and small `freshness` events for limit and device timestamps. Each data envelope
+contains `stats`. The Hub also emits an SSE comment heartbeat. The app closes the underlying stream in
 `onPause`, opens it only on a dashboard route, refreshes first on resume, and
 retries a disconnected stream with 1–30 second bounded exponential backoff plus
 jitter.
 
-Streamed stats do not carry the full retained history embedded in the dedicated
-device response. The repository therefore keeps the last authenticated device
-history while applying live device totals. A foreground refresh replaces it
-with the current `/api/devices` result.
+`HubStreamProtocol` treats complete and incremental delivery separately from the
+stable snapshot parser. A freshness frame may update only the top-level update
+time, stale threshold, limit freshness, and device freshness fields. It is merged
+into the last complete wire snapshot by device ID, preserving periods, sessions,
+limits, provider details, and retained device history. A foreground refresh still
+replaces the snapshot with the current read endpoints.
 
 ## Fixtures
 
-Sanitized v0.56.0 examples live in
-`app/src/test/resources/protocol/v0.56.0/`; the retained v0.54.0 and v0.55.0 fixtures prove
+Sanitized v0.60.0 examples live in
+`app/src/test/resources/protocol/v0.60.0/`; the retained v0.54.0, v0.55.0, and v0.56.0 fixtures prove
 backward compatibility. They contain no user secrets,
 machine paths, account identifiers, or real usage. Parser tests cover every
 read surface, the SSE envelope, omitted optional fields, and a future unknown
@@ -67,6 +70,13 @@ v0.56.0 adds optional `windows[].boundaryKind` lifecycle wording and
 `periods.*.sessions[].sessionKind` metadata. Android preserves both, renders
 reset, expiry, and mixed boundaries accurately, and keeps older omitted fields
 on their legacy behavior.
+
+v0.60.0 adds optional session `contextTokens`, `contextWindow`, and tri-state
+`turnEnded` fields. `false` means a recent turn is still running, `true` means
+the turn ended, and an omitted value remains unknown; the parser does not collapse
+those states. Android shows context use only when both positive values are present
+on a recent Running or Finished session. The same fixture covers current Factory
+percentage and credit allowance shapes plus stream-v2 complete and freshness events.
 
 When the desktop protocol changes, add a new versioned fixture directory and
 tests before changing the Android mapping.

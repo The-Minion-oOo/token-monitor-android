@@ -4,14 +4,14 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createShowcaseResponses } from "./showcase-data.mjs";
 
-const root = join(dirname(fileURLToPath(import.meta.url)), "..", "app", "src", "test", "resources", "protocol", "v0.54.0");
-const fixture = async (name) => readFile(join(root, name), "utf8");
+const protocolRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "app", "src", "test", "resources", "protocol");
+const fixture = async (version, name) => readFile(join(protocolRoot, version, name), "utf8");
 let responses = {
-    "/api/health": await fixture("health.json"),
-    "/api/stats": await fixture("stats.json"),
-    "/api/devices": await fixture("devices.json"),
-    "/api/history": await fixture("history.json"),
-    "/api/subscriptions": await fixture("subscriptions.json"),
+    "/api/health": await fixture("v0.54.0", "health.json"),
+    "/api/stats": await fixture("v0.60.0", "stats.json"),
+    "/api/devices": await fixture("v0.54.0", "devices.json"),
+    "/api/history": await fixture("v0.54.0", "history.json"),
+    "/api/subscriptions": await fixture("v0.54.0", "subscriptions.json"),
 };
 
 const showcaseMode = process.env.TOKEN_MONITOR_SHOWCASE === "1";

@@ -1,8 +1,51 @@
 # Changelog
 
-Android releases use the desktop protocol version plus an Android revision. Only
-published revisions appear below; unreleased candidate work is folded into the
-release that first shipped it.
+Android releases use the desktop protocol version plus an Android revision.
+Unreleased work stays under **Next release** until its signed APK is published.
+
+## v0.60.0 r7 — 2026-09-22
+
+- Give both dense Breakdown columns one two-line row with room between the
+  lines: name and share, then tokens and cost, then the bar. Rows line up
+  across the divider and nothing touches its neighbour.
+- Center the app icon, the Limits provider marks and the Breakdown vendor
+  marks on the text lines beside them instead of on the first line alone.
+- Show today's cost in the Activity stat slot when the Hub reports no message
+  count for the day, instead of a false "0 messages".
+- Give the common one-tool/one-model Breakdown state a dedicated feature
+  layout with large, aligned token and share figures, explicit captions, and
+  full-width bars. Dense multi-row data keeps the compact table layout.
+
+- Verify the desktop Token Monitor v0.60.0 Hub contract while retaining the
+  v0.54.0, v0.55.0, and v0.56.0 compatibility fixtures.
+- Negotiate stream protocol v2 and merge lightweight freshness events into the
+  last complete snapshot without dropping periods, limits, devices, or history.
+- Show a session as Running, Finished, or Idle from the new tri-state turn signal,
+  and show recent context-window use when both token values are available.
+- Recognize the current Factory credit/allowance limit shapes and add Qwen,
+  NVIDIA, and StepFun provider presentation without changing the read-only boundary.
+- Rebuild the four widget pages on one measured grid written down in
+  `docs/WIDGET_SPEC.md`. Every position and type size now comes from that
+  specification, the card scales as one picture to any launcher size, and the
+  Overview stats, Limits cells, Breakdown rows and Activity charts match the
+  approved concept cards instead of colliding.
+- Bundle a Latin subset of JetBrains Mono for the widget pages so Samsung
+  launchers, which substitute their own monospace face, render the same card
+  the emulator does. Figures keep the system sans-serif with tabular numerals.
+- Group the Limits page by provider, each with its two tightest windows, and
+  draw bars, the seven-day chart and the heatmap as vectors on the card instead
+  of scaled bitmaps.
+- Render the card at the launcher's display density instead of enlarging a
+  560-pixel raster. Type, icons, borders, and charts stay sharp on high-density
+  Samsung launchers while remaining inside Android's widget bitmap budget.
+- Fix eleven imported vendor logos whose SVG arc flags Android's path parser
+  rejects. Drawing a Qwen, Gemini, Meta, Cohere, Kimi, MiniMax, Doubao, Hunyuan,
+  OpenRouter, xAI or Xiaomi mark in the widget crashed the render.
+- Render the widget gallery and the widget design test from the dense showcase
+  fixture rather than a two-row protocol sample, so emulator evidence shows the
+  card at real density.
+- Split stream delivery and session display rules into focused modules so future
+  desktop upgrades remain fixture-and-adapter work instead of screen rewrites.
 
 ## v0.56.0 — September 13, 2026
 

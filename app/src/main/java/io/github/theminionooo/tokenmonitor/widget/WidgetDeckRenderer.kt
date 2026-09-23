@@ -3,16 +3,22 @@ package io.github.theminionooo.tokenmonitor.widget
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.DashPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
+import android.graphics.RadialGradient
 import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.Typeface
 import android.util.SizeF
 import android.widget.RemoteViews
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.toArgb
+import androidx.core.content.res.ResourcesCompat
 import io.github.theminionooo.tokenmonitor.R
+import io.github.theminionooo.tokenmonitor.domain.HistoryPoint
 import io.github.theminionooo.tokenmonitor.ui.InterfaceTheme
 import io.github.theminionooo.tokenmonitor.ui.Palette
 import io.github.theminionooo.tokenmonitor.ui.displayName
@@ -22,22 +28,42 @@ import io.github.theminionooo.tokenmonitor.ui.formatTokens
 import io.github.theminionooo.tokenmonitor.ui.originalToolColor
 import io.github.theminionooo.tokenmonitor.ui.providerLabel
 import io.github.theminionooo.tokenmonitor.ui.upstreamToolAsset
+import io.github.theminionooo.tokenmonitor.ui.vendorOf
+import io.github.theminionooo.tokenmonitor.widget.WidgetDeckGrid.Type
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.Locale
 import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.log10
 import kotlin.math.min
+import kotlin.math.pow
 import kotlin.math.roundToInt
 
 /**
  * Draws the selected deck page into one immutable frame. The launcher receives a
  * single ImageView, so it cannot add collection-card depth or resize each page.
+ *
+ * Every coordinate comes from [WidgetDeckGrid], which mirrors `docs/WIDGET_SPEC.md`.
+ * The canvas is scaled once so the grid's reference units fill the fitted card.
  */
 internal object WidgetDeckRenderer {
-    internal const val CARD_ASPECT = 1.82f
-    private const val MAX_BITMAP_WIDTH = 560
+    internal const val CARD_ASPECT = WidgetDeckGrid.ASPECT
+    // RemoteViews is displayed in the launcher's density, not at one bitmap pixel
+    // per dp. Keep the single card sharp while remaining well below Android's
+    // 1.5-screen aggregate bitmap budget for App Widgets.
+    private const val MAX_BITMAP_WIDTH = 1200
 
     internal fun frameSize(size: SizeF): SizeF {
         val height = min(size.height, size.width / CARD_ASPECT).coerceAtLeast(1f)
         val width = min(size.width, height * CARD_ASPECT).coerceAtLeast(1f)
         return SizeF(width, height)
+    }
+
+    internal fun bitmapScale(frameWidth: Float, density: Float): Float {
+        val safeWidth = frameWidth.coerceAtLeast(1f)
+        return min(density, MAX_BITMAP_WIDTH / safeWidth).coerceAtLeast(1f / safeWidth)
     }
 
     fun render(
@@ -67,13 +93,13 @@ internal object WidgetDeckRenderer {
         size: SizeF,
     ): Bitmap {
         val frame = frameSize(size)
-        val renderScale = min(2f, MAX_BITMAP_WIDTH / frame.width).coerceAtLeast(1f)
+        val renderScale = bitmapScale(frame.width, context.resources.displayMetrics.density)
         val width = (frame.width * renderScale).roundToInt().coerceAtLeast(1)
         val height = (frame.height * renderScale).roundToInt().coerceAtLeast(1)
         return Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888).also { bitmap ->
             val canvas = Canvas(bitmap)
-            canvas.scale(width / frame.width, height / frame.height)
-            DeckCanvas(context, canvas, frame.width, frame.height, palette).draw(page, data)
+            canvas.scale(width / WidgetDeckGrid.WIDTH, height / WidgetDeckGrid.HEIGHT)
+            DeckCanvas(context, canvas, palette).draw(page, data)
         }
     }
 
@@ -83,26 +109,47 @@ internal object WidgetDeckRenderer {
     }
 }
 
+/** A text style from the specification's type table. */
+private class DeckType(val typeface: Typeface, val size: Float, val tracking: Float = 0f, val uppercase: Boolean = false, val tabular: Boolean = false)
+
 private class DeckCanvas(
     private val context: Context,
     private val canvas: Canvas,
-    private val width: Float,
-    private val height: Float,
     private val palette: Palette,
 ) {
-    private val mono = Typeface.create("monospace", Typeface.NORMAL)
-    private val monoBold = Typeface.create("monospace", Typeface.BOLD)
-    private val sansBold = Typeface.create("sans-serif-medium", Typeface.NORMAL)
-    private val compact = width < 300f || height < 150f
-    private val sectionSize = if (compact) 8f else 10f
-    private val primarySize = if (compact) 11f else 13f
-    private val bodySize = if (compact) 7f else 9f
-    private val secondarySize = if (compact) 6.5f else 8f
-    private val contentEdge = if (compact) 16f else 24f
+    private val width = WidgetDeckGrid.WIDTH
+    private val height = WidgetDeckGrid.HEIGHT
+    private val left = WidgetDeckGrid.LEFT
+    private val right = WidgetDeckGrid.RIGHT
+
+    private val mono = font(R.font.jetbrains_mono_regular, Typeface.MONOSPACE)
+    private val monoBold = font(R.font.jetbrains_mono_bold, Typeface.create(Typeface.MONOSPACE, Typeface.BOLD))
+    private val sansBold = Typeface.create("sans-serif", Typeface.BOLD)
+
+    private val brand = DeckType(monoBold, Type.BRAND, tracking = 0.04f, uppercase = true)
+    private val pageType = DeckType(mono, Type.PAGE, tracking = 0.06f, uppercase = true)
+    private val section = DeckType(monoBold, Type.SECTION, tracking = 0.06f, uppercase = true)
+    private val status = DeckType(monoBold, Type.STATUS, tracking = 0.04f, uppercase = true)
+    private val display = DeckType(sansBold, Type.DISPLAY, tabular = true)
+    private val figure = DeckType(sansBold, Type.FIGURE, tabular = true)
+    private val stat = DeckType(sansBold, Type.STAT, tabular = true)
+    private val body = DeckType(mono, Type.BODY)
+    private val bodyStrong = DeckType(monoBold, Type.BODY_STRONG)
+    private val legend = DeckType(monoBold, Type.LEGEND)
+    private val secondary = DeckType(mono, Type.SECONDARY)
+    private val caption = DeckType(mono, Type.CAPTION, tracking = 0.03f, uppercase = true)
+    private val axis = DeckType(mono, Type.AXIS, uppercase = true)
+
     private val ink = palette.ink.toArgb()
     private val muted = palette.muted.toArgb()
+    private val label = lerp(palette.muted, palette.ink, 0.30f).toArgb()
+    private val accent = palette.accent.toArgb()
     private val line = palette.line.compositeOver(palette.shell).toArgb()
     private val strongLine = palette.strongLine.compositeOver(palette.shell).toArgb()
+    private val fallbackColors = listOf(palette.blue, palette.orange, palette.purple, palette.yellow)
+
+    private fun font(resource: Int, fallback: Typeface): Typeface =
+        runCatching { ResourcesCompat.getFont(context, resource) }.getOrNull() ?: fallback
 
     fun draw(page: WidgetDeckPage, data: WidgetDeckData) {
         drawSurface()
@@ -116,227 +163,379 @@ private class DeckCanvas(
         drawPager(page)
     }
 
-    private fun drawPager(page: WidgetDeckPage) {
-        val centerY = height / 2f
-        val chevronColor = palette.muted.copy(alpha = if (compact) 0.62f else 0.78f).compositeOver(palette.shell).toArgb()
-        drawChevron(if (compact) 6.5f else 8f, centerY, pointsLeft = true, color = chevronColor)
-        drawChevron(width - if (compact) 6.5f else 8f, centerY, pointsLeft = false, color = chevronColor)
-
-        val gap = if (compact) 6f else 7f
-        val dotY = height - if (compact) 3.5f else 5.5f
-        val startX = width / 2f - gap * (WidgetDeckPage.entries.size - 1) / 2f
-        WidgetDeckPage.entries.forEachIndexed { index, candidate ->
-            circle(
-                startX + index * gap,
-                dotY,
-                if (candidate == page) 1.9f else 1.45f,
-                if (candidate == page) palette.accent.toArgb() else strongLine,
-            )
-        }
-    }
-
-    private fun drawChevron(centerX: Float, centerY: Float, pointsLeft: Boolean, color: Int) {
-        val halfWidth = if (compact) 2f else 2.6f
-        val halfHeight = if (compact) 3.5f else 4.5f
-        val pointX = centerX + if (pointsLeft) -halfWidth else halfWidth
-        val outerX = centerX + if (pointsLeft) halfWidth else -halfWidth
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            this.color = color
-            style = Paint.Style.STROKE
-            strokeWidth = if (compact) 1.2f else 1.6f
-            strokeCap = Paint.Cap.ROUND
-            strokeJoin = Paint.Join.ROUND
-        }
-        canvas.drawLine(outerX, centerY - halfHeight, pointX, centerY, paint)
-        canvas.drawLine(pointX, centerY, outerX, centerY + halfHeight, paint)
-    }
+    // Surface and chrome
 
     private fun drawSurface() {
-        val radius = min(20f, height / 7f)
-        val card = RectF(0.75f, 0.75f, width - 0.75f, height - 0.75f)
-        val fill = Paint(Paint.ANTI_ALIAS_FLAG or Paint.DITHER_FLAG).apply {
+        val inset = WidgetDeckGrid.EDGE_STROKE / 2f
+        val card = RectF(inset, inset, width - inset, height - inset)
+        val radius = WidgetDeckGrid.RADIUS
+        canvas.drawRoundRect(card, radius, radius, Paint(Paint.ANTI_ALIAS_FLAG or Paint.DITHER_FLAG).apply {
             shader = LinearGradient(
                 0f, 0f, width, height,
                 intArrayOf(palette.gradientTop.toArgb(), palette.shell.toArgb(), palette.gradientBottom.toArgb()),
                 floatArrayOf(0f, 0.4f, 1f), Shader.TileMode.CLAMP,
             )
+        })
+        if (!palette.isLight) {
+            glow(width * 0.12f, 0f, width * 0.46f, palette.blue.copy(alpha = 0.22f), card, radius)
+            glow(width * 0.88f, height * 0.05f, width * 0.34f, palette.accent.copy(alpha = 0.18f), card, radius)
         }
-        canvas.drawRoundRect(card, radius, radius, fill)
         canvas.drawRoundRect(card, radius, radius, Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = strongLine
+            color = if (palette.isLight) strongLine else lerp(palette.strongLine.compositeOver(palette.shell), palette.blue, 0.38f).toArgb()
             style = Paint.Style.STROKE
-            strokeWidth = 1f
+            strokeWidth = WidgetDeckGrid.EDGE_STROKE
+        })
+    }
+
+    private fun glow(x: Float, y: Float, radius: Float, color: Color, card: RectF, cornerRadius: Float) {
+        canvas.drawRoundRect(card, cornerRadius, cornerRadius, Paint(Paint.ANTI_ALIAS_FLAG or Paint.DITHER_FLAG).apply {
+            shader = RadialGradient(x, y, radius, intArrayOf(color.toArgb(), color.copy(alpha = 0f).toArgb()), floatArrayOf(0f, 1f), Shader.TileMode.CLAMP)
         })
     }
 
     private fun drawHeader(page: WidgetDeckPage, data: WidgetDeckData) {
-        val iconSize = if (compact) 18f else 22f
-        drawDrawable(R.drawable.token_monitor_icon, 12f, 10f, iconSize, iconSize)
-        val titleX = 12f + iconSize + 8f
-        val brandSize = if (compact) 9f else 12f
-        text("TOKEN MONITOR", titleX, 10f + brandSize, brandSize, ink, monoBold, width = if (compact) 83f else 145f)
-        text(
-            context.getString(page.subtitle).uppercase(),
-            titleX, if (compact) 36f else 41f, if (compact) 7f else 9f, muted, mono,
-            width = if (compact) 100f else 150f,
-        )
-        val toggleRight = width - 12f
-        val toggleWidth = if (compact) 35f else 42f
-        val toggleTop = if (compact) 10f else 12f
-        val toggleHeight = if (compact) 18f else 22f
-        val toggleLeft = toggleRight - toggleWidth
-        val refreshSize = if (compact) 17f else 21f
-        val refreshLeft = toggleLeft - if (compact) 55f else 78f
-        drawDrawable(R.drawable.ic_widget_refresh, refreshLeft, toggleTop, refreshSize, refreshSize, ink)
-        if (!compact) {
-            text(data.status, toggleLeft - 8f, toggleTop + 15.5f, 9f, if (data.liveEnabled && data.status == "LIVE") palette.accent.toArgb() else muted, monoBold, Paint.Align.RIGHT, 58f)
-        }
-        val activeColor = palette.accent.toArgb()
-        val fillColor = if (data.liveEnabled) palette.accent.copy(alpha = 0.18f).compositeOver(palette.shell).toArgb() else palette.overlay.compositeOver(palette.shell).toArgb()
-        roundRect(toggleLeft, toggleTop, toggleRight, toggleTop + toggleHeight, toggleHeight / 2f, fillColor)
-        strokeRoundRect(toggleLeft, toggleTop, toggleRight, toggleTop + toggleHeight, toggleHeight / 2f, if (data.liveEnabled) activeColor else strongLine)
-        val knobRadius = toggleHeight * 0.31f
-        val knobX = if (data.liveEnabled) toggleRight - toggleHeight / 2f else toggleLeft + toggleHeight / 2f
-        circle(knobX, toggleTop + toggleHeight / 2f, knobRadius, if (data.liveEnabled) activeColor else muted)
+        val h = WidgetDeckGrid.Header
+        drawDrawable(R.drawable.token_monitor_icon, h.ICON_X, h.ICON_Y, h.ICON_SIZE, h.ICON_SIZE)
+        text("Token Monitor", h.TEXT_X, h.BRAND_BASELINE, brand, ink, maxWidth = h.REFRESH_X - h.TEXT_X - 8f)
+        text(context.getString(page.subtitle), h.TEXT_X, h.PAGE_BASELINE, pageType, muted, maxWidth = h.REFRESH_X - h.TEXT_X - 8f)
+        drawDrawable(R.drawable.ic_widget_refresh, h.REFRESH_X, h.REFRESH_Y, h.REFRESH_SIZE, h.REFRESH_SIZE, ink)
+        val live = data.liveEnabled && data.status == "LIVE"
+        text(data.status, h.STATUS_RIGHT, h.STATUS_BASELINE, status, if (live) accent else muted, Paint.Align.RIGHT, h.STATUS_RIGHT - h.REFRESH_X - h.REFRESH_SIZE - 6f)
+        val toggle = RectF(h.TOGGLE_LEFT, h.TOGGLE_TOP, h.TOGGLE_LEFT + h.TOGGLE_WIDTH, h.TOGGLE_TOP + h.TOGGLE_HEIGHT)
+        val trackRadius = h.TOGGLE_HEIGHT / 2f
+        val track = if (data.liveEnabled) palette.accent.copy(alpha = 0.18f).compositeOver(palette.shell) else palette.overlay.compositeOver(palette.shell)
+        fillRoundRect(toggle, trackRadius, track.toArgb())
+        strokeRoundRect(toggle, trackRadius, if (data.liveEnabled) accent else strongLine, 1f)
+        val knobX = if (data.liveEnabled) toggle.right - trackRadius else toggle.left + trackRadius
+        circle(knobX, toggle.centerY(), h.KNOB_RADIUS, if (data.liveEnabled) accent else muted)
     }
+
+    private fun drawPager(current: WidgetDeckPage) {
+        val h = WidgetDeckGrid.Header
+        val chevron = palette.muted.copy(alpha = 0.78f).compositeOver(palette.shell).toArgb()
+        drawChevron(h.CHEVRON_LEFT_X, h.CHEVRON_Y, pointsLeft = true, color = chevron)
+        drawChevron(h.CHEVRON_RIGHT_X, h.CHEVRON_Y, pointsLeft = false, color = chevron)
+        val startX = width / 2f - h.DOTS_GAP * (WidgetDeckPage.entries.size - 1) / 2f
+        WidgetDeckPage.entries.forEachIndexed { index, candidate ->
+            circle(startX + index * h.DOTS_GAP, h.DOTS_Y, if (candidate == current) 2f else 1.5f, if (candidate == current) accent else strongLine)
+        }
+    }
+
+    private fun drawChevron(centerX: Float, centerY: Float, pointsLeft: Boolean, color: Int) {
+        val h = WidgetDeckGrid.Header
+        val pointX = centerX + if (pointsLeft) -h.CHEVRON_HALF_WIDTH else h.CHEVRON_HALF_WIDTH
+        val outerX = centerX + if (pointsLeft) h.CHEVRON_HALF_WIDTH else -h.CHEVRON_HALF_WIDTH
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            this.color = color
+            style = Paint.Style.STROKE
+            strokeWidth = 1.6f
+            strokeCap = Paint.Cap.ROUND
+            strokeJoin = Paint.Join.ROUND
+        }
+        canvas.drawLine(outerX, centerY - h.CHEVRON_HALF_HEIGHT, pointX, centerY, paint)
+        canvas.drawLine(pointX, centerY, outerX, centerY + h.CHEVRON_HALF_HEIGHT, paint)
+    }
+
+    // Overview
 
     private fun drawOverview(data: WidgetDeckData) {
+        val g = WidgetDeckGrid.Overview
         val snapshot = requireNotNull(data.snapshot)
-        if (compact) {
-            text("TOTAL TOKENS", contentEdge, 55f, sectionSize, ink, monoBold)
-            fitText(formatTokens(snapshot.today.totalTokens), contentEdge, 82f, 23f, 13f, ink, sansBold, width - contentEdge * 2)
-            text("${formatMoney(snapshot.today.costUsd)} estimated cost", contentEdge, 99f, bodySize, muted, mono, width = width - contentEdge * 2)
-            return
+        text("Total tokens", left, g.SECTION_BASELINE, section, label)
+        fitText(formatTokens(snapshot.today.totalTokens), left, g.TOTAL_BASELINE, display, Type.DISPLAY_MIN, ink, g.TOTAL_RIGHT - left)
+        text("${formatMoney(snapshot.today.costUsd)} estimated cost", left, g.COST_BASELINE, body, muted, maxWidth = g.TOTAL_RIGHT - left)
+        vline(g.DIVIDER_X, g.DIVIDER_TOP, g.DIVIDER_BOTTOM, line)
+        val statsWidth = right - g.STATS_X
+        data.stats.take(3).forEachIndexed { index, (value, name) ->
+            val top = g.STATS_TOP + index * g.STATS_PITCH
+            text(value, g.STATS_X, top + g.STAT_VALUE_OFFSET, stat, ink, maxWidth = statsWidth)
+            text(name, g.STATS_X, top + g.STAT_CAPTION_OFFSET, caption, muted, maxWidth = statsWidth)
         }
-        val left = contentEdge
-        val rightColumn = width - 118f
-        text("TOTAL TOKENS", left, 70f, sectionSize, ink, monoBold)
-        fitText(formatTokens(snapshot.today.totalTokens), left, 116f, 31f, 20f, ink, sansBold, rightColumn - left - 12f)
-        text("${formatMoney(snapshot.today.costUsd)} estimated cost", left, 137f, bodySize, muted, mono, width = rightColumn - left - 12f)
-        line(rightColumn, 61f, rightColumn, 145f, strongLine)
-        data.stats.take(3).forEachIndexed { index, stat ->
-            val top = 65f + index * 25f
-            text(stat.first, rightColumn + 12f, top + 12f, primarySize, ink, monoBold, width = width - rightColumn - contentEdge - 12f)
-            text(stat.second, rightColumn + 12f, top + 22f, secondarySize, muted, mono, width = width - rightColumn - contentEdge - 12f)
+        val tools = data.tools.take(3).mapIndexed { index, row -> row to vendorColor(row.name, index) }
+        drawSegmentedBar(RectF(left, g.BAR_TOP, right, g.BAR_BOTTOM), tools.map { it.first.share to it.second })
+        val slot = (right - left) / 3f
+        tools.forEachIndexed { index, (row, color) ->
+            val x = left + index * slot
+            circle(x + g.LEGEND_DOT_INSET, g.LEGEND_DOT_Y, g.LEGEND_DOT_RADIUS, color)
+            text("${row.name.displayName()} ${sharePercent(row.share)}", x + g.LEGEND_TEXT_INSET, g.LEGEND_BASELINE, legend, ink, maxWidth = slot - g.LEGEND_TEXT_INSET - 6f)
         }
-        val colors = listOf(palette.blue, palette.orange, palette.yellow)
-        val colored = data.tools.take(3).mapIndexed { index, row -> row to originalToolColor(row.name, colors[index]).toArgb() }
-        drawSegmentedBar(contentEdge, 153f, width - contentEdge, 159f, colored.map { it.first.share to it.second })
-        val slot = (width - contentEdge * 2) / 3f
-        colored.forEachIndexed { index, entry ->
-            val label = "${entry.first.name.displayName().substringBefore(' ')} ${(entry.first.share * 100).roundToInt()}%"
-            text(label, contentEdge + index * slot, 174f, secondarySize, entry.second, mono, width = slot - 5f)
-        }
+        hline(left, right, g.RULE_Y, line)
         val weekTokens = data.week.sumOf { it.tokens }
         val weekCost = data.week.sumOf { it.costUsd }
-        text("THIS WEEK  ${formatCompactTokens(weekTokens)} · ${formatMoney(weekCost)}", contentEdge, height - 14f, bodySize, if (weekTokens > 0) ink else muted, mono, width = width - contentEdge * 2)
+        text("This week", left, g.WEEK_BASELINE, caption, muted)
+        if (weekTokens > 0) {
+            val advance = text(formatCompactTokens(weekTokens), g.WEEK_VALUE_X, g.WEEK_BASELINE, stat, ink)
+            text("· ${formatMoney(weekCost)}", g.WEEK_VALUE_X + advance + 8f, g.WEEK_BASELINE, body, muted, maxWidth = right - g.WEEK_VALUE_X - advance - 8f)
+        } else {
+            text("No history yet", g.WEEK_VALUE_X, g.WEEK_BASELINE, body, muted)
+        }
     }
 
+    // Limits
+
     private fun drawLimits(data: WidgetDeckData) {
-        if (data.limits.isEmpty()) {
+        val g = WidgetDeckGrid.Limits
+        if (data.limitGroups.isEmpty()) {
             drawCentered(context.getString(R.string.widget_no_limits))
             return
         }
-        val top = if (compact) 48f else 59f
-        val bottom = height - if (compact) 8f else 15f
-        val centerX = width / 2f
-        line(centerX, top, centerX, bottom, line)
-        val rowHeight = (bottom - top) / 2f
-        line(contentEdge, top + rowHeight, width - contentEdge, top + rowHeight, line)
-        data.limits.take(4).forEachIndexed { index, row ->
-            val column = index % 2
-            val lineIndex = index / 2
-            val cellLeft = if (column == 0) contentEdge else centerX + 10f
-            val cellRight = if (column == 0) centerX - 10f else width - contentEdge
-            val cellTop = top + lineIndex * rowHeight + 5f
-            val color = WidgetDeckDrawing.tone(palette, row.remainingPercent).toArgb()
-            drawMark(row.provider, cellLeft, cellTop, if (compact) 11f else 14f, color, R.drawable.view_limits)
-            text("${row.provider.providerLabel()} · ${row.title}", cellLeft + if (compact) 15f else 19f, cellTop + 10f, bodySize, ink, mono, width = cellRight - cellLeft - 20f)
-            text("${row.remainingPercent.roundToInt()}% left", cellLeft, cellTop + if (compact) 25f else 29f, primarySize, if (row.remainingPercent > 35) ink else color, monoBold, width = cellRight - cellLeft)
-            val barTop = cellTop + if (compact) 29f else 35f
-            drawBar(cellLeft, barTop, cellRight, barTop + 4f, row.remainingPercent / 100.0, color)
-            text(row.reset.ifBlank { "Reset not reported" }, cellLeft, barTop + 14f, secondarySize, muted, mono, width = cellRight - cellLeft)
+        val groups = data.limitGroups.take(g.ROW_TOPS.size)
+        if (groups.size > 1) hline(left, right, g.RULE_Y, line)
+        groups.forEachIndexed { index, group ->
+            val top = g.ROW_TOPS[index]
+            drawMark(group.provider, left, top + g.MARK_OFFSET, g.MARK_SIZE, vendorColor(group.provider, 0), R.drawable.view_limits)
+            group.windows.take(2).forEachIndexed { column, window ->
+                val cellLeft = if (column == 0) g.LEFT_TEXT_X else g.RIGHT_TEXT_X
+                val cellRight = if (column == 0) g.LEFT_RIGHT_EDGE else right
+                val cellWidth = cellRight - cellLeft
+                val tone = WidgetDeckDrawing.tone(palette, window.remainingPercent).toArgb()
+                val titleType = DeckType(monoBold, g.TITLE_SIZE, tracking = 0.04f, uppercase = true)
+                val fullTitle = "${group.provider.providerLabel()} · ${window.title}"
+                text(if (measure(fullTitle, titleType) <= cellWidth) fullTitle else window.title, cellLeft, top + g.TITLE_OFFSET, titleType, label, maxWidth = cellWidth)
+                val percent = text("${window.remainingPercent.roundToInt()}%", cellLeft, top + g.VALUE_OFFSET, figure, if (window.remainingPercent > 35) ink else tone)
+                text("left", cellLeft + percent + 6f, top + g.VALUE_OFFSET, DeckType(mono, g.LEFT_LABEL_SIZE), ink, maxWidth = cellWidth - percent - 6f)
+                drawBar(RectF(cellLeft, top + g.BAR_TOP_OFFSET, cellRight, top + g.BAR_BOTTOM_OFFSET), window.remainingPercent / 100.0, tone)
+                text(window.reset.ifBlank { "Reset not reported" }, cellLeft, top + g.RESET_OFFSET, secondary, muted, maxWidth = cellWidth)
+            }
         }
     }
 
+    // Breakdown
+
     private fun drawBreakdown(data: WidgetDeckData) {
+        val g = WidgetDeckGrid.Breakdown
         if (data.tools.isEmpty() && data.models.isEmpty()) {
             drawCentered("No tool or model breakdown reported")
             return
         }
-        val top = if (compact) 51f else 62f
-        val bottom = height - if (compact) 8f else 16f
-        val middle = width / 2f
-        line(middle, top, middle, bottom, strongLine)
-        text("TOOLS", contentEdge, top + 10f, sectionSize, ink, monoBold)
-        text("MODELS", middle + 12f, top + 10f, sectionSize, ink, monoBold)
-        val toolsTop = top + 17f
-        val toolRow = (bottom - toolsTop) / 3f
-        data.tools.take(3).forEachIndexed { index, row ->
-            val y = toolsTop + index * toolRow
-            val color = originalToolColor(row.name, listOf(palette.blue, palette.orange, palette.yellow)[index]).toArgb()
-            drawMark(row.name, contentEdge, y + 2f, if (compact) 10f else 14f, color, R.drawable.view_tool)
-            text(row.name.displayName(), contentEdge + if (compact) 14f else 19f, y + 12f, bodySize, ink, mono, width = middle - contentEdge - 62f)
-            text("${formatCompactTokens(row.tokens)}·${(row.share * 100).roundToInt()}%", middle - 12f, y + 12f, secondarySize, muted, mono, Paint.Align.RIGHT, 62f)
-            drawBar(contentEdge, y + if (compact) 17f else 20f, middle - 12f, y + if (compact) 20f else 24f, row.share, color)
+        vline(g.DIVIDER_X, g.DIVIDER_TOP, g.DIVIDER_BOTTOM, line)
+        text("Tools", left, g.SECTION_BASELINE, section, label)
+        text("Models", g.MODELS_X, g.SECTION_BASELINE, section, label)
+        if (data.tools.size <= 1 && data.models.size <= 1) {
+            data.tools.firstOrNull()?.let { row ->
+                val color = vendorColor(row.name, 0)
+                drawMark(row.name, left, g.SPARSE_MARK_TOP, g.SPARSE_MARK_SIZE, color, R.drawable.view_tool)
+                text(row.name.displayName(), g.SPARSE_TOOL_NAME_X, g.SPARSE_IDENTITY_BASELINE, bodyStrong, ink, maxWidth = g.TOOL_RIGHT - g.SPARSE_TOOL_NAME_X)
+                fitText(compactFigure(row.tokens), left, g.SPARSE_VALUE_BASELINE, figure, Type.STAT, ink, 72f)
+                text(sharePercent(row.share), g.TOOL_RIGHT, g.SPARSE_VALUE_BASELINE, figure, ink, Paint.Align.RIGHT, 68f)
+                text("Tokens", left, g.SPARSE_CAPTION_BASELINE, caption, muted)
+                text("Share", g.TOOL_RIGHT, g.SPARSE_CAPTION_BASELINE, caption, muted, Paint.Align.RIGHT)
+                drawBar(RectF(left, g.SPARSE_BAR_TOP, g.TOOL_RIGHT, g.SPARSE_BAR_BOTTOM), row.share, color)
+                if (row.costUsd > 0) text("${formatMoney(row.costUsd)} estimated cost", left, g.SPARSE_COST_BASELINE, secondary, muted)
+            }
+            data.models.firstOrNull()?.let { row ->
+                val color = vendorColor(row.name, 0)
+                drawMark(row.name, g.MODELS_X, g.SPARSE_MARK_TOP, g.SPARSE_MARK_SIZE, color, R.drawable.view_model)
+                text(row.name, g.SPARSE_MODEL_NAME_X, g.SPARSE_IDENTITY_BASELINE, bodyStrong, ink, maxWidth = right - g.SPARSE_MODEL_NAME_X)
+                fitText(compactFigure(row.tokens), g.MODELS_X, g.SPARSE_VALUE_BASELINE, figure, Type.STAT, ink, 72f)
+                text(sharePercent(row.share), right, g.SPARSE_VALUE_BASELINE, figure, ink, Paint.Align.RIGHT, 68f)
+                text("Tokens", g.MODELS_X, g.SPARSE_CAPTION_BASELINE, caption, muted)
+                text("Share", right, g.SPARSE_CAPTION_BASELINE, caption, muted, Paint.Align.RIGHT)
+                drawBar(RectF(g.MODELS_X, g.SPARSE_BAR_TOP, right, g.SPARSE_BAR_BOTTOM), row.share, color)
+            }
+            return
         }
-        val modelsTop = top + 17f
-        val modelRow = (bottom - modelsTop) / 4f
-        data.models.take(4).forEachIndexed { index, row ->
-            val y = modelsTop + index * modelRow
-            val fallback = listOf(palette.blue, palette.orange, palette.purple, palette.yellow)[index]
-            val color = originalToolColor(row.name, fallback).toArgb()
-            drawMark(row.name, middle + 12f, y + 1f, if (compact) 9f else 13f, color, R.drawable.view_model)
-            text(row.name, middle + if (compact) 25f else 30f, y + 11f, bodySize, ink, mono, width = width - middle - if (compact) 96f else 105f)
-            text("${formatCompactTokens(row.tokens)}·${(row.share * 100).roundToInt()}%", width - contentEdge, y + 11f, secondarySize, muted, mono, Paint.Align.RIGHT, 68f)
-            drawBar(middle + 12f, y + if (compact) 15f else 18f, width - contentEdge, y + if (compact) 18f else 22f, row.share, color)
+        drawBreakdownRows(data.tools, left, g.TOOL_NAME_X, g.TOOL_RIGHT, R.drawable.view_tool) { it.displayName() }
+        drawBreakdownRows(data.models, g.MODELS_X, g.MODEL_NAME_X, right, R.drawable.view_model) { it }
+    }
+
+    /** One dense column: mark, name and share on the first line, tokens and cost on the second, then the bar. */
+    private fun drawBreakdownRows(rows: List<WidgetDeckUsageRow>, columnLeft: Float, nameX: Float, columnRight: Float, fallbackMark: Int, label: (String) -> String) {
+        val g = WidgetDeckGrid.Breakdown
+        rows.take(g.ROW_TOPS.size).forEachIndexed { index, row ->
+            val top = g.ROW_TOPS[index]
+            val color = vendorColor(row.name, index)
+            drawMark(row.name, columnLeft, top + g.MARK_OFFSET, g.MARK_SIZE, color, fallbackMark)
+            val shareWidth = text(sharePercent(row.share), columnRight, top + g.NAME_BASELINE_OFFSET, bodyStrong, ink, Paint.Align.RIGHT)
+            text(label(row.name), nameX, top + g.NAME_BASELINE_OFFSET, body, ink, maxWidth = columnRight - shareWidth - g.SHARE_GAP - nameX)
+            val detail = compactFigure(row.tokens) + if (row.costUsd > 0) " · ${formatMoney(row.costUsd)}" else ""
+            text(detail, nameX, top + g.DETAIL_BASELINE_OFFSET, secondary, muted, maxWidth = columnRight - nameX)
+            drawBar(RectF(columnLeft, top + g.BAR_TOP_OFFSET, columnRight, top + g.BAR_BOTTOM_OFFSET), row.share, color)
         }
     }
 
+    // Activity
+
     private fun drawActivity(data: WidgetDeckData) {
+        val g = WidgetDeckGrid.Activity
         if (data.history.isEmpty()) {
             drawCentered("No activity history reported")
             return
         }
-        val top = if (compact) 50f else 62f
-        val bottom = height - if (compact) 8f else 16f
-        val middle = width * 0.57f
-        line(middle, top, middle, bottom, strongLine)
+        vline(g.DIVIDER_X, g.DIVIDER_TOP, g.DIVIDER_BOTTOM, line)
+
         val weekTokens = data.week.sumOf { it.tokens }
         val weekCost = data.week.sumOf { it.costUsd }
-        val peak = data.week.maxOfOrNull { it.tokens } ?: 0
-        fun compactTokens(value: Long) = formatCompactTokens(value).replace(".0K", "K").replace(".0M", "M")
-        text("${compactTokens(weekTokens)} · ${formatMoney(weekCost)}", contentEdge, top + 11f, bodySize, ink, monoBold, width = middle - contentEdge - 79f)
-        text("PEAK ${compactTokens(peak)}", middle - 10f, top + 11f, secondarySize, muted, mono, Paint.Align.RIGHT, 78f)
-        val chartTop = top + 18f
-        drawBitmap(WidgetDeckDrawing.weekChart(data.history, data.date, palette, ceil(middle - contentEdge - 12f).toInt(), ceil(bottom - chartTop).toInt(), 1f), contentEdge, chartTop, middle - 12f, bottom)
-        val rightLeft = middle + 12f
-        text("ACTIVITY", rightLeft, top + 11f, sectionSize, ink, monoBold)
-        val heatTop = top + 18f
-        val statsTop = bottom - if (compact) 27f else 35f
-        drawBitmap(WidgetDeckDrawing.heatmap(data.history, data.date, palette, ceil(width - rightLeft - contentEdge).toInt(), ceil(statsTop - heatTop - 5f).toInt(), 1f), rightLeft, heatTop, width - contentEdge, statsTop - 5f)
-        val statWidth = (width - rightLeft - contentEdge) / 2f
-        text(data.activeDays.toString(), rightLeft, statsTop + 13f, primarySize, ink, monoBold)
-        text("ACTIVE DAYS", rightLeft, statsTop + 24f, secondarySize, muted, mono, width = statWidth - 3f)
-        text(formatCompactTokens(data.messagesToday), rightLeft + statWidth, statsTop + 13f, primarySize, ink, monoBold)
-        text("MESSAGES", rightLeft + statWidth, statsTop + 24f, secondarySize, muted, mono, width = statWidth)
+        val peak = data.week.maxOfOrNull { it.tokens } ?: 0L
+        text("7 days", left, g.SECTION_BASELINE, section, label)
+        val advance = text(compactFigure(weekTokens), left, g.SUMMARY_BASELINE, stat, ink)
+        val peakWidth = measure("Peak ${compactFigure(peak)}", caption)
+        text("tokens · ${formatMoney(weekCost)}", left + advance + 6f, g.SUMMARY_BASELINE, secondary, muted, maxWidth = g.LEFT_RIGHT_EDGE - peakWidth - 10f - left - advance - 6f)
+        text("Peak ${compactFigure(peak)}", g.LEFT_RIGHT_EDGE, g.SUMMARY_BASELINE, caption, muted, Paint.Align.RIGHT)
+        drawWeekChart(data.history, data.date)
+
+        text("Activity", g.RIGHT_X, g.SECTION_BASELINE, section, label)
+        drawHeatmap(data.history, data.date)
+        hline(g.RIGHT_X, right, g.RULE_Y, line)
+        vline(g.STAT_DIVIDER_X, g.STAT_DIVIDER_TOP, g.STAT_DIVIDER_BOTTOM, line)
+        text(data.activeDays.toString(), g.RIGHT_X, g.STAT_VALUE_BASELINE, stat, ink)
+        fitCaption("Active days", "Days", g.RIGHT_X, g.STAT_DIVIDER_X - g.RIGHT_X - 6f)
+        if (data.messagesToday > 0) {
+            text(compactFigure(data.messagesToday), g.STAT_RIGHT_X, g.STAT_VALUE_BASELINE, stat, ink)
+            fitCaption("Messages today", "Messages", g.STAT_RIGHT_X, right - g.STAT_RIGHT_X)
+        } else {
+            // The Hub reports no message count for today; a zero here would be a false figure.
+            text(formatMoney(data.snapshot?.today?.costUsd ?: 0.0), g.STAT_RIGHT_X, g.STAT_VALUE_BASELINE, stat, ink)
+            fitCaption("Cost today", "Cost", g.STAT_RIGHT_X, right - g.STAT_RIGHT_X)
+        }
     }
 
+    private fun drawWeekChart(history: List<HistoryPoint>, end: LocalDate) {
+        val g = WidgetDeckGrid.Activity
+        val byDay = history.associateBy { it.label.take(10) }
+        val days = (6 downTo 0).map { end.minusDays(it.toLong()) }
+        val values = days.map { byDay[it.toString()] }
+        val peak = values.maxOfOrNull { it?.tokens ?: 0L } ?: 0L
+        val top = niceCeiling(ceil(peak / 3.0).toLong()) * 3
+        val plotHeight = g.PLOT_BOTTOM - g.PLOT_TOP
+        val gridPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = line
+            strokeWidth = 1f
+            pathEffect = DashPathEffect(floatArrayOf(3f, 3f), 0f)
+        }
+        listOf(1f / 3f, 2f / 3f, 1f).forEach { fraction ->
+            val y = g.PLOT_BOTTOM - plotHeight * fraction
+            canvas.drawLine(g.PLOT_LEFT, y, g.LEFT_RIGHT_EDGE, y, gridPaint)
+            text(axisLabel(top * fraction), left, y + 2.5f, axis, muted, maxWidth = g.PLOT_LEFT - left - 2f)
+        }
+        text("0", left, g.PLOT_BOTTOM + 2.5f, axis, muted)
+        hline(g.PLOT_LEFT, g.LEFT_RIGHT_EDGE, g.PLOT_BOTTOM, strongLine)
+        val column = (g.LEFT_RIGHT_EDGE - g.PLOT_LEFT) / 7f
+        val barWidth = column * g.BAR_FRACTION
+        values.forEachIndexed { index, point ->
+            val x = g.PLOT_LEFT + index * column + (column - barWidth) / 2f
+            val today = index == 6
+            if (point == null || point.tokens <= 0) {
+                fillRoundRect(RectF(x, g.PLOT_BOTTOM - 1.5f, x + barWidth, g.PLOT_BOTTOM), 0.75f, strongLine)
+            } else {
+                val barHeight = (point.tokens.toDouble() / top * plotHeight).toFloat().coerceIn(2f, plotHeight)
+                val barTop = g.PLOT_BOTTOM - barHeight
+                fillRoundRect(RectF(x, barTop, x + barWidth, g.PLOT_BOTTOM), g.BAR_RADIUS, if (today) accent else palette.blue.toArgb())
+                if (!today) {
+                    val claude = point.perClient.entries.filter { vendorOf(it.key) == "claude" }.sumOf { it.value.tokens }
+                    if (claude > 0 && point.tokens > 0) {
+                        val capHeight = (barHeight * claude / point.tokens.toDouble()).toFloat()
+                        if (capHeight >= 1.5f) {
+                            canvas.save()
+                            canvas.clipRect(x, barTop, x + barWidth, barTop + capHeight)
+                            fillRoundRect(RectF(x, barTop, x + barWidth, g.PLOT_BOTTOM), g.BAR_RADIUS, palette.orange.toArgb())
+                            canvas.restore()
+                        }
+                    }
+                }
+            }
+            text(days[index].dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.US), x + barWidth / 2f, g.DAY_LABEL_BASELINE, caption, muted, Paint.Align.CENTER)
+        }
+    }
+
+    private fun drawHeatmap(history: List<HistoryPoint>, end: LocalDate) {
+        val g = WidgetDeckGrid.Activity
+        val byDay = history.associateBy { it.label.take(10) }
+        val start = end.minusDays((g.HEAT_COLUMNS - 1) * 7L + (end.dayOfWeek.value % 7).toLong())
+        val maximum = generateSequence(start) { it.plusDays(1) }.takeWhile { !it.isAfter(end) }
+            .mapNotNull { byDay[it.toString()]?.tokens }.maxOrNull()?.coerceAtLeast(1) ?: 1L
+        val cell = (right - g.RIGHT_X - g.HEAT_GAP * (g.HEAT_COLUMNS - 1)) / g.HEAT_COLUMNS
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        val months = mutableListOf<Pair<Int, LocalDate>>()
+        var date = start
+        repeat(g.HEAT_COLUMNS * g.HEAT_ROWS) { offset ->
+            val column = offset / g.HEAT_ROWS
+            val row = offset % g.HEAT_ROWS
+            if (!date.isAfter(end)) {
+                if (date.dayOfMonth == 1) months += column to date
+                val tokens = byDay[date.toString()]?.tokens ?: 0L
+                val step = when {
+                    tokens <= 0 -> 0
+                    tokens.toDouble() / maximum >= 0.75 -> 4
+                    tokens.toDouble() / maximum >= 0.5 -> 3
+                    tokens.toDouble() / maximum >= 0.25 -> 2
+                    else -> 1
+                }
+                paint.color = palette.heat[step].toArgb()
+                val x = g.RIGHT_X + column * (cell + g.HEAT_GAP)
+                val y = g.HEAT_TOP + row * (cell + g.HEAT_GAP)
+                canvas.drawRoundRect(x, y, x + cell, y + cell, g.HEAT_RADIUS, g.HEAT_RADIUS, paint)
+            }
+            date = date.plusDays(1)
+        }
+        var lastLabelRight = Float.NEGATIVE_INFINITY
+        months.forEach { (column, monthDate) ->
+            val x = g.RIGHT_X + column * (cell + g.HEAT_GAP)
+            val name = monthDate.month.getDisplayName(TextStyle.SHORT, Locale.US)
+            val labelWidth = measure(name, caption)
+            if (x >= lastLabelRight + 4f && x + labelWidth <= right + 1f) {
+                text(name, x, g.MONTH_BASELINE, caption, muted)
+                lastLabelRight = x + labelWidth
+            }
+        }
+    }
+
+    // Shared drawing helpers
+
     private fun drawCentered(message: String) {
-        val maxWidth = width - contentEdge * 2
-        val words = message.split(' ')
+        val maxWidth = right - left
+        val paint = paint(body, muted)
         val lines = mutableListOf<String>()
         var current = ""
-        val paint = textPaint(bodySize, muted, mono)
-        words.forEach { word ->
+        message.split(' ').forEach { word ->
             val candidate = if (current.isEmpty()) word else "$current $word"
             if (paint.measureText(candidate) <= maxWidth || current.isEmpty()) current = candidate
             else { lines += current; current = word }
         }
         if (current.isNotEmpty()) lines += current
-        val lineHeight = if (compact) 11f else 14f
-        val start = height / 2f - (lines.size - 1) * lineHeight / 2f
-        lines.take(3).forEachIndexed { index, value -> text(value, width / 2f, start + index * lineHeight, bodySize, muted, mono, Paint.Align.CENTER, maxWidth) }
+        val lineHeight = 15f
+        val start = (WidgetDeckGrid.Overview.DIVIDER_TOP + WidgetDeckGrid.Activity.DIVIDER_BOTTOM) / 2f - (lines.size - 1) * lineHeight / 2f
+        lines.take(3).forEachIndexed { index, value -> text(value, width / 2f, start + index * lineHeight, body, muted, Paint.Align.CENTER, maxWidth) }
+    }
+
+    /** Widget figures: one decimal below 100K and 100M, none above, so number columns stay narrow. */
+    private fun compactFigure(value: Long): String = when {
+        value >= 100_000_000L -> "${(value / 1_000_000.0).roundToInt()}M"
+        value >= 1_000_000L -> formatCompactTokens(value)
+        value >= 100_000L -> "${(value / 1_000.0).roundToInt()}K"
+        else -> formatCompactTokens(value)
+    }
+
+    /** Draws the long caption when it fits the column, otherwise the short one. */
+    private fun fitCaption(long: String, short: String, x: Float, maxWidth: Float) {
+        text(if (measure(long, caption) <= maxWidth) long else short, x, WidgetDeckGrid.Activity.STAT_CAPTION_BASELINE, caption, muted, maxWidth = maxWidth)
+    }
+
+    private fun vendorColor(name: String, index: Int): Int = originalToolColor(name, fallbackColors[index % fallbackColors.size]).toArgb()
+
+    private fun sharePercent(share: Double): String {
+        val percent = share * 100
+        return if (percent > 0 && percent < 1) "<1%" else "${percent.roundToInt()}%"
+    }
+
+    private fun niceCeiling(value: Long): Double {
+        if (value <= 0) return 1.0
+        val magnitude = 10.0.pow(floor(log10(value.toDouble())))
+        val normalized = value / magnitude
+        val step = listOf(1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0).first { normalized <= it + 1e-9 }
+        return step * magnitude
+    }
+
+    private fun axisLabel(value: Double): String = when {
+        value >= 1_000_000_000 -> trim(value / 1_000_000_000) + "B"
+        value >= 1_000_000 -> trim(value / 1_000_000) + "M"
+        value >= 1_000 -> trim(value / 1_000) + "K"
+        else -> value.roundToInt().toString()
+    }
+
+    private fun trim(value: Double): String {
+        val rounded = (value * 10).roundToInt() / 10.0
+        return if (rounded == floor(rounded)) rounded.toInt().toString() else rounded.toString()
     }
 
     private fun drawMark(name: String, left: Float, top: Float, size: Float, color: Int, fallback: Int) {
@@ -346,57 +545,73 @@ private class DeckCanvas(
     private fun drawDrawable(resource: Int, left: Float, top: Float, drawWidth: Float, drawHeight: Float, tint: Int? = null) {
         val drawable = context.getDrawable(resource)?.mutate() ?: return
         if (tint != null) drawable.setTint(tint)
-        drawable.setBounds(left.roundToInt(), top.roundToInt(), (left + drawWidth).roundToInt(), (top + drawHeight).roundToInt())
-        drawable.draw(canvas)
-    }
-
-    private fun drawBitmap(bitmap: Bitmap, left: Float, top: Float, right: Float, bottom: Float) {
-        canvas.drawBitmap(bitmap, null, RectF(left, top, right, bottom), Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG))
-    }
-
-    private fun drawBar(left: Float, top: Float, right: Float, bottom: Float, fraction: Double, color: Int) {
-        val radius = (bottom - top) / 2f
-        roundRect(left, top, right, bottom, radius, strongLine)
-        val fillRight = left + (right - left) * fraction.coerceIn(0.0, 1.0).toFloat()
-        if (fillRight > left) roundRect(left, top, fillRight.coerceAtLeast(left + bottom - top), bottom, radius, color)
-    }
-
-    private fun drawSegmentedBar(left: Float, top: Float, right: Float, bottom: Float, segments: List<Pair<Double, Int>>) {
-        drawBar(left, top, right, bottom, 0.0, strongLine)
-        val radius = (bottom - top) / 2f
+        drawable.isFilterBitmap = true
+        // Drawable bounds are integers; draw in a scaled-up local space so small marks keep their exact size.
+        val precision = 8f
         canvas.save()
-        canvas.clipRect(left, top, right, bottom)
-        var x = left
-        segments.forEachIndexed { index, segment ->
-            val segmentRight = min(right, x + (right - left) * segment.first.coerceIn(0.0, 1.0).toFloat())
-            val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = segment.second }
-            if (index == 0) canvas.drawRoundRect(RectF(x, top, segmentRight, bottom), radius, radius, paint)
-            else canvas.drawRect(x, top, segmentRight, bottom, paint)
+        canvas.translate(left, top)
+        canvas.scale(1f / precision, 1f / precision)
+        drawable.setBounds(0, 0, (drawWidth * precision).roundToInt(), (drawHeight * precision).roundToInt())
+        drawable.draw(canvas)
+        canvas.restore()
+    }
+
+    private fun drawBar(rect: RectF, fraction: Double, color: Int) {
+        val radius = rect.height() / 2f
+        fillRoundRect(rect, radius, strongLine)
+        val fillRight = rect.left + rect.width() * fraction.coerceIn(0.0, 1.0).toFloat()
+        if (fillRight > rect.left) fillRoundRect(RectF(rect.left, rect.top, fillRight.coerceAtLeast(rect.left + rect.height()), rect.bottom), radius, color)
+    }
+
+    private fun drawSegmentedBar(rect: RectF, segments: List<Pair<Double, Int>>) {
+        val radius = rect.height() / 2f
+        fillRoundRect(rect, radius, strongLine)
+        canvas.save()
+        canvas.clipPath(android.graphics.Path().apply { addRoundRect(rect, radius, radius, android.graphics.Path.Direction.CW) })
+        var x = rect.left
+        segments.forEach { (share, color) ->
+            val segmentRight = min(rect.right, x + rect.width() * share.coerceIn(0.0, 1.0).toFloat())
+            canvas.drawRect(x, rect.top, segmentRight, rect.bottom, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color })
             x = segmentRight
         }
         canvas.restore()
     }
 
-    private fun fitText(value: String, x: Float, baseline: Float, preferred: Float, minimum: Float, color: Int, typeface: Typeface, maxWidth: Float) {
-        var size = preferred
-        var paint = textPaint(size, color, typeface)
-        while (size > minimum && paint.measureText(value) > maxWidth) {
+    private fun fitText(value: String, x: Float, baseline: Float, type: DeckType, minimum: Float, color: Int, maxWidth: Float) {
+        var size = type.size
+        var current = DeckType(type.typeface, size, type.tracking, type.uppercase, type.tabular)
+        while (size > minimum && measure(value, current) > maxWidth) {
             size -= 1f
-            paint = textPaint(size, color, typeface)
+            current = DeckType(type.typeface, size, type.tracking, type.uppercase, type.tabular)
         }
-        canvas.drawText(ellipsize(value, paint, maxWidth), x, baseline, paint)
+        text(value, x, baseline, current, color, maxWidth = maxWidth)
     }
 
-    private fun text(value: String, x: Float, baseline: Float, size: Float, color: Int, typeface: Typeface, align: Paint.Align = Paint.Align.LEFT, width: Float = Float.MAX_VALUE) {
-        val paint = textPaint(size, color, typeface, align)
-        canvas.drawText(ellipsize(value, paint, width), x, baseline, paint)
+    /** Draws [value] and returns its advance width in reference units. */
+    private fun text(
+        value: String,
+        x: Float,
+        baseline: Float,
+        type: DeckType,
+        color: Int,
+        align: Paint.Align = Paint.Align.LEFT,
+        maxWidth: Float = Float.MAX_VALUE,
+    ): Float {
+        val paint = paint(type, color, align)
+        val shown = ellipsize(if (type.uppercase) value.uppercase(Locale.US) else value, paint, maxWidth)
+        canvas.drawText(shown, x, baseline, paint)
+        return paint.measureText(shown)
     }
 
-    private fun textPaint(size: Float, color: Int, typeface: Typeface, align: Paint.Align = Paint.Align.LEFT) = Paint(Paint.ANTI_ALIAS_FLAG or Paint.SUBPIXEL_TEXT_FLAG).apply {
-        textSize = size
+    private fun measure(value: String, type: DeckType): Float = paint(type, ink).measureText(if (type.uppercase) value.uppercase(Locale.US) else value)
+
+    private fun paint(type: DeckType, color: Int, align: Paint.Align = Paint.Align.LEFT) = Paint(Paint.ANTI_ALIAS_FLAG or Paint.SUBPIXEL_TEXT_FLAG).apply {
+        textSize = type.size
         this.color = color
-        this.typeface = typeface
+        typeface = type.typeface
         textAlign = align
+        letterSpacing = type.tracking
+        if (type.tabular) fontFeatureSettings = "tnum"
     }
 
     private fun ellipsize(value: String, paint: Paint, maxWidth: Float): String {
@@ -407,23 +622,27 @@ private class DeckCanvas(
         return value.substring(0, end) + suffix
     }
 
-    private fun line(startX: Float, startY: Float, endX: Float, endY: Float, color: Int) {
-        canvas.drawLine(startX, startY, endX, endY, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color; strokeWidth = 1f })
+    private fun hline(startX: Float, endX: Float, y: Float, color: Int) {
+        canvas.drawLine(startX, y, endX, y, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color; strokeWidth = 1f })
+    }
+
+    private fun vline(x: Float, startY: Float, endY: Float, color: Int) {
+        canvas.drawLine(x, startY, x, endY, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color; strokeWidth = 1f })
     }
 
     private fun circle(x: Float, y: Float, radius: Float, color: Int) {
         canvas.drawCircle(x, y, radius, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color })
     }
 
-    private fun roundRect(left: Float, top: Float, right: Float, bottom: Float, radius: Float, color: Int) {
-        canvas.drawRoundRect(RectF(left, top, right, bottom), radius, radius, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color })
+    private fun fillRoundRect(rect: RectF, radius: Float, color: Int) {
+        canvas.drawRoundRect(rect, radius, radius, Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color })
     }
 
-    private fun strokeRoundRect(left: Float, top: Float, right: Float, bottom: Float, radius: Float, color: Int) {
-        canvas.drawRoundRect(RectF(left, top, right, bottom), radius, radius, Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private fun strokeRoundRect(rect: RectF, radius: Float, color: Int, strokeWidth: Float) {
+        canvas.drawRoundRect(rect, radius, radius, Paint(Paint.ANTI_ALIAS_FLAG).apply {
             this.color = color
             style = Paint.Style.STROKE
-            strokeWidth = 1f
+            this.strokeWidth = strokeWidth
         })
     }
 }

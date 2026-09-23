@@ -1,6 +1,6 @@
-# Desktop parity for v0.56.0
+# Desktop parity for v0.60.0
 
-The Android app is verified against desktop Token Monitor v0.56.0. It mirrors
+The Android app is verified against desktop Token Monitor v0.60.0. It mirrors
 the desktop information that the Hub can safely provide while keeping the phone
 read-only and lightweight.
 
@@ -15,7 +15,7 @@ read-only and lightweight.
 | Devices | Device totals, clients, models, collection cadence, last upload, and retained history |
 | Models | Token or cost ranking, with the desktop vendor mark for recognized model families and a generic model mark for unknown names |
 | Projects | Totals, session/tool counts, date range, and tool breakdown |
-| Sessions | Project, tool, model, start/update time, session ID, tokens, and cost |
+| Sessions | Project, tool, model, start/update time, session ID, tokens, cost, Running/Finished/Idle activity, and recent context-window use when reported |
 | Usage dashboard | Overview cards, activity heatmap, and model/tool summaries |
 | Trends | By tool or model, Bars or K-line, and 7/30/90-day, one-year, or all-history ranges |
 | Display settings | View and Home-module visibility/order, ranking metric, limit-bar metric/source/email visibility, compact total, tool colors, default range, reduce motion, and a three-step text size in place of the desktop Zoom slider |
@@ -39,7 +39,7 @@ controls are window-specific rather than Hub dashboard features.
 ## Intentional boundaries
 
 The following remain on desktop because they collect data, control a desktop
-window, or require information the v0.56.0 Hub does not transmit:
+window, or require information the v0.60.0 Hub does not transmit:
 
 - tool discovery, account sign-in, collection cadence, diagnostics, export, and
   subscription editing;
@@ -50,6 +50,8 @@ window, or require information the v0.56.0 Hub does not transmit:
 - exact renderer-only attribution that is not present in the Hub response.
 - live token-rate presentation. The v0.55.0 throughput capability and timed
   counters are parsed compatibly, but Android does not display a rate yet.
+- the v0.60.0 Edge Dock and its pin, edge, hover, drag, and desktop-window
+  behavior. Sessions remain a normal mobile dashboard destination.
 
 The Android app does not replace these with remote commands. It reads only the
 documented Hub endpoints listed in [`SECURITY.md`](SECURITY.md).

@@ -3,8 +3,10 @@
 Add Token Monitor from your launcher's widget picker. The existing responsive widget
 starts at 2×2 cells and is also available from Settings → Home-screen widget. A
 separate **Token Monitor · Pages** entry requests 4×2 and shows four manually
-selectable information pages. Long-press either widget and use the launcher's
-resize handles to change its shape.
+selectable information pages. Long-press the original Usage widget and use the
+launcher's resize handles to change its shape. The Pages widget is fixed-layout:
+some launchers may still expose handles, but it always fits the same 1.82:1 card
+instead of switching to another composition.
 
 ## What fits where
 
@@ -16,7 +18,8 @@ resize handles to change its shape.
 | Overview | 240×190 dp | Brand header, count with two stats beside it, tool split, the tightest window (a second from 221 dp), and the seven-day chart from 301 dp |
 | Detailed | 250×384 dp | Overview content plus three stats, every limit window with its reset in two columns, and the week total on the chart |
 
-The pages widget is intended for medium and large placements from 250×180 dp.
+The Pages widget requests a 4×2 placement. Launchers may allocate a different
+physical size or cell count, but that does not create a responsive Pages layout.
 Its fixed manual order is **Overview → Limits → Breakdown → Activity**. All four
 pages are rendered from one saved or Live snapshot into identical 1.82:1 full-card
 images. The launcher receives only the selected image, so it cannot shrink or fan
@@ -29,11 +32,11 @@ auto-rotation loop, or wake lock.
 | Overview | Total tokens, estimated cost, messages, active time, streak, tool share, and week summary |
 | Limits | Up to four tightest account windows with remaining quota and reset or expiry wording |
 | Breakdown | Ranked tool and model totals with proportional bars and provider colors |
-| Activity | Seven-day token and cost summary, daily bars, recent-history heatmap, active days, and messages |
+| Activity | Labeled seven-day token and cost bars, a labeled 13-week heatmap, active days, and messages |
 
 ![Pages widget Overview, Limits, Breakdown and Activity](images/widget-pages-overview.png)
 
-The complete four-page gallery is shown in the project [README](../README.md#four-views-one-steady-footprint).
+The complete four-page gallery is shown in the project [README](../README.md#four-views-one-fixed-footprint).
 
 These are content dimensions, not launcher cells. Pixel, One UI and other launchers
 size their cells differently and add their own padding, so the same 2×2 request can
@@ -48,6 +51,9 @@ a tabular sans-serif figure, and the same `Reset 1d 13h` countdowns the app show
 The card takes the launcher's system corner radius on Android 12 and newer. Quota
 bars and the seven-day chart are drawn at the exact pixel size the launcher reports
 for the widget, so nothing is scaled after the fact and edges stay sharp at any size.
+All four pages share the same text roles and supporting-label contrast. Long names
+truncate instead of forcing a smaller page-specific type scale, and sparse Breakdown
+data remains top-aligned rather than stretching across the card.
 
 Stats beside the figure are today's messages and active time from the Hub's history,
 the current streak, and the week's tokens when a day has none of those. The tool bar
@@ -99,8 +105,10 @@ outside the explicit foreground session.
 
 ## Troubleshooting
 
-- **The widget kept its old shape after an update:** its dimensions belong to the
-  launcher. Resize it, or remove and add it again.
+- **The Usage widget kept its old shape after an update:** its dimensions belong
+  to the launcher. Resize it, or remove and add it again.
+- **The Pages widget has resize handles:** this is launcher behavior. Its content
+  remains one fixed 1.82:1 composition and is fitted inside the allocated space.
 - **The picker shows an older preview:** close and reopen the picker. Do not clear
   app data just to refresh a preview; that would also remove pairing.
 - **Live says connecting:** check that the desktop Hub is running and reachable over

@@ -180,6 +180,15 @@ internal fun LazyListScope.sessionItems(sessions: List<SessionUsage>, period: Da
 internal fun SessionUsageRow(session: SessionUsage, title: String, meta: String, ratio: Float) {
     var expanded by rememberSaveable(session.id) { mutableStateOf(false) }
     val motionEnabled = LocalInteractionMotion.current
+    val now = LocalNow.current
+    val activity = sessionActivityState(session, now)
+    val activityLabel = when (activity) {
+        SessionActivityState.Running -> "Running"
+        SessionActivityState.Finished -> "Finished"
+        SessionActivityState.Idle -> ""
+    }
+    val activityColor = if (activity == SessionActivityState.Running) Success else Muted
+    val context = sessionContextForRow(session, now)
     Column(
         modifier = Modifier.fillMaxWidth().clickable { expanded = !expanded }.padding(vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(5.dp),
@@ -189,7 +198,19 @@ internal fun SessionUsageRow(session: SessionUsage, title: String, meta: String,
             Spacer(Modifier.width(8.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(title, color = Ink, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(meta, color = Muted, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (activityLabel.isNotBlank()) {
+                        StatusDot(activityColor, size = 6.dp)
+                        Spacer(Modifier.width(5.dp))
+                    }
+                    Text(
+                        listOf(activityLabel, meta).filter { it.isNotBlank() }.joinToString(" · "),
+                        color = Muted,
+                        style = MaterialTheme.typography.labelSmall,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
             Spacer(Modifier.width(10.dp))
             Column(horizontalAlignment = Alignment.End) {
@@ -205,6 +226,18 @@ internal fun SessionUsageRow(session: SessionUsage, title: String, meta: String,
             )
         }
         UsageBar(ratio, accentFor(session.client))
+        context?.let { reading ->
+            val contextColor = when {
+                reading.percentLeft <= 10 -> Danger
+                reading.percentLeft <= 30 -> Orange
+                else -> Muted
+            }
+            Row(modifier = Modifier.fillMaxWidth().padding(start = 20.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Context ${reading.percentUsed}% used", color = Muted, style = MaterialTheme.typography.labelSmall)
+                Text("${reading.percentLeft}% left", color = contextColor, style = MaterialTheme.typography.labelSmall)
+            }
+            UsageBar(reading.percentUsed / 100f, contextColor)
+        }
         AnimatedVisibility(
             visible = expanded,
             enter = fadeIn(tween(if (motionEnabled) 160 else 0)) + expandVertically(tween(if (motionEnabled) 240 else 0, easing = DesktopEaseOut)),

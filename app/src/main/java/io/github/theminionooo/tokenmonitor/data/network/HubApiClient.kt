@@ -23,6 +23,11 @@ internal data class WireHubSnapshot(
     val capturedAt: Long,
 )
 
+internal data class HubStreamEvent(
+    val type: String,
+    val data: String,
+)
+
 internal class HubApiException(
     val statusCode: Int,
     val presentation: String,
@@ -89,20 +94,21 @@ internal class HubApiClient : Closeable {
     suspend fun streamStats(
         connection: HubConnection,
         onOpen: suspend (SseSession) -> Unit,
-        onData: suspend (String) -> Unit,
+        onEvent: suspend (HubStreamEvent) -> Unit,
     ) {
         val http = open(
             connection = connection,
             path = "/api/stats/stream",
             authenticated = true,
             accept = "text/event-stream",
+            headers = mapOf("x-token-monitor-stream" to "2"),
         )
         try {
             if (http.responseCode !in 200..299) throw responseException(http)
             val session = SseSession(http)
             onOpen(session)
             http.inputStream.bufferedReader(StandardCharsets.UTF_8).use { reader ->
-                readEvents(reader, session, onData)
+                readEvents(reader, session, onEvent)
             }
         } finally {
             release(http)
@@ -130,6 +136,7 @@ internal class HubApiClient : Closeable {
         path: String,
         authenticated: Boolean,
         accept: String = "application/json",
+        headers: Map<String, String> = emptyMap(),
     ): HttpURLConnection {
         val http = (URL(connection.baseUrl + path).openConnection() as HttpURLConnection).apply {
             requestMethod = "GET"
@@ -139,6 +146,7 @@ internal class HubApiClient : Closeable {
             useCaches = false
             setRequestProperty("Accept", accept)
             setRequestProperty("User-Agent", "Token-Monitor-Android/${BuildConfig.VERSION_NAME}")
+            headers.forEach(::setRequestProperty)
             if (authenticated) setRequestProperty("Authorization", "Bearer ${connection.secret}")
         }
         synchronized(requests) {
@@ -157,15 +165,19 @@ internal class HubApiClient : Closeable {
         else -> HubApiException(http.responseCode, "The Hub returned HTTP ${http.responseCode}. Try again when it is online.")
     }
 
-    private suspend fun readEvents(reader: BufferedReader, session: SseSession, onData: suspend (String) -> Unit) {
+    private suspend fun readEvents(reader: BufferedReader, session: SseSession, onEvent: suspend (HubStreamEvent) -> Unit) {
         val data = StringBuilder()
+        var eventType = "message"
         while (!session.closed.get()) {
             val line = readSseLine(reader) ?: break
             if (line.isEmpty()) {
                 if (data.isNotEmpty()) {
-                    onData(data.toString())
+                    onEvent(HubStreamEvent(eventType, data.toString()))
                     data.clear()
                 }
+                eventType = "message"
+            } else if (line.startsWith("event:")) {
+                eventType = line.removePrefix("event:").trim().ifBlank { "message" }
             } else if (line.startsWith("data:")) {
                 val payload = line.removePrefix("data:").trimStart()
                 if (data.length + payload.length > maxSseEventChars) {

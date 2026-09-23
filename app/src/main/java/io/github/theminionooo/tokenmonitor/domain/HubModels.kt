@@ -66,6 +66,9 @@ data class SessionUsage(
     val startedAt: String,
     val lastUsedAt: String,
     val sessionKind: String = "",
+    val contextTokens: Long = 0,
+    val contextWindow: Long = 0,
+    val turnEnded: Boolean? = null,
 )
 
 data class DeviceUsage(

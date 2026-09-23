@@ -29,16 +29,18 @@ Desktop collectors → Token Monitor Hub → Tailscale or home Wi-Fi → HubRepo
 ui/         App shell, screens, presentation rules, ViewModel, ActivityHeatmap
 domain/     HubSnapshot, UsagePeriod, DeviceUsage, LimitAccount, HistoryPoint, ...
 data/       HubRepository
-  protocol/ HubDtos, HubProtocolParser          wire → domain
+  protocol/ HubDtos, HubProtocolParser          complete wire → domain
+             HubStreamProtocol                  SSE event → complete wire
   network/  HubApiClient, HubAddressValidator, EndpointFailover, HubDiscovery, BackoffPolicy, ServiceStatusClient
   storage/  SecureConnectionStore, SnapshotCache, DisplayPreferences
 widget/     Responsive RemoteViews, cached-snapshot pages, explicit Live service and controls
 ```
 
 Screens receive domain models and callbacks;
-they never see JSON field names, headers, or storage. The parser is the single
-place that knows the wire shape, so a desktop protocol change is absorbed in
-`protocol/` and its fixtures without touching screens.
+they never see JSON field names, headers, or storage. The stable parser owns the
+complete wire shape; the stream reducer owns incremental delivery. A desktop
+protocol change is absorbed in `protocol/`, its versioned fixtures, and focused
+presentation helpers before any screen needs to change.
 
 ## Connection lifecycle
 
@@ -53,9 +55,10 @@ When a dashboard becomes visible the repository:
    `/api/stats`, `/api/devices`, `/api/history`, `/api/subscriptions` with the
    bearer secret. A 404 on an optional endpoint is tolerated; a redirect is
    refused so the secret cannot be sent elsewhere.
-2. Opens `/api/stats/stream` and applies each `stats` event to the current
-   snapshot. Streamed stats omit the per-device history, so the previous
-   device history is retained across events (`retainDeviceHistory`).
+2. Opens `/api/stats/stream` with `x-token-monitor-stream: 2`. Complete
+   `snapshot` and `stats` events replace the wire snapshot. Small `freshness`
+   events are merged by `HubStreamProtocol`, which updates only timestamp and
+   stale metadata while retaining periods, sessions, providers, and device history.
 3. On stream failure, reports "Live updates paused", waits according to
    `BackoffPolicy` (bounded exponential with jitter), and reconnects while the
    dashboard is still visible.
@@ -109,12 +112,13 @@ accept older SSE envelopes, and foreground writes store the normalized stats
 object. The responsive widget updates after a saved snapshot, when resized, and
 after each stats refresh during an explicit Live session; Android 12+ selects
 compact, medium, or large RemoteViews using responsive size mappings. Older
-Android versions receive portrait and landscape layouts. A separate pages
-provider renders Overview, Limits, Breakdown, and Activity from one current
+Android versions receive portrait and landscape layouts. A separate fixed-layout
+pages provider renders Overview, Limits, Breakdown, and Activity from one current
 cache/session snapshot. It sends the launcher one complete 1.82:1 page bitmap
 plus transparent native touch targets for Previous, Next, Open, Refresh, and
-Live. The selected page is stored locally per widget. This avoids launcher
-collection transforms and keeps page changes local without fetching.
+Live. It requests 4×2 but never switches composition when a launcher allocates a
+different physical size. The selected page is stored locally per widget. This
+avoids launcher collection transforms and keeps page changes local without fetching.
 Neither provider registers a periodic update.
 See [Android widget layouts](https://developer.android.com/develop/ui/views/appwidgets/layouts).
 
@@ -158,7 +162,9 @@ and settings. Shared presentation rules live alongside them in focused files:
   period. Rolling ranges have no sessions or projects because the Hub reports
   those only for its own periods.
 - **Formatting.** `UsageFormatting.kt` centralizes cached formatters and stable
-  labels; `VendorPresentation.kt` maps tool and model names to marks and colors.
+  labels; `VendorPresentation.kt` maps tool and model names to marks and colors;
+  `SessionPresentation.kt` owns the Running, Finished, and Idle window plus
+  context-window calculations. Those rules are unit-tested without Compose.
 - **Settings.** `ConnectionSettings.kt` sections collapse to a header with a summary,
   like the desktop settings list. A fresh install shows `WelcomeSetup` instead
   of Settings until a Hub is saved.

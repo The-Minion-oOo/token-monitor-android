@@ -1,19 +1,151 @@
 # Validation
 
-The current public release is Android **v0.56.0 r4** (`560004`). The latest
-phone-verified build is **v0.54.0 r20** (`540020`). r4 is based on desktop Token
-Monitor v0.56.0 while retaining explicit v0.54.0 and v0.55.0 compatibility
-coverage. Installation and launcher inspection on the Galaxy S25 Ultra remain
-pending; emulator results are not presented as One UI verification.
+The current public release, source version, and latest phone-verified build is
+Android **v0.60.0 r7** (`600007`).
+
+## v0.60.0 r7 release
+
+A phone inspection of r6 on September 22, 2026 with real two-tool, three-model
+data showed the dense Breakdown rows crowded: the model names' descenders
+touched the token line beneath them, and the tool line packed name, tokens and
+share together. r7 gives both columns one two-line row with fourteen units
+between the lines and aligns three rows across the divider. The same inspection
+showed "0 MESSAGES" on Activity because the Hub reported no message count for
+the day; r7 shows today's cost in that slot instead of a false zero.
+
+The specification was updated before the renderer. 83 JVM tests, lint with no
+errors, the debug build, the seven-test emulator design run, the sixteen-test
+gallery capture and the documentation link check pass.
+
+The signed r7 APK reports package `io.github.theminionooo.tokenmonitor`, version
+code `600007`, certificate SHA-256
+`eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c` (unchanged
+since r3), and file SHA-256
+`562d28d63902f86e55079d56120c30398dbbbd03914d19bf1328d41d48747f96`. It was
+installed over r6 on the Galaxy S25 Ultra without uninstalling; the first-install
+time (`2026-09-21 11:03:41`) and the placed widget were preserved. All four
+pages were captured on One UI at the 406×216 dp allocation and are in
+`local-private/widget-r7-phone-2026-09-22/`. Breakdown shows the two-tool,
+three-model state with clear rows in both columns; Activity shows the cost
+fallback in place of the missing message count; Overview and Limits are
+unchanged from r6. The owner reviewed the Breakdown render twice during the work: the row
+spacing was widened, then the vendor mark was lowered to center on the two
+text lines, and the same centering was applied to the header app icon and the
+Limits provider marks, each time before a signed rebuild and phone install.
+
+## v0.60.0 r6 candidate
+
+The owner's final r5 One UI screenshot showed that the common one-tool/one-model
+state still looked like a mostly empty dense table: small figures clustered at
+the top and the token total could read into the share. r6 gives this sparse state
+a dedicated feature layout with large token and share figures on opposite column
+edges, explicit captions, matching baselines, and full-width bars. Multi-row data
+continues to use the dense table. The card ratio and the other three pages do not
+change.
+
+The written grid specification was updated before the renderer. All 82 JVM
+tests, all 31 API 36 instrumentation tests, lint, debug assembly, signed release
+assembly, documentation links, and the final diff check pass. The independent
+review found no material issue.
+
+The signed r6 APK reports package `io.github.theminionooo.tokenmonitor`, version
+code `600006`, certificate SHA-256
+`eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`, and file
+SHA-256 `0f73f96da54087481ec416b486e35b8cd90833fc1bb5d7b289ae15e896fb7ef6`.
+
+The APK was installed over the existing r5/r6 candidate on a Galaxy S25 Ultra
+(SM-S938U) without uninstalling. The original first-install timestamp
+(`2026-09-21 11:03:41`) and One UI widget ID `42` were preserved. Physical
+captures of Overview, Limits, Breakdown, and Activity are in
+`local-private/widget-r6-phone-2026-09-22/`. The sparse Breakdown capture shows
+the token and share figures separated and aligned at the installed 5×2 widget
+size; the other three pages remain visually consistent with the approved r5
+phone-size comparison.
+
+The bounded battery gate found no active Token Monitor service or wake lock and
+no Android CLI test instrumentation. This is an idle-state check, not a
+multi-hour battery soak.
+
+## v0.60.0 r5 candidate
+
+The candidate is based on desktop Token Monitor v0.60.0 commit
+`8031cf3b75c7f354db8a990a983999c69086da28`. It retains v0.54.0, v0.55.0,
+and v0.56.0 fixtures and adds a sanitized v0.60.0 fixture for session context,
+tri-state activity, current limit shapes, and stream-v2 events.
+
+On September 21, 2026:
+
+- all 76 JVM tests passed;
+- Android lint, debug assembly, R8 release assembly, and local documentation-link
+  checks passed;
+- all 31 instrumentation tests passed on the API 36
+  `TokenMonitor_API36_Pixel10ProXL` emulator (`emulator-5554`), including the
+  stream-v2 request header, dashboard/widget ownership switching, fixed widget
+  geometry, 48 dp controls, saved/offline/stale states, and page cycling;
+- production renders of Overview, Limits, Breakdown, and Activity were captured
+  together at 320×180 dp in Default. The final pass increased the shared type
+  scale; restored brighter cyan, mint, and coral accents; kept sparse Breakdown
+  names and values distinct; and strengthened the Activity chart and heatmap
+  without changing the 1.82:1 card;
+- phone inspection of r2 confirmed One UI allocated 406×215.8 dp while the
+  renderer supplied only a 560-pixel-wide raster. r3 renders at launcher density,
+  producing a 960-pixel-wide card for the 320 dp emulator case; instrumentation
+  asserts the density-matched bitmap size and unchanged 1.82:1 aspect ratio.
+- the r3 production APK was signed with the established release certificate and
+  installed successfully on the API 36 emulator. It reports version code
+  `600003`, certificate SHA-256
+  `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`,
+  and file SHA-256
+  `4c0d95fe4dc0ef5fe2d31d481bfd6a0a7ab0e46a11efd3959a0b6437bdf928ab`.
+- r3 phone screenshots showed that density alone did not correct the layout.
+  r4 added shared layout bands, but its phone captures on the Galaxy S25 Ultra
+  (September 21, 2026, saved under `local-private/widget-r4-phone-2026-09-21/`)
+  still showed the Overview stat column overlapping, oversized Limits and
+  Breakdown rows, and a Samsung-substituted monospace face. The emulator
+  comparison that had passed r4 used a two-row fixture, which hid all of that.
+- r5 replaces the page bodies with one measured grid (`docs/WIDGET_SPEC.md`,
+  `WidgetDeckGrid`), bundles a JetBrains Mono subset so the phone and the
+  emulator draw the same face, and renders the design test from the dense
+  showcase fixture. All four pages were rendered at 250×110, 320×180 and
+  360×220 dp in Default and Porcelain on the API 36 emulator; the 360×220
+  captures are the gallery images and were placed beside the concept cards for
+  the owner's approval.
+- r5 also repairs eleven vendor logo drawables whose compact SVG arc flags
+  Android rejects; the dense fixture's Qwen model was the first render to hit one.
+- the r4 production APK (`600004`, file SHA-256
+  `ba7dd7a4b90385586985148d2a9f16ef05f278715a7df6c7ed056be1c2628de2`) was
+  installed on the Galaxy S25 Ultra and is the build the r4 phone captures show.
+- On September 22, the independent review gate found and corrected the bitmap-cap
+  enforcement, root-directory font-subset generation, and third-party notice.
+  All 81 JVM tests, all 31 API 36 instrumentation tests, lint, debug assembly,
+  release assembly, documentation links, and the final diff check then passed.
+- The signed r5 APK reports version code `600005`, package
+  `io.github.theminionooo.tokenmonitor`, certificate SHA-256
+  `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`,
+  and file SHA-256
+  `0acb04d601a5b45700580d4511512038ea5247dece06dc7257d791c592bad990`.
+  Its certificate matches the installed r4 release.
+- On September 22, the signed r5 APK was installed in place over r4 on the
+  Galaxy S25 Ultra (`SM-S938U`) without uninstalling. Android retained the
+  original September 21 install timestamp, pairing data, and One UI widget ID
+  `42`; the launcher continued to allocate 406.04×215.82 dp at 2.8125 density.
+- Overview, Limits, Breakdown, and Activity were captured from that preserved
+  One UI widget under `local-private/widget-r5-phone-2026-09-22/` and compared
+  with `local-private/widget-r5-qa/concept-vs-r5.png`. The final Breakdown pass
+  reserves a measured eight-unit gap between the tool token total and its share,
+  keeping `12.2M` and `100%` distinct without changing the other three pages.
+- The bounded physical battery gate found no active Token Monitor service or
+  app wake lock with Saved off. The Android CLI instrumentation helper used for
+  an earlier inspection was not installed when final phone evidence was taken.
 
 ## Current development checks
 
 The local suite uses the isolated preview package on the API 36
 `TokenMonitor_API36_Pixel10ProXL` emulator (`emulator-5554`).
 
-- 72 JVM tests cover v0.54.0 through v0.56.0 protocol parsing, throughput capability
+- 81 JVM tests cover v0.54.0 through v0.60.0 protocol parsing, throughput capability
   boundaries, network boundaries, storage and shutdown, history aggregation,
-  widget data, and presentation rules.
+  widget data, the widget grid, and presentation rules.
 - 31 instrumentation tests exercise navigation, filtering, period changes, day
   details, search, connection cancellation, both widget families, all four deck
   pages, responsive rendering, theme rendering, and Live controls.

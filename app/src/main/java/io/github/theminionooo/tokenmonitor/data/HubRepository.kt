@@ -9,6 +9,7 @@ import io.github.theminionooo.tokenmonitor.data.network.HubApiClient
 import io.github.theminionooo.tokenmonitor.data.network.HubApiException
 import io.github.theminionooo.tokenmonitor.data.network.WireHubSnapshot
 import io.github.theminionooo.tokenmonitor.data.protocol.HubProtocolParser
+import io.github.theminionooo.tokenmonitor.data.protocol.HubStreamProtocol
 import io.github.theminionooo.tokenmonitor.data.storage.SecureConnectionStore
 import io.github.theminionooo.tokenmonitor.data.storage.SerialDiskQueue
 import io.github.theminionooo.tokenmonitor.data.storage.SnapshotCache
@@ -222,9 +223,9 @@ internal class HubRepository(context: Context) {
                                     onOpen = { withContext(Dispatchers.Main.immediate) {
                                         if (generation == token) _state.update { it.copy(streamActive = true, widgetLiveActive = false) }
                                     } },
-                                    onData = { raw -> withContext(Dispatchers.Main.immediate) {
+                                    onEvent = { event -> withContext(Dispatchers.Main.immediate) {
                                         if (generation == token) {
-                                            if (applyStatsUpdate(raw, token, streamEnvelope = true)) attempt = 0
+                                            if (applyStatsUpdate(event.data, token, streamEventType = event.type)) attempt = 0
                                             refreshSubscriptions(saved, api, token)
                                         }
                                     } },
@@ -239,7 +240,7 @@ internal class HubRepository(context: Context) {
                                     }
                                     ensureActive()
                                     if (generation != token || desiredWorkMode != mode) break
-                                    if (applyStatsUpdate(raw, token, streamEnvelope = false)) attempt = 0
+                                    if (applyStatsUpdate(raw, token)) attempt = 0
                                     refreshSubscriptions(saved, api, token)
                                 }
                             }
@@ -303,14 +304,19 @@ internal class HubRepository(context: Context) {
         )
     }
 
-    private suspend fun applyStatsUpdate(raw: String, token: Long, streamEnvelope: Boolean): Boolean {
+    private suspend fun applyStatsUpdate(raw: String, token: Long, streamEventType: String? = null): Boolean {
         val previous = _state.value.snapshot ?: return false
         val wire = lastWireSnapshot ?: return false
         val parsed = withContext(Dispatchers.IO) {
-            val stats = if (streamEnvelope) HubProtocolParser.decodeStatsStreamEvent(raw)
-            else runCatching { HubProtocolParser.decodeStats(raw) }.getOrNull()
-            stats ?: return@withContext null
-            val updatedWire = wire.copy(stats = HubProtocolParser.normalizeStatsJson(raw), capturedAt = System.currentTimeMillis())
+            if (streamEventType != null && streamEventType !in setOf("message", "snapshot", "stats", "freshness")) {
+                return@withContext null
+            }
+            val normalized = runCatching {
+                if (streamEventType == "freshness") HubStreamProtocol.mergeFreshness(wire.stats, raw)
+                else HubStreamProtocol.normalizeComplete(raw)
+            }.getOrNull() ?: return@withContext null
+            val stats = runCatching { HubProtocolParser.decodeStats(normalized) }.getOrNull() ?: return@withContext null
+            val updatedWire = wire.copy(stats = normalized, capturedAt = System.currentTimeMillis())
             val decoded = parse(updatedWire)
             updatedWire to decoded.copy(stats = retainDeviceHistory(stats, previous.stats.devices))
         } ?: return false

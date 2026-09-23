@@ -48,7 +48,7 @@ pairing and preferences. Never use the preview flag for a release.
 
 ## Fixture Hub
 
-The local fixture serves sanitized v0.56.0 responses on port 17321 with the
+The local fixture serves sanitized v0.60.0 responses on port 17321 with the
 secret `fixture-secret`:
 
 ```powershell
@@ -86,7 +86,9 @@ in a fixture or screenshot.
 JVM tests cover protocol parsing, private-address rules, endpoint failover,
 stream recovery, ordered cache writes, history aggregation, presentation rules,
 and preferences. Versioned Hub fixtures live under
-`app/src/test/resources/protocol/`.
+`app/src/test/resources/protocol/`. The v0.60.0 set includes full stream frames,
+a freshness-only frame, tri-state session activity, context-window values, and
+current percentage and credit limit shapes.
 
 Instrumentation tests use the preview package to exercise navigation, dialogs,
 widgets, storage, and lifecycle behavior. Run them on an API 36 emulator before
@@ -119,6 +121,19 @@ Current coverage and physical-device limits are recorded in
 Add the field to the tolerant DTO, map it once in `HubProtocolParser`, expose it
 through the domain model, add it to the appropriate versioned fixture, and test
 the mapping before using it in UI.
+
+### Stream events
+
+Keep delivery semantics in `HubStreamProtocol`. A complete event may pass through
+the stable snapshot parser; an incremental event must explicitly whitelist the
+fields it can replace and preserve the rest of the last complete snapshot. Add a
+fixture and reducer test before wiring the event into `HubRepository`.
+
+### Presentation semantics
+
+Put reusable rules such as session activity windows, context percentages, and
+vendor families in small presentation helpers. Test those helpers independently;
+screens should render the result rather than re-interpret protocol fields.
 
 ### Dashboard views
 

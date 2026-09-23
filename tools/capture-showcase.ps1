@@ -12,9 +12,9 @@ try {
         & $adb -s $Device install -r $apk
         if ($LASTEXITCODE) { throw "Installation failed: $apk" }
     }
-    $result = & $adb -s $Device shell am instrument -w -e class 'io.github.theminionooo.tokenmonitor.LaunchShowcaseTest,io.github.theminionooo.tokenmonitor.WidgetThemeTest#allShapesUseAppPaletteIncludingLightAndCustomThemes' io.github.theminionooo.tokenmonitor.preview.test/androidx.test.runner.AndroidJUnitRunner
+    $result = & $adb -s $Device shell am instrument -w -e class 'io.github.theminionooo.tokenmonitor.LaunchShowcaseTest,io.github.theminionooo.tokenmonitor.WidgetThemeTest#allShapesUseAppPaletteIncludingLightAndCustomThemes,io.github.theminionooo.tokenmonitor.WidgetDeckDesignTest' io.github.theminionooo.tokenmonitor.preview.test/androidx.test.runner.AndroidJUnitRunner
     $result | Write-Output
-    if (($result -join "`n") -notmatch 'OK \(9 tests\)') { throw 'Showcase tests did not pass.' }
+    if (($result -join "`n") -notmatch 'OK \(16 tests\)') { throw 'Showcase tests did not pass.' }
     $names = @('home','models','devices','projects','trends','settings','filtered-models','widget-compact','widget-portrait','widget-wide','widget-overview','widget-large','widget-picker-preview')
     $captures = @($names | ForEach-Object {
         @{ source = "launch-$_.png"; target = if ($_ -eq 'widget-picker-preview') { 'app/src/main/res/drawable-xxhdpi/widget_picker_preview.png' } else { "docs/images/$_.png" } }
@@ -22,6 +22,9 @@ try {
     $captures += @{ source = 'launch-widget-picker-preview.png'; target = 'docs/images/widget-picker-preview.png' }
     foreach ($theme in @('default','obsidian','porcelain','custom')) {
         $captures += @{ source = "theme-$theme-large-live.png"; target = "docs/images/widget-theme-$theme.png" }
+    }
+    foreach ($page in @('overview','limits','breakdown','activity')) {
+        $captures += @{ source = "widget-deck-$page-default-360x220.png"; target = "docs/images/widget-pages-$page.png" }
     }
     foreach ($capture in $captures) {
         $start = [System.Diagnostics.ProcessStartInfo]::new()

@@ -3,15 +3,15 @@
 ## Requirements
 
 - Android 8.0 or newer.
-- Token Monitor desktop v0.56.0 with Hub hosting enabled and a shared secret.
+- Token Monitor desktop v0.60.0 with Hub hosting enabled and a shared secret.
 - A private route to the desktop: Tailscale is recommended; home Wi-Fi is optional.
 
 ## Install
 
-A signed v0.56.0 r4 APK is available from the public
-[release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.56.0-r4).
-Its automated, emulator, and signing checks pass. Samsung-specific installation
-and launcher inspection status is recorded in [Validation](VALIDATION.md).
+Download the signed v0.60.0 r7 APK from the public
+[release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.60.0-r7).
+Its automated, emulator, signing, in-place upgrade, and Samsung launcher checks
+pass. The evidence is recorded in [Validation](VALIDATION.md).
 
 To build the current source, install JDK 17 and Android SDK 37, then run:
 
@@ -38,7 +38,7 @@ There is no Play Store or F-Droid listing.
 Each signed release will include an APK and a `.sha256` file. Compare the hash:
 
 ```powershell
-Get-FileHash .\token-monitor-android-v0.56.0-r4.apk -Algorithm SHA256
+Get-FileHash .\token-monitor-android-v0.60.0-r7.apk -Algorithm SHA256
 ```
 
 A matching checksum detects download corruption; download both files from the
@@ -59,6 +59,7 @@ does not silently install updates.
 For an installation conflict, check that you downloaded a release APK rather than
 a debug/preview build. Keep developer previews in the separate `.preview` package.
 
-After updating, open the dashboard once to verify the saved connection and resize
-any existing widgets if desired. Widget Live is an explicit session and may need
-to be started again.
+After updating, open the dashboard once to verify the saved connection. The
+original Usage widget remains resizable; the four-page Pages widget keeps one
+fixed 1.82:1 composition. Widget Live is an explicit session and may need to be
+started again.
