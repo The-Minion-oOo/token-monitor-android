@@ -36,7 +36,7 @@ auto-rotation loop, or wake lock.
 
 ![Pages widget Overview, Limits, Breakdown and Activity](images/widget-pages-overview.png)
 
-The complete four-page gallery is shown in the project [README](../README.md#four-views-one-fixed-footprint).
+The complete four-page gallery is shown in the project [README](../README.md#one-fixed-card-four-focused-pages).
 
 These are content dimensions, not launcher cells. Pixel, One UI and other launchers
 size their cells differently and add their own padding, so the same 2×2 request can
