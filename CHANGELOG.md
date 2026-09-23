@@ -3,7 +3,7 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
-## Next release — v0.60.0 r7
+## v0.60.0 r7 — 2026-09-22
 
 - Give both dense Breakdown columns one two-line row with room between the
   lines: name and share, then tokens and cost, then the bar. Rows line up

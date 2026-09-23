@@ -8,13 +8,10 @@
 
 ## Install
 
-A signed v0.56.0 r4 APK remains available from the public
-[release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.56.0-r4).
-Its automated, emulator, and signing checks pass. Samsung-specific installation
-and launcher inspection status is recorded in [Validation](VALIDATION.md).
-
-The current source is the phone-verified v0.60.0 r7 candidate. It is not a public
-release until the signed APK appears on the Releases page.
+Download the signed v0.60.0 r7 APK from the public
+[release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.60.0-r7).
+Its automated, emulator, signing, in-place upgrade, and Samsung launcher checks
+pass. The evidence is recorded in [Validation](VALIDATION.md).
 
 To build the current source, install JDK 17 and Android SDK 37, then run:
 
@@ -62,6 +59,7 @@ does not silently install updates.
 For an installation conflict, check that you downloaded a release APK rather than
 a debug/preview build. Keep developer previews in the separate `.preview` package.
 
-After updating, open the dashboard once to verify the saved connection and resize
-any existing widgets if desired. Widget Live is an explicit session and may need
-to be started again.
+After updating, open the dashboard once to verify the saved connection. The
+original Usage widget remains resizable; the four-page Pages widget keeps one
+fixed 1.82:1 composition. Widget Live is an explicit session and may need to be
+started again.

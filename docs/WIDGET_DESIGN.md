@@ -62,6 +62,11 @@ leaves the digits still; otherwise they roll when the total changes.
 
 ## Full-size pages
 
+The Pages widget is one fixed layout. It requests a 4×2 placement and does not
+reflow into the original widget's Compact, Wide, Portrait, Overview, or Detailed
+compositions. A launcher can allocate a different physical size or show resize
+handles, but the renderer only fits this same card into that space.
+
 The provider sends one `RemoteViews` card to the launcher and stores the selected
 page locally for each widget. It loads the newer of the in-process session snapshot
 and private cache, then draws the selected page into a fixed 1.82:1 bitmap. The alpha
@@ -85,10 +90,10 @@ instead of zero-filled evidence.
 Every position on the four pages comes from [the pages widget specification](WIDGET_SPEC.md),
 which was measured from the approved concept cards. `WidgetDeckGrid` carries those
 numbers in reference units of a 364×200 card, and the renderer scales its canvas
-once to the fitted frame. A smaller allocation is therefore the same picture drawn
-smaller, down to the launcher's 250×110 dp minimum; there is no separate compact
-composition to drift out of step. Bars, the seven-day chart and the heatmap are
-drawn straight onto that canvas, never as separate bitmaps.
+once to the fitted frame. A smaller test or launcher allocation is therefore the
+same picture drawn smaller, down to the launcher's 250×110 dp minimum; there is no
+separate compact composition to drift out of step. Bars, the seven-day chart and
+the heatmap are drawn straight onto that canvas, never as separate bitmaps.
 
 The pages use a bundled Latin subset of JetBrains Mono for labels and rows, so
 the widget looks the same on a Pixel and on a Samsung launcher, which substitutes

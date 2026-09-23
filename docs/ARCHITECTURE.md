@@ -112,12 +112,13 @@ accept older SSE envelopes, and foreground writes store the normalized stats
 object. The responsive widget updates after a saved snapshot, when resized, and
 after each stats refresh during an explicit Live session; Android 12+ selects
 compact, medium, or large RemoteViews using responsive size mappings. Older
-Android versions receive portrait and landscape layouts. A separate pages
-provider renders Overview, Limits, Breakdown, and Activity from one current
+Android versions receive portrait and landscape layouts. A separate fixed-layout
+pages provider renders Overview, Limits, Breakdown, and Activity from one current
 cache/session snapshot. It sends the launcher one complete 1.82:1 page bitmap
 plus transparent native touch targets for Previous, Next, Open, Refresh, and
-Live. The selected page is stored locally per widget. This avoids launcher
-collection transforms and keeps page changes local without fetching.
+Live. It requests 4×2 but never switches composition when a launcher allocates a
+different physical size. The selected page is stored locally per widget. This
+avoids launcher collection transforms and keeps page changes local without fetching.
 Neither provider registers a periodic update.
 See [Android widget layouts](https://developer.android.com/develop/ui/views/appwidgets/layouts).
 

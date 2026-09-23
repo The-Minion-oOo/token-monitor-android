@@ -1,10 +1,9 @@
 # Validation
 
-The current public release is Android **v0.56.0 r4** (`560004`). The current
-source candidate and latest phone-verified build is **v0.60.0 r7** (`600007`).
-It remains unpublished pending maintainer approval.
+The current public release, source version, and latest phone-verified build is
+Android **v0.60.0 r7** (`600007`).
 
-## v0.60.0 r7 candidate
+## v0.60.0 r7 release
 
 A phone inspection of r6 on September 22, 2026 with real two-tool, three-model
 data showed the dense Breakdown rows crowded: the model names' descenders

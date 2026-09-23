@@ -26,7 +26,7 @@ Tokens, account limits, models and trends from the desktop Token Monitor Hub, pl
 
 Your desktop [Token Monitor](https://github.com/Javis603/token-monitor) already
 tracks the usage. This app brings the same dashboard, visual language, and
-numbers to your phone, with responsive home-screen widgets for quick checks.
+numbers to your phone, with home-screen widgets for quick checks.
 
 The desktop stays the collector and the source of truth. The phone reads its Hub over your own private network and shows what it finds. That is the whole trick.
 
@@ -52,23 +52,22 @@ The desktop stays the collector and the source of truth. The phone reads its Hub
 
 <img src="docs/images/widget-gallery.png" alt="The five widget layouts: compact, wide, portrait, overview and detailed" width="100%">
 
-The original widget is the dashboard shrunk to a card, not a different app that happens to share a name. Same type, same palette, same `Reset 1d 13h` countdowns. It starts at 2×2 and reflows as you resize it, from a count you can read across the room to a detailed panel with limits and a seven-day chart. A separate medium/large widget uses left and right edge controls to move through Overview, Limits, Breakdown, and Activity from one saved snapshot. The launcher always receives one full-size card, so One UI cannot shrink the pages into its collection fan. Bars and charts are drawn at the exact size your launcher hands over, so they stay sharp instead of being stretched.
+The original Usage widget is the dashboard shrunk to a card, not a different app that happens to share a name. Same type, same palette, same `Reset 1d 13h` countdowns. It starts at 2×2 and reflows as you resize it, from a count you can read across the room to a detailed panel with limits and a seven-day chart.
 
-### Four views. One steady footprint.
+The separate Pages widget is deliberately fixed-layout. Its left and right edge controls move through Overview, Limits, Breakdown, and Activity inside the same 1.82:1 card; it does not reflow into alternate compositions. The launcher always receives one complete page, so One UI cannot shrink the pages into its collection fan. Bars and charts are drawn at the exact density of the allocated card, so they stay sharp instead of being stretched.
 
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="docs/images/widget-pages-overview.png" alt="Pages widget Overview with total tokens, activity, streak and tool share" width="100%"><br><sub><b>Overview</b> · Total, cost, activity and weekly mix</sub></td>
-    <td align="center" width="50%"><img src="docs/images/widget-pages-limits.png" alt="Pages widget Limits with four account quota windows" width="100%"><br><sub><b>Limits</b> · Four account windows and reset times</sub></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="docs/images/widget-pages-breakdown.png" alt="Pages widget Breakdown comparing tools and models" width="100%"><br><sub><b>Breakdown</b> · Tools and models side by side</sub></td>
-    <td align="center" width="50%"><img src="docs/images/widget-pages-activity.png" alt="Pages widget Activity with a seven-day chart and heatmap" width="100%"><br><sub><b>Activity</b> · Seven-day bars and recent history</sub></td>
-  </tr>
-</table>
+### Four views. One fixed footprint.
 
-Tap either edge to move between pages. The card itself stays at the same 1.82:1
-shape, the type scale stays consistent, and the raised page dots keep your place. Moving
+<a href="docs/images/widget-pages-gallery.png"><img src="docs/images/widget-pages-gallery.png" alt="The Pages widget showing Overview, Limits, Breakdown and Activity at one consistent size" width="100%"></a>
+
+Overview keeps the headline total readable. Limits gives each provider room for
+its tightest windows. Breakdown aligns tools and models on one row rhythm, and
+Activity combines the seven-day chart with recent history. Every image above is
+rendered by the production widget from the dense showcase fixture.
+
+Tap either edge to move between pages. The card stays at the same 1.82:1 shape
+and uses one composition at every launcher allocation; only the whole card is fitted.
+The type scale stays consistent, and the raised page dots keep your place. Moving
 between pages is entirely local: it does not wake the Hub, start Live, or schedule
 background work.
 
@@ -122,7 +121,7 @@ The Hub deliberately does not carry prompt or response text, so the phone never 
 
 You need Android 8.0 or newer and a desktop running Token Monitor v0.60.0 with Hub hosting on.
 
-1. Follow [Installing and updating](docs/INSTALL.md). The signed v0.56.0 r4 APK remains the latest public release; v0.60.0 r7 is the current phone-verified candidate and remains unpublished.
+1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.60.0 r7 APK.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
 3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
 4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
@@ -134,9 +133,9 @@ You need Android 8.0 or newer and a desktop running Token Monitor v0.60.0 with H
 
 | | |
 | --- | --- |
-| Current Android release | [`v0.56.0-r4`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.56.0-r4) |
-| Current source candidate | `v0.60.0-r7` ([candidate notes](docs/releases/android-v0.60.0-r7.md)) |
-| Latest phone-verified build | `v0.60.0-r7` ([candidate notes](docs/releases/android-v0.60.0-r7.md)) |
+| Current Android release | [`v0.60.0-r7`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.60.0-r7) |
+| Current source version | `v0.60.0-r7` ([release notes](docs/releases/android-v0.60.0-r7.md)) |
+| Latest phone-verified build | `v0.60.0-r7` ([release notes](docs/releases/android-v0.60.0-r7.md)) |
 | Verified desktop baseline | Token Monitor `v0.60.0` |
 | Upstream commit | [`8031cf3`](https://github.com/Javis603/token-monitor/commit/8031cf3b75c7f354db8a990a983999c69086da28) |
 

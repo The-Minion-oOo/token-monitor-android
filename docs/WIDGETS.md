@@ -3,8 +3,10 @@
 Add Token Monitor from your launcher's widget picker. The existing responsive widget
 starts at 2×2 cells and is also available from Settings → Home-screen widget. A
 separate **Token Monitor · Pages** entry requests 4×2 and shows four manually
-selectable information pages. Long-press either widget and use the launcher's
-resize handles to change its shape.
+selectable information pages. Long-press the original Usage widget and use the
+launcher's resize handles to change its shape. The Pages widget is fixed-layout:
+some launchers may still expose handles, but it always fits the same 1.82:1 card
+instead of switching to another composition.
 
 ## What fits where
 
@@ -16,7 +18,8 @@ resize handles to change its shape.
 | Overview | 240×190 dp | Brand header, count with two stats beside it, tool split, the tightest window (a second from 221 dp), and the seven-day chart from 301 dp |
 | Detailed | 250×384 dp | Overview content plus three stats, every limit window with its reset in two columns, and the week total on the chart |
 
-The pages widget is intended for medium and large placements from 250×180 dp.
+The Pages widget requests a 4×2 placement. Launchers may allocate a different
+physical size or cell count, but that does not create a responsive Pages layout.
 Its fixed manual order is **Overview → Limits → Breakdown → Activity**. All four
 pages are rendered from one saved or Live snapshot into identical 1.82:1 full-card
 images. The launcher receives only the selected image, so it cannot shrink or fan
@@ -33,7 +36,7 @@ auto-rotation loop, or wake lock.
 
 ![Pages widget Overview, Limits, Breakdown and Activity](images/widget-pages-overview.png)
 
-The complete four-page gallery is shown in the project [README](../README.md#four-views-one-steady-footprint).
+The complete four-page gallery is shown in the project [README](../README.md#four-views-one-fixed-footprint).
 
 These are content dimensions, not launcher cells. Pixel, One UI and other launchers
 size their cells differently and add their own padding, so the same 2×2 request can
@@ -102,8 +105,10 @@ outside the explicit foreground session.
 
 ## Troubleshooting
 
-- **The widget kept its old shape after an update:** its dimensions belong to the
-  launcher. Resize it, or remove and add it again.
+- **The Usage widget kept its old shape after an update:** its dimensions belong
+  to the launcher. Resize it, or remove and add it again.
+- **The Pages widget has resize handles:** this is launcher behavior. Its content
+  remains one fixed 1.82:1 composition and is fitted inside the allocated space.
 - **The picker shows an older preview:** close and reopen the picker. Do not clear
   app data just to refresh a preview; that would also remove pairing.
 - **Live says connecting:** check that the desktop Hub is running and reachable over

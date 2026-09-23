@@ -12,15 +12,19 @@ one reference unit below is 1382 / 364 ≈ 3.8 image pixels.
 
 ## Card and coordinate system
 
+- The Pages widget is fixed-layout, not responsive. It requests a 4×2 launcher
+  placement and never switches to a compact, wide, portrait, or detailed
+  composition. A launcher may allocate different physical dimensions or expose
+  resize handles; that only changes how this one card is fitted.
 - The card is always 1.82:1. The launcher allocation is fitted to that ratio and
   the card is centered in it.
 - Every coordinate in this document is in **reference units**: a card that is
   364 units wide and 200 units tall. The renderer scales the whole drawing
   uniformly by `frame width / 364`, so a 393 dp card on the phone draws every
   number below at 1.08 dp per unit, and a 320 dp card at 0.88 dp per unit.
-- There is no separate compact layout. A smaller allocation is the same card
-  drawn smaller. The launcher minimum (250×110 dp, card 200×110 dp) scales to
-  0.55 dp per unit and is the same picture.
+- There is no separate compact layout. A smaller test or launcher allocation is
+  the same card drawn smaller. The launcher minimum (250×110 dp, card 200×110 dp)
+  scales to 0.55 dp per unit and is the same picture.
 - Bitmaps are rendered at the launcher's display density with a 1200-pixel
   width cap, then handed to one `ImageView`. Charts, bars and the heatmap are
   drawn straight onto that canvas, never as separate bitmaps that get scaled.
