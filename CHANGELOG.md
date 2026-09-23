@@ -3,6 +3,13 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
+## Next release — v0.61.0 r2
+
+- Add an on-demand update check in Settings for published Android releases.
+- Verify a downloaded APK's size, SHA-256, package, version, and signing
+  certificate before handing it to Android's installer for user confirmation.
+- Include a machine-readable update manifest in future release assets.
+
 ## v0.61.0 r1 — 2026-09-23
 
 - Verify every Android read endpoint against desktop Token Monitor v0.61.0 and

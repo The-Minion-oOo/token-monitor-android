@@ -101,7 +101,8 @@ Current coverage and physical-device limits are recorded in
 
 ## Engineering rules
 
-- Keep the app read-only. Network code calls only the documented Hub GET routes.
+- Keep Hub access read-only. The separate updater reads only published GitHub
+  release metadata and downloads the signed APK when the user asks to install.
 - Validate every saved address before sending the bearer secret. Reject redirects.
 - Keep secrets out of UI state, logs, fixtures, screenshots, and issue reports.
 - Share one repository between the visible dashboard and an explicit widget

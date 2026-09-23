@@ -125,7 +125,7 @@ internal fun ConnectionScreen(
         )
     }
     if (!hasConnection) {
-        WelcomeSetup(modifier = modifier, fields = fields)
+        WelcomeSetup(modifier = modifier, fields = fields, onOpenReleasePage = onOpenReleasePage)
         return
     }
     val openSection = rememberSaveable { mutableStateOf<String?>(null) }
@@ -287,11 +287,7 @@ internal fun ConnectionScreen(
                 Text("Protocol changes are reviewed against versioned fixtures before this baseline moves forward.", color = Muted, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
             }
             SettingsGroup("App updates", summary = "${BuildConfig.VERSION_NAME} r${BuildConfig.VERSION_CODE % 1000}") {
-                StatusLine("Installed", BuildConfig.VERSION_NAME)
-                StatusLine("Release revision", (BuildConfig.VERSION_CODE % 1000).toString())
-                StatusLine("Source", "GitHub Releases")
-                Text("Android keeps the saved Hub connection and display settings when a newer APK is installed over this one. Installation always requires Android approval.", color = Muted, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
-                OutlinedButton(onClick = onOpenReleasePage, modifier = Modifier.fillMaxWidth()) { Text("VIEW ANDROID RELEASES") }
+                AppUpdatesPanel(onOpenReleasePage)
             }
             Text("The dashboard streams immediately while visible. Widget Live uses a lighter 30-second refresh and stops after one hour.", color = Muted, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
         }
@@ -356,7 +352,7 @@ private fun ColumnScope.ConnectionFields(
 }
 
 @Composable
-private fun WelcomeSetup(modifier: Modifier, fields: @Composable ColumnScope.(String) -> Unit) {
+private fun WelcomeSetup(modifier: Modifier, fields: @Composable ColumnScope.(String) -> Unit, onOpenReleasePage: () -> Unit) {
     Column(
         modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()).statusBarsPadding().padding(horizontal = 20.dp, vertical = 28.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -377,7 +373,10 @@ private fun WelcomeSetup(modifier: Modifier, fields: @Composable ColumnScope.(St
         Surface(color = Recessed.copy(alpha = 0.76f), border = BorderStroke(1.dp, Line), shape = MaterialTheme.shapes.medium, modifier = Modifier.fillMaxWidth().padding(top = 4.dp)) {
             Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { fields("CONNECT") }
         }
-        Text("Read-only. No account, no cloud, and nothing leaves your own network.", color = Muted, style = MaterialTheme.typography.labelSmall, lineHeight = 15.sp)
+        Text("Usage stays between this phone and your private Hub. App update checks contact GitHub.", color = Muted, style = MaterialTheme.typography.labelSmall, lineHeight = 15.sp)
+        SettingsGroup("App updates", summary = "${BuildConfig.VERSION_NAME} r${BuildConfig.VERSION_CODE % 1000}") {
+            AppUpdatesPanel(onOpenReleasePage)
+        }
     }
 }
 

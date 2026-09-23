@@ -1,8 +1,23 @@
 # Validation
 
-The current public release and source version is Android **v0.61.0 r1**
-(`610001`). The latest build verified by an in-place physical-phone upgrade
-remains v0.60.0 r7.
+The current public release is Android **v0.61.0 r1** (`610001`). The current
+source candidate is **v0.61.0 r2** (`610002`). R1 was installed over r7 on a
+physical phone; its paired state and widgets still need screen inspection.
+
+## v0.61.0 r2 candidate
+
+The in-app update candidate adds a published-release check and verified APK
+download. Its version comparison, release metadata, package, and rollback
+rules passed four focused JVM tests; the full local JVM suite had 89 tests
+before the r2 rebase. Lint and a side-by-side preview build also passed. On the
+Galaxy S25 Ultra, the unpaired preview opened App updates and correctly
+reported that the then-published v0.60.0 r7 was older. The preview was removed.
+
+R2 now builds on the published r1 source with version code `610002`. On this
+revision, all 89 JVM tests, Android lint, the R8 release build, and the local
+documentation-link check pass. A fresh r2 preview phone check, signed in-place
+phone upgrade, and end-to-end download/installer handoff remain pending; the
+latter also needs a future published release carrying update metadata.
 
 ## v0.61.0 r1 release
 
@@ -19,23 +34,24 @@ desktop provider labels. Older fixtures from v0.54.0 through v0.60.0 remain in
 the suite. The r7 Pages widget specification, coordinates, and type sizes are
 unchanged.
 
-All 85 JVM tests, Android lint, the debug build, the R8 release build, and the
-documentation-link check pass. The hero and social preview were regenerated
+Before the updater addition, all 85 JVM tests, Android lint, the debug build,
+the R8 release build, and the documentation-link check passed. The hero and
+social preview were regenerated
 from the existing synthetic captures with the v0.61.0 r1 footer and inspected
 at full size.
 
-The independent read-only diff review found one material documentation error:
-the candidate README and install guide described r1 as already public before a
-GitHub release or phone gate existed. Both now distinguish the published
-v0.60.0 r7 build from the v0.61.0 r1 source candidate. The final regression
-pass found no remaining material issue.
+The independent read-only diff review of the original compatibility candidate
+found a premature release-status claim, which was corrected before publication.
 
 The published APK reports package `io.github.theminionooo.tokenmonitor`, version
 code `610001`, certificate SHA-256
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`, and file
 SHA-256 `cc52c84aa519d72de65465ed39224043ef8e1cd044dc6abda013c1e27882f705`.
-Its certificate matches v0.60.0 r7. No device was connected for the final
-physical in-place upgrade gate, so that result remains explicitly unverified.
+Its certificate matches v0.60.0 r7. On September 24, the published r1 APK was
+installed over r7 on the Galaxy S25 Ultra without uninstalling. Android reports
+version code `610001` and the unchanged first-install time
+(`2026-09-21 11:03:41`). The phone was locked during this check, so paired state,
+widgets, and screen behavior remain to be verified.
 
 ## v0.60.0 r7 release
 

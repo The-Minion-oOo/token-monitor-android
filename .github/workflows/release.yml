@@ -47,6 +47,16 @@ jobs:
           Copy-Item app/build/outputs/apk/release/app-release.apk $apk
           $hash = (Get-FileHash $apk -Algorithm SHA256).Hash.ToLowerInvariant()
           "$hash  $apk" | Set-Content -NoNewline "$apk.sha256"
+          [ordered]@{
+            schemaVersion = 1
+            packageName = 'io.github.theminionooo.tokenmonitor'
+            tag = $tag
+            versionName = $properties.tokenMonitorVersionName
+            versionCode = [int]$properties.tokenMonitorVersionCode
+            apk = $apk
+            sizeBytes = (Get-Item $apk).Length
+            sha256 = $hash
+          } | ConvertTo-Json -Compress | Set-Content -NoNewline 'token-monitor-android-update.json'
           $notes = "docs/releases/$tag.md"
           if (!(Test-Path $notes)) { throw "Missing curated release notes: $notes" }
           "notes=$notes" >> $env:GITHUB_OUTPUT
@@ -64,6 +74,7 @@ jobs:
           gh release create "${{ steps.metadata.outputs.tag }}"
           "${{ steps.metadata.outputs.apk }}"
           "${{ steps.metadata.outputs.apk }}.sha256"
+          token-monitor-android-update.json
           --target "${{ github.sha }}"
           --title "${{ steps.metadata.outputs.title }}"
           --notes-file "${{ steps.metadata.outputs.notes }}"

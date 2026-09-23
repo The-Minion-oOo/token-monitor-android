@@ -8,8 +8,8 @@ Android-only releases keep `versionName` and increment the final three digits of
 
 ```text
 versionName: v0.61.0
-versionCode: 610001
-release tag: android-v0.61.0-r1
+versionCode: 610002
+release tag: android-v0.61.0-r2
 ```
 
 A newly verified desktop version updates the visible version and starts its
@@ -64,13 +64,15 @@ $buildTools = Get-ChildItem "$env:LOCALAPPDATA\Android\Sdk\build-tools" | Sort-O
 ## Publishing
 
 The manually triggered **Android release** workflow runs JVM tests and lint,
-builds and verifies the signed APK, creates its SHA-256 file, and opens a draft
+builds and verifies the signed APK, creates its SHA-256 file and the
+`token-monitor-android-update.json` asset, then opens a draft
 GitHub release. It reads the release body from
 `docs/releases/android-v<version>-r<revision>.md` and refuses to overwrite an
 existing tag.
 
-Review the draft, install its exact APK on the phone, then publish it. Release
-notes should state what changed, compatibility, and any important update action;
+Check that the manifest's version code, APK name, size, and hash match the
+uploaded APK. Review the draft, install its exact APK on the phone, then publish
+it. Release notes should state what changed, compatibility, and any important update action;
 link to [Install and update](INSTALL.md) instead of repeating the full procedure.
 
 Batch related work and publish when the APK is worth reinstalling. Documentation,

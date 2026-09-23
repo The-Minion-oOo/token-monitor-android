@@ -109,6 +109,7 @@ The Hub deliberately does not carry prompt or response text, so the phone never 
 - Read-only. The app cannot change desktop settings, usage data, or files.
 - Hub credentials live in an Android Keystore-backed store and are excluded from backups.
 - No ads, analytics, wake lock, scheduled background work or "please rate us" popup.
+- In the next release, App updates will check published GitHub releases from Settings and verify the signed APK before Android asks to install it.
 - The visible dashboard streams immediately. Widget Live uses a lightweight 30-second stats refresh and stops after one hour.
 - Android 13 and newer asks for notification permission the first time you start a widget session, so the Stop control has somewhere to live. Ordinary use needs no permission prompts at all.
 
@@ -131,8 +132,8 @@ You need Android 8.0 or newer and a desktop running Token Monitor v0.61.0 with H
 | | |
 | --- | --- |
 | Current public release | [`v0.61.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.61.0-r1) |
-| Current source version | `v0.61.0-r1` ([release notes](docs/releases/android-v0.61.0-r1.md)) |
-| Latest phone-verified build | [`v0.60.0-r7`](docs/releases/android-v0.60.0-r7.md); v0.61.0 r1 pending |
+| Current source candidate | `v0.61.0-r2` ([release notes](docs/releases/android-v0.61.0-r2.md)) |
+| Latest in-place phone install | `v0.61.0-r1` over r7; paired state and widgets not yet inspected |
 | Verified desktop baseline | Token Monitor `v0.61.0` |
 | Upstream commit | [`dc3cc13`](https://github.com/Javis603/token-monitor/commit/dc3cc1321d9490873ff96abb662e07eecea75751) |
 
