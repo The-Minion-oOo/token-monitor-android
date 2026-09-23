@@ -22,7 +22,7 @@ Tokens, account limits, models and trends from the desktop Token Monitor Hub, pl
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
 </p>
 
-<img src="docs/images/hero.png" alt="The Android dashboard beside the detailed and compact widgets, all showing made-up usage data" width="100%">
+<img src="docs/images/hero.png" alt="Token Monitor's Android dashboard showing synthetic usage data" width="100%">
 
 Your desktop [Token Monitor](https://github.com/Javis603/token-monitor) already
 tracks the usage. This app brings the same dashboard, visual language, and
@@ -48,38 +48,35 @@ The desktop stays the collector and the source of truth. The phone reads its Hub
 > Every image is a capture of the Android app using made-up accounts, devices,
 > projects, and usage. Capture instructions are in the [development guide](docs/DEVELOPMENT.md#showcase-captures).
 
-## Widgets that earn their space
-
-<img src="docs/images/widget-gallery.png" alt="The five widget layouts: compact, wide, portrait, overview and detailed" width="100%">
-
-The original Usage widget is the dashboard shrunk to a card, not a different app that happens to share a name. Same type, same palette, same `Reset 1d 13h` countdowns. It starts at 2×2 and reflows as you resize it, from a count you can read across the room to a detailed panel with limits and a seven-day chart.
-
-The separate Pages widget is deliberately fixed-layout. Its left and right edge controls move through Overview, Limits, Breakdown, and Activity inside the same 1.82:1 card; it does not reflow into alternate compositions. The launcher always receives one complete page, so One UI cannot shrink the pages into its collection fan. Bars and charts are drawn at the exact density of the allocated card, so they stay sharp instead of being stretched.
-
-### Four views. One fixed footprint.
+## One fixed card, four focused pages
 
 <a href="docs/images/widget-pages-gallery.png"><img src="docs/images/widget-pages-gallery.png" alt="The Pages widget showing Overview, Limits, Breakdown and Activity at one consistent size" width="100%"></a>
 
-Overview keeps the headline total readable. Limits gives each provider room for
-its tightest windows. Breakdown aligns tools and models on one row rhythm, and
-Activity combines the seven-day chart with recent history. Every image above is
-rendered by the production widget from the dense showcase fixture.
+**Token Monitor · Pages** is the redesigned widget shown above. It requests a
+wide 4×2 placement and always draws the same 1.82:1 composition. Android launchers
+can allocate different physical dimensions, and some may still show resize handles,
+but the Pages widget does not reflow, add rows, or switch layouts.
 
-Tap either edge to move between pages. The card stays at the same 1.82:1 shape
-and uses one composition at every launcher allocation; only the whole card is fitted.
-The type scale stays consistent, and the raised page dots keep your place. Moving
-between pages is entirely local: it does not wake the Hub, start Live, or schedule
-background work.
+- **Overview** keeps the complete token total, cost, recent activity, streak, tool
+  share, and week summary together.
+- **Limits** shows the four tightest reported account windows with their reset or
+  expiry wording.
+- **Breakdown** compares up to three tools and three models on one shared row rhythm.
+- **Activity** pairs the labeled seven-day chart with a thirteen-week heatmap and
+  recent activity totals.
 
-- **Full numbers.** Every digit, comma-separated, rolling when the total changes. Never "3.5M".
-- **Refresh once.** A compact refresh icon in a transparent 48 dp touch target fetches a fresh snapshot without opening the app.
-- **Live for an hour.** A toggle in the header checks the Hub every 30 seconds while you do other things; the knob glows while it is connected. Tap it again, or Stop in the notification, to end early.
-- **More than the count.** Messages, active time and streak beside the figure, today's split by tool, every limit window with its reset, and the week total on the chart, as space allows.
-- **Saved when offline.** The last snapshot stays on the home screen with its time, so `SAVED` never pretends to be live.
+Tap the left or right edge to change pages. The selected page and four position
+dots update locally without waking the Hub or starting background work. Refresh
+performs one bounded fetch; Live checks current stats every 30 seconds for up to
+one hour and can be stopped from the widget or its notification. When the Hub is
+offline, the last snapshot remains visible with a `SAVED` status.
 
-<img src="docs/images/widget-themes.png" alt="Widgets in the Default, Obsidian, Porcelain and a custom theme" width="100%">
+The widget picker also includes the original **Token Monitor · Usage** widget. It
+is a separate responsive provider that reflows a single summary as its launcher
+allocation changes; its layouts are not alternate sizes of the four Pages shown
+above. Both widgets follow the app theme, including desktop `TM1-…` theme codes.
 
-Pick a theme in Settings, or paste a `TM1-…` code from the desktop app, and the widgets follow on the spot. [Layouts, sizes and Live behavior](docs/WIDGETS.md) · [Design notes](docs/WIDGET_DESIGN.md).
+[Widget behavior and controls](docs/WIDGETS.md) · [Widget design notes](docs/WIDGET_DESIGN.md).
 
 ## How it works
 
@@ -168,6 +165,5 @@ Add `-PtokenMonitorPreview=true` to install a separate `.preview` build next to 
 This project is independent of the upstream Token Monitor maintainers and of the services whose marks appear in the app. [MIT License](LICENSE) · [Third-party notices](THIRD_PARTY_NOTICES.md).
 
 <p align="center">
-  Made with ❤️ by <a href="https://github.com/The-Minion-oOo"><b>The_Minion_oOo</b></a><br>
-  <sub>...: Thanks to Codex and Claude :...</sub>
+  Maintained by <a href="https://github.com/The-Minion-oOo"><b>The_Minion_oOo</b></a>
 </p>

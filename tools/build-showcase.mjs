@@ -83,26 +83,21 @@ async function board(name, width, height, copy, layers) {
   await sharp(withArt).composite([svgLayer(width, height, copy)]).png().toFile(at(name));
 }
 
-// Hero: the pitch on the left, the phone with two widgets floating in front of it on the right.
+// Hero: a truthful product overview using one real app capture. Widget renders live in their own section.
 if (!preserveHero) {
   const home = await phone('home', 340);
-  const large = await rounded('widget-large', 300, 28);
-  // One grid: the phone's top sits on the kicker's cap line, and the phone, the widget and the
-  // footer line share a bottom edge.
-  // Equal margins above the phone and below the shared bottom line.
   const top = 80, bottom = top + home.height;
   await board('hero', 1440, bottom + top,
     text(72, top + 12, 'ANDROID COMPANION', { size: 17, color: mint, weight: 700, family: mono, spacing: 4 }) +
     text(72, top + 94, 'Your desktop usage.', { size: 60, color: ink, weight: 700 }) +
     text(72, top + 162, 'In your pocket.', { size: 60, color: ink, weight: 700 }) +
-    text(72, top + 224, 'Tokens, limits, models and trends from the', { size: 23 }) +
-    text(72, top + 258, 'Token Monitor Hub on your own desktop.', { size: 23 }) +
-    text(72, top + 292, 'Live when you look. Sharp on the home screen.', { size: 23 }) +
-    text(72, top + 364, 'PRIVATE HUB  ·  READ ONLY  ·  RESIZABLE WIDGETS', { size: 16, color: mint, weight: 700, family: mono, spacing: 2 }) +
-    text(72, bottom, 'v0.60.0  ·  Android 8+  ·  synthetic demonstration data', { size: 16, family: mono, color: '#7d8794' }),
+    text(72, top + 224, 'Totals, account limits, models and trends from', { size: 23 }) +
+    text(72, top + 258, 'the Token Monitor Hub on your own desktop.', { size: 23 }) +
+    text(72, top + 292, 'The phone reads. The desktop stays in control.', { size: 23 }) +
+    text(72, top + 364, 'PRIVATE HUB  ·  READ ONLY  ·  NO ANALYTICS', { size: 16, color: mint, weight: 700, family: mono, spacing: 2 }) +
+    text(72, bottom, 'v0.60.0 r7  ·  Android 8+  ·  synthetic demonstration data', { size: 16, family: mono, color: '#7d8794' }),
     [
       { item: home, left: 1440 - 72 - home.width, top, shadow: true, radius: 50 },
-      { item: large, left: 1440 - 72 - home.width - 40 - large.width, top: bottom - large.height, shadow: true, radius: 28 },
     ]);
 }
 
