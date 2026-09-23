@@ -17,12 +17,12 @@ Tokens, account limits, models and trends from the desktop Token Monitor Hub, pl
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/badge/Android_checks-CI-73bdf5?style=flat-square&logo=githubactions&logoColor=10221c"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.60.0" src="https://img.shields.io/badge/Desktop-v0.60.0-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.61.0" src="https://img.shields.io/badge/Desktop-v0.61.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
 </p>
 
-<img src="docs/images/hero.png?v=0.60.0-r7-readme" alt="Token Monitor's Android dashboard showing synthetic usage data" width="100%">
+<img src="docs/images/hero.png?v=0.61.0-r1-readme" alt="Token Monitor's Android dashboard showing synthetic usage data" width="100%">
 
 Your desktop [Token Monitor](https://github.com/Javis603/token-monitor) already
 tracks the usage. This app brings the same dashboard, visual language, and
@@ -96,7 +96,7 @@ is no public server, vendor relay, or separate Token Monitor account.
 - Day, week, month, rolling 7, 30 and 90 days, one year, all history and total.
 - Account limits with the desktop's reset countdowns.
 - Tools, devices, models, projects, sessions, subscriptions, service status, activity and trends, each with an `updated 5m ago` freshness.
-- Session activity and context-window use when desktop v0.60.0 reports them, without reading prompt or response text.
+- Session activity and context-window use when desktop v0.61.0 reports them, without reading prompt or response text.
 - Trends by tool or model, shown as bars or a K-line chart.
 - Cache hit, cache miss, output and unclassified token details where the Hub provides them.
 - The desktop's Default, Obsidian and Porcelain themes, theme codes pasted as-is, an option to follow the phone's light and dark setting, three text sizes, motion controls, and reorderable views and Home modules.
@@ -116,9 +116,11 @@ The Hub deliberately does not carry prompt or response text, so the phone never 
 
 ## Get connected
 
-You need Android 8.0 or newer and a desktop running Token Monitor v0.60.0 with Hub hosting on.
+You need Android 8.0 or newer and a desktop running Token Monitor v0.61.0 with Hub hosting on.
 
-1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.60.0 r7 APK.
+1. Follow [Installing and updating](docs/INSTALL.md). v0.61.0 r1 is the current
+   source candidate; v0.60.0 r7 remains the published build until the signed
+   candidate completes its phone upgrade gate.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
 3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
 4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
@@ -130,11 +132,11 @@ You need Android 8.0 or newer and a desktop running Token Monitor v0.60.0 with H
 
 | | |
 | --- | --- |
-| Current Android release | [`v0.60.0-r7`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.60.0-r7) |
-| Current source version | `v0.60.0-r7` ([release notes](docs/releases/android-v0.60.0-r7.md)) |
-| Latest phone-verified build | `v0.60.0-r7` ([release notes](docs/releases/android-v0.60.0-r7.md)) |
-| Verified desktop baseline | Token Monitor `v0.60.0` |
-| Upstream commit | [`8031cf3`](https://github.com/Javis603/token-monitor/commit/8031cf3b75c7f354db8a990a983999c69086da28) |
+| Current public release | [`v0.60.0-r7`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.60.0-r7) |
+| Current source candidate | `v0.61.0-r1` ([release notes](docs/releases/android-v0.61.0-r1.md)) |
+| Latest phone-verified build | [`v0.60.0-r7`](docs/releases/android-v0.60.0-r7.md); v0.61.0 r1 pending |
+| Verified desktop baseline | Token Monitor `v0.61.0` |
+| Upstream commit | [`dc3cc13`](https://github.com/Javis603/token-monitor/commit/dc3cc1321d9490873ff96abb662e07eecea75751) |
 
 The visible version matches the desktop release the phone understands. Android-only
 builds bump the release revision and internal version code while the compatibility

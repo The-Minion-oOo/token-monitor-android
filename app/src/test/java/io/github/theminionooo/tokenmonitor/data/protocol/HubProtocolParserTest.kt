@@ -113,7 +113,38 @@ class HubProtocolParserTest {
         assertEquals(42.50, credits.remaining!!, 0.001)
         assertEquals("USD", credits.currency)
         assertEquals(false, credits.showMeter)
-        assertEquals("v0.60.0", HubProtocolParser.SUPPORTED_UPSTREAM_VERSION)
+    }
+
+    @Test
+    fun `v0 61 preserves canonical clients limits and full endpoint snapshot`() {
+        val snapshot = HubProtocolParser.decodeSnapshot(
+            healthRaw = resource("health.json", "v0.61.0"),
+            statsRaw = resource("stats.json", "v0.61.0"),
+            devicesRaw = resource("devices.json", "v0.61.0"),
+            historyRaw = resource("history.json", "v0.61.0"),
+            subscriptionsRaw = resource("subscriptions.json", "v0.61.0"),
+            capturedAt = 1_800_000_000_000,
+        )
+
+        assertEquals(setOf("codex", "mimo", "devin", "copilot", "cline"), snapshot.today.clients.keys)
+        assertEquals(listOf("cline", "devin", "mimo"), snapshot.stats.limits.providers.map { it.provider })
+        assertEquals(170_000, snapshot.today.sessions.first { it.client == "codex" }.contextTokens)
+        assertEquals("Studio", snapshot.stats.devices.single().hostname)
+        assertEquals("mimo", snapshot.subscriptions.entries.single().provider)
+        assertEquals(3, snapshot.history.daily.size)
+        assertEquals("v0.61.0", HubProtocolParser.SUPPORTED_UPSTREAM_VERSION)
+    }
+
+    @Test
+    fun `v0 61 stream carries canonical client ids`() {
+        val data = resource("stats-stream.sse", "v0.61.0")
+            .lineSequence()
+            .filter { it.startsWith("data:") }
+            .joinToString("\n") { it.removePrefix("data:").trimStart() }
+
+        val today = checkNotNull(HubProtocolParser.decodeStatsStreamEvent(data)).periods.getValue("today")
+        assertEquals(61_000, today.clients.getValue("mimo"))
+        assertEquals(45_000, today.clients.getValue("devin"))
     }
 
     @Test

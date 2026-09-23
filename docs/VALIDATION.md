@@ -1,7 +1,41 @@
 # Validation
 
-The current public release, source version, and latest phone-verified build is
-Android **v0.60.0 r7** (`600007`).
+The current source is Android **v0.61.0 r1** (`610001`). The current public and
+latest phone-verified release remains v0.60.0 r7 until this candidate completes
+its signed in-place upgrade gate and is published.
+
+## v0.61.0 r1 candidate
+
+The candidate is pinned to desktop Token Monitor v0.61.0 tag commit
+`dc3cc1321d9490873ff96abb662e07eecea75751`. The released Hub keeps the same
+five read endpoints and stream envelope used by v0.60.0. A sanitized v0.61.0
+fixture covers health, stats, devices, history, subscriptions, complete stream
+events, and freshness events; no local Hub address, secret, account, device, or
+usage response is included.
+
+The compatibility delta is presentation and identity: canonical `mimo` and
+`devin` clients, Cline and Devin limit providers, GitHub Copilot, and current
+desktop provider labels. Older fixtures from v0.54.0 through v0.60.0 remain in
+the suite. The r7 Pages widget specification, coordinates, and type sizes are
+unchanged.
+
+All 85 JVM tests, Android lint, the debug build, the R8 release build, and the
+documentation-link check pass. The hero and social preview were regenerated
+from the existing synthetic captures with the v0.61.0 r1 footer and inspected
+at full size.
+
+The independent read-only diff review found one material documentation error:
+the candidate README and install guide described r1 as already public before a
+GitHub release or phone gate existed. Both now distinguish the published
+v0.60.0 r7 build from the v0.61.0 r1 source candidate. The final regression
+pass found no remaining material issue.
+
+The signed APK reports package `io.github.theminionooo.tokenmonitor`, version
+code `610001`, certificate SHA-256
+`eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`, and file
+SHA-256 `cc52c84aa519d72de65465ed39224043ef8e1cd044dc6abda013c1e27882f705`.
+Its certificate matches v0.60.0 r7. The in-place phone gate remains pending
+until a device is connected; this candidate has not been published.
 
 ## v0.60.0 r7 release
 
@@ -143,7 +177,7 @@ On September 21, 2026:
 The local suite uses the isolated preview package on the API 36
 `TokenMonitor_API36_Pixel10ProXL` emulator (`emulator-5554`).
 
-- 81 JVM tests cover v0.54.0 through v0.60.0 protocol parsing, throughput capability
+- 85 JVM tests cover v0.54.0 through v0.61.0 protocol parsing, throughput capability
   boundaries, network boundaries, storage and shutdown, history aggregation,
   widget data, the widget grid, and presentation rules.
 - 31 instrumentation tests exercise navigation, filtering, period changes, day

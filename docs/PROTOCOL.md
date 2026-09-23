@@ -4,7 +4,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The baseline is upstream Token Monitor **v0.60.0**, released 2026-09-21. The
+The baseline is upstream Token Monitor **v0.61.0**, released 2026-09-23. The
 release and source were checked directly from the `Javis603/token-monitor`
 tag before this implementation. The older local desktop checkout was not
 changed and is not the protocol authority.
@@ -51,9 +51,9 @@ replaces the snapshot with the current read endpoints.
 
 ## Fixtures
 
-Sanitized v0.60.0 examples live in
-`app/src/test/resources/protocol/v0.60.0/`; the retained v0.54.0, v0.55.0, and v0.56.0 fixtures prove
-backward compatibility. They contain no user secrets,
+Sanitized v0.61.0 examples for all five read endpoints and the live stream live
+in `app/src/test/resources/protocol/v0.61.0/`; the retained v0.54.0, v0.55.0,
+v0.56.0, and v0.60.0 fixtures prove backward compatibility. They contain no user secrets,
 machine paths, account identifiers, or real usage. Parser tests cover every
 read surface, the SSE envelope, omitted optional fields, and a future unknown
 field. The compatibility parser maps only the fields the dashboard needs and
@@ -77,6 +77,13 @@ the turn ended, and an omitted value remains unknown; the parser does not collap
 those states. Android shows context use only when both positive values are present
 on a recent Running or Finished session. The same fixture covers current Factory
 percentage and credit allowance shapes plus stream-v2 complete and freshness events.
+
+v0.61.0 keeps the read endpoint and session shapes stable. It normalizes Xiaomi
+MiMo usage to the canonical `mimo` client, adds `devin` usage, and adds Cline and
+Devin limit providers. Android recognizes those identities, keeps the legacy
+`micode` label readable, and retains the existing Copilot and context-window
+fields. Desktop-only Edge Dock, floating bubble, and macOS haptic changes do not
+cross the Hub contract.
 
 When the desktop protocol changes, add a new versioned fixture directory and
 tests before changing the Android mapping.

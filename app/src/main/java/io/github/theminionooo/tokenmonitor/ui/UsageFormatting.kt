@@ -121,10 +121,11 @@ internal fun shortDate(value: String): String = runCatching {
 private val toolLabels = mapOf(
     "claude" to "Claude Code", "codex" to "Codex", "hermes" to "Hermes Agent", "gemini" to "Gemini", "cursor" to "Cursor",
     "opencode" to "OpenCode", "openclaw" to "OpenClaw", "antigravity" to "Antigravity", "cline" to "Cline", "kimi" to "Kimi",
-    "qwen" to "Qwen", "grok" to "Grok Build", "copilot" to "GitHub Copilot", "pi" to "Pi", "zed" to "Zed", "kilocode" to "Kilo Code",
-    "commandcode" to "Command Code", "micode" to "MiMo Code", "zcode" to "ZCode", "kiro" to "Kiro", "codebuddy" to "CodeBuddy",
+    "amp" to "Amp", "droid" to "Factory Droid", "qwen" to "Qwen", "grok" to "Grok Build", "copilot" to "GitHub Copilot",
+    "pi" to "Pi", "zed" to "Zed", "kilo" to "Kilo", "kilocode" to "Kilo Code", "commandcode" to "Command Code",
+    "mimo" to "Xiaomi MiMo", "micode" to "Xiaomi MiMo", "zcode" to "ZCode", "kiro" to "Kiro", "codebuddy" to "CodeBuddy",
     "workbuddy" to "WorkBuddy", "proma" to "Proma", "qodercn" to "Qoder CN", "reasonix" to "Reasonix", "dsh" to "DeepSeek Harness",
-    "cherrystudio" to "Cherry Studio", "lmstudio" to "LM Studio", "unsloth" to "Unsloth", "openrouter" to "OpenRouter",
+    "cherrystudio" to "Cherry Studio", "lmstudio" to "LM Studio", "unsloth" to "Unsloth", "devin" to "Devin", "openrouter" to "OpenRouter",
     "deepseek" to "DeepSeek", "ollama" to "Ollama", "thirdparty" to "Third-party",
     "factory" to "Factory", "nvidia" to "NVIDIA", "stepfun" to "StepFun",
 )
@@ -169,4 +170,22 @@ internal fun String.providerName(): String = replace('_', ' ').split(' ').joinTo
 internal val Int.absoluteValue: Int get() = if (this == Int.MIN_VALUE) 0 else kotlin.math.abs(this)
 
 /** Limit and subscription providers: the desktop shows `Claude`, not `Claude Code`, but keeps labels such as `OpenCode`. */
-internal fun String.providerLabel(): String = if (trim().lowercase(Locale.US) == "claude") "Claude" else displayName()
+private val providerLabels = mapOf(
+    "claude" to "Claude",
+    "factory" to "Factory Droid",
+    "grok" to "Grok",
+    "mimo" to "Xiaomi MiMo",
+    "zai" to "GLM",
+    "zaiteam" to "GLM Team",
+    "qoder" to "Qoder",
+    "devin" to "Devin",
+    "volcengine" to "Volcengine",
+    "trae" to "Trae CN",
+    "alibaba" to "Alibaba Cloud",
+    "thirdparty" to "Third-party APIs",
+)
+
+internal fun String.providerLabel(): String {
+    val key = trim().lowercase(Locale.US)
+    return providerLabels[key] ?: displayName()
+}

@@ -1,0 +1,18 @@
+{
+  "ok": true,
+  "version": 1,
+  "updatedAt": "2026-09-23T12:00:00.000Z",
+  "subscriptions": [
+    {
+      "id": "sub_redacted_mimo",
+      "provider": "mimo",
+      "planName": "Pro",
+      "amountMinor": 2000,
+      "currency": "USD",
+      "startDate": "2026-09-01",
+      "interval": "month",
+      "autoRenew": true,
+      "accountKey": "redacted"
+    }
+  ]
+}
