@@ -16,7 +16,7 @@ for (const file of walk(root)) {
   for (const match of links) {
     let target = (match[1] || match[2]).split(/\s+"/)[0].replace(/^<|>$/g,'');
     if (/^(?:https?:|mailto:|data:|#)/i.test(target)) continue;
-    target = decodeURIComponent(target.split('#')[0]);
+    target = decodeURIComponent(target.split(/[?#]/)[0]);
     if (!fs.existsSync(path.resolve(path.dirname(file),target))) {console.error(`${path.relative(root,file)}: missing ${target}`);errors++;}
   }
 }
