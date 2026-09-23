@@ -33,6 +33,12 @@ internal data class WidgetDeckLimitRow(
     val reset: String,
 )
 
+/** One provider and its two tightest windows, tightest first; a Limits row. */
+internal data class WidgetDeckLimitGroup(
+    val provider: String,
+    val windows: List<WidgetDeckLimitRow>,
+)
+
 internal data class WidgetDeckData(
     val snapshot: HubSnapshot?,
     val liveEnabled: Boolean,
@@ -45,6 +51,7 @@ internal data class WidgetDeckData(
     val tools: List<WidgetDeckUsageRow>,
     val models: List<WidgetDeckUsageRow>,
     val limits: List<WidgetDeckLimitRow>,
+    val limitGroups: List<WidgetDeckLimitGroup>,
     val week: List<HistoryPoint>,
     val activeDays: Int,
     val messagesToday: Long,
@@ -100,8 +107,8 @@ internal fun prepareWidgetDeck(
             WidgetDeckUsageRow(name, value, costs[name] ?: 0.0, value / total)
         }
     }
-    val limits = snapshot?.stats?.limits?.providers.orEmpty().flatMap { account ->
-        account.windows.mapNotNull { window ->
+    val limitsByProvider = snapshot?.stats?.limits?.providers.orEmpty().map { account ->
+        account.provider to account.windows.mapNotNull { window ->
             remainingPercent(window)?.let { remaining ->
                 WidgetDeckLimitRow(
                     provider = account.provider,
@@ -110,8 +117,14 @@ internal fun prepareWidgetDeck(
                     reset = io.github.theminionooo.tokenmonitor.ui.formatBoundary(window.resetsAt, window.boundaryKind, now),
                 )
             }
-        }
-    }.sortedBy { it.remainingPercent }.take(4)
+        }.sortedBy { it.remainingPercent }
+    }.filter { it.second.isNotEmpty() }
+    val limits = limitsByProvider.flatMap { it.second }.sortedBy { it.remainingPercent }.take(4)
+    val limitGroups = limitsByProvider
+        .map { (provider, windows) -> WidgetDeckLimitGroup(provider, windows.take(2)) }
+        .sortedBy { it.windows.first().remainingPercent }
+        .distinctBy { it.provider }
+        .take(2)
     return WidgetDeckData(
         snapshot = snapshot,
         liveEnabled = liveEnabled,
@@ -124,6 +137,7 @@ internal fun prepareWidgetDeck(
         tools = period?.let { rows(it.clients, it.clientCosts, 3) }.orEmpty(),
         models = period?.let { rows(it.models, it.modelCosts, 4) }.orEmpty(),
         limits = limits,
+        limitGroups = limitGroups,
         week = week,
         activeDays = buildActivityHeatmap(history, date).activeDays,
         messagesToday = today?.messages ?: 0,

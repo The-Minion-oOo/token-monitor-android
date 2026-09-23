@@ -65,25 +65,39 @@ leaves the digits still; otherwise they roll when the total changes.
 The provider sends one `RemoteViews` card to the launcher and stores the selected
 page locally for each widget. It loads the newer of the in-process session snapshot
 and private cache, then draws the selected page into a fixed 1.82:1 bitmap. The alpha
-bitmap is capped below the RemoteViews transfer limit and scaled as one unit, so
-launchers cannot apply collection-card depth, remeasure page rows, or expose rear
-cards. Changing pages performs no network work. Pages do not auto-advance or
-schedule their own updates.
+bitmap is rendered at the launcher's display density, with a 1200-pixel safety cap,
+instead of being enlarged from a fixed low-resolution raster. One page remains well
+inside Android's 1.5-screen aggregate widget bitmap budget. The launcher scales the
+card as one unit, so it cannot apply collection-card depth, remeasure page rows, or
+expose rear cards. Changing pages performs no network work. Pages do not auto-advance
+or schedule their own updates.
 
 Each page retains the same header controls. Forty-eight-dp left and right edge targets
 cycle the pages and four dots, inset above the lower edge, show the current position; tapping the content opens
 the app. Overview prioritizes the total, three operating stats, tool share, and week
-summary. Limits shows up to four tightest windows. Breakdown compares tools and
-models and keeps sparse results top-aligned without shrinking their type. Activity
-labels its daily seven-day bars and identifies the heatmap as thirteen weeks.
+summary. Limits shows up to two providers, each with its two tightest windows.
+Breakdown compares tools and models and keeps sparse results top-aligned without
+shrinking their type. Activity labels its daily seven-day bars and identifies the
+heatmap as thirteen weeks.
 Missing snapshot, limits, breakdown, or history data produces a named empty state
 instead of zero-filled evidence.
 
-The four pages share one type scale for section headings, primary values, body
-rows, and secondary labels. The overview token total is the only deliberate size
-exception. Long names are ellipsized rather than rendered with a smaller font.
-The Saved state keeps its off switch but uses a clearer label and knob contrast than
-ordinary metadata.
+Every position on the four pages comes from [the pages widget specification](WIDGET_SPEC.md),
+which was measured from the approved concept cards. `WidgetDeckGrid` carries those
+numbers in reference units of a 364×200 card, and the renderer scales its canvas
+once to the fitted frame. A smaller allocation is therefore the same picture drawn
+smaller, down to the launcher's 250×110 dp minimum; there is no separate compact
+composition to drift out of step. Bars, the seven-day chart and the heatmap are
+drawn straight onto that canvas, never as separate bitmaps.
+
+The pages use a bundled Latin subset of JetBrains Mono for labels and rows, so
+the widget looks the same on a Pixel and on a Samsung launcher, which substitutes
+its own face for the system monospace family. Figures use the system sans-serif
+in bold with tabular numerals. The overview token total is the only text that
+shrinks to fit; everything else is ellipsized at its column, and the specification
+records the two fallbacks that exist (a shorter Limits title and shorter Activity
+captions). The Saved state keeps its off switch but uses a clearer label and knob
+contrast than ordinary metadata.
 
 ## Verification
 
@@ -93,10 +107,11 @@ and asserts the chart bitmap matches its view size. `WidgetControlsTest` checks 
 minimum dimensions at normal and 130 percent text, long counts, 48 dp targets, picker
 metadata and the switch between widget polling and dashboard streaming. `WidgetThemeTest` covers the three presets
 and a custom code, plus a real AppWidgetHost recolor on theme change.
-`WidgetDeckDesignTest` renders all four pages at medium and large sizes in dark
-and light themes, checks provider metadata, page-state wrapping, identical bitmap
-dimensions and aspect ratios, accessible controls, and covers saved, stale, offline,
-empty, and v0.54-compatible snapshots. The gallery
+`WidgetDeckDesignTest` renders all four pages from the dense showcase fixture
+(three tools, four models, four quota windows, 65 days of history) at the minimum,
+medium and large sizes in dark and light themes, checks provider metadata,
+page-state wrapping, identical bitmap dimensions and aspect ratios, accessible
+controls, and covers saved, stale, offline, empty, and v0.54-compatible snapshots. The gallery
 images come from the same layouts through `tools/capture-showcase.ps1`.
 
 Physical-phone coverage is recorded separately in [Validation](VALIDATION.md).

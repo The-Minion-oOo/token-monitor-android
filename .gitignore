@@ -16,3 +16,4 @@ app/build/
 secrets.properties
 
 node_modules/
+/local-private/

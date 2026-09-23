@@ -13,7 +13,7 @@ A signed v0.56.0 r4 APK remains available from the public
 Its automated, emulator, and signing checks pass. Samsung-specific installation
 and launcher inspection status is recorded in [Validation](VALIDATION.md).
 
-The current source is the v0.60.0 r1 candidate. It is not a public release until
+The current source is the v0.60.0 r5 candidate. It is not a public release until
 the signed APK passes the phone upgrade gate and appears on the Releases page.
 
 To build the current source, install JDK 17 and Android SDK 37, then run:
@@ -41,7 +41,7 @@ There is no Play Store or F-Droid listing.
 Each signed release will include an APK and a `.sha256` file. Compare the hash:
 
 ```powershell
-Get-FileHash .\token-monitor-android-v0.60.0-r1.apk -Algorithm SHA256
+Get-FileHash .\token-monitor-android-v0.60.0-r5.apk -Algorithm SHA256
 ```
 
 A matching checksum detects download corruption; download both files from the
