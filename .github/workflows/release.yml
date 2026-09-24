@@ -62,7 +62,7 @@ jobs:
           "notes=$notes" >> $env:GITHUB_OUTPUT
           "tag=$tag" >> $env:GITHUB_OUTPUT
           "apk=$apk" >> $env:GITHUB_OUTPUT
-          "title=Token Monitor Android v$version (r$revision)" >> $env:GITHUB_OUTPUT
+          "title=Android v$version r$revision" >> $env:GITHUB_OUTPUT
       - name: Verify APK signature
         run: >-
           "$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/apksigner"
