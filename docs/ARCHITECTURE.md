@@ -33,6 +33,7 @@ data/       HubRepository
              HubStreamProtocol                  SSE event → complete wire
   network/  HubApiClient, HubAddressValidator, EndpointFailover, HubDiscovery, BackoffPolicy, ServiceStatusClient
   storage/  SecureConnectionStore, SnapshotCache, DisplayPreferences
+  update/   ReleaseUpdates (published GitHub release check and verified APK)
 widget/     Responsive RemoteViews, cached-snapshot pages, explicit Live service and controls
 ```
 

@@ -1,6 +1,6 @@
-# Desktop parity for v0.61.0
+# Desktop parity for v0.62.0
 
-The Android app is verified against desktop Token Monitor v0.61.0. It mirrors
+The Android app is verified against desktop Token Monitor v0.62.0. It mirrors
 the desktop information that the Hub can safely provide while keeping the phone
 read-only and lightweight.
 
@@ -39,7 +39,7 @@ controls are window-specific rather than Hub dashboard features.
 ## Intentional boundaries
 
 The following remain on desktop because they collect data, control a desktop
-window, or require information the v0.61.0 Hub does not transmit:
+window, or require information the v0.62.0 Hub does not transmit:
 
 - tool discovery, account sign-in, collection cadence, diagnostics, export, and
   subscription editing;
@@ -57,6 +57,10 @@ v0.61.0 presentation parity includes canonical Xiaomi MiMo and Devin usage,
 Cline and Devin limits, GitHub Copilot labeling, and the desktop provider names.
 Those are display mappings over the existing Hub data, not new phone-side
 collection.
+
+v0.62.0 distinguishes Oh My Pi (`omp`) from Pi and shows TypeSafe's plan and
+balance plus Devin's reported plan. Detailed TypeSafe token summaries and
+Claude reset-grant explanations remain desktop-only for now.
 
 The Android app does not replace these with remote commands. It reads only the
 documented Hub endpoints listed in [`SECURITY.md`](SECURITY.md).
@@ -76,7 +80,8 @@ documented Hub endpoints listed in [`SECURITY.md`](SECURITY.md).
   opened it, instead of leaving the app.
 - Pull down on any dashboard view to request a fresh snapshot.
 - A light haptic tick on tab and view changes.
-- A direct link to signed Android releases without a background updater.
+- An on-demand check for signed Android releases, with a Releases link and no
+  background polling or silent installation.
 - A four-page home-screen widget for Overview, Limits, Breakdown, and Activity.
   It changes pages locally inside one fixed 1.82:1 card, without adding a network
   request, timer, or background task.

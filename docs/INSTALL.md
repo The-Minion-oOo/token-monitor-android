@@ -3,16 +3,17 @@
 ## Requirements
 
 - Android 8.0 or newer.
-- Token Monitor desktop v0.61.0 with Hub hosting enabled and a shared secret.
+- Token Monitor desktop v0.61.0 or v0.62.0 with Hub hosting enabled and a shared secret.
 - A private route to the desktop: Tailscale is recommended; home Wi-Fi is optional.
 
 ## Install
 
 Download the signed v0.61.0 r1 APK from the public
 [release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.61.0-r1).
-Automated, emulator, signing, and packaging checks pass. A physical in-place
-phone upgrade was not available before publication; that limitation and the
-completed evidence are recorded in [Validation](VALIDATION.md).
+The published r1 APK was installed over r7 on a physical phone without
+uninstalling. The saved connection and placed Pages widget survived; see
+[Validation](VALIDATION.md). The in-app updater is a v0.62.0 r1 source candidate,
+not a feature of the published v0.61.0 r1 APK.
 
 To build the current source, install JDK 17 and Android SDK 37, then run:
 
@@ -55,8 +56,14 @@ Install the newer release APK over the existing release. The package and signing
 identity stay the same, and the internal version code increases. Do not uninstall
 first: uninstalling removes pairing, preferences and the saved snapshot.
 
-Settings → App updates opens Releases once a signed build is published. The app
-does not silently install updates.
+Starting with the v0.62.0 r1 candidate, Settings → App updates checks the latest
+published GitHub release when opened. For newer releases with an update
+manifest, tap **Download and install**. The
+app checks the APK size, SHA-256, package, version code, and release signing
+certificate before opening Android's installer. Android may ask you to allow
+Token Monitor to install apps; return and tap **Install downloaded update** after
+granting that permission. Android still asks you to confirm the installation.
+If the release lacks an update manifest, use **View Android releases** instead.
 For an installation conflict, check that you downloaded a release APK rather than
 a debug/preview build. Keep developer previews in the separate `.preview` package.
 

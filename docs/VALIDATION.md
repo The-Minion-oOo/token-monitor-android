@@ -1,8 +1,45 @@
 # Validation
 
-The current public release and source version is Android **v0.61.0 r1**
-(`610001`). The latest build verified by an in-place physical-phone upgrade
-remains v0.60.0 r7.
+The current public release is Android **v0.61.0 r1** (`610001`). The current
+source candidate is **v0.62.0 r1** (`620001`). The published r1 was installed over r7 on a
+physical phone; its saved connection and placed Pages widget survived.
+
+## v0.62.0 r1 candidate
+
+The candidate is pinned to desktop v0.62.0 tag commit
+`dcccfb01557e2786888fd5479552f392ac6c0d32`; the installed Windows desktop
+executable reports v0.62.0. The released read endpoints and stream envelope
+remain compatible. The Node Hub requires header-based secret authentication,
+which the Android client already uses. A new sanitized fixture covers all five
+read endpoints, a complete stream event, and a freshness event. It exercises
+separate `pi` and `omp` usage, TypeSafe's plan and credit window, and Devin's
+plan without containing real Hub credentials, account data, or usage.
+
+The on-demand updater carries forward from the unpublished v0.61.0 r2 source
+candidate. Its version comparison, release metadata, package, and rollback
+rules passed four focused JVM tests. On this v0.62.0 source, all 91 JVM tests,
+Android lint, and unsigned R8 release assembly pass. The documentation-link
+check also passes.
+
+On the API 36 Pixel 10 Pro XL emulator (`emulator-5554`), the side-by-side
+preview paired with the synthetic v0.62.0 fixture Hub. The Home screen showed
+separate Pi and Oh My Pi tool rows, TypeSafe's Pro plan and $42.50 balance, and
+Devin's Core plan. Settings showed `v0.62.0 r1` and correctly treated the
+published v0.61.0 r1 Android release as older. All 31 instrumentation tests
+passed after removing the Android CLI layout helper; the first run had two
+`UiAutomation` conflicts while that helper was active, not app assertions.
+
+The locally signed candidate was installed over v0.61.0 r1 on a Galaxy S25
+Ultra (`R5CY7205W0B`) without uninstalling. Android reported version code
+`620001`; the release certificate matched the pinned SHA-256 fingerprint.
+The saved Home Wi-Fi connection remained active, the placed Pages widget kept
+its launcher registration (widget ID 42), and Settings showed `v0.62.0 r1`
+with the older public Android release correctly reported as not newer. The
+widget's visual content was not recaptured after this upgrade. The temporary
+Android CLI layout helper was removed from the phone afterward.
+
+End-to-end in-app download and installer handoff still needs a later published
+release carrying update metadata; v0.61.0 r1 has no updater code.
 
 ## v0.61.0 r1 release
 
@@ -19,23 +56,29 @@ desktop provider labels. Older fixtures from v0.54.0 through v0.60.0 remain in
 the suite. The r7 Pages widget specification, coordinates, and type sizes are
 unchanged.
 
-All 85 JVM tests, Android lint, the debug build, the R8 release build, and the
-documentation-link check pass. The hero and social preview were regenerated
+Before the updater addition, all 85 JVM tests, Android lint, the debug build,
+the R8 release build, and the documentation-link check passed. The hero and
+social preview were regenerated
 from the existing synthetic captures with the v0.61.0 r1 footer and inspected
 at full size.
 
-The independent read-only diff review found one material documentation error:
-the candidate README and install guide described r1 as already public before a
-GitHub release or phone gate existed. Both now distinguish the published
-v0.60.0 r7 build from the v0.61.0 r1 source candidate. The final regression
-pass found no remaining material issue.
+The independent read-only diff review of the original compatibility candidate
+found a premature release-status claim, which was corrected before publication.
 
 The published APK reports package `io.github.theminionooo.tokenmonitor`, version
 code `610001`, certificate SHA-256
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`, and file
 SHA-256 `cc52c84aa519d72de65465ed39224043ef8e1cd044dc6abda013c1e27882f705`.
-Its certificate matches v0.60.0 r7. No device was connected for the final
-physical in-place upgrade gate, so that result remains explicitly unverified.
+Its certificate matches v0.60.0 r7. On September 24, the published r1 APK was
+installed over r7 on the Galaxy S25 Ultra without uninstalling. Android reports
+version code `610001` and the unchanged first-install time
+(`2026-09-21 11:03:41`). After unlocking, the app opened to live Hub data over
+the saved Home Wi-Fi connection, and Settings showed the preserved preferences
+and `v0.61.0 r1`. The existing Pages widget remained placed on the Samsung
+launcher at its prior 406×216 dp size. Overview rendered current data; the
+widget advanced through Limits, Breakdown, and Activity and returned to
+Overview. No uninstall or re-pairing was needed. The temporary Android layout
+helper was removed and the original USB display setting restored.
 
 ## v0.60.0 r7 release
 

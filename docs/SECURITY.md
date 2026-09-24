@@ -50,6 +50,12 @@ The Status view separately reads public service-health endpoints for Claude,
 OpenAI, Cursor, and DeepSeek. Those requests do not include Hub credentials
 or Token Monitor usage data.
 
+Opening App updates checks this app's latest published GitHub release. A
+download starts only after the user taps Download and install. These HTTPS
+requests do not include the Hub secret or usage data. Before handing the APK to
+Android, the app verifies the release checksum, package identity, version code,
+and pinned release signing certificate. Android controls installation approval.
+
 ## Lifecycle and resource use
 
 A user-started dataSync foreground service supports widget Live for one hour with

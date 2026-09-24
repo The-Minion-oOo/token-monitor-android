@@ -132,7 +132,6 @@ class HubProtocolParserTest {
         assertEquals("Studio", snapshot.stats.devices.single().hostname)
         assertEquals("mimo", snapshot.subscriptions.entries.single().provider)
         assertEquals(3, snapshot.history.daily.size)
-        assertEquals("v0.61.0", HubProtocolParser.SUPPORTED_UPSTREAM_VERSION)
     }
 
     @Test
@@ -145,6 +144,47 @@ class HubProtocolParserTest {
         val today = checkNotNull(HubProtocolParser.decodeStatsStreamEvent(data)).periods.getValue("today")
         assertEquals(61_000, today.clients.getValue("mimo"))
         assertEquals(45_000, today.clients.getValue("devin"))
+    }
+
+    @Test
+    fun `v0 62 keeps Pi and Oh My Pi separate and reads TypeSafe limits`() {
+        val snapshot = HubProtocolParser.decodeSnapshot(
+            healthRaw = resource("health.json", "v0.62.0"),
+            statsRaw = resource("stats.json", "v0.62.0"),
+            devicesRaw = resource("devices.json", "v0.62.0"),
+            historyRaw = resource("history.json", "v0.62.0"),
+            subscriptionsRaw = resource("subscriptions.json", "v0.62.0"),
+            capturedAt = 1_800_000_000_000,
+        )
+
+        assertEquals(30_000, snapshot.today.clients.getValue("pi"))
+        assertEquals(60_000, snapshot.today.clients.getValue("omp"))
+        assertEquals("omp", snapshot.today.sessions.single().client)
+        assertEquals(setOf("pi", "omp"), snapshot.history.daily.last().perClient.keys - "codex")
+        assertEquals(listOf("codex", "pi", "omp"), snapshot.stats.devices.single().trackedClients)
+        assertEquals("codex", snapshot.subscriptions.entries.single().provider)
+        val typesafe = snapshot.stats.limits.providers.first { it.provider == "typesafe" }
+        assertEquals("Pro", typesafe.plan)
+        assertEquals(42.50, typesafe.windows.single().remaining!!, 0.001)
+        assertEquals("expiry", typesafe.windows.single().boundaryKind)
+        assertEquals("Core", snapshot.stats.limits.providers.first { it.provider == "devin" }.plan)
+        assertEquals("v0.62.0", HubProtocolParser.SUPPORTED_UPSTREAM_VERSION)
+    }
+
+    @Test
+    fun `v0 62 stream and freshness preserve separate clients and update timestamps`() {
+        val statsEvent = resource("stats-stream.sse", "v0.62.0")
+            .lineSequence().first { it.startsWith("data:") }.removePrefix("data:").trimStart()
+        val today = checkNotNull(HubProtocolParser.decodeStatsStreamEvent(statsEvent)).periods.getValue("today")
+        assertEquals(30_000, today.clients.getValue("pi"))
+        assertEquals(61_000, today.clients.getValue("omp"))
+
+        val freshnessEvent = resource("stats-freshness.sse", "v0.62.0")
+            .lineSequence().first { it.startsWith("data:") }.removePrefix("data:").trimStart()
+        val merged = HubStreamProtocol.mergeFreshness(resource("stats.json", "v0.62.0"), freshnessEvent)
+        val refreshed = HubProtocolParser.decodeStats(merged)
+        assertEquals(60_000, refreshed.periods.getValue("today").clients.getValue("omp"))
+        assertEquals("2026-09-24T14:32:00.000Z", refreshed.limits.updatedAt)
     }
 
     @Test
