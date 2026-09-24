@@ -11,7 +11,7 @@
 Download the signed v0.61.0 r1 APK from the public
 [release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.61.0-r1).
 The published r1 APK was installed over r7 on a physical phone without
-uninstalling. Paired state and widgets still need a screen check; see
+uninstalling. The saved connection and placed Pages widget survived; see
 [Validation](VALIDATION.md). The in-app updater is a source candidate for r2,
 not a feature of the published r1 APK.
 

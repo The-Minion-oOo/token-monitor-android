@@ -133,7 +133,7 @@ You need Android 8.0 or newer and a desktop running Token Monitor v0.61.0 with H
 | --- | --- |
 | Current public release | [`v0.61.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.61.0-r1) |
 | Current source candidate | `v0.61.0-r2` ([release notes](docs/releases/android-v0.61.0-r2.md)) |
-| Latest in-place phone install | `v0.61.0-r1` over r7; paired state and widgets not yet inspected |
+| Latest phone-verified build | `v0.61.0-r1` over r7; saved connection and placed Pages widget preserved |
 | Verified desktop baseline | Token Monitor `v0.61.0` |
 | Upstream commit | [`dc3cc13`](https://github.com/Javis603/token-monitor/commit/dc3cc1321d9490873ff96abb662e07eecea75751) |
 

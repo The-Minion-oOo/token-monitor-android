@@ -2,7 +2,7 @@
 
 The current public release is Android **v0.61.0 r1** (`610001`). The current
 source candidate is **v0.61.0 r2** (`610002`). R1 was installed over r7 on a
-physical phone; its paired state and widgets still need screen inspection.
+physical phone; its saved connection and placed Pages widget survived.
 
 ## v0.61.0 r2 candidate
 
@@ -50,8 +50,13 @@ SHA-256 `cc52c84aa519d72de65465ed39224043ef8e1cd044dc6abda013c1e27882f705`.
 Its certificate matches v0.60.0 r7. On September 24, the published r1 APK was
 installed over r7 on the Galaxy S25 Ultra without uninstalling. Android reports
 version code `610001` and the unchanged first-install time
-(`2026-09-21 11:03:41`). The phone was locked during this check, so paired state,
-widgets, and screen behavior remain to be verified.
+(`2026-09-21 11:03:41`). After unlocking, the app opened to live Hub data over
+the saved Home Wi-Fi connection, and Settings showed the preserved preferences
+and `v0.61.0 r1`. The existing Pages widget remained placed on the Samsung
+launcher at its prior 406×216 dp size. Overview rendered current data; the
+widget advanced through Limits, Breakdown, and Activity and returned to
+Overview. No uninstall or re-pairing was needed. The temporary Android layout
+helper was removed and the original USB display setting restored.
 
 ## v0.60.0 r7 release
 
