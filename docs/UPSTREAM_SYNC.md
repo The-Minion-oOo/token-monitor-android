@@ -2,7 +2,7 @@
 
 ## Version rule
 
-The current source displays `v0.61.0` because it is verified against desktop Token Monitor `v0.61.0`. The Gradle properties and `upstream.json` identify tag `v0.61.0` and peeled commit `dc3cc1321d9490873ff96abb662e07eecea75751`.
+The current source displays `v0.62.0` because it is verified against desktop Token Monitor `v0.62.0`. The Gradle properties and `upstream.json` identify tag `v0.62.0` and peeled commit `dcccfb01557e2786888fd5479552f392ac6c0d32`.
 
 An Android-only fix increments `versionCode` and the GitHub release revision,
 for example `android-vX.Y.Z-rN`, without changing the visible compatibility

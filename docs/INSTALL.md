@@ -3,7 +3,7 @@
 ## Requirements
 
 - Android 8.0 or newer.
-- Token Monitor desktop v0.61.0 with Hub hosting enabled and a shared secret.
+- Token Monitor desktop v0.61.0 or v0.62.0 with Hub hosting enabled and a shared secret.
 - A private route to the desktop: Tailscale is recommended; home Wi-Fi is optional.
 
 ## Install
@@ -12,8 +12,8 @@ Download the signed v0.61.0 r1 APK from the public
 [release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.61.0-r1).
 The published r1 APK was installed over r7 on a physical phone without
 uninstalling. The saved connection and placed Pages widget survived; see
-[Validation](VALIDATION.md). The in-app updater is a source candidate for r2,
-not a feature of the published r1 APK.
+[Validation](VALIDATION.md). The in-app updater is a v0.62.0 r1 source candidate,
+not a feature of the published v0.61.0 r1 APK.
 
 To build the current source, install JDK 17 and Android SDK 37, then run:
 
@@ -56,7 +56,7 @@ Install the newer release APK over the existing release. The package and signing
 identity stay the same, and the internal version code increases. Do not uninstall
 first: uninstalling removes pairing, preferences and the saved snapshot.
 
-Starting with the r2 candidate, Settings → App updates checks the latest
+Starting with the v0.62.0 r1 candidate, Settings → App updates checks the latest
 published GitHub release when opened. For newer releases with an update
 manifest, tap **Download and install**. The
 app checks the APK size, SHA-256, package, version code, and release signing

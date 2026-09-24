@@ -1,23 +1,45 @@
 # Validation
 
 The current public release is Android **v0.61.0 r1** (`610001`). The current
-source candidate is **v0.61.0 r2** (`610002`). R1 was installed over r7 on a
+source candidate is **v0.62.0 r1** (`620001`). The published r1 was installed over r7 on a
 physical phone; its saved connection and placed Pages widget survived.
 
-## v0.61.0 r2 candidate
+## v0.62.0 r1 candidate
 
-The in-app update candidate adds a published-release check and verified APK
-download. Its version comparison, release metadata, package, and rollback
-rules passed four focused JVM tests; the full local JVM suite had 89 tests
-before the r2 rebase. Lint and a side-by-side preview build also passed. On the
-Galaxy S25 Ultra, the unpaired preview opened App updates and correctly
-reported that the then-published v0.60.0 r7 was older. The preview was removed.
+The candidate is pinned to desktop v0.62.0 tag commit
+`dcccfb01557e2786888fd5479552f392ac6c0d32`; the installed Windows desktop
+executable reports v0.62.0. The released read endpoints and stream envelope
+remain compatible. The Node Hub requires header-based secret authentication,
+which the Android client already uses. A new sanitized fixture covers all five
+read endpoints, a complete stream event, and a freshness event. It exercises
+separate `pi` and `omp` usage, TypeSafe's plan and credit window, and Devin's
+plan without containing real Hub credentials, account data, or usage.
 
-R2 now builds on the published r1 source with version code `610002`. On this
-revision, all 89 JVM tests, Android lint, the R8 release build, and the local
-documentation-link check pass. A fresh r2 preview phone check, signed in-place
-phone upgrade, and end-to-end download/installer handoff remain pending; the
-latter also needs a future published release carrying update metadata.
+The on-demand updater carries forward from the unpublished v0.61.0 r2 source
+candidate. Its version comparison, release metadata, package, and rollback
+rules passed four focused JVM tests. On this v0.62.0 source, all 91 JVM tests,
+Android lint, and unsigned R8 release assembly pass. The documentation-link
+check also passes.
+
+On the API 36 Pixel 10 Pro XL emulator (`emulator-5554`), the side-by-side
+preview paired with the synthetic v0.62.0 fixture Hub. The Home screen showed
+separate Pi and Oh My Pi tool rows, TypeSafe's Pro plan and $42.50 balance, and
+Devin's Core plan. Settings showed `v0.62.0 r1` and correctly treated the
+published v0.61.0 r1 Android release as older. All 31 instrumentation tests
+passed after removing the Android CLI layout helper; the first run had two
+`UiAutomation` conflicts while that helper was active, not app assertions.
+
+The locally signed candidate was installed over v0.61.0 r1 on a Galaxy S25
+Ultra (`R5CY7205W0B`) without uninstalling. Android reported version code
+`620001`; the release certificate matched the pinned SHA-256 fingerprint.
+The saved Home Wi-Fi connection remained active, the placed Pages widget kept
+its launcher registration (widget ID 42), and Settings showed `v0.62.0 r1`
+with the older public Android release correctly reported as not newer. The
+widget's visual content was not recaptured after this upgrade. The temporary
+Android CLI layout helper was removed from the phone afterward.
+
+End-to-end in-app download and installer handoff still needs a later published
+release carrying update metadata; v0.61.0 r1 has no updater code.
 
 ## v0.61.0 r1 release
 

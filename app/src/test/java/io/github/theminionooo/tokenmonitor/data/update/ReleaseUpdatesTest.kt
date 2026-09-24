@@ -13,47 +13,48 @@ import org.junit.Test
 class ReleaseUpdatesTest {
     @Test fun comparesDesktopVersionsAndAndroidRevisions() {
         assertEquals(1, ReleaseUpdates.compareTags("android-v0.61.0-r1", "android-v0.60.0-r7"))
+        assertEquals(1, ReleaseUpdates.compareTags("android-v0.62.0-r1", "android-v0.61.0-r2"))
         assertEquals(1, ReleaseUpdates.compareTags("android-v0.61.0-r2", "android-v0.61.0-r1"))
         assertEquals(0, ReleaseUpdates.compareTags("android-v0.61.0-r1", "android-v0.61.0-r1"))
         assertEquals(-1, ReleaseUpdates.compareTags("android-v0.60.0-r7", "android-v0.61.0-r1"))
     }
 
     @Test fun acceptsOnlyMatchingPublishedReleaseAssets() {
-        val candidate = ReleaseUpdates.parseManifest(release(), manifest(), 600007)
-        assertEquals("v0.61.0", candidate.versionName)
-        assertEquals(610001, candidate.versionCode)
-        assertEquals("token-monitor-android-v0.61.0-r1.apk", candidate.apkName)
+        val candidate = ReleaseUpdates.parseManifest(release(), manifest(), 610001)
+        assertEquals("v0.62.0", candidate.versionName)
+        assertEquals(620001, candidate.versionCode)
+        assertEquals("token-monitor-android-v0.62.0-r1.apk", candidate.apkName)
     }
 
     @Test fun rejectsWrongPackageAndRollback() {
         assertThrows(IllegalArgumentException::class.java) {
-            ReleaseUpdates.parseManifest(release(), manifest().with("packageName", JsonPrimitive("other.app")), 600007)
+            ReleaseUpdates.parseManifest(release(), manifest().with("packageName", JsonPrimitive("other.app")), 610001)
         }
         assertThrows(IllegalArgumentException::class.java) {
-            ReleaseUpdates.parseManifest(release(), manifest(), 610001)
+            ReleaseUpdates.parseManifest(release(), manifest(), 620001)
         }
     }
 
     @Test fun rejectsUnpublishedReleaseAndWrongDownloadLocation() {
         assertThrows(IllegalArgumentException::class.java) {
-            ReleaseUpdates.parseManifest(release().with("draft", JsonPrimitive(true)), manifest(), 600007)
+            ReleaseUpdates.parseManifest(release().with("draft", JsonPrimitive(true)), manifest(), 610001)
         }
         assertThrows(IllegalStateException::class.java) {
-            ReleaseUpdates.parseManifest(release().with("assets", JsonArray(emptyList())), manifest(), 600007)
+            ReleaseUpdates.parseManifest(release().with("assets", JsonArray(emptyList())), manifest(), 610001)
         }
     }
 
     private fun release(): JsonObject = Json.parseToJsonElement(
         """{
-          "tag_name":"android-v0.61.0-r1",
+          "tag_name":"android-v0.62.0-r1",
           "draft":false,
           "prerelease":false,
-          "name":"Android v0.61.0 r1",
+          "name":"Android v0.62.0 r1",
           "body":"## What changed\\n- Update checking",
-          "html_url":"https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.61.0-r1",
+          "html_url":"https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.62.0-r1",
           "assets":[{
-            "name":"token-monitor-android-v0.61.0-r1.apk",
-            "browser_download_url":"https://github.com/The-Minion-oOo/token-monitor-android/releases/download/android-v0.61.0-r1/token-monitor-android-v0.61.0-r1.apk"
+            "name":"token-monitor-android-v0.62.0-r1.apk",
+            "browser_download_url":"https://github.com/The-Minion-oOo/token-monitor-android/releases/download/android-v0.62.0-r1/token-monitor-android-v0.62.0-r1.apk"
           }]
         }""",
     ).jsonObject
@@ -62,10 +63,10 @@ class ReleaseUpdatesTest {
         """{
           "schemaVersion":1,
           "packageName":"io.github.theminionooo.tokenmonitor",
-          "tag":"android-v0.61.0-r1",
-          "versionName":"v0.61.0",
-          "versionCode":610001,
-          "apk":"token-monitor-android-v0.61.0-r1.apk",
+          "tag":"android-v0.62.0-r1",
+          "versionName":"v0.62.0",
+          "versionCode":620001,
+          "apk":"token-monitor-android-v0.62.0-r1.apk",
           "sizeBytes":10000000,
           "sha256":"${"a".repeat(64)}"
         }""",
