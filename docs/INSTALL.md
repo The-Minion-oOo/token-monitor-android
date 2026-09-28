@@ -15,6 +15,9 @@ version code. The v0.63.0 in-place upgrade was not tested on a physical phone;
 see [Validation](VALIDATION.md). The older v0.61.0 r1 app has no in-app updater,
 so install a newer release manually once.
 
+The source currently prepares a v0.63.1 r1 candidate. It is not available
+through the in-app update check until a signed GitHub release is published.
+
 To build the current source, install JDK 17 and Android SDK 37, then run:
 
 ```powershell

@@ -17,7 +17,7 @@ Tokens, account limits, models and trends from the desktop Token Monitor Hub, pl
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/badge/Android_checks-CI-73bdf5?style=flat-square&logo=githubactions&logoColor=10221c"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.63.0" src="https://img.shields.io/badge/Desktop-v0.63.0-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.63.1 candidate" src="https://img.shields.io/badge/Desktop-v0.63.1%20candidate-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
 </p>
@@ -117,7 +117,7 @@ The Hub does not carry prompt or response bodies. It can carry a conversation ti
 
 ## Get connected
 
-You need Android 8.0 or newer and a desktop running Token Monitor v0.61.0 through v0.63.0 with Hub hosting on. The v0.63.0 Hub contract is verified in the Android test suite; physical-phone upgrade checks were skipped for this release.
+You need Android 8.0 or newer and a desktop running Token Monitor with Hub hosting on. The published Android v0.63.0 r1 APK was verified through desktop v0.63.0. This source candidate adds fixture-backed verification for desktop v0.63.1; its APK is not published yet, and a physical-phone upgrade has not been checked.
 
 1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.63.0 r1 APK.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
@@ -133,9 +133,9 @@ You need Android 8.0 or newer and a desktop running Token Monitor v0.61.0 throug
 | --- | --- |
 | Current public release | [`v0.63.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.63.0-r1) |
 | Latest phone-verified build | signed `v0.62.0-r1` over v0.61.0 r1; saved connection and placed Pages widget registration preserved |
-| v0.63.0 phone checks | Skipped at the owner's request; pairing, placed-widget retention and battery behavior are not yet verified on a phone |
-| Desktop baseline | Token Monitor `v0.63.0` |
-| Upstream commit | [`f756d1d`](https://github.com/Javis603/token-monitor/commit/f756d1d0fdbf415c1cd4a7178f3fe5d7a026fc90) |
+| Source candidate | `v0.63.1-r1` — not published or phone-verified |
+| Desktop baseline for source candidate | Token Monitor `v0.63.1` |
+| Upstream commit | [`e38f60a`](https://github.com/Javis603/token-monitor/commit/e38f60a94ce6310341f8ad2de6888f1ec51dd755) |
 
 The visible version matches the desktop release the phone understands. Android-only
 builds bump the release revision and internal version code while the compatibility
