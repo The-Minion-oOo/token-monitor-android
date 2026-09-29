@@ -4,7 +4,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The candidate baseline is upstream Token Monitor **v0.63.1**, released 2026-09-28. The
+The verified baseline is upstream Token Monitor **v0.63.1**, released 2026-09-28. The
 release and source were checked directly from the `Javis603/token-monitor`
 tag before this implementation. The older local desktop checkout was not
 changed and is not the protocol authority.

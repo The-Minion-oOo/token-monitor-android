@@ -1,6 +1,6 @@
 # Validation
 
-## v0.63.1 r1 candidate — 2026-09-28
+## v0.63.1 r1 release — 2026-09-28
 
 Desktop v0.63.1 is pinned to the released tag commit
 `e38f60a94ce6310341f8ad2de6888f1ec51dd755`. The v0.63.0-to-v0.63.1
@@ -25,14 +25,16 @@ fixture JSON parsed and local documentation links resolved. The scheduled
 local upstream check identifies v0.63.1 as the latest released version; nine newer
 `main` commits remain unreleased and are not part of this baseline.
 
-The local candidate APK reports package `io.github.theminionooo.tokenmonitor`,
+The signed APK reports package `io.github.theminionooo.tokenmonitor`,
 version code `631001`, and the existing release certificate SHA-256
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
 Its file SHA-256 is
 `1a517ad54d9dc58f180f5126f3cf661764ee66bed2b12c4978a349b8d436264b`.
-The APK and checksum are local in `Token Monitor/artifacts/`; no GitHub release
-has been published. A physical-phone in-place upgrade, retained pairing and
-widget registration, and battery behavior are not verified for this candidate.
+The APK, checksum, and matching update manifest are published under
+[`android-v0.63.1-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.63.1-r1).
+The owner requested publication to perform the in-app upgrade remotely, so the
+physical-phone in-place upgrade, retained pairing and widget registration, and
+battery behavior remain unverified at publication.
 
 ## v0.63.0 r1 release
 

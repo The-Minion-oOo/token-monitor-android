@@ -17,7 +17,7 @@ Tokens, account limits, models and trends from the desktop Token Monitor Hub, pl
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/badge/Android_checks-CI-73bdf5?style=flat-square&logo=githubactions&logoColor=10221c"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.63.1 candidate" src="https://img.shields.io/badge/Desktop-v0.63.1%20candidate-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.63.1" src="https://img.shields.io/badge/Desktop-v0.63.1-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
 </p>
@@ -117,9 +117,9 @@ The Hub does not carry prompt or response bodies. It can carry a conversation ti
 
 ## Get connected
 
-You need Android 8.0 or newer and a desktop running Token Monitor with Hub hosting on. The published Android v0.63.0 r1 APK was verified through desktop v0.63.0. This source candidate adds fixture-backed verification for desktop v0.63.1; its APK is not published yet, and a physical-phone upgrade has not been checked.
+You need Android 8.0 or newer and a desktop running Token Monitor with Hub hosting on. Android v0.63.1 r1 is fixture-verified against desktop v0.63.1. A physical-phone upgrade has not yet been checked for this release.
 
-1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.63.0 r1 APK.
+1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.63.1 r1 APK.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
 3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
 4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
@@ -131,10 +131,10 @@ You need Android 8.0 or newer and a desktop running Token Monitor with Hub hosti
 
 | | |
 | --- | --- |
-| Current public release | [`v0.63.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.63.0-r1) |
+| Current public release | [`v0.63.1-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.63.1-r1) |
 | Latest phone-verified build | signed `v0.62.0-r1` over v0.61.0 r1; saved connection and placed Pages widget registration preserved |
-| Source candidate | `v0.63.1-r1` — not published or phone-verified |
-| Desktop baseline for source candidate | Token Monitor `v0.63.1` |
+| v0.63.1 phone checks | In-place upgrade, saved pairing, widget retention, and battery behavior await owner verification |
+| Desktop baseline | Token Monitor `v0.63.1` |
 | Upstream commit | [`e38f60a`](https://github.com/Javis603/token-monitor/commit/e38f60a94ce6310341f8ad2de6888f1ec51dd755) |
 
 The visible version matches the desktop release the phone understands. Android-only

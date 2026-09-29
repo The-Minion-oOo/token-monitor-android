@@ -1,6 +1,6 @@
 # Desktop parity for v0.63.1
 
-The Android candidate is verified against desktop Token Monitor v0.63.1. It mirrors
+The Android release is fixture-verified against desktop Token Monitor v0.63.1. It mirrors
 the desktop information that the Hub can safely provide while keeping the phone
 read-only and lightweight.
 

@@ -25,6 +25,8 @@ Token Monitor v0.63.1.
 
 Install this signed release over the existing app; do not uninstall first. See
 the [install guide](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md).
+The physical-phone in-place upgrade, saved pairing, widget retention, and battery
+behavior have not yet been verified for this release.
 
 ## Verification
 
