@@ -114,19 +114,19 @@ Session rows also show generation speed, cache-hit percentage and prompt-cache e
 - No ads, analytics, wake lock, scheduled background work or "please rate us" popup.
 - App updates checks published GitHub releases from Settings and verifies a downloaded signed APK before Android asks to install it; there is no background update check or silent install.
 - The visible dashboard streams immediately. Widget Live uses a lightweight 30-second stats refresh and stops after one hour.
-- Android 13 and newer asks for notification permission the first time you start a widget session, so the Stop control has somewhere to live. The r2 candidate also requests Android 17 local-network permission when you choose home Wi-Fi access.
+- Android 13 and newer asks for notification permission the first time you start a widget session, so the Stop control has somewhere to live. Android 17 also requests local-network permission when you choose home Wi-Fi access.
 
 [Privacy and security](docs/SECURITY.md) · [Report a concern](SECURITY.md).
 
 ## Get connected
 
-You need Android 8.0 or newer and a desktop running Token Monitor with Hub hosting on. Android v0.66.0 r1 is fixture-verified against desktop v0.66.0. Its in-app upgrade from v0.65.0 preserved pairing and the placed Pages widget on a Galaxy S25 Ultra.
+You need Android 8.0 or newer and a desktop running Token Monitor with Hub hosting on. Android v0.66.0 r2 is verified against desktop v0.66.0. The earlier r1 in-app upgrade from v0.65.0 preserved pairing and the placed Pages widget on a Galaxy S25 Ultra; r2 phone checks remain pending.
 
-1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.66.0 r1 APK.
+1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.66.0 r2 APK.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
 3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
 4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
-5. At home, tap **Find** to fill in the desktop's Wi-Fi address, then save the connection with the Hub secret. In the r2 candidate, **Test and save home address** verifies and saves it using the stored secret.
+5. At home, tap **Find** to fill in the desktop's Wi-Fi address, then use **Test and save home address** to verify and save it with the stored pairing secret.
 
 Desktop v0.64's optional iCloud Drive sync does not replace the Hub connection for Android.
 
@@ -136,9 +136,8 @@ Desktop v0.64's optional iCloud Drive sync does not replace the Hub connection f
 
 | | |
 | --- | --- |
-| Current public release | [`v0.66.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.66.0-r1) |
+| Current public release | [`v0.66.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.66.0-r2) |
 | Latest phone-verified build | signed `v0.66.0-r1` over v0.65.0 r1; pairing, home Wi-Fi reconnection and placed Pages widget preserved |
-| Next candidate | `v0.66.0-r2`; reliability and presentation changes, not yet published or installed on the phone |
 | Remaining phone checks | r2 in-place upgrade, Tailscale/Wi-Fi transitions, screen-off expiry and battery behavior |
 | Desktop baseline | Token Monitor `v0.66.0` |
 | Upstream commit | [`e7bac3a`](https://github.com/Javis603/token-monitor/commit/e7bac3aff6a1bc7cf74fd149a26d2730cfe32de8) |

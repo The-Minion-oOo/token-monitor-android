@@ -8,8 +8,7 @@ Android-only releases keep `versionName` and increment the final three digits of
 
 | Build | Version name | Version code | Tag |
 | --- | --- | --- | --- |
-| Published | v0.66.0 | 660001 | `android-v0.66.0-r1` |
-| Working candidate | v0.66.0 | 660002 | `android-v0.66.0-r2` |
+| Published | v0.66.0 | 660002 | `android-v0.66.0-r2` |
 
 A newly verified desktop version updates the visible version and starts its
 Android revision at 1. `release.json` records the working build, last published
@@ -18,8 +17,8 @@ release, production package/certificate, and required CI jobs.
 and the installer's pinned identity. Keep README and protocol fixtures aligned
 with those records.
 
-Keep `published` at r1 while r2 is a local candidate or draft. After publication,
-record the actual released tag, version, and tagged source commit in `published`
+Keep `published` at the last public release while a new build is a candidate or
+draft. After publication, record the actual released tag, version, and tagged source commit in `published`
 and set `candidate.status` to `published` with the same build identity. This
 records the release without inventing the next Android revision. New app work
 sets the status back to `candidate` and uses a higher version code. A published

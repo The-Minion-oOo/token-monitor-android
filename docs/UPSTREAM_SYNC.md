@@ -2,7 +2,7 @@
 
 ## Version rule
 
-The current Android release displays `v0.66.0` because it is fixture-verified against desktop Token Monitor `v0.66.0`. The Gradle properties and `upstream.json` identify tag `v0.66.0` and peeled commit `e7bac3aff6a1bc7cf74fd149a26d2730cfe32de8`. The signed release is [`android-v0.66.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.66.0-r1). Its Galaxy S25 Ultra upgrade preserved pairing and the placed Pages widget. `release.json` keeps that published identity separate from the unpublished r2 candidate.
+The current Android release displays `v0.66.0` because it is fixture-verified against desktop Token Monitor `v0.66.0`. The Gradle properties and `upstream.json` identify tag `v0.66.0` and peeled commit `e7bac3aff6a1bc7cf74fd149a26d2730cfe32de8`. The signed release is [`android-v0.66.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.66.0-r2), recorded with its source commit in `release.json`. The earlier r1 Galaxy S25 Ultra upgrade preserved pairing and the placed Pages widget; r2 physical-device checks remain pending.
 
 An Android-only fix increments `versionCode` and the GitHub release revision,
 for example `android-vX.Y.Z-rN`, without changing the visible compatibility
