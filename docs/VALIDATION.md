@@ -65,7 +65,7 @@ type sizes and marketing captures are retained.
 This is an unpublished `660002` candidate on the existing package identity.
 GitHub checks must run on the exact release main commit. The phone has not
 received r2; its in-place upgrade, pairing/widget retention, Tailscale/Wi-Fi
-transitions, screen-off expiry and battery measurements remain release gates.
+transitions, screen-off expiry and battery measurements remain unverified.
 
 APK: `token-monitor-android-v0.66.0-r2.apk`, 2,434,741 bytes,
 package `io.github.theminionooo.tokenmonitor`, version code `660002`.

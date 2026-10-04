@@ -1,6 +1,6 @@
 # Token Monitor for Android v0.66.0 r2
 
-This candidate improves home Wi-Fi recovery, widget session limits and the
+This revision improves home Wi-Fi recovery, widget session limits and the
 accuracy of existing dashboard views. The desktop baseline stays v0.66.0.
 
 ## What changed
@@ -26,12 +26,13 @@ release certificate are retained.
 ## Compatibility and updating
 
 Android 8.0 or newer; verified desktop baseline v0.66.0. Package
-`io.github.theminionooo.tokenmonitor`, version code `660002`.
-This is an unpublished candidate. The public release remains v0.66.0 r1.
+`io.github.theminionooo.tokenmonitor`, version code `660002`, signed with the
+existing release certificate. Use **Settings → App updates** or install the
+APK over your current release. Do not uninstall first.
 
 Build, emulator, review and performance evidence is recorded in
 [Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md).
 The r1 phone update preserved pairing and the placed Pages widget; r2 has not
 been installed on that phone. Its in-place upgrade, Tailscale/Wi-Fi transitions,
-screen-off expiry and battery behavior remain physical-device release checks.
+screen-off expiry and battery behavior remain unverified on a physical device.
 See [installing and updating](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md).
