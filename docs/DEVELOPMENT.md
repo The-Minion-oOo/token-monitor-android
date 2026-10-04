@@ -48,7 +48,7 @@ pairing and preferences. Never use the preview flag for a release.
 
 ## Fixture Hub
 
-The local fixture serves sanitized v0.65.0 responses on port 17321 with the
+The local fixture serves sanitized v0.66.0 responses on port 17321 with the
 secret `fixture-secret`:
 
 ```powershell
@@ -86,11 +86,11 @@ in a fixture or screenshot.
 JVM tests cover protocol parsing, private-address rules, endpoint failover,
 stream recovery, ordered cache writes, history aggregation, presentation rules,
 and preferences. Versioned Hub fixtures live under
-`app/src/test/resources/protocol/`. The v0.65.0 set covers all five read
+`app/src/test/resources/protocol/`. The v0.66.0 set covers all five read
 endpoints, a complete stream frame, and a freshness-only frame. It exercises
-fx usage, session output/duration counters, cache-hit components, and an optional
-prompt-cache estimate, alongside normalized provider windows and archive flags.
-Earlier sets retain Muse, Grok, Cursor Auto and ZCode/OpenCode regressions.
+MiniMax Code usage, title-free sessions, reported pricing, session counters,
+cache components, optional prompt-cache estimates and normalized MiniMax windows.
+Earlier sets retain fx, Muse, Grok, Cursor Auto and ZCode/OpenCode regressions.
 
 Instrumentation tests use the preview package to exercise navigation, dialogs,
 widgets, storage, and lifecycle behavior. Run them on an API 36 emulator before
