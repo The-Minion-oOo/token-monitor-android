@@ -34,7 +34,9 @@ internal class HubApiException(
 ) : Exception(presentation)
 
 /** A deliberately small GET-only client for the Token Monitor Hub. */
-internal class HubApiClient : Closeable {
+internal class HubApiClient(
+    private val beforeRequest: (HubConnection) -> Unit = {},
+) : Closeable {
     private val requests = mutableSetOf<HttpURLConnection>()
     private var closed = false
 
@@ -138,6 +140,7 @@ internal class HubApiClient : Closeable {
         accept: String = "application/json",
         headers: Map<String, String> = emptyMap(),
     ): HttpURLConnection {
+        beforeRequest(connection)
         val http = (URL(connection.baseUrl + path).openConnection() as HttpURLConnection).apply {
             requestMethod = "GET"
             connectTimeout = 10_000
@@ -232,7 +235,8 @@ internal class HubApiClient : Closeable {
 
     private companion object {
         const val maxResponseBytes = 2 * 1024 * 1024
-        const val maxSseLineChars = 512 * 1024
-        const val maxSseEventChars = 512 * 1024
+        // A stats response accepted by GET must also fit inside the stream's JSON envelope.
+        const val maxSseEventChars = maxResponseBytes + 16 * 1024
+        const val maxSseLineChars = maxSseEventChars + 6
     }
 }

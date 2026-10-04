@@ -27,6 +27,7 @@ APK over your current release. Do not uninstall first.
 
 Build, emulator, review and APK-integrity evidence is recorded in
 [Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md).
-Physical-phone upgrade, pairing/widget retention, Tailscale/Wi-Fi transitions
-and battery behavior were not tested for this release.
+The October 4 Galaxy S25 Ultra in-app upgrade from v0.65.0 preserved pairing,
+home Wi-Fi reconnection and the placed Pages widget. Tailscale/Wi-Fi transitions
+and battery behavior remain unverified for this release.
 See [installing and updating](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md).

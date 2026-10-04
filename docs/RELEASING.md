@@ -6,26 +6,37 @@ The visible Android version matches the verified desktop Token Monitor version.
 Android-only releases keep `versionName` and increment the final three digits of
 `versionCode` and the GitHub tag revision.
 
-```text
-versionName: v0.66.0
-versionCode: 660001
-release tag: android-v0.66.0-r1
-```
+| Build | Version name | Version code | Tag |
+| --- | --- | --- | --- |
+| Published | v0.66.0 | 660001 | `android-v0.66.0-r1` |
+| Working candidate | v0.66.0 | 660002 | `android-v0.66.0-r2` |
 
 A newly verified desktop version updates the visible version and starts its
-Android revision at 1. Keep `gradle.properties`, `upstream.json`, README, and
-protocol fixtures aligned.
+Android revision at 1. `release.json` records the working build, last published
+release, production package/certificate, and required CI jobs.
+`tools/check-release.mjs` checks it against `gradle.properties`, `upstream.json`,
+and the installer's pinned identity. Keep README and protocol fixtures aligned
+with those records.
+
+Keep `published` at r1 while r2 is a local candidate or draft. After publication,
+record the actual released tag, version, and tagged source commit in `published`
+and set `candidate.status` to `published` with the same build identity. This
+records the release without inventing the next Android revision. New app work
+sets the status back to `candidate` and uses a higher version code. A published
+record cannot be prepared as another draft.
 
 ## Release checks
 
 Before publishing:
 
-- Bump version metadata and add concise notes under `docs/releases/`.
+- Update `release.json` and Gradle version metadata, then add concise notes under
+  `docs/releases/`. Keep the verified upstream pin unchanged for Android-only work.
 - Update README compatibility and widget marketing from production captures;
   do not replace the established hero for a widget-only release.
 - Run JVM tests, lint, debug assembly, and release assembly.
-- Wait for Android checks and Android interaction checks on the exact `main`
-  commit being released.
+- Wait for every required job in `release.json` on the exact `main` commit being
+  released: `build`, `interaction-api36`, `interaction-api37`, `optimized-api26`,
+  and `contract`.
 - Exercise affected dashboard and widget behavior on the emulator.
 - Install the signed candidate over the previous release on a phone and confirm
   pairing and preferences survive.
@@ -38,6 +49,10 @@ Before publishing:
 
 Record what was actually checked in [Validation](VALIDATION.md). Do not describe
 emulator results as phone coverage or design safeguards as measured battery life.
+The API 26 optimized check covers installation, launch, and resume; it is not the
+full interaction suite. The synthetic performance test measures cache hydration
+and processing, not a true cold start. See [Development](DEVELOPMENT.md) for the
+matrix, real-Hub contract harness, and measurement limits.
 
 ## Signing
 
@@ -54,25 +69,46 @@ The keystore and passwords stay outside the repository. Keep an encrypted backup
 of the keystore and record the certificate SHA-256 fingerprint separately; losing
 the key prevents future APKs from updating installed copies.
 
-Verify a local APK with Android build tools:
+After signing, inspect the APK and prepare its release assets:
 
 ```powershell
-$buildTools = Get-ChildItem "$env:LOCALAPPDATA\Android\Sdk\build-tools" | Sort-Object Name | Select-Object -Last 1
-& "$($buildTools.FullName)\apksigner.bat" verify --print-certs app\build\outputs\apk\release\app-release.apk
+node tools/check-release.mjs --apk app/build/outputs/apk/release/app-release.apk --prepare build/release
 ```
+
+Set `ANDROID_SDK_ROOT` or `ANDROID_HOME` to the installed SDK. The tool uses its
+build tools to verify the signature and read the APK manifest. It requires the
+production package, expected version, and existing signing certificate before
+writing the APK, checksum, and `token-monitor-android-update.json` together.
+It then reads the assets back and checks their size/hash agreement. Recheck a
+downloaded release bundle with `--apk <path-to-named-apk>` without `--prepare`.
 
 ## Publishing
 
-The manually triggered **Android release** workflow runs JVM tests and lint,
-builds and verifies the signed APK, creates its SHA-256 file and the
-`token-monitor-android-update.json` asset, then opens a draft
-GitHub release. It reads the release body from
-`docs/releases/android-v<version>-r<revision>.md` and refuses to overwrite an
-existing tag. The workflow requires the four signing secrets to be configured
-in the public repository; do not copy a private keystore into the repository.
-If the workflow is unavailable, sign locally with the same release key and
-create a draft with the APK, checksum, and matching update manifest. Check the
-uploaded asset hashes before publication.
+The manually triggered **Android release** workflow runs only from `main`.
+Before restoring signing material, `tools/release-preflight.mjs` confirms that
+the release SHA is still current `main`, the latest published tag matches
+`release.json`, and every required workflow/job passed on that exact main push.
+Missing, skipped, failed, or incomplete jobs block preparation. An older green
+run does not replace a newer failed attempt.
+
+The workflow runs JVM tests and lint, builds the signed APK, and prepares the
+verified three-asset bundle. It repeats the main/SHA checks before opening a
+draft GitHub release with notes from
+`docs/releases/android-v<version>-r<revision>.md`. It does not publish the draft
+or overwrite an existing tag. Signing material is removed when the job ends.
+The four signing secrets must be configured in the repository; the keystore
+itself stays outside Git.
+
+For a local release, use the same signing key and asset preparation command.
+With a GitHub token available in `GH_TOKEN`, run the same read-only preflight
+against the reviewed main commit before creating the draft:
+
+```powershell
+node tools/release-preflight.mjs (git rev-parse HEAD)
+```
+
+The published APK, checksum, and update manifest must be the verified files.
+Download the uploaded assets again and check the bundle before publication.
 
 Check that the manifest's version code, APK name, size, and hash match the
 uploaded APK. Review the draft, install its exact APK on the phone, then publish

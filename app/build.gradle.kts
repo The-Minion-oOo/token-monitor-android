@@ -98,6 +98,17 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    // Android 17 removed InputManager.getInstance; Espresso 3.7 uses getSystemService.
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     androidTestImplementation("androidx.test:runner:1.7.0")
+}
+
+tasks.withType<Test>().configureEach {
+    val contractDirectory = providers.environmentVariable("TOKEN_MONITOR_CONTRACT_DIR")
+    inputs.property("releasedHubContract", contractDirectory.orElse(""))
+    if (contractDirectory.isPresent) {
+        environment("TOKEN_MONITOR_CONTRACT_DIR", contractDirectory.get())
+        inputs.dir(contractDirectory.get())
+    }
 }

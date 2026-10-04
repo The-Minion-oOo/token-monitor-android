@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "repository": "The-Minion-oOo/token-monitor-android",
+  "packageName": "io.github.theminionooo.tokenmonitor",
+  "signingCertificateSha256": "eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c",
+  "candidate": {
+    "status": "candidate",
+    "tag": "android-v0.66.0-r2",
+    "versionName": "v0.66.0",
+    "versionCode": 660002
+  },
+  "published": {
+    "tag": "android-v0.66.0-r1",
+    "versionName": "v0.66.0",
+    "versionCode": 660001,
+    "sourceCommit": "839426ce6046a39f1542e3ebb885fe59bb9814dd"
+  },
+  "requiredChecks": [
+    { "workflow": "android.yml", "jobs": ["build"] },
+    { "workflow": "emulator.yml", "jobs": ["interaction-api36", "interaction-api37", "optimized-api26"] },
+    { "workflow": "hub-contract.yml", "jobs": ["contract"] }
+  ]
+}

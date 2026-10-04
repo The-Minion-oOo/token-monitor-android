@@ -23,6 +23,9 @@ request cannot move the bearer secret to another host.
 - The Hub URL and secret are encrypted with a non-exportable Android Keystore key.
 - The app-private snapshot cache stores compressed Hub JSON responses, including usage and account/device/project metadata returned by the Hub. It is not separately encrypted by the app; Android app isolation protects access. Pairing credentials use the separate Keystore-backed store.
 - Android backup/data-transfer rules exclude pairing and snapshot storage.
+- A secret typed into the connection form is held only in memory, not saved in
+  Activity instance state. Home-address repair reads the existing encrypted
+  pairing and does not expose its secret back to the form.
 
 ## Read-only API use
 
@@ -66,6 +69,10 @@ kill. There is no wake lock, scheduled worker, boot receiver, analytics SDK, or
 advertising SDK.
 
 `ACCESS_NETWORK_STATE` lets an active dashboard or widget session reconnect after a route changes.
+On Android 17 and newer, `ACCESS_LOCAL_NETWORK` is requested for a chosen LAN
+operation. Denial or revocation excludes home routes without erasing pairing;
+Tailscale routes remain eligible. Discovery sends no secret. Saving a replacement
+home address requires a successful authenticated check of that address.
 The home-screen widget reads saved data while Live is off and receives current snapshots during an explicit session. It
 shows saved totals, estimated cost, quota windows, and a small usage chart according
 to its size. Adding it makes those figures visible on the launcher; account emails,
@@ -74,6 +81,9 @@ project labels, session identifiers, and connection credentials are omitted.
 ## Data visible on the phone
 
 Hub responses can include device names, model/tool attribution, project folder labels, session identifiers and titles, account email/plan metadata, costs, and normalized limits. Conversation titles can reveal sensitive text and appear in Home and Sessions when the Hub provides them; they are not displayed on the home-screen widgets. Account emails are hidden by default and can be shown only through an explicit display setting. The Hub does not send absolute project paths or prompt/response transcript bodies.
+
+When **Show session titles** is off, search also excludes title text. The cached
+Hub response may still contain titles; hiding them does not delete stored data.
 
 ## Reporting a problem
 

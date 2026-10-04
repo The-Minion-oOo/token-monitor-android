@@ -21,6 +21,10 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
       - name: Check documentation links
         run: node tools/check-docs.mjs
+      - name: Check release metadata and tooling regressions
+        run: |
+          node tools/check-release.mjs
+          node --test tools/tests/*.test.mjs
       - name: Test, lint, and build
         run: ./gradlew :app:testDebugUnitTest lint :app:assembleDebug --no-daemon --console=plain
       - uses: actions/upload-artifact@v7

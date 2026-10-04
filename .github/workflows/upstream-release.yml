@@ -14,31 +14,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      - name: Require the reviewed main branch
+        run: test "${{ github.ref }}" = "refs/heads/main"
       - id: upstream
         name: Compare verified and latest releases
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: ./tools/check-upstream.ps1
-      - name: Open compatibility review issue
-        if: steps.upstream.outputs.update_available == 'true'
+      - name: Reconcile compatibility review issues
         uses: actions/github-script@v9
         with:
           script: |
-            const title = `Review Token Monitor ${process.env.LATEST_TAG}`;
+            const { pathToFileURL } = require('node:url');
+            const { planIssueSync } = await import(pathToFileURL(`${process.env.GITHUB_WORKSPACE}/tools/upstream-issues.mjs`));
             const issues = await github.paginate(github.rest.issues.listForRepo, {
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: 'all',
               per_page: 100
             });
-            if (!issues.some(issue => issue.title === title)) {
-              await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title,
-                body: `The verified desktop baseline is ${process.env.CURRENT_TAG}. Review ${process.env.RELEASE_URL} and follow docs/UPSTREAM_SYNC.md before changing compatibility metadata.`
-              });
+            const actions = planIssueSync({ issues, currentTag: process.env.CURRENT_TAG,
+              latestTag: process.env.LATEST_TAG, releaseUrl: process.env.RELEASE_URL });
+            for (const action of actions) {
+              if (action.type === 'close') {
+                await github.rest.issues.update({ ...context.repo, issue_number: action.number,
+                  state: 'closed', state_reason: action.state_reason });
+              } else {
+                await github.rest.issues.create({ ...context.repo, title: action.title, body: action.body });
+              }
             }
         env:
           CURRENT_TAG: ${{ steps.upstream.outputs.current_tag }}

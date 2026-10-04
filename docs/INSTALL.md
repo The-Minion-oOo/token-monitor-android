@@ -3,7 +3,7 @@
 ## Requirements
 
 - Android 8.0 or newer.
-- Token Monitor desktop with Hub hosting enabled and a shared secret. Android v0.66.0 r1 is fixture-verified through desktop v0.66.0; its physical-phone upgrade is not yet verified.
+- Token Monitor desktop with Hub hosting enabled and a shared secret. Android v0.66.0 r1 is fixture-verified through desktop v0.66.0.
 - A private route to the desktop: Tailscale is recommended; home Wi-Fi is optional.
 
 ## Install
@@ -12,8 +12,9 @@ Download the signed v0.66.0 r1 APK from the public
 [release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.66.0-r1),
 or use **Settings → App updates** in v0.62.0 r1 or newer. It uses the same package
 and release certificate as earlier releases, with a higher version code. A
-physical-phone in-place upgrade to v0.66.0 r1 has not yet been verified; see
-[Validation](VALIDATION.md). The older v0.61.0 r1 app has no in-app updater,
+Galaxy S25 Ultra in-app upgrade from v0.65.0 to v0.66.0 r1 preserved pairing and
+the placed Pages widget; see [Validation](VALIDATION.md). The r2 source remains
+an unpublished candidate. The older v0.61.0 r1 app has no in-app updater,
 so install a newer release manually once.
 
 To build the current source, install JDK 17 and Android SDK 37, then run:

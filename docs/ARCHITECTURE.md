@@ -86,12 +86,22 @@ ordered list; foreground updates use the active address and alternate on each re
 The active address is surfaced to the UI so the header and Hub status can say
 when the home route is in use.
 
+On API 37 and newer, `LocalNetworkAccess` excludes LAN routes unless Android's
+local-network permission is granted. Tailscale remains eligible independently.
+The UI requests permission only after a LAN action and resumes that action after
+the Activity is resumed. Each HTTP request rechecks permission and run ownership.
+Home-address repair verifies only the proposed address with the stored secret,
+then saves that fallback while preserving the rest of the pairing.
+
 ### Finding a Hub on Wi-Fi
 
 `HubDiscovery` enumerates the phone's private IPv4 addresses, derives up to two
 `/24` prefixes, and probes each host's `/api/health` with a short timeout and
 bounded parallelism. It runs only on a tap of Find, touches only
 private ranges, and never sends the secret.
+
+A discovery result fills the form but does not change stored pairing. The
+explicit test-and-save action is the boundary between discovery and persistence.
 
 ## Storage
 
@@ -207,6 +217,10 @@ the widget lease; changing pairing or disconnecting first cancels the session.
 
 The service is START_NOT_STICKY, has a one-hour monotonic expiry, handles Android's
 dataSync timeout callback, and does not request a wake lock or battery exemption.
+Its absolute `elapsedRealtime` deadline includes deep sleep. Timed checks and a
+screen-on callback stop expired sessions; every widget-owned request also checks
+the deadline before opening a socket. Refresh does not extend an existing Live
+deadline. An open dashboard can continue its independent foreground connection.
 Refresh uses the same service for one snapshot with a 45-second timeout. First use
 requests notification permission so Stop remains available outside the launcher.
 Android sleep and connectivity can delay data; the widget always includes its last

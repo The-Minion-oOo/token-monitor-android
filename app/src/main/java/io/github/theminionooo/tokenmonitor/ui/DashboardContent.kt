@@ -121,6 +121,7 @@ internal fun DashboardContent(
     onOpenToolModels: (String) -> Unit = {},
 ) {
     val snapshot = state.snapshot
+    val showSessionTitles = LocalSessionTitles.current
     if (snapshot == null) {
         EmptyDashboard(modifier, state.message, { onChoose(DashboardDestination.Settings) })
         return
@@ -174,7 +175,9 @@ internal fun DashboardContent(
         if (state.message != null && !state.streamActive) item { StatusMessage(state.message, state.snapshot.stale) }
         if (destination != DashboardDestination.Home && homeReturnVisible && modelFilter == null) item { BackToHomeRow { onChoose(DashboardDestination.Home) } }
         if (destination == DashboardDestination.Sessions || destination == DashboardDestination.Projects) {
-            item { CompactSearchField(search, { search = it }, "Search tool, model, or project") }
+            item { CompactSearchField(search, { search = it }, if (destination == DashboardDestination.Sessions) {
+                if (showSessionTitles) "Search title, ID, tool, model, or project" else "Search ID, tool, model, or project"
+            } else "Search project, ID, or tool") }
         }
         when (destination) {
             DashboardDestination.Home -> homeItems(snapshot, usage, period, displayOptions, homeActivity.first, homeActivity.second, onChoose)
@@ -200,8 +203,8 @@ internal fun DashboardContent(
                 rankingMetric = displayOptions.rankingMetric,
                 modelRows = true,
             )
-            DashboardDestination.Projects -> projectItems(usage.projects.filter { search.isBlank() || (it.label + " " + it.clients.keys.joinToString(" ")).contains(search, true) }, period)
-            DashboardDestination.Sessions -> sessionItems(usage.sessions.filter { search.isBlank() || (it.projectLabel + " " + it.client + " " + it.modelNames.joinToString(" ")).contains(search, true) }, period)
+            DashboardDestination.Projects -> projectItems(usage.projects.filter { it.matchesSearch(search) }, period, search.isNotBlank())
+            DashboardDestination.Sessions -> sessionItems(usage.sessions.filter { it.matchesSearch(search, showSessionTitles) }, period, search.isNotBlank())
             DashboardDestination.Limits -> limitItems(snapshot, displayOptions)
             DashboardDestination.Trends -> trendItems(snapshot)
             DashboardDestination.Settings -> Unit

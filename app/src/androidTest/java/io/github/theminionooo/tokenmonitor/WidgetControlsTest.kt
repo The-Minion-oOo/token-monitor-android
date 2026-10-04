@@ -23,6 +23,7 @@ import java.net.ServerSocket
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.concurrent.thread
+import kotlin.math.roundToInt
 
 class WidgetControlsTest {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
@@ -110,8 +111,8 @@ class WidgetControlsTest {
         assertEquals(2, info.targetCellWidth)
         assertEquals(2, info.targetCellHeight)
         val density = context.resources.displayMetrics.density
-        assertEquals((110 * density).toInt(), info.minResizeWidth)
-        assertEquals((110 * density).toInt(), info.minResizeHeight)
+        assertEquals((110 * density).roundToInt(), info.minResizeWidth)
+        assertEquals((110 * density).roundToInt(), info.minResizeHeight)
         assertEquals(R.layout.usage_widget_compact, info.initialLayout)
         assertEquals(R.layout.usage_widget_preview, info.previewLayout)
         instrumentation.runOnMainSync {
@@ -129,6 +130,7 @@ class WidgetControlsTest {
 
     @Test fun livePollsWithoutDashboardSwitchesToOneStreamThenStops() {
         check(context.packageName.endsWith(".preview"))
+        grantFixtureNetworkAccess()
         val address = NetworkInterface.getNetworkInterfaces().toList().flatMap { it.inetAddresses.toList() }
             .filterIsInstance<Inet4Address>().first { it.isSiteLocalAddress }.hostAddress
         val streams = AtomicInteger()

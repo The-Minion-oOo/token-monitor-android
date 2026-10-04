@@ -22,13 +22,31 @@ Tailscale may stay enabled at home. When both devices are on the same network it
 
 Settings has an optional **Home Wi-Fi URL** beside the Hub URL. Enter the desktop's private `10.x`, `172.16–31.x`, `192.168.x`, or `.local` address there and the phone switches on its own: it tries the address that answered last, and if that one is silent it tries the other. Arriving home with Tailscale off, or leaving on mobile data, needs no manual change. While the stream is up, the header names the route that answered: `Tailscale`, `Home Wi-Fi`, or `Private network`. Settings → Hub status shows the same label.
 
-The main **Hub URL** must be a Tailscale address unless **Allow a private Wi-Fi Hub** is enabled, which lets an isolated home network use a private address as the only Hub. Tailscale remains preferred because it supplies an encrypted identity-aware path both at home and away.
+The main **Hub URL** must be a Tailscale address unless **Use Wi-Fi as the main Hub address** is enabled, which lets an isolated home network use a private address as the only Hub. The optional fallback is a separate choice. Tailscale remains preferred because it supplies an encrypted identity-aware path both at home and away.
+
+### Updating a home address
+
+If the desktop's home address changes, open Settings, use **Find** or enter the
+new **Home Wi-Fi URL**, then choose **Test and save home address**. The app checks
+that address with the stored pairing secret before saving it. Your main address
+and other connection settings are preserved; unrelated form edits are not saved.
+A failed check keeps the previous pairing. Replacing the secret or main address
+still uses **Connect** with the current Hub secret.
+
+### Android 17 local-network access
+
+Android 17 asks for local-network permission when you choose a home Wi-Fi
+connection or **Find**. Denial leaves the saved pairing intact; a configured
+Tailscale route remains available. Use **Allow home Wi-Fi access** to retry, or
+the Android app-settings link if the system no longer shows a prompt. Returning
+to the app rechecks permission, including changes made in Android Settings.
+Revoking access excludes home routes until permission is restored.
 
 Public IP addresses and ordinary public hostnames are rejected for both fields. Do not port-forward the Hub.
 
 ## No QR code in the current desktop release
 
-Token Monitor v0.61.0 lists Hub URLs and the secret but does not generate a pairing QR code. Manual copy is therefore the supported first pairing flow. A future QR flow should be added only when both apps can keep the payload local and clearly warn that the code contains the Hub secret.
+Token Monitor v0.66.0 lists Hub URLs and the secret but does not generate a pairing QR code. Manual copy is therefore the supported first pairing flow. A future QR flow should be added only when both apps can keep the payload local and clearly warn that the code contains the Hub secret.
 
 ## Troubleshooting
 

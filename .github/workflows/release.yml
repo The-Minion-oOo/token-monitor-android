@@ -5,6 +5,7 @@ on:
 
 permissions:
   contents: write
+  actions: read
 
 concurrency:
   group: android-release
@@ -13,10 +14,15 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
       - name: Require the reviewed main branch
         run: test "${{ github.ref }}" = "refs/heads/main"
+      - name: Require passing checks on this exact main commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node tools/release-preflight.mjs
       - uses: actions/setup-java@v6
         with:
           distribution: temurin
@@ -35,47 +41,25 @@ jobs:
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: ./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleRelease --no-daemon --console=plain
-      - name: Prepare release files
+      - name: Verify production identity and prepare matching release assets
         id: metadata
-        shell: pwsh
-        run: |
-          $properties = Get-Content gradle.properties | ConvertFrom-StringData
-          $version = $properties.tokenMonitorVersionName.TrimStart('v')
-          $revision = [int]$properties.tokenMonitorVersionCode % 1000
-          $tag = "android-v$version-r$revision"
-          $apk = "token-monitor-android-v$version-r$revision.apk"
-          Copy-Item app/build/outputs/apk/release/app-release.apk $apk
-          $hash = (Get-FileHash $apk -Algorithm SHA256).Hash.ToLowerInvariant()
-          "$hash  $apk" | Set-Content -NoNewline "$apk.sha256"
-          [ordered]@{
-            schemaVersion = 1
-            packageName = 'io.github.theminionooo.tokenmonitor'
-            tag = $tag
-            versionName = $properties.tokenMonitorVersionName
-            versionCode = [int]$properties.tokenMonitorVersionCode
-            apk = $apk
-            sizeBytes = (Get-Item $apk).Length
-            sha256 = $hash
-          } | ConvertTo-Json -Compress | Set-Content -NoNewline 'token-monitor-android-update.json'
-          $notes = "docs/releases/$tag.md"
-          if (!(Test-Path $notes)) { throw "Missing curated release notes: $notes" }
-          "notes=$notes" >> $env:GITHUB_OUTPUT
-          "tag=$tag" >> $env:GITHUB_OUTPUT
-          "apk=$apk" >> $env:GITHUB_OUTPUT
-          "title=Android v$version r$revision" >> $env:GITHUB_OUTPUT
-      - name: Verify APK signature
-        run: >-
-          "$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/apksigner"
-          verify --verbose "${{ steps.metadata.outputs.apk }}"
+        run: node tools/check-release.mjs --apk app/build/outputs/apk/release/app-release.apk --prepare build/release
+      - name: Recheck main and its checks before creating the draft
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node tools/release-preflight.mjs
       - name: Create draft GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.metadata.outputs.tag }}
+          RELEASE_APK: ${{ steps.metadata.outputs.apk }}
+          RELEASE_MANIFEST: ${{ steps.metadata.outputs.manifest }}
+          RELEASE_TITLE: ${{ steps.metadata.outputs.title }}
+          RELEASE_NOTES: ${{ steps.metadata.outputs.notes }}
         run: >-
-          gh release create "${{ steps.metadata.outputs.tag }}"
-          "${{ steps.metadata.outputs.apk }}"
-          "${{ steps.metadata.outputs.apk }}.sha256"
-          token-monitor-android-update.json
-          --target "${{ github.sha }}"
-          --title "${{ steps.metadata.outputs.title }}"
-          --notes-file "${{ steps.metadata.outputs.notes }}"
-          --draft
+          gh release create "$RELEASE_TAG" "$RELEASE_APK" "$RELEASE_APK.sha256"
+          "$RELEASE_MANIFEST" --target "$GITHUB_SHA" --title "$RELEASE_TITLE"
+          --notes-file "$RELEASE_NOTES" --draft
+      - name: Remove temporary signing material
+        if: always()
+        run: rm -f "$RUNNER_TEMP/token-monitor-release.jks"

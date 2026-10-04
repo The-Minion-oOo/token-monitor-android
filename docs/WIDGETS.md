@@ -88,8 +88,10 @@ the saved timestamp. Figures come from the snapshot date, which may be older tha
 today when the phone has been offline; Live does not invent intermediate readings,
 and the count rolls only when the total actually changes.
 
-While a session runs, its notification carries the figure, today's cost, and the
-tightest window per provider with its reset, updated only when that visible content changes. On
+While a session runs, its notification carries the figure, cost, and the
+tightest window per provider with its reset. It labels reconnecting sessions and
+shows the age of saved data, avoiding a Today label for an older snapshot. It is
+updated only when visible content changes. On
 Android 16 it is a promoted ongoing notification, which is what One UI shows under
 "Live notifications" and on the lock screen, with a status bar chip carrying the
 compact figure. Tap it to open the app; Stop ends the session.
@@ -102,6 +104,16 @@ once, so the Stop control has somewhere to live. Declining leaves the dashboard 
 saved widgets working. A killed process, the hour expiring, or removing the last
 widget ends the session. There is no automatic restart, wake lock, page rotation, or updating
 outside the explicit foreground session.
+
+The hour includes time spent asleep. Waking the phone after expiry does not
+extend the session, and Refresh does not restart its clock. The repository checks
+the deadline before each widget-owned request. On Android 17, a home-only pairing
+also needs local-network permission; a configured Tailscale route can work
+without that optional home-route permission.
+
+Screen-reader summaries describe the selected Pages page, including its totals,
+quota windows, breakdown or activity. They omit account emails, project/session
+identities and connection details.
 
 ## Troubleshooting
 
