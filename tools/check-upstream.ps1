@@ -7,7 +7,10 @@ $metadata = Get-Content -Raw -LiteralPath $metadataPath | ConvertFrom-Json
 $headers = @{ 'User-Agent' = 'token-monitor-android-upstream-check' }
 if ($env:GH_TOKEN) { $headers.Authorization = "Bearer $env:GH_TOKEN" }
 $latest = Invoke-RestMethod -Headers $headers -Uri "https://api.github.com/repos/$($metadata.repository)/releases/latest"
-$available = [string]$latest.tag_name -ne [string]$metadata.tag
+if ([string]$latest.tag_name -notmatch '^v\d+\.\d+\.\d+$' -or [string]$metadata.tag -notmatch '^v\d+\.\d+\.\d+$') {
+    throw 'Only stable semantic release tags can be compared automatically.'
+}
+$available = [version]([string]$latest.tag_name).TrimStart('v') -gt [version]([string]$metadata.tag).TrimStart('v')
 
 Write-Output "Verified baseline: $($metadata.tag)"
 Write-Output "Latest upstream:  $($latest.tag_name)"

@@ -1,5 +1,95 @@
 # Validation
 
+## v0.66.0 r2 candidate — 2026-10-04
+
+The desktop baseline remains released v0.66.0 at
+`e7bac3aff6a1bc7cf74fd149a26d2730cfe32de8`. The contract harness executed that
+commit's Hub with isolated synthetic data, verified authentication and all five
+read endpoints, then captured complete, freshness-only and changed stats events.
+Android's parser consumed those actual responses. No private Hub data was used.
+
+All 145 JVM tests passed, including the generated Hub contract. Android lint,
+preview debug assembly and instrumentation assembly passed. The full API 36
+Pixel 10 Pro XL suite passed all 43 tests again after the runtime changes. The
+five performance/widget checks and the native Trends capture also passed.
+All 21 targeted API 37 tests passed. That run exposed an old Espresso dependency
+using a removed input API and a test truncating fractional display density;
+Espresso 3.7.0 and Android's rounded pixel expectation resolved those test issues.
+Eleven Node tests cover release identity, exact-commit checks and upstream issue
+reconciliation. Documentation links and Git whitespace checks passed.
+
+Manual API 37 checks exercised the local-network prompt, denial feedback, grant
+during initial pairing, permission revocation, retained cached data/pairing and
+restoration from Settings. The granted pairing reached the synthetic Hub without
+a second Connect tap. Restoring access cleared the denial banner. These are
+emulator observations; they do not establish Tailscale or One UI behavior.
+
+Native bar and K-line captures were inspected with the synthetic showcase data.
+The selected controls, calendar gaps, observation count, date range and chart
+explanation rendered correctly. Captures remain local; the published gallery was
+not replaced. The signed R8 APK also installed, launched and resumed on the
+oldest supported API 26 emulator without an app crash. That is a launch smoke
+check, not full API 26 interaction or background coverage.
+
+### Synthetic performance baseline
+
+The same API 36 emulator and debug build measured five samples per case. Each
+generated snapshot has 365 history days, 12 months and increasing session counts.
+The live-update path now decodes stats once and retains the most recent device
+history instead of decoding the same complete stats a second time.
+
+| Stats bytes | Month sessions | Freshness median before | Freshness median after | Warm cache hydration median after |
+| --- | --- | --- | --- | --- |
+| 522,519 | 804 | 152.5 ms | 120.7 ms | 130.4 ms |
+| 1,047,618 | 1,751 | 243.6 ms | 176.7 ms | 136.4 ms |
+| 2,029,902 | 3,522 | 390.3 ms | 264.9 ms | 169.9 ms |
+
+These are local observations, not timing guarantees. First hydration followed a
+synthetic cache write and is not a process or filesystem cold-start measurement.
+Widget timings cover off-screen bitmap drawing, excluding launcher/GPU work.
+The test records aggregate JSON only. Phone memory, network and battery behavior
+remain separate measurements; startup hydration has not been redesigned here.
+
+### Review and release status
+
+Independent read-only reviews covered connection/permission flows, deadline
+enforcement, UI semantics, privacy-aware search, chart accounting and release
+tooling. Fixed findings include permission callbacks arriving before resume,
+optional home-route permission blocking Tailscale widget use, stale denial
+feedback and a notification date crossing midnight. Actual APK inspection also
+caught a metadata-field suffix being mistaken for the package name; the parser
+now matches complete fields and has a regression using real `aapt` output.
+Final review found no material issues. Fixed widget geometry,
+type sizes and marketing captures are retained.
+
+The first hosted API 37 job timed out before the emulator booted or tests ran.
+The pinned emulator action retained the runner's old command-line tools. CI now
+installs revision 23, matching the successful local environment, and checks the
+generated AVD target before launch.
+
+This is an unpublished `660002` candidate on the existing package identity.
+GitHub checks must run on the exact release main commit. The phone has not
+received r2; its in-place upgrade, pairing/widget retention, Tailscale/Wi-Fi
+transitions, screen-off expiry and battery measurements remain unverified.
+
+APK: `token-monitor-android-v0.66.0-r2.apk`, 2,434,741 bytes,
+package `io.github.theminionooo.tokenmonitor`, version code `660002`.
+File SHA-256:
+`4fd49f95a78eba6d9dfac96ab1ecab42cbe60ca24cff1877dea941cf299fe3bd`.
+Certificate SHA-256:
+`eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
+The prepared APK, checksum and update manifest passed the new bundle validator.
+
+### Published r1 phone update
+
+On October 4, the Galaxy S25 Ultra (SM-S938U, Android 16/API 36) updated from
+v0.65.0 (`650001`) to published v0.66.0 r1 (`660001`) through **App updates** and
+Android's user-confirmed installer. The saved pairing remained, the dashboard
+reconnected over home Wi-Fi, and the placed Pages widget remained and refreshed.
+Private captures were inspected locally. No Token Monitor service remained
+running after the check. This establishes r1 upgrade behavior only, not r2 or
+route-transition, screen-off or battery results.
+
 ## v0.66.0 r1 release — 2026-10-04
 
 Desktop v0.66.0 is pinned to released tag commit
@@ -36,7 +126,8 @@ File SHA-256:
 Certificate SHA-256:
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
 The APK, checksum and matching update manifest use the existing upgrade identity.
-Physical-phone upgrade, pairing/widget retention, Tailscale/Wi-Fi transitions
+The subsequent r1 phone check above verified the in-place update, retained
+pairing and Pages widget, and home Wi-Fi reconnection. Tailscale/Wi-Fi transitions
 and battery behavior remain unverified for this release.
 
 ## v0.65.0 r1 release — 2026-10-02

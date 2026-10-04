@@ -3,6 +3,26 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
+## Next release — v0.66.0 r2
+
+- Request Android 17 local-network access when connecting or searching over
+  home Wi-Fi, with recovery after denial and Tailscale available independently.
+- Test and save a changed home address using the stored pairing secret. A
+  discovered address is not saved until that check succeeds.
+- Enforce the widget Live deadline across device sleep and between requests;
+  show reconnecting and saved-data age in its notification.
+- Preserve unattributed usage and missing calendar days in Trends. Search
+  visible session titles, identifiers and tool names, with clearer empty states.
+- Add selected-control and chart semantics, page-specific widget summaries,
+  and consistent quota urgency across Home and Limits.
+- Avoid decoding the complete stats response twice on live updates while
+  retaining previously received device history.
+- Add a contract check against pinned released Hub source, synthetic performance
+  baselines, Android 17 coverage, and exact-commit release checks.
+
+The desktop baseline stays v0.66.0. Widget geometry and the existing release
+signing identity are retained. This candidate has not been published.
+
 ## v0.66.0 r1 — 2026-10-04
 
 - Follow desktop v0.66.0 with synthetic fixtures for every Hub read endpoint,

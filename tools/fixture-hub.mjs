@@ -6,12 +6,14 @@ import { createShowcaseResponses } from "./showcase-data.mjs";
 
 const protocolRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "app", "src", "test", "resources", "protocol");
 const fixture = async (version, name) => readFile(join(protocolRoot, version, name), "utf8");
+const upstream = JSON.parse(await readFile(new URL("../upstream.json", import.meta.url), "utf8"));
+if (!/^v\d+\.\d+\.\d+$/.test(upstream.tag)) throw new Error("Invalid upstream fixture version");
 let responses = {
-    "/api/health": await fixture("v0.66.0", "health.json"),
-    "/api/stats": await fixture("v0.66.0", "stats.json"),
-    "/api/devices": await fixture("v0.66.0", "devices.json"),
-    "/api/history": await fixture("v0.66.0", "history.json"),
-    "/api/subscriptions": await fixture("v0.66.0", "subscriptions.json"),
+    "/api/health": await fixture(upstream.tag, "health.json"),
+    "/api/stats": await fixture(upstream.tag, "stats.json"),
+    "/api/devices": await fixture(upstream.tag, "devices.json"),
+    "/api/history": await fixture(upstream.tag, "history.json"),
+    "/api/subscriptions": await fixture(upstream.tag, "subscriptions.json"),
 };
 
 const showcaseMode = process.env.TOKEN_MONITOR_SHOWCASE === "1";

@@ -100,14 +100,25 @@ internal fun ConnectionScreen(
     discovery: HubDiscoveryState,
     onFindHomeHub: () -> Unit,
     onShowSessionTitlesChange: (Boolean) -> Unit = {},
+    onRepairHomeAddress: (String) -> Unit = {},
+    onAllowLocalNetwork: () -> Unit = {},
 ) {
     val hasConnection = state.hasConnection
     var hubUrl by rememberSaveable(state.connectionUrl) { mutableStateOf(state.connectionUrl.orEmpty()) }
     var fallbackUrl by rememberSaveable(state.fallbackUrl) { mutableStateOf(state.fallbackUrl.orEmpty()) }
-    var secret by rememberSaveable { mutableStateOf("") }
+    var secret by remember { mutableStateOf("") }
     var allowLocalNetwork by rememberSaveable(state.allowLocalNetwork) { mutableStateOf(state.allowLocalNetwork) }
     LaunchedEffect(discovery.found) { discovery.found?.let { fallbackUrl = it } }
     val fields: @Composable ColumnScope.(String) -> Unit = { saveLabel ->
+        if (state.localNetworkPermissionRequired || form.result == io.github.theminionooo.tokenmonitor.data.network.LocalNetworkAccess.deniedMessage) {
+            Text("Android needs your permission to reach the home Wi-Fi Hub. Tailscale can still be used when available.", color = Muted, style = MaterialTheme.typography.bodySmall)
+            OutlinedButton(onClick = onAllowLocalNetwork, modifier = Modifier.fillMaxWidth()) { Text("ALLOW HOME WI-FI ACCESS") }
+            val permissionContext = androidx.compose.ui.platform.LocalContext.current
+            TextButton(onClick = {
+                permissionContext.startActivity(android.content.Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    android.net.Uri.parse("package:${permissionContext.packageName}")))
+            }) { Text("Open Android permissions") }
+        }
         ConnectionFields(
             hubUrl = hubUrl,
             onHubUrlChange = { hubUrl = it },
@@ -123,6 +134,8 @@ internal fun ConnectionScreen(
             onSave = { onSaveConnection(hubUrl, fallbackUrl, secret, allowLocalNetwork) },
             discovery = discovery,
             onFindHomeHub = onFindHomeHub,
+            canRepairHomeAddress = hasConnection && fallbackUrl.isNotBlank() && fallbackUrl != state.fallbackUrl,
+            onRepairHomeAddress = { onRepairHomeAddress(fallbackUrl) },
         )
     }
     if (!hasConnection) {
@@ -141,7 +154,7 @@ internal fun ConnectionScreen(
             }
             SettingsGroup("Connection", summary = listOfNotNull(route, "home fallback".takeIf { state.fallbackUrl != null && route != "Home Wi-Fi" }).joinToString(" · ")) {
                 Text("This phone only reads your private desktop Hub. It cannot control the desktop or access its files.", color = Muted, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
-                Text("The saved Hub is shown below. Enter the secret again only to change the connection.", color = Accent, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
+                Text("Repair the home address with the saved pairing, or enter the secret again to replace the connection.", color = Accent, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
                 fields("CHECK AND SAVE CONNECTION")
                 OutlinedButton(onClick = onDisconnect, modifier = Modifier.fillMaxWidth()) { Text("DISCONNECT THIS PHONE") }
             }
@@ -312,6 +325,8 @@ private fun ColumnScope.ConnectionFields(
     onSave: () -> Unit,
     discovery: HubDiscoveryState,
     onFindHomeHub: () -> Unit,
+    canRepairHomeAddress: Boolean,
+    onRepairHomeAddress: () -> Unit,
 ) {
     OutlinedTextField(
         value = hubUrl,
@@ -341,10 +356,16 @@ private fun ColumnScope.ConnectionFields(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
     )
     OutlinedTextField(value = secret, onValueChange = onSecretChange, modifier = Modifier.fillMaxWidth(), label = { Text("Hub secret") }, supportingText = { Text("Stored with an Android Keystore key and never shown after saving.") }, singleLine = true, visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password))
+    if (canRepairHomeAddress) {
+        OutlinedButton(onClick = onRepairHomeAddress, enabled = !saving, modifier = Modifier.fillMaxWidth()) {
+            Text(if (saving) "CHECKING HOME ADDRESS…" else "TEST AND SAVE HOME ADDRESS")
+        }
+        Text("Uses the saved Hub secret to verify only this home address. Other edited fields are not saved.", color = Muted, style = MaterialTheme.typography.bodySmall)
+    }
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-            Text("Allow a private Wi-Fi Hub", color = Ink, style = MaterialTheme.typography.bodyMedium)
-            Text("Public addresses are always rejected. Enable this only for a 10.x, 172.16–31.x, 192.168.x, or .local Hub.", color = Muted, style = MaterialTheme.typography.bodySmall, lineHeight = 17.sp)
+            Text("Use Wi-Fi as the main Hub address", color = Ink, style = MaterialTheme.typography.bodyMedium)
+            Text("Allows a private address in the main field. A saved home fallback is enabled separately by entering its address. Public addresses are always rejected.", color = Muted, style = MaterialTheme.typography.bodySmall, lineHeight = 17.sp)
         }
         Spacer(Modifier.width(12.dp))
         Switch(checked = allowLocalNetwork, onCheckedChange = onAllowLocalNetworkChange)

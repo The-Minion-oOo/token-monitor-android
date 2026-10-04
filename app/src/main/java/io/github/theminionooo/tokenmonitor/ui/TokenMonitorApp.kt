@@ -90,6 +90,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.theminionooo.tokenmonitor.data.HubRepositoryState
+import io.github.theminionooo.tokenmonitor.data.network.HubAddressValidator
 import io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions
 import io.github.theminionooo.tokenmonitor.data.storage.LimitBarMetric
 import io.github.theminionooo.tokenmonitor.data.storage.RankingMetric
@@ -115,6 +116,7 @@ internal fun TokenMonitorApp(viewModel: DashboardViewModel) {
     val discovery by viewModel.discovery.collectAsState()
     val uriHandler = LocalUriHandler.current
     val context = LocalContext.current
+    val withLocalNetworkAccess = rememberLocalNetworkAction(viewModel::localNetworkPermissionDenied)
     val systemAnimationsEnabled = Settings.Global.getFloat(
         context.contentResolver,
         Settings.Global.ANIMATOR_DURATION_SCALE,
@@ -171,7 +173,11 @@ internal fun TokenMonitorApp(viewModel: DashboardViewModel) {
                     serviceStatus = serviceStatus,
                     onChoose = viewModel::choose,
                     onRefresh = viewModel::refresh,
-                    onSaveConnection = viewModel::saveConnection,
+                    onSaveConnection = { url, fallback, secret, allowLocal ->
+                        withLocalNetworkAccess(HubAddressValidator.isLocalAddress(url) || HubAddressValidator.isLocalAddress(fallback)) {
+                            viewModel.saveConnection(url, fallback, secret, allowLocal)
+                        }
+                    },
                     onColorfulToolMarksChange = viewModel::setColorfulToolMarks,
                     onCompactTokenTotalChange = viewModel::setCompactTokenTotal,
                     onReduceMotionChange = viewModel::setReduceMotion,
@@ -194,7 +200,9 @@ internal fun TokenMonitorApp(viewModel: DashboardViewModel) {
                     onOpenServicePage = { url -> runCatching { uriHandler.openUri(url) } },
                     onOpenReleasePage = { runCatching { uriHandler.openUri(androidReleasesUrl) } },
                     discovery = discovery,
-                    onFindHomeHub = viewModel::findHomeHub,
+                    onFindHomeHub = { withLocalNetworkAccess(true, viewModel::findHomeHub) },
+                    onRepairHomeAddress = { address -> withLocalNetworkAccess(true) { viewModel.repairHomeAddress(address) } },
+                    onAllowLocalNetwork = { withLocalNetworkAccess(true, viewModel::onResume) },
                 )
             }
         }
@@ -234,6 +242,8 @@ internal fun DashboardScaffold(
     discovery: HubDiscoveryState,
     onFindHomeHub: () -> Unit,
     onShowSessionTitlesChange: (Boolean) -> Unit = {},
+    onRepairHomeAddress: (String) -> Unit = {},
+    onAllowLocalNetwork: () -> Unit = {},
 ) {
     var periodName by rememberSaveable { mutableStateOf(displayOptions.defaultPeriod) }
     var homeReturnVisible by rememberSaveable { mutableStateOf(false) }
@@ -313,6 +323,8 @@ internal fun DashboardScaffold(
                 onOpenReleasePage = onOpenReleasePage,
                 discovery = discovery,
                 onFindHomeHub = onFindHomeHub,
+                onRepairHomeAddress = onRepairHomeAddress,
+                onAllowLocalNetwork = onAllowLocalNetwork,
             )
         } else {
             DashboardContent(

@@ -44,7 +44,7 @@ object HubAddressValidator {
         val local = isPrivateIpv4(host) || host.endsWith(".local")
         if (!tailscale && !(allowLocalNetwork && local)) {
             return HubAddressValidation.Rejected(
-                "For safety, use a Tailscale address. Enable Local Wi-Fi fallback only for a private LAN Hub.",
+                "Use a Tailscale address, or enable a private Wi-Fi address as the main Hub.",
             )
         }
         val port = if (uri.port == -1) defaultPort else uri.port
@@ -84,11 +84,18 @@ object HubAddressValidator {
         }
     }
 
+    /** True only for the private LAN forms accepted by [validate], never the Tailscale range. */
+    fun isLocalAddress(url: String): Boolean {
+        val host = runCatching { URI(normalize(url)).host }.getOrNull().orEmpty().trim('[', ']').lowercase()
+        return isPrivateIpv4(host) || host.endsWith(".local")
+    }
+
     private fun isTailscaleAddress(host: String): Boolean {
         if (host.startsWith("fd7a:115c:a1e0:", ignoreCase = true)) return true
         val octets = host.split('.')
         if (octets.size != 4) return false
         val values = octets.map { it.toIntOrNull() ?: return false }
+        if (values.any { it !in 0..255 }) return false
         return values[0] == 100 && values[1] in 64..127
     }
 
@@ -96,6 +103,7 @@ object HubAddressValidator {
         val octets = host.split('.')
         if (octets.size != 4) return false
         val values = octets.map { it.toIntOrNull() ?: return false }
+        if (values.any { it !in 0..255 }) return false
         return when {
             values[0] == 10 -> true
             values[0] == 172 && values[1] in 16..31 -> true

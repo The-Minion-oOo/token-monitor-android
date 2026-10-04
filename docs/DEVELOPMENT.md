@@ -8,9 +8,9 @@ Read [Architecture](ARCHITECTURE.md) before changing runtime behavior and
 | Requirement | Version |
 | --- | --- |
 | JDK | 17 or newer |
-| Android SDK | Platform 37 and current build tools |
+| Android SDK | Platform 37 (`37.0` in the SDK package feed) and current build tools |
 | Gradle | Wrapper included in the repository |
-| Node.js | 22 or newer, only for the fixture Hub |
+| Node.js | 22 or newer for fixture, contract, and release tools |
 | Emulator | API 36 Google APIs image recommended |
 
 `local.properties` must point to the Android SDK and is ignored by Git.
@@ -29,6 +29,10 @@ Run these from the repository root. Use `./gradlew` instead of
 
 # One JVM test class
 .\gradlew.bat :app:testDebugUnitTest --tests "*HubDiscoveryTest*"
+
+# Release metadata and tooling regressions
+node tools/check-release.mjs
+node --test tools/tests/*.test.mjs
 ```
 
 Debug output is written to `app/build/outputs/apk/debug/`. Lint reports are in
@@ -48,8 +52,8 @@ pairing and preferences. Never use the preview flag for a release.
 
 ## Fixture Hub
 
-The local fixture serves sanitized v0.66.0 responses on port 17321 with the
-secret `fixture-secret`:
+The local fixture serves the sanitized version selected by `upstream.json` on
+port 17321 with the secret `fixture-secret`:
 
 ```powershell
 node tools/fixture-hub.mjs
@@ -99,6 +103,58 @@ native screenshot at the affected phone or launcher size.
 
 Current coverage and physical-device limits are recorded in
 [Validation](VALIDATION.md).
+
+### Released Hub contract
+
+The fixture server is useful for repeatable UI checks, but cannot detect a
+mistake shared by the Android parser and its hand-written fixtures.
+`tools/check-hub-contract.mjs` exercises the actual desktop Hub at the released
+commit pinned in `upstream.json`. Review that source before running it:
+
+```powershell
+$desktopSource = 'C:\path\to\token-monitor'
+$upstream = Get-Content upstream.json -Raw | ConvertFrom-Json
+node tools/check-hub-contract.mjs --upstream-repo $desktopSource --approved-commit $upstream.commit
+$env:TOKEN_MONITOR_CONTRACT_DIR = (Resolve-Path app/build/hub-contract).Path
+try {
+    .\gradlew.bat :app:testDebugUnitTest --tests '*ReleasedHubContractTest*'
+} finally {
+    Remove-Item Env:TOKEN_MONITOR_CONTRACT_DIR
+}
+```
+
+The harness exports committed Hub/shared files into a temporary directory,
+starts a loopback Hub with synthetic records, and checks authentication, all
+five read endpoints, snapshot delivery, freshness, and changed statistics. It
+does not use the desktop working tree, collectors, saved pairing, or real data.
+Responses are written to `app/build/hub-contract/`; the temporary Hub is stopped
+and its source/data directory removed afterwards.
+
+`ReleasedHubContractTest` feeds those responses through the Android parser and
+stream reducer. Gradle tracks the supplied directory as a test input. Without
+`TOKEN_MONITOR_CONTRACT_DIR`, that one test is skipped; the versioned fixture
+tests still run normally. The contract workflow supplies it explicitly.
+
+### Synthetic performance baseline
+
+`PerformanceBaselineTest` generates statistics around 512 KiB, 1 MiB, and just
+under 2 MiB, with 365 history days and 12 months. It records cache hydration,
+complete parsing, freshness processing, and each Pages widget's bitmap drawing
+time. Run it on the isolated preview package:
+
+```powershell
+.\gradlew.bat :app:assembleDebug :app:assembleDebugAndroidTest -PtokenMonitorPreview=true
+adb -s emulator-5554 install -r app/build/outputs/apk/debug/app-debug.apk
+adb -s emulator-5554 install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+adb -s emulator-5554 shell am instrument -w -e class io.github.theminionooo.tokenmonitor.PerformanceBaselineTest io.github.theminionooo.tokenmonitor.preview.test/androidx.test.runner.AndroidJUnitRunner
+adb -s emulator-5554 exec-out run-as io.github.theminionooo.tokenmonitor.preview cat files/performance/performance-baseline.json
+```
+
+The first hydration follows a synthetic cache write. It is not a process or
+filesystem cold start. Widget timings cover an off-screen software bitmap,
+excluding launcher updates and GPU composition. These are diagnostic timings
+with no pass/fail threshold; compare the same device and build type. They do
+not establish release startup speed, network consumption, or battery life.
 
 ## Engineering rules
 
@@ -156,13 +212,24 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 
 ## Continuous integration
 
-- **Android checks:** JVM tests, lint, and debug assembly on pull requests and
-  pushes to `main`.
-- **Android interaction checks:** API 36 emulator suite on app pull requests and
-  app changes merged to `main`.
+- **Android checks:** documentation links, release metadata, Node tooling tests,
+  JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
+- **Android interaction checks:** the full preview suite on API 36; focused
+  dashboard, connection lifecycle, and widget-control tests on API 37 using SDK
+  package `37.0`; and optimized APK install/launch/resume on API 26. The API 26
+  build uses a disposable CI signing key and is not a distributable upgrade.
+- **Released Hub contract:** the pinned desktop source and Android parser test
+  above, on `main` pushes or explicit dispatch on `main`. It does not execute
+  PR-selected upstream code. The workflow's literal source pin must agree with
+  `upstream.json`.
 - **Upstream release check:** weekly comparison with the desktop release in
-  `upstream.json`; it opens an issue and never merges changes automatically.
+  `upstream.json`; opens a review issue for a newer stable release and closes
+  older automated reminders already covered by the verified baseline. Manual
+  issues and previously closed review decisions are retained.
 - **Dependabot:** weekly Gradle and GitHub Actions updates.
+
+Workflow configuration describes intended coverage. Check the actual run and
+its commit before recording a pass in [Validation](VALIDATION.md).
 
 Release signing and publishing are documented in [Releasing](RELEASING.md).
 
