@@ -3,7 +3,7 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
-## Next release — v0.66.0 r2
+## v0.66.0 r2 — 2026-10-04
 
 - Request Android 17 local-network access when connecting or searching over
   home Wi-Fi, with recovery after denial and Tailscale available independently.
@@ -21,7 +21,7 @@ Unreleased work stays under **Next release** until its signed APK is published.
   baselines, Android 17 coverage, and exact-commit release checks.
 
 The desktop baseline stays v0.66.0. Widget geometry and the existing release
-signing identity are retained. This candidate has not been published.
+signing identity are retained.
 
 ## v0.66.0 r1 — 2026-10-04
 

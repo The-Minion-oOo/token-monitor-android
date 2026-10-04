@@ -1,6 +1,6 @@
 # Validation
 
-## v0.66.0 r2 candidate — 2026-10-04
+## v0.66.0 r2 release — 2026-10-04
 
 The desktop baseline remains released v0.66.0 at
 `e7bac3aff6a1bc7cf74fd149a26d2730cfe32de8`. The contract harness executed that
@@ -71,10 +71,13 @@ That job then passed, but its downloaded report contained only the first test
 from the requested class list. Both modern Android jobs now run the full suite;
 a report check requires all 43 distinct tests with no failures, errors or skips.
 
-This is an unpublished `660002` candidate on the existing package identity.
-GitHub checks must run on the exact release main commit. The phone has not
-received r2; its in-place upgrade, pairing/widget retention, Tailscale/Wi-Fi
-transitions, screen-off expiry and battery measurements remain unverified.
+Published `660002` from reviewed main commit `1651e93162750f15b171f36b23ec43b6bcda8bf4`.
+The [build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/37233540238), [Android interaction](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/37233540239)
+and [released Hub contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/37233540284) workflows passed on that
+exact commit. CI reports confirm all 43 tests on both API 36 and API 37, plus
+the API 26 optimized launch check. R2 has not been checked on a physical phone;
+its in-place upgrade, pairing/widget retention, Tailscale/Wi-Fi transitions,
+screen-off expiry and battery measurements remain unverified.
 
 APK: `token-monitor-android-v0.66.0-r2.apk`, 2,434,741 bytes,
 package `io.github.theminionooo.tokenmonitor`, version code `660002`.
@@ -82,7 +85,10 @@ File SHA-256:
 `4fd49f95a78eba6d9dfac96ab1ecab42cbe60ca24cff1877dea941cf299fe3bd`.
 Certificate SHA-256:
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
-The prepared APK, checksum and update manifest passed the new bundle validator.
+The uploaded APK, checksum and update manifest were downloaded and validated
+both as a draft and from the public release. Their size, hash, package, version
+and signing identity match the prepared bundle. GitHub reports r2 as the latest
+published release for the in-app updater.
 
 ### Published r1 phone update
 
