@@ -31,6 +31,12 @@ jobs:
           distribution: temurin
           java-version: '17'
       - uses: gradle/actions/setup-gradle@v6
+      - name: Use command-line tools that understand Android 17
+        if: matrix.api == 37
+        run: |
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install 'cmdline-tools;23.0'
+          mv "$ANDROID_HOME/cmdline-tools/latest" "$RUNNER_TEMP/cmdline-tools-preinstalled"
+          ln -s 23.0 "$ANDROID_HOME/cmdline-tools/latest"
       - name: Free disk space for the AVD
         run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android/sdk/ndk /opt/ghc /usr/local/share/boost "$AGENT_TOOLSDIRECTORY/CodeQL"
       - name: Enable emulator acceleration
@@ -43,6 +49,7 @@ jobs:
           target: google_apis
           disable-animations: true
           disk-size: 4096M
+          pre-emulator-launch-script: grep -Fx 'target=android-${{ matrix.sdk }}' "$ANDROID_AVD_HOME/test.ini"
           script: ./gradlew :app:connectedDebugAndroidTest -PtokenMonitorPreview=true ${{ matrix.tests }} --no-daemon --console=plain
       - uses: actions/upload-artifact@v7
         if: always()

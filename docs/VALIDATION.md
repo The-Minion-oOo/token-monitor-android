@@ -62,6 +62,11 @@ now matches complete fields and has a regression using real `aapt` output.
 Final review found no material issues. Fixed widget geometry,
 type sizes and marketing captures are retained.
 
+The first hosted API 37 job timed out before the emulator booted or tests ran.
+The pinned emulator action retained the runner's old command-line tools. CI now
+installs revision 23, matching the successful local environment, and checks the
+generated AVD target before launch.
+
 This is an unpublished `660002` candidate on the existing package identity.
 GitHub checks must run on the exact release main commit. The phone has not
 received r2; its in-place upgrade, pairing/widget retention, Tailscale/Wi-Fi
