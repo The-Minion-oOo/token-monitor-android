@@ -15,8 +15,9 @@ five performance/widget checks and the native Trends capture also passed.
 All 21 targeted API 37 tests passed. That run exposed an old Espresso dependency
 using a removed input API and a test truncating fractional display density;
 Espresso 3.7.0 and Android's rounded pixel expectation resolved those test issues.
-Eleven Node tests cover release identity, exact-commit checks and upstream issue
-reconciliation. Documentation links and Git whitespace checks passed.
+Fourteen Node tests cover release identity, exact-commit checks, instrumentation
+report completeness and upstream issue reconciliation. Documentation links and
+Git whitespace checks passed.
 
 Manual API 37 checks exercised the local-network prompt, denial feedback, grant
 during initial pairing, permission revocation, retained cached data/pairing and
@@ -66,6 +67,9 @@ The first hosted API 37 job timed out before the emulator booted or tests ran.
 The pinned emulator action retained the runner's old command-line tools. CI now
 installs revision 23, matching the successful local environment, and checks the
 generated AVD target before launch.
+That job then passed, but its downloaded report contained only the first test
+from the requested class list. Both modern Android jobs now run the full suite;
+a report check requires all 43 distinct tests with no failures, errors or skips.
 
 This is an unpublished `660002` candidate on the existing package identity.
 GitHub checks must run on the exact release main commit. The phone has not
