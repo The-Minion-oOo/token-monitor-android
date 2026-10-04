@@ -17,7 +17,7 @@ Tokens, account limits, models and trends from the desktop Token Monitor Hub, pl
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/badge/Android_checks-CI-73bdf5?style=flat-square&logo=githubactions&logoColor=10221c"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.65.0" src="https://img.shields.io/badge/Desktop-v0.65.0-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.66.0" src="https://img.shields.io/badge/Desktop-v0.66.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
 </p>
@@ -120,9 +120,9 @@ Session rows also show generation speed, cache-hit percentage and prompt-cache e
 
 ## Get connected
 
-You need Android 8.0 or newer and a desktop running Token Monitor with Hub hosting on. Android v0.65.0 r1 is fixture-verified against desktop v0.65.0. A physical-phone upgrade has not yet been checked for this release.
+You need Android 8.0 or newer and a desktop running Token Monitor with Hub hosting on. Android v0.66.0 r1 is fixture-verified against desktop v0.66.0. A physical-phone upgrade has not yet been checked for this release.
 
-1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.65.0 r1 APK.
+1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.66.0 r1 APK.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
 3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
 4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
@@ -136,11 +136,11 @@ Desktop v0.64's optional iCloud Drive sync does not replace the Hub connection f
 
 | | |
 | --- | --- |
-| Current public release | [`v0.65.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.65.0-r1) |
+| Current public release | [`v0.66.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.66.0-r1) |
 | Latest phone-verified build | signed `v0.62.0-r1` over v0.61.0 r1; saved connection and placed Pages widget registration preserved |
-| v0.65.0 phone checks | In-place upgrade, saved pairing, widget retention, and battery behavior await owner verification |
-| Desktop baseline | Token Monitor `v0.65.0` |
-| Upstream commit | [`db325fd`](https://github.com/Javis603/token-monitor/commit/db325fdf46ea7f7328feeb47a4f2005fe339909f) |
+| v0.66.0 phone checks | In-place upgrade, saved pairing, widget retention, and battery behavior await owner verification |
+| Desktop baseline | Token Monitor `v0.66.0` |
+| Upstream commit | [`e7bac3a`](https://github.com/Javis603/token-monitor/commit/e7bac3aff6a1bc7cf74fd149a26d2730cfe32de8) |
 
 The visible version matches the desktop release the phone understands. Android-only
 builds bump the release revision and internal version code while the compatibility

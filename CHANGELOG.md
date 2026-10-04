@@ -3,6 +3,17 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
+## v0.66.0 r1 — 2026-10-04
+
+- Follow desktop v0.66.0 with synthetic fixtures for every Hub read endpoint,
+  complete/freshness stream events and retained earlier compatibility tests.
+- Recognize MiniMax Code as `mcode`, using its display label and MiniMax mark
+  across the existing app and widget surfaces, separate from MiniMax limits.
+- Preserve desktop-supplied costs in current usage and history, including
+  custom-pricing corrections; no Android-side pricing or collection is added.
+- Keep the widget geometry, private read-only connection, bounded Live behavior
+  and release signing identity unchanged.
+
 ## v0.65.0 r1 — 2026-10-02
 
 - Follow desktop v0.65.0 with versioned fixtures for every Hub read endpoint and
