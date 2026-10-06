@@ -178,7 +178,7 @@ internal fun HomeLimits(accounts: List<LimitAccount>, displayOptions: DisplayOpt
                 Column(modifier = Modifier.weight(1f)) {
                     Text(account.provider.ifBlank { "Provider" }.providerLabel(), color = Ink, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     val email = account.accountEmail.takeIf { displayOptions.showAccountEmails }.orEmpty()
-                    val meta = listOf(account.accountName, account.plan, email).filter { it.isNotBlank() }.joinToString(" · ")
+                    val meta = listOf(account.productLabel, account.accountName, account.plan, email).filter { it.isNotBlank() }.joinToString(" · ")
                     if (meta.isNotBlank()) Text(meta, color = Muted, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
             }

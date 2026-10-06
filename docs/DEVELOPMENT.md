@@ -90,10 +90,11 @@ in a fixture or screenshot.
 JVM tests cover protocol parsing, private-address rules, endpoint failover,
 stream recovery, ordered cache writes, history aggregation, presentation rules,
 and preferences. Versioned Hub fixtures live under
-`app/src/test/resources/protocol/`. The v0.66.0 set covers all five read
+`app/src/test/resources/protocol/`. The v0.67.0 set covers all five read
 endpoints, a complete stream frame, and a freshness-only frame. It exercises
-MiniMax Code usage, title-free sessions, reported pricing, session counters,
-cache components, optional prompt-cache estimates and normalized MiniMax windows.
+MiMo Console and Membership identities, native-currency balances/spend and
+additive shared-settings revisions. Earlier fixtures retain MiniMax Code,
+title-free sessions, pricing, counters, cache components and prompt-cache estimates.
 Earlier sets retain fx, Muse, Grok, Cursor Auto and ZCode/OpenCode regressions.
 
 Instrumentation tests use the preview package to exercise navigation, dialogs,
@@ -215,7 +216,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 43 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 44 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.

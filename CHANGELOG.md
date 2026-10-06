@@ -3,6 +3,20 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
+## Next release — v0.67.0 r1
+
+- Follow desktop v0.67.0 with pinned-source contract checks and synthetic
+  endpoint/stream fixtures, retaining older compatibility coverage.
+- Accept TM2 chart-color codes while preserving TM1, preset appearance and
+  vendor colors. Custom chart colors reach Trends and both widget providers.
+- Separate MiMo Console and Desktop Membership rows, keep wallet balances in
+  native currency, and distinguish tracked daily/weekly spend from provider totals.
+- Verify default title stripping, opt-in titles, revocation and transcript
+  exclusion against the released Hub. Android remains read-only.
+
+The r2 Wi-Fi recovery, bounded widget sessions, fixed widget geometry and
+existing signing identity are retained.
+
 ## v0.66.0 r2 — 2026-10-04
 
 - Request Android 17 local-network access when connecting or searching over
