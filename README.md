@@ -17,7 +17,7 @@ Tokens, account limits, models and trends from the desktop Token Monitor Hub, pl
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/badge/Android_checks-CI-73bdf5?style=flat-square&logo=githubactions&logoColor=10221c"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.66.0" src="https://img.shields.io/badge/Desktop-v0.66.0-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.67.0" src="https://img.shields.io/badge/Desktop-v0.67.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
 </p>
@@ -74,8 +74,8 @@ offline, the last snapshot remains visible with a `SAVED` status.
 The widget picker also includes the original **Token Monitor · Usage** widget. It
 is a separate responsive provider that reflows a single summary as its launcher
 allocation changes; its layouts are not alternate sizes of the four Pages shown
-above. Both widgets follow the app theme, including desktop `TM1-…` theme codes.
-The v0.67.0 candidate also accepts `TM2-…` codes with an independent chart color.
+above. Both widgets follow the app theme, including desktop `TM1-…` theme codes
+and `TM2-…` codes with an independent chart color.
 
 [Widget behavior and controls](docs/WIDGETS.md) · [Widget design notes](docs/WIDGET_DESIGN.md).
 
@@ -95,7 +95,8 @@ is no public server, vendor relay, or separate Token Monitor account.
 
 - Live totals while the app is open, an immediate refresh on return, pull-to-refresh, and a saved snapshot when the Hub is unavailable.
 - Day, week, month, rolling 7, 30 and 90 days, one year, all history and total.
-- Account limits with the desktop's reset countdowns.
+- Account limits with the desktop's reset countdowns, separate MiMo products,
+  and reported wallet/spend values in their native currency.
 - Tools, devices, models, projects, sessions, subscriptions, service status, activity and trends, each with an `updated 5m ago` freshness.
 - Recent and running sessions on Home, reported conversation titles, and context-window use when the desktop provides them, without reading prompt or response bodies.
 - Trends by tool or model, shown as bars or a K-line chart.
@@ -103,7 +104,12 @@ is no public server, vendor relay, or separate Token Monitor account.
 - The desktop's Default, Obsidian and Porcelain themes, theme codes pasted as-is, an option to follow the phone's light and dark setting, three text sizes, motion controls, and reorderable views and Home modules.
 - A Back button that goes Home instead of quitting on you, and a light haptic tick on every tab.
 
-The Hub does not carry prompt or response bodies. It can carry a conversation title, which may contain sensitive text; the phone shows it in Home and Sessions, never on a widget. Turn off **Show session titles** in Settings to hide them on the phone; this does not remove them from the local snapshot cache.
+The Hub does not carry prompt or response bodies. Desktop v0.67.0 strips
+conversation titles by default and shares them only with server and device
+consent. A received title may contain sensitive text; the phone shows it in Home
+and Sessions, never on a widget. Turn off **Show session titles** in Settings to
+hide them on the phone; this does not remove them from the local snapshot cache
+or change desktop sharing consent.
 
 Home shows the five most recent sessions plus any other running sessions. On an existing installation, enable **Sessions** under **Settings → Main dashboard → Home modules**; saved layouts are not reset.
 Session rows also show generation speed, cache-hit percentage and prompt-cache estimates when the Hub supplies them. Speed is a session average, not a live rate; cache retention is an estimate, not a guarantee.
@@ -121,9 +127,12 @@ Session rows also show generation speed, cache-hit percentage and prompt-cache e
 
 ## Get connected
 
-You need Android 8.0 or newer and a desktop running Token Monitor with Hub hosting on. Android v0.66.0 r2 is verified against desktop v0.66.0. The earlier r1 in-app upgrade from v0.65.0 preserved pairing and the placed Pages widget on a Galaxy S25 Ultra; r2 phone checks remain pending.
+You need Android 8.0 or newer and a desktop running Token Monitor with Hub hosting
+on. Android v0.67.0 r1 is verified against desktop v0.67.0. The earlier v0.66.0 r1
+in-app upgrade from v0.65.0 preserved pairing and the placed Pages widget on a
+Galaxy S25 Ultra; v0.67.0 phone checks remain pending.
 
-1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.66.0 r2 APK.
+1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.67.0 r1 APK.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
 3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
 4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
@@ -137,11 +146,11 @@ Desktop v0.64's optional iCloud Drive sync does not replace the Hub connection f
 
 | | |
 | --- | --- |
-| Current public release | [`v0.66.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.66.0-r2) |
+| Current public release | [`v0.67.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.67.0-r1) |
 | Latest phone-verified build | signed `v0.66.0-r1` over v0.65.0 r1; pairing, home Wi-Fi reconnection and placed Pages widget preserved |
-| Remaining phone checks | r2 in-place upgrade, Tailscale/Wi-Fi transitions, screen-off expiry and battery behavior |
-| Desktop baseline | Token Monitor `v0.66.0` |
-| Upstream commit | [`e7bac3a`](https://github.com/Javis603/token-monitor/commit/e7bac3aff6a1bc7cf74fd149a26d2730cfe32de8) |
+| Remaining phone checks | v0.67.0 r1 in-place upgrade, Tailscale/Wi-Fi transitions, screen-off expiry and battery behavior |
+| Desktop baseline | Token Monitor `v0.67.0` |
+| Upstream commit | [`338a965`](https://github.com/Javis603/token-monitor/commit/338a965f6c9a5a06b017eba4ebd7d5997973519e) |
 
 The visible version matches the desktop release the phone understands. Android-only
 builds bump the release revision and internal version code while the compatibility

@@ -1,6 +1,7 @@
-# Desktop parity for v0.66.0
+# Desktop parity for v0.67.0
 
-The Android release is fixture-verified against desktop Token Monitor v0.66.0. It mirrors
+The Android release is verified against desktop Token Monitor v0.67.0 using
+versioned fixtures and responses from the pinned released Hub. It mirrors
 the desktop information that the Hub can safely provide while keeping the phone
 read-only and lightweight.
 
@@ -10,7 +11,7 @@ read-only and lightweight.
 | --- | --- |
 | Home totals and period selection | Day, month, week, 7 days, 30 days, and total, with a configurable default |
 | Home Sessions | Five newest sessions plus all running sessions, raw reported titles, recent context, and a link to Sessions; independent of the totals period |
-| Limits | Provider windows, remaining or used bars, reset time, plan/source metadata, and hidden-by-default account email |
+| Limits | Provider windows, remaining or used bars, reset time, plan/source metadata, separate MiMo products, native-currency wallet/spend values, and hidden-by-default account email |
 | Tools | Token and cost totals, proportional bars, cache hit, cache miss, output, and unclassified details |
 | Status | Provider status, message, update time, and provider status-page link |
 | Devices | Device totals, clients, models, collection cadence, last upload, and retained history |
@@ -20,7 +21,7 @@ read-only and lightweight.
 | Usage dashboard | Overview cards, activity heatmap, and model/tool summaries |
 | Trends | By tool or model, Bars or K-line, and 7/30/90-day, one-year, or all-history ranges |
 | Display settings | View and Home-module visibility/order, ranking metric, limit-bar metric/source/email visibility, compact total, tool colors, default range, reduce motion, and a three-step text size in place of the desktop Zoom slider |
-| Appearance | Interface theme with the desktop's Default, Obsidian, and Porcelain presets, desktop `TM1-…` theme codes pasted as-is, the Live indicator and Tool icons toggles, and a phone-only **Follow phone light and dark** switch: Porcelain by day, the chosen dark preset at night. Glass and Depth are desktop window effects with no Android equivalent |
+| Appearance | Interface theme with the desktop's Default, Obsidian, and Porcelain presets, desktop `TM1-…` and `TM2-…` theme codes pasted as-is, an independent TM2 chart color, the Live indicator and Tool icons toggles, and a phone-only **Follow phone light and dark** switch: Porcelain by day, the chosen dark preset at night. Glass and Depth are desktop window effects with no Android equivalent |
 
 All expandable rows, selectors, values, bars, and screen changes use short
 interaction-driven motion. **Reduce motion** can follow Android, minimize motion,
@@ -39,8 +40,8 @@ controls are window-specific rather than Hub dashboard features.
 
 ## Intentional boundaries
 
-The following remain on desktop because they collect data, control a desktop
-window, or require information the v0.66.0 Hub does not transmit:
+The following remain on desktop because they collect data, change configuration,
+control a desktop window, or need information outside Android's read-only endpoints:
 
 - tool discovery, account sign-in, collection cadence, diagnostics, export, and
   subscription editing;
@@ -102,6 +103,15 @@ desktop responsibilities. Hub-stripped titles keep the existing client/model fal
 Optional macOS iCloud Drive sync, Edge Dock fullscreen/quota pins, Claude Web
 organization selection, and collection/watch fixes remain desktop features.
 Android still requires a hosted Hub over its private network.
+
+v0.67.0 adds TM2 theme codes with an independent chart color and distinguishes
+MiMo Console from Desktop Membership. Wallet balances and spend retain their
+reported currency; today/week spend is labeled tracked rather than a provider
+total. The Hub strips conversation titles by default and sends them only with
+server and device consent. Android displays a received title according to its
+local visibility setting; it does not grant sharing consent or change Hub settings.
+Shared alias/pricing documents remain on desktop. Android displays the names and
+costs already reported in usage rather than fetching or applying those documents.
 
 The Android app does not replace these with remote commands. It reads only the
 documented Hub endpoints listed in [`SECURITY.md`](SECURITY.md).
