@@ -75,6 +75,7 @@ The widget picker also includes the original **Token Monitor · Usage** widget. 
 is a separate responsive provider that reflows a single summary as its launcher
 allocation changes; its layouts are not alternate sizes of the four Pages shown
 above. Both widgets follow the app theme, including desktop `TM1-…` theme codes.
+The v0.67.0 candidate also accepts `TM2-…` codes with an independent chart color.
 
 [Widget behavior and controls](docs/WIDGETS.md) · [Widget design notes](docs/WIDGET_DESIGN.md).
 

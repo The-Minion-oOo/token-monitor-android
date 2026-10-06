@@ -1,5 +1,51 @@
 # Validation
 
+## v0.67.0 r1 candidate — 2026-10-06
+
+Desktop tag `v0.67.0` resolves to
+`338a965f6c9a5a06b017eba4ebd7d5997973519e`. Its release notes and relevant
+Hub, normalization, theme, sync-content and MiMo changes were reviewed before
+the Android adapter was updated. The desktop checkout was not modified.
+
+The isolated pinned-source harness passed authenticated reads of all five
+endpoints and v2 snapshot, freshness and changed-stat events. It also verified
+that titles are stripped by default, delivered only with server/device consent,
+and removed from stored sessions after revocation. Synthetic prompt/message
+sentinels were absent from exported responses. Android's parser consumed those
+actual responses alongside the new synthetic v0.67.0 fixtures and retained
+earlier versions. No private Hub or vendor account was queried.
+
+All 148 JVM tests passed with the generated Hub contract supplied; none was
+skipped. Lint, preview debug and instrumentation assembly passed. The full API
+36 Pixel 10 Pro XL suite passed all 44 distinct tests without failures, errors
+or skips. Focused native capture checks cover separate MiMo products, CNY
+wallet/spend values with no inferred quota, and custom TM2 themes on both
+widget providers. Default Pages captures retain the existing composition;
+no coordinate or type size changed, and the marketing gallery remains intact.
+All four recaptured Default Pages images are byte-for-byte identical to their
+published gallery counterparts. The new MiMo and TM2 images use synthetic data
+on an API 36 emulator (448 dp dashboard width; 360×220 dp widget allocation).
+
+The signed R8 release installed, opened and resumed without an app crash on
+the API 26 emulator. This is a launch smoke check, not full interaction or
+background coverage. Fourteen Node tooling tests, documentation links, release
+metadata/bundle checks and Git whitespace checks passed. The independent
+read-only review found no material issues in the runtime diff.
+
+APK: `token-monitor-android-v0.67.0-r1.apk`, 2,434,723 bytes,
+package `io.github.theminionooo.tokenmonitor`, version code `670001`.
+File SHA-256:
+`798c27251aa58c077221fb73f8728e688173430a13acd26b1fcc7f35e346e7fb`.
+Certificate SHA-256:
+`eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
+The prepared APK, checksum and update manifest agree on size and identity.
+
+Hosted checks, uploaded-asset verification and publication are still pending.
+No physical phone was used for this revision. In-place upgrade, pairing/widget
+retention, One UI rendering, Tailscale/Wi-Fi transitions, screen-off expiry and
+battery use remain unverified on a physical device. Older phone evidence below
+applies only to the named earlier build.
+
 ## v0.66.0 r2 release — 2026-10-04
 
 The desktop baseline remains released v0.66.0 at

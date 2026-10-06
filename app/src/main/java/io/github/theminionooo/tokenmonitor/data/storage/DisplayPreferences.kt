@@ -19,7 +19,7 @@ internal data class DisplayOptions(
     val compactTokenTotal: Boolean = false,
     val reduceMotion: ReduceMotionMode = ReduceMotionMode.System,
     val textScale: TextScale = TextScale.Comfortable,
-    /** A desktop `TM1-…` theme code; null means the default preset. */
+    /** A desktop TM1 or TM2 theme code; null means the default preset. */
     val themeCode: String? = null,
     /** Porcelain while the phone is in light mode and the chosen dark preset at night. */
     val followSystemTheme: Boolean = false,
