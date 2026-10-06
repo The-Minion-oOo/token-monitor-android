@@ -68,6 +68,12 @@ marks a day with no recorded data rather than a measured zero.
 
 ## Saved, Refresh and Live
 
+Both widget providers follow the app's appearance settings. Desktop `TM1-…`
+codes supply the original four colors; `TM2-…` codes add an independent chart
+color for seven-day bars and activity heatmaps. Vendor-colored tool/model bars
+keep their own attribution colors. Pasting a theme code does not change the
+Pages widget's fixed composition or require a new Hub fetch.
+
 The controls live in the header: a refresh icon with no visible button circle and a
 Live toggle. Both retain 48 dp touch targets. The
 toggle's knob sits left and grey while Live is off, and right with a soft glow in the

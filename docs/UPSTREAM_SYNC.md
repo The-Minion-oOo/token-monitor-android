@@ -2,17 +2,17 @@
 
 ## Version rule
 
-The working v0.67.0 r1 candidate targets desktop tag `v0.67.0`, peeled commit
+Android v0.67.0 r1 targets desktop tag `v0.67.0`, peeled commit
 `338a965f6c9a5a06b017eba4ebd7d5997973519e`, in Gradle and `upstream.json`.
 It includes TM2 chart-color codes, separate MiMo product rows and title-consent
 contract checks. Shared alias/pricing documents and title-sharing controls
 remain on desktop. Android is still read-only.
 
-The latest published release remains
-[`android-v0.66.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.66.0-r2),
+The latest published release is
+[`android-v0.67.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.67.0-r1),
 recorded with its source commit in `release.json`. The earlier v0.66.0 r1
 Galaxy S25 Ultra upgrade preserved pairing and the placed Pages widget;
-r2 and the v0.67.0 candidate have not been checked on that phone.
+v0.66.0 r2 and v0.67.0 r1 have not been checked on that phone.
 
 An Android-only fix increments `versionCode` and the GitHub release revision,
 for example `android-vX.Y.Z-rN`, without changing the visible compatibility

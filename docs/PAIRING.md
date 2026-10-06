@@ -44,9 +44,11 @@ Revoking access excludes home routes until permission is restored.
 
 Public IP addresses and ordinary public hostnames are rejected for both fields. Do not port-forward the Hub.
 
-## No QR code in the current desktop release
+## Manual pairing
 
-Token Monitor v0.66.0 lists Hub URLs and the secret but does not generate a pairing QR code. Manual copy is therefore the supported first pairing flow. A future QR flow should be added only when both apps can keep the payload local and clearly warn that the code contains the Hub secret.
+Desktop Token Monitor's Hub settings list the addresses and shared secret.
+Copy those into Android for the first connection. Treat the secret as a password;
+do not post it in screenshots or support requests.
 
 ## Troubleshooting
 

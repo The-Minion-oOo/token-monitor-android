@@ -1,6 +1,6 @@
 # Validation
 
-## v0.67.0 r1 candidate — 2026-10-06
+## v0.67.0 r1 release — 2026-10-06
 
 Desktop tag `v0.67.0` resolves to
 `338a965f6c9a5a06b017eba4ebd7d5997973519e`. Its release notes and relevant
@@ -40,7 +40,19 @@ Certificate SHA-256:
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
 The prepared APK, checksum and update manifest agree on size and identity.
 
-Hosted checks, uploaded-asset verification and publication are still pending.
+The release tag points to reviewed main commit
+`14fd638a41dc3904fc78e30f158ca4304d4749f2`, merged through
+[PR #30](https://github.com/The-Minion-oOo/token-monitor-android/pull/30).
+All required checks passed on that exact main push:
+[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/37515314833),
+[Android interaction and optimized API 26 smoke checks](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/37515314840),
+and [released Hub contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/37515314830).
+Downloaded API 36 and API 37 reports each contain 44 distinct tests with no
+failures, errors or skips. The same APK, checksum and update manifest were
+downloaded from the draft and verified before publication, then downloaded
+anonymously from the public release and verified again. GitHub's Latest release
+is [android-v0.67.0-r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.67.0-r1).
+
 No physical phone was used for this revision. In-place upgrade, pairing/widget
 retention, One UI rendering, Tailscale/Wi-Fi transitions, screen-off expiry and
 battery use remain unverified on a physical device. Older phone evidence below
