@@ -1,3 +1,2 @@
 event: freshness
 data: {"at":"2026-10-08T12:02:00.000Z","stats":{"updatedAt":"2026-10-08T12:02:00.000Z","devices":[{"deviceId":"sample-desktop","updatedAt":"2026-10-08T12:01:59.000Z","receivedAt":"2026-10-08T12:02:00.000Z","stale":false,"ageMs":1000}]}}
-
