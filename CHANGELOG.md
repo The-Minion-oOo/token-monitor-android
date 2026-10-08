@@ -3,7 +3,7 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
-## Next release — v0.68.0 r1
+## v0.68.0 r1 — 2026-10-08
 
 - Follow desktop v0.68.0 with pinned-source contract checks and synthetic
   endpoint/stream fixtures, retaining earlier compatibility tests.
