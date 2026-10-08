@@ -33,7 +33,7 @@ import kotlinx.serialization.json.longOrNull
  * Android client renders and intentionally ignores unknown fields.
  */
 object HubProtocolParser {
-    const val SUPPORTED_UPSTREAM_VERSION = "v0.67.0"
+    const val SUPPORTED_UPSTREAM_VERSION = "v0.68.0"
 
     private val json = Json {
         ignoreUnknownKeys = true
@@ -179,6 +179,12 @@ object HubProtocolParser {
             modelUnclassifiedTokens = longMap("modelUnclassifiedTokens"),
             projects = projects,
             sessions = sessions,
+            unpricedTokens = long("unpricedTokens") ?: 0,
+            clientUnpricedTokens = longMap("clientUnpricedTokens"),
+            modelUnpricedTokens = longMap("modelUnpricedTokens"),
+            clientModelUnpricedTokens = objectField("clientModelUnpricedTokens")?.mapValues { (_, value) ->
+                JsonObject(mapOf("values" to value)).longMap("values")
+            }.orEmpty(),
         )
     }
 
@@ -189,6 +195,7 @@ object HubProtocolParser {
         costUsd = double("costUsd") ?: 0.0,
         sessionCount = (long("sessionCount") ?: 0).toIntSafely(),
         clients = longMap("clients"),
+        unpricedTokens = long("unpricedTokens") ?: 0,
     )
 
     private fun JsonObject.toSessionDto(key: String) = HubSessionDto(
@@ -203,6 +210,9 @@ object HubProtocolParser {
         startedAt = string("startedAt"),
         lastUsedAt = string("lastUsedAt"),
         sessionKind = string("sessionKind"),
+        unpricedTokens = long("unpricedTokens") ?: 0,
+        usageSource = string("usageSource"),
+        usageCoverage = string("usageCoverage"),
         contextTokens = long("contextTokens") ?: 0,
         contextWindow = long("contextWindow") ?: 0,
         turnEnded = boolean("turnEnded"),
@@ -300,6 +310,7 @@ object HubProtocolParser {
         tokenComponentsAvailable = boolean("tokenComponentsAvailable") ?: false,
         perClient = attributionMap("perClient"),
         perModel = attributionMap("perModel"),
+        unpricedTokens = long("unpricedTokens") ?: 0,
     )
 
     private fun JsonObject.attributionMap(name: String): Map<String, HubHistoryAttributionDto> =
@@ -308,6 +319,7 @@ object HubProtocolParser {
                 key to HubHistoryAttributionDto(
                     tokens = entry.long("tokens") ?: 0,
                     costUsd = entry.double("cost") ?: entry.double("costUsd") ?: 0.0,
+                    unpricedTokens = entry.long("unpricedTokens") ?: 0,
                     cacheReadTokens = entry.long("cacheReadTokens") ?: 0,
                     cacheWriteTokens = entry.long("cacheWriteTokens") ?: 0,
                     outputTokens = entry.long("outputTokens") ?: 0,
@@ -353,30 +365,41 @@ object HubProtocolParser {
         staleAfterMs = staleAfterMs,
     )
 
-    private fun HubPeriodDto.toDomain() = UsagePeriod(
-        throughputAvailable = throughputAvailable,
-        timedTokens = timedTokens,
-        timedOutputTokens = timedOutputTokens,
-        timedDurationMs = timedDurationMs,
-        totalTokens = totalTokens.coerceAtLeast(0),
-        costUsd = costUsd.coerceAtLeast(0.0),
-        clients = clients,
-        clientCosts = clientCosts,
-        models = models,
-        modelCosts = modelCosts,
-        clientModels = clientModels,
-        clientModelCosts = clientModelCosts,
-        clientCacheReads = clientCacheReads,
-        clientCacheWrites = clientCacheWrites,
-        clientOutputs = clientOutputs,
-        clientUnclassifiedTokens = clientUnclassifiedTokens,
-        modelCacheReads = modelCacheReads,
-        modelCacheWrites = modelCacheWrites,
-        modelOutputs = modelOutputs,
-        modelUnclassifiedTokens = modelUnclassifiedTokens,
-        projects = projects.map { it.toDomain() },
-        sessions = sessions.map { it.toDomain() },
-    )
+    private fun HubPeriodDto.toDomain(): UsagePeriod {
+        val missing = unpricedTokens.coerceIn(0, totalTokens.coerceAtLeast(0))
+        val byClient = boundedUnpricedMap(clientUnpricedTokens, clients, missing)
+        return UsagePeriod(
+            throughputAvailable = throughputAvailable,
+            timedTokens = timedTokens,
+            timedOutputTokens = timedOutputTokens,
+            timedDurationMs = timedDurationMs,
+            totalTokens = totalTokens.coerceAtLeast(0),
+            costUsd = costUsd.coerceAtLeast(0.0),
+            clients = clients,
+            clientCosts = clientCosts,
+            models = models,
+            modelCosts = modelCosts,
+            clientModels = clientModels,
+            clientModelCosts = clientModelCosts,
+            clientCacheReads = clientCacheReads,
+            clientCacheWrites = clientCacheWrites,
+            clientOutputs = clientOutputs,
+            clientUnclassifiedTokens = clientUnclassifiedTokens,
+            modelCacheReads = modelCacheReads,
+            modelCacheWrites = modelCacheWrites,
+            modelOutputs = modelOutputs,
+            modelUnclassifiedTokens = modelUnclassifiedTokens,
+            projects = projects.map { it.toDomain() },
+            sessions = sessions.map { it.toDomain() },
+            unpricedTokens = missing,
+            clientUnpricedTokens = byClient,
+            modelUnpricedTokens = boundedUnpricedMap(modelUnpricedTokens, models, missing),
+            clientModelUnpricedTokens = clientModelUnpricedTokens.mapValues { (client, counts) ->
+                boundedUnpricedMap(counts, clientModels[client].orEmpty(),
+                    byClient[client] ?: 0)
+            },
+        )
+    }
 
     private fun HubProjectDto.toDomain() = ProjectUsage(
         id = id,
@@ -385,6 +408,7 @@ object HubProtocolParser {
         costUsd = costUsd.coerceAtLeast(0.0),
         sessionCount = sessionCount.coerceAtLeast(0),
         clients = clients,
+        unpricedTokens = unpricedTokens.coerceIn(0, totalTokens.coerceAtLeast(0)),
     )
 
     private fun HubSessionDto.toDomain() = SessionUsage(
@@ -410,6 +434,8 @@ object HubProtocolParser {
         timedOutputTokens = if (timedDurationMs > 0) timedOutputTokens.coerceIn(0, outputTokens.coerceAtLeast(0)) else 0,
         timedDurationMs = timedDurationMs.coerceAtLeast(0),
         promptCache = promptCache?.let { PromptCache(it.observedAt, it.ttlSeconds) },
+        unpricedTokens = unpricedTokens.coerceIn(0, totalTokens.coerceAtLeast(0)),
+        dotsObservedOnly = client == "codex" && usageSource == "codex-dots-local" && usageCoverage == "observed-only",
     )
 
     private fun HubDeviceDto.toDomain() = DeviceUsage(
@@ -479,6 +505,7 @@ object HubProtocolParser {
         tokenComponentsAvailable = tokenComponentsAvailable,
         perClient = perClient.mapValues { it.value.toDomain() },
         perModel = perModel.mapValues { it.value.toDomain() },
+        unpricedTokens = unpricedTokens.coerceIn(0, tokens.coerceAtLeast(0)),
     )
 
     private fun HubHistoryAttributionDto.toDomain() = HistoryAttribution(
@@ -488,6 +515,7 @@ object HubProtocolParser {
         cacheWriteTokens = cacheWriteTokens.coerceAtLeast(0),
         outputTokens = outputTokens.coerceAtLeast(0),
         unclassifiedTokens = unclassifiedTokens.coerceAtLeast(0),
+        unpricedTokens = unpricedTokens.coerceIn(0, tokens.coerceAtLeast(0)),
     )
 
     private fun HubSubscriptionsDto.toDomain() = HubSubscriptions(
@@ -505,6 +533,15 @@ object HubProtocolParser {
         interval = interval,
         autoRenew = autoRenew,
     )
+
+    private fun boundedUnpricedMap(counts: Map<String, Long>, tokens: Map<String, Long>, total: Long): Map<String, Long> {
+        var remaining = total
+        return counts.mapNotNull { (key, count) ->
+            val bounded = count.coerceIn(0, (tokens[key] ?: 0).coerceAtLeast(0)).coerceAtMost(remaining)
+            remaining -= bounded
+            if (bounded > 0) key to bounded else null
+        }.toMap()
+    }
 
     private fun JsonObject.objectField(name: String): JsonObject? = this[name].objectOrNull()
 

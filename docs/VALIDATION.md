@@ -1,5 +1,50 @@
 # Validation
 
+## v0.68.0 r1 candidate — 2026-10-08
+
+Desktop tag `v0.68.0` resolves to
+`5d2db368d8313415763860d594de00e46a663418`. The release notes, API changes,
+usage/history normalization and Dots provenance were reviewed at that pin.
+No desktop checkout, collector or private Hub was used for the checks.
+
+The isolated released-source harness passed authenticated reads of all five
+endpoints, complete/freshness/changed-stat events, unpriced attribution,
+observed-only Dots metadata, title consent/revocation and exclusion of synthetic
+prompt/message/private local-session-key sentinels. Android parsed those actual
+responses alongside new v0.68 fixtures and retained earlier regression fixtures.
+
+All 153 JVM tests passed with the generated contract supplied and no skips.
+Lint, preview debug and instrumentation assembly passed. The full API 36 Pixel
+10 Pro XL suite passed all 46 distinct tests without failures, errors or skips;
+13 focused presentation/widget tests passed again. Native captures show the
+known subtotal and unpriced count in Tools/Models/Sessions, the Dots coverage
+label, and compact widget warnings with accessible explanations. The dense
+showcase was used for Pages checks, not the sparse protocol fixture.
+All four Default Pages captures are byte-for-byte identical to the published
+gallery when no unpriced count is reported. No widget coordinate or type size
+changed. The hero and marketing gallery were preserved.
+
+The independent read-only review found and corrected the original Usage widget's
+missing spoken explanation of the compact pricing marker. The resulting runtime
+diff has no further material findings. The signed R8 APK installed, opened and
+resumed on API 26 without an app crash; this is a launch smoke check, not full
+Android 8 interaction coverage. Fourteen Node tooling tests, documentation
+links, release metadata/bundle checks and Git whitespace checks passed.
+
+APK: `token-monitor-android-v0.68.0-r1.apk`, 2,434,730 bytes,
+package `io.github.theminionooo.tokenmonitor`, version code `680001`.
+File SHA-256:
+`81b97ff5ce2947c2d18539b0b166808405a7d812c58b743b3c98f525e1ec8663`.
+Certificate SHA-256:
+`eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
+The prepared APK, checksum and update manifest agree on size and identity.
+GitHub CI and release publication are pending.
+
+No physical phone was used for this revision. Galaxy in-place upgrade,
+pairing/widget retention, One UI rendering, Tailscale/Wi-Fi transitions,
+screen-off expiry and battery use remain unverified on a physical device.
+Older phone evidence below applies only to the named earlier build.
+
 ## v0.67.0 r1 release — 2026-10-06
 
 Desktop tag `v0.67.0` resolves to

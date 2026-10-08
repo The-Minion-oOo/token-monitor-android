@@ -1,6 +1,6 @@
-# Desktop parity for v0.67.0
+# Desktop parity for v0.68.0
 
-The Android release is verified against desktop Token Monitor v0.67.0 using
+The Android adapter targets desktop Token Monitor v0.68.0 using
 versioned fixtures and responses from the pinned released Hub. It mirrors
 the desktop information that the Hub can safely provide while keeping the phone
 read-only and lightweight.
@@ -112,6 +112,14 @@ server and device consent. Android displays a received title according to its
 local visibility setting; it does not grant sharing consent or change Hub settings.
 Shared alias/pricing documents remain on desktop. Android displays the names and
 costs already reported in usage rather than fetching or applying those documents.
+
+v0.68.0 preserves the Hub's explicit unpriced-token counts in current usage,
+selected history ranges and tool/model attribution. Cost labels distinguish the
+known subtotal from unpriced usage; zero cost alone does not create a warning.
+Codex Dots sessions carry an observed-only label, not a claim of full history.
+Dots collection/visibility controls, MiMo cookie discovery, batch alias editing
+and Edge Dock refinements stay on desktop. Android does not recollect or deduplicate
+the Hub's usage. Older Hubs without these optional fields keep their previous display.
 
 The Android app does not replace these with remote commands. It reads only the
 documented Hub endpoints listed in [`SECURITY.md`](SECURITY.md).

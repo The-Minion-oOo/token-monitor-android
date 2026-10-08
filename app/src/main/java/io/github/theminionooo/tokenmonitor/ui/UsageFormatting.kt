@@ -26,6 +26,15 @@ internal fun formatCompactTokens(tokens: Long): String = when {
 
 internal fun formatMoney(value: Double): String = currencyFormat.format(value)
 
+/** A missing catalog price is not a zero rate. Keep the known subtotal explicit. */
+internal fun formatUsageCost(value: Double, unpricedTokens: Long = 0, compact: Boolean = false): String {
+    if (unpricedTokens <= 0) return formatMoney(value)
+    val known = if (value > 0) formatMoney(value) else "—"
+    if (compact) return if (value > 0) "$known + ?" else "— (?)"
+    val missing = "${formatCompactTokens(unpricedTokens)} unpriced"
+    return if (value > 0) "$known + $missing" else "— ($missing)"
+}
+
 internal fun formatSubscriptionAmount(amountMinor: Long, currency: String): String = if (currency == "USD") {
     formatMoney(amountMinor / 100.0)
 } else {

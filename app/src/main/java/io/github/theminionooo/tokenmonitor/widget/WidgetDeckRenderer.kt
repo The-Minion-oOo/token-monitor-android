@@ -23,7 +23,7 @@ import io.github.theminionooo.tokenmonitor.ui.InterfaceTheme
 import io.github.theminionooo.tokenmonitor.ui.Palette
 import io.github.theminionooo.tokenmonitor.ui.displayName
 import io.github.theminionooo.tokenmonitor.ui.formatCompactTokens
-import io.github.theminionooo.tokenmonitor.ui.formatMoney
+import io.github.theminionooo.tokenmonitor.ui.formatUsageCost
 import io.github.theminionooo.tokenmonitor.ui.formatTokens
 import io.github.theminionooo.tokenmonitor.ui.originalToolColor
 import io.github.theminionooo.tokenmonitor.ui.providerLabel
@@ -243,7 +243,7 @@ private class DeckCanvas(
         val snapshot = requireNotNull(data.snapshot)
         text("Total tokens", left, g.SECTION_BASELINE, section, label)
         fitText(formatTokens(snapshot.today.totalTokens), left, g.TOTAL_BASELINE, display, Type.DISPLAY_MIN, ink, g.TOTAL_RIGHT - left)
-        text("${formatMoney(snapshot.today.costUsd)} estimated cost", left, g.COST_BASELINE, body, muted, maxWidth = g.TOTAL_RIGHT - left)
+        text("${formatUsageCost(snapshot.today.costUsd, snapshot.today.unpricedTokens, compact = true)} estimated cost", left, g.COST_BASELINE, body, muted, maxWidth = g.TOTAL_RIGHT - left)
         vline(g.DIVIDER_X, g.DIVIDER_TOP, g.DIVIDER_BOTTOM, line)
         val statsWidth = right - g.STATS_X
         data.stats.take(3).forEachIndexed { index, (value, name) ->
@@ -265,7 +265,7 @@ private class DeckCanvas(
         text("This week", left, g.WEEK_BASELINE, caption, muted)
         if (weekTokens > 0) {
             val advance = text(formatCompactTokens(weekTokens), g.WEEK_VALUE_X, g.WEEK_BASELINE, stat, ink)
-            text("· ${formatMoney(weekCost)}", g.WEEK_VALUE_X + advance + 8f, g.WEEK_BASELINE, body, muted, maxWidth = right - g.WEEK_VALUE_X - advance - 8f)
+            text("· ${formatUsageCost(weekCost, data.week.sumOf { it.unpricedTokens }, compact = true)}", g.WEEK_VALUE_X + advance + 8f, g.WEEK_BASELINE, body, muted, maxWidth = right - g.WEEK_VALUE_X - advance - 8f)
         } else {
             text("No history yet", g.WEEK_VALUE_X, g.WEEK_BASELINE, body, muted)
         }
@@ -321,7 +321,7 @@ private class DeckCanvas(
                 text("Tokens", left, g.SPARSE_CAPTION_BASELINE, caption, muted)
                 text("Share", g.TOOL_RIGHT, g.SPARSE_CAPTION_BASELINE, caption, muted, Paint.Align.RIGHT)
                 drawBar(RectF(left, g.SPARSE_BAR_TOP, g.TOOL_RIGHT, g.SPARSE_BAR_BOTTOM), row.share, color)
-                if (row.costUsd > 0) text("${formatMoney(row.costUsd)} estimated cost", left, g.SPARSE_COST_BASELINE, secondary, muted)
+                if (row.costUsd > 0 || row.unpricedTokens > 0) text("${formatUsageCost(row.costUsd, row.unpricedTokens, compact = true)} estimated cost", left, g.SPARSE_COST_BASELINE, secondary, muted)
             }
             data.models.firstOrNull()?.let { row ->
                 val color = vendorColor(row.name, 0)
@@ -348,7 +348,7 @@ private class DeckCanvas(
             drawMark(row.name, columnLeft, top + g.MARK_OFFSET, g.MARK_SIZE, color, fallbackMark)
             val shareWidth = text(sharePercent(row.share), columnRight, top + g.NAME_BASELINE_OFFSET, bodyStrong, ink, Paint.Align.RIGHT)
             text(label(row.name), nameX, top + g.NAME_BASELINE_OFFSET, body, ink, maxWidth = columnRight - shareWidth - g.SHARE_GAP - nameX)
-            val detail = compactFigure(row.tokens) + if (row.costUsd > 0) " · ${formatMoney(row.costUsd)}" else ""
+            val detail = compactFigure(row.tokens) + if (row.costUsd > 0 || row.unpricedTokens > 0) " · ${formatUsageCost(row.costUsd, row.unpricedTokens, compact = true)}" else ""
             text(detail, nameX, top + g.DETAIL_BASELINE_OFFSET, secondary, muted, maxWidth = columnRight - nameX)
             drawBar(RectF(columnLeft, top + g.BAR_TOP_OFFSET, columnRight, top + g.BAR_BOTTOM_OFFSET), row.share, color)
         }
@@ -370,7 +370,7 @@ private class DeckCanvas(
         text("7 days", left, g.SECTION_BASELINE, section, label)
         val advance = text(compactFigure(weekTokens), left, g.SUMMARY_BASELINE, stat, ink)
         val peakWidth = measure("Peak ${compactFigure(peak)}", caption)
-        text("tokens · ${formatMoney(weekCost)}", left + advance + 6f, g.SUMMARY_BASELINE, secondary, muted, maxWidth = g.LEFT_RIGHT_EDGE - peakWidth - 10f - left - advance - 6f)
+        text("tokens · ${formatUsageCost(weekCost, data.week.sumOf { it.unpricedTokens }, compact = true)}", left + advance + 6f, g.SUMMARY_BASELINE, secondary, muted, maxWidth = g.LEFT_RIGHT_EDGE - peakWidth - 10f - left - advance - 6f)
         text("Peak ${compactFigure(peak)}", g.LEFT_RIGHT_EDGE, g.SUMMARY_BASELINE, caption, muted, Paint.Align.RIGHT)
         drawWeekChart(data.history, data.date)
 
@@ -385,7 +385,7 @@ private class DeckCanvas(
             fitCaption("Messages today", "Messages", g.STAT_RIGHT_X, right - g.STAT_RIGHT_X)
         } else {
             // The Hub reports no message count for today; a zero here would be a false figure.
-            text(formatMoney(data.snapshot?.today?.costUsd ?: 0.0), g.STAT_RIGHT_X, g.STAT_VALUE_BASELINE, stat, ink)
+            text(formatUsageCost(data.snapshot?.today?.costUsd ?: 0.0, data.snapshot?.today?.unpricedTokens ?: 0, compact = true), g.STAT_RIGHT_X, g.STAT_VALUE_BASELINE, stat, ink)
             fitCaption("Cost today", "Cost", g.STAT_RIGHT_X, right - g.STAT_RIGHT_X)
         }
     }

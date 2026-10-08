@@ -58,7 +58,7 @@ internal fun LazyListScope.trendItems(snapshot: HubSnapshot) {
     if (snapshot.history.monthly.isNotEmpty()) {
         item { Text("MONTHLY HISTORY", color = Ink, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 8.dp)) }
         items(snapshot.history.monthly.takeLast(12).reversed(), key = { it.label }) { point ->
-            DesktopDetailRow(point.label, "", formatTokens(point.tokens), formatMoney(point.costUsd), Blue)
+            DesktopDetailRow(point.label, "", formatTokens(point.tokens), formatUsageCost(point.costUsd, point.unpricedTokens), Blue)
         }
     }
 }
@@ -97,13 +97,14 @@ private fun UsageOverview(snapshot: HubSnapshot) {
     val active = history.filter { it.tokens > 0 }
     val totalTokens = history.sumOf { it.tokens }
     val totalCost = history.sumOf { it.costUsd }
+    val unpricedTokens = history.sumOf { it.unpricedTokens }
     val messages = history.sumOf { it.messages }
     val activeTime = history.sumOf { it.activeTimeMs }
     val peak = history.maxOfOrNull { it.tokens } ?: 0L
     val topModel = history.flatMap { it.perModel.entries }.groupingBy { it.key }.fold(0L) { sum, entry -> sum + entry.value.tokens }.maxByOrNull { it.value }?.key.orEmpty()
     val stats = listOf(
         "TOTAL TOKENS" to formatCompactTokens(totalTokens),
-        "TOTAL COST" to formatMoney(totalCost),
+        (if (unpricedTokens > 0) "KNOWN COST" else "TOTAL COST") to formatUsageCost(totalCost, unpricedTokens, compact = true),
         "ACTIVE DAYS" to active.size.toString(),
         "CURRENT STREAK" to currentStreak(history).toString(),
         "ACTIVE TIME" to formatActiveDuration(activeTime),
@@ -117,6 +118,9 @@ private fun UsageOverview(snapshot: HubSnapshot) {
                 rowStats.forEach { (label, value) -> OverviewStat(label, value, Modifier.weight(1f)) }
                 if (rowStats.size == 1) Spacer(Modifier.weight(1f))
             }
+        }
+        if (unpricedTokens > 0) {
+            MutedCopy("${formatCompactTokens(unpricedTokens)} tokens have no reported price. Cost shading uses known subtotals; choose Tokens to see all usage.")
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("TOKEN ACTIVITY", color = Ink, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
@@ -205,7 +209,7 @@ private fun TrendsPanel(history: List<HistoryPoint>) {
         Row(verticalAlignment = Alignment.Bottom) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(formatCompactTokens(trend.totalTokens), color = Ink, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text("${trend.days.size} recorded days · ${formatMoney(trend.days.sumOf { it.costUsd })}", color = Muted, style = MaterialTheme.typography.labelSmall)
+                Text("${trend.days.size} recorded days · ${formatUsageCost(trend.days.sumOf { it.costUsd }, trend.days.sumOf { it.unpricedTokens })}", color = Muted, style = MaterialTheme.typography.labelSmall)
             }
             Text(if (group == TrendGroup.Tool) "BY TOOL" else "BY MODEL", color = Muted, style = MaterialTheme.typography.labelSmall)
         }

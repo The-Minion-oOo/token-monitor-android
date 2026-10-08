@@ -58,6 +58,7 @@ internal fun sessionPromptCacheMinutes(session: SessionUsage, now: Long): Int? {
 }
 
 internal fun sessionMetricLabels(session: SessionUsage, now: Long): String = buildList {
+    if (session.dotsObservedOnly) add("Dots · observed only")
     sessionCacheHitPercent(session)?.let { percent ->
         val value = if (percent > 0 && percent < 1) "<1" else percent.roundToInt().toString()
         add("Cache hit $value%")

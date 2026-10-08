@@ -3,6 +3,17 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
+## Next release — v0.68.0 r1
+
+- Follow desktop v0.68.0 with pinned-source contract checks and synthetic
+  endpoint/stream fixtures, retaining earlier compatibility tests.
+- Show reported unpriced tokens alongside known costs across totals, breakdowns,
+  projects, sessions and history. Widget cost slots use a compact uncertainty
+  marker with the count in their accessibility descriptions.
+- Label Codex Dots sessions as observed-only rather than complete history.
+- Keep collection on desktop, with no new permissions, background work or
+  changes to widget coordinates and type sizes.
+
 ## v0.67.0 r1 — 2026-10-06
 
 - Follow desktop v0.67.0 with pinned-source contract checks and synthetic

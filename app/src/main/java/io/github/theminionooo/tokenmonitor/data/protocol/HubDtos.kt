@@ -1,7 +1,7 @@
 package io.github.theminionooo.tokenmonitor.data.protocol
 
 /**
- * Wire DTOs for the v0.67.0 Hub protocol. They deliberately have defaults because
+ * Wire DTOs for the v0.68.0 Hub protocol. They deliberately have defaults because
  * the Hub may add fields or an older Hub may omit optional fields.
  */
 internal data class HubHealthDto(
@@ -37,6 +37,10 @@ internal data class HubPeriodDto(
     val modelUnclassifiedTokens: Map<String, Long> = emptyMap(),
     val projects: List<HubProjectDto> = emptyList(),
     val sessions: List<HubSessionDto> = emptyList(),
+    val unpricedTokens: Long = 0,
+    val clientUnpricedTokens: Map<String, Long> = emptyMap(),
+    val modelUnpricedTokens: Map<String, Long> = emptyMap(),
+    val clientModelUnpricedTokens: Map<String, Map<String, Long>> = emptyMap(),
 )
 
 internal data class HubProjectDto(
@@ -46,6 +50,7 @@ internal data class HubProjectDto(
     val costUsd: Double = 0.0,
     val sessionCount: Int = 0,
     val clients: Map<String, Long> = emptyMap(),
+    val unpricedTokens: Long = 0,
 )
 
 internal data class HubSessionDto(
@@ -71,6 +76,9 @@ internal data class HubSessionDto(
     val timedOutputTokens: Long = 0,
     val timedDurationMs: Long = 0,
     val promptCache: HubPromptCacheDto? = null,
+    val unpricedTokens: Long = 0,
+    val usageSource: String = "",
+    val usageCoverage: String = "",
 )
 
 internal data class HubPromptCacheDto(val observedAt: String, val ttlSeconds: Long)
@@ -153,6 +161,7 @@ internal data class HubHistoryPointDto(
     val tokenComponentsAvailable: Boolean = false,
     val perClient: Map<String, HubHistoryAttributionDto> = emptyMap(),
     val perModel: Map<String, HubHistoryAttributionDto> = emptyMap(),
+    val unpricedTokens: Long = 0,
 )
 
 internal data class HubHistoryAttributionDto(
@@ -162,6 +171,7 @@ internal data class HubHistoryAttributionDto(
     val cacheWriteTokens: Long = 0,
     val outputTokens: Long = 0,
     val unclassifiedTokens: Long = 0,
+    val unpricedTokens: Long = 0,
 )
 
 internal data class HubHistoryDto(
