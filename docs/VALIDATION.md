@@ -1,6 +1,6 @@
 # Validation
 
-## v0.68.0 r1 candidate — 2026-10-08
+## v0.68.0 r1 release — 2026-10-08
 
 Desktop tag `v0.68.0` resolves to
 `5d2db368d8313415763860d594de00e46a663418`. The release notes, API changes,
@@ -38,7 +38,21 @@ File SHA-256:
 Certificate SHA-256:
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
 The prepared APK, checksum and update manifest agree on size and identity.
-GitHub CI and release publication are pending.
+
+The release tag points to reviewed main commit
+`5aaf41bad4c5199fde49d3f8c8887e5e80f76b02`, merged through
+[PR #32](https://github.com/The-Minion-oOo/token-monitor-android/pull/32).
+All required checks passed on that exact main push:
+[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/37853989707),
+[Android interaction and optimized API 26 smoke checks](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/37853989594),
+and [released Hub contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/37853989694).
+Downloaded API 36 and API 37 reports each contain 46 distinct tests with no
+failures, errors or skips. The APK, checksum and update manifest were downloaded
+from the draft and verified before publication, then downloaded anonymously from
+the public release and verified again. Size, file hash, package, version code,
+certificate and manifest agree with the staged bundle. GitHub's Latest release
+is [android-v0.68.0-r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.68.0-r1),
+published on 2026-10-08 at 22:39 UTC.
 
 No physical phone was used for this revision. Galaxy in-place upgrade,
 pairing/widget retention, One UI rendering, Tailscale/Wi-Fi transitions,

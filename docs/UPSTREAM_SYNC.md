@@ -10,10 +10,10 @@ are retained. Dots collection, alias/pricing edits and title-sharing controls
 remain on desktop. Android is still read-only.
 
 The latest published release is
-[`android-v0.67.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.67.0-r1),
+[`android-v0.68.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.68.0-r1),
 recorded with its source commit in `release.json`. The earlier v0.66.0 r1
 Galaxy S25 Ultra upgrade preserved pairing and the placed Pages widget;
-v0.66.0 r2 and v0.67.0 r1 have not been checked on that phone.
+later revisions, including v0.68.0 r1, have not been checked on that phone.
 
 An Android-only fix increments `versionCode` and the GitHub release revision,
 for example `android-vX.Y.Z-rN`, without changing the visible compatibility

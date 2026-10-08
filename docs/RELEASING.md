@@ -8,8 +8,7 @@ Android-only releases keep `versionName` and increment the final three digits of
 
 | Build | Version name | Version code | Tag |
 | --- | --- | --- | --- |
-| Published | v0.67.0 | 670001 | `android-v0.67.0-r1` |
-| Candidate | v0.68.0 | 680001 | `android-v0.68.0-r1` |
+| Published | v0.68.0 | 680001 | `android-v0.68.0-r1` |
 
 A newly verified desktop version updates the visible version and starts its
 Android revision at 1. `release.json` records the working build, last published

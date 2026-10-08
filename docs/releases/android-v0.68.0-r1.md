@@ -21,7 +21,7 @@ Dots collection, alias/pricing edits and Edge Dock improvements stay on desktop.
 Android 8 or newer; verified against desktop v0.68.0, with earlier Hub fixtures
 retained. Older Hubs without the new optional fields keep their existing display.
 This APK uses the existing package and signing certificate and updates the
-installed release in place. Open **Settings → Updates** to download it; Android
+installed release in place. Open **Settings → App updates** to download it; Android
 asks you to confirm installation. See [Install and update](../INSTALL.md).
 
 Verification includes JVM tests, lint, native emulator checks and the released

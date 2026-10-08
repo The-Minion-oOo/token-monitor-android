@@ -17,7 +17,7 @@ Tokens, account limits, models and trends from the desktop Token Monitor Hub, pl
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/badge/Android_checks-CI-73bdf5?style=flat-square&logo=githubactions&logoColor=10221c"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.67.0" src="https://img.shields.io/badge/Desktop-v0.67.0-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.68.0" src="https://img.shields.io/badge/Desktop-v0.68.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
 </p>
@@ -101,6 +101,7 @@ is no public server, vendor relay, or separate Token Monitor account.
 - Recent and running sessions on Home, reported conversation titles, and context-window use when the desktop provides them, without reading prompt or response bodies.
 - Trends by tool or model, shown as bars or a K-line chart.
 - Cache hit, cache miss, output and unclassified token details where the Hub provides them.
+- Known cost subtotals with explicit unpriced-token warnings, and Codex Dots sessions labeled as observed-only rather than complete history.
 - The desktop's Default, Obsidian and Porcelain themes, theme codes pasted as-is, an option to follow the phone's light and dark setting, three text sizes, motion controls, and reorderable views and Home modules.
 - A Back button that goes Home instead of quitting on you, and a light haptic tick on every tab.
 
@@ -128,11 +129,11 @@ Session rows also show generation speed, cache-hit percentage and prompt-cache e
 ## Get connected
 
 You need Android 8.0 or newer and a desktop running Token Monitor with Hub hosting
-on. Android v0.67.0 r1 is verified against desktop v0.67.0. The earlier v0.66.0 r1
+on. Android v0.68.0 r1 is verified against desktop v0.68.0. The earlier v0.66.0 r1
 in-app upgrade from v0.65.0 preserved pairing and the placed Pages widget on a
-Galaxy S25 Ultra; v0.67.0 phone checks remain pending.
+Galaxy S25 Ultra; v0.68.0 phone checks remain pending.
 
-1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.67.0 r1 APK.
+1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.68.0 r1 APK.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
 3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
 4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
@@ -146,11 +147,11 @@ Desktop v0.64's optional iCloud Drive sync does not replace the Hub connection f
 
 | | |
 | --- | --- |
-| Current public release | [`v0.67.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.67.0-r1) |
+| Current public release | [`v0.68.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.68.0-r1) |
 | Latest phone-verified build | signed `v0.66.0-r1` over v0.65.0 r1; pairing, home Wi-Fi reconnection and placed Pages widget preserved |
-| Remaining phone checks | v0.67.0 r1 in-place upgrade, Tailscale/Wi-Fi transitions, screen-off expiry and battery behavior |
-| Desktop baseline | Token Monitor `v0.67.0` |
-| Upstream commit | [`338a965`](https://github.com/Javis603/token-monitor/commit/338a965f6c9a5a06b017eba4ebd7d5997973519e) |
+| Remaining phone checks | v0.68.0 r1 in-place upgrade, Tailscale/Wi-Fi transitions, screen-off expiry and battery behavior |
+| Desktop baseline | Token Monitor `v0.68.0` |
+| Upstream commit | [`5d2db36`](https://github.com/Javis603/token-monitor/commit/5d2db368d8313415763860d594de00e46a663418) |
 
 The visible version matches the desktop release the phone understands. Android-only
 builds bump the release revision and internal version code while the compatibility
