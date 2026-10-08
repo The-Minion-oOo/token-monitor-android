@@ -4,7 +4,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.67.0**, released 2026-10-06. The
+The verified baseline is upstream Token Monitor **v0.68.0**, released 2026-10-08. The
 release and source were checked directly from the `Javis603/token-monitor`
 tag before this implementation. The older local desktop checkout was not
 changed and is not the protocol authority.
@@ -51,9 +51,9 @@ replaces the snapshot with the current read endpoints.
 
 ## Fixtures
 
-Synthetic v0.67.0 examples for all five read endpoints and the live stream live
-in `app/src/test/resources/protocol/v0.67.0/`; the retained v0.54.0, v0.55.0,
-v0.56.0, v0.60.0, v0.61.0, v0.62.0, v0.63.0, v0.63.1, v0.64.0, v0.65.0 and v0.66.0 fixtures prove backward compatibility. They contain no user secrets,
+Synthetic v0.68.0 examples for all five read endpoints and the live stream live
+in `app/src/test/resources/protocol/v0.68.0/`; the retained v0.54.0, v0.55.0,
+v0.56.0, v0.60.0, v0.61.0, v0.62.0, v0.63.0, v0.63.1, v0.64.0, v0.65.0, v0.66.0 and v0.67.0 fixtures prove backward compatibility. They contain no user secrets,
 machine paths, account identifiers, or real usage. Parser tests cover every
 read surface, the SSE envelope, omitted optional fields, and a future unknown
 field. The compatibility parser maps only the fields the dashboard needs and
@@ -201,3 +201,30 @@ CodeBuddy/WorkBuddy and Cherry Studio counters already include the desktop's
 reasoning normalization. Android does not add those tokens again. Desktop
 collectors, alias/pricing synchronization, title-sharing controls, export,
 locale and window-management features remain desktop responsibilities.
+
+## v0.68.0 observed usage and incomplete prices
+
+The existing routes, Bearer authentication and stream-v2 envelope are unchanged.
+Optional `unpricedTokens` identifies tokens without a known model price; `costUsd`
+remains the known subtotal, not the price of all reported usage. Android retains
+the count on periods, projects, sessions and daily/monthly history, including
+`perClient` and `perModel` buckets. Period attribution uses `clientUnpricedTokens`,
+`modelUnpricedTokens` and `clientModelUnpricedTokens`; a tool filter never borrows
+global model attribution. Missing fields mean no reported unpriced count, and
+zero cost by itself does not imply missing prices. Counts are bounded by their
+reported token totals. History summary fields are tolerated; Android derives
+its selected-range totals from the actual daily rows and live-day overlay.
+
+Cost labels show the known subtotal plus the unpriced count. Widgets use `+ ?`
+in their existing cost slots, or `— (?)` when all reported cost is unknown,
+with an explicit unpriced count in the accessibility description. Cost heatmap
+shading covers known subtotals; token shading still includes all reported usage.
+
+A Codex session with both `usageSource: "codex-dots-local"` and
+`usageCoverage: "observed-only"` is labeled **Dots · observed only**. It covers
+local observations while the desktop was connected, not a complete history.
+Android does not enable Dots, recollect usage or add reasoning tokens again.
+Desktop normalization handles native-rollout precedence and deduplication.
+Dots collection/visibility controls, MiMo cookie discovery, batch aliases and
+Edge Dock changes remain desktop-only. Synthetic v0.68 fixtures and the isolated
+released-Hub contract check cover the new fields and freshness retention.

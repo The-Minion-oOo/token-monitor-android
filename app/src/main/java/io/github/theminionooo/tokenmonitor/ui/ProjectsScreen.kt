@@ -140,7 +140,7 @@ internal fun ProjectUsageRow(project: ProjectUsage, ratio: Float) {
             Spacer(Modifier.width(10.dp))
             Column(horizontalAlignment = Alignment.End) {
                 Text(formatTokens(project.totalTokens), color = Ink, style = MaterialTheme.typography.bodySmall)
-                Text(formatMoney(project.costUsd), color = Muted, style = MaterialTheme.typography.labelSmall)
+                Text(formatUsageCost(project.costUsd, project.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
             }
         }
         UsageBar(ratio, Purple)
@@ -214,7 +214,7 @@ internal fun SessionUsageRow(session: SessionUsage, title: String, meta: String,
             Spacer(Modifier.width(10.dp))
             Column(horizontalAlignment = Alignment.End) {
                 Text(formatTokens(session.totalTokens), color = Ink, style = MaterialTheme.typography.bodySmall)
-                Text(formatMoney(session.costUsd), color = Muted, style = MaterialTheme.typography.labelSmall)
+                Text(formatUsageCost(session.costUsd, session.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
             }
             Spacer(Modifier.width(4.dp))
             Icon(
@@ -250,6 +250,10 @@ internal fun SessionUsageRow(session: SessionUsage, title: String, meta: String,
                 if (session.startedAt.isNotBlank()) DetailLine("Started", session.startedAt.shortTime())
                 if (session.modelNames.isNotEmpty()) DetailLine("Models", session.modelNames.joinToString { it.displayName() })
                 DetailLine("Session", session.id)
+                if (session.dotsObservedOnly) Text(
+                    "Dots usage covers observations while the desktop was connected, not complete history.",
+                    color = Muted, style = MaterialTheme.typography.labelSmall,
+                )
                 Text(
                     "Prompt and reply text stays on the desktop and is not synchronized by the v${BuildConfig.UPSTREAM_VERSION} Hub.",
                     color = Muted,

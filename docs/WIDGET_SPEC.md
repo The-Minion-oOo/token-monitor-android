@@ -240,6 +240,10 @@ drawn only at columns that contain the first day of a month.
 - Missing limits, breakdown or history: the same centered message for that page.
 - Saved, Stale, Offline, Connecting, Updating: only the status text and toggle
   change. Figures stay.
+- When the Hub reports unpriced tokens, cost text uses `known subtotal + ?`,
+  or `— (?)` when none is priced. Existing cost positions and type sizes stay
+  unchanged; ellipsis remains the overflow rule. Screen-reader summaries give
+  the unpriced token count explicitly. No marker is inferred from zero cost.
 
 ## Verification
 

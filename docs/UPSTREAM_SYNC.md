@@ -2,10 +2,11 @@
 
 ## Version rule
 
-Android v0.67.0 r1 targets desktop tag `v0.67.0`, peeled commit
-`338a965f6c9a5a06b017eba4ebd7d5997973519e`, in Gradle and `upstream.json`.
-It includes TM2 chart-color codes, separate MiMo product rows and title-consent
-contract checks. Shared alias/pricing documents and title-sharing controls
+Android v0.68.0 r1 targets desktop tag `v0.68.0`, peeled commit
+`5d2db368d8313415763860d594de00e46a663418`, in Gradle and `upstream.json`.
+It retains explicit unpriced-token counts and labels Dots sessions as observed-only.
+TM2 colors, separate MiMo product rows, title-consent checks and Wi-Fi recovery
+are retained. Dots collection, alias/pricing edits and title-sharing controls
 remain on desktop. Android is still read-only.
 
 The latest published release is

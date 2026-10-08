@@ -43,6 +43,12 @@ complete wire shape; the stream reducer owns incremental delivery. A desktop
 protocol change is absorbed in `protocol/`, its versioned fixtures, and focused
 presentation helpers before any screen needs to change.
 
+Explicit unpriced-token counts stay separate from known cost subtotals through
+the parser, live-day history overlay and selected-range aggregation. Shared cost
+formatting supplies the full warning in app rows and a compact marker in existing
+widget slots. Optional Dots coverage maps to a session flag; it does not introduce
+a phone collector, new permission or another connection owner.
+
 ## Connection lifecycle
 
 `MainActivity` forwards resume and pause to `DashboardViewModel`, which tells

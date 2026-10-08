@@ -160,7 +160,7 @@ internal fun DeviceUsageRow(
             Spacer(Modifier.width(10.dp))
             Column(horizontalAlignment = Alignment.End) {
                 Text(formatTokens(usage.totalTokens), color = Ink, style = MaterialTheme.typography.bodySmall)
-                Text(formatMoney(usage.costUsd), color = Muted, style = MaterialTheme.typography.labelSmall)
+                Text(formatUsageCost(usage.costUsd, usage.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
             }
         }
         UsageBar(ratio, tone)

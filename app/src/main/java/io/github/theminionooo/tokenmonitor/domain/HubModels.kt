@@ -44,6 +44,10 @@ data class UsagePeriod(
     val modelUnclassifiedTokens: Map<String, Long> = emptyMap(),
     val projects: List<ProjectUsage> = emptyList(),
     val sessions: List<SessionUsage> = emptyList(),
+    val unpricedTokens: Long = 0,
+    val clientUnpricedTokens: Map<String, Long> = emptyMap(),
+    val modelUnpricedTokens: Map<String, Long> = emptyMap(),
+    val clientModelUnpricedTokens: Map<String, Map<String, Long>> = emptyMap(),
 )
 
 data class ProjectUsage(
@@ -53,6 +57,7 @@ data class ProjectUsage(
     val costUsd: Double,
     val sessionCount: Int,
     val clients: Map<String, Long>,
+    val unpricedTokens: Long = 0,
 )
 
 data class SessionUsage(
@@ -78,6 +83,8 @@ data class SessionUsage(
     val timedOutputTokens: Long = 0,
     val timedDurationMs: Long = 0,
     val promptCache: PromptCache? = null,
+    val unpricedTokens: Long = 0,
+    val dotsObservedOnly: Boolean = false,
 )
 
 /** A provider-specific estimate, not a guaranteed server-side expiry. */
@@ -150,6 +157,7 @@ data class HistoryAttribution(
     val cacheWriteTokens: Long = 0,
     val outputTokens: Long = 0,
     val unclassifiedTokens: Long = 0,
+    val unpricedTokens: Long = 0,
 )
 
 data class HistoryPoint(
@@ -165,6 +173,7 @@ data class HistoryPoint(
     val tokenComponentsAvailable: Boolean = false,
     val perClient: Map<String, HistoryAttribution> = emptyMap(),
     val perModel: Map<String, HistoryAttribution> = emptyMap(),
+    val unpricedTokens: Long = 0,
 )
 
 data class HubHistory(

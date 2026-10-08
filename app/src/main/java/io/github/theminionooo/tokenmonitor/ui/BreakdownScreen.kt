@@ -114,6 +114,7 @@ internal fun LazyListScope.breakdownItems(
     rankingMetric: RankingMetric,
     modelRows: Boolean = false,
     onToolSelected: ((String) -> Unit)? = null,
+    unpriced: Map<String, Long> = emptyMap(),
 ) {
     if (tokens.isEmpty()) {
         item { MutedCopy(emptyMessage, modifier = Modifier.padding(vertical = 12.dp)) }
@@ -123,7 +124,7 @@ internal fun LazyListScope.breakdownItems(
             DesktopUsageRow(
                 name = name,
                 totalTokens = count,
-                detail = costs[name]?.let(::formatMoney).orEmpty(),
+                detail = if (name in costs || (unpriced[name] ?: 0) > 0) formatUsageCost(costs[name] ?: 0.0, unpriced[name] ?: 0) else "",
                 ratio = count.toFloat() / maximum,
                 cacheReadTokens = cacheReads[name] ?: 0L,
                 outputTokens = outputs[name] ?: 0L,

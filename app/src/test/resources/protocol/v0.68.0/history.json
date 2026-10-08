@@ -1,0 +1,75 @@
+{
+  "daily": [
+    {
+      "date": "2026-10-08",
+      "tokens": 1000,
+      "cost": 1.25,
+      "unpricedTokens": 400,
+      "perClient": {
+        "codex": {
+          "tokens": 700,
+          "cost": 1.25,
+          "unpricedTokens": 400
+        },
+        "claude": {
+          "tokens": 300,
+          "cost": 0
+        }
+      },
+      "perModel": {
+        "gpt-5": {
+          "tokens": 300,
+          "cost": 1.25
+        },
+        "unpriced-model": {
+          "tokens": 400,
+          "cost": 0,
+          "unpricedTokens": 400
+        },
+        "claude-sonnet-4-5": {
+          "tokens": 300,
+          "cost": 0
+        }
+      }
+    }
+  ],
+  "monthly": [
+    {
+      "tokens": 1000,
+      "cost": 1.25,
+      "unpricedTokens": 400,
+      "perClient": {
+        "codex": {
+          "tokens": 700,
+          "cost": 1.25,
+          "unpricedTokens": 400
+        },
+        "claude": {
+          "tokens": 300,
+          "cost": 0
+        }
+      },
+      "perModel": {
+        "gpt-5": {
+          "tokens": 300,
+          "cost": 1.25
+        },
+        "unpriced-model": {
+          "tokens": 400,
+          "cost": 0,
+          "unpricedTokens": 400
+        },
+        "claude-sonnet-4-5": {
+          "tokens": 300,
+          "cost": 0
+        }
+      },
+      "month": "2026-10"
+    }
+  ],
+  "summary": {
+    "totalTokens": 1000,
+    "totalCost": 1.25,
+    "unpricedTokens": 400
+  }
+}

@@ -116,9 +116,9 @@ internal fun LazyListScope.homeItems(
     displayOptions.visibleHomeModules.forEach { module ->
         when (module) {
             "Limits" -> item { DesktopModule("LIMITS", DashboardDestination.Limits, onChoose) { HomeLimits(snapshot.stats.limits.providers, displayOptions) } }
-            "Tools" -> item { DesktopModule("TOOLS", DashboardDestination.Tools, onChoose) { HomeBreakdown(usage.clients, usage.clientCosts, displayOptions.rankingMetric) } }
+            "Tools" -> item { DesktopModule("TOOLS", DashboardDestination.Tools, onChoose) { HomeBreakdown(usage.clients, usage.clientCosts, displayOptions.rankingMetric, unpriced = usage.clientUnpricedTokens) } }
             "Devices" -> item { DesktopModule("DEVICES", DashboardDestination.Devices, onChoose) { HomeDevices(snapshot.stats.devices, period = period, aggregateUsage = usage) } }
-            "Models" -> item { DesktopModule("MODELS", DashboardDestination.Models, onChoose) { HomeBreakdown(usage.models, usage.modelCosts, displayOptions.rankingMetric, modelRows = true) } }
+            "Models" -> item { DesktopModule("MODELS", DashboardDestination.Models, onChoose) { HomeBreakdown(usage.models, usage.modelCosts, displayOptions.rankingMetric, modelRows = true, unpriced = usage.modelUnpricedTokens) } }
             "Sessions" -> item { HomeSessionsModule(snapshot, onChoose) }
             "Activity" -> item {
                 DesktopModule(
@@ -218,6 +218,7 @@ internal fun HomeBreakdown(
     costs: Map<String, Double>,
     rankingMetric: RankingMetric,
     modelRows: Boolean = false,
+    unpriced: Map<String, Long> = emptyMap(),
 ) {
     if (tokens.isEmpty()) {
         MutedCopy("No activity for this period")
@@ -229,7 +230,7 @@ internal fun HomeBreakdown(
             HomeListRow(
                 name = name,
                 primary = "${formatCompactTokens(count)}  ${formatPercent(count.toDouble() / total * 100.0)}",
-                secondary = costs[name]?.let(::formatMoney).orEmpty(),
+                secondary = if (name in costs || (unpriced[name] ?: 0) > 0) formatUsageCost(costs[name] ?: 0.0, unpriced[name] ?: 0) else "",
                 upstreamName = name,
                 modelRow = modelRows,
             )

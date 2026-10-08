@@ -50,7 +50,7 @@ jobs:
           pre-emulator-launch-script: grep -Fx 'target=android-${{ matrix.sdk }}' "$ANDROID_AVD_HOME/test.ini"
           script: |
             ./gradlew :app:connectedDebugAndroidTest -PtokenMonitorPreview=true --no-daemon --console=plain
-            node tools/check-instrumentation.mjs app/build/outputs/androidTest-results/connected/debug 44
+            node tools/check-instrumentation.mjs app/build/outputs/androidTest-results/connected/debug 46
       - uses: actions/upload-artifact@v7
         if: always()
         with:

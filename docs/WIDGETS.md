@@ -34,6 +34,11 @@ auto-rotation loop, or wake lock.
 | Breakdown | Ranked tool and model totals with proportional bars and provider colors |
 | Activity | Labeled seven-day token and cost bars, a labeled 13-week heatmap, active days, and messages |
 
+When the Hub reports unpriced tokens, cost slots show the known subtotal with
+`+ ?`, or `— (?)` when no priced subtotal is available. Accessibility descriptions
+include the unpriced count. This does not change the card's geometry or type sizes;
+older Hub snapshots without the optional count keep their existing cost labels.
+
 ![Pages widget Overview, Limits, Breakdown and Activity](images/widget-pages-overview.png)
 
 The complete four-page gallery is shown in the project [README](../README.md#one-fixed-card-four-focused-pages).

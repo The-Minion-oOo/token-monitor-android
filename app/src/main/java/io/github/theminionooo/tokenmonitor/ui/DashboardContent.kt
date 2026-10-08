@@ -184,6 +184,7 @@ internal fun DashboardContent(
             DashboardDestination.Tools -> breakdownItems(
                 tokens = usage.clients,
                 costs = usage.clientCosts,
+                unpriced = usage.clientUnpricedTokens,
                 cacheReads = usage.clientCacheReads,
                 outputs = usage.clientOutputs,
                 unclassified = usage.clientUnclassifiedTokens,
@@ -196,6 +197,7 @@ internal fun DashboardContent(
             DashboardDestination.Models -> breakdownItems(
                 tokens = modelUsage.models,
                 costs = modelUsage.modelCosts,
+                unpriced = modelUsage.modelUnpricedTokens,
                 cacheReads = modelUsage.modelCacheReads,
                 outputs = modelUsage.modelOutputs,
                 unclassified = modelUsage.modelUnclassifiedTokens,
@@ -229,7 +231,7 @@ internal fun TotalPanel(usage: UsagePeriod, compact: Boolean) {
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
-        Text(formatMoney(cost), color = Muted, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp))
+        Text(formatUsageCost(cost, usage.unpricedTokens), color = Muted, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp))
     }
 }
 
