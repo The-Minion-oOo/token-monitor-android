@@ -3,7 +3,7 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
-## Next release — v0.68.0 r2
+## v0.68.0 r2 — 2026-10-11
 
 - Keep the Hub secret on the network its address belongs to: Tailscale only
   while a VPN is up, the home address only on Wi-Fi, Ethernet or a VPN, never
