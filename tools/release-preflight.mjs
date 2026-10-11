@@ -54,7 +54,7 @@ async function main() {
         for (let page = 1; ; page++) {
             const response = await githubGet(`${base}/actions/runs/${latest.id}/attempts/${latest.run_attempt}/jobs?per_page=100&page=${page}`);
             jobs.push(...response.jobs);
-            if (jobs.length >= response.total_count) break;
+            if (!response.jobs.length || jobs.length >= response.total_count) break;
         }
         requireSuccessfulJobs(check, sha, runs, new Map([[latest.id, jobs]]));
         console.log(`${check.workflow}: required jobs passed on ${sha}.`);

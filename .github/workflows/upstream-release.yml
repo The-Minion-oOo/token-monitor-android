@@ -12,10 +12,13 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
       - name: Require the reviewed main branch
-        run: test "${{ github.ref }}" = "refs/heads/main"
+        run: test "$GITHUB_REF" = "refs/heads/main"
       - id: upstream
         name: Compare verified and latest releases
         shell: pwsh
@@ -23,7 +26,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: ./tools/check-upstream.ps1
       - name: Reconcile compatibility review issues
-        uses: actions/github-script@v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
         with:
           script: |
             const { pathToFileURL } = require('node:url');
