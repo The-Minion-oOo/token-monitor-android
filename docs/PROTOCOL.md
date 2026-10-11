@@ -4,10 +4,9 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.68.0**, released 2026-10-08. The
-release and source were checked directly from the `Javis603/token-monitor`
-tag before this implementation. The older local desktop checkout was not
-changed and is not the protocol authority.
+The verified baseline is upstream Token Monitor **v0.68.0**, released 2026-10-08.
+I check each release against the `Javis603/token-monitor` tag recorded in
+`upstream.json`; that tag, not a local checkout, is the protocol reference.
 
 The current Node Hub binds to loopback when no secret is configured. A secret is
 therefore required before the Hub can bind to a Tailscale or LAN address. The

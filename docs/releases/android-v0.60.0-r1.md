@@ -27,4 +27,5 @@ The app remains read-only. It does not collect usage on the phone, expose sessio
 transcripts, schedule background sync, request a wake lock, or send data through a
 public relay.
 
-See [Install and update](../INSTALL.md) for installation and checksum instructions.
+See [Install and update](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md)
+for installation and checksum instructions.

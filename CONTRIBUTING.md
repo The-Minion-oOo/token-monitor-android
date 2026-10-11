@@ -26,7 +26,13 @@ keep it that way.
 
    ```powershell
    .\gradlew.bat :app:testDebugUnitTest :app:lintDebug :app:assembleDebug
+   node tools/check-docs.mjs
+   node tools/check-release.mjs
+   node --test tools/tests/*.test.mjs
    ```
+
+   CI also runs the emulator interaction suite; see
+   [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md) to run it yourself.
 
 4. Exercise the change on an emulator or phone. For visual changes, capture a
    screenshot from the fixture Hub, never from a real Hub.
@@ -38,8 +44,7 @@ keep it that way.
 
 Write them plainly: a short imperative subject such as
 `Add an optional home Wi-Fi fallback address`, and a body only when the diff
-does not explain the why. No ticket jargon, no severity labels, no generated
-trailers or footers.
+does not explain the why. No ticket jargon or severity labels.
 
 ## Never commit
 

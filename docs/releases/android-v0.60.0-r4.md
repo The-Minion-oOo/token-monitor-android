@@ -31,4 +31,5 @@ layout more sharply.
 The app remains read-only. Page changes are local and add no background timer,
 network request, service, or wake lock.
 
-See [Install and update](../INSTALL.md) for installation and checksum instructions.
+See [Install and update](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md)
+for installation and checksum instructions.

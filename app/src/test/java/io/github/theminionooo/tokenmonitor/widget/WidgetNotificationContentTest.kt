@@ -126,7 +126,7 @@ class WidgetNotificationContentTest {
         ))
         val notification = widgetNotificationContent(
             session, live = true, now = Instant.parse("2026-10-05T00:00:10Z").toEpochMilli(),
-            zoneId = ZoneId.of("America/Chicago"), locale = Locale.US,
+            zoneId = ZoneId.of("Asia/Tokyo"), locale = Locale.US,
         )
 
         assertTrue(notification.headline.endsWith("today"))

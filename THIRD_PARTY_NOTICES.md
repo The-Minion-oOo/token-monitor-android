@@ -133,8 +133,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 
 ## Libraries
 
-AndroidX/Jetpack Compose, Kotlin and kotlinx.serialization are used under their
-respective open-source licenses. Dependency versions are declared in
+AndroidX/Jetpack Compose, the Kotlin standard library, kotlinx.coroutines and
+kotlinx.serialization are included in the APK under the Apache License 2.0
+(<https://www.apache.org/licenses/LICENSE-2.0>). Dependency versions are declared in
 `gradle/libs.versions.toml` and `app/build.gradle.kts`; the project does not
 relicense those dependencies. Android/Material icons retain their upstream
 attribution and licenses.

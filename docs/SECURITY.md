@@ -12,6 +12,11 @@ end-to-end encrypted relay when network conditions require it. The app does not
 operate a cloud relay or require the desktop Hub to be exposed on the public
 internet.
 
+The desktop Hub serves plain HTTP. Over Tailscale the traffic is encrypted by
+Tailscale's WireGuard tunnel. On the optional home-network (LAN) route it is not
+encrypted, so other devices on the same Wi-Fi could observe the Hub secret and
+usage data. Use the LAN route only on a network you trust, and prefer Tailscale.
+
 The desktop Hub secret is sent as a bearer credential only to the validated Hub address. It is never logged or included in diagnostics.
 
 The unauthenticated health response must identify a Token Monitor Hub before the

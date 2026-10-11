@@ -42,9 +42,9 @@ class HubDiscoveryTest {
     @Test
     fun `duplicate subnets collapse and the search stays small`() {
         val prefixes = HubDiscovery.subnetPrefixes(
-            listOf("192.168.1.2", "192.168.1.3", "172.20.96.1", "10.1.1.1"),
+            listOf("192.168.1.2", "192.168.1.3", "172.24.8.1", "10.1.1.1"),
         )
 
-        assertEquals(listOf("192.168.1" to 2, "172.20.96" to 1), prefixes)
+        assertEquals(listOf("192.168.1" to 2, "172.24.8" to 1), prefixes)
     }
 }

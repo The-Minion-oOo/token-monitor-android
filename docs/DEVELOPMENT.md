@@ -15,6 +15,9 @@ Read [Architecture](ARCHITECTURE.md) before changing runtime behavior and
 
 `local.properties` must point to the Android SDK and is ignored by Git.
 
+Install the Node tooling dependencies once with `npm ci --prefix tools`. Only the
+image tools (`build-showcase.mjs`, `subset-fonts.mjs`) need them.
+
 ## Common commands
 
 Run these from the repository root. Use `./gradlew` instead of
@@ -30,7 +33,8 @@ Run these from the repository root. Use `./gradlew` instead of
 # One JVM test class
 .\gradlew.bat :app:testDebugUnitTest --tests "*HubDiscoveryTest*"
 
-# Release metadata and tooling regressions
+# Documentation links, release metadata, and tooling regressions
+node tools/check-docs.mjs
 node tools/check-release.mjs
 node --test tools/tests/*.test.mjs
 ```
@@ -82,6 +86,14 @@ same launcher allocation. Keep all four production renders together in README
 marketing so typography, card geometry, navigation controls, and empty-space
 handling can be compared directly.
 
+`tools/capture-showcase.ps1` builds the preview package, runs the showcase tests
+on the emulator and pulls the captures into `docs/images/`. It and
+`tools/subset-fonts.mjs` are helper scripts that assume Windows PowerShell and a
+default Android Studio install. The capture script finds `adb` on `PATH` or under
+`%LOCALAPPDATA%\Android\Sdk`; the font script reads Android Studio's bundled
+JetBrains Mono from its default folder unless you pass another one. Adjust the
+paths if your setup differs.
+
 Never put a real Hub secret, address, account, device, project, or usage response
 in a fixture or screenshot.
 
@@ -105,7 +117,7 @@ against the actual Hub, including exclusion of private local-session keys.
 
 Instrumentation tests use the preview package to exercise navigation, dialogs,
 widgets, storage, and lifecycle behavior. Run them on an API 36 emulator before
-handing off a meaningful UI or lifecycle change. Visual changes also need a
+opening a pull request for a UI or lifecycle change. Visual changes also need a
 native screenshot at the affected phone or launcher size.
 
 Current coverage and physical-device limits are recorded in
@@ -251,5 +263,5 @@ Release signing and publishing are documented in [Releasing](RELEASING.md).
 | Find on Wi-Fi is slow in the emulator | The simulated network can take several seconds. |
 | A desktop address starts with `169.254` | Use the `100.x` address shown by Tailscale instead. |
 
-Android permits only one active UiAutomation connection. Stop interactive CLI
-inspection before running instrumentation tests.
+Android permits only one active UiAutomation connection. Close any other
+UI-automation or inspection tool before running instrumentation tests.

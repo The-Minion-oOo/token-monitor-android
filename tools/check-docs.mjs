@@ -11,10 +11,12 @@ function walk(dir) {
 }
 let errors = 0;
 for (const file of walk(root)) {
+  const notes = path.relative(root,file).split(path.sep).join('/').startsWith('docs/releases/');
   const body = fs.readFileSync(file,'utf8').replace(/```[\s\S]*?```/g,'');
   const links = [...body.matchAll(/\]\(([^)]+)\)|(?:src|href)="([^"]+)"/g)];
   for (const match of links) {
     let target = (match[1] || match[2]).split(/\s+"/)[0].replace(/^<|>$/g,'');
+    if (notes && !/^(?:https:|mailto:|#)/i.test(target)) {console.error(`${path.relative(root,file)}: release notes need absolute links: ${target}`);errors++;continue;}
     if (/^(?:https?:|mailto:|data:|#)/i.test(target)) continue;
     target = decodeURIComponent(target.split(/[?#]/)[0]);
     if (!fs.existsSync(path.resolve(path.dirname(file),target))) {console.error(`${path.relative(root,file)}: missing ${target}`);errors++;}

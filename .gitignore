@@ -11,8 +11,13 @@ captures/
 app/build/
 *.apk
 *.apk.sha256
+*.aab
+*.idsig
 *.jks
 *.keystore
+*.p12
+signing.env
+.env
 secrets.properties
 
 node_modules/
