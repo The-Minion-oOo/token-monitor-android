@@ -111,8 +111,9 @@ internal fun counterFrame(old: CounterFrame?, value: Long?): CounterFrame = when
 /** The lowest remaining window a provider reports, which is what the dashboard's Home module leads with. */
 internal data class QuotaRow(val provider: String, val window: LimitWindow, val remainingPercent: Double, val siblings: List<LimitWindow> = listOf(window))
 
+/** The same whole-number "% left" the app shows, so every readout truncates or rounds identically. */
 internal fun remainingPercent(window: LimitWindow): Double? =
-    (window.remainingPercent ?: window.usedPercent?.let { 100.0 - it })?.takeIf { it.isFinite() }?.coerceIn(0.0, 100.0)
+    io.github.theminionooo.tokenmonitor.ui.quotaPercentLeft(window)?.toDouble()
 
 internal fun quotaRows(snapshot: HubSnapshot): List<QuotaRow> = snapshot.stats.limits.providers.mapNotNull { account ->
     account.windows.mapNotNull { window -> remainingPercent(window)?.let { QuotaRow(account.provider, window, it, account.windows) } }

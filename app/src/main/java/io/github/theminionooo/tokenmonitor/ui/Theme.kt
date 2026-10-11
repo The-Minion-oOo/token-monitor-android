@@ -121,10 +121,11 @@ internal data class Palette(
                 success = if (light) Color(0xFF18794E) else Color(0xFFB7EAD4),
                 blue = blue,
                 chart = if (theme.chart.equals("#73bdf5", ignoreCase = true)) blue else hex(theme.chart),
-                orange = Color(0xFFF4A073),
+                // Light themes darken the warning hues (same hue, 4.5:1 or better on Porcelain) because they are drawn as text.
+                orange = if (light) Color(0xFFA03E0C) else Color(0xFFF4A073),
                 purple = Color(0xFFB394F4),
-                yellow = Color(0xFFF1D973),
-                danger = Color(0xFFF47788),
+                yellow = if (light) Color(0xFF705B00) else Color(0xFFF1D973),
+                danger = if (light) Color(0xFFA82132) else Color(0xFFF47788),
                 heat = if (!theme.chart.equals("#73bdf5", ignoreCase = true)) {
                     val chart = hex(theme.chart)
                     listOf(if (light) Color(0xFFE3E7EC) else lerp(shell, Color.Black, 0.35f)) +

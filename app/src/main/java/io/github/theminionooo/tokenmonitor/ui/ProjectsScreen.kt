@@ -34,6 +34,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
@@ -108,7 +109,9 @@ internal fun LazyListScope.projectItems(projects: List<ProjectUsage>, period: Da
     if (projects.isEmpty()) item { MutedCopy(usageListEmptyMessage(false, period, searching), modifier = Modifier.padding(vertical = 12.dp)) }
     else {
         val maximum = projects.maxOfOrNull { it.totalTokens }?.coerceAtLeast(1L) ?: 1L
-        items(projects.sortedByDescending { it.totalTokens }, key = { it.id }) { project ->
+        val ranked = projects.sortedByDescending { it.totalTokens }
+        val keys = uniqueKeys(ranked) { it.id }
+        itemsIndexed(ranked, key = { index, _ -> keys[index] }) { _, project ->
             ProjectUsageRow(project, project.totalTokens.toFloat() / maximum)
         }
     }
@@ -168,7 +171,9 @@ internal fun LazyListScope.sessionItems(sessions: List<SessionUsage>, period: Da
     if (sessions.isEmpty()) item { MutedCopy(usageListEmptyMessage(true, period, searching), modifier = Modifier.padding(vertical = 12.dp)) }
     else {
         val maximum = sessions.maxOfOrNull { it.totalTokens }?.coerceAtLeast(1L) ?: 1L
-        items(sessions.sortedByDescending { it.totalTokens }, key = { "${it.client}:${it.id}" }) { session ->
+        val ranked = sessions.sortedByDescending { it.totalTokens }
+        val keys = uniqueKeys(ranked) { "${it.client}:${it.id}" }
+        itemsIndexed(ranked, key = { index, _ -> keys[index] }) { _, session ->
             val labels = sessionRowLabels(session, LocalSessionTitles.current)
             SessionUsageRow(session, labels.title, labels.meta, session.totalTokens.toFloat() / maximum)
         }

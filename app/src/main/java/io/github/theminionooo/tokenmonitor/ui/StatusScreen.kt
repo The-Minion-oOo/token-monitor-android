@@ -112,6 +112,8 @@ internal fun LazyListScope.statusItems(
 ) {
     if (serviceStatus.loading && serviceStatus.snapshot == null) {
         item { MutedCopy("Checking Claude, OpenAI, Cursor, and DeepSeek…", modifier = Modifier.padding(vertical = 8.dp)) }
+    } else if (serviceStatus.snapshot == null) {
+        item { MutedCopy("Service status is unavailable right now.", modifier = Modifier.padding(vertical = 8.dp)) }
     }
     serviceStatus.snapshot?.providers?.let { providers ->
         items(providers, key = { it.id }) { provider ->

@@ -17,11 +17,24 @@ internal val dayFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE, MM
 
 internal fun formatTokens(tokens: Long): String = wholeNumberFormat.format(tokens)
 
-internal fun formatCompactTokens(tokens: Long): String = when {
-    tokens >= 1_000_000_000L -> String.format(Locale.US, "%.1fB", tokens / 1_000_000_000.0)
-    tokens >= 1_000_000L -> String.format(Locale.US, "%.1fM", tokens / 1_000_000.0)
-    tokens >= 10_000L -> String.format(Locale.US, "%.1fK", tokens / 1_000.0)
-    else -> formatTokens(tokens)
+private val compactUnits = listOf(1_000L to "K", 1_000_000L to "M", 1_000_000_000L to "B")
+
+/** [tokens] in tenths of [unit], rounded half up in whole numbers so the unit check below sees the rounded value. */
+private fun tenthsOf(tokens: Long, unit: Long): Long {
+    val step = unit / 10
+    return tokens / step + if (tokens % step >= step / 2) 1 else 0
+}
+
+internal fun formatCompactTokens(tokens: Long): String {
+    if (tokens < 10_000L) return formatTokens(tokens)
+    var index = compactUnits.indexOfLast { tokens >= it.first }
+    var tenths = tenthsOf(tokens, compactUnits[index].first)
+    // A value that rounds up to 1000.0 of a unit belongs to the next one: 999,960 is 1.0M, not 1000.0K.
+    while (tenths >= 10_000L && index < compactUnits.lastIndex) {
+        index++
+        tenths = tenthsOf(tokens, compactUnits[index].first)
+    }
+    return "${tenths / 10}.${tenths % 10}${compactUnits[index].second}"
 }
 
 internal fun formatMoney(value: Double): String = currencyFormat.format(value)
@@ -199,6 +212,25 @@ private val providerLabels = mapOf(
 internal fun String.providerLabel(): String {
     val key = trim().lowercase(Locale.US)
     return providerLabels[key] ?: displayName()
+}
+
+/**
+ * Lazy list keys must be unique, but Hub ids can repeat (two devices each reporting the same signed-out provider).
+ * The first occurrence keeps its plain key so saved expanded state stays attached to it; repeats get `#2`, `#3`, ….
+ */
+internal fun <T> uniqueKeys(items: List<T>, key: (T) -> String): List<String> {
+    val used = HashSet<String>()
+    val repeats = HashMap<String, Int>()
+    return items.map { item ->
+        val base = key(item)
+        var candidate = base
+        while (!used.add(candidate)) {
+            val occurrence = (repeats[base] ?: 1) + 1
+            repeats[base] = occurrence
+            candidate = "$base#$occurrence"
+        }
+        candidate
+    }
 }
 
 /** Products from one MiMo account are distinct rows even when their names match. */
