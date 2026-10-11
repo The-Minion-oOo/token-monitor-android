@@ -33,10 +33,11 @@ class SwipeWidgetProvider : AppWidgetProvider() {
 
     /** Reading the cache, parsing and drawing the card are too slow for the broadcast thread. */
     private fun updateAsync(context: Context, ids: IntArray) {
-        val result = goAsync()
+        // Null when the provider is called directly rather than from a delivered broadcast.
+        val result: PendingResult? = goAsync()
         val app = context.applicationContext
         thread(name = "pages-widget") {
-            try { render(app, AppWidgetManager.getInstance(app), ids) } finally { result.finish() }
+            try { render(app, AppWidgetManager.getInstance(app), ids) } finally { result?.finish() }
         }
     }
 

@@ -145,7 +145,8 @@ class WidgetDeckDesignTest {
             fun description(): String {
                 var value = ""
                 instrumentation.runOnMainSync {
-                    value = view.findViewById<ImageView>(R.id.swipe_page_bitmap).contentDescription.toString()
+                    // The provider draws in the background, so the first frame may not be posted yet.
+                    value = view.findViewById<ImageView>(R.id.swipe_page_bitmap)?.contentDescription?.toString().orEmpty()
                 }
                 return value
             }
