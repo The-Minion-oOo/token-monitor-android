@@ -9,6 +9,7 @@ import io.github.theminionooo.tokenmonitor.widget.WidgetUpdateCoordinator
 import io.github.theminionooo.tokenmonitor.data.HubRepositoryState
 import io.github.theminionooo.tokenmonitor.data.network.HubDiscovery
 import io.github.theminionooo.tokenmonitor.data.network.LocalNetworkAccess
+import io.github.theminionooo.tokenmonitor.data.network.PhoneNetworks
 import io.github.theminionooo.tokenmonitor.data.network.ServiceStatusClient
 import io.github.theminionooo.tokenmonitor.data.storage.DisplayPreferences
 import io.github.theminionooo.tokenmonitor.data.storage.LimitBarMetric
@@ -43,6 +44,8 @@ internal data class ConnectionFormState(
 internal data class ServiceStatusState(
     val loading: Boolean = false,
     val snapshot: ServiceStatusSnapshot? = null,
+    /** The last check finished without any status to show. */
+    val failed: Boolean = false,
 )
 
 internal data class HubDiscoveryState(
@@ -66,7 +69,7 @@ internal class DashboardViewModel(application: Application) : AndroidViewModel(a
     val displayOptions = displayPreferences.options
     private val _serviceStatus = MutableStateFlow(ServiceStatusState())
     val serviceStatus: StateFlow<ServiceStatusState> = _serviceStatus.asStateFlow()
-    private val hubDiscovery = HubDiscovery()
+    private val hubDiscovery = HubDiscovery(addresses = { PhoneNetworks.lanAddresses(getApplication()) })
     private val _discovery = MutableStateFlow(HubDiscoveryState())
     val discovery: StateFlow<HubDiscoveryState> = _discovery.asStateFlow()
     private var discoveryJob: Job? = null
@@ -243,7 +246,7 @@ internal class DashboardViewModel(application: Application) : AndroidViewModel(a
         serviceStatusJob = viewModelScope.launch {
             val snapshot = runCatching { serviceStatusClient.load() }.getOrNull()
             if (resumed && _destination.value == DashboardDestination.Status) {
-                _serviceStatus.value = ServiceStatusState(loading = false, snapshot = snapshot ?: current)
+                _serviceStatus.value = ServiceStatusState(loading = false, snapshot = snapshot ?: current, failed = snapshot == null && current == null)
             }
         }
     }

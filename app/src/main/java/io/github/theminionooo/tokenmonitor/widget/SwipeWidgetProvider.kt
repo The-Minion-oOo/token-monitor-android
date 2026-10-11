@@ -10,15 +10,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.RemoteViews
 import io.github.theminionooo.tokenmonitor.R
+import kotlin.concurrent.thread
 
 class SwipeWidgetProvider : AppWidgetProvider() {
-    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) {
-        ids.forEach { configure(context, manager, it) }
-    }
+    override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = updateAsync(context, ids)
 
-    override fun onAppWidgetOptionsChanged(context: Context, manager: AppWidgetManager, id: Int, options: Bundle) {
-        configure(context, manager, id)
-    }
+    override fun onAppWidgetOptionsChanged(context: Context, manager: AppWidgetManager, id: Int, options: Bundle) =
+        updateAsync(context, intArrayOf(id))
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
@@ -26,24 +24,20 @@ class SwipeWidgetProvider : AppWidgetProvider() {
         val widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
         if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) return
         WidgetDeckPageState.move(context, widgetId, if (intent.action == ACTION_PREVIOUS) -1 else 1)
-        configure(context, AppWidgetManager.getInstance(context), widgetId)
+        updateAsync(context, intArrayOf(widgetId))
     }
 
     override fun onDeleted(context: Context, ids: IntArray) = WidgetDeckPageState.remove(context, ids)
 
     override fun onDisabled(context: Context) = WidgetUpdateCoordinator.stopLiveIfUnused(context)
 
-    private fun configure(context: Context, manager: AppWidgetManager, widgetId: Int) {
-        val state = loadWidgetDeck(context, widgetId)
-        val page = WidgetDeckPageState.read(context, widgetId)
-        val views = WidgetDeckRenderer.render(context, page, state.data, state.theme, state.size).apply {
-            setOnClickPendingIntent(R.id.swipe_page_open, activityIntent(context, widgetId, 0, WidgetControlActivity.ACTION_OPEN))
-            setOnClickPendingIntent(R.id.swipe_page_previous, pageIntent(context, widgetId, 1, ACTION_PREVIOUS))
-            setOnClickPendingIntent(R.id.swipe_page_next, pageIntent(context, widgetId, 2, ACTION_NEXT))
-            setOnClickPendingIntent(R.id.widget_refresh, activityIntent(context, widgetId, 3, WidgetLiveService.ACTION_REFRESH))
-            setOnClickPendingIntent(R.id.widget_live, activityIntent(context, widgetId, 4, WidgetLiveService.ACTION_LIVE))
+    /** Reading the cache, parsing and drawing the card are too slow for the broadcast thread. */
+    private fun updateAsync(context: Context, ids: IntArray) {
+        val result = goAsync()
+        val app = context.applicationContext
+        thread(name = "pages-widget") {
+            try { render(app, AppWidgetManager.getInstance(app), ids) } finally { result.finish() }
         }
-        manager.updateAppWidget(widgetId, views)
     }
 
     companion object {
@@ -53,9 +47,28 @@ class SwipeWidgetProvider : AppWidgetProvider() {
 
         internal fun refresh(context: Context) {
             val manager = AppWidgetManager.getInstance(context)
-            val ids = manager.getAppWidgetIds(ComponentName(context, SwipeWidgetProvider::class.java))
-            val provider = SwipeWidgetProvider()
-            ids.forEach { provider.configure(context, manager, it) }
+            render(context, manager, manager.getAppWidgetIds(ComponentName(context, SwipeWidgetProvider::class.java)))
+        }
+
+        /**
+         * One render at a time, so an older snapshot is never posted after a newer one. A launcher that
+         * refuses an update must not take the app down with it.
+         */
+        @Synchronized private fun render(context: Context, manager: AppWidgetManager, ids: IntArray) {
+            ids.forEach { id -> runCatching { configure(context, manager, id) } }
+        }
+
+        private fun configure(context: Context, manager: AppWidgetManager, widgetId: Int) {
+            val state = loadWidgetDeck(context, widgetId)
+            val page = WidgetDeckPageState.read(context, widgetId)
+            val views = WidgetDeckRenderer.render(context, page, state.data, state.theme, state.size).apply {
+                setOnClickPendingIntent(R.id.swipe_page_open, activityIntent(context, widgetId, 0, WidgetControlActivity.ACTION_OPEN))
+                setOnClickPendingIntent(R.id.swipe_page_previous, pageIntent(context, widgetId, 1, ACTION_PREVIOUS))
+                setOnClickPendingIntent(R.id.swipe_page_next, pageIntent(context, widgetId, 2, ACTION_NEXT))
+                setOnClickPendingIntent(R.id.widget_refresh, activityIntent(context, widgetId, 3, WidgetLiveService.ACTION_REFRESH))
+                setOnClickPendingIntent(R.id.widget_live, activityIntent(context, widgetId, 4, WidgetLiveService.ACTION_LIVE))
+            }
+            manager.updateAppWidget(widgetId, views)
         }
 
         private fun activityIntent(context: Context, widgetId: Int, offset: Int, action: String): PendingIntent {

@@ -160,7 +160,7 @@ class UsageWidgetProvider : AppWidgetProvider() {
     private fun updateAsync(context: Context) {
         val result = goAsync()
         thread(name = "usage-widget") {
-            try { refresh(context.applicationContext) } finally { result.finish() }
+            try { runCatching { refresh(context.applicationContext) } } finally { result.finish() }
         }
     }
 

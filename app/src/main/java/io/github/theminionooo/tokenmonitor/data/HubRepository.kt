@@ -8,6 +8,8 @@ import io.github.theminionooo.tokenmonitor.data.network.HubAddressValidation
 import io.github.theminionooo.tokenmonitor.data.network.HubAddressValidator
 import io.github.theminionooo.tokenmonitor.data.network.HubApiClient
 import io.github.theminionooo.tokenmonitor.data.network.HubApiException
+import io.github.theminionooo.tokenmonitor.data.network.HubRouteGuard
+import io.github.theminionooo.tokenmonitor.data.network.PhoneNetworks
 import io.github.theminionooo.tokenmonitor.data.network.LocalNetworkAccess
 import io.github.theminionooo.tokenmonitor.data.network.prepareHomeAddressRepair
 import io.github.theminionooo.tokenmonitor.data.network.WireHubSnapshot
@@ -17,6 +19,8 @@ import io.github.theminionooo.tokenmonitor.data.storage.SecureConnectionStore
 import io.github.theminionooo.tokenmonitor.data.storage.SerialDiskQueue
 import io.github.theminionooo.tokenmonitor.data.storage.SnapshotCache
 import io.github.theminionooo.tokenmonitor.domain.HubConnection
+import io.github.theminionooo.tokenmonitor.domain.HubHistory
+import io.github.theminionooo.tokenmonitor.domain.HubSubscriptions
 import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
 import io.github.theminionooo.tokenmonitor.domain.HubStats
 import io.github.theminionooo.tokenmonitor.domain.DeviceUsage
@@ -53,6 +57,8 @@ internal data class HubRepositoryState(
     val streamActive: Boolean = false,
     val widgetLiveActive: Boolean = false,
     val message: String? = null,
+    /** The Hub answered 401; retrying cannot help until the pairing changes. */
+    val secretRejected: Boolean = false,
 )
 
 internal fun retainDeviceHistory(streamed: HubStats, previous: List<DeviceUsage>): HubStats = streamed.copy(
@@ -69,10 +75,34 @@ internal fun retainDeviceHistory(streamed: HubStats, previous: List<DeviceUsage>
     },
 )
 
+/**
+ * The /history and /subscriptions bodies only change on a full reload, but every stream event and widget
+ * poll rebuilds the snapshot. Keep their decoded form while the raw text is the same object.
+ */
+internal class DecodedBodies {
+    private var historyRaw: String? = null
+    private var history: HubHistory? = null
+    private var subscriptionsRaw: String? = null
+    private var subscriptions: HubSubscriptions? = null
+
+    @Synchronized fun history(raw: String?): HubHistory? {
+        if (raw == null) return null
+        if (raw !== historyRaw) { history = HubProtocolParser.decodeHistory(raw); historyRaw = raw }
+        return history
+    }
+
+    @Synchronized fun subscriptions(raw: String?): HubSubscriptions? {
+        if (raw == null) return null
+        if (raw !== subscriptionsRaw) { subscriptions = HubProtocolParser.decodeSubscriptions(raw); subscriptionsRaw = raw }
+        return subscriptions
+    }
+}
+
 /** Stream/poll updates reuse the latest device history rather than decoding the older /devices response. */
-internal fun decodeStatsUpdate(wire: WireHubSnapshot, previousDevices: List<DeviceUsage>): HubSnapshot {
+internal fun decodeStatsUpdate(wire: WireHubSnapshot, previousDevices: List<DeviceUsage>, bodies: DecodedBodies = DecodedBodies()): HubSnapshot {
     val decoded = HubProtocolParser.decodeSnapshot(
         wire.health, wire.stats, null, wire.history, wire.subscriptions, wire.capturedAt,
+        decodedHistory = bodies.history(wire.history), decodedSubscriptions = bodies.subscriptions(wire.subscriptions),
     )
     if (!decoded.health.ok || decoded.health.role != "hub") throw HubApiException(200, "The address is not a Token Monitor Hub.")
     return decoded.copy(stats = retainDeviceHistory(decoded.stats, previousDevices))
@@ -98,6 +128,7 @@ internal class HubRepository(context: Context) {
     private val appContext = context.applicationContext
     private val connectionStore = SecureConnectionStore(appContext)
     private val cache = SnapshotCache(appContext)
+    private val decodedBodies = DecodedBodies()
     private val backoff = BackoffPolicy()
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val diskScope = CoroutineScope(SupervisorJob() + Dispatchers.IO.limitedParallelism(1))
@@ -186,7 +217,7 @@ internal class HubRepository(context: Context) {
         val token = generation
         val api = HubApiClient { route ->
             if (generation != token) throw CancellationException("Connection check cancelled")
-            requireLocalPermission(route)
+            requireRouteAllowed(route)
         }.also { activeApi = it }
         return try {
             val (url, wire) = withContext(Dispatchers.IO) {
@@ -242,15 +273,16 @@ internal class HubRepository(context: Context) {
         val token = generation
         val api = HubApiClient { route ->
             if (generation != token || desiredWorkMode != mode) throw CancellationException("Hub work ended")
-            requireLocalPermission(route)
+            requireRouteAllowed(route)
         }.also { activeApi = it }
         activeWorkMode = mode
         foregroundJob = scope.launch {
             var attempt = 0
             try {
                 while (desiredWorkMode == mode && generation == token) {
+                    var connected = false
                     try {
-                        _state.update { it.copy(refreshing = true, message = null) }
+                        _state.update { it.copy(refreshing = true, message = null, secretRejected = false) }
                         val (url, wire) = withContext(Dispatchers.IO) {
                             EndpointFailover.run(permittedRoutes(saved, activeUrl)) { api.loadSnapshot(saved.copy(baseUrl = it)) }
                         }
@@ -260,6 +292,7 @@ internal class HubRepository(context: Context) {
                         if (generation != token) break
                         activeUrl = url
                         applySuccess(wire, snapshot)
+                        connected = true
                         when (mode) {
                             HubWorkMode.DashboardStreaming -> withContext(Dispatchers.IO) {
                                 api.streamStats(saved.copy(baseUrl = url),
@@ -295,10 +328,12 @@ internal class HubRepository(context: Context) {
                     catch (error: Exception) {
                         if (generation != token) break
                         val rejected = error is HubApiException && error.statusCode == 401
-                        _state.update { it.copy(refreshing = false, streamActive = false, widgetLiveActive = false,
+                        _state.update { it.copy(refreshing = false, streamActive = false, widgetLiveActive = false, secretRejected = rejected,
                             message = if (error is HubApiException) error.presentation else "Hub unavailable. Showing the last successful snapshot; retrying...") }
                         if (rejected) break
-                        activeUrl = EndpointFailover.candidates(saved, activeUrl).getOrNull(1) ?: activeUrl
+                        // A dropped stream on a route that just answered is retried there first; only a failed
+                        // connection moves the other saved address to the front.
+                        if (!connected) activeUrl = EndpointFailover.candidates(saved, activeUrl).getOrNull(1) ?: activeUrl
                     }
                     delay(backoff.delayForAttempt(attempt++))
                 }
@@ -342,16 +377,23 @@ internal class HubRepository(context: Context) {
         LocalNetworkAccess.needed(it) && !LocalNetworkAccess.granted(appContext)
     } ?: false
 
-    private fun requireLocalPermission(route: HubConnection) {
+    /** Runs before every request, including the unauthenticated identity check, on an IO thread. */
+    private fun requireRouteAllowed(route: HubConnection) {
         if (HubAddressValidator.isLocalAddress(route.baseUrl) && !LocalNetworkAccess.granted(appContext)) {
             throw HubApiException(0, LocalNetworkAccess.deniedMessage)
         }
+        HubRouteGuard.require(route.baseUrl, PhoneNetworks.read(appContext))
     }
 
-    private fun permittedRoutes(saved: HubConnection, preferred: String?): List<String> =
-        LocalNetworkAccess.allowedRoutes(saved, preferred, LocalNetworkAccess.granted(appContext)).ifEmpty {
+    private fun permittedRoutes(saved: HubConnection, preferred: String?): List<String> {
+        val allowed = LocalNetworkAccess.allowedRoutes(saved, preferred, LocalNetworkAccess.granted(appContext)).ifEmpty {
             throw HubApiException(0, LocalNetworkAccess.deniedMessage)
         }
+        val networks = PhoneNetworks.read(appContext)
+        return allowed.filter { HubRouteGuard.usable(it, networks) }.ifEmpty {
+            throw HubApiException(0, HubRouteGuard.unavailableMessage(allowed, networks))
+        }
+    }
 
     private fun applySuccess(wire: WireHubSnapshot, snapshot: HubSnapshot) {
         lastWireSnapshot = wire
@@ -376,7 +418,7 @@ internal class HubRepository(context: Context) {
                 else HubStreamProtocol.normalizeComplete(raw)
             }.getOrNull() ?: return@withContext null
             val updatedWire = wire.copy(stats = normalized, capturedAt = System.currentTimeMillis())
-            updatedWire to decodeStatsUpdate(updatedWire, previous.stats.devices)
+            updatedWire to decodeStatsUpdate(updatedWire, previous.stats.devices, decodedBodies)
         } ?: return false
         if (generation != token) return false
         // A subscription request may complete while this event is being parsed.

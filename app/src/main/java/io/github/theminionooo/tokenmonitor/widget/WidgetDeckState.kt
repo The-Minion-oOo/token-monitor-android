@@ -19,7 +19,8 @@ internal data class WidgetDeckRenderState(
 
 internal fun loadWidgetDeck(context: Context, widgetId: Int): WidgetDeckRenderState {
     val session = WidgetRuntime.session
-    val cached = SnapshotCache(context).read()?.let { wire ->
+    // During a Live or refresh session the in-memory snapshot is the newest one; skip decoding the disk cache on every frame.
+    val cached = if ((session.enabled || session.refreshing) && session.snapshot != null) null else SnapshotCache(context).read()?.let { wire ->
         runCatching {
             HubProtocolParser.decodeSnapshot(
                 wire.health,

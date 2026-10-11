@@ -75,6 +75,13 @@ internal object WidgetDeckRenderer {
     ): RemoteViews {
         val bitmap = renderBitmap(context, page, data, Palette.from(theme), size)
         return RemoteViews(context.packageName, R.layout.usage_widget_deck).apply {
+            // Pad the root to the fitted card so the touch targets line up with what is drawn, whatever
+            // allocation the launcher gives (WIDGET_SPEC.md, touch targets).
+            val frame = frameSize(size)
+            val density = context.resources.displayMetrics.density
+            val padX = ((size.width - frame.width) / 2f * density).roundToInt().coerceAtLeast(0)
+            val padY = ((size.height - frame.height) / 2f * density).roundToInt().coerceAtLeast(0)
+            setViewPadding(R.id.swipe_card, padX, padY, padX, padY)
             setImageViewBitmap(R.id.swipe_page_bitmap, bitmap)
             setContentDescription(R.id.swipe_page_bitmap, description(context, page, data))
             setContentDescription(R.id.swipe_page_open, description(context, page, data))
@@ -196,11 +203,12 @@ private class DeckCanvas(
     private fun drawHeader(page: WidgetDeckPage, data: WidgetDeckData) {
         val h = WidgetDeckGrid.Header
         drawDrawable(R.drawable.token_monitor_icon, h.ICON_X, h.ICON_Y, h.ICON_SIZE, h.ICON_SIZE)
-        text("Token Monitor", h.TEXT_X, h.BRAND_BASELINE, brand, ink, maxWidth = h.REFRESH_X - h.TEXT_X - 8f)
-        text(context.getString(page.subtitle), h.TEXT_X, h.PAGE_BASELINE, pageType, muted, maxWidth = h.REFRESH_X - h.TEXT_X - 8f)
-        drawDrawable(R.drawable.ic_widget_refresh, h.REFRESH_X, h.REFRESH_Y, h.REFRESH_SIZE, h.REFRESH_SIZE, ink)
+        val refreshX = h.refreshX(measure(data.status, status))
+        text("Token Monitor", h.TEXT_X, h.BRAND_BASELINE, brand, ink, maxWidth = refreshX - h.TEXT_X - 8f)
+        text(context.getString(page.subtitle), h.TEXT_X, h.PAGE_BASELINE, pageType, muted, maxWidth = refreshX - h.TEXT_X - 8f)
+        drawDrawable(R.drawable.ic_widget_refresh, refreshX, h.REFRESH_Y, h.REFRESH_SIZE, h.REFRESH_SIZE, ink)
         val live = data.liveEnabled && data.status == "LIVE"
-        text(data.status, h.STATUS_RIGHT, h.STATUS_BASELINE, status, if (live) accent else muted, Paint.Align.RIGHT, h.STATUS_RIGHT - h.REFRESH_X - h.REFRESH_SIZE - 6f)
+        text(data.status, h.STATUS_RIGHT, h.STATUS_BASELINE, status, if (live) accent else muted, Paint.Align.RIGHT)
         val toggle = RectF(h.TOGGLE_LEFT, h.TOGGLE_TOP, h.TOGGLE_LEFT + h.TOGGLE_WIDTH, h.TOGGLE_TOP + h.TOGGLE_HEIGHT)
         val trackRadius = h.TOGGLE_HEIGHT / 2f
         val track = if (data.liveEnabled) palette.accent.copy(alpha = 0.18f).compositeOver(palette.shell) else palette.overlay.compositeOver(palette.shell)
@@ -498,11 +506,14 @@ private class DeckCanvas(
         lines.take(3).forEachIndexed { index, value -> text(value, width / 2f, start + index * lineHeight, body, muted, Paint.Align.CENTER, maxWidth) }
     }
 
-    /** Widget figures: one decimal below 100K and 100M, none above, so number columns stay narrow. */
+    /**
+     * Widget figures: one decimal below 100K and 100M, none above, so number columns stay narrow.
+     * Thresholds sit where rounding reaches the next step, so 999,600 reads 1.0M rather than 1000K.
+     */
     private fun compactFigure(value: Long): String = when {
-        value >= 100_000_000L -> "${(value / 1_000_000.0).roundToInt()}M"
-        value >= 1_000_000L -> formatCompactTokens(value)
-        value >= 100_000L -> "${(value / 1_000.0).roundToInt()}K"
+        value >= 99_950_000L -> "${(value / 1_000_000.0).roundToInt()}M"
+        value >= 999_500L -> String.format(Locale.US, "%.1fM", value / 1_000_000.0)
+        value >= 99_950L -> "${(value / 1_000.0).roundToInt()}K"
         else -> formatCompactTokens(value)
     }
 

@@ -17,6 +17,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import io.github.theminionooo.tokenmonitor.data.protocol.HubProtocolParser
 import io.github.theminionooo.tokenmonitor.ui.InterfaceTheme
 import io.github.theminionooo.tokenmonitor.widget.SwipeWidgetProvider
+import io.github.theminionooo.tokenmonitor.widget.WidgetDeckGrid
 import io.github.theminionooo.tokenmonitor.widget.WidgetDeckPage
 import io.github.theminionooo.tokenmonitor.widget.WidgetDeckPageState
 import io.github.theminionooo.tokenmonitor.widget.WidgetDeckRenderer
@@ -199,7 +200,8 @@ class WidgetDeckDesignTest {
         instrumentation.runOnMainSync {
             for (theme in listOf(InterfaceTheme.Default, InterfaceTheme.Porcelain,
                 InterfaceTheme.fromCode("TM2-B7EAD4-303438-EEF5FB-A3ADBB-FF6688")!!)) {
-                for (size in listOf(SizeF(250f, 110f), SizeF(320f, 180f), SizeF(360f, 220f))) {
+                // The last two are taller and wider than the card, so the targets must follow the fitted card.
+                for (size in listOf(SizeF(250f, 110f), SizeF(320f, 180f), SizeF(360f, 220f), SizeF(370f, 340f), SizeF(500f, 180f))) {
                     val renderedSizes = mutableListOf<Pair<Int, Int>>()
                     for (page in WidgetDeckPage.entries) {
                         val view = WidgetDeckRenderer.render(context, page, data, theme, size).apply(context, FrameLayout(context))
@@ -213,6 +215,11 @@ class WidgetDeckDesignTest {
                         assertInside(view, R.id.widget_live, size)
                         assertInside(view, R.id.swipe_page_previous, size)
                         assertInside(view, R.id.swipe_page_next, size)
+                        val header = WidgetDeckGrid.Header
+                        assertCovers(view, R.id.widget_refresh, size, header.REFRESH_X + header.REFRESH_SIZE / 2f, header.REFRESH_Y + header.REFRESH_SIZE / 2f)
+                        assertCovers(view, R.id.widget_live, size, header.TOGGLE_LEFT + header.TOGGLE_WIDTH / 2f, header.TOGGLE_TOP + header.TOGGLE_HEIGHT / 2f)
+                        assertCovers(view, R.id.swipe_page_previous, size, header.CHEVRON_LEFT_X, header.CHEVRON_Y)
+                        assertCovers(view, R.id.swipe_page_next, size, header.CHEVRON_RIGHT_X, header.CHEVRON_Y)
                         val density = context.resources.displayMetrics.density
                         val card = view.findViewById<View>(R.id.swipe_card)
                         assertEquals(view.width, card.width)
@@ -308,6 +315,20 @@ class WidgetDeckDesignTest {
         (root as android.view.ViewGroup).offsetDescendantRectToMyCoords(child, bounds)
         assertTrue("control $id is clipped: $bounds", bounds.left >= 0 && bounds.top >= 0)
         assertTrue("control $id is clipped: $bounds", bounds.right <= size.width * density && bounds.bottom <= size.height * density)
+    }
+
+    /** The control drawn at card units ([x], [y]) must sit inside the transparent target [id]. */
+    private fun assertCovers(root: View, id: Int, size: SizeF, x: Float, y: Float) {
+        val density = context.resources.displayMetrics.density
+        val frame = WidgetDeckRenderer.frameSize(size)
+        val unit = frame.width / WidgetDeckGrid.WIDTH * density
+        val pointX = ((size.width - frame.width) / 2f * density + x * unit).toInt()
+        val pointY = ((size.height - frame.height) / 2f * density + y * unit).toInt()
+        val child = root.findViewById<View>(id)
+        val bounds = android.graphics.Rect()
+        child.getDrawingRect(bounds)
+        (root as android.view.ViewGroup).offsetDescendantRectToMyCoords(child, bounds)
+        assertTrue("control $id at $size does not cover its drawn mark ($pointX, $pointY): $bounds", bounds.contains(pointX, pointY))
     }
 
     private fun capture(view: View, name: String) {
