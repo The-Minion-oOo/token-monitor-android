@@ -88,7 +88,11 @@ refreshes are single-flight and throttle retries of a failed version.
 `EndpointFailover` orders candidates with the address that answered last
 first, tries the next when one is silent, and stops immediately on a rejected
 secret because another address cannot fix that. Snapshot reads use the
-ordered list; foreground updates use the active address and alternate on each retry.
+ordered list. When a live stream drops, the address that was answering is tried
+first again; only a failed connection moves the other address to the front.
+`HubRouteGuard` drops routes the phone cannot use right now (Tailscale without a
+VPN, a home address on mobile data without a VPN) and checks that private names
+resolve inside their range before any request.
 The active address is surfaced to the UI so the header and Hub status can say
 when the home route is in use.
 

@@ -17,6 +17,15 @@ Tailscale's WireGuard tunnel. On the optional home-network (LAN) route it is not
 encrypted, so other devices on the same Wi-Fi could observe the Hub secret and
 usage data. Use the LAN route only on a network you trust, and prefer Tailscale.
 
+Before any request, including the identity check, the app confirms the route
+fits the phone's current networks. A Tailscale address or MagicDNS name is
+tried only while a VPN is connected, because without Tailscale the 100.64/10
+range belongs to carrier-grade NAT. A home address is tried on Wi-Fi or
+Ethernet, or through a VPN such as a Tailscale subnet router, and never directly
+over mobile data. `.ts.net` names must resolve to Tailscale addresses and
+`.local` names to private IPv4 addresses, so a hostile DNS answer cannot move
+the secret to a public host.
+
 The desktop Hub secret is sent as a bearer credential only to the validated Hub address. It is never logged or included in diagnostics.
 
 The unauthenticated health response must identify a Token Monitor Hub before the
@@ -50,9 +59,10 @@ Two optional connection features operate only within private address ranges:
 - The **home Wi-Fi fallback** is a second saved address that must pass the
   same private-network validation. The secret is sent only to whichever of the
   two saved addresses identifies itself as a Hub.
-- **Find** searches the phone's current private `/24` network for a Hub by
-  reading the unauthenticated `/api/health` endpoint. It runs only when
-  tapped, never sends the secret, and stops as soon as one Hub answers.
+- **Find** searches the private `/24` network of the phone's current Wi-Fi or
+  Ethernet connection (never mobile data or a VPN) for a Hub by reading the
+  unauthenticated `/api/health` endpoint. It runs only when tapped, never sends
+  the secret, and stops as soon as one Hub answers.
 
 The Status view separately reads public service-health endpoints for Claude,
 OpenAI, Cursor, and DeepSeek. Those requests do not include Hub credentials
