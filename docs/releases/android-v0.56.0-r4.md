@@ -31,5 +31,5 @@ over the existing release to preserve pairing, preferences, and the saved snapsh
 See [Install and update](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md).
 
 The automated build and API 36 emulator interaction suites pass. Physical inspection
-of all four pages on the Galaxy S25 Ultra remains pending and is tracked separately
+of all four pages on my phone remains pending and is tracked separately
 in [Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md).

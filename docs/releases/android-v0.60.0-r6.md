@@ -27,9 +27,10 @@ network request, service, or wake lock.
 
 - 82 JVM tests and 31 API 36 instrumentation tests pass.
 - Lint, debug assembly, signed release assembly, and documentation checks pass.
-- The signed APK upgrades the existing Galaxy installation in place and keeps
-  the existing One UI widget.
-- All four widget pages were captured on the Galaxy after the upgrade; the new
+- The signed APK upgrades the existing installation on my phone in place and
+  keeps the existing One UI widget.
+- All four widget pages were captured on my phone after the upgrade; the new
   sparse Breakdown composition is visible at the installed 5×2 size.
 
-See [Install and update](../INSTALL.md) for installation and checksum instructions.
+See [Install and update](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md)
+for installation and checksum instructions.

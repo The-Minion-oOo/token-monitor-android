@@ -10,6 +10,11 @@ Android-only releases keep `versionName` and increment the final three digits of
 | --- | --- | --- | --- |
 | Published | v0.68.0 | 680001 | `android-v0.68.0-r1` |
 
+For desktop `0.<minor>.<patch>`, the version code is
+`minor × 10000 + patch × 1000 + revision`. For example, v0.68.0 r1 is 680001
+and v0.63.1 r1 is 631001. The formula assumes a patch number of 9 or less and a
+revision of 999 or less.
+
 A newly verified desktop version updates the visible version and starts its
 Android revision at 1. `release.json` records the working build, last published
 release, production package/certificate, and required CI jobs.
@@ -37,14 +42,15 @@ Before publishing:
   released: `build`, `interaction-api36`, `interaction-api37`, `optimized-api26`,
   and `contract`.
 - Exercise affected dashboard and widget behavior on the emulator.
-- Install the signed candidate over the previous release on a phone and confirm
-  pairing and preferences survive.
-- For networking, lifecycle, or widget changes, check Tailscale, Wi-Fi fallback,
-  offline resume, Live/Stop/expiry, and the affected widget sizes on the phone.
+- When a release makes significant app changes (networking, lifecycle, or
+  widgets), install the signed candidate over the previous release on my phone
+  and confirm pairing and preferences survive.
+- On my phone, also check Tailscale, Wi-Fi fallback, offline resume,
+  Live/Stop/expiry, and the affected widget sizes. If a release skips the phone
+  checks, its release notes say it wasn't phone-tested.
 - Confirm the working tree contains no keystore, passwords, private addresses,
   personal data, captures, or raw Hub responses.
-- Perform an independent read-only review of the release diff and fix validated
-  findings.
+- Review the full release diff once more and fix anything real it turns up.
 
 Record what was actually checked in [Validation](VALIDATION.md). Do not describe
 emulator results as phone coverage or design safeguards as measured battery life.
@@ -54,6 +60,9 @@ and processing, not a true cold start. See [Development](DEVELOPMENT.md) for the
 matrix, real-Hub contract harness, and measurement limits.
 
 ## Signing
+
+Releases so far are built and signed locally on my PC with the same key, then
+uploaded as a draft and published after I recheck the downloaded assets.
 
 Release builds read four environment variables:
 
@@ -95,12 +104,14 @@ verified three-asset bundle. It repeats the main/SHA checks before opening a
 draft GitHub release with notes from
 `docs/releases/android-v<version>-r<revision>.md`. It does not publish the draft
 or overwrite an existing tag. Signing material is removed when the job ends.
-The four signing secrets must be configured in the repository; the keystore
-itself stays outside Git.
+The workflow needs four repository secrets: `ANDROID_KEYSTORE_BASE64` (the
+keystore, base64-encoded), `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, and
+`ANDROID_KEY_PASSWORD`. They are not configured on this repository at the
+moment, so the workflow is not used. The keystore itself stays outside Git.
 
-For a local release, use the same signing key and asset preparation command.
-With a GitHub token available in `GH_TOKEN`, run the same read-only preflight
-against the reviewed main commit before creating the draft:
+I make releases locally, with the same signing key and asset preparation
+command. With a GitHub token available in `GH_TOKEN`, I run the same read-only
+preflight against the reviewed main commit before creating the draft:
 
 ```powershell
 node tools/release-preflight.mjs (git rev-parse HEAD)
@@ -110,9 +121,15 @@ The published APK, checksum, and update manifest must be the verified files.
 Download the uploaded assets again and check the bundle before publication.
 
 Check that the manifest's version code, APK name, size, and hash match the
-uploaded APK. Review the draft, install its exact APK on the phone, then publish
-it. Release notes should state what changed, compatibility, and any important update action;
-link to [Install and update](INSTALL.md) instead of repeating the full procedure.
+uploaded APK. Review the draft, install its exact APK on my phone if the release
+changes the app significantly (see Release checks), then publish it.
+
+Release notes should state what changed, compatibility, and any important update
+action. They are shown on the GitHub release page, where relative paths do not
+resolve, so every link in `docs/releases/*.md` must be an absolute
+`https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/...`
+URL; `tools/check-docs.mjs` enforces this. Link to Install and update
+(`.../docs/INSTALL.md`) instead of repeating the full procedure.
 
 Batch related work and publish when the APK is worth reinstalling. Documentation,
 marketing-image placement, and other non-app changes do not need a new Android

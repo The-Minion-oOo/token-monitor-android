@@ -22,8 +22,9 @@ Android 8 or newer; verified against desktop v0.68.0, with earlier Hub fixtures
 retained. Older Hubs without the new optional fields keep their existing display.
 This APK uses the existing package and signing certificate and updates the
 installed release in place. Open **Settings → App updates** to download it; Android
-asks you to confirm installation. See [Install and update](../INSTALL.md).
+asks you to confirm installation. See [Install and update](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md).
 
 Verification includes JVM tests, lint, native emulator checks and the released
-Hub contract. Physical Galaxy upgrade and battery behavior were not rechecked
-for this release; the detailed evidence is in [Validation](../VALIDATION.md).
+Hub contract. I haven't rechecked the upgrade or battery behavior on my phone
+for this release; the detailed evidence is in
+[Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md).

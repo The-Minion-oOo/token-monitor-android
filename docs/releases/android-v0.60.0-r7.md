@@ -32,7 +32,7 @@ network request, service, or wake lock.
 - 83 JVM tests, lint, debug and signed release builds pass.
 - The dense showcase was checked at the supported widget sizes and all four
   production gallery renders were regenerated.
-- The signed APK was installed over r6 on a Galaxy S25 Ultra without removing
+- The signed APK was installed over r6 on my phone without removing
   pairing, preferences, or the placed widget. All four pages were captured on
   One UI at the installed 5×2 size.
 - The release keeps the existing signing certificate, so it upgrades r4 and

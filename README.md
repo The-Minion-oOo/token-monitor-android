@@ -15,7 +15,7 @@ Tokens, account limits, models and trends from the desktop Token Monitor Hub, pl
 </p>
 
 <p align="center">
-  <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/badge/Android_checks-CI-73bdf5?style=flat-square&logo=githubactions&logoColor=10221c"></a>
+  <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/github/actions/workflow/status/The-Minion-oOo/token-monitor-android/android.yml?branch=main&style=flat-square&logo=githubactions&logoColor=10221c&label=Android%20checks"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
   <img alt="Desktop baseline v0.68.0" src="https://img.shields.io/badge/Desktop-v0.68.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
@@ -121,7 +121,7 @@ Session rows also show generation speed, cache-hit percentage and prompt-cache e
 - Read-only. The app cannot change desktop settings, usage data, or files.
 - Hub credentials live in an Android Keystore-backed store and are excluded from backups.
 - No ads, analytics, wake lock, scheduled background work or "please rate us" popup.
-- App updates checks published GitHub releases from Settings and verifies a downloaded signed APK before Android asks to install it; there is no background update check or silent install.
+- **Settings → App updates** checks published GitHub releases and verifies a downloaded signed APK before Android asks to install it; there is no background update check or silent install.
 - The visible dashboard streams immediately. Widget Live uses a lightweight 30-second stats refresh and stops after one hour.
 - Android 13 and newer asks for notification permission the first time you start a widget session, so the Stop control has somewhere to live. Android 17 also requests local-network permission when you choose home Wi-Fi access.
 
@@ -130,9 +130,9 @@ Session rows also show generation speed, cache-hit percentage and prompt-cache e
 ## Get connected
 
 You need Android 8.0 or newer and a desktop running Token Monitor with Hub hosting
-on. Android v0.68.0 r1 is verified against desktop v0.68.0. The earlier v0.66.0 r1
-in-app upgrade from v0.65.0 preserved pairing and the placed Pages widget on a
-Galaxy S25 Ultra; v0.68.0 phone checks remain pending.
+on. Android v0.68.0 r1 is verified against desktop v0.68.0. The last build I
+checked on my phone, v0.66.0 r1, upgraded in place from v0.65.0 and kept pairing
+and the placed Pages widget. I haven't installed v0.68.0 on my phone yet.
 
 1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.68.0 r1 APK.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.

@@ -6,8 +6,8 @@ high-density launchers while preserving its fixed footprint and real data.
 ## What changed
 
 - The card now renders at launcher density instead of enlarging a 560-pixel
-  bitmap. Text, icons, borders, charts, and the activity grid stay sharp on the
-  Galaxy S25 Ultra's One UI launcher.
+  bitmap. Text, icons, borders, charts, and the activity grid stay sharp on my
+  phone's One UI launcher.
 - Text is larger and more consistent across Overview, Limits, Breakdown, and
   Activity. Only the main total uses a separate display size.
 - Brighter cyan, mint, and coral accents improve the border, quota bars, tool
@@ -27,4 +27,5 @@ high-density launchers while preserving its fixed footprint and real data.
 The app remains read-only. Page changes are local and add no background timer,
 network request, service, or wake lock.
 
-See [Install and update](../INSTALL.md) for installation and checksum instructions.
+See [Install and update](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md)
+for installation and checksum instructions.

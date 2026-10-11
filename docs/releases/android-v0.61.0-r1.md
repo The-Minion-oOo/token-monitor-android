@@ -23,9 +23,11 @@ versioned fixtures and the shared identity presentation layer.
 
 Install the APK over the existing app. Do not uninstall first; uninstalling
 removes pairing, preferences, and the saved snapshot. See
-[Install and update](../INSTALL.md) for signing and checksum guidance.
+[Install and update](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md)
+for signing and checksum guidance.
 
 ## Verification
 
 The exact test, signing, upgrade, and device evidence for the release
-is recorded in [Validation](../VALIDATION.md).
+is recorded in
+[Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md).

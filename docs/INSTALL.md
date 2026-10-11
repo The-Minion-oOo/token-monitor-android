@@ -11,10 +11,10 @@
 Download the signed v0.68.0 r1 APK from the public
 [release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.68.0-r1),
 or use **Settings → App updates** in v0.62.0 r1 or newer. It uses the same package
-and release certificate as earlier releases, with a higher version code. A
-Galaxy S25 Ultra in-app upgrade from v0.65.0 to v0.66.0 r1 preserved pairing and
-the placed Pages widget; see [Validation](VALIDATION.md). Physical-device checks
-for v0.68.0 r1 remain pending. The older v0.61.0 r1 app has no in-app updater,
+and release certificate as earlier releases, with a higher version code. An
+in-app upgrade on my phone from v0.65.0 to v0.66.0 r1 preserved pairing and the
+placed Pages widget; see [Validation](VALIDATION.md). I haven't installed
+v0.68.0 r1 on my phone yet. The older v0.61.0 r1 app has no in-app updater,
 so install a newer release manually once.
 
 To build the current source, install JDK 17 and Android SDK 37, then run:
@@ -39,10 +39,17 @@ There is no Play Store or F-Droid listing.
 
 ## Verify the download
 
-Each signed release will include an APK and a `.sha256` file. Compare the hash:
+Each signed release includes an APK and a `.sha256` file. Compare the hash:
 
 ```powershell
 Get-FileHash .\token-monitor-android-v0.68.0-r1.apk -Algorithm SHA256
+```
+
+On macOS or Linux, use `shasum -a 256` or `sha256sum` instead:
+
+```sh
+shasum -a 256 token-monitor-android-v0.68.0-r1.apk
+sha256sum token-monitor-android-v0.68.0-r1.apk
 ```
 
 A matching checksum detects download corruption; download both files from the
@@ -51,6 +58,16 @@ trusted repository release. The release signing certificate SHA-256 is:
 ```text
 eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c
 ```
+
+Optionally, check the signature as well with `apksigner` from the Android SDK
+build tools:
+
+```sh
+apksigner verify --print-certs token-monitor-android-v0.68.0-r1.apk
+```
+
+The printed SHA-256 certificate digest must equal the value above, which is also
+recorded in `release.json`.
 
 ## Update without losing pairing
 

@@ -1,2 +1,2 @@
-# Project-specific R8 rules belong here. Keep this file intentionally small until
-# the network serialization layer is selected and its release build is verified.
+# Project-specific R8 rules. The JSON layer uses kotlinx.serialization without
+# reflection, so no keep rules are needed yet.

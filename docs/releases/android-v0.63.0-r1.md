@@ -29,6 +29,5 @@ explains verification and the user-confirmed installer step.
 
 Completed and pending checks are recorded in
 [Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md).
-The owner chose to skip physical-phone verification for this release, so saved
-pairing, widget retention, and battery behavior have not been rechecked on a
-phone with this APK.
+I didn't install this release on my phone, so saved pairing, widget retention,
+and battery behavior have not been rechecked with this APK.

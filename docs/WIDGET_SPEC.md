@@ -7,8 +7,8 @@ change this file first, then make the renderer match it, then recapture the
 gallery images. Do not nudge coordinates in code without updating this page.
 
 The reference images are the four concept cards approved on September 21, 2026.
-They were measured at 1536×1024 pixels; the card in each is 1382 pixels wide, so
-one reference unit below is 1382 / 364 ≈ 3.8 image pixels.
+The card in each is 1382 pixels wide, so one reference unit below is
+1382 / 364 ≈ 3.8 image pixels.
 
 ## Card and coordinate system
 
@@ -253,6 +253,6 @@ drawn only at columns that contain the first day of a month.
   65 days of history, at 250×110, 320×180 and 360×220 dp in Default and
   Porcelain and a custom TM2 chart theme. The Default 360×220 renders supply
   the gallery images; custom-theme checks do not replace the approved gallery.
-- Before any release, the four gallery images are placed beside the concept
-  cards at phone size and approved by the owner. Emulator captures alone do
-  not pass the visual gate.
+- Before a release I place the four gallery images beside the concept cards at
+  phone size and sign off on them. Emulator captures alone do not pass the
+  visual gate.
