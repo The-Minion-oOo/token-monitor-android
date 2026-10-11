@@ -6,6 +6,7 @@ import io.github.theminionooo.tokenmonitor.widget.widgetLayout
 import org.junit.Assert.*
 import org.junit.Test
 import java.time.LocalDate
+import java.time.ZoneId
 
 class UsageHistoryTest {
     private val today = LocalDate.of(2026, 9, 7)
@@ -32,6 +33,67 @@ class UsageHistoryTest {
         assertEquals(42L, result.single().perModel.getValue("gpt-5").tokens)
         assertTrue(historyInRange(result, today, today).isEmpty())
     }
+    // Noon in the test machine's zone, so the phone's date does not depend on where the suite runs.
+    private fun phoneNoon(date: String) = LocalDate.parse(date).atTime(12, 0).atZone(ZoneId.systemDefault()).toInstant().toString()
+    private fun liveSnapshot(phoneDate: String, live: Long, rows: List<HistoryPoint>) = HubSnapshot(
+        stats = HubStats(updatedAt = phoneNoon(phoneDate), periods = mapOf("today" to UsagePeriod(totalTokens = live, costUsd = live / 10.0, models = mapOf("gpt-5" to live))),
+            historyPreview = HubHistory(daily = rows)),
+    )
+
+    @Test fun `live today replaces the same dated row and keeps its activity`() {
+        val rows = listOf(HistoryPoint("2026-10-07", 500, 5.0), HistoryPoint("2026-10-08", 100, 1.0, messages = 7, activeTimeMs = 9_000))
+        val result = usageHistory(liveSnapshot("2026-10-08", 250, rows))
+        assertEquals(listOf("2026-10-07", "2026-10-08"), result.map { it.label })
+        assertEquals(500L, result[0].tokens)
+        assertEquals(250L, result[1].tokens)
+        assertEquals(7L, result[1].messages)
+        assertEquals(9_000L, result[1].activeTimeMs)
+        assertEquals(250L, result[1].perModel.getValue("gpt-5").tokens)
+    }
+
+    @Test fun `live today starts a new row when the hub has none for the day yet`() {
+        val result = usageHistory(liveSnapshot("2026-10-08", 30, listOf(HistoryPoint("2026-10-07", 500, 5.0))))
+        assertEquals(listOf("2026-10-07", "2026-10-08"), result.map { it.label })
+        assertEquals(30L, result.last().tokens)
+    }
+
+    @Test fun `a hub already on the next date does not overwrite the phone's full day`() {
+        val rows = listOf(HistoryPoint("2026-10-08", 900, 9.0, messages = 3), HistoryPoint("2026-10-09", 40, 0.4, messages = 2, activeTimeMs = 1_000))
+        val result = usageHistory(liveSnapshot("2026-10-08", 40, rows))
+        assertEquals(listOf("2026-10-08", "2026-10-09"), result.map { it.label })
+        assertEquals(900L, result[0].tokens)
+        assertEquals(3L, result[0].messages)
+        assertEquals(40L, result[1].tokens)
+        assertEquals(2L, result[1].messages)
+        assertEquals(40L, result[1].perModel.getValue("gpt-5").tokens)
+    }
+
+    @Test fun `a freshness frame past midnight does not double count the hub's last row`() {
+        val rows = listOf(HistoryPoint("2026-10-07", 500, 5.0), HistoryPoint("2026-10-08", 800, 8.0, messages = 4))
+        val result = usageHistory(liveSnapshot("2026-10-09", 800, rows))
+        assertEquals(listOf("2026-10-07", "2026-10-08"), result.map { it.label })
+        assertEquals(800L, result.last().tokens)
+        assertEquals(4L, result.last().messages)
+        assertEquals(800L, result.last().perModel.getValue("gpt-5").tokens)
+    }
+
+    @Test fun `a new day with different totals stays on the phone date`() {
+        val rows = listOf(HistoryPoint("2026-10-08", 800, 8.0))
+        val result = usageHistory(liveSnapshot("2026-10-09", 20, rows))
+        assertEquals(listOf("2026-10-08", "2026-10-09"), result.map { it.label })
+        assertEquals(800L, result[0].tokens)
+        assertEquals(20L, result[1].tokens)
+    }
+
+    @Test fun `a zero live total never erases a real row`() {
+        val rows = listOf(HistoryPoint("2026-10-08", 800, 8.0, messages = 4))
+        assertEquals(800L, usageHistory(liveSnapshot("2026-10-08", 0, rows)).single().tokens)
+        val ahead = rows + HistoryPoint("2026-10-09", 60, 0.6)
+        assertEquals(listOf(800L, 60L), usageHistory(liveSnapshot("2026-10-08", 0, ahead)).map { it.tokens })
+        val empty = usageHistory(liveSnapshot("2026-10-08", 0, listOf(HistoryPoint("2026-10-08", 0, 0.0))))
+        assertEquals(0L, empty.single().tokens)
+    }
+
     @Test fun `widget layout responds to both width and height`() {
         assertEquals(WidgetLayout.Wide, widgetLayout(300, 120))
         assertEquals(WidgetLayout.Overview, widgetLayout(250, 370))

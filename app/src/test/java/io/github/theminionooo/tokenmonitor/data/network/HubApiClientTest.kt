@@ -92,6 +92,65 @@ class HubApiClientTest {
         }
     }
 
+    @Test
+    fun `an oversized optional endpoint is treated as omitted`() {
+        val oversized = """{"padding":"${"x".repeat(3 * 1024 * 1024)}"}"""
+        // Announced length and chunked streaming take different guards in the client.
+        listOf(oversized.length.toLong(), 0L).forEach { announced ->
+            val reads = java.util.Collections.synchronizedList(mutableListOf<String>())
+            val server = detailServer(reads, oversized = setOf("/api/devices", "/api/subscriptions"), announced = announced)
+            try {
+                val connection = HubConnection("http://127.0.0.1:${server.address.port}", "synthetic-secret", true)
+                val snapshot = HubApiClient().use { it.loadSnapshot(connection) }
+                assertNull(snapshot.devices)
+                assertNull(snapshot.subscriptions)
+                assertEquals("""{"daily":[]}""", snapshot.history)
+                assertEquals("""{"updatedAt":"now"}""", snapshot.stats)
+                assertEquals(listOf("/api/health", "/api/stats", "/api/devices", "/api/history", "/api/subscriptions"), reads.toList())
+            } finally {
+                server.stop(0)
+            }
+        }
+    }
+
+    @Test
+    fun `an oversized stats response still fails the snapshot`() {
+        val server = detailServer(java.util.Collections.synchronizedList(mutableListOf()), oversized = setOf("/api/stats"), announced = 0L)
+        try {
+            val connection = HubConnection("http://127.0.0.1:${server.address.port}", "synthetic-secret", true)
+            try {
+                HubApiClient().use { it.loadSnapshot(connection) }
+                fail("Expected an oversized stats response to be rejected")
+            } catch (error: HubResponseTooLargeException) {
+                assertTrue(error.presentation.contains("too large"))
+            }
+        } finally {
+            server.stop(0)
+        }
+    }
+
+    private fun detailServer(reads: MutableList<String>, oversized: Set<String>, announced: Long): HttpServer =
+        HttpServer.create(InetSocketAddress("127.0.0.1", 0), 0).apply {
+            createContext("/api/") { exchange ->
+                val path = exchange.requestURI.path
+                reads.add(path)
+                try {
+                    val body = when {
+                        path in oversized -> """{"padding":"${"x".repeat(3 * 1024 * 1024)}"}"""
+                        path == "/api/health" -> """{"ok":true,"role":"hub"}"""
+                        path == "/api/stats" -> """{"updatedAt":"now"}"""
+                        else -> """{"daily":[]}"""
+                    }.toByteArray()
+                    // The client closes an oversized response early; the server must not fail on that.
+                    exchange.sendResponseHeaders(200, if (path in oversized) announced else body.size.toLong())
+                    exchange.responseBody.use { it.write(body) }
+                } catch (_: java.io.IOException) {
+                    exchange.close()
+                }
+            }
+            start()
+        }
+
     private fun streamServer(payload: String): HttpServer = HttpServer.create(InetSocketAddress("127.0.0.1", 0), 0).apply {
         createContext("/api/stats/stream") { exchange ->
             // A bounded reader deliberately closes an oversized response early.

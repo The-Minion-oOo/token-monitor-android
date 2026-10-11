@@ -108,14 +108,15 @@ internal object ReleaseUpdates {
         }
     }
 
-    fun install(context: Context, file: File, release: AppRelease): Boolean {
+    suspend fun install(context: Context, file: File, release: AppRelease): Boolean {
         if (!context.packageManager.canRequestPackageInstalls()) {
             context.startActivity(
                 Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:${context.packageName}")),
             )
             return false
         }
-        validateApk(context, file, release)
+        // Parsing the archive and checking its signature is slow; still the last step before the intent, on the same file.
+        withContext(Dispatchers.IO) { validateApk(context, file, release) }
         val uri = FileProvider.getUriForFile(context, "${context.packageName}.updates", file)
         context.startActivity(
             Intent(Intent.ACTION_VIEW).apply {

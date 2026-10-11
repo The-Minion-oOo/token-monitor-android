@@ -149,6 +149,22 @@ class HubProtocolParserTest {
         assertNull(session("\"title\":\"Legacy\"").promptCache)
     }
 
+    @Test fun `non finite numbers fall back to the default instead of poisoning totals`() {
+        val stats = HubProtocolParser.decodeStats(
+            """{"periods":{"today":{"totalTokens":9,"costUsd":"NaN","clientCosts":{"codex":"Infinity","claude":"-Infinity","pi":"NaN","other":1.5},
+                "sessions":{"s":{"totalTokens":4,"costUsd":"Infinity"}}}},
+                "limits":{"providers":[{"id":"p","windows":[{"id":"w","usedPercent":"NaN","remainingPercent":"Infinity"}]}]}}""",
+        )
+        val window = stats.limits.providers.single().windows.single()
+        assertNull(window.usedPercent)
+        assertNull(window.remainingPercent)
+        val period = stats.periods.getValue("today")
+        assertEquals(0.0, period.costUsd, 0.0)
+        assertEquals(mapOf("other" to 1.5), period.clientCosts)
+        assertEquals(0.0, period.sessions.single().costUsd, 0.0)
+        assertEquals(1.25, HubProtocolParser.decodeStats("""{"periods":{"today":{"costUsd":1.25}}}""").periods.getValue("today").costUsd, 0.0)
+    }
+
     @Test
     fun `v0 54 fixture maps every dashboard surface`() {
         val snapshot = HubProtocolParser.decodeSnapshot(

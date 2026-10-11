@@ -36,12 +36,26 @@ fun snapshotDate(snapshot: HubSnapshot, zone: ZoneId = ZoneId.systemDefault()): 
     runCatching { Instant.parse(snapshot.stats.updatedAt).atZone(zone).toLocalDate() }.getOrNull()
         ?: snapshot.capturedAt.takeIf { it > 0 }?.let { Instant.ofEpochMilli(it).atZone(zone).toLocalDate() }
 
-/** Share the same current-day observation across Home, Trends, comparisons, and widgets. */
+/**
+ * Share the same current-day observation across Home, Trends, comparisons, and widgets.
+ * The Hub's "today" follows the desktop's calendar and its zone is not sent, so the phone's date is
+ * only a guess: the Hub's own newest row says which day the live totals belong to.
+ */
 fun usageHistory(snapshot: HubSnapshot): List<HistoryPoint> {
     val history = mergeUsageHistory(snapshot.history.daily, snapshot.stats.historyPreview.daily).associateBy { it.label.take(10) }.toMutableMap()
-    val day = snapshotDate(snapshot) ?: return history.values.sortedBy { it.label }
+    val phoneDay = snapshotDate(snapshot) ?: return history.values.sortedBy { it.label }
     val period = snapshot.stats.periods["today"] ?: return history.values.sortedBy { it.label }
+    val latest = history.keys.mapNotNull { runCatching { LocalDate.parse(it) }.getOrNull() }.maxOrNull()
+    val day = when {
+        latest == null || latest == phoneDay -> phoneDay
+        // The desktop is already on a later date than the phone.
+        latest > phoneDay -> latest
+        // The phone is a day ahead (or a freshness frame moved updatedAt past midnight) but the totals are still the Hub's last row.
+        latest == phoneDay.minusDays(1) && period.totalTokens > 0 && history[latest.toString()]?.tokens == period.totalTokens -> latest
+        else -> phoneDay
+    }
     val existing = history[day.toString()]
+    if (period.totalTokens == 0L && existing != null && existing.tokens > 0) return history.values.sortedBy { it.label }
     fun attribution(tokens: Map<String, Long>, costs: Map<String, Double>, reads: Map<String, Long>, outputs: Map<String, Long>, writes: Map<String, Long>, unknown: Map<String, Long>, unpriced: Map<String, Long>) =
         tokens.mapValues { (key, value) -> HistoryAttribution(value, costs[key] ?: 0.0, reads[key] ?: 0, writes[key] ?: 0, outputs[key] ?: 0, unknown[key] ?: 0, unpriced[key] ?: 0) }
     history[day.toString()] = HistoryPoint(

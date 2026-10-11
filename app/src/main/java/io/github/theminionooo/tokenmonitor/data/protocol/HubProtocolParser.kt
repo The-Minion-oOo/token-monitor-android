@@ -551,7 +551,8 @@ object HubProtocolParser {
 
     private fun JsonObject.long(name: String): Long? = this[name].numberOrNull()?.longOrNull
 
-    private fun JsonObject.double(name: String): Double? = this[name].numberOrNull()?.doubleOrNull
+    // "NaN" and "Infinity" parse as doubles; a buggy Hub must not push them into costs and sums.
+    private fun JsonObject.double(name: String): Double? = this[name].numberOrNull()?.doubleOrNull?.takeIf { it.isFinite() }
 
     private fun JsonObject.boolean(name: String): Boolean? = this[name].numberOrNull()?.booleanOrNull
 
@@ -560,7 +561,7 @@ object HubProtocolParser {
     }?.toMap().orEmpty()
 
     private fun JsonObject.doubleMap(name: String): Map<String, Double> = objectField(name)?.mapNotNull { (key, value) ->
-        value.numberOrNull()?.doubleOrNull?.let { key to it.coerceAtLeast(0.0) }
+        value.numberOrNull()?.doubleOrNull?.takeIf { it.isFinite() }?.let { key to it.coerceAtLeast(0.0) }
     }?.toMap().orEmpty()
 
     private fun JsonElement?.objectOrNull(): JsonObject? = this as? JsonObject
