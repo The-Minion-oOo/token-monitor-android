@@ -41,7 +41,7 @@ internal fun limitAttention(snapshot: HubSnapshot, now: Long): List<String> = sn
         val label = window.label.ifBlank { window.kind }
         when {
             reset != null && reset <= now -> QuotaNote("$provider $label: ${formatBoundary(window.resetsAt, window.boundaryKind, now)}; awaiting updated quota", 1, boundary = reset)
-            remaining != null && remaining <= 20 -> QuotaNote("$provider $label: ${quotaPercentLeft(window)}% left", 0, remaining)
+            remaining != null && (quotaPercentLeft(window) ?: 100) <= 20 -> QuotaNote("$provider $label: ${quotaPercentLeft(window)}% left", 0, remaining)
             reset != null && reset - now <= 3_600_000L -> QuotaNote("$provider $label: ${formatBoundary(window.resetsAt, window.boundaryKind, now)}", 2, boundary = reset)
             else -> null
         }

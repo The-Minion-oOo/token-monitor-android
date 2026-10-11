@@ -110,7 +110,9 @@ CONNECTING) and the brand and page lines end 8 units before it.
 
 Touch targets are separate transparent views in `usage_widget_deck.xml` and are
 not drawn. The widget root is padded to the fitted card, so every target is
-measured from the card, not from the launcher allocation around it:
+measured from the card, not from the launcher allocation around it. On
+Android 12 and newer each size the launcher lists gets its own frame and
+padding; older versions get one portrait and one landscape frame:
 
 - Page changes: 48 dp columns at the card's left and right edges, 96 dp tall,
   centered on the chevrons.

@@ -158,9 +158,10 @@ class UsageWidgetProvider : AppWidgetProvider() {
     override fun onDeleted(context: Context, ids: IntArray) { synchronized(frames) { ids.forEach { frames.remove(it) } } }
 
     private fun updateAsync(context: Context) {
-        val result = goAsync()
+        // Null when the provider is called directly rather than from a delivered broadcast.
+        val result: PendingResult? = goAsync()
         thread(name = "usage-widget") {
-            try { runCatching { refresh(context.applicationContext) } } finally { result.finish() }
+            try { runCatching { refresh(context.applicationContext) } } finally { result?.finish() }
         }
     }
 

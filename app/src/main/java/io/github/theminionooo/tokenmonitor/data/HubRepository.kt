@@ -91,6 +91,10 @@ internal class DecodedBodies {
         return history
     }
 
+    @Synchronized fun clear() {
+        historyRaw = null; history = null; subscriptionsRaw = null; subscriptions = null
+    }
+
     @Synchronized fun subscriptions(raw: String?): HubSubscriptions? {
         if (raw == null) return null
         if (raw !== subscriptionsRaw) { subscriptions = HubProtocolParser.decodeSubscriptions(raw); subscriptionsRaw = raw }
@@ -245,6 +249,7 @@ internal class HubRepository(context: Context) {
         activeUrl = null
         lastWireSnapshot = null
         pendingCacheWrite = null
+        decodedBodies.clear()
         connectionStore.clear()
         diskQueue.enqueue { cache.clear(); WidgetUpdateCoordinator.refresh(appContext) }
         _state.value = HubRepositoryState()

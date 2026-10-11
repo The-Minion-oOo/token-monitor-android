@@ -44,6 +44,9 @@ internal fun loadWidgetDeck(context: Context, widgetId: Int): WidgetDeckRenderSt
     )
 }
 
+/** A launcher allocation, never smaller than the widget's declared minimum. */
+internal fun deckAllocation(size: SizeF): SizeF = SizeF(size.width.coerceAtLeast(250f), size.height.coerceAtLeast(110f))
+
 internal fun widgetDeckSize(context: Context, widgetId: Int): SizeF {
     if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) return SizeF(320f, 180f)
     val options = AppWidgetManager.getInstance(context).getAppWidgetOptions(widgetId)

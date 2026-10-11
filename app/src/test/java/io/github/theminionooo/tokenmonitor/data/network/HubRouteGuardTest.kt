@@ -15,7 +15,7 @@ class HubRouteGuardTest {
     private fun ip(vararg bytes: Int) = InetAddress.getByAddress(bytes.map { it.toByte() }.toByteArray())
 
     @Test
-    fun `tailscale routes need a VPN and home routes need Wi-Fi or Ethernet`() {
+    fun `tailscale routes need a VPN and home routes need Wi-Fi, Ethernet or a VPN`() {
         val mobileOnly = PhoneNetworks(lan = false, vpn = false)
         val homeWifi = PhoneNetworks(lan = true, vpn = false)
         val travelling = PhoneNetworks(lan = false, vpn = true)
@@ -24,7 +24,8 @@ class HubRouteGuardTest {
         assertFalse(HubRouteGuard.usable(magicDns, homeWifi))
         assertTrue(HubRouteGuard.usable(tailscale, travelling))
         assertFalse(HubRouteGuard.usable(home, mobileOnly))
-        assertFalse(HubRouteGuard.usable(mdns, travelling))
+        // A Tailscale subnet router carries the home range when the phone is away.
+        assertTrue(HubRouteGuard.usable(mdns, travelling))
         assertTrue(HubRouteGuard.usable(home, homeWifi))
     }
 
@@ -36,7 +37,7 @@ class HubRouteGuardTest {
         )
         assertEquals(
             "This phone is not on Wi-Fi, so the home Hub address is not tried.",
-            HubRouteGuard.unavailableMessage(listOf(home), PhoneNetworks(lan = false, vpn = true)),
+            HubRouteGuard.unavailableMessage(listOf(home), PhoneNetworks(lan = false, vpn = false)),
         )
         assertEquals(
             "Tailscale is off and this phone is not on Wi-Fi, so neither Hub address can be reached.",
@@ -52,6 +53,8 @@ class HubRouteGuardTest {
         assertThrows(HubApiException::class.java) { HubRouteGuard.require(magicDns, connected) { listOf(ip(8, 8, 8, 8)) } }
         assertThrows(HubApiException::class.java) { HubRouteGuard.require(magicDns, connected) { listOf(ip(192, 168, 1, 20)) } }
         assertThrows(HubApiException::class.java) { HubRouteGuard.require(mdns, connected) { listOf(ip(192, 168, 1, 20), ip(203, 0, 113, 9)) } }
+        // A Mac or avahi host on an IPv6 network also answers with its global address.
+        HubRouteGuard.require(mdns, connected) { listOf(ip(192, 168, 1, 20), InetAddress.getByName("2001:db8::20")) }
     }
 
     @Test
@@ -68,6 +71,7 @@ class HubRouteGuardTest {
         assertTrue(HubRouteGuard.isTailscale(InetAddress.getByName("fd7a:115c:a1e0::1")))
         assertFalse(HubRouteGuard.isTailscale(InetAddress.getByName("fd00::1")))
         assertTrue(HubRouteGuard.isPrivate(InetAddress.getByName("fd00::1")))
+        assertFalse(HubRouteGuard.isPrivate(ip(203, 0, 113, 9)))
         assertTrue(HubRouteGuard.isPrivate(ip(169, 254, 10, 4)))
         assertFalse(HubRouteGuard.isPrivate(ip(100, 88, 1, 2)))
     }

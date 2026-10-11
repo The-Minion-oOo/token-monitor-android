@@ -47,23 +47,23 @@ internal data class PhoneNetworks(val lan: Boolean, val vpn: Boolean) {
 
 /**
  * Keeps the Hub secret on the network a saved route belongs to. A Tailscale address is tried only while a
- * VPN is up, because without Tailscale the 100.64/10 range is carrier-grade NAT. A home address is tried only
- * on Wi-Fi or Ethernet, never over mobile data. Names are resolved first so a hostile DNS answer cannot
- * point a private name at a public host.
+ * VPN is up, because without Tailscale the 100.64/10 range is carrier-grade NAT. A home address is tried on
+ * Wi-Fi or Ethernet, or through a VPN such as a Tailscale subnet router, but never directly over mobile data.
+ * Names are resolved first so a hostile DNS answer cannot point a private name at a public host.
  */
 internal object HubRouteGuard {
     private const val privateNameMessage = "The Hub name did not resolve to a private address, so the secret was not sent."
 
     fun usable(url: String, networks: PhoneNetworks): Boolean = when {
         HubAddressValidator.isTailscaleRoute(url) -> networks.vpn
-        HubAddressValidator.isLocalAddress(url) -> networks.lan
+        HubAddressValidator.isLocalAddress(url) -> networks.lan || networks.vpn
         else -> true
     }
 
     /** Why none of [routes] can be tried on [networks]. */
     fun unavailableMessage(routes: List<String>, networks: PhoneNetworks): String {
         val tailscaleOff = routes.any(HubAddressValidator::isTailscaleRoute) && !networks.vpn
-        val offLan = routes.any(HubAddressValidator::isLocalAddress) && !networks.lan
+        val offLan = routes.any(HubAddressValidator::isLocalAddress) && !networks.lan && !networks.vpn
         return when {
             tailscaleOff && offLan -> "Tailscale is off and this phone is not on Wi-Fi, so neither Hub address can be reached."
             tailscaleOff -> "Tailscale is not connected on this phone. Turn it on to reach the Hub."
@@ -96,6 +96,6 @@ internal object HubRouteGuard {
         }
     }
 
-    internal fun isPrivate(address: InetAddress): Boolean = address.isSiteLocalAddress || address.isLinkLocalAddress ||
-        (address is Inet6Address && (address.address[0].toInt() and 0xfe) == 0xfc)
+    /** mDNS hosts on IPv6 home networks also publish global addresses, so only IPv4 answers must be private. */
+    internal fun isPrivate(address: InetAddress): Boolean = address !is Inet4Address || address.isSiteLocalAddress || address.isLinkLocalAddress
 }
