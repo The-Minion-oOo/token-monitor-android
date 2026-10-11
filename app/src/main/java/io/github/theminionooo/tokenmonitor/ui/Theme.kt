@@ -93,6 +93,10 @@ internal data class Palette(
     val purple: Color,
     val yellow: Color,
     val danger: Color,
+    /** Warning hues for text: darker on light themes so they read at 4.5:1; the fills above stay as designed. */
+    val orangeText: Color = orange,
+    val yellowText: Color = yellow,
+    val dangerText: Color = danger,
     /** Five-step activity ramp, index 0 is an inactive day. */
     val heat: List<Color>,
 ) {
@@ -121,11 +125,14 @@ internal data class Palette(
                 success = if (light) Color(0xFF18794E) else Color(0xFFB7EAD4),
                 blue = blue,
                 chart = if (theme.chart.equals("#73bdf5", ignoreCase = true)) blue else hex(theme.chart),
-                // Light themes darken the warning hues (same hue, 4.5:1 or better on Porcelain) because they are drawn as text.
-                orange = if (light) Color(0xFFA03E0C) else Color(0xFFF4A073),
+                orange = Color(0xFFF4A073),
                 purple = Color(0xFFB394F4),
-                yellow = if (light) Color(0xFF705B00) else Color(0xFFF1D973),
-                danger = if (light) Color(0xFFA82132) else Color(0xFFF47788),
+                yellow = Color(0xFFF1D973),
+                danger = Color(0xFFF47788),
+                // Same hues, darkened on light themes (4.5:1 or better on Porcelain) where they are drawn as text.
+                orangeText = if (light) Color(0xFFA03E0C) else Color(0xFFF4A073),
+                yellowText = if (light) Color(0xFF705B00) else Color(0xFFF1D973),
+                dangerText = if (light) Color(0xFFA82132) else Color(0xFFF47788),
                 heat = if (!theme.chart.equals("#73bdf5", ignoreCase = true)) {
                     val chart = hex(theme.chart)
                     listOf(if (light) Color(0xFFE3E7EC) else lerp(shell, Color.Black, 0.35f)) +
@@ -178,6 +185,9 @@ internal val Orange: Color @Composable get() = LocalPalette.current.orange
 internal val Purple: Color @Composable get() = LocalPalette.current.purple
 internal val Yellow: Color @Composable get() = LocalPalette.current.yellow
 internal val Danger: Color @Composable get() = LocalPalette.current.danger
+internal val OrangeText: Color @Composable get() = LocalPalette.current.orangeText
+internal val YellowText: Color @Composable get() = LocalPalette.current.yellowText
+internal val DangerText: Color @Composable get() = LocalPalette.current.dangerText
 internal val Success: Color @Composable get() = LocalPalette.current.success
 
 internal val LocalColorfulToolMarks = staticCompositionLocalOf { false }
@@ -192,6 +202,14 @@ internal fun quotaColor(used: Float): Color = when {
     used >= 0.85f -> Danger
     used >= 0.65f -> Orange
     else -> Success
+}
+
+/** [quotaColor] for text, which needs the darker light-theme warning hues. */
+@Composable
+internal fun quotaTextColor(used: Float): Color = when {
+    used >= 0.85f -> DangerText
+    used >= 0.65f -> OrangeText
+    else -> Ink
 }
 
 /** Uses the vendor color when known; otherwise chooses a stable fallback accent. */

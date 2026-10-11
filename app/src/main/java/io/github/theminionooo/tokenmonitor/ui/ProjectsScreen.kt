@@ -235,8 +235,8 @@ internal fun SessionUsageRow(session: SessionUsage, title: String, meta: String,
         }
         context?.let { reading ->
             val contextColor = when {
-                reading.percentLeft <= 10 -> Danger
-                reading.percentLeft <= 30 -> Orange
+                reading.percentLeft <= 10 -> DangerText
+                reading.percentLeft <= 30 -> OrangeText
                 else -> Muted
             }
             Row(modifier = Modifier.fillMaxWidth().padding(start = 20.dp), horizontalArrangement = Arrangement.SpaceBetween) {

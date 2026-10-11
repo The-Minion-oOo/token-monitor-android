@@ -130,6 +130,11 @@ internal fun ServiceStatusRow(provider: ServiceProviderStatus, onOpenServicePage
         ServiceHealth.Outage -> Danger
         ServiceHealth.Unknown -> Muted
     }
+    val textTone = when (provider.health) {
+        ServiceHealth.Degraded -> YellowText
+        ServiceHealth.Outage -> DangerText
+        else -> tone
+    }
     val label = when (provider.health) {
         ServiceHealth.Ok -> "Operational"
         ServiceHealth.Degraded -> "Degraded"
@@ -152,7 +157,7 @@ internal fun ServiceStatusRow(provider: ServiceProviderStatus, onOpenServicePage
             Spacer(Modifier.width(7.dp))
             Text(provider.label, color = Ink, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
             Surface(color = Color.Transparent, border = BorderStroke(1.dp, tone.copy(alpha = 0.4f)), shape = MaterialTheme.shapes.small) {
-                Text(label, color = tone, style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp))
+                Text(label, color = textTone, style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp))
             }
         }
         Text(provider.description, color = Ink.copy(alpha = 0.88f), style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)

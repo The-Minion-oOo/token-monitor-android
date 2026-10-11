@@ -201,7 +201,7 @@ internal fun HomeLimits(accounts: List<LimitAccount>, displayOptions: DisplayOpt
                                     StatusDot(tone, size = 5.dp)
                                     Spacer(Modifier.width(4.dp))
                                 }
-                                Text(amount, color = if (tone != Success) tone else Ink, style = MaterialTheme.typography.labelSmall)
+                                Text(amount, color = quotaTextColor(risk), style = MaterialTheme.typography.labelSmall)
                             }
                             formatBoundary(window.resetsAt, window.boundaryKind, LocalNow.current).takeIf { it.isNotBlank() }?.let { Text(it, color = Muted, style = MaterialTheme.typography.labelSmall, maxLines = 1) }
                         }

@@ -300,7 +300,7 @@ private class DeckCanvas(
                 val titleType = DeckType(monoBold, g.TITLE_SIZE, tracking = 0.04f, uppercase = true)
                 val fullTitle = "${group.provider.providerLabel()} · ${window.title}"
                 text(if (measure(fullTitle, titleType) <= cellWidth) fullTitle else window.title, cellLeft, top + g.TITLE_OFFSET, titleType, label, maxWidth = cellWidth)
-                val percent = text("${window.remainingPercent.roundToInt()}%", cellLeft, top + g.VALUE_OFFSET, figure, if (window.remainingPercent > 35) ink else tone)
+                val percent = text("${window.remainingPercent.roundToInt()}%", cellLeft, top + g.VALUE_OFFSET, figure, if (window.remainingPercent > 35) ink else WidgetDeckDrawing.textTone(palette, window.remainingPercent).toArgb())
                 text("left", cellLeft + percent + 6f, top + g.VALUE_OFFSET, DeckType(mono, g.LEFT_LABEL_SIZE), ink, maxWidth = cellWidth - percent - 6f)
                 drawBar(RectF(cellLeft, top + g.BAR_TOP_OFFSET, cellRight, top + g.BAR_BOTTOM_OFFSET), window.remainingPercent / 100.0, tone)
                 text(window.reset.ifBlank { "Reset not reported" }, cellLeft, top + g.RESET_OFFSET, secondary, muted, maxWidth = cellWidth)

@@ -21,7 +21,7 @@ class WarningContrastTest {
                 "overlay on shell" to palette.overlay.compositeOver(palette.shell),
                 "overlay on gradient bottom" to palette.overlay.compositeOver(palette.gradientBottom),
             )
-            mapOf("orange" to palette.orange, "danger" to palette.danger, "yellow" to palette.yellow).forEach { (name, color) ->
+            mapOf("orange" to palette.orangeText, "danger" to palette.dangerText, "yellow" to palette.yellowText).forEach { (name, color) ->
                 surfaces.forEach { (surface, background) ->
                     val ratio = contrast(color, background)
                     assertTrue("${theme.code} $name on $surface is %.2f:1".format(ratio), ratio >= 4.5)
@@ -33,17 +33,23 @@ class WarningContrastTest {
     @Test fun lightVariantsKeepTheirHueSoTheyStillReadAsTheSameWarning() {
         val dark = Palette.from(InterfaceTheme.Default)
         val light = Palette.from(InterfaceTheme.Porcelain)
-        assertEquals(hue(dark.orange), hue(light.orange), 3.0)
-        assertEquals(hue(dark.danger), hue(light.danger), 3.0)
-        assertEquals(hue(dark.yellow), hue(light.yellow), 3.0)
+        assertEquals(hue(dark.orange), hue(light.orangeText), 3.0)
+        assertEquals(hue(dark.danger), hue(light.dangerText), 3.0)
+        assertEquals(hue(dark.yellow), hue(light.yellowText), 3.0)
     }
 
-    @Test fun darkThemesKeepTheOriginalWarningColors() {
-        listOf(InterfaceTheme.Default, InterfaceTheme.Obsidian).forEach { theme ->
+    @Test fun fillsKeepTheOriginalWarningColorsAndDarkTextMatchesThem() {
+        listOf(InterfaceTheme.Default, InterfaceTheme.Obsidian, InterfaceTheme.Porcelain).forEach { theme ->
             val palette = Palette.from(theme)
             assertEquals(Color(0xFFF4A073), palette.orange)
             assertEquals(Color(0xFFF47788), palette.danger)
             assertEquals(Color(0xFFF1D973), palette.yellow)
+        }
+        listOf(InterfaceTheme.Default, InterfaceTheme.Obsidian).forEach { theme ->
+            val palette = Palette.from(theme)
+            assertEquals(palette.orange, palette.orangeText)
+            assertEquals(palette.danger, palette.dangerText)
+            assertEquals(palette.yellow, palette.yellowText)
         }
     }
 
