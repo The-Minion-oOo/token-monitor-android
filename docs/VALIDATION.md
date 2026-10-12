@@ -37,40 +37,40 @@ the exact `main` commit that gets tagged. None of these checks uses a private
 Hub or a vendor account. [Releasing](RELEASING.md) covers the process and
 [Development](DEVELOPMENT.md) covers running the checks locally.
 
-## Current release: v0.68.0 r2
+## Current release: v0.69.0 r1
 
-The desktop baseline stays tag `v0.68.0`, commit
-`5d2db368d8313415763860d594de00e46a663418`. This revision changes how the app
-chooses a route to the Hub, fixes the Pages widget's touch targets and status
-text, and hardens Live sessions, parsing and several screens.
+The desktop baseline is tag `v0.69.0`, commit
+`3f106ae3d4712b26cced8272f0d488eaab0de1e6`. I reviewed its release notes, API
+changes and session presentation at that pin. Android now reads session identity,
+parent links and live activity, groups subagents, continuation files, T3 Code
+runs, Grok Bot records and background reviews the way the desktop does, and shows
+when a session is waiting for a reply.
 
-All JVM tests, lint and the debug build passed, and CI ran all 46
-instrumentation tests on API 36 and API 37 plus the optimized API 26 smoke
-check. A new instrumentation check confirms that each Pages widget touch target
-covers its drawn control at five allocations, including tall and wide ones. The
-LIVE gallery renders are byte-identical to the previous release. Before and
-after captures of the status words, touch targets and light-theme warning text
-were compared side by side before merging.
+The released-Hub contract check passed against the pinned v0.69.0 Hub, including
+the new session fields and the privacy sentinels. All JVM tests, lint and the
+debug build passed, and CI ran all 46 instrumentation tests on API 36 and API 37
+plus the optimized API 26 smoke check. I compared emulator captures of Home and
+Sessions, with a group collapsed and expanded, before merging.
 
-- APK: `token-monitor-android-v0.68.0-r2.apk`, 2,450,628 bytes
-- Package: `io.github.theminionooo.tokenmonitor`, version code `680002`
+- APK: `token-monitor-android-v0.69.0-r1.apk`, 2,467,030 bytes
+- Package: `io.github.theminionooo.tokenmonitor`, version code `690001`
 - File SHA-256:
-  `01fbedc6bdb0dda0dea11a0bc46ff4eb290969ed3adbc40005e08f13e53aab43`
+  `b188411aa93abc478802dd7f5e33d7a0e6653cdbf7ada2dba38057dee174f3cd`
 - Certificate SHA-256:
   `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`
 
 The release tag points to `main` commit
-`e43f734bf47219574c2928d8710d88627b79746e`, merged through
-[PR #40](https://github.com/The-Minion-oOo/token-monitor-android/pull/40).
+`c972f3c7c95eceb38490bffb48764920802a8e88`, merged through
+[PR #44](https://github.com/The-Minion-oOo/token-monitor-android/pull/44).
 The required checks passed on that exact push:
-[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/38159728388),
-[Android interaction and optimized API 26 smoke checks](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/38159728284),
-and [released Hub contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/38159728323).
+[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/38196574552),
+[Android interaction and optimized API 26 smoke checks](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/38196574513),
+and [released Hub contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/38196574524).
 I verified the APK, checksum and update manifest on the draft and again after
 downloading them from the public release,
-[android-v0.68.0-r2](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.68.0-r2).
-It was published on 2026-10-11 at 22:57 UTC. I haven't installed this release
-on my phone yet.
+[android-v0.69.0-r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.69.0-r1).
+It was published on 2026-10-12 at 04:28 UTC. I haven't installed this release on my phone
+yet.
 
 ## Release history
 
@@ -80,6 +80,7 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 
 | Release | Date | Desktop baseline | Main checks | Phone check |
 | --- | --- | --- | --- | --- |
+| v0.69.0 r1 | 2026-10-12 | v0.69.0 | Session grouping, Waiting for you, live-activity clock | No |
 | v0.68.0 r2 | 2026-10-11 | v0.68.0 | Route rules, Pages widget touch targets and status text, Live and parsing fixes | No |
 | v0.68.0 r1 | 2026-10-08 | v0.68.0 | Unpriced-usage subtotals, Dots provenance | No |
 | v0.67.0 r1 | 2026-10-06 | v0.67.0 | Separate MiMo products, CNY wallet values, custom TM2 themes | No |
@@ -93,11 +94,12 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 | v0.61.0 r1 | 2026-09-23 | v0.61.0 | Provider and client compatibility, current desktop labels | Yes: in-place upgrade kept pairing, preferences and widget |
 | v0.60.0 r7 | 2026-09-22 | v0.60.0 | Pages widget Breakdown and Activity layout | Yes: installed over r6, widget kept |
 
-APK SHA-256 for each published release (v0.68.0 r2 is listed above). All of
+APK SHA-256 for each published release (v0.69.0 r1 is listed above). All of
 them use package `io.github.theminionooo.tokenmonitor` and the same signing
 certificate, SHA-256
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
 
+- v0.68.0 r2 (`680002`): `01fbedc6bdb0dda0dea11a0bc46ff4eb290969ed3adbc40005e08f13e53aab43`
 - v0.68.0 r1 (`680001`): `81b97ff5ce2947c2d18539b0b166808405a7d812c58b743b3c98f525e1ec8663`
 - v0.67.0 r1 (`670001`): `798c27251aa58c077221fb73f8728e688173430a13acd26b1fcc7f35e346e7fb`
 - v0.66.0 r2 (`660002`): `4fd49f95a78eba6d9dfac96ab1ecab42cbe60ca24cff1877dea941cf299fe3bd`
@@ -145,8 +147,8 @@ What I have confirmed on the phone:
   installed, not from Token Monitor; I removed it.
 
 The last build I tested on the phone is v0.66.0 r1 (`660001`). v0.66.0 r2,
-v0.67.0 r1, v0.68.0 r1 and v0.68.0 r2 have not been rechecked on a phone, and
-neither were v0.63.0 through v0.65.0 when they were released.
+v0.67.0 r1, v0.68.0 r1, v0.68.0 r2 and v0.69.0 r1 have not been rechecked on a
+phone, and neither were v0.63.0 through v0.65.0 when they were released.
 
 ## Known limits
 

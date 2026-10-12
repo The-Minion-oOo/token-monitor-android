@@ -13,11 +13,10 @@ watching, alias/pricing edits and title-sharing controls remain on desktop.
 Android is still read-only.
 
 The latest published release is
-[`android-v0.68.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.68.0-r2),
-recorded with its source commit in `release.json`; v0.69.0 r1 is the current
-candidate. The earlier v0.66.0 r1 upgrade on my phone preserved pairing and
-the placed Pages widget; later revisions, including v0.68.0 r2, have not been
-checked on it.
+[`android-v0.69.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.69.0-r1),
+recorded with its source commit in `release.json`. The earlier v0.66.0 r1
+upgrade on my phone preserved pairing and the placed Pages widget; later
+revisions, including v0.69.0 r1, have not been checked on it.
 
 An Android-only fix increments `versionCode` and the GitHub release revision,
 for example `android-vX.Y.Z-rN`, without changing the visible compatibility

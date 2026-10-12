@@ -130,13 +130,11 @@ Session rows also show generation speed, cache-hit percentage and prompt-cache e
 ## Get connected
 
 You need Android 8.0 or newer and a desktop running Token Monitor with Hub hosting
-on. The current release, Android v0.68.0 r2, is verified against desktop v0.68.0.
-The source on `main` follows desktop v0.69.0; its v0.69.0 r1 build is verified
-against that release but isn't published yet. The last build I checked on my
-phone, v0.66.0 r1, upgraded in place from v0.65.0 and kept pairing and the placed
-Pages widget. I haven't installed v0.68.0 or v0.69.0 on my phone yet.
+on. Android v0.69.0 r1 is verified against desktop v0.69.0. The last build I
+checked on my phone, v0.66.0 r1, upgraded in place from v0.65.0 and kept pairing
+and the placed Pages widget. I haven't installed v0.69.0 on my phone yet.
 
-1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.68.0 r2 APK.
+1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.69.0 r1 APK.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
 3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
 4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
@@ -150,9 +148,9 @@ Desktop v0.64's optional iCloud Drive sync does not replace the Hub connection f
 
 | | |
 | --- | --- |
-| Current public release | [`v0.68.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.68.0-r2) |
+| Current public release | [`v0.69.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.69.0-r1) |
 | Latest phone-verified build | signed `v0.66.0-r1` over v0.65.0 r1; pairing, home Wi-Fi reconnection and placed Pages widget preserved |
-| Remaining phone checks | v0.68.0 r2 and v0.69.0 r1 in-place upgrades, Tailscale/Wi-Fi transitions, screen-off expiry and battery behavior |
+| Remaining phone checks | v0.69.0 r1 in-place upgrade, Tailscale/Wi-Fi transitions, screen-off expiry and battery behavior |
 | Desktop baseline | Token Monitor `v0.69.0` |
 | Upstream commit | [`3f106ae`](https://github.com/Javis603/token-monitor/commit/3f106ae3d4712b26cced8272f0d488eaab0de1e6) |
 
