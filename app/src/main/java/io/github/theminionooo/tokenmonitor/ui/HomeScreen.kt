@@ -190,8 +190,8 @@ internal fun HomeLimits(accounts: List<LimitAccount>, displayOptions: DisplayOpt
                         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(windowTitle(window, account.windows), color = Muted, style = MaterialTheme.typography.labelSmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                                val remainingPercent = window.remainingPercent ?: window.usedPercent?.let { 100.0 - it.coerceIn(0.0, 100.0) }
-                                val amount = remainingPercent?.let { "${formatPercent(it)} left" }
+                                val remainingPercent = quotaRemainingPercent(window)
+                                val amount = quotaPercentLeft(window)?.let { "$it% left" }
                                     ?: window.remaining?.let { formatWindowAmount(it, window.currency) }
                                     ?: "—"
                                 // Like the desktop Home module, a nearly spent window is flagged in place.
@@ -201,7 +201,7 @@ internal fun HomeLimits(accounts: List<LimitAccount>, displayOptions: DisplayOpt
                                     StatusDot(tone, size = 5.dp)
                                     Spacer(Modifier.width(4.dp))
                                 }
-                                Text(amount, color = if (tone != Success) tone else Ink, style = MaterialTheme.typography.labelSmall)
+                                Text(amount, color = quotaTextColor(risk), style = MaterialTheme.typography.labelSmall)
                             }
                             formatBoundary(window.resetsAt, window.boundaryKind, LocalNow.current).takeIf { it.isNotBlank() }?.let { Text(it, color = Muted, style = MaterialTheme.typography.labelSmall, maxLines = 1) }
                         }

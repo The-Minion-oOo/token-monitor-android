@@ -34,6 +34,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
@@ -109,13 +110,16 @@ internal fun LazyListScope.limitItems(snapshot: HubSnapshot, displayOptions: Dis
     if (snapshot.stats.limits.providers.isEmpty()) item { MutedCopy("No account limits are available from this Hub yet.", modifier = Modifier.padding(vertical = 12.dp)) }
     else {
         val providers = prioritizeAvailableLimits(snapshot.stats.limits.providers)
-        items(providers, key = { limitAccountIdentity(it) }) { account ->
+        val keys = uniqueKeys(providers, ::limitAccountIdentity)
+        itemsIndexed(providers, key = { index, _ -> keys[index] }) { _, account ->
             LimitAccountRow(account, displayOptions)
         }
     }
     if (snapshot.subscriptions.entries.isNotEmpty()) {
         item { Text("SUBSCRIPTIONS", color = Ink, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 8.dp)) }
-        items(snapshot.subscriptions.entries, key = { it.id }) { subscription -> SubscriptionRow(subscription) }
+        val subscriptions = snapshot.subscriptions.entries
+        val keys = uniqueKeys(subscriptions) { it.id }
+        itemsIndexed(subscriptions, key = { index, _ -> keys[index] }) { _, subscription -> SubscriptionRow(subscription) }
     }
 }
 
@@ -160,7 +164,7 @@ internal fun LimitAccountRow(account: LimitAccount, displayOptions: DisplayOptio
                             Row {
                                 Text(windowTitle(window, account.windows), color = Muted, style = MaterialTheme.typography.labelSmall, modifier = Modifier.weight(1f), maxLines = 1)
                                 val display = (if (displayOptions.limitBarMetric == LimitBarMetric.Remaining) {
-                                    remaining?.let { "${formatPercent(it)} left" }
+                                    quotaPercentLeft(window)?.let { "$it% left" }
                                 } else {
                                     usedPercent?.let { "${formatPercent(it)} used" }
                                 })

@@ -111,8 +111,9 @@ internal fun counterFrame(old: CounterFrame?, value: Long?): CounterFrame = when
 /** The lowest remaining window a provider reports, which is what the dashboard's Home module leads with. */
 internal data class QuotaRow(val provider: String, val window: LimitWindow, val remainingPercent: Double, val siblings: List<LimitWindow> = listOf(window))
 
+/** The same whole-number "% left" the app shows, so every readout truncates or rounds identically. */
 internal fun remainingPercent(window: LimitWindow): Double? =
-    (window.remainingPercent ?: window.usedPercent?.let { 100.0 - it })?.takeIf { it.isFinite() }?.coerceIn(0.0, 100.0)
+    io.github.theminionooo.tokenmonitor.ui.quotaPercentLeft(window)?.toDouble()
 
 internal fun quotaRows(snapshot: HubSnapshot): List<QuotaRow> = snapshot.stats.limits.providers.mapNotNull { account ->
     account.windows.mapNotNull { window -> remainingPercent(window)?.let { QuotaRow(account.provider, window, it, account.windows) } }
@@ -157,9 +158,10 @@ class UsageWidgetProvider : AppWidgetProvider() {
     override fun onDeleted(context: Context, ids: IntArray) { synchronized(frames) { ids.forEach { frames.remove(it) } } }
 
     private fun updateAsync(context: Context) {
-        val result = goAsync()
+        // Null when the provider is called directly rather than from a delivered broadcast.
+        val result: PendingResult? = goAsync()
         thread(name = "usage-widget") {
-            try { refresh(context.applicationContext) } finally { result.finish() }
+            try { runCatching { refresh(context.applicationContext) } } finally { result?.finish() }
         }
     }
 
@@ -387,7 +389,7 @@ class UsageWidgetProvider : AppWidgetProvider() {
                         views.setTextViewText(cell[1], title)
                         views.setTextColor(cell[1], muted)
                         views.setTextViewText(cell[2], "${remaining.toInt()}% left")
-                        views.setTextColor(cell[2], if (tone == palette.success) ink else tone.toArgb())
+                        views.setTextColor(cell[2], if (tone == palette.success) ink else textTone(palette, tone).toArgb())
                         views.setImageViewBitmap(cell[3], quotaBar(palette, tone.toArgb(), remaining, if (windows.size == 1) contentWidth else cellWidth, (4 * density).roundToInt().coerceAtLeast(2)))
                         val reset = formatBoundary(window.resetsAt, window.boundaryKind, now)
                         views.setTextViewText(cell[4], reset)
@@ -417,7 +419,7 @@ class UsageWidgetProvider : AppWidgetProvider() {
                     views.setTextViewText(row[2], if (narrow) provider else "$provider · $window")
                     views.setTextColor(row[2], ink)
                     views.setTextViewText(row[3], if (narrow) "${remaining.toInt()}%" else "${remaining.toInt()}% left")
-                    views.setTextColor(row[3], if (tone == palette.success) ink else tone.toArgb())
+                    views.setTextColor(row[3], if (tone == palette.success) ink else textTone(palette, tone).toArgb())
                     views.setContentDescription(row[0], "$provider, $window, ${remaining.toInt()} percent remaining")
                     views.setImageViewBitmap(row[4], quotaBar(palette, tone.toArgb(), remaining, contentWidth, (4 * density).roundToInt().coerceAtLeast(2)))
                     mark(views, row[1], item.provider, palette)
@@ -469,6 +471,13 @@ class UsageWidgetProvider : AppWidgetProvider() {
                 used >= 0.65f -> palette.orange
                 else -> palette.success
             }
+        }
+
+        /** The darker light-theme hue for a warning [tone] drawn as text. */
+        private fun textTone(palette: Palette, tone: Color): Color = when (tone) {
+            palette.danger -> palette.dangerText
+            palette.orange -> palette.orangeText
+            else -> tone
         }
 
         private fun mark(views: RemoteViews, id: Int, provider: String, palette: Palette) {

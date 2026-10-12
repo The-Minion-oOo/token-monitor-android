@@ -134,7 +134,7 @@ internal fun DesktopHeader(
                 state.message != null -> state.message
                 else -> null
             }
-            if (status != null) Text(status, color = if (state.snapshot?.stale == true) Orange else Muted, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            if (status != null) Text(status, color = if (state.snapshot?.stale == true) OrangeText else Muted, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
         if (settingsOpen) {
             IconButton(onClick = onGoHome, modifier = Modifier.size(30.dp)) {

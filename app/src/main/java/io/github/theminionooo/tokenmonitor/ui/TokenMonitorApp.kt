@@ -246,6 +246,8 @@ internal fun DashboardScaffold(
     onAllowLocalNetwork: () -> Unit = {},
 ) {
     var periodName by rememberSaveable { mutableStateOf(displayOptions.defaultPeriod) }
+    // The default steers the period only when the setting changes; a rotation or theme switch must keep the period picked in the header.
+    var appliedDefaultPeriod by rememberSaveable { mutableStateOf(displayOptions.defaultPeriod) }
     var homeReturnVisible by rememberSaveable { mutableStateOf(false) }
     // Destinations have separate compositions during AnimatedContent transitions.
     var modelFilter by rememberSaveable { mutableStateOf<String?>(null) }
@@ -253,7 +255,10 @@ internal fun DashboardScaffold(
     val period = DashboardPeriod.entries.firstOrNull { it.name == periodName } ?: DashboardPeriod.Today
     val settingsOpen = destination == DashboardDestination.Settings
     LaunchedEffect(displayOptions.defaultPeriod) {
-        periodName = displayOptions.defaultPeriod
+        if (displayOptions.defaultPeriod != appliedDefaultPeriod) {
+            appliedDefaultPeriod = displayOptions.defaultPeriod
+            periodName = displayOptions.defaultPeriod
+        }
     }
     val chooseDestination: (DashboardDestination) -> Unit = { next ->
         modelFilter = null

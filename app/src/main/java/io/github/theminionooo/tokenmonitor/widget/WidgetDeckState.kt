@@ -19,7 +19,8 @@ internal data class WidgetDeckRenderState(
 
 internal fun loadWidgetDeck(context: Context, widgetId: Int): WidgetDeckRenderState {
     val session = WidgetRuntime.session
-    val cached = SnapshotCache(context).read()?.let { wire ->
+    // During a Live or refresh session the in-memory snapshot is the newest one; skip decoding the disk cache on every frame.
+    val cached = if ((session.enabled || session.refreshing) && session.snapshot != null) null else SnapshotCache(context).read()?.let { wire ->
         runCatching {
             HubProtocolParser.decodeSnapshot(
                 wire.health,
@@ -42,6 +43,9 @@ internal fun loadWidgetDeck(context: Context, widgetId: Int): WidgetDeckRenderSt
         size = widgetDeckSize(context, widgetId),
     )
 }
+
+/** A launcher allocation, never smaller than the widget's declared minimum. */
+internal fun deckAllocation(size: SizeF): SizeF = SizeF(size.width.coerceAtLeast(250f), size.height.coerceAtLeast(110f))
 
 internal fun widgetDeckSize(context: Context, widgetId: Int): SizeF {
     if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) return SizeF(320f, 180f)

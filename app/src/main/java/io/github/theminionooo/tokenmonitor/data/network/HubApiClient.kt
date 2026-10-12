@@ -28,10 +28,13 @@ internal data class HubStreamEvent(
     val data: String,
 )
 
-internal class HubApiException(
+internal open class HubApiException(
     val statusCode: Int,
     val presentation: String,
 ) : Exception(presentation)
+
+/** A GET body over the phone's size cap; optional endpoints treat it like an omitted one. */
+internal class HubResponseTooLargeException : HubApiException(200, "The Hub response is too large for this phone dashboard.")
 
 /** A deliberately small GET-only client for the Token Monitor Hub. */
 internal class HubApiClient(
@@ -121,6 +124,8 @@ internal class HubApiClient(
         val http = open(connection, path, authenticated)
         try {
             if (http.responseCode !in 200..299) throw responseException(http)
+            // Refuse an announced oversized body before downloading it.
+            if (http.contentLengthLong > maxResponseBytes) throw HubResponseTooLargeException()
             return readBounded(http.inputStream)
         } finally {
             release(http)
@@ -130,7 +135,8 @@ internal class HubApiClient(
     private fun getOptional(connection: HubConnection, path: String): String? = try {
         get(connection, path)
     } catch (error: HubApiException) {
-        if (error.statusCode == 404) null else throw error
+        // Optional details beyond the size cap must not stop the dashboard from connecting.
+        if (error.statusCode == 404 || error is HubResponseTooLargeException) null else throw error
     }
 
     private fun open(
@@ -218,7 +224,7 @@ internal class HubApiClient(
             if (read == -1) break
             totalBytes += read
             if (totalBytes > maxResponseBytes) {
-                throw HubApiException(200, "The Hub response is too large for this phone dashboard.")
+                throw HubResponseTooLargeException()
             }
             output.write(buffer, 0, read)
         }

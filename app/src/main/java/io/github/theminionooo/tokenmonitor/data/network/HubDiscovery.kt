@@ -7,18 +7,17 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
-import java.net.Inet4Address
-import java.net.NetworkInterface
 import java.util.concurrent.atomic.AtomicReference
 
 /**
  * Finds a Token Monitor Hub on the phone's current private network so nobody has to
- * type the home address. Only private ranges are searched, only the unauthenticated
- * identity endpoint is read, and it runs solely when the person taps Find.
+ * type the home address. Only private ranges on Wi-Fi or Ethernet are searched (see
+ * [PhoneNetworks.lanAddresses]), only the unauthenticated identity endpoint is read,
+ * and it runs solely when the person taps Find.
  */
 internal class HubDiscovery(
     private val probe: (baseUrl: String, timeoutMs: Int) -> Boolean = HubApiClient()::probeHub,
-    private val addresses: () -> List<String> = ::deviceAddresses,
+    private val addresses: () -> List<String>,
 ) {
     suspend fun findOnLocalNetwork(): String? = withContext(Dispatchers.IO) {
         val subnets = subnetPrefixes(addresses())
@@ -61,17 +60,5 @@ internal class HubDiscovery(
             }
             .distinctBy { it.first }
             .take(maxSubnets)
-
-        // One interface that refuses to describe itself must not hide the others, so each is read on its own.
-        private fun deviceAddresses(): List<String> = runCatching {
-            NetworkInterface.getNetworkInterfaces()?.toList().orEmpty()
-        }.getOrDefault(emptyList()).flatMap { network ->
-            runCatching {
-                if (network.isLoopback) emptyList() else network.inetAddresses.toList()
-                    .filterIsInstance<Inet4Address>()
-                    .filter { it.isSiteLocalAddress }
-                    .mapNotNull { it.hostAddress }
-            }.getOrDefault(emptyList())
-        }
     }
 }

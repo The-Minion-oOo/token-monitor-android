@@ -121,7 +121,7 @@ internal fun StatusLine(label: String, value: String, color: Color = Ink) {
 
 @Composable
 internal fun StatusMessage(message: String, stale: Boolean) {
-    Text(message, color = if (stale) Orange else Muted, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(vertical = 3.dp))
+    Text(message, color = if (stale) OrangeText else Muted, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(vertical = 3.dp))
 }
 
 @Composable

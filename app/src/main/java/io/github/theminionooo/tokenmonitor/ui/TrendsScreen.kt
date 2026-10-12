@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -51,20 +51,23 @@ private enum class TrendRange(val label: String, val days: Int?) {
     Seven("7 DAYS", 7), Thirty("30 DAYS", 30), Ninety("90 DAYS", 90), Year("1 YEAR", 365), All("ALL", null)
 }
 
-internal fun LazyListScope.trendItems(snapshot: HubSnapshot) {
-    item { UsageDashboardPanel(snapshot) }
-    item { UsageComparisonPanel(homeActivityPoints(snapshot)) }
-    item { UsageExplorer(homeActivityPoints(snapshot)) }
+/** [history] is the Hub's daily history, built once per snapshot by the caller and shared by every panel here. */
+internal fun LazyListScope.trendItems(snapshot: HubSnapshot, history: List<HistoryPoint>) {
+    item { UsageDashboardPanel(history) }
+    item { UsageComparisonPanel(history) }
+    item { UsageExplorer(history) }
     if (snapshot.history.monthly.isNotEmpty()) {
         item { Text("MONTHLY HISTORY", color = Ink, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 8.dp)) }
-        items(snapshot.history.monthly.takeLast(12).reversed(), key = { it.label }) { point ->
+        val months = snapshot.history.monthly.takeLast(12).reversed()
+        val keys = uniqueKeys(months) { it.label }
+        itemsIndexed(months, key = { index, _ -> keys[index] }) { _, point ->
             DesktopDetailRow(point.label, "", formatTokens(point.tokens), formatUsageCost(point.costUsd, point.unpricedTokens), Blue)
         }
     }
 }
 
 @Composable
-private fun UsageDashboardPanel(snapshot: HubSnapshot) {
+private fun UsageDashboardPanel(history: List<HistoryPoint>) {
     var tabName by rememberSaveable { mutableStateOf(DashboardTab.Overview.name) }
     val tab = DashboardTab.entries.firstOrNull { it.name == tabName } ?: DashboardTab.Overview
     val motionEnabled = LocalInteractionMotion.current
@@ -80,40 +83,53 @@ private fun UsageDashboardPanel(snapshot: HubSnapshot) {
             transitionSpec = { (fadeIn(tween(if (motionEnabled) 200 else 0, easing = DesktopEaseOut)) + slideInVertically(tween(if (motionEnabled) 240 else 0, easing = DesktopEaseOut)) { it / 28 }) togetherWith fadeOut(tween(if (motionEnabled) 110 else 0)) },
             label = "usage dashboard tab",
         ) { visibleTab ->
-            if (visibleTab == DashboardTab.Overview) UsageOverview(snapshot) else TrendsPanel(homeActivityPoints(snapshot))
+            if (visibleTab == DashboardTab.Overview) UsageOverview(history) else TrendsPanel(history)
         }
     }
 }
 
+/** Everything the Overview tab derives from the whole history, so it is worked out once per history and not once per frame. */
+private class OverviewSummary(
+    val stats: List<Pair<String, String>>,
+    val unpricedTokens: Long,
+    val totalTokens: Long,
+    val tokensByModel: Map<String, Long>,
+    val tokensByTool: Map<String, Long>,
+)
+
+private fun summarizeOverview(history: List<HistoryPoint>, today: LocalDate): OverviewSummary {
+    val totalTokens = history.sumOf { it.tokens }
+    val unpricedTokens = history.sumOf { it.unpricedTokens }
+    val tokensByModel = history.flatMap { it.perModel.entries }.groupingBy { it.key }.fold(0L) { sum, entry -> sum + entry.value.tokens }
+    val tokensByTool = history.flatMap { it.perClient.entries }.groupingBy { it.key }.fold(0L) { sum, entry -> sum + entry.value.tokens }
+    val topModel = tokensByModel.maxByOrNull { it.value }?.key.orEmpty()
+    val stats = listOf(
+        "TOTAL TOKENS" to formatCompactTokens(totalTokens),
+        (if (unpricedTokens > 0) "KNOWN COST" else "TOTAL COST") to formatUsageCost(history.sumOf { it.costUsd }, unpricedTokens, compact = true),
+        "ACTIVE DAYS" to history.count { it.tokens > 0 }.toString(),
+        "CURRENT STREAK" to currentStreak(history, today).toString(),
+        "ACTIVE TIME" to formatActiveDuration(history.sumOf { it.activeTimeMs }),
+        "PEAK DAY" to formatCompactTokens(history.maxOfOrNull { it.tokens } ?: 0L),
+        "TOP MODEL" to topModel.displayName().ifBlank { "—" },
+        "MESSAGES" to formatCompactTokens(history.sumOf { it.messages }),
+    )
+    return OverviewSummary(stats, unpricedTokens, totalTokens, tokensByModel, tokensByTool)
+}
+
 @Composable
-private fun UsageOverview(snapshot: HubSnapshot) {
+private fun UsageOverview(history: List<HistoryPoint>) {
     var activityMetricName by rememberSaveable { mutableStateOf(ActivityMetric.Cost.name) }
     val activityMetric = ActivityMetric.entries.firstOrNull { it.name == activityMetricName } ?: ActivityMetric.Cost
-    val history = homeActivityPoints(snapshot)
     if (history.isEmpty()) {
         MutedCopy("No daily history is available yet.", modifier = Modifier.padding(vertical = 12.dp))
         return
     }
-    val active = history.filter { it.tokens > 0 }
-    val totalTokens = history.sumOf { it.tokens }
-    val totalCost = history.sumOf { it.costUsd }
-    val unpricedTokens = history.sumOf { it.unpricedTokens }
-    val messages = history.sumOf { it.messages }
-    val activeTime = history.sumOf { it.activeTimeMs }
-    val peak = history.maxOfOrNull { it.tokens } ?: 0L
-    val topModel = history.flatMap { it.perModel.entries }.groupingBy { it.key }.fold(0L) { sum, entry -> sum + entry.value.tokens }.maxByOrNull { it.value }?.key.orEmpty()
-    val stats = listOf(
-        "TOTAL TOKENS" to formatCompactTokens(totalTokens),
-        (if (unpricedTokens > 0) "KNOWN COST" else "TOTAL COST") to formatUsageCost(totalCost, unpricedTokens, compact = true),
-        "ACTIVE DAYS" to active.size.toString(),
-        "CURRENT STREAK" to currentStreak(history).toString(),
-        "ACTIVE TIME" to formatActiveDuration(activeTime),
-        "PEAK DAY" to formatCompactTokens(peak),
-        "TOP MODEL" to topModel.displayName().ifBlank { "—" },
-        "MESSAGES" to formatCompactTokens(messages),
-    )
+    val today = LocalDate.now()
+    val overview = remember(history, today) { summarizeOverview(history, today) }
+    val heatmap = remember(history, activityMetric, today) { buildActivityHeatmap(history, endDate = today, metric = activityMetric) }
+    val unpricedTokens = overview.unpricedTokens
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        stats.chunked(2).forEach { rowStats ->
+        overview.stats.chunked(2).forEach { rowStats ->
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 rowStats.forEach { (label, value) -> OverviewStat(label, value, Modifier.weight(1f)) }
                 if (rowStats.size == 1) Spacer(Modifier.weight(1f))
@@ -131,9 +147,9 @@ private fun UsageOverview(snapshot: HubSnapshot) {
                 modifier = Modifier.width(150.dp),
             )
         }
-        ActivityHeatmapGrid(buildActivityHeatmap(history, metric = activityMetric), history)
-        OverviewBreakdown("BY MODEL · AVAILABLE HISTORY", history.flatMap { it.perModel.entries }.groupingBy { it.key }.fold(0L) { sum, entry -> sum + entry.value.tokens }, totalTokens, modelRows = true)
-        OverviewBreakdown("BY TOOL · AVAILABLE HISTORY", history.flatMap { it.perClient.entries }.groupingBy { it.key }.fold(0L) { sum, entry -> sum + entry.value.tokens }, totalTokens)
+        ActivityHeatmapGrid(heatmap, history)
+        OverviewBreakdown("BY MODEL · AVAILABLE HISTORY", overview.tokensByModel, overview.totalTokens, modelRows = true)
+        OverviewBreakdown("BY TOOL · AVAILABLE HISTORY", overview.tokensByTool, overview.totalTokens)
     }
 }
 

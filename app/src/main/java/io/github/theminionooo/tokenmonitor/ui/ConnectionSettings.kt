@@ -108,7 +108,15 @@ internal fun ConnectionScreen(
     var fallbackUrl by rememberSaveable(state.fallbackUrl) { mutableStateOf(state.fallbackUrl.orEmpty()) }
     var secret by remember { mutableStateOf("") }
     var allowLocalNetwork by rememberSaveable(state.allowLocalNetwork) { mutableStateOf(state.allowLocalNetwork) }
-    LaunchedEffect(discovery.found) { discovery.found?.let { fallbackUrl = it } }
+    // A discovery result fills the home address once. Recreating the screen must not put an old result over what was typed since.
+    var appliedDiscovery by rememberSaveable { mutableStateOf(discovery.found) }
+    LaunchedEffect(discovery.found) {
+        val found = discovery.found
+        if (found != appliedDiscovery) {
+            appliedDiscovery = found
+            found?.let { fallbackUrl = it }
+        }
+    }
     val fields: @Composable ColumnScope.(String) -> Unit = { saveLabel ->
         if (state.localNetworkPermissionRequired || form.result == io.github.theminionooo.tokenmonitor.data.network.LocalNetworkAccess.deniedMessage) {
             Text("Android needs your permission to reach the home Wi-Fi Hub. Tailscale can still be used when available.", color = Muted, style = MaterialTheme.typography.bodySmall)

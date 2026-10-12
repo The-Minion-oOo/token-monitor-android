@@ -208,7 +208,7 @@ internal fun DashboardContent(
             DashboardDestination.Projects -> projectItems(usage.projects.filter { it.matchesSearch(search) }, period, search.isNotBlank())
             DashboardDestination.Sessions -> sessionItems(usage.sessions.filter { it.matchesSearch(search, showSessionTitles) }, period, search.isNotBlank())
             DashboardDestination.Limits -> limitItems(snapshot, displayOptions)
-            DashboardDestination.Trends -> trendItems(snapshot)
+            DashboardDestination.Trends -> trendItems(snapshot, homeActivity.first)
             DashboardDestination.Settings -> Unit
         }
         item { Spacer(Modifier.height(8.dp)) }

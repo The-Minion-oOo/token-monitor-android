@@ -10,4 +10,11 @@ internal object WidgetDeckDrawing {
         remaining <= 35 -> palette.orange
         else -> palette.success
     }
+
+    /** [tone] for text: the darker light-theme warning hues. */
+    fun textTone(palette: Palette, remaining: Double): Color = when {
+        remaining <= 15 -> palette.dangerText
+        remaining <= 35 -> palette.orangeText
+        else -> palette.success
+    }
 }

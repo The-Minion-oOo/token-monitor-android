@@ -92,8 +92,8 @@ All colors come from the dashboard `Palette` for the active theme.
 | App icon | 22×22 at (18, 20), centered on the brand and page lines |
 | Brand "TOKEN MONITOR" | x 48, baseline 30 |
 | Page "OVERVIEW · 1/4" | x 48, baseline 43 |
-| Refresh icon | 16×16 at (238, 20) |
-| Status text | right edge 296, baseline 31 |
+| Refresh icon | 16×16 at (238, 20); moves left only as far as a longer status word needs to keep 6 units clear |
+| Status text | right edge 296, baseline 31; never shortened with an ellipsis |
 | Live toggle | 40×22 at (306, 16), radius 11 |
 | Toggle knob | radius 8, center 11 units from the active end |
 | Left chevron | center (9, 100), 6 wide, 10 tall |
@@ -104,9 +104,21 @@ The toggle track is accent at 18 percent over the shell with an accent stroke
 when Live; otherwise the overlay color with a strong line stroke and a muted
 knob.
 
+LIVE, SAVED and STALE leave the refresh icon at x 238. OFFLINE, NO DATA, UPDATING
+and CONNECTING are wider, so the icon moves left (to about x 207 for
+CONNECTING) and the brand and page lines end 8 units before it.
+
 Touch targets are separate transparent views in `usage_widget_deck.xml` and are
-not drawn: 48 dp edge columns for page changes, 48×48 dp for Refresh 96 dp from
-the right edge, and 72×48 dp for Live at the right edge.
+not drawn. The widget root is padded to the fitted card, so every target is
+measured from the card, not from the launcher allocation around it. On
+Android 12 and newer each size the launcher lists gets its own frame and
+padding; older versions get one portrait and one landscape frame:
+
+- Page changes: 48 dp columns at the card's left and right edges, 96 dp tall,
+  centered on the chevrons.
+- Refresh and Live: a 48 dp strip along the card's top edge. Refresh spans
+  x 188 … 276 and Live x 276 … 364, so each covers its drawn control at every
+  card size and is at least 48 dp wide on the smallest card.
 
 ## Overview
 

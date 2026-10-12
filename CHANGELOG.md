@@ -3,6 +3,24 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
+## v0.68.0 r2 — 2026-10-11
+
+- Keep the Hub secret on the network its address belongs to: Tailscale only
+  while a VPN is up, the home address only on Wi-Fi, Ethernet or a VPN, never
+  directly over mobile data. Private names must resolve to private addresses,
+  and Find searches only Wi-Fi.
+- Line the Pages widget's touch targets up with the drawn card at every size
+  and orientation, show every status word in full, draw the card off the main
+  thread and stop refused widget updates from crashing the app.
+- End Live when the Hub rejects the secret, start a fresh hour after an expiry
+  during sleep, and satisfy Android's foreground-start rule in every path.
+- File live totals under the desktop's day across time zones, skip oversized
+  optional endpoints instead of failing, reuse decoded history between live
+  updates and ignore non-finite numbers.
+- Keep the selected period across rotation, darken light-theme warning text,
+  round quota percentages the same way everywhere, roll compact totals over
+  cleanly and fix a crash on duplicate limit rows.
+
 ## v0.68.0 r1 — 2026-10-08
 
 - Follow desktop v0.68.0 with pinned-source contract checks and synthetic

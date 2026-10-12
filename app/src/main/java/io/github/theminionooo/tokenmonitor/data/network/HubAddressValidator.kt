@@ -90,6 +90,12 @@ object HubAddressValidator {
         return isPrivateIpv4(host) || host.endsWith(".local")
     }
 
+    /** True for a Tailscale address or MagicDNS name, which only routes while Tailscale is connected. */
+    fun isTailscaleRoute(url: String): Boolean {
+        val host = runCatching { URI(normalize(url)).host }.getOrNull().orEmpty().trim('[', ']').lowercase()
+        return host.endsWith(".ts.net") || isTailscaleAddress(host)
+    }
+
     private fun isTailscaleAddress(host: String): Boolean {
         if (host.startsWith("fd7a:115c:a1e0:", ignoreCase = true)) return true
         val octets = host.split('.')

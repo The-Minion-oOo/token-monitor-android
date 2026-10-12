@@ -68,6 +68,8 @@ object HubProtocolParser {
         subscriptionsRaw: String?,
         capturedAt: Long,
         fromCache: Boolean = false,
+        decodedHistory: HubHistory? = null,
+        decodedSubscriptions: HubSubscriptions? = null,
     ): HubSnapshot {
         val parsedStats = decodeStats(statsRaw)
         val devices = devicesRaw?.let(::decodeDevices).orEmpty()
@@ -79,7 +81,7 @@ object HubProtocolParser {
                 current.copy(history = saved.history, historyAvailable = current.historyAvailable ?: saved.historyAvailable)
             } else current
         })
-        val savedHistory = historyRaw?.let(::decodeHistory) ?: HubHistory()
+        val savedHistory = decodedHistory ?: historyRaw?.let(::decodeHistory) ?: HubHistory()
         val history = HubHistory(
             daily = mergeHistory(savedHistory.daily, stats.historyPreview.daily),
             monthly = mergeHistory(savedHistory.monthly, stats.historyPreview.monthly),
@@ -88,7 +90,7 @@ object HubProtocolParser {
             health = decodeHealth(healthRaw),
             stats = stats,
             history = history,
-            subscriptions = subscriptionsRaw?.let(::decodeSubscriptions) ?: HubSubscriptions(),
+            subscriptions = decodedSubscriptions ?: subscriptionsRaw?.let(::decodeSubscriptions) ?: HubSubscriptions(),
             capturedAt = capturedAt,
             fromCache = fromCache,
             stale = fromCache,
@@ -551,7 +553,8 @@ object HubProtocolParser {
 
     private fun JsonObject.long(name: String): Long? = this[name].numberOrNull()?.longOrNull
 
-    private fun JsonObject.double(name: String): Double? = this[name].numberOrNull()?.doubleOrNull
+    // "NaN" and "Infinity" parse as doubles; a buggy Hub must not push them into costs and sums.
+    private fun JsonObject.double(name: String): Double? = this[name].numberOrNull()?.doubleOrNull?.takeIf { it.isFinite() }
 
     private fun JsonObject.boolean(name: String): Boolean? = this[name].numberOrNull()?.booleanOrNull
 
@@ -560,7 +563,7 @@ object HubProtocolParser {
     }?.toMap().orEmpty()
 
     private fun JsonObject.doubleMap(name: String): Map<String, Double> = objectField(name)?.mapNotNull { (key, value) ->
-        value.numberOrNull()?.doubleOrNull?.let { key to it.coerceAtLeast(0.0) }
+        value.numberOrNull()?.doubleOrNull?.takeIf { it.isFinite() }?.let { key to it.coerceAtLeast(0.0) }
     }?.toMap().orEmpty()
 
     private fun JsonElement?.objectOrNull(): JsonObject? = this as? JsonObject

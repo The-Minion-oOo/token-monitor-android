@@ -112,6 +112,8 @@ internal fun LazyListScope.statusItems(
 ) {
     if (serviceStatus.loading && serviceStatus.snapshot == null) {
         item { MutedCopy("Checking Claude, OpenAI, Cursor, and DeepSeek…", modifier = Modifier.padding(vertical = 8.dp)) }
+    } else if (serviceStatus.failed) {
+        item { MutedCopy("Service status is unavailable right now.", modifier = Modifier.padding(vertical = 8.dp)) }
     }
     serviceStatus.snapshot?.providers?.let { providers ->
         items(providers, key = { it.id }) { provider ->
@@ -127,6 +129,11 @@ internal fun ServiceStatusRow(provider: ServiceProviderStatus, onOpenServicePage
         ServiceHealth.Degraded -> Yellow
         ServiceHealth.Outage -> Danger
         ServiceHealth.Unknown -> Muted
+    }
+    val textTone = when (provider.health) {
+        ServiceHealth.Degraded -> YellowText
+        ServiceHealth.Outage -> DangerText
+        else -> tone
     }
     val label = when (provider.health) {
         ServiceHealth.Ok -> "Operational"
@@ -150,7 +157,7 @@ internal fun ServiceStatusRow(provider: ServiceProviderStatus, onOpenServicePage
             Spacer(Modifier.width(7.dp))
             Text(provider.label, color = Ink, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
             Surface(color = Color.Transparent, border = BorderStroke(1.dp, tone.copy(alpha = 0.4f)), shape = MaterialTheme.shapes.small) {
-                Text(label, color = tone, style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp))
+                Text(label, color = textTone, style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp))
             }
         }
         Text(provider.description, color = Ink.copy(alpha = 0.88f), style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)

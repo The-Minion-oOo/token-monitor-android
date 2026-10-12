@@ -21,7 +21,7 @@ class WidgetControlActivity : Activity() {
         if (action == ACTION_OPEN) {
             startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP))
             finish()
-        } else if (action == WidgetLiveService.ACTION_LIVE && WidgetRuntime.session.enabled) {
+        } else if (action == WidgetLiveService.ACTION_LIVE && WidgetRuntime.session.let { it.enabled && it.expiresAt > System.currentTimeMillis() }) {
             WidgetLiveService.stop(this)
             finish()
         } else if (action !in listOf(WidgetLiveService.ACTION_LIVE, WidgetLiveService.ACTION_REFRESH)) {

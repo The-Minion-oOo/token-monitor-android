@@ -29,6 +29,7 @@ internal object WidgetDeckGrid {
         const val REFRESH_X = 238f
         const val REFRESH_Y = 20f
         const val REFRESH_SIZE = 16f
+        const val STATUS_GAP = 6f
         const val STATUS_RIGHT = 296f
         const val STATUS_BASELINE = 31f
         const val TOGGLE_LEFT = 306f
@@ -43,6 +44,12 @@ internal object WidgetDeckGrid {
         const val CHEVRON_HALF_HEIGHT = 5f
         const val DOTS_Y = 190f
         const val DOTS_GAP = 7f
+        /** Touch strip along the top edge: Refresh covers x 188 … 276 and Live x 276 … 364 (mirrored as layout weights). */
+        const val REFRESH_TARGET_LEFT = 188f
+        const val LIVE_TARGET_LEFT = 276f
+
+        /** The refresh icon stays at [REFRESH_X] unless a longer status word needs the room. */
+        fun refreshX(statusWidth: Float): Float = minOf(REFRESH_X, STATUS_RIGHT - statusWidth - STATUS_GAP - REFRESH_SIZE)
     }
 
     object Overview {

@@ -131,25 +131,30 @@ class WidgetLiveService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent?.action !in listOf(ACTION_LIVE, ACTION_REFRESH)) {
-            stopSelf()
+        val manager = getSystemService(NotificationManager::class.java)
+        manager.createNotificationChannel(NotificationChannel(CHANNEL, "Widget live updates", NotificationManager.IMPORTANCE_LOW))
+        if (intent?.action !in listOf(ACTION_LIVE, ACTION_REFRESH) || finishing) {
+            // Every start arrives through startForegroundService, which Android only accepts once
+            // startForeground has run, even when this start ends straight away.
+            runCatching { enterForeground(widgetNotificationContent(WidgetRuntime.session, false)); stopForeground(STOP_FOREGROUND_REMOVE) }
+            stopSelf(startId)
             return START_NOT_STICKY
         }
-        if (finishing || expireIfNeeded()) return START_NOT_STICKY
+        // An hour that ran out while the phone slept ends that session; this tap starts a new one.
+        if (deadline?.hasExpired(SystemClock.elapsedRealtime()) == true) {
+            deadline = null
+            live = false
+        }
         current = this
         val alreadyLive = live
         live = live || intent?.action == ACTION_LIVE
         val activeDeadline = widgetSessionDeadline(deadline, alreadyLive, live, SystemClock.elapsedRealtime(), System.currentTimeMillis())
         deadline = activeDeadline
         WidgetRuntime.session = WidgetRuntime.session.copy(enabled = live, refreshing = true, expiresAt = activeDeadline.displayExpiresAt, note = null)
-        val manager = getSystemService(NotificationManager::class.java)
-        manager.createNotificationChannel(NotificationChannel(CHANNEL, "Widget live updates", NotificationManager.IMPORTANCE_LOW))
         try {
             val content = widgetNotificationContent(WidgetRuntime.session, live)
             shownNotification = content
-            val notification = notification(content)
-            if (Build.VERSION.SDK_INT >= 29) startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
-            else startForeground(NOTIFICATION_ID, notification)
+            enterForeground(content)
         } catch (_: RuntimeException) {
             finishSession("Live unavailable. Tap to retry.")
             return START_NOT_STICKY
@@ -168,6 +173,11 @@ class WidgetLiveService : Service() {
                 if (expireIfNeeded()) return@collectLatest
                 if (!state.hasConnection) {
                     finishSession("Connect your Hub in the app")
+                    return@collectLatest
+                }
+                // The repository has stopped retrying a rejected secret, so there is nothing left to wait for.
+                if (state.secretRejected) {
+                    finishSession("Hub rejected the secret · open the app")
                     return@collectLatest
                 }
                 WidgetRuntime.session = WidgetRuntime.session.copy(
@@ -195,6 +205,12 @@ class WidgetLiveService : Service() {
             }
         }
         return START_NOT_STICKY
+    }
+
+    private fun enterForeground(content: WidgetNotificationContent) {
+        val notification = notification(content)
+        if (Build.VERSION.SDK_INT >= 29) startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        else startForeground(NOTIFICATION_ID, notification)
     }
 
     private fun expireIfNeeded(): Boolean {

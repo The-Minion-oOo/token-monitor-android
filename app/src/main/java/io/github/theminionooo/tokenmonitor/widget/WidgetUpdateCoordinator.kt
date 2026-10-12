@@ -5,9 +5,10 @@ import android.content.ComponentName
 import android.content.Context
 
 internal object WidgetUpdateCoordinator {
+    /** Called from the disk queue, Live and plain threads; a launcher that refuses an update must not crash any of them. */
     fun refresh(context: Context) {
-        UsageWidgetProvider.refresh(context)
-        SwipeWidgetProvider.refresh(context)
+        runCatching { UsageWidgetProvider.refresh(context) }
+        runCatching { SwipeWidgetProvider.refresh(context) }
     }
 
     fun stopLiveIfUnused(context: Context) {
