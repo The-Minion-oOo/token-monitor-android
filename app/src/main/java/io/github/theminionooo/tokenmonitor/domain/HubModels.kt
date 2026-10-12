@@ -88,10 +88,28 @@ data class SessionUsage(
     val promptCache: PromptCache? = null,
     val unpricedTokens: Long = 0,
     val dotsObservedOnly: Boolean = false,
+    /** Positive per-model tokens, so grouped rows and Grok Bot detection can read them (desktop v0.69). */
+    val modelTokens: Map<String, Long> = emptyMap(),
+    /** Codex native conversation id shared by continuation files; presentation-only identity. */
+    val nativeSessionId: String = "",
+    /** T3 Code App thread identity joining continuations and delegated runs. */
+    val t3ThreadId: String = "",
+    /** The session that started this subagent or background review, in [parentClient]'s id space. */
+    val parentSessionId: String = "",
+    /** Blank means the child's own client. */
+    val parentClient: String = "",
+    val liveActivity: LiveActivity? = null,
+    /** Codex question waiting; null when the producer did not say. */
+    val waitingForInput: Boolean? = null,
+    /** Explicit Cursor Grok Bot marker; null when absent, so ids and models decide. */
+    val grokBotSession: Boolean? = null,
 )
 
 /** A provider-specific estimate, not a guaranteed server-side expiry. */
 data class PromptCache(val observedAt: String, val ttlSeconds: Long)
+
+/** A short-lived provider observation: running, waiting, idle or unknown, valid for 30 seconds. */
+data class LiveActivity(val state: String, val observedAt: String)
 
 data class DeviceUsage(
     val id: String,
