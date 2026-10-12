@@ -121,7 +121,7 @@ a background review and a continuation file, a T3 Code thread shared by a Claude
 Code and a Codex session, Codex question waiting, a Claude Code live-activity
 observation and Cursor Grok Bot records. Parser tests check each field, malformed
 shapes and the defaults on every earlier fixture. The released-source harness
-ingests the same shapes into the pinned Hub, asserts which fields it keeps, and
+ingests similar shapes into the pinned Hub, asserts which fields it keeps, and
 confirms that question and activity text never reaches the response; the
 Android contract test then parses those responses.
 

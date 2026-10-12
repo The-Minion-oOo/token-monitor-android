@@ -51,15 +51,22 @@ private fun SessionUsage.parentKey(): String? {
 private fun SessionUsage.conversationIdentity(): String = when {
     t3ThreadId.isNotBlank() -> "t3:$t3ThreadId"
     client == "codex" && nativeSessionId.isNotBlank() -> "codex:$nativeSessionId"
-    else -> accountingKey()
+    // Its own namespace, so a Codex session id can never alias a native conversation id.
+    else -> "session:${accountingKey()}"
 }
+
+private val grokBotSandboxId = Regex("^sand-subagent-.+")
+private val grokBotModel = Regex("^grok-bot-.+")
+
+private fun List<SessionUsage>.newestFirst(): List<SessionUsage> =
+    map { it to sessionSortTime(it) }.sortedByDescending { it.second }.map { it.first }
 
 /** Cursor sandbox ids and a positive grok-bot model mark a bot conversation; an explicit flag wins. */
 internal fun isGrokBotSession(session: SessionUsage): Boolean {
     if (session.client != "cursor") return false
     session.grokBotSession?.let { return it }
-    return session.id.matches(Regex("^sand-subagent-.+")) ||
-        session.modelTokens.any { (model, tokens) -> model.matches(Regex("^grok-bot-.+")) && tokens > 0 }
+    return session.id.matches(grokBotSandboxId) ||
+        session.modelTokens.any { (model, tokens) -> model.matches(grokBotModel) && tokens > 0 }
 }
 
 /**
@@ -128,20 +135,21 @@ private fun groupConversations(sessions: List<SessionUsage>): List<SessionRow> {
         val representative = byKey[key] === session
         when {
             representative && key in grouped -> null
-            representative && key in children -> conversationRow(session, children.getValue(key))
+            representative && key in children -> conversationRow(session, children.getValue(key), session.conversationIdentity() in conflicts)
             else -> SessionRow(key = key, display = session, subagent = session.parentKey() != null)
         }
     }
 }
 
-private fun conversationRow(parent: SessionUsage, members: List<SessionUsage>): SessionRow {
+private fun conversationRow(parent: SessionUsage, members: List<SessionUsage>, splitIdentity: Boolean): SessionRow {
     val identity = parent.conversationIdentity()
     val all = listOf(parent) + members
-    val main = all.filter { it.conversationIdentity() == identity }.sortedByDescending(::sessionSortTime)
-    val delegated = all.filter { it.conversationIdentity() != identity }.sortedByDescending(::sessionSortTime)
+    val main = all.filter { it.conversationIdentity() == identity }.newestFirst()
+    val delegated = all.filter { it.conversationIdentity() != identity }.newestFirst()
     val ordered = main.map { SessionMember(it, true) } + delegated.map { SessionMember(it, false) }
     return SessionRow(
-        key = "group:$identity",
+        // Conflicting links can give two roots one identity; the root's own key keeps their rows apart.
+        key = "group:$identity" + if (splitIdentity) ":root:${parent.accountingKey()}" else "",
         display = main.first(),
         kind = SessionGroupKind.Conversation,
         members = ordered,
@@ -155,7 +163,7 @@ private fun conversationRow(parent: SessionUsage, members: List<SessionUsage>): 
 }
 
 private fun summaryRow(key: String, kind: SessionGroupKind, sessions: List<SessionUsage>): SessionRow {
-    val ordered = sessions.sortedByDescending(::sessionSortTime)
+    val ordered = sessions.newestFirst()
     return SessionRow(
         key = key,
         display = ordered.first(),
@@ -171,6 +179,12 @@ private fun summaryRow(key: String, kind: SessionGroupKind, sessions: List<Sessi
 
 private fun combinedModels(sessions: List<SessionUsage>): Map<String, Long> =
     sessions.flatMap { it.modelTokens.entries }.groupBy({ it.key }, { it.value }).mapValues { (_, tokens) -> tokens.sum() }
+
+/** Keeps rows with any matching member, or a group whose own label matches, so a match keeps its whole group. */
+internal fun searchSessionRows(rows: List<SessionRow>, searching: Boolean, matches: (SessionUsage) -> Boolean, query: String): List<SessionRow> =
+    if (!searching) rows else rows.filter { row ->
+        row.sessions.any(matches) || (row.grouped && query.isNotBlank() && sessionRowPresentation(row).title.contains(query.trim(), ignoreCase = true))
+    }
 
 /** Running beats waiting, which beats the first member's own state: a group is as busy as its busiest member. */
 internal fun sessionRowActivity(row: SessionRow, now: Long): SessionActivityState {

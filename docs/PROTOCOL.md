@@ -278,6 +278,6 @@ A session's activity state is decided in this order:
 
 Waiting is shown as **Waiting for you** in Home and Sessions. The synthetic
 v0.69.0 fixtures cover these shapes in the stats and devices responses and both
-stream event forms. The released-Hub contract check ingests the same shapes into
+stream event forms. The released-Hub contract check ingests similar shapes into
 the pinned Hub and confirms which fields survive and that question and activity
 text stays out of the response.

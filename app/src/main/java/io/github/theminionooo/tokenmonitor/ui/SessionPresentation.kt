@@ -70,11 +70,13 @@ internal fun sessionMetricLabels(session: SessionUsage, now: Long): String = bui
 
 private const val SESSION_RUNNING_WINDOW_MS = 10 * 60_000L
 private const val LIVE_ACTIVITY_TTL_MS = 30_000L
+/** The dashboard clock ([LocalNow]) ticks every 30 seconds; a fresh observation may be that far ahead of it. */
+private const val LIVE_ACTIVITY_CLOCK_SLACK_MS = 30_000L
 private val liveActivityClients = setOf("claude", "codex")
 
 /**
  * Desktop v0.69's order: an archived session is idle; a fresh provider observation (Claude Code and Codex,
- * at most 30 seconds old and not from the future) wins unless it is `unknown`; otherwise the transcript
+ * at most 30 seconds old and not clearly from the future) wins unless it is `unknown`; otherwise the transcript
  * decides: a finished turn, a Codex question waiting for an answer, recent writing, or quiet.
  */
 internal fun sessionActivityState(session: SessionUsage, now: Long): SessionActivityState {
@@ -95,7 +97,7 @@ private fun liveActivityState(session: SessionUsage, now: Long): SessionActivity
     if (session.client !in liveActivityClients) return null
     val reading = session.liveActivity ?: return null
     val observedAt = runCatching { Instant.parse(reading.observedAt).toEpochMilli() }.getOrNull() ?: return null
-    if (observedAt > now || observedAt + LIVE_ACTIVITY_TTL_MS <= now) return null
+    if (observedAt > now + LIVE_ACTIVITY_CLOCK_SLACK_MS || observedAt + LIVE_ACTIVITY_TTL_MS <= now) return null
     return when (reading.state) {
         "running" -> SessionActivityState.Running
         "waiting" -> SessionActivityState.Waiting

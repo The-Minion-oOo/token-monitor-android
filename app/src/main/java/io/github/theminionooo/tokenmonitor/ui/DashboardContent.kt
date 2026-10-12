@@ -207,8 +207,10 @@ internal fun DashboardContent(
             )
             DashboardDestination.Projects -> projectItems(usage.projects.filter { it.matchesSearch(search) }, period, search.isNotBlank())
             DashboardDestination.Sessions -> sessionItems(
-                usage.sessions.filter { it.matchesSearch(search, showSessionTitles) }, period, search.isNotBlank(),
+                usage.sessions, period, search.isNotBlank(),
                 evidence = snapshot.today.sessions + snapshot.month.sessions,
+                matches = { it.matchesSearch(search, showSessionTitles) },
+                query = search,
             )
             DashboardDestination.Limits -> limitItems(snapshot, displayOptions)
             DashboardDestination.Trends -> trendItems(snapshot, homeActivity.first)

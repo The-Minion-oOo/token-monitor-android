@@ -17,7 +17,7 @@ class SessionGroupingTest {
         val child = session("child", tokens = 40, cost = 0.5, minutesAgo = 2, parent = "main")
         val other = session("solo", tokens = 30)
         val rows = groupSessions(listOf(parent, child, other))
-        assertEquals(listOf("group:codex:main", "codex:solo"), rows.map { it.key })
+        assertEquals(listOf("group:session:codex:main", "codex:solo"), rows.map { it.key })
         val group = rows.first()
         assertEquals(SessionGroupKind.Conversation, group.kind)
         assertEquals(140L, group.totalTokens)
@@ -93,6 +93,23 @@ class SessionGroupingTest {
         assertEquals(2, loop.sumOf { it.sessions.size })
     }
 
+    @Test fun `a plain session id never aliases a native conversation id`() {
+        val plain = session("native-1")
+        val continuation = session("rollout", minutesAgo = 3).copy(nativeSessionId = "native-1")
+        assertEquals(2, groupSessions(listOf(plain, continuation)).size)
+    }
+
+    @Test fun `search keeps whole groups and finds summary labels`() {
+        val parent = session("main", tokens = 100)
+        val child = session("child", tokens = 40, parent = "main")
+        val bot = session("sand-subagent-1", client = "cursor")
+        val rows = groupSessions(listOf(parent, child, bot))
+        val byId = { id: String -> { s: SessionUsage -> s.id == id } }
+        assertEquals(listOf(140L), searchSessionRows(rows, true, byId("child"), "child").map { it.totalTokens })
+        assertEquals(SessionGroupKind.GrokBot, searchSessionRows(rows, true, { false }, "grok").single().kind)
+        assertEquals(rows, searchSessionRows(rows, false, { false }, ""))
+    }
+
     @Test fun `a repeated accounting key keeps its own row`() {
         val one = session("dup", tokens = 1)
         val two = session("dup", tokens = 2, minutesAgo = 4)
@@ -122,6 +139,8 @@ class SessionGroupingTest {
         assertEquals(SessionActivityState.Running, sessionActivityState(observed("running", 29), now))
         assertEquals(SessionActivityState.Idle, sessionActivityState(observed("waiting", 31), now))
         assertEquals(SessionActivityState.Idle, sessionActivityState(observed("unknown", 5), now))
+        // The dashboard clock lags real time by up to 30 seconds, so a just-arrived observation can be ahead of it.
+        assertEquals(SessionActivityState.Waiting, sessionActivityState(observed("waiting", -20), now))
         assertEquals(SessionActivityState.Idle, sessionActivityState(observed("waiting", -60), now))
         assertEquals(SessionActivityState.Idle, sessionActivityState(observed("waiting", 5).copy(client = "cursor"), now))
         assertEquals(SessionActivityState.Idle, sessionActivityState(observed("running", 5).copy(archived = true), now))

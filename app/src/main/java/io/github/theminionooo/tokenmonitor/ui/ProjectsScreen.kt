@@ -170,16 +170,22 @@ internal fun ProjectUsageRow(project: ProjectUsage, ratio: Float) {
     }
 }
 
-/** [evidence] holds other periods' sessions, which can prove a Cursor conversation is a Grok Bot run. */
+/**
+ * [evidence] holds other periods' sessions, which can prove a Cursor conversation is a Grok Bot run. Search runs
+ * after grouping, so a match keeps its whole group and its totals, and a group's own label can be searched.
+ */
 internal fun LazyListScope.sessionItems(
     sessions: List<SessionUsage>,
     period: DashboardPeriod,
     searching: Boolean = false,
     evidence: List<SessionUsage> = emptyList(),
+    matches: (SessionUsage) -> Boolean = { true },
+    query: String = "",
 ) {
-    if (sessions.isEmpty()) item { MutedCopy(usageListEmptyMessage(true, period, searching), modifier = Modifier.padding(vertical = 12.dp)) }
+    val ranked = searchSessionRows(groupSessions(sessions, evidence), searching, matches, query)
+        .sortedByDescending { it.totalTokens }
+    if (ranked.isEmpty()) item { MutedCopy(usageListEmptyMessage(true, period, searching), modifier = Modifier.padding(vertical = 12.dp)) }
     else {
-        val ranked = groupSessions(sessions, evidence).sortedByDescending { it.totalTokens }
         val maximum = ranked.maxOf { it.totalTokens }.coerceAtLeast(1L)
         val keys = uniqueKeys(ranked) { it.key }
         itemsIndexed(ranked, key = { index, _ -> keys[index] }) { _, row ->
@@ -196,7 +202,8 @@ internal fun SessionGroupUsageRow(row: SessionRow, ratio: Float) {
     var expanded by rememberSaveable(row.key) { mutableStateOf(false) }
     val motionEnabled = LocalInteractionMotion.current
     val now = LocalNow.current
-    val activity = sessionRowActivity(row, now)
+    // The desktop Sessions list shows activity on conversation groups, not on summary rows.
+    val activity = if (row.kind == SessionGroupKind.Conversation) sessionRowActivity(row, now) else SessionActivityState.Idle
     val labels = sessionRowPresentation(row, LocalSessionTitles.current)
     val client = row.display.client
     Column(
