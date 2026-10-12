@@ -24,8 +24,8 @@ session activity stays on desktop.
 ## Compatibility and updating
 
 Android 8.0 or newer; verified desktop baseline v0.69.0, with earlier Hub
-fixtures retained. A Hub without the new optional fields keeps the existing flat
-session list. Package `io.github.theminionooo.tokenmonitor`, version code
+fixtures retained. With an older Hub, subagents and continuations stay separate
+rows because the links they need are missing. Package `io.github.theminionooo.tokenmonitor`, version code
 `690001`, signed with the existing release certificate. Use **Settings → App
 updates** or install the APK over your current release. Do not uninstall first.
 See [Install and update](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md).
