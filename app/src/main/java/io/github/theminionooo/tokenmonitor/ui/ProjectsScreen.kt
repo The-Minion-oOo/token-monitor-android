@@ -76,7 +76,10 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -251,6 +254,8 @@ private fun SessionMemberLine(member: SessionMember, kind: SessionGroupKind?, no
             Text(formatTokens(session.totalTokens), color = Ink, style = MaterialTheme.typography.bodySmall)
             Text(formatUsageCost(session.costUsd, session.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
         }
+        // Lines the figures up with the group's, which leave room for the chevron.
+        Spacer(Modifier.width(20.dp))
     }
 }
 
@@ -270,9 +275,14 @@ private fun SessionActivityLine(activity: SessionActivityState, meta: String) {
             )
             Spacer(Modifier.width(5.dp))
         }
+        val waiting = OrangeText
         Text(
-            listOf(label, meta).filter { it.isNotBlank() }.joinToString(" · "),
-            color = if (activity == SessionActivityState.Waiting) OrangeText else Muted,
+            buildAnnotatedString {
+                if (activity == SessionActivityState.Waiting) withStyle(SpanStyle(color = waiting)) { append(label) } else append(label)
+                if (label.isNotBlank() && meta.isNotBlank()) append(" · ")
+                append(meta)
+            },
+            color = Muted,
             style = MaterialTheme.typography.labelSmall,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

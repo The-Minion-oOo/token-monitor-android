@@ -186,7 +186,8 @@ internal fun sessionRowPresentation(row: SessionRow, showTitles: Boolean = true)
     SessionGroupKind.Conversation -> {
         val labels = sessionRowLabels(row.display.copy(modelNames = topModelFirst(row)), showTitles)
         val count = row.subagentCount.takeIf { it > 0 }?.let { if (it == 1) "1 subagent" else "$it subagents" }
-        SessionRowLabels(labels.title, listOfNotNull(labels.meta, count).joinToString(" · "))
+        // The count leads, so a narrow row shortens the project rather than hiding how many subagents ran.
+        SessionRowLabels(labels.title, listOfNotNull(count, labels.meta).joinToString(" · "))
     }
     null -> sessionRowLabels(row.display, showTitles).let { labels ->
         if (row.subagent) labels.copy(meta = "Subagent · ${labels.meta}") else labels

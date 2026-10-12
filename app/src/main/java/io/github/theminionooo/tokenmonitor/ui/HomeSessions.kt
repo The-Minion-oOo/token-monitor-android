@@ -56,7 +56,7 @@ internal fun HomeSessionsModule(snapshot: HubSnapshot, onChoose: (DashboardDesti
                         HomeListRow(
                             name = sessionRowPresentation(row, LocalSessionTitles.current).title,
                             primary = formatCompactTokens(row.totalTokens),
-                            secondary = listOfNotNull(session.client.displayName(), sessionActivityLabel(state).ifBlank { "Idle" }, age, session.projectLabel, members)
+                            secondary = listOfNotNull(session.client.displayName(), sessionActivityLabel(state).ifBlank { "Idle" }, members, age, session.projectLabel)
                                 .filter { it.isNotBlank() }.joinToString(" · "),
                             color = when (state) {
                                 SessionActivityState.Running -> Success

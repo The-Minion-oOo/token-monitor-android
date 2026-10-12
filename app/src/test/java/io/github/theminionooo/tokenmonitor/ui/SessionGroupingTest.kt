@@ -25,7 +25,7 @@ class SessionGroupingTest {
         assertEquals(1, group.subagentCount)
         assertEquals(listOf("main" to true, "child" to false), group.members.map { it.session.id to it.main })
         assertEquals(parent, group.display)
-        assertTrue(sessionRowPresentation(group).meta.endsWith("1 subagent"))
+        assertTrue(sessionRowPresentation(group).meta.startsWith("1 subagent · "))
     }
 
     @Test fun `a subagent without its parent in the list keeps its own labelled row`() {
