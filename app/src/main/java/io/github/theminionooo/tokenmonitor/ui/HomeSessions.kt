@@ -9,44 +9,58 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
-import io.github.theminionooo.tokenmonitor.domain.SessionUsage
 import java.time.Instant
 
-/** Home is a recent-session summary, independent of the selected usage period. */
-internal fun recentHomeSessions(snapshot: HubSnapshot, now: Long): List<SessionUsage> =
-    (snapshot.month.sessions + snapshot.today.sessions)
-        .filter { it.sessionKind != "background-review" }
+/**
+ * Home is a recent-session summary, independent of the selected usage period. Like the desktop it groups
+ * subagents and continuations under their conversation, keeps the five newest rows and never hides a row
+ * that is running or waiting for a reply.
+ */
+internal fun recentHomeSessions(snapshot: HubSnapshot, now: Long): List<SessionRow> {
+    val all = snapshot.month.sessions + snapshot.today.sessions
+    val sessions = all.filter { it.sessionKind != "background-review" }
         .distinctBy { it.client to it.id }
-        .mapNotNull { session ->
-            val timestamp = session.lastUsedAt.ifBlank { session.startedAt }
-            runCatching { Instant.parse(timestamp).toEpochMilli() }.getOrNull()?.let { session to it }
+        .filter { session ->
+            runCatching { Instant.parse(session.lastUsedAt.ifBlank { session.startedAt }) }.isSuccess
         }
-        .sortedByDescending { it.second }
-        .mapIndexedNotNull { index, (session, _) ->
-            session.takeIf { index < 5 || sessionActivityState(it, now) == SessionActivityState.Running }
+    return groupSessions(sessions, evidence = all)
+        .sortedByDescending { it.sortTime }
+        .filterIndexed { index, row ->
+            index < 5 || sessionRowActivity(row, now) in setOf(SessionActivityState.Running, SessionActivityState.Waiting)
         }
+}
 
 @Composable
 internal fun HomeSessionsModule(snapshot: HubSnapshot, onChoose: (DashboardDestination) -> Unit) {
     val now = LocalNow.current
-    val sessions = recentHomeSessions(snapshot, now)
-    val running = sessions.count { sessionActivityState(it, now) == SessionActivityState.Running }
-    DesktopModule("SESSIONS", DashboardDestination.Sessions, onChoose, meta = "$running running") {
-        if (sessions.isEmpty()) {
+    val rows = recentHomeSessions(snapshot, now)
+    val states = rows.map { sessionRowActivity(it, now) }
+    val waiting = states.count { it == SessionActivityState.Waiting }
+    val meta = listOfNotNull("${states.count { it == SessionActivityState.Running }} running", waiting.takeIf { it > 0 }?.let { "$it waiting" })
+        .joinToString(" · ")
+    DesktopModule("SESSIONS", DashboardDestination.Sessions, onChoose, meta = meta) {
+        if (rows.isEmpty()) {
             MutedCopy("No recent sessions reported by the Hub")
         } else {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                sessions.forEach { session ->
-                    val state = sessionActivityState(session, now)
-                    val age = session.lastUsedAt.ifBlank { session.startedAt }.relativeAge(now)
+                rows.forEachIndexed { index, row ->
+                    val session = row.display
+                    val state = states[index]
+                    val age = Instant.ofEpochMilli(row.sortTime).toString().relativeAge(now)
+                    val members = when (row.kind) {
+                        SessionGroupKind.Conversation -> row.subagentCount.takeIf { it > 0 }?.let { if (it == 1) "1 subagent" else "$it subagents" }
+                        SessionGroupKind.GrokBot -> "${row.members.size} activity records"
+                        else -> null
+                    }
                     Column {
                         HomeListRow(
-                            name = sessionRowLabels(session, LocalSessionTitles.current).title,
-                            primary = formatCompactTokens(session.totalTokens),
-                            secondary = listOf(session.client.displayName(), state.name, age, session.projectLabel)
+                            name = sessionRowPresentation(row, LocalSessionTitles.current).title,
+                            primary = formatCompactTokens(row.totalTokens),
+                            secondary = listOfNotNull(session.client.displayName(), sessionActivityLabel(state).ifBlank { "Idle" }, age, session.projectLabel, members)
                                 .filter { it.isNotBlank() }.joinToString(" · "),
                             color = when (state) {
                                 SessionActivityState.Running -> Success
+                                SessionActivityState.Waiting -> Orange
                                 SessionActivityState.Finished -> Blue
                                 SessionActivityState.Idle -> Muted
                             },

@@ -7,7 +7,8 @@ import androidx.compose.runtime.staticCompositionLocalOf
 
 internal val LocalSessionTitles = staticCompositionLocalOf { true }
 
-internal enum class SessionActivityState { Running, Finished, Idle }
+/** Waiting means the session needs a reply or approval (desktop v0.69). */
+internal enum class SessionActivityState { Running, Waiting, Finished, Idle }
 
 internal data class SessionContext(
     val percentUsed: Int,
@@ -68,13 +69,47 @@ internal fun sessionMetricLabels(session: SessionUsage, now: Long): String = bui
 }.joinToString(" · ")
 
 private const val SESSION_RUNNING_WINDOW_MS = 10 * 60_000L
+private const val LIVE_ACTIVITY_TTL_MS = 30_000L
+private val liveActivityClients = setOf("claude", "codex")
 
+/**
+ * Desktop v0.69's order: an archived session is idle; a fresh provider observation (Claude Code and Codex,
+ * at most 30 seconds old and not from the future) wins unless it is `unknown`; otherwise the transcript
+ * decides: a finished turn, a Codex question waiting for an answer, recent writing, or quiet.
+ */
 internal fun sessionActivityState(session: SessionUsage, now: Long): SessionActivityState {
     if (session.archived) return SessionActivityState.Idle
+    liveActivityState(session, now)?.let { return it }
     val lastUsed = runCatching { Instant.parse(session.lastUsedAt).toEpochMilli() }.getOrNull()
         ?: return SessionActivityState.Idle
-    if (now - lastUsed > SESSION_RUNNING_WINDOW_MS) return SessionActivityState.Idle
-    return if (session.turnEnded == true) SessionActivityState.Finished else SessionActivityState.Running
+    val recent = now - lastUsed <= SESSION_RUNNING_WINDOW_MS
+    return when {
+        session.turnEnded == true -> if (recent) SessionActivityState.Finished else SessionActivityState.Idle
+        recent && session.client == "codex" && session.waitingForInput == true -> SessionActivityState.Waiting
+        recent -> SessionActivityState.Running
+        else -> SessionActivityState.Idle
+    }
+}
+
+private fun liveActivityState(session: SessionUsage, now: Long): SessionActivityState? {
+    if (session.client !in liveActivityClients) return null
+    val reading = session.liveActivity ?: return null
+    val observedAt = runCatching { Instant.parse(reading.observedAt).toEpochMilli() }.getOrNull() ?: return null
+    if (observedAt > now || observedAt + LIVE_ACTIVITY_TTL_MS <= now) return null
+    return when (reading.state) {
+        "running" -> SessionActivityState.Running
+        "waiting" -> SessionActivityState.Waiting
+        "idle" -> SessionActivityState.Idle
+        else -> null
+    }
+}
+
+/** The state's words in a row; idle says nothing. */
+internal fun sessionActivityLabel(state: SessionActivityState): String = when (state) {
+    SessionActivityState.Running -> "Running"
+    SessionActivityState.Waiting -> "Waiting for you"
+    SessionActivityState.Finished -> "Finished"
+    SessionActivityState.Idle -> ""
 }
 
 internal fun sessionContextForRow(session: SessionUsage, now: Long): SessionContext? {

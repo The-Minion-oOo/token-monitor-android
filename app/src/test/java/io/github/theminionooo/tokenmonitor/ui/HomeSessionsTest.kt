@@ -10,7 +10,7 @@ class HomeSessionsTest {
 
     @Test fun `keeps five newest plus running sessions beyond the cap`() {
         val rows = (0..7).map { session("s$it", now - it * 60_000L, ended = it != 6) }
-        assertEquals(listOf("s0", "s1", "s2", "s3", "s4", "s6"), recentHomeSessions(snapshot(rows), now).map { it.id })
+        assertEquals(listOf("s0", "s1", "s2", "s3", "s4", "s6"), recentHomeSessions(snapshot(rows), now).map { it.display.id })
     }
 
     @Test fun `uses canonical client and id across month and today and excludes background work`() {
@@ -20,7 +20,7 @@ class HomeSessionsTest {
         val background = month.copy(id = "review", sessionKind = "background-review")
         val startedOnly = month.copy(id = "start", lastUsedAt = "")
         val snapshot = snapshot(listOf(month, invalid, background), listOf(month, otherClient, startedOnly))
-        assertEquals(listOf(month, otherClient, startedOnly), recentHomeSessions(snapshot, now))
+        assertEquals(listOf(month, otherClient, startedOnly), recentHomeSessions(snapshot, now).map { it.display })
     }
 
     @Test fun `archived sessions cannot be running or retain context`() {
@@ -29,6 +29,18 @@ class HomeSessionsTest {
         assertNull(sessionContextForRow(archived, now))
         val recent = (0..4).map { session("s$it", now - it * 100L, true) }
         assertEquals(5, recentHomeSessions(snapshot(recent + archived), now).size)
+    }
+
+    @Test fun `subagents fold into their conversation and waiting rows survive the cap`() {
+        val parent = session("parent", now - 1_000)
+        val child = session("child", now - 2_000).copy(parentSessionId = "parent", totalTokens = 5)
+        val quiet = (0..5).map { session("q$it", now - 60_000L * (it + 1), ended = true) }
+        val waiting = session("waiting", now - 8 * 60_000L).copy(waitingForInput = true)
+        val rows = recentHomeSessions(snapshot(listOf(parent, child) + quiet + waiting), now)
+        assertEquals(15L, rows.first().totalTokens)
+        assertEquals(1, rows.first().subagentCount)
+        assertEquals(SessionActivityState.Waiting, sessionRowActivity(rows.last(), now))
+        assertEquals(6, rows.size)
     }
 
     private fun snapshot(month: List<SessionUsage>, today: List<SessionUsage> = emptyList()) =
