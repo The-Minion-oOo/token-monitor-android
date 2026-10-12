@@ -130,11 +130,11 @@ Session rows also show generation speed, cache-hit percentage and prompt-cache e
 ## Get connected
 
 You need Android 8.0 or newer and a desktop running Token Monitor with Hub hosting
-on. Android v0.68.0 r1 is verified against desktop v0.68.0. The last build I
+on. Android v0.68.0 r2 is verified against desktop v0.68.0. The last build I
 checked on my phone, v0.66.0 r1, upgraded in place from v0.65.0 and kept pairing
 and the placed Pages widget. I haven't installed v0.68.0 on my phone yet.
 
-1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.68.0 r1 APK.
+1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.68.0 r2 APK.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
 3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
 4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
@@ -148,9 +148,9 @@ Desktop v0.64's optional iCloud Drive sync does not replace the Hub connection f
 
 | | |
 | --- | --- |
-| Current public release | [`v0.68.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.68.0-r1) |
+| Current public release | [`v0.68.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.68.0-r2) |
 | Latest phone-verified build | signed `v0.66.0-r1` over v0.65.0 r1; pairing, home Wi-Fi reconnection and placed Pages widget preserved |
-| Remaining phone checks | v0.68.0 r1 in-place upgrade, Tailscale/Wi-Fi transitions, screen-off expiry and battery behavior |
+| Remaining phone checks | v0.68.0 r2 in-place upgrade, Tailscale/Wi-Fi transitions, screen-off expiry and battery behavior |
 | Desktop baseline | Token Monitor `v0.68.0` |
 | Upstream commit | [`5d2db36`](https://github.com/Javis603/token-monitor/commit/5d2db368d8313415763860d594de00e46a663418) |
 
