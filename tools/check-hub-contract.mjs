@@ -127,6 +127,51 @@ async function isolatedContract(source, output, upstream) {
         responses["dots.json"] = dotsHub.getStats();
         assert.equal(Object.values(responses["dots.json"].periods.today.sessions)[0].usageCoverage, "observed-only");
         assert.ok(!JSON.stringify(responses["dots.json"]).includes("NEVER_EXPORT_LOCAL_KEY"));
+        // Relationships and activity go to another disposable Hub so the single-session checks above stay exact.
+        const relationHub = createHub({ port: 0, host: "127.0.0.1", secret, dataFile: join(source, "synthetic-relations.json") });
+        const parentNative = "0B8F6C2E-3D41-4A6B-9C0E-5A1D2F7E8B01"; // Upper case on purpose: the Hub lower-cases it.
+        const row = (client, sessionId, model, tokens, extra = {}) => ({ sessionId, client, totalTokens: tokens, costUsd: 0.01,
+            models: { [model]: tokens }, projectLabel: "Example Project", lastUsedAt: now, ...extra });
+        const relationRows = [
+            row("codex", "sample-codex-parent", "gpt-5", 600, { nativeSessionId: parentNative, waitingForInput: false }),
+            row("codex", "sample-codex-subagent", "gpt-5", 150, { parentSessionId: "sample-codex-parent", parentClient: "codex",
+                nativeSessionId: "5E7A91D4-2C3B-4F08-8A6D-1B9C0E4F7A22" }),
+            row("codex", "sample-codex-continuation", "gpt-5", 250, { nativeSessionId: parentNative }),
+            row("codex", "sample-codex-waiting", "gpt-5", 120, { waitingForInput: true, question: "NEVER_EXPORT_QUESTION" }),
+            row("claude", "sample-t3-claude", "claude-sonnet-4-5", 300, { t3ThreadId: "sample-t3-thread-1", waitingForInput: true,
+                liveActivity: { state: "running", observedAt: now, prompt: "NEVER_EXPORT_ACTIVITY" } }),
+            row("codex", "sample-t3-codex", "gpt-5", 100, { t3ThreadId: "sample-t3-thread-1", parentSessionId: "sample-t3-claude", parentClient: "claude" }),
+            row("claude", "sample-claude-live", "claude-sonnet-4-5", 90, { liveActivity: { state: "waiting", observedAt: now } }),
+            row("cursor", "sand-subagent-sample-1", "claude-sonnet-4-5", 70, { liveActivity: { state: "running", observedAt: now } }),
+            row("cursor", "sample-cursor-bot", "grok-bot-1", 50),
+        ];
+        const tally = pick => relationRows.reduce((result, entry) => {
+            for (const [name, tokens] of Object.entries(pick(entry))) result[name] = (result[name] || 0) + tokens;
+            return result;
+        }, {});
+        const relationPeriod = { totalTokens: relationRows.reduce((total, entry) => total + entry.totalTokens, 0),
+            costUsd: relationRows.length * 0.01, clients: tally(entry => ({ [entry.client]: entry.totalTokens })),
+            models: tally(entry => entry.models), sessions: Object.fromEntries(relationRows.map(entry => [`${entry.client}:${entry.sessionId}`, entry])) };
+        relationHub.ingest({ ...device, trackedClients: ["codex", "claude", "cursor"], periods: { today: relationPeriod, month: relationPeriod } });
+        responses["relations.json"] = relationHub.getStats();
+        const related = responses["relations.json"].periods.today.sessions;
+        // Upstream src/shared/usage.js: applyNativeSessionId, applyT3ThreadId, applyParentLink, normalizeSession and mergeSession.
+        assert.equal(related["codex:sample-codex-parent"].nativeSessionId, parentNative.toLowerCase());
+        assert.equal(related["codex:sample-codex-continuation"].nativeSessionId, parentNative.toLowerCase());
+        assert.equal(related["codex:sample-codex-parent"].waitingForInput, false);
+        assert.equal(related["codex:sample-codex-waiting"].waitingForInput, true);
+        assert.equal(related["codex:sample-codex-subagent"].parentSessionId, "sample-codex-parent");
+        assert.equal(related["codex:sample-codex-subagent"].parentClient, undefined, "A parent in the child's own client needs no parentClient");
+        assert.equal(related["codex:sample-t3-codex"].parentSessionId, "sample-t3-claude");
+        assert.equal(related["codex:sample-t3-codex"].parentClient, "claude");
+        assert.equal(related["codex:sample-t3-codex"].t3ThreadId, "sample-t3-thread-1");
+        assert.equal(related["claude:sample-t3-claude"].t3ThreadId, "sample-t3-thread-1");
+        assert.deepEqual(related["claude:sample-t3-claude"].liveActivity, { state: "running", observedAt: now }, "Only state and time cross the Hub");
+        assert.deepEqual(related["claude:sample-claude-live"].liveActivity, { state: "waiting", observedAt: now });
+        assert.equal(related["claude:sample-t3-claude"].waitingForInput, undefined, "Question waiting belongs to Codex");
+        assert.equal(related["cursor:sand-subagent-sample-1"].liveActivity, undefined, "Live activity is limited to Claude and Codex");
+        assert.equal(related["cursor:sample-cursor-bot"].models["grok-bot-1"], 50);
+        assert.ok(!JSON.stringify(responses["relations.json"]).includes("NEVER_EXPORT"), "Question and activity content must never cross the Hub");
         responses["contract.json"] = { upstream, generatedAt: new Date().toISOString(), synthetic: true,
             expectedTodayTokens: 1234, expectedUpdatedTokens: 1235 };
         await mkdir(output, { recursive: true });

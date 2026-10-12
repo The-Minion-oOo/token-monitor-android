@@ -2,18 +2,22 @@
 
 ## Version rule
 
-Android v0.68.0 r2 targets desktop tag `v0.68.0`, peeled commit
-`5d2db368d8313415763860d594de00e46a663418`, in Gradle and `upstream.json`.
-It retains explicit unpriced-token counts and labels Dots sessions as observed-only.
-TM2 colors, separate MiMo product rows, title-consent checks and Wi-Fi recovery
-are retained. Dots collection, alias/pricing edits and title-sharing controls
-remain on desktop. Android is still read-only.
+Android v0.69.0 r1 targets desktop tag `v0.69.0`, peeled commit
+`3f106ae3d4712b26cced8272f0d488eaab0de1e6`, in Gradle and `upstream.json`.
+It reads session identity, parent links and live activity, so Codex subagents
+and continuations, T3 Code threads, Cursor Grok Bot records and background
+reviews group under one row, and sessions waiting for you say so. Explicit
+unpriced-token counts, Dots labels, TM2 colors, separate MiMo product rows,
+title-consent checks and Wi-Fi recovery are retained. Collection, activity
+watching, alias/pricing edits and title-sharing controls remain on desktop.
+Android is still read-only.
 
 The latest published release is
 [`android-v0.68.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.68.0-r2),
-recorded with its source commit in `release.json`. The earlier v0.66.0 r1
-upgrade on my phone preserved pairing and the placed Pages widget; later
-revisions, including v0.68.0 r2, have not been checked on it.
+recorded with its source commit in `release.json`; v0.69.0 r1 is the current
+candidate. The earlier v0.66.0 r1 upgrade on my phone preserved pairing and
+the placed Pages widget; later revisions, including v0.68.0 r2, have not been
+checked on it.
 
 An Android-only fix increments `versionCode` and the GitHub release revision,
 for example `android-vX.Y.Z-rN`, without changing the visible compatibility

@@ -1,0 +1,91 @@
+{
+  "daily": [
+    {
+      "date": "2026-10-11",
+      "tokens": 19100,
+      "cost": 0.94,
+      "unpricedTokens": 400,
+      "perClient": {
+        "codex": {
+          "tokens": 13400,
+          "cost": 0.65,
+          "unpricedTokens": 400
+        },
+        "claude": {
+          "tokens": 3900,
+          "cost": 0.2
+        },
+        "cursor": {
+          "tokens": 1800,
+          "cost": 0.09
+        }
+      },
+      "perModel": {
+        "gpt-5": {
+          "tokens": 13000,
+          "cost": 0.65
+        },
+        "claude-sonnet-4-5": {
+          "tokens": 5200,
+          "cost": 0.265
+        },
+        "grok-bot-1": {
+          "tokens": 500,
+          "cost": 0.025
+        },
+        "unpriced-model": {
+          "tokens": 400,
+          "cost": 0,
+          "unpricedTokens": 400
+        }
+      }
+    }
+  ],
+  "monthly": [
+    {
+      "tokens": 19100,
+      "cost": 0.94,
+      "unpricedTokens": 400,
+      "perClient": {
+        "codex": {
+          "tokens": 13400,
+          "cost": 0.65,
+          "unpricedTokens": 400
+        },
+        "claude": {
+          "tokens": 3900,
+          "cost": 0.2
+        },
+        "cursor": {
+          "tokens": 1800,
+          "cost": 0.09
+        }
+      },
+      "perModel": {
+        "gpt-5": {
+          "tokens": 13000,
+          "cost": 0.65
+        },
+        "claude-sonnet-4-5": {
+          "tokens": 5200,
+          "cost": 0.265
+        },
+        "grok-bot-1": {
+          "tokens": 500,
+          "cost": 0.025
+        },
+        "unpriced-model": {
+          "tokens": 400,
+          "cost": 0,
+          "unpricedTokens": 400
+        }
+      },
+      "month": "2026-10"
+    }
+  ],
+  "summary": {
+    "totalTokens": 19100,
+    "totalCost": 0.94,
+    "unpricedTokens": 400
+  }
+}

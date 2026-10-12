@@ -3,6 +3,18 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
+## Next release — v0.69.0 r1
+
+- Follow desktop v0.69.0 with pinned-source contract checks and synthetic
+  endpoint/stream fixtures, retaining earlier compatibility tests.
+- Group Codex subagents and continuation files, and T3 Code continuations and
+  delegated runs, under their main session with combined usage.
+- Group Cursor Grok Bot activity records, and gather Codex background reviews
+  as Codex Auto Review.
+- Show "Waiting for you" in Home and Sessions for Claude Code and Codex
+  sessions that are waiting on a reply or approval.
+- Keep read-only access, widgets and the release signing identity unchanged.
+
 ## v0.68.0 r2 — 2026-10-11
 
 - Keep the Hub secret on the network its address belongs to: Tailscale only

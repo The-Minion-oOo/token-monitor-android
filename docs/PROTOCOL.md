@@ -4,7 +4,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.68.0**, released 2026-10-08.
+The verified baseline is upstream Token Monitor **v0.69.0**, released 2026-10-11.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -50,9 +50,9 @@ replaces the snapshot with the current read endpoints.
 
 ## Fixtures
 
-Synthetic v0.68.0 examples for all five read endpoints and the live stream live
-in `app/src/test/resources/protocol/v0.68.0/`; the retained v0.54.0, v0.55.0,
-v0.56.0, v0.60.0, v0.61.0, v0.62.0, v0.63.0, v0.63.1, v0.64.0, v0.65.0, v0.66.0 and v0.67.0 fixtures prove backward compatibility. They contain no user secrets,
+Synthetic v0.69.0 examples for all five read endpoints and the live stream live
+in `app/src/test/resources/protocol/v0.69.0/`; the retained v0.54.0, v0.55.0,
+v0.56.0, v0.60.0, v0.61.0, v0.62.0, v0.63.0, v0.63.1, v0.64.0, v0.65.0, v0.66.0, v0.67.0 and v0.68.0 fixtures prove backward compatibility. They contain no user secrets,
 machine paths, account identifiers, or real usage. Parser tests cover every
 read surface, the SSE envelope, omitted optional fields, and a future unknown
 field. The compatibility parser maps only the fields the dashboard needs and
@@ -227,3 +227,57 @@ Desktop normalization handles native-rollout precedence and deduplication.
 Dots collection/visibility controls, MiMo cookie discovery, batch aliases and
 Edge Dock changes remain desktop-only. Synthetic v0.68 fixtures and the isolated
 released-Hub contract check cover the new fields and freshness retention.
+
+## v0.69.0 session identity, relationships and activity
+
+The routes, Bearer authentication and stream-v2 envelope are unchanged. Sessions
+in `periods.today.sessions` and `periods.month.sessions` may carry the optional
+fields below. An older Hub omits them and its rows display as before. None of
+them carries conversation text, question content, call IDs or paths.
+
+| Field | Meaning |
+| --- | --- |
+| `nativeSessionId` | Codex only: the conversation UUID from the first rollout record, shared by every continuation file of that conversation. The `client:sessionId` accounting key does not change. |
+| `t3ThreadId` | T3 Code thread identity that joins continuations and delegated runs, including across providers. Equal values belong together. |
+| `parentSessionId`, `parentClient` | The session that started a subagent or background review. `parentClient` names the parent's client and means the child's own client when blank; the Hub leaves it out in that case. Top-level sessions and forks I make myself have neither. |
+| `liveActivity` | Claude Code and Codex only: `{ state, observedAt }` with `state` one of `running`, `waiting`, `idle` or `unknown`. |
+| `waitingForInput` | Codex only: `true` while a native question call is unanswered. It is not an approval signal. |
+| `models` | Per-model tokens, already on the wire. Android keeps only finite positive counts for grouped rows. |
+| `grokBotSession` | Cursor: an explicit Grok Bot marker if a producer sends one. The v0.69.0 Hub does not forward it, so Android normally decides from the id and models. |
+
+Android reads each field tolerantly. Strings are trimmed and blank when absent.
+`liveActivity` is kept only for a known state with a non-blank `observedAt`.
+`waitingForInput` and `grokBotSession` are true or false only when the JSON value
+is a boolean, and unknown otherwise. The Hub itself discards a `nativeSessionId`
+that is not a UUID or that conflicts across devices, and a `liveActivity` for any
+client other than Claude Code and Codex.
+
+Grouping is presentation only. Each member keeps its own usage and the period
+totals are untouched; a group sums its members once and never adds the session a
+link points to a second time.
+
+- Codex rollout files that share a `nativeSessionId`, and children that name a
+  `parentSessionId`, collect under the main session with combined usage.
+  Background reviews group as **Codex Auto Review**.
+- Sessions that share a `t3ThreadId` group first, then parent links are followed,
+  so a T3 Code continuation or delegated run folds into its main session.
+- A Cursor conversation whose ID starts with `sand-subagent-`, or that has
+  positive tokens on a `grok-bot-*` model, is a Grok Bot record. All models in
+  that conversation stay together, including Claude. The group counts activity
+  records, not chat rooms or billable calls, and infers no parent conversation.
+
+A session's activity state is decided in this order:
+
+1. An archived session is idle.
+2. A `liveActivity` observed within the last 30 seconds, and not in the future, wins
+   for Claude Code and Codex unless its state is `unknown`.
+3. Otherwise the transcript decides. `turnEnded: true` means finished while the
+   session is recent. For Codex, `waitingForInput` within the last 10 minutes means
+   waiting. Any other session active within 10 minutes is running, and an older
+   one is idle.
+
+Waiting is shown as **Waiting for you** in Home and Sessions. The synthetic
+v0.69.0 fixtures cover these shapes in the stats and devices responses and both
+stream event forms. The released-Hub contract check ingests the same shapes into
+the pinned Hub and confirms which fields survive and that question and activity
+text stays out of the response.

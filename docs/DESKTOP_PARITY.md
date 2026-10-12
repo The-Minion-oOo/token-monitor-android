@@ -1,6 +1,6 @@
-# Desktop parity for v0.68.0
+# Desktop parity for v0.69.0
 
-The Android adapter targets desktop Token Monitor v0.68.0 using
+The Android adapter targets desktop Token Monitor v0.69.0 using
 versioned fixtures and responses from the pinned released Hub. It mirrors
 the desktop information that the Hub can safely provide while keeping the phone
 read-only and lightweight.
@@ -17,7 +17,7 @@ read-only and lightweight.
 | Devices | Device totals, clients, models, collection cadence, last upload, and retained history |
 | Models | Token or cost ranking, with the desktop vendor mark for recognized model families and a generic model mark for unknown names |
 | Projects | Totals, session/tool counts, date range, and tool breakdown |
-| Sessions | Reported conversation title, project, tool, model, start/update time, session ID, tokens, cost, Running/Finished/Idle activity, and recent context-window use; untitled sessions retain the client/model label |
+| Sessions | Reported conversation title, project, tool, model, start/update time, session ID, tokens, cost, Running/Waiting for you/Finished/Idle activity, and recent context-window use; Codex subagents and continuations, T3 Code continuations, Grok Bot records and background reviews are grouped under one row with combined usage; untitled sessions retain the client/model label |
 | Usage dashboard | Overview cards, activity heatmap, and model/tool summaries |
 | Trends | By tool or model, Bars or K-line, and 7/30/90-day, one-year, or all-history ranges |
 | Display settings | View and Home-module visibility/order, ranking metric, limit-bar metric/source/email visibility, compact total, tool colors, default range, reduce motion, and a three-step text size in place of the desktop Zoom slider |
@@ -120,6 +120,18 @@ Codex Dots sessions carry an observed-only label, not a claim of full history.
 Dots collection/visibility controls, MiMo cookie discovery, batch alias editing
 and Edge Dock refinements stay on desktop. Android does not recollect or deduplicate
 the Hub's usage. Older Hubs without these optional fields keep their previous display.
+
+v0.69.0 adds optional session identity, relationship and activity fields.
+Android groups Codex subagents and continuation files, T3 Code continuations and
+delegated runs under their main session with combined usage, groups Cursor Grok
+Bot activity records and gathers Codex background reviews as **Codex Auto
+Review**. Grouping changes presentation only; every session keeps its own usage
+and the period totals stay as the Hub reports them. Claude Code and Codex
+sessions that are waiting on a reply or approval show **Waiting for you**. A
+fresh provider observation wins over the transcript, and Codex question waiting
+is bounded by the transcript's ten-minute window. The Edge Dock, the desktop's
+local session-detail views, activity collection and the Electron-only bot-id
+projection stay on desktop. Older Hubs keep their previous flat session list.
 
 The Android app does not replace these with remote commands. It reads only the
 documented Hub endpoints listed in [`SECURITY.md`](SECURITY.md).

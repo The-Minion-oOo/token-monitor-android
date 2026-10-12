@@ -1,6 +1,7 @@
 package io.github.theminionooo.tokenmonitor.data.protocol
 
 import java.io.File
+import java.time.Instant
 import org.junit.Assert.*
 import org.junit.Assume.assumeTrue
 import org.junit.Test
@@ -44,5 +45,25 @@ class ReleasedHubContractTest {
         assertTrue(dots.sessions.single().dotsObservedOnly)
         assertEquals(400L, dots.unpricedTokens)
         assertEquals(0.0, dots.costUsd, 0.0)
+        val related = HubProtocolParser.decodeStats(response("relations")).periods.getValue("today").sessions.associateBy { it.id }
+        val parent = related.getValue("sample-codex-parent")
+        assertEquals("0b8f6c2e-3d41-4a6b-9c0e-5a1d2f7e8b01", parent.nativeSessionId)
+        assertEquals(parent.nativeSessionId, related.getValue("sample-codex-continuation").nativeSessionId)
+        assertEquals(false, parent.waitingForInput)
+        assertEquals(true, related.getValue("sample-codex-waiting").waitingForInput)
+        assertEquals(parent.id, related.getValue("sample-codex-subagent").parentSessionId)
+        assertEquals("", related.getValue("sample-codex-subagent").parentClient)
+        assertEquals("sample-t3-claude", related.getValue("sample-t3-codex").parentSessionId)
+        assertEquals("claude", related.getValue("sample-t3-codex").parentClient)
+        assertEquals("sample-t3-thread-1", related.getValue("sample-t3-codex").t3ThreadId)
+        assertEquals("sample-t3-thread-1", related.getValue("sample-t3-claude").t3ThreadId)
+        assertEquals("running", related.getValue("sample-t3-claude").liveActivity?.state)
+        assertNull(related.getValue("sample-t3-claude").waitingForInput)
+        val waiting = related.getValue("sample-claude-live").liveActivity
+        assertEquals("waiting", waiting?.state)
+        assertTrue(runCatching { Instant.parse(waiting?.observedAt.orEmpty()) }.isSuccess)
+        assertNull(related.getValue("sand-subagent-sample-1").liveActivity)
+        assertEquals(mapOf("grok-bot-1" to 50L), related.getValue("sample-cursor-bot").modelTokens)
+        assertEquals(mapOf("gpt-5" to 600L), parent.modelTokens)
     }
 }

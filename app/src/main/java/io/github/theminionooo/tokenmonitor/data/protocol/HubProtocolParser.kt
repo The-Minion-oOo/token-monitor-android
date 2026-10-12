@@ -11,6 +11,7 @@ import io.github.theminionooo.tokenmonitor.domain.HubSubscriptions
 import io.github.theminionooo.tokenmonitor.domain.HistoryPoint
 import io.github.theminionooo.tokenmonitor.domain.LimitAccount
 import io.github.theminionooo.tokenmonitor.domain.LimitWindow
+import io.github.theminionooo.tokenmonitor.domain.LiveActivity
 import io.github.theminionooo.tokenmonitor.domain.ProjectUsage
 import io.github.theminionooo.tokenmonitor.domain.PromptCache
 import java.time.Instant
@@ -33,7 +34,9 @@ import kotlinx.serialization.json.longOrNull
  * Android client renders and intentionally ignores unknown fields.
  */
 object HubProtocolParser {
-    const val SUPPORTED_UPSTREAM_VERSION = "v0.68.0"
+    const val SUPPORTED_UPSTREAM_VERSION = "v0.69.0"
+
+    private val LIVE_ACTIVITY_STATES = setOf("running", "waiting", "idle", "unknown")
 
     private val json = Json {
         ignoreUnknownKeys = true
@@ -215,6 +218,18 @@ object HubProtocolParser {
         unpricedTokens = long("unpricedTokens") ?: 0,
         usageSource = string("usageSource"),
         usageCoverage = string("usageCoverage"),
+        modelTokens = positiveLongMap("models"),
+        nativeSessionId = string("nativeSessionId").trim(),
+        t3ThreadId = string("t3ThreadId").trim(),
+        parentSessionId = string("parentSessionId").trim(),
+        parentClient = string("parentClient").trim(),
+        liveActivity = objectField("liveActivity")?.let { activity ->
+            val state = activity.text("state")
+            val observedAt = activity.text("observedAt")
+            if (state in LIVE_ACTIVITY_STATES && observedAt.isNotBlank()) HubLiveActivityDto(state, observedAt) else null
+        },
+        waitingForInput = strictBoolean("waitingForInput"),
+        grokBotSession = strictBoolean("grokBotSession"),
         contextTokens = long("contextTokens") ?: 0,
         contextWindow = long("contextWindow") ?: 0,
         turnEnded = boolean("turnEnded"),
@@ -438,6 +453,14 @@ object HubProtocolParser {
         promptCache = promptCache?.let { PromptCache(it.observedAt, it.ttlSeconds) },
         unpricedTokens = unpricedTokens.coerceIn(0, totalTokens.coerceAtLeast(0)),
         dotsObservedOnly = client == "codex" && usageSource == "codex-dots-local" && usageCoverage == "observed-only",
+        modelTokens = modelTokens,
+        nativeSessionId = nativeSessionId,
+        t3ThreadId = t3ThreadId,
+        parentSessionId = parentSessionId,
+        parentClient = parentClient,
+        liveActivity = liveActivity?.let { LiveActivity(it.state, it.observedAt) },
+        waitingForInput = waitingForInput,
+        grokBotSession = grokBotSession,
     )
 
     private fun HubDeviceDto.toDomain() = DeviceUsage(
@@ -557,6 +580,21 @@ object HubProtocolParser {
     private fun JsonObject.double(name: String): Double? = this[name].numberOrNull()?.doubleOrNull?.takeIf { it.isFinite() }
 
     private fun JsonObject.boolean(name: String): Boolean? = this[name].numberOrNull()?.booleanOrNull
+
+    // A JSON boolean only: the lenient helper above would also accept the string "true".
+    private fun JsonObject.strictBoolean(name: String): Boolean? =
+        this[name].numberOrNull()?.takeIf { !it.isString }?.booleanOrNull
+
+    // A JSON string only, trimmed; numbers and null read as blank.
+    private fun JsonObject.text(name: String): String =
+        this[name].numberOrNull()?.takeIf { it.isString }?.content?.trim().orEmpty()
+
+    // Finite, positive token counts; zero, negative and non-numeric entries are dropped.
+    private fun JsonObject.positiveLongMap(name: String): Map<String, Long> = objectField(name)?.mapNotNull { (key, value) ->
+        val primitive = value.numberOrNull()?.takeIf { !it.isString }
+        val tokens = primitive?.longOrNull ?: primitive?.doubleOrNull?.takeIf { it.isFinite() }?.toLong()
+        tokens?.takeIf { it > 0 }?.let { key to it }
+    }?.toMap().orEmpty()
 
     private fun JsonObject.longMap(name: String): Map<String, Long> = objectField(name)?.mapNotNull { (key, value) ->
         value.numberOrNull()?.longOrNull?.let { key to it.coerceAtLeast(0) }
