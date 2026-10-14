@@ -159,7 +159,7 @@ internal fun DeviceUsageRow(
             }
             Spacer(Modifier.width(10.dp))
             Column(horizontalAlignment = Alignment.End) {
-                Text(formatTokens(usage.totalTokens), color = Ink, style = MaterialTheme.typography.bodySmall)
+                RowTokenValue(usage.totalTokens)
                 Text(formatUsageCost(usage.costUsd, usage.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
             }
         }

@@ -16,6 +16,7 @@ import io.github.theminionooo.tokenmonitor.data.storage.LimitBarMetric
 import io.github.theminionooo.tokenmonitor.data.storage.RankingMetric
 import io.github.theminionooo.tokenmonitor.data.storage.ReduceMotionMode
 import io.github.theminionooo.tokenmonitor.data.storage.TextScale
+import io.github.theminionooo.tokenmonitor.data.storage.TokenNumberAnimation
 import io.github.theminionooo.tokenmonitor.domain.ServiceStatusSnapshot
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -133,6 +134,7 @@ internal class DashboardViewModel(application: Application) : AndroidViewModel(a
     fun setColorfulToolMarks(enabled: Boolean) = displayPreferences.setColorfulToolMarks(enabled)
     fun setCompactTokenTotal(enabled: Boolean) = displayPreferences.setCompactTokenTotal(enabled)
     fun setReduceMotion(mode: ReduceMotionMode) = displayPreferences.setReduceMotion(mode)
+    fun setTokenNumberAnimation(animation: TokenNumberAnimation) = displayPreferences.setTokenNumberAnimation(animation)
     fun setTextScale(scale: TextScale) = displayPreferences.setTextScale(scale)
     fun setFollowSystemTheme(enabled: Boolean) {
         displayPreferences.setFollowSystemTheme(enabled)

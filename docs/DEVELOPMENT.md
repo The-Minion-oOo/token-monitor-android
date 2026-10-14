@@ -102,8 +102,9 @@ in a fixture or screenshot.
 JVM tests cover protocol parsing, private-address rules, endpoint failover,
 stream recovery, ordered cache writes, history aggregation, presentation rules,
 and preferences. Versioned Hub fixtures live under
-`app/src/test/resources/protocol/`. The v0.69.0 set covers all five read
-endpoints, a complete stream frame, and a freshness-only frame. The v0.68.0
+`app/src/test/resources/protocol/`. The v0.70.0 set covers all five read
+endpoints, a complete stream frame, and a freshness-only frame. The v0.69.0
+fixtures retain session relationships and activity, the v0.68.0
 fixtures retain unpriced counts and Dots provenance, and the v0.67.0
 fixtures retain MiMo Console and Membership identities, native-currency
 balances/spend and additive shared-settings revisions. Earlier fixtures retain MiniMax Code,
@@ -124,6 +125,15 @@ shapes and the defaults on every earlier fixture. The released-source harness
 ingests similar shapes into the pinned Hub, asserts which fields it keeps, and
 confirms that question and activity text never reaches the response; the
 Android contract test then parses those responses.
+
+The v0.70.0 fixtures keep those sessions and add a synthetic CatPaw session with
+unpriced usage and a MiniMax pay-as-you-go balance in yuan. Parser tests read both
+on every surface, through the stream and freshness frames, and check zero,
+negative and missing balances, a Token Plan account, and that earlier fixtures
+have neither. The harness generates the balance windows with the released
+MiniMax code and a stubbed response, so nothing leaves the process, and
+confirms that zero and negative balances and the CatPaw client survive the Hub
+and that no key reaches the response.
 
 Instrumentation tests use the preview package to exercise navigation, dialogs,
 widgets, storage, and lifecycle behavior. Run them on an API 36 emulator before
@@ -154,8 +164,8 @@ try {
 
 The harness exports committed Hub/shared files into a temporary directory,
 starts a loopback Hub with synthetic records, and checks authentication, all
-five read endpoints, snapshot delivery, freshness, changed statistics, and
-session links and activity. It does not use the desktop working tree, collectors, saved pairing, or real data.
+five read endpoints, snapshot delivery, freshness, changed statistics,
+session links and activity, CatPaw usage and MiniMax pay-as-you-go balances. It does not use the desktop working tree, collectors, saved pairing, or real data.
 Responses are written to `app/build/hub-contract/`; the temporary Hub is stopped
 and its source/data directory removed afterwards.
 
@@ -244,7 +254,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 46 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 47 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.

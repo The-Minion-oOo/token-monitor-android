@@ -67,6 +67,7 @@ import io.github.theminionooo.tokenmonitor.data.storage.LimitBarMetric
 import io.github.theminionooo.tokenmonitor.data.storage.RankingMetric
 import io.github.theminionooo.tokenmonitor.data.storage.ReduceMotionMode
 import io.github.theminionooo.tokenmonitor.data.storage.TextScale
+import io.github.theminionooo.tokenmonitor.data.storage.TokenNumberAnimation
 import java.util.Locale
 
 private val LocalOpenSettingsSection = compositionLocalOf<MutableState<String?>?> { null }
@@ -102,6 +103,7 @@ internal fun ConnectionScreen(
     onShowSessionTitlesChange: (Boolean) -> Unit = {},
     onRepairHomeAddress: (String) -> Unit = {},
     onAllowLocalNetwork: () -> Unit = {},
+    onTokenNumberAnimationChange: (TokenNumberAnimation) -> Unit = {},
 ) {
     val hasConnection = state.hasConnection
     var hubUrl by rememberSaveable(state.connectionUrl) { mutableStateOf(state.connectionUrl.orEmpty()) }
@@ -224,6 +226,13 @@ internal fun ConnectionScreen(
                     onSelect = { selected -> ReduceMotionMode.entries.firstOrNull { it.name == selected }?.let(onReduceMotionChange) },
                 )
                 Text("System follows Android. On minimizes motion; Off keeps the app's interaction animations.", color = Muted, style = MaterialTheme.typography.labelSmall)
+                Text("Token number animation", color = Ink, style = MaterialTheme.typography.bodyMedium)
+                ChoiceGroup(
+                    options = listOf("DIGIT ROLL" to TokenNumberAnimation.Roll.name, "COUNT UP" to TokenNumberAnimation.Count.name),
+                    selected = displayOptions.tokenNumberAnimation.name,
+                    onSelect = { selected -> TokenNumberAnimation.entries.firstOrNull { it.name == selected }?.let(onTokenNumberAnimationChange) },
+                )
+                Text("Digit roll keeps the unchanged leading digits and rolls the rest, like the desktop. Count up counts to the new total.", color = Muted, style = MaterialTheme.typography.labelSmall)
             }
             SettingsGroup("Main dashboard", summary = "${displayOptions.visibleViews.size}/${DisplayOptions.defaultViews.size} views · ${DashboardPeriod.entries.firstOrNull { it.name == displayOptions.defaultPeriod }?.let(::periodRangeLabel) ?: "Day"}") {
                 Text("Default usage range", color = Ink, style = MaterialTheme.typography.bodyMedium)

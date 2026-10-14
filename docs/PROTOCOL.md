@@ -4,7 +4,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.69.0**, released 2026-10-11.
+The verified baseline is upstream Token Monitor **v0.70.0**, released 2026-10-13.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -50,9 +50,9 @@ replaces the snapshot with the current read endpoints.
 
 ## Fixtures
 
-Synthetic v0.69.0 examples for all five read endpoints and the live stream live
-in `app/src/test/resources/protocol/v0.69.0/`; the retained v0.54.0, v0.55.0,
-v0.56.0, v0.60.0, v0.61.0, v0.62.0, v0.63.0, v0.63.1, v0.64.0, v0.65.0, v0.66.0, v0.67.0 and v0.68.0 fixtures prove backward compatibility. They contain no user secrets,
+Synthetic v0.70.0 examples for all five read endpoints and the live stream live
+in `app/src/test/resources/protocol/v0.70.0/`; the retained v0.54.0, v0.55.0,
+v0.56.0, v0.60.0, v0.61.0, v0.62.0, v0.63.0, v0.63.1, v0.64.0, v0.65.0, v0.66.0, v0.67.0, v0.68.0 and v0.69.0 fixtures prove backward compatibility. They contain no user secrets,
 machine paths, account identifiers, or real usage. Parser tests cover every
 read surface, the SSE envelope, omitted optional fields, and a future unknown
 field. The compatibility parser maps only the fields the dashboard needs and
@@ -281,3 +281,42 @@ v0.69.0 fixtures cover these shapes in the stats and devices responses and both
 stream event forms. The released-Hub contract check ingests similar shapes into
 the pinned Hub and confirms which fields survive and that question and activity
 text stays out of the response.
+
+## v0.70.0 CatPaw and MiniMax pay-as-you-go balances
+
+The routes, Bearer authentication and stream-v2 envelope are unchanged, and
+upstream's API document and Hub source are identical to v0.69.0. Two additions
+reach the wire.
+
+**CatPaw.** `catpaw` is a new tool ID with the label CatPaw. It is off by default
+on desktop. Its models are not priced from the catalog, so usage normally
+arrives with `costUsd: 0` and `unpricedTokens` equal to the tokens, in the same
+period, session, history and attribution fields as any other tool; custom
+pricing set on desktop can change that. CatPaw supplies no
+project, title or context size, so those fields are blank. Android reads the ID
+like any other tool and supplies the display name.
+
+**MiniMax pay-as-you-go.** A MiniMax key set to API billing makes the `minimax`
+limit provider report `accountLabel: "Pay-as-you-go"` and one window instead of
+the Token Plan session and weekly windows:
+
+| Field | Value |
+| --- | --- |
+| `kind`, `metric`, `label` | `billing`, `credits`, `Balance` |
+| `remaining` | The spendable amount. Zero and negative amounts are real readings. |
+| `currency` | `CNY` for the China region, `USD` for international. |
+| `usedPercent`, `remainingPercent`, `resetsAt` | `null`. A balance has no percentage and no reset time. |
+| `showMeter` | `true` on the wire, even though there is no percentage to draw. |
+
+The Hub keeps one MiniMax account at a time, so a Token Plan key and a
+pay-as-you-go key do not appear side by side. A response without a usable amount
+gives no window and the status `unavailable`. Android keeps `remaining` as
+sent, including its sign.
+
+Other v0.70.0 changes do not alter the wire shape. Codex compressed session logs
+now count on desktop, so Codex totals can be higher. Hermes reasoning tokens join
+its history on desktop, and the desktop's build registry gains two build IDs.
+StepFun sign-in renewal, the token number animation and the faster session lists
+are desktop-side. The synthetic v0.70.0 fixtures and the isolated released-Hub
+contract check cover the CatPaw client and the balance, including a zero and a
+negative amount, and confirm that no key crosses the Hub.

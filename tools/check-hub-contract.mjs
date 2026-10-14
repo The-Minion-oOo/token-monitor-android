@@ -172,6 +172,41 @@ async function isolatedContract(source, output, upstream) {
         assert.equal(related["cursor:sand-subagent-sample-1"].liveActivity, undefined, "Live activity is limited to Claude and Codex");
         assert.equal(related["cursor:sample-cursor-bot"].models["grok-bot-1"], 50);
         assert.ok(!JSON.stringify(responses["relations.json"]).includes("NEVER_EXPORT"), "Question and activity content must never cross the Hub");
+        // v0.70.0: the CatPaw client and MiniMax pay-as-you-go balances. The Hub keeps one MiniMax account at a time (it
+        // collapses limit providers by name), so each balance goes to its own disposable Hub. The balance windows come
+        // from the released MiniMax code fed a stubbed balance response, so no request leaves this process.
+        const { fetchMinimaxLimits } = require("./src/shared/providers/minimax/limits.js");
+        const minimaxBalance = (region, keyName, amount) => fetchMinimaxLimits(
+            { minimaxApiKey: `NEVER_EXPORT_MINIMAX_KEY_${keyName}`, minimaxBillingMode: "api", minimaxApiRegion: region },
+            { env: {}, now: () => Date.parse(now), fetchJson: async () => ({ available_amount: amount, cash_balance: 999, base_resp: { status_code: 0, status_msg: "success" } }) });
+        const catpawPeriod = { totalTokens: 1200, costUsd: 0, unpricedTokens: 1200, clients: { catpaw: 1200 }, clientCosts: { catpaw: 0 },
+            models: { auto: 1200 }, modelCosts: { auto: 0 }, clientModels: { catpaw: { auto: 1200 } },
+            clientUnpricedTokens: { catpaw: 1200 }, modelUnpricedTokens: { auto: 1200 }, clientModelUnpricedTokens: { catpaw: { auto: 1200 } },
+            sessions: { "catpaw:sample-catpaw": { sessionId: "sample-catpaw", client: "catpaw", totalTokens: 1200, costUsd: 0, unpricedTokens: 1200,
+                models: { auto: 1200 }, lastUsedAt: now } } };
+        // Upstream src/shared/usage.js (normalizeClientName) and src/shared/providers/minimax/limits.js (parseMinimaxBalance).
+        for (const [name, region, amount, currency] of [["balance", "cn", 12.5, "CNY"], ["balance-zero", "en", 0, "USD"], ["balance-negative", "en", -3.2, "USD"]]) {
+            const balanceHub = createHub({ port: 0, host: "127.0.0.1", secret, dataFile: join(source, `synthetic-${name}.json`) });
+            balanceHub.ingest({ ...device, trackedClients: ["catpaw"], periods: { today: catpawPeriod, month: catpawPeriod },
+                limits: { updatedAt: now, providers: [await minimaxBalance(region, `${name}-key`, amount)] } });
+            responses[`${name}.json`] = balanceHub.getStats();
+            const provider = responses[`${name}.json`].limits.providers.find(entry => entry.provider === "minimax");
+            assert.ok(provider, `A ${amount} balance must survive the Hub, zero and negative included`);
+            assert.equal(provider.accountLabel, "Pay-as-you-go");
+            assert.equal(provider.status, "ok");
+            assert.equal(provider.windows.length, 1);
+            assert.deepEqual({ kind: provider.windows[0].kind, metric: provider.windows[0].metric, label: provider.windows[0].label,
+                remaining: provider.windows[0].remaining, currency: provider.windows[0].currency },
+            { kind: "billing", metric: "credits", label: "Balance", remaining: amount, currency });
+            assert.equal(provider.windows[0].usedPercent, null, "A balance carries no percentage");
+            assert.equal(provider.windows[0].remainingPercent, null);
+            assert.equal(provider.windows[0].resetsAt, null, "A balance has no reset time");
+            assert.ok(!JSON.stringify(responses[`${name}.json`]).includes("NEVER_EXPORT"), "A MiniMax key must never cross the Hub");
+        }
+        const catpaw = responses["balance.json"].periods.today;
+        assert.equal(catpaw.clients.catpaw, 1200, "catpaw must survive client normalization");
+        assert.equal(catpaw.sessions["catpaw:sample-catpaw"].client, "catpaw");
+        assert.equal(catpaw.clientUnpricedTokens.catpaw, 1200);
         responses["contract.json"] = { upstream, generatedAt: new Date().toISOString(), synthetic: true,
             expectedTodayTokens: 1234, expectedUpdatedTokens: 1235 };
         await mkdir(output, { recursive: true });

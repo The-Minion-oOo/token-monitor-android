@@ -2,21 +2,22 @@
 
 ## Version rule
 
-Android v0.69.0 r1 targets desktop tag `v0.69.0`, peeled commit
-`3f106ae3d4712b26cced8272f0d488eaab0de1e6`, in Gradle and `upstream.json`.
-It reads session identity, parent links and live activity, so Codex subagents
-and continuations, T3 Code threads, Cursor Grok Bot records and background
-reviews group under one row, and sessions waiting for you say so. Explicit
-unpriced-token counts, Dots labels, TM2 colors, separate MiMo product rows,
-title-consent checks and Wi-Fi recovery are retained. Collection, activity
-watching, alias/pricing edits and title-sharing controls remain on desktop.
-Android is still read-only.
+Android v0.70.0 r1 targets desktop tag `v0.70.0`, peeled commit
+`ac4eeb2c4aea239dd94b67f074c73f69aafc46f8`, in Gradle and `upstream.json`.
+It names the new CatPaw tool, shows a MiniMax pay-as-you-go balance in Limits
+and follows the desktop's token number animation. Session grouping and
+waiting state, explicit unpriced-token counts, Dots labels, TM2 colors,
+separate MiMo product rows, title-consent checks and Wi-Fi recovery are
+retained. Collection, MiniMax billing-mode selection, activity watching,
+alias/pricing edits and title-sharing controls remain on desktop. Android is
+still read-only.
 
 The latest published release is
 [`android-v0.69.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.69.0-r1),
-recorded with its source commit in `release.json`. The earlier v0.66.0 r1
-upgrade on my phone preserved pairing and the placed Pages widget; later
-revisions, including v0.69.0 r1, have not been checked on it.
+recorded with its source commit in `release.json`; v0.70.0 r1 is the current
+candidate. The earlier v0.66.0 r1 upgrade on my phone preserved pairing and
+the placed Pages widget; later revisions, including v0.69.0 r1, have not been
+checked on it.
 
 An Android-only fix increments `versionCode` and the GitHub release revision,
 for example `android-vX.Y.Z-rN`, without changing the visible compatibility

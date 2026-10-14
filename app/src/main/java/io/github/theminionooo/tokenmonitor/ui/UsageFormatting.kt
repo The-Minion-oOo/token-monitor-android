@@ -10,6 +10,10 @@ import java.util.Locale
 // Formatters are built once; they are used on every frame while a total rolls.
 private val wholeNumberFormat: NumberFormat = NumberFormat.getNumberInstance(Locale.US)
 private val currencyFormat: NumberFormat = NumberFormat.getCurrencyInstance(Locale.US)
+private val twoDecimalFormat: NumberFormat = NumberFormat.getNumberInstance(Locale.US).apply {
+    minimumFractionDigits = 2
+    maximumFractionDigits = 2
+}
 private val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, h:mm a")
 private val clockFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 private val shortDateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("M/d")
@@ -54,10 +58,16 @@ internal fun formatSubscriptionAmount(amountMinor: Long, currency: String): Stri
     "$currency ${wholeNumberFormat.format(amountMinor / 100.0)}"
 }
 
-internal fun formatWindowAmount(value: Double, currency: String): String = when {
-    currency.equals("USD", ignoreCase = true) -> formatMoney(value)
-    currency.isNotBlank() -> "$currency ${wholeNumberFormat.format(value)}"
-    else -> wholeNumberFormat.format(value)
+/**
+ * Balances and spend in their reported currency, as the desktop prints them: `$` and `¥` symbols, other codes
+ * spelled out, provider credits bare, always to the cent. An amount without a currency is a plain count.
+ */
+internal fun formatWindowAmount(value: Double, currency: String): String = when (val code = currency.trim().uppercase(Locale.US)) {
+    "" -> wholeNumberFormat.format(value)
+    "USD" -> formatMoney(value)
+    "CNY" -> "¥${twoDecimalFormat.format(value)}"
+    "CREDITS" -> twoDecimalFormat.format(value)
+    else -> "$code ${twoDecimalFormat.format(value)}"
 }
 
 /** The desktop `formatDuration`: `2d 21h`, `1h 59m`, `5m`, or `<1m`, rounded to the minute. */
@@ -146,7 +156,7 @@ private val toolLabels = mapOf(
     "amp" to "Amp", "droid" to "Factory Droid", "qwen" to "Qwen", "grok" to "Grok Build", "copilot" to "GitHub Copilot",
     "pi" to "Pi", "omp" to "Oh My Pi", "zed" to "Zed", "kilo" to "Kilo", "kilocode" to "Kilo Code", "commandcode" to "Command Code",
     "mimo" to "Xiaomi MiMo", "micode" to "Xiaomi MiMo", "zcode" to "ZCode", "kiro" to "Kiro", "codebuddy" to "CodeBuddy",
-    "workbuddy" to "WorkBuddy", "proma" to "Proma", "qodercn" to "Qoder CN", "reasonix" to "Reasonix", "dsh" to "DeepSeek Harness",
+    "workbuddy" to "WorkBuddy", "proma" to "Proma", "catpaw" to "CatPaw", "qodercn" to "Qoder CN", "reasonix" to "Reasonix", "dsh" to "DeepSeek Harness",
     "cherrystudio" to "Cherry Studio", "lmstudio" to "LM Studio", "unsloth" to "Unsloth", "devin" to "Devin", "openrouter" to "OpenRouter",
     "deepseek" to "DeepSeek", "ollama" to "Ollama", "thirdparty" to "Third-party",
     "factory" to "Factory", "nvidia" to "NVIDIA", "stepfun" to "StepFun", "muse" to "Muse Code", "fx" to "fx",

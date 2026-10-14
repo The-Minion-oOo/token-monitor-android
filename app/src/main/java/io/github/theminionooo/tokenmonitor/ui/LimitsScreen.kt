@@ -172,9 +172,10 @@ internal fun LimitAccountRow(account: LimitAccount, displayOptions: DisplayOptio
                                     ?: "Available"
                                 Text(display, color = Ink, style = MaterialTheme.typography.labelSmall)
                             }
-                            val meterPercent = if (displayOptions.limitBarMetric == LimitBarMetric.Remaining) remaining else usedPercent
+                            val balance = balanceMeterPercent(account.provider, window)
+                            val meterPercent = if (displayOptions.limitBarMetric == LimitBarMetric.Remaining) remaining ?: balance else usedPercent ?: balance?.let { 100.0 - it }
                             val meter = (meterPercent ?: 0.0).coerceIn(0.0, 100.0).toFloat() / 100f
-                            val risk = ((usedPercent ?: 0.0).coerceIn(0.0, 100.0) / 100.0).toFloat()
+                            val risk = (((usedPercent ?: balance?.let { 100.0 - it }) ?: 0.0).coerceIn(0.0, 100.0) / 100.0).toFloat()
                             if (window.showMeter != false && meterPercent != null) UsageBar(meter, quotaColor(risk))
                             if (window.detail.isNotBlank()) Text(window.detail, color = Muted, style = MaterialTheme.typography.labelSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
                             formatBoundary(window.resetsAt, window.boundaryKind, LocalNow.current).takeIf { it.isNotBlank() }?.let { Text(it, color = Muted, style = MaterialTheme.typography.labelSmall, maxLines = 1) }

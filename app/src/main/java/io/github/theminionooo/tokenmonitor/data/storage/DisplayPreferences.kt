@@ -10,6 +10,9 @@ internal enum class RankingMetric { Tokens, Cost }
 internal enum class LimitBarMetric { Remaining, Used }
 internal enum class ReduceMotionMode { System, On, Off }
 
+/** The desktop v0.70 Appearance choice for changing token totals; Roll is its default. */
+internal enum class TokenNumberAnimation { Roll, Count }
+
 /** Mirrors the desktop Zoom control in three steps; [step] is added to every type size in sp. */
 internal enum class TextScale(val step: Int) { Compact(0), Comfortable(1), Large(2) }
 
@@ -18,6 +21,7 @@ internal data class DisplayOptions(
     val colorfulToolMarks: Boolean = false,
     val compactTokenTotal: Boolean = false,
     val reduceMotion: ReduceMotionMode = ReduceMotionMode.System,
+    val tokenNumberAnimation: TokenNumberAnimation = TokenNumberAnimation.Roll,
     val textScale: TextScale = TextScale.Comfortable,
     /** A desktop TM1 or TM2 theme code; null means the default preset. */
     val themeCode: String? = null,
@@ -49,6 +53,7 @@ internal class DisplayPreferences(context: Context) {
     fun setColorfulToolMarks(enabled: Boolean) = update { copy(colorfulToolMarks = enabled) }
     fun setCompactTokenTotal(enabled: Boolean) = update { copy(compactTokenTotal = enabled) }
     fun setReduceMotion(mode: ReduceMotionMode) = update { copy(reduceMotion = mode) }
+    fun setTokenNumberAnimation(animation: TokenNumberAnimation) = update { copy(tokenNumberAnimation = animation) }
     fun setTextScale(scale: TextScale) = update { copy(textScale = scale) }
     fun setThemeCode(code: String?) = update { copy(themeCode = code) }
     fun setFollowSystemTheme(enabled: Boolean) = update { copy(followSystemTheme = enabled) }
@@ -79,6 +84,7 @@ internal class DisplayPreferences(context: Context) {
             putBoolean(colorfulToolMarksKey, next.colorfulToolMarks)
             putBoolean(compactTokenTotalKey, next.compactTokenTotal)
             putString(reduceMotionKey, next.reduceMotion.name)
+            putString(tokenNumberAnimationKey, next.tokenNumberAnimation.name)
             putString(textScaleKey, next.textScale.name)
             putString(themeCodeKey, next.themeCode)
             putBoolean(followSystemThemeKey, next.followSystemTheme)
@@ -100,6 +106,7 @@ internal class DisplayPreferences(context: Context) {
         colorfulToolMarks = preferences.getBoolean(colorfulToolMarksKey, false),
         compactTokenTotal = preferences.getBoolean(compactTokenTotalKey, false),
         reduceMotion = preferences.getString(reduceMotionKey, null).enumOrDefault(ReduceMotionMode.System),
+        tokenNumberAnimation = preferences.getString(tokenNumberAnimationKey, null).enumOrDefault(TokenNumberAnimation.Roll),
         textScale = preferences.getString(textScaleKey, null).enumOrDefault(TextScale.Comfortable),
         themeCode = preferences.getString(themeCodeKey, null)?.takeIf { it.isNotBlank() },
         followSystemTheme = preferences.getBoolean(followSystemThemeKey, false),
@@ -120,6 +127,7 @@ internal class DisplayPreferences(context: Context) {
         const val colorfulToolMarksKey = "colorful_tool_marks"
         const val compactTokenTotalKey = "compact_token_total"
         const val reduceMotionKey = "reduce_motion"
+        const val tokenNumberAnimationKey = "token_number_animation"
         const val textScaleKey = "text_scale"
         const val themeCodeKey = "theme_code"
         const val followSystemThemeKey = "follow_system_theme"

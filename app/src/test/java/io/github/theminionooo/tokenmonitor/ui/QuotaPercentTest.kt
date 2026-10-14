@@ -55,6 +55,18 @@ class QuotaPercentTest {
         assertNull(remainingPercent(window()))
     }
 
+    @Test fun aMiniMaxBalanceMetersFullUntilItRunsOut() {
+        val balance = { amount: Double? -> window().copy(kind = "billing", metric = "credits", remaining = amount, currency = "CNY") }
+        assertEquals(100.0, balanceMeterPercent("minimax", balance(12.5))!!, 0.0)
+        assertEquals(0.0, balanceMeterPercent("minimax", balance(0.0))!!, 0.0)
+        assertEquals(0.0, balanceMeterPercent("minimax", balance(-3.2))!!, 0.0)
+        assertNull(balanceMeterPercent("minimax", balance(null)))
+        // Other balances keep their own presentation, and a reported percent always wins.
+        assertNull(balanceMeterPercent("deepseek", balance(12.5)))
+        assertNull(balanceMeterPercent("minimax", balance(12.5).copy(remainingPercent = 40.0)))
+        assertNull(balanceMeterPercent("minimax", balance(12.5).copy(showMeter = false)))
+    }
+
     private fun window(remainingPercent: Double? = null, usedPercent: Double? = null) = LimitWindow(
         kind = "weekly",
         label = "Weekly",

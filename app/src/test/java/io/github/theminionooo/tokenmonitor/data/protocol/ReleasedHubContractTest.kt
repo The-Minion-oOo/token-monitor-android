@@ -65,5 +65,22 @@ class ReleasedHubContractTest {
         assertNull(related.getValue("sand-subagent-sample-1").liveActivity)
         assertEquals(mapOf("grok-bot-1" to 50L), related.getValue("sample-cursor-bot").modelTokens)
         assertEquals(mapOf("gpt-5" to 600L), parent.modelTokens)
+        val catpaw = HubProtocolParser.decodeStats(response("balance")).periods.getValue("today")
+        assertEquals(1200L, catpaw.clients["catpaw"])
+        assertEquals(mapOf("auto" to 1200L), catpaw.clientModels["catpaw"])
+        assertEquals(1200L, catpaw.clientUnpricedTokens["catpaw"])
+        assertEquals("sample-catpaw", catpaw.sessions.single().id)
+        assertEquals("catpaw", catpaw.sessions.single().client)
+        for ((name, amount, currency) in listOf(Triple("balance", 12.5, "CNY"), Triple("balance-zero", 0.0, "USD"), Triple("balance-negative", -3.2, "USD"))) {
+            val window = HubProtocolParser.decodeStats(response(name)).limits.providers.single { it.provider == "minimax" }.windows.single()
+            assertEquals(name, "billing", window.kind)
+            assertEquals(name, "credits", window.metric)
+            assertEquals(name, "Balance", window.label)
+            assertEquals(name, amount, window.remaining!!, 0.0)
+            assertEquals(name, currency, window.currency)
+            assertNull(name, window.usedPercent)
+            assertNull(name, window.remainingPercent)
+            assertEquals(name, "", window.resetsAt)
+        }
     }
 }

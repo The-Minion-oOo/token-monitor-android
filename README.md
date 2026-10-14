@@ -17,7 +17,7 @@ Tokens, account limits, models and trends from the desktop Token Monitor Hub, pl
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/github/actions/workflow/status/The-Minion-oOo/token-monitor-android/android.yml?branch=main&style=flat-square&logo=githubactions&logoColor=10221c&label=Android%20checks"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.69.0" src="https://img.shields.io/badge/Desktop-v0.69.0-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.70.0" src="https://img.shields.io/badge/Desktop-v0.70.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/releases"><img alt="Total GitHub release asset downloads" src="https://img.shields.io/github/downloads/The-Minion-oOo/token-monitor-android/total?label=Downloads&style=flat-square&color=73bdf5"></a>
@@ -97,13 +97,13 @@ is no public server, vendor relay, or separate Token Monitor account.
 - Live totals while the app is open, an immediate refresh on return, pull-to-refresh, and a saved snapshot when the Hub is unavailable.
 - Day, week, month, rolling 7, 30 and 90 days, one year, all history and total.
 - Account limits with the desktop's reset countdowns, separate MiMo products,
-  and reported wallet/spend values in their native currency.
+  reported wallet/spend values in their native currency and MiniMax pay-as-you-go balances.
 - Tools, devices, models, projects, sessions, subscriptions, service status, activity and trends, each with an `updated 5m ago` freshness.
 - Recent and running sessions on Home, reported conversation titles, and context-window use when the desktop provides them, without reading prompt or response bodies.
 - Trends by tool or model, shown as bars or a K-line chart.
 - Cache hit, cache miss, output and unclassified token details where the Hub provides them.
 - Known cost subtotals with explicit unpriced-token warnings, and Codex Dots sessions labeled as observed-only rather than complete history.
-- The desktop's Default, Obsidian and Porcelain themes, theme codes pasted as-is, an option to follow the phone's light and dark setting, three text sizes, motion controls, and reorderable views and Home modules.
+- The desktop's Default, Obsidian and Porcelain themes, theme codes pasted as-is, an option to follow the phone's light and dark setting, three text sizes, motion controls with the desktop's Digit roll or Count up token numbers, and reorderable views and Home modules.
 - A Back button that goes Home instead of quitting on you, and a light haptic tick on every tab.
 
 The Hub does not carry prompt or response bodies. Desktop v0.67.0 strips
@@ -130,9 +130,11 @@ Session rows also show generation speed, cache-hit percentage and prompt-cache e
 ## Get connected
 
 You need Android 8.0 or newer and a desktop running Token Monitor with Hub hosting
-on. Android v0.69.0 r1 is verified against desktop v0.69.0. The last build I
-checked on my phone, v0.66.0 r1, upgraded in place from v0.65.0 and kept pairing
-and the placed Pages widget. I haven't installed v0.69.0 on my phone yet.
+on. The current release, Android v0.69.0 r1, is verified against desktop v0.69.0.
+The source on `main` follows desktop v0.70.0; its v0.70.0 r1 build isn't
+published yet. The last build I checked on my phone, v0.66.0 r1, upgraded in
+place from v0.65.0 and kept pairing and the placed Pages widget. I haven't
+installed v0.69.0 or v0.70.0 on my phone yet.
 
 1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.69.0 r1 APK.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
@@ -150,9 +152,9 @@ Desktop v0.64's optional iCloud Drive sync does not replace the Hub connection f
 | --- | --- |
 | Current public release | [`v0.69.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.69.0-r1) |
 | Latest phone-verified build | signed `v0.66.0-r1` over v0.65.0 r1; pairing, home Wi-Fi reconnection and placed Pages widget preserved |
-| Remaining phone checks | v0.69.0 r1 in-place upgrade, Tailscale/Wi-Fi transitions, screen-off expiry and battery behavior |
-| Desktop baseline | Token Monitor `v0.69.0` |
-| Upstream commit | [`3f106ae`](https://github.com/Javis603/token-monitor/commit/3f106ae3d4712b26cced8272f0d488eaab0de1e6) |
+| Remaining phone checks | v0.69.0 r1 and v0.70.0 r1 in-place upgrades, Tailscale/Wi-Fi transitions, screen-off expiry and battery behavior |
+| Desktop baseline | Token Monitor `v0.70.0` |
+| Upstream commit | [`ac4eeb2`](https://github.com/Javis603/token-monitor/commit/ac4eeb2c4aea239dd94b67f074c73f69aafc46f8) |
 
 The visible version matches the desktop release the phone understands. Android-only
 builds bump the release revision and internal version code while the compatibility

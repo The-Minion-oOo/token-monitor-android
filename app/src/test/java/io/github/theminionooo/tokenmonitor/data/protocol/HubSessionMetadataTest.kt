@@ -18,7 +18,6 @@ class HubSessionMetadataTest {
             resource("history.json"), resource("subscriptions.json"), 0,
         )
         assertEquals("v0.69.0", snapshot.health.hubBuild)
-        assertEquals("v0.69.0", HubProtocolParser.SUPPORTED_UPSTREAM_VERSION)
         assertEquals(19_100L, snapshot.today.totalTokens)
         assertEquals(snapshot.today.totalTokens, snapshot.today.sessions.sumOf { it.totalTokens })
         assertEquals(12, snapshot.today.sessions.size)

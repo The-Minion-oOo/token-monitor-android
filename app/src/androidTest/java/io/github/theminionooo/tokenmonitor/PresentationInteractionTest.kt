@@ -65,7 +65,7 @@ class PresentationInteractionTest {
         compose.onNodeWithText("Console · Example account · Pay-as-you-go", substring = true).assertIsDisplayed()
         compose.onNodeWithText("Desktop Membership · Example account · Pro", substring = true).assertIsDisplayed()
         compose.onNodeWithText("75% left").assertIsDisplayed()
-        compose.onNodeWithText("CNY 42").assertIsDisplayed()
+        compose.onNodeWithText("¥42.00").assertIsDisplayed()
         compose.onNodeWithText("42% left").assertDoesNotExist()
         compose.onNodeWithText("Month spend", substring = true).assertIsDisplayed()
         compose.onNodeWithText("Today spend (tracked)", substring = true).assertIsDisplayed()

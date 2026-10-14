@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: Javis603/token-monitor
-          ref: 3f106ae3d4712b26cced8272f0d488eaab0de1e6
+          ref: ac4eeb2c4aea239dd94b67f074c73f69aafc46f8
           path: upstream-contract-source
           persist-credentials: false
       - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
@@ -37,7 +37,7 @@ jobs:
       - name: Exercise the released Hub with isolated synthetic data
         run: >-
           node tools/check-hub-contract.mjs --upstream-repo upstream-contract-source
-          --approved-commit 3f106ae3d4712b26cced8272f0d488eaab0de1e6
+          --approved-commit ac4eeb2c4aea239dd94b67f074c73f69aafc46f8
       - name: Parse actual Hub responses in Android's compatibility tests
         env:
           TOKEN_MONITOR_CONTRACT_DIR: ${{ github.workspace }}/app/build/hub-contract

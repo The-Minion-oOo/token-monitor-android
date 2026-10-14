@@ -176,8 +176,10 @@ and settings. Shared presentation rules live alongside them in focused files:
 - **Motion.** `LocalInteractionMotion` resolves the reduce-motion setting
   against the system animator scale. Every animation reads it and collapses
   to zero duration when motion is off. `DesktopEaseOut` is the desktop's
-  easing curve. The headline total rolls toward new values, bars and charts
-  grow in on open, chevrons rotate, and views cross-fade with a small slide.
+  easing curve. Token totals follow the desktop's token number animation:
+  `DigitRoll.kt` ports its digit roll for the headline and breakdown rows, and
+  Count up keeps the earlier rolling headline value. Bars and charts grow in on
+  open, chevrons rotate, and views cross-fade with a small slide.
 - **Menus.** `AnchoredMenu` is a popup positioned a few pixels off its anchor,
   replacing the stock menu whose screen-edge margin left a gap above the view
   switcher.

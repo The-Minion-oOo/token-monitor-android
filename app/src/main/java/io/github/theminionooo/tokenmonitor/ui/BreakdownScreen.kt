@@ -166,7 +166,7 @@ internal fun DesktopUsageRow(
             Text(name.displayName(), color = Ink, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
             Spacer(Modifier.width(10.dp))
             Column(horizontalAlignment = Alignment.End) {
-                Text(formatTokens(totalTokens), color = Ink, style = MaterialTheme.typography.bodySmall)
+                RowTokenValue(totalTokens)
                 if (detail.isNotBlank()) Text(detail, color = Muted, style = MaterialTheme.typography.labelSmall)
             }
         }

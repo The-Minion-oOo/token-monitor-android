@@ -18,6 +18,14 @@ internal fun quotaPercentLeft(remaining: Double?, limit: Double?): Int? {
     return Math.round((remaining * 100.0 / limit).coerceIn(0.0, 100.0)).toInt()
 }
 
+/**
+ * Desktop v0.70 meters a MiniMax pay-as-you-go balance against itself: full while money remains, empty at zero
+ * or below. It only draws the bar; the figure stays the amount, and other balances keep their own presentation.
+ */
+internal fun balanceMeterPercent(provider: String, window: LimitWindow): Double? =
+    if (provider != "minimax" || window.metric != "credits" || window.showMeter == false || quotaRemainingPercent(window) != null) null
+    else window.remaining?.takeIf { it.isFinite() }?.let { if (it > 0.0) 100.0 else 0.0 }
+
 /** A window's percent left, whether the Hub reports it directly or as the complement of percent used. */
 internal fun quotaPercentLeft(window: LimitWindow): Int? = quotaPercentLeft(quotaRemainingPercent(window), 100.0)
 

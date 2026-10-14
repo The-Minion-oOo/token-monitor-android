@@ -87,6 +87,12 @@ internal fun groupSessions(sessions: List<SessionUsage>, evidence: List<SessionU
 }
 
 private fun groupConversations(sessions: List<SessionUsage>): List<SessionRow> {
+    // Independent conversations need neither alias resolution nor parent walks (desktop v0.70). Any link,
+    // including a missing or cross-client parent, or a repeated identity takes the full path below.
+    val identities = HashSet<String>()
+    if (sessions.none { it.parentKey() != null || !identities.add(it.conversationIdentity()) }) {
+        return sessions.map { SessionRow(key = it.accountingKey(), display = it) }
+    }
     val byKey = LinkedHashMap<String, SessionUsage>()
     sessions.forEach { byKey.putIfAbsent(it.accountingKey(), it) }
     // A conversation may have several accounting records; links resolve through any visible alias.

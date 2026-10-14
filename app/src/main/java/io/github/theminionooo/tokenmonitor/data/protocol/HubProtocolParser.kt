@@ -34,7 +34,7 @@ import kotlinx.serialization.json.longOrNull
  * Android client renders and intentionally ignores unknown fields.
  */
 object HubProtocolParser {
-    const val SUPPORTED_UPSTREAM_VERSION = "v0.69.0"
+    const val SUPPORTED_UPSTREAM_VERSION = "v0.70.0"
 
     private val LIVE_ACTIVITY_STATES = setOf("running", "waiting", "idle", "unknown")
 
@@ -272,7 +272,8 @@ object HubProtocolParser {
         accountName = string("accountName"),
         accountEmail = string("accountEmail").ifBlank { string("email") },
         plan = string("plan").ifBlank { string("planLabel") }.ifBlank {
-            if (string("provider") in setOf("typesafe", "stepfun")) string("accountLabel") else ""
+            // MiniMax names its billing type here (Token Plan or Pay-as-you-go); the desktop shows it as the plan.
+            if (string("provider") in setOf("typesafe", "stepfun", "minimax")) string("accountLabel") else ""
         },
         status = string("status"),
         sourceDeviceId = string("sourceDeviceId"),

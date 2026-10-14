@@ -85,6 +85,7 @@ import io.github.theminionooo.tokenmonitor.data.HubRepositoryState
 import io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions
 import io.github.theminionooo.tokenmonitor.data.storage.LimitBarMetric
 import io.github.theminionooo.tokenmonitor.data.storage.RankingMetric
+import io.github.theminionooo.tokenmonitor.data.storage.TokenNumberAnimation
 import io.github.theminionooo.tokenmonitor.domain.DeviceUsage
 import io.github.theminionooo.tokenmonitor.domain.HistoryPoint
 import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
@@ -223,17 +224,21 @@ internal fun DashboardContent(
 
 @Composable
 internal fun TotalPanel(usage: UsagePeriod, compact: Boolean) {
-    val tokens = rememberRollingValue(usage.totalTokens.toDouble()).roundToLong()
-    val cost = rememberRollingValue(usage.costUsd)
+    // Digit roll changes only the glyphs that differ; Count up keeps the earlier counting total and cost.
+    val roll = LocalTokenNumberAnimation.current == TokenNumberAnimation.Roll
+    val tokens = if (roll) usage.totalTokens else rememberRollingValue(usage.totalTokens.toDouble()).roundToLong()
+    val cost = if (roll) usage.costUsd else rememberRollingValue(usage.costUsd)
     Column(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
         Text("TOTAL TOKENS", color = Muted, style = MaterialTheme.typography.labelMedium)
-        Text(
-            if (compact) formatCompactTokens(tokens) else formatTokens(tokens),
+        RollingTokenText(
+            value = tokens,
+            text = if (compact) formatCompactTokens(tokens) else formatTokens(tokens),
+            style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Medium),
             color = Ink,
-            style = MaterialTheme.typography.displayMedium,
-            fontWeight = FontWeight.Medium,
             modifier = Modifier.padding(top = 5.dp),
-            maxLines = 1,
+            // The gaps above and below double as the room a rolling glyph fades into.
+            fadeTop = 5.dp,
+            fadeBottom = 4.dp,
             overflow = TextOverflow.Ellipsis,
         )
         Text(formatUsageCost(cost, usage.unpricedTokens), color = Muted, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp))

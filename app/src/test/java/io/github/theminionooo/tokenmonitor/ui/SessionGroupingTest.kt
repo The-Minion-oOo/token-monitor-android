@@ -110,6 +110,19 @@ class SessionGroupingTest {
         assertEquals(rows, searchSessionRows(rows, false, { false }, ""))
     }
 
+    @Test fun `independent sessions keep their order and stay ungrouped`() {
+        val sessions = listOf(session("a", tokens = 3), session("b", client = "claude", tokens = 9), session("c", tokens = 1))
+        val rows = groupSessions(sessions)
+        assertEquals(listOf("codex:a", "claude:b", "codex:c"), rows.map { it.key })
+        assertTrue(rows.none { it.grouped || it.subagent })
+        assertEquals(sessions, rows.map { it.display })
+    }
+
+    @Test fun `a link to a missing parent still marks the subagent`() {
+        val rows = groupSessions(listOf(session("solo"), session("child", parent = "gone")))
+        assertEquals(listOf(false, true), rows.map { it.subagent })
+    }
+
     @Test fun `a repeated accounting key keeps its own row`() {
         val one = session("dup", tokens = 1)
         val two = session("dup", tokens = 2, minutesAgo = 4)

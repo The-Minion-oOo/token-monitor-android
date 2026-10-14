@@ -145,7 +145,7 @@ internal fun ProjectUsageRow(project: ProjectUsage, ratio: Float) {
             }
             Spacer(Modifier.width(10.dp))
             Column(horizontalAlignment = Alignment.End) {
-                Text(formatTokens(project.totalTokens), color = Ink, style = MaterialTheme.typography.bodySmall)
+                RowTokenValue(project.totalTokens)
                 Text(formatUsageCost(project.costUsd, project.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
             }
         }
@@ -219,7 +219,7 @@ internal fun SessionGroupUsageRow(row: SessionRow, ratio: Float) {
             }
             Spacer(Modifier.width(10.dp))
             Column(horizontalAlignment = Alignment.End) {
-                Text(formatTokens(row.totalTokens), color = Ink, style = MaterialTheme.typography.bodySmall)
+                RowTokenValue(row.totalTokens)
                 Text(formatUsageCost(row.costUsd, row.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
             }
             Spacer(Modifier.width(4.dp))
@@ -317,7 +317,7 @@ internal fun SessionUsageRow(session: SessionUsage, title: String, meta: String,
             }
             Spacer(Modifier.width(10.dp))
             Column(horizontalAlignment = Alignment.End) {
-                Text(formatTokens(session.totalTokens), color = Ink, style = MaterialTheme.typography.bodySmall)
+                RowTokenValue(session.totalTokens)
                 Text(formatUsageCost(session.costUsd, session.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
             }
             Spacer(Modifier.width(4.dp))

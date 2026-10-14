@@ -25,6 +25,18 @@ class UsageFormattingTest {
         assertEquals("1.0B", formatCompactTokens(999_999_999))
     }
 
+    @Test fun balancesPrintLikeTheDesktopInTheirOwnCurrency() {
+        assertEquals("¥12.50", formatWindowAmount(12.5, "CNY"))
+        assertEquals("¥1,234,567.89", formatWindowAmount(1_234_567.89, "cny"))
+        assertEquals("$0.00", formatWindowAmount(0.0, "USD"))
+        assertEquals("680.00", formatWindowAmount(680.0, "CREDITS"))
+        assertEquals("EUR 3.20", formatWindowAmount(3.2, "EUR"))
+        assertEquals("¥-3.20", formatWindowAmount(-3.2, "CNY"))
+        // Without a currency the amount is a plain count.
+        assertEquals("1,500", formatWindowAmount(1_500.0, ""))
+        assertEquals("CatPaw", "catpaw".displayName())
+    }
+
     @Test fun billionsHaveNoLargerUnitToCarryInto() {
         assertEquals("12.3B", formatCompactTokens(12_345_678_901))
         assertEquals("1000.0B", formatCompactTokens(999_999_999_999))

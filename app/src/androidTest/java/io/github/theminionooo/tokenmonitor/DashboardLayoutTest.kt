@@ -82,4 +82,47 @@ class DashboardLayoutTest {
         compose.onNodeWithText("CLOSE").performClick()
         compose.onNodeWithContentDescription("Find a tool or model").assertIsDisplayed()
     }
+
+    @Test fun digitRollKeepsTheSettledLayoutAndReading() {
+        val palette = Palette.from(InterfaceTheme.Default)
+        var usage by mutableStateOf(UsagePeriod(totalTokens = 1_234_567, costUsd = 1.0))
+        var row by mutableLongStateOf(98_765L)
+        compose.mainClock.autoAdvance = false
+        compose.setContent {
+            MaterialTheme(colorScheme = tokenMonitorColors(palette), typography = tokenMonitorTypography(1)) {
+                CompositionLocalProvider(LocalPalette provides palette, LocalInteractionMotion provides true) {
+                    Column(Modifier.width(393.dp).background(palette.shell).padding(14.dp)) {
+                        TotalPanel(usage, compact = false)
+                        Row {
+                            Spacer(Modifier.weight(1f))
+                            Column(horizontalAlignment = androidx.compose.ui.Alignment.End) {
+                                RowTokenValue(row)
+                                androidx.compose.material3.Text("cost line")
+                            }
+                        }
+                        androidx.compose.material3.Text("below")
+                    }
+                }
+            }
+        }
+        compose.mainClock.advanceTimeBy(1_000)
+        fun bounds(text: String) = compose.onNodeWithText(text).fetchSemanticsNode().boundsInRoot
+        val reading = compose.onNodeWithText("1,234,567").fetchSemanticsNode().id
+        val below = bounds("below")
+        val cost = bounds("cost line")
+        compose.runOnIdle {
+            usage = usage.copy(totalTokens = 1_299_999)
+            row = 101_234L
+        }
+        // Mid-roll the reading keeps one accessibility node with the new value, and nothing around it moves.
+        compose.mainClock.advanceTimeBy(150)
+        org.junit.Assert.assertEquals(reading, compose.onNodeWithText("1,299,999").fetchSemanticsNode().id)
+        compose.onNodeWithText("101,234").assertExists()
+        org.junit.Assert.assertEquals(below, bounds("below"))
+        org.junit.Assert.assertEquals(cost, bounds("cost line"))
+        compose.mainClock.advanceTimeBy(1_000)
+        org.junit.Assert.assertEquals(reading, compose.onNodeWithText("1,299,999").fetchSemanticsNode().id)
+        org.junit.Assert.assertEquals(below, bounds("below"))
+        org.junit.Assert.assertEquals(cost, bounds("cost line"))
+    }
 }

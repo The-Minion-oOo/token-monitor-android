@@ -3,7 +3,7 @@
 ## Requirements
 
 - Android 8.0 or newer.
-- Token Monitor desktop with Hub hosting enabled and a shared secret. Android v0.69.0 r1 is verified against desktop v0.69.0.
+- Token Monitor desktop with Hub hosting enabled and a shared secret. The published Android v0.69.0 r1 is verified against desktop v0.69.0; the v0.70.0 r1 candidate follows desktop v0.70.0 and isn't published yet.
 - A private route to the desktop: Tailscale is recommended; home Wi-Fi is optional.
 
 ## Install

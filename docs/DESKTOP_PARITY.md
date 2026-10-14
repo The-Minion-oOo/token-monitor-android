@@ -1,6 +1,6 @@
-# Desktop parity for v0.69.0
+# Desktop parity for v0.70.0
 
-The Android adapter targets desktop Token Monitor v0.69.0 using
+The Android adapter targets desktop Token Monitor v0.70.0 using
 versioned fixtures and responses from the pinned released Hub. It mirrors
 the desktop information that the Hub can safely provide while keeping the phone
 read-only and lightweight.
@@ -11,7 +11,7 @@ read-only and lightweight.
 | --- | --- |
 | Home totals and period selection | Day, month, week, 7 days, 30 days, and total, with a configurable default |
 | Home Sessions | Five newest sessions plus all running sessions, raw reported titles, recent context, and a link to Sessions; independent of the totals period |
-| Limits | Provider windows, remaining or used bars, reset time, plan/source metadata, separate MiMo products, native-currency wallet/spend values, and hidden-by-default account email |
+| Limits | Provider windows, remaining or used bars, reset time, plan/source metadata, separate MiMo products, native-currency wallet/spend values, MiniMax pay-as-you-go balances, and hidden-by-default account email |
 | Tools | Token and cost totals, proportional bars, cache hit, cache miss, output, and unclassified details |
 | Status | Provider status, message, update time, and provider status-page link |
 | Devices | Device totals, clients, models, collection cadence, last upload, and retained history |
@@ -20,7 +20,7 @@ read-only and lightweight.
 | Sessions | Reported conversation title, project, tool, model, start/update time, session ID, tokens, cost, Running/Waiting for you/Finished/Idle activity, and recent context-window use; Codex subagents and continuations, T3 Code continuations, Grok Bot records and background reviews are grouped under one row with combined usage; untitled sessions retain the client/model label |
 | Usage dashboard | Overview cards, activity heatmap, and model/tool summaries |
 | Trends | By tool or model, Bars or K-line, and 7/30/90-day, one-year, or all-history ranges |
-| Display settings | View and Home-module visibility/order, ranking metric, limit-bar metric/source/email visibility, compact total, tool colors, default range, reduce motion, and a three-step text size in place of the desktop Zoom slider |
+| Display settings | View and Home-module visibility/order, ranking metric, limit-bar metric/source/email visibility, compact total, tool colors, default range, reduce motion, the Digit roll or Count up token number animation, and a three-step text size in place of the desktop Zoom slider |
 | Appearance | Interface theme with the desktop's Default, Obsidian, and Porcelain presets, desktop `TM1-…` and `TM2-…` theme codes pasted as-is, an independent TM2 chart color, the Live indicator and Tool icons toggles, and a phone-only **Follow phone light and dark** switch: Porcelain by day, the chosen dark preset at night. Glass and Depth are desktop window effects with no Android equivalent |
 
 All expandable rows, selectors, values, bars, and screen changes use short
@@ -132,6 +132,27 @@ fresh provider observation wins over the transcript, and Codex question waiting
 is bounded by the transcript's ten-minute window. The Edge Dock, the desktop's
 local session-detail views, activity collection and the Electron-only bot-id
 projection stay on desktop. Older Hubs keep their previous flat session list.
+
+v0.70.0 adds CatPaw as an opt-in tool, and Android shows it by its desktop name
+in tools, sessions and models. CatPaw models are never priced, so its tokens
+count as unpriced, with no invented cost. A MiniMax key in pay-as-you-go mode
+reports a balance instead of Token Plan quota windows: yuan for the China
+region, dollars for international. Limits shows it with a symbol and two
+decimals and a bar that is full while money remains and empty at zero, as the
+desktop does, and keeps a zero or negative balance as reported. The MiniMax
+billing type appears as the plan. Every balance and spend figure now shows a
+`¥` or `$` symbol and two decimals like the desktop; Android keeps thousands
+separators. Token totals use the desktop's token number animation.
+**Digit roll** is the default and **Count up** is the previous behavior; both
+are under **Settings → Appearance**, and Reduce motion still turns animation
+off. The roll keeps the desktop's timing, scale and fade but not its brief
+blur: blurring every glyph crashed the Android emulator's renderer during
+testing, and the roll reads the same without it. Large
+session lists skip grouping work when no session links to another, as the
+desktop's faster session lists do. CatPaw collection, MiniMax billing-mode and
+region selection, Codex compressed-log reading, StepFun sign-in renewal,
+Hermes reasoning accounting and Edge Dock changes stay on desktop. Android
+shows the numbers the Hub reports.
 
 The Android app does not replace these with remote commands. It reads only the
 documented Hub endpoints listed in [`SECURITY.md`](SECURITY.md).

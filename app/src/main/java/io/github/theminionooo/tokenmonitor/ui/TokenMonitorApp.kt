@@ -96,6 +96,7 @@ import io.github.theminionooo.tokenmonitor.data.storage.LimitBarMetric
 import io.github.theminionooo.tokenmonitor.data.storage.RankingMetric
 import io.github.theminionooo.tokenmonitor.data.storage.ReduceMotionMode
 import io.github.theminionooo.tokenmonitor.data.storage.TextScale
+import io.github.theminionooo.tokenmonitor.data.storage.TokenNumberAnimation
 import java.util.Locale
 import kotlin.math.max
 import kotlinx.coroutines.delay
@@ -149,6 +150,7 @@ internal fun TokenMonitorApp(viewModel: DashboardViewModel) {
             LocalColorfulToolMarks provides displayOptions.colorfulToolMarks,
             LocalToolIcons provides displayOptions.showToolIcons,
             LocalInteractionMotion provides interactionMotionEnabled(displayOptions.reduceMotion, systemAnimationsEnabled),
+            LocalTokenNumberAnimation provides displayOptions.tokenNumberAnimation,
             LocalNow provides rememberNow(),
             LocalSessionTitles provides displayOptions.showSessionTitles,
         ) {
@@ -203,6 +205,7 @@ internal fun TokenMonitorApp(viewModel: DashboardViewModel) {
                     onFindHomeHub = { withLocalNetworkAccess(true, viewModel::findHomeHub) },
                     onRepairHomeAddress = { address -> withLocalNetworkAccess(true) { viewModel.repairHomeAddress(address) } },
                     onAllowLocalNetwork = { withLocalNetworkAccess(true, viewModel::onResume) },
+                    onTokenNumberAnimationChange = viewModel::setTokenNumberAnimation,
                 )
             }
         }
@@ -244,6 +247,7 @@ internal fun DashboardScaffold(
     onShowSessionTitlesChange: (Boolean) -> Unit = {},
     onRepairHomeAddress: (String) -> Unit = {},
     onAllowLocalNetwork: () -> Unit = {},
+    onTokenNumberAnimationChange: (TokenNumberAnimation) -> Unit = {},
 ) {
     var periodName by rememberSaveable { mutableStateOf(displayOptions.defaultPeriod) }
     // The default steers the period only when the setting changes; a rotation or theme switch must keep the period picked in the header.
@@ -330,26 +334,30 @@ internal fun DashboardScaffold(
                 onFindHomeHub = onFindHomeHub,
                 onRepairHomeAddress = onRepairHomeAddress,
                 onAllowLocalNetwork = onAllowLocalNetwork,
+                onTokenNumberAnimationChange = onTokenNumberAnimationChange,
             )
         } else {
-            DashboardContent(
-                modifier = Modifier.padding(padding),
-                state = state,
-                destination = visibleDestination,
-                period = period,
-                onChoose = chooseDestination,
-                onRefresh = onRefresh,
-                homeReturnVisible = homeReturnVisible,
-                modelFilter = modelFilter.takeIf { visibleDestination == DashboardDestination.Models },
-                onClearModelFilter = { modelFilter = null },
-                onOpenToolModels = { tool ->
-                    chooseDestination(DashboardDestination.Models)
-                    modelFilter = tool
-                },
-                serviceStatus = serviceStatus,
-                displayOptions = displayOptions,
-                onOpenServicePage = onOpenServicePage,
-            )
+            // A period switch replaces every reading at once, so rolling totals sweep instead of ticking.
+            CompositionLocalProvider(LocalTokenRollPeriod provides period) {
+                DashboardContent(
+                    modifier = Modifier.padding(padding),
+                    state = state,
+                    destination = visibleDestination,
+                    period = period,
+                    onChoose = chooseDestination,
+                    onRefresh = onRefresh,
+                    homeReturnVisible = homeReturnVisible,
+                    modelFilter = modelFilter.takeIf { visibleDestination == DashboardDestination.Models },
+                    onClearModelFilter = { modelFilter = null },
+                    onOpenToolModels = { tool ->
+                        chooseDestination(DashboardDestination.Models)
+                        modelFilter = tool
+                    },
+                    serviceStatus = serviceStatus,
+                    displayOptions = displayOptions,
+                    onOpenServicePage = onOpenServicePage,
+                )
+            }
         }
         }
     }

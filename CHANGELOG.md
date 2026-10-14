@@ -3,6 +3,26 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
+## Next release — v0.70.0 r1
+
+- Follow desktop v0.70.0 with pinned-source contract checks and synthetic
+  endpoint/stream fixtures, retaining earlier compatibility tests.
+- Roll token totals the way the desktop now does: each changed digit rolls in
+  while unchanged leading digits stay put, on the Home total and in breakdown
+  rows. Settings → Appearance has a new Token number animation choice, Digit
+  roll (the default) or Count up (the previous behavior). Reduce motion still
+  turns animation off. The roll keeps the desktop's timing, scale and fade but
+  not its brief blur.
+- Show CatPaw sessions and usage under the desktop's CatPaw name.
+- Show a MiniMax pay-as-you-go key's CNY or USD balance in Limits with the
+  desktop's full balance bar, and name the MiniMax plan (Token Plan or
+  Pay-as-you-go).
+- Print balances and spend with a `¥` or `$` symbol and two decimals, as the
+  desktop does, so a MiMo wallet now reads `¥42.00` instead of `CNY 42`.
+- Skip session grouping work on large session lists when no session links to
+  another, matching the desktop's faster session lists.
+- Keep read-only access, widgets and the release signing identity unchanged.
+
 ## v0.69.0 r1 — 2026-10-12
 
 - Follow desktop v0.69.0 with pinned-source contract checks and synthetic
