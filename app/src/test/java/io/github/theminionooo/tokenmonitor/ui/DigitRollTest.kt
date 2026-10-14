@@ -121,6 +121,19 @@ class DigitRollTest {
         assertEquals(leaveFull.glyphAt(300.0, travel, blurRoom).y / 2, leaveCaught.glyphAt(300.0, travel, blurRoom).y, 1e-4f)
     }
 
+    @Test fun `the edge fade shows a resting glyph fully and hides one that has rolled past the room`() {
+        // A 40 px line box with ink from 10 to 32, and 6 px of fade room above and 4 below.
+        val coverage = { y: Float, scale: Float -> rollMaskCoverage(6f, 4f, 40f, 10f, 32f, y, scale) }
+        assertEquals(1f, coverage(0f, 1f), 1e-6f)
+        assertEquals(1f, coverage(-10f, 1f), 1e-6f)
+        assertEquals(0f, coverage(-40f, 1f), 1e-6f)
+        assertEquals(0f, coverage(40f, 1f), 1e-6f)
+        val partly = coverage(-14f, 1f)
+        assertTrue(partly > 0f && partly < 1f)
+        // Shrinking about the centre pulls the ink back inside the line box.
+        assertTrue(coverage(-14f, 0.4f) > partly)
+    }
+
     @Test fun `a period retarget keeps only the strongest two glyphs per place`() {
         val crowded = listOf(1f, 0.6f, 0.2f, 0.1f).map { RollGlyph("digit:0", "1", true, 0f, 10f, alpha = it) }
         val layers = plan("1", "2", previous = crowded, period = true)

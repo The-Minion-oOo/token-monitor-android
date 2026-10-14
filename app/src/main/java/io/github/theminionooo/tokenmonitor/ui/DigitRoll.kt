@@ -20,12 +20,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.AlignmentLine
+import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
@@ -454,10 +454,42 @@ internal fun RollingTokenText(
             // Settled readings are ordinary text, so nothing about the steady layout changes.
             Text(shown, style = textStyle, maxLines = 1, softWrap = false, overflow = overflow)
         } else {
-            RollingGlyphs(layers, state, alignEnd, textStyle, fontPx, travel, blurRoom, fadeTop, fadeBottom)
+            RollingGlyphs(layers, state, alignEnd, textStyle, fontPx, ink * fontPx, travel, blurRoom, fadeTop, fadeBottom)
         }
     }
 }
+
+
+/**
+ * How much of a glyph's ink the desktop's fade mask would show: the mask is opaque over the line box and
+ * fades to nothing across [roomTop] above and [roomBottom] below it. Positions are in the extended box, whose
+ * line box starts at [roomTop]; the ink spans [inkTop]..[inkBottom] of a [lineHeight] glyph box that is moved
+ * by [y] and scaled by [scale] about its centre.
+ */
+internal fun rollMaskCoverage(
+    roomTop: Float,
+    roomBottom: Float,
+    lineHeight: Float,
+    inkTop: Float,
+    inkBottom: Float,
+    y: Float,
+    scale: Float,
+): Float {
+    val center = lineHeight / 2f
+    val top = roomTop + y + center + (inkTop - center) * scale
+    val bottom = roomTop + y + center + (inkBottom - center) * scale
+    fun mask(at: Float): Float = when {
+        at < roomTop -> if (roomTop > 0f) (at / roomTop).coerceIn(0f, 1f) else 0f
+        at > roomTop + lineHeight -> if (roomBottom > 0f) ((roomTop + lineHeight + roomBottom - at) / roomBottom).coerceIn(0f, 1f) else 0f
+        else -> 1f
+    }
+    if (bottom <= top) return mask(top)
+    var sum = 0f
+    for (sample in 0 until MASK_SAMPLES) sum += mask(top + (bottom - top) * (sample + 0.5f) / MASK_SAMPLES)
+    return sum / MASK_SAMPLES
+}
+
+private const val MASK_SAMPLES = 8
 
 @Composable
 private fun RollingGlyphs(
@@ -466,6 +498,7 @@ private fun RollingGlyphs(
     alignEnd: Boolean,
     textStyle: TextStyle,
     fontPx: Float,
+    inkHeight: Float,
     travel: Float,
     blurRoom: Float,
     fadeTop: Dp,
@@ -477,11 +510,13 @@ private fun RollingGlyphs(
     val roomBottom = with(density) { fadeBottom.toPx() }.let(::ceil).toInt()
     val anchorWidth = state.anchorWidth
     val anchor = if (alignEnd) anchorWidth.toFloat() else 0f
-    // Sideways the mask stays opaque: a little room plus whatever the outgoing reading overhangs.
+    // Sideways nothing fades: a little room plus whatever the outgoing reading overhangs.
     val overhangLeft = max(0f, -(layers.minOf { min(it.fromX, it.toX) } + anchor))
     val overhangRight = max(0f, layers.maxOf { max(it.fromX, it.toX) + it.width } + anchor - anchorWidth)
     val roomLeft = ceil(0.25f * fontPx + overhangLeft).toInt()
     val roomRight = ceil(0.25f * fontPx + overhangRight).toInt()
+    // The line box and baseline from the latest measure; read while drawing, so they never trigger a relayout.
+    val lineBox = remember { IntArray(2) }
     Layout(
         content = {
             layers.forEach { layer ->
@@ -490,46 +525,39 @@ private fun RollingGlyphs(
                     style = textStyle,
                     maxLines = 1,
                     softWrap = false,
-                    // Position, scale and fade follow the desktop envelope. Its blur is not drawn: a blur
-                    // effect on every glyph crashed the Android emulator's renderer in testing.
+                    // Position, scale and fade follow the desktop envelope. Nothing renders off screen: the
+                    // desktop's per-glyph blur and its fade mask become an alpha on each glyph, because
+                    // off-screen layers for them crashed the Android emulator's renderer in testing.
                     modifier = Modifier.graphicsLayer {
                         val glyph = layer.glyphAt(state.elapsedMs(), travel, blurRoom)
                         translationX = roomLeft + anchor + glyph.x
                         translationY = roomTop + glyph.y
                         scaleX = glyph.scale
                         scaleY = glyph.scale
-                        alpha = glyph.alpha
+                        val baseline = lineBox[1].toFloat()
+                        alpha = glyph.alpha * rollMaskCoverage(
+                            roomTop.toFloat(), roomBottom.toFloat(), lineBox[0].toFloat(),
+                            baseline - inkHeight, baseline, glyph.y, glyph.scale,
+                        )
+                        compositingStrategy = CompositingStrategy.ModulateAlpha
                     },
                 )
             }
         },
         modifier = Modifier
             .layout { measurable, constraints ->
-                // Padding cancelled by the reported size: the mask gets room to fade into without moving layout.
+                // Padding cancelled by the reported size: glyphs get room to roll into without moving layout.
                 val placeable = measurable.measure(Constraints())
                 val width = (placeable.width - roomLeft - roomRight).coerceIn(constraints.minWidth, constraints.maxWidth)
                 val height = (placeable.height - roomTop - roomBottom).coerceIn(constraints.minHeight, constraints.maxHeight)
                 layout(width, height) { placeable.place(-roomLeft, -roomTop) }
             }
-            .graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }
-            .drawWithContent {
-                drawContent()
-                val height = size.height
-                if (height > 0f) {
-                    drawRect(
-                        Brush.verticalGradient(
-                            0f to Color.Transparent,
-                            (roomTop / height) to Color.Black,
-                            ((height - roomBottom) / height) to Color.Black,
-                            1f to Color.Transparent,
-                        ),
-                        blendMode = BlendMode.DstIn,
-                    )
-                }
-            },
+            .clipToBounds(),
     ) { measurables, _ ->
         val placeables = measurables.map { it.measure(Constraints()) }
         val lineHeight = placeables.maxOfOrNull { it.height } ?: 0
+        lineBox[0] = lineHeight
+        lineBox[1] = placeables.firstOrNull()?.get(FirstBaseline)?.takeIf { it != AlignmentLine.Unspecified } ?: lineHeight
         layout(anchorWidth + roomLeft + roomRight, lineHeight + roomTop + roomBottom) {
             placeables.forEach { it.place(0, 0) }
         }
