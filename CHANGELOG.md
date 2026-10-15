@@ -3,6 +3,14 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
+## Next release — v0.71.0 r1
+
+- I updated the desktop baseline to v0.71.0 and added fixtures and released-Hub
+  checks for Goose, Notion AI allowances and separate WorkBuddy accounts.
+- I added the Goose and Notion marks and desktop labels. Notion's Rolling and
+  Monthly windows use the existing quota display without merging workspaces.
+- I kept digit roll, session grouping, route rules and widget layouts unchanged.
+
 ## v0.70.0 r1 — 2026-10-14
 
 - Follow desktop v0.70.0 with pinned-source contract checks and synthetic

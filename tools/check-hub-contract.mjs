@@ -209,6 +209,50 @@ async function isolatedContract(source, output, upstream) {
         assert.equal(catpaw.clientUnpricedTokens.catpaw, 1200);
         responses["contract.json"] = { upstream, generatedAt: new Date().toISOString(), synthetic: true,
             expectedTodayTokens: 1234, expectedUpdatedTokens: 1235 };
+        // Notion's collector exports only a hashed user/workspace identity and normalized quotas.
+        const { fetchNotionLimits } = require("./src/shared/providers/notion/limits.js");
+        const userId = "11111111-1111-4111-8111-111111111111";
+        const workspaceIds = ["22222222-2222-4222-8222-222222222222", "33333333-3333-4333-8333-333333333333"];
+        const notionAccounts = await Promise.all(workspaceIds.map((workspaceId, index) => fetchNotionLimits(
+            { notionCookie: "NEVER_EXPORT_NOTION_COOKIE", notionWorkspaceId: workspaceId },
+            { env: {}, now: () => Date.parse(now), fetch: async url => ({ status: 200, json: async () =>
+                url.endsWith("getSpaces") ? { [userId]: { notion_user: { [userId]: { value: { id: userId } } },
+                    space: { [workspaceId]: { value: { id: workspaceId, name: "NEVER_EXPORT_WORKSPACE_NAME",
+                        subscription_tier: index ? "enterprise" : "business" } } } } } :
+                    { status: "within_limit", resetsInSeconds: 7200,
+                        window: { creditType: "basic_ai_credits", scope: "per_user", window: "6h", used: 25, limit: 100 },
+                        billingPeriodWindow: { creditType: "basic_ai_credits", scope: "per_user", cadence: "billing_period",
+                            used: index ? 10 : 40, limit: 100, periodEndMs: Date.parse(now) + 86400000 } } }) } )));
+        const goosePeriod = { totalTokens: 1500, costUsd: 0.05, clients: { goose: 1500 }, clientCosts: { goose: 0.05 },
+            models: { "claude-sonnet-4-5": 1500 }, modelCosts: { "claude-sonnet-4-5": 0.05 },
+            clientModels: { goose: { "claude-sonnet-4-5": 1500 } },
+            sessions: { "goose:sample-goose": { sessionId: "sample-goose", client: "goose", totalTokens: 1500,
+                costUsd: 0.05, models: { "claude-sonnet-4-5": 1500 }, lastUsedAt: now } } };
+        const workbuddyAccounts = [
+            { provider: "workbuddy", accountKey: `sha256:${"a".repeat(64)}`, accountName: "Sample China account",
+                source: "oauth", realm: "cn", status: "ok", updatedAt: now,
+                windows: [{ kind: "billing", label: "Credits", metric: "credits", currency: "CREDITS", used: 300,
+                    remaining: 700, limit: 1000, usedPercent: 30, remainingPercent: 70 }] },
+            { provider: "workbuddy", accountKey: `sha256:${"b".repeat(64)}`, accountName: "Sample international account",
+                source: "oauth", realm: "intl", status: "unauthorized", updatedAt: now, windows: [] },
+        ];
+        const allowanceHub = createHub({ port: 0, host: "127.0.0.1", secret, dataFile: join(source, "synthetic-allowances.json") });
+        allowanceHub.ingest({ ...device, trackedClients: ["goose"], periods: { today: goosePeriod },
+            limits: { updatedAt: now, providers: [...notionAccounts, ...workbuddyAccounts] } });
+        responses["allowances.json"] = allowanceHub.getStats();
+        const allowances = responses["allowances.json"].limits.providers;
+        const notion = allowances.filter(entry => entry.provider === "notion");
+        assert.equal(notion.length, 2, "Distinct selected Notion workspaces must remain separate");
+        assert.notEqual(notion[0].accountKey, notion[1].accountKey);
+        for (const account of notion) {
+            assert.equal(account.status, "ok");
+            assert.deepEqual(account.windows.map(window => [window.kind, window.label]), [["session", "Rolling"], ["billing", "Monthly"]]);
+            assert.equal(account.windows[0].windowMinutes, 360);
+        }
+        assert.deepEqual(allowances.filter(entry => entry.provider === "workbuddy").map(entry => entry.status).sort(), ["ok", "unauthorized"]);
+        assert.equal(responses["allowances.json"].periods.today.clients.goose, 1500);
+        const serializedAllowances = JSON.stringify(responses["allowances.json"]);
+        for (const sentinel of [userId, ...workspaceIds, "NEVER_EXPORT"]) assert.ok(!serializedAllowances.includes(sentinel));
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) await writeFile(join(output, name), `${JSON.stringify(value, null, 2)}\n`);
         console.log(`Actual ${upstream.tag} Hub passed authenticated reads, snapshot, freshness and changed-stat checks. Synthetic responses: ${output}`);

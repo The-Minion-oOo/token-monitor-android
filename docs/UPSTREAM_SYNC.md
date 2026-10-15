@@ -2,10 +2,10 @@
 
 ## Version rule
 
-Android v0.70.0 r1 targets desktop tag `v0.70.0`, peeled commit
-`ac4eeb2c4aea239dd94b67f074c73f69aafc46f8`, in Gradle and `upstream.json`.
-It names the new CatPaw tool, shows a MiniMax pay-as-you-go balance in Limits
-and follows the desktop's token number animation. Session grouping and
+Android v0.71.0 r1 targets desktop tag `v0.71.0`, peeled commit
+`a514e2063563e318ef73c2a17fad68057c4e300c`, in Gradle and `upstream.json`.
+It names Goose and Notion AI, shows Notion's rolling/monthly allowances and
+keeps WorkBuddy accounts separate. The token number animation, session grouping and
 waiting state, explicit unpriced-token counts, Dots labels, TM2 colors,
 separate MiMo product rows, title-consent checks and Wi-Fi recovery are
 retained. Collection, MiniMax billing-mode selection, activity watching,

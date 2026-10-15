@@ -1,0 +1,28 @@
+{
+  "daily": [
+    {
+      "date": "2026-10-14",
+      "tokens": 1500,
+      "cost": 0.05,
+      "perClient": {
+        "goose": {
+          "tokens": 1500,
+          "cost": 0.05
+        }
+      },
+      "perModel": {
+        "claude-sonnet-4-5": {
+          "tokens": 1500,
+          "cost": 0.05
+        }
+      }
+    }
+  ],
+  "monthly": [
+    {
+      "month": "2026-10",
+      "tokens": 1500,
+      "cost": 0.05
+    }
+  ]
+}

@@ -1,6 +1,6 @@
-# Desktop parity for v0.70.0
+# Desktop parity for v0.71.0
 
-The Android adapter targets desktop Token Monitor v0.70.0 using
+The Android adapter targets desktop Token Monitor v0.71.0 using
 versioned fixtures and responses from the pinned released Hub. It mirrors
 the desktop information that the Hub can safely provide while keeping the phone
 read-only and lightweight.
@@ -156,6 +156,13 @@ shows the numbers the Hub reports.
 
 The Android app does not replace these with remote commands. It reads only the
 documented Hub endpoints listed in [`SECURITY.md`](SECURITY.md).
+
+v0.71.0 adds Goose usage and Notion AI allowances. Android uses their desktop
+labels and marks, shows both Rolling and Monthly quotas, and keeps separate
+Notion workspaces and WorkBuddy accounts. The marks use theme colors rather
+than desktop's white fill so they remain readable in light themes.
+I leave WorkBuddy sign-in, account management and its optional combined quota
+on desktop. Pi/CodeBuddy transcript details are not shared with Android.
 
 ## Mobile additions
 

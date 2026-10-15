@@ -102,7 +102,7 @@ in a fixture or screenshot.
 JVM tests cover protocol parsing, private-address rules, endpoint failover,
 stream recovery, ordered cache writes, history aggregation, presentation rules,
 and preferences. Versioned Hub fixtures live under
-`app/src/test/resources/protocol/`. The v0.70.0 set covers all five read
+`app/src/test/resources/protocol/`. The v0.71.0 set covers all five read
 endpoints, a complete stream frame, and a freshness-only frame. The v0.69.0
 fixtures retain session relationships and activity, the v0.68.0
 fixtures retain unpriced counts and Dots provenance, and the v0.67.0
@@ -126,7 +126,7 @@ ingests similar shapes into the pinned Hub, asserts which fields it keeps, and
 confirms that question and activity text never reaches the response; the
 Android contract test then parses those responses.
 
-The v0.70.0 fixtures keep those sessions and add a synthetic CatPaw session with
+The retained v0.70.0 fixtures keep those sessions and add a synthetic CatPaw session with
 unpriced usage and a MiniMax pay-as-you-go balance in yuan. Parser tests read both
 on every surface, through the stream and freshness frames, and check zero,
 negative and missing balances, a Token Plan account, and that earlier fixtures
@@ -134,6 +134,13 @@ have neither. The harness generates the balance windows with the released
 MiniMax code and a stubbed response, so nothing leaves the process, and
 confirms that zero and negative balances and the CatPaw client survive the Hub
 and that no key reaches the response.
+
+The v0.71.0 fixtures add Goose usage, separate Notion Business/Enterprise
+allowances, rolling and monthly windows, and WorkBuddy accounts with different
+sign-in states. The released-source check runs Notion's normalizer with stubbed
+responses and checks that cookies, raw user/workspace IDs and workspace names
+do not enter Hub responses. The presentation check captures Goose and the new
+allowances using synthetic data.
 
 Instrumentation tests use the preview package to exercise navigation, dialogs,
 widgets, storage, and lifecycle behavior. Run them on an API 36 emulator before
@@ -254,7 +261,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 47 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 48 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.

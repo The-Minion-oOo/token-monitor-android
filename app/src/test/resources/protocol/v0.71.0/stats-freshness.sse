@@ -1,0 +1,2 @@
+event: freshness
+data: {"at":"2026-10-14T20:02:00.000Z","stats":{"updatedAt":"2026-10-14T20:02:00.000Z","devices":[{"deviceId":"synthetic-desktop","updatedAt":"2026-10-14T20:01:59.000Z","receivedAt":"2026-10-14T20:02:00.000Z","stale":false,"ageMs":1000}]}}

@@ -1,8 +1,8 @@
 {
   "repository": "Javis603/token-monitor",
-  "version": "0.70.0",
-  "tag": "v0.70.0",
-  "commit": "ac4eeb2c4aea239dd94b67f074c73f69aafc46f8",
-  "releasedAt": "2026-10-13T15:35:09Z",
-  "protocolFixture": "app/src/test/resources/protocol/v0.70.0"
+  "version": "0.71.0",
+  "tag": "v0.71.0",
+  "commit": "a514e2063563e318ef73c2a17fad68057c4e300c",
+  "releasedAt": "2026-10-14T19:19:24Z",
+  "protocolFixture": "app/src/test/resources/protocol/v0.71.0"
 }

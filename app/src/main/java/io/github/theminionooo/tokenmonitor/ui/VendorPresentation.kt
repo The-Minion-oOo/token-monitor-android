@@ -42,6 +42,7 @@ internal fun vendorOf(name: String): String? {
     if (key.isEmpty()) return null
     if (key == "cursor") return "cursor"
     if (key == "fx") return "fx"
+    if (key == "goose" || key == "notion") return key
     if (key == "mcode") return "minimax"
     if (key == "muse" || key == "muse code") return "meta"
     if (key == "openrouter" || key.startsWith("openrouter/")) return "openrouter"
@@ -99,6 +100,8 @@ internal fun upstreamToolAsset(name: String): Int? = when (vendorOf(name)) {
     "openrouter" -> R.drawable.upstream_logo_openrouter
     "zed" -> R.drawable.upstream_logo_zed
     "fx" -> R.drawable.upstream_logo_fx
+    "goose" -> R.drawable.upstream_logo_goose
+    "notion" -> R.drawable.upstream_logo_notion
     else -> null
 }
 

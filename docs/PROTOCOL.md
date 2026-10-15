@@ -4,7 +4,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.70.0**, released 2026-10-13.
+The verified baseline is upstream Token Monitor **v0.71.0**, released 2026-10-14.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -50,9 +50,9 @@ replaces the snapshot with the current read endpoints.
 
 ## Fixtures
 
-Synthetic v0.70.0 examples for all five read endpoints and the live stream live
-in `app/src/test/resources/protocol/v0.70.0/`; the retained v0.54.0, v0.55.0,
-v0.56.0, v0.60.0, v0.61.0, v0.62.0, v0.63.0, v0.63.1, v0.64.0, v0.65.0, v0.66.0, v0.67.0, v0.68.0 and v0.69.0 fixtures prove backward compatibility. They contain no user secrets,
+Synthetic v0.71.0 examples for all five read endpoints and the live stream live
+in `app/src/test/resources/protocol/v0.71.0/`; the retained v0.54.0, v0.55.0,
+v0.56.0, v0.60.0, v0.61.0, v0.62.0, v0.63.0, v0.63.1, v0.64.0, v0.65.0, v0.66.0, v0.67.0, v0.68.0, v0.69.0 and v0.70.0 fixtures prove backward compatibility. They contain no user secrets,
 machine paths, account identifiers, or real usage. Parser tests cover every
 read surface, the SSE envelope, omitted optional fields, and a future unknown
 field. The compatibility parser maps only the fields the dashboard needs and
@@ -320,3 +320,28 @@ StepFun sign-in renewal, the token number animation and the faster session lists
 are desktop-side. The synthetic v0.70.0 fixtures and the isolated released-Hub
 contract check cover the CatPaw client and the balance, including a zero and a
 negative amount, and confirm that no key crosses the Hub.
+
+## v0.71.0 Goose, Notion AI and WorkBuddy accounts
+
+The read routes, authentication, stream envelope and session grouping are
+unchanged. `goose` is a new client ID; Android keeps its reported usage, cost,
+models and sessions without collecting or re-dating them on the phone.
+
+`notion` is a Limits provider named **Notion AI**. Its included allowances use
+the existing quota fields: **Rolling** is a `session` window of 360 minutes;
+**Monthly** is a `billing` window. Both carry percentages, and a supplied
+`resetsAt` is a reset, not an expiry. `planLabel` identifies Business or
+Enterprise. The account key represents a verified user/workspace pair, so
+different workspaces remain separate. Cookies, raw user/workspace IDs and
+workspace names are not part of that reading.
+
+WorkBuddy's known accounts remain separate even when one is stale or signed
+out. Android shows their individual quotas and statuses. The optional combined
+quota, browser sign-in and account management are desktop features; the Hub
+does not send the combined display setting. I do not infer a combined quota
+or add a sign-in path on Android.
+
+The released-source check exercises Goose, normalized Notion allowances and
+multiple WorkBuddy accounts. The Android fixtures also cover a monthly-only
+allowance and a missing reset time. Pi/CodeBuddy transcript details, tray fixes
+and Dots executor detection stay on desktop. Android still reads no transcripts.

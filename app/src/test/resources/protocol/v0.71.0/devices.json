@@ -1,0 +1,148 @@
+{
+  "devices": [
+    {
+      "deviceId": "synthetic-desktop",
+      "hostname": "Sample desktop",
+      "platform": "linux",
+      "agentVersion": "0.71.0",
+      "updatedAt": "2026-10-14T20:00:00.000Z",
+      "receivedAt": "2026-10-14T20:00:00.000Z",
+      "trackedClients": [
+        "goose"
+      ],
+      "periods": {
+        "today": {
+          "totalTokens": 1500,
+          "costUsd": 0.05,
+          "clients": {
+            "goose": 1500
+          },
+          "clientCosts": {
+            "goose": 0.05
+          },
+          "models": {
+            "claude-sonnet-4-5": 1500
+          },
+          "modelCosts": {
+            "claude-sonnet-4-5": 0.05
+          },
+          "clientModels": {
+            "goose": {
+              "claude-sonnet-4-5": 1500
+            }
+          },
+          "sessions": {
+            "goose:sample-goose": {
+              "sessionId": "sample-goose",
+              "client": "goose",
+              "totalTokens": 1500,
+              "costUsd": 0.05,
+              "models": {
+                "claude-sonnet-4-5": 1500
+              },
+              "startedAt": "2026-10-14T20:00:00.000Z",
+              "lastUsedAt": "2026-10-14T20:00:00.000Z"
+            }
+          }
+        },
+        "month": {
+          "totalTokens": 1500,
+          "costUsd": 0.05,
+          "clients": {
+            "goose": 1500
+          },
+          "clientCosts": {
+            "goose": 0.05
+          },
+          "models": {
+            "claude-sonnet-4-5": 1500
+          },
+          "modelCosts": {
+            "claude-sonnet-4-5": 0.05
+          },
+          "clientModels": {
+            "goose": {
+              "claude-sonnet-4-5": 1500
+            }
+          },
+          "sessions": {
+            "goose:sample-goose": {
+              "sessionId": "sample-goose",
+              "client": "goose",
+              "totalTokens": 1500,
+              "costUsd": 0.05,
+              "models": {
+                "claude-sonnet-4-5": 1500
+              },
+              "startedAt": "2026-10-14T20:00:00.000Z",
+              "lastUsedAt": "2026-10-14T20:00:00.000Z"
+            }
+          }
+        },
+        "allTime": {
+          "totalTokens": 1500,
+          "costUsd": 0.05,
+          "clients": {
+            "goose": 1500
+          },
+          "clientCosts": {
+            "goose": 0.05
+          },
+          "models": {
+            "claude-sonnet-4-5": 1500
+          },
+          "modelCosts": {
+            "claude-sonnet-4-5": 0.05
+          },
+          "clientModels": {
+            "goose": {
+              "claude-sonnet-4-5": 1500
+            }
+          },
+          "sessions": {
+            "goose:sample-goose": {
+              "sessionId": "sample-goose",
+              "client": "goose",
+              "totalTokens": 1500,
+              "costUsd": 0.05,
+              "models": {
+                "claude-sonnet-4-5": 1500
+              },
+              "startedAt": "2026-10-14T20:00:00.000Z",
+              "lastUsedAt": "2026-10-14T20:00:00.000Z"
+            }
+          }
+        }
+      },
+      "historyAvailable": true,
+      "history": {
+        "daily": [
+          {
+            "date": "2026-10-14",
+            "tokens": 1500,
+            "cost": 0.05,
+            "perClient": {
+              "goose": {
+                "tokens": 1500,
+                "cost": 0.05
+              }
+            },
+            "perModel": {
+              "claude-sonnet-4-5": {
+                "tokens": 1500,
+                "cost": 0.05
+              }
+            }
+          }
+        ],
+        "monthly": [
+          {
+            "month": "2026-10",
+            "tokens": 1500,
+            "cost": 0.05
+          }
+        ]
+      }
+    }
+  ]
+}

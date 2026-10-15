@@ -65,6 +65,20 @@ class ReleasedHubContractTest {
         assertNull(related.getValue("sand-subagent-sample-1").liveActivity)
         assertEquals(mapOf("grok-bot-1" to 50L), related.getValue("sample-cursor-bot").modelTokens)
         assertEquals(mapOf("gpt-5" to 600L), parent.modelTokens)
+        val allowanceStats = HubProtocolParser.decodeStats(response("allowances"))
+        assertEquals(1500L, allowanceStats.periods.getValue("today").clients["goose"])
+        val notions = allowanceStats.limits.providers.filter { it.provider == "notion" }
+        assertEquals(2, notions.size)
+        assertTrue(notions.map { it.plan }.containsAll(listOf("Business", "Enterprise")))
+        assertEquals(2, notions.map { it.accountKey }.distinct().size)
+        notions.forEach { account ->
+            assertEquals(listOf("Rolling", "Monthly"), account.windows.map { it.label })
+            assertEquals(75.0, account.windows.first().remainingPercent!!, 0.0)
+            assertTrue(account.windows.all { it.resetsAt.isNotBlank() })
+        }
+        val workbuddy = allowanceStats.limits.providers.filter { it.provider == "workbuddy" }
+        assertEquals(2, workbuddy.size)
+        assertEquals(setOf("ok", "unauthorized"), workbuddy.map { it.status }.toSet())
         val catpaw = HubProtocolParser.decodeStats(response("balance")).periods.getValue("today")
         assertEquals(1200L, catpaw.clients["catpaw"])
         assertEquals(mapOf("auto" to 1200L), catpaw.clientModels["catpaw"])

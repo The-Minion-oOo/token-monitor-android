@@ -23,6 +23,37 @@ import java.time.LocalDate
 class PresentationInteractionTest {
     @get:Rule val compose = createComposeRule()
 
+    @Test fun gooseAndNotionKeepTheirLabelsAndSeparateAllowances() {
+        val instrumentation = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation()
+        val wire = instrumentation.context.assets.open("protocol/v0.71.0/stats.json").bufferedReader().use { it.readText() }
+        val snapshot = HubSnapshot(stats = io.github.theminionooo.tokenmonitor.data.protocol.HubProtocolParser.decodeStats(wire))
+        var destination by mutableStateOf(DashboardDestination.Tools)
+        val palette = Palette.from(InterfaceTheme.Default)
+        compose.setContent { MaterialTheme(colorScheme = tokenMonitorColors(palette), typography = tokenMonitorTypography(1)) {
+            CompositionLocalProvider(LocalPalette provides palette, LocalInteractionMotion provides false) {
+                DashboardContent(Modifier.fillMaxSize().background(palette.shell), HubRepositoryState(snapshot = snapshot), destination,
+                    DashboardPeriod.Today, {}, {}, false, ServiceStatusState(), DisplayOptions(), {})
+            }
+        } }
+        fun capture(name: String) {
+            val bitmap = compose.onRoot().captureToImage().asAndroidBitmap()
+            instrumentation.targetContext.openFileOutput(name, 0).use { bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it) }
+        }
+        compose.onNodeWithText("Goose").assertIsDisplayed()
+        capture("v071-goose.png")
+        compose.runOnIdle { destination = DashboardDestination.Limits }
+        compose.onAllNodesWithText("Notion AI").assertCountEquals(2)
+        compose.onNodeWithText("Business", substring = true).assertIsDisplayed()
+        compose.onNodeWithText("Rolling").assertIsDisplayed()
+        compose.onAllNodesWithText("Monthly").assertCountEquals(2)
+        compose.onNodeWithText("75% left").assertIsDisplayed()
+        compose.onNodeWithText("60% left").assertIsDisplayed()
+        compose.onNodeWithText("90% left").assertIsDisplayed()
+        capture("v071-notion.png")
+        compose.onNodeWithText("Sign in again").performScrollTo().assertIsDisplayed()
+        capture("v071-workbuddy.png")
+    }
+
     @Test fun unpricedCostsAndObservedSessionsRemainExplicit() {
         val instrumentation = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation()
         val wire = instrumentation.context.assets.open("protocol/v0.68.0/stats.json").bufferedReader().use { it.readText() }
