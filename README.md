@@ -153,7 +153,7 @@ Desktop v0.64's optional iCloud Drive sync does not replace the Hub connection f
 | Latest phone-verified build | signed `v0.66.0-r1` over v0.65.0 r1; pairing, home Wi-Fi reconnection and placed Pages widget preserved |
 | Remaining phone checks | v0.72.0 r1 in-place upgrade, Tailscale/Wi-Fi transitions, screen-off expiry and battery behavior |
 | Desktop baseline | Token Monitor `v0.72.0` |
-| Upstream commit | [`a514e20`](https://github.com/Javis603/token-monitor/commit/a514e2063563e318ef73c2a17fad68057c4e300c) |
+| Upstream commit | [`126e9a4`](https://github.com/Javis603/token-monitor/commit/126e9a43dcc51d3d7b2609231eac9974ba73bed7) |
 
 The visible version matches the desktop release the phone understands. Android-only
 builds bump the release revision and internal version code while the compatibility
