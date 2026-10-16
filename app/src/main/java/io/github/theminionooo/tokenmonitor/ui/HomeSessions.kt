@@ -69,7 +69,7 @@ internal fun HomeSessionsModule(snapshot: HubSnapshot, onChoose: (DashboardDesti
                         sessionContextForRow(session, now)?.let { context ->
                             Text("Context ${context.percentLeft}% left", color = Muted, style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(start = 16.dp))
                         }
-                        sessionMetricLabels(session, now).takeIf { it.isNotBlank() }?.let {
+                        sessionRowMetricLabels(row, now).takeIf { it.isNotBlank() }?.let {
                             Text(it, color = Muted, style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(start = 16.dp))
                         }
                     }

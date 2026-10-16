@@ -3,6 +3,16 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
+## Next release
+
+- I updated the desktop baseline to v0.72.0 and checked Cursor's included
+  weekly/monthly usage and optional prepaid balance against the released Hub.
+- I calculate grouped-session cache hit and output speed from summed counters,
+  show the combined message count, and use the latest member's activity time.
+  Continuations keep their subagent label when their parent is outside the list.
+- I kept widget layouts, digit roll, network route rules and on-demand Android
+  updates unchanged. Desktop update and transcript changes stay on desktop.
+
 ## v0.71.0 r1 — 2026-10-14
 
 - I updated the desktop baseline to v0.71.0 and added fixtures and released-Hub

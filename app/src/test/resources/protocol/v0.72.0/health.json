@@ -1,0 +1,9 @@
+{
+  "ok": true,
+  "role": "hub",
+  "runtime": "node-hub",
+  "hubBuild": "v0.72.0",
+  "deviceCount": 1,
+  "secretRequired": true,
+  "now": "2026-10-16T12:04:00.000Z"
+}

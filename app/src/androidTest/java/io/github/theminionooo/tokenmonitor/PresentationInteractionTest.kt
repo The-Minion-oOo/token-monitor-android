@@ -23,6 +23,45 @@ import java.time.LocalDate
 class PresentationInteractionTest {
     @get:Rule val compose = createComposeRule()
 
+    @Test fun cursorIncludedUsageAndGroupedMetricsMatchDesktop() {
+        val instrumentation = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation()
+        val wire = instrumentation.context.assets.open("protocol/v0.72.0/stats.json").bufferedReader().use { it.readText() }
+        val snapshot = HubSnapshot(stats = io.github.theminionooo.tokenmonitor.data.protocol.HubProtocolParser.decodeStats(wire))
+        var destination by mutableStateOf(DashboardDestination.Limits)
+        var home by mutableStateOf(false)
+        val palette = Palette.from(InterfaceTheme.Default)
+        compose.setContent { MaterialTheme(colorScheme = tokenMonitorColors(palette), typography = tokenMonitorTypography(1)) {
+            CompositionLocalProvider(LocalPalette provides palette, LocalInteractionMotion provides false) {
+                if (home) Column(Modifier.fillMaxSize().background(palette.shell)) { HomeSessionsModule(snapshot) {} }
+                else DashboardContent(Modifier.fillMaxSize().background(palette.shell), HubRepositoryState(snapshot = snapshot), destination,
+                    DashboardPeriod.Today, {}, {}, false, ServiceStatusState(), DisplayOptions(), {})
+            }
+        } }
+        fun capture(name: String) {
+            val bitmap = compose.onRoot().captureToImage().asAndroidBitmap()
+            instrumentation.targetContext.openFileOutput(name, 0).use { bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it) }
+        }
+        compose.onAllNodesWithText("Included Usage").assertCountEquals(3)
+        compose.onNodeWithText("63% left").assertIsDisplayed()
+        compose.onNodeWithText("Prepaid Balance").assertIsDisplayed()
+        compose.onNodeWithText("$14.46").assertIsDisplayed()
+        compose.onNodeWithText("14% left").assertDoesNotExist()
+        capture("v072-cursor.png")
+        compose.runOnIdle { destination = DashboardDestination.Sessions }
+        compose.onNodeWithText("Sample conversation").assertIsDisplayed()
+        compose.onNodeWithText("10 messages", substring = true).assertIsDisplayed()
+        compose.onNodeWithText("Cache hit 33% · 40 tok/s").assertIsDisplayed()
+        capture("v072-sessions.png")
+        compose.onNodeWithText("Sample conversation").performClick()
+        compose.onNodeWithContentDescription("Collapse grouped sessions").assertExists()
+        compose.onAllNodesWithText("Main session", substring = true, useUnmergedTree = true).assertCountEquals(2)
+        compose.onNodeWithText("Subagent", substring = true, useUnmergedTree = true).assertIsDisplayed()
+        capture("v072-session-members.png")
+        compose.runOnIdle { home = true }
+        compose.onNodeWithText("Cache hit 33% · 40 tok/s").assertIsDisplayed()
+        capture("v072-home-sessions.png")
+    }
+
     @Test fun gooseAndNotionKeepTheirLabelsAndSeparateAllowances() {
         val instrumentation = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation()
         val wire = instrumentation.context.assets.open("protocol/v0.71.0/stats.json").bufferedReader().use { it.readText() }

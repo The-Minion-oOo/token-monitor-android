@@ -96,5 +96,30 @@ class ReleasedHubContractTest {
             assertNull(name, window.remainingPercent)
             assertEquals(name, "", window.resetsAt)
         }
+        fun cursor(name: String) = HubProtocolParser.decodeStats(response(name)).limits.providers.single { it.provider == "cursor" }
+        val weekly = cursor("cursor-weekly")
+        assertEquals("Premium", weekly.plan)
+        assertEquals(listOf("Included usage", "Prepaid balance"), weekly.windows.map { it.label })
+        assertEquals(63.0, weekly.windows.first().remainingPercent!!, 0.0)
+        assertEquals("2026-10-19T00:00:00.000Z", weekly.windows.first().resetsAt)
+        val prepaid = weekly.windows.last()
+        assertEquals(14.46, prepaid.remaining!!, 0.0)
+        assertEquals("USD", prepaid.currency)
+        assertEquals(false, prepaid.showMeter)
+        assertNull(prepaid.remainingPercent)
+        assertEquals("Ultra", cursor("cursor-monthly").plan)
+        assertEquals("billing", cursor("cursor-monthly").windows.single().kind)
+        assertEquals("2026-11-01T00:00:00.000Z", cursor("cursor-monthly").windows.single().resetsAt)
+        for (name in listOf("cursor-unknown-reset", "cursor-fallback")) {
+            assertEquals("weekly", cursor(name).windows.single().kind)
+            assertEquals("", cursor(name).windows.single().resetsAt)
+        }
+        assertEquals(listOf("Cursor Models", "Other Models", "Grok Bot", "On-demand spend"),
+            cursor("cursor-legacy").windows.map { it.label })
+        val metrics = HubProtocolParser.decodeStats(response("group-metrics")).periods.getValue("today")
+        val group = io.github.theminionooo.tokenmonitor.ui.groupSessions(metrics.sessions).single()
+        assertEquals(5400L, group.totalTokens)
+        assertEquals(10L, group.usageMetrics.messageCount)
+        assertEquals("Cache hit 33% · 40 tok/s", io.github.theminionooo.tokenmonitor.ui.sessionRowMetricLabels(group, 0))
     }
 }

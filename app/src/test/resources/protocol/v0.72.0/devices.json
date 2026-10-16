@@ -1,0 +1,277 @@
+{
+  "devices": [
+    {
+      "deviceId": "synthetic-desktop",
+      "hostname": "Sample desktop",
+      "platform": "linux",
+      "agentVersion": "0.72.0",
+      "updatedAt": "2026-10-16T12:04:00.000Z",
+      "receivedAt": "2026-10-16T12:04:00.000Z",
+      "trackedClients": [
+        "codex"
+      ],
+      "periods": {
+        "today": {
+          "totalTokens": 5400,
+          "costUsd": 4,
+          "clients": {
+            "codex": 5400
+          },
+          "clientCosts": {
+            "codex": 4
+          },
+          "models": {
+            "gpt-5": 5400
+          },
+          "modelCosts": {
+            "gpt-5": 4
+          },
+          "clientModels": {
+            "codex": {
+              "gpt-5": 5400
+            }
+          },
+          "sessions": {
+            "codex:main": {
+              "sessionId": "main",
+              "nativeSessionId": "synthetic-native",
+              "client": "codex",
+              "title": "Sample conversation",
+              "totalTokens": 1100,
+              "costUsd": 1.2,
+              "models": {
+                "gpt-5": 1100
+              },
+              "messageCount": 2,
+              "inputTokens": 100,
+              "cacheReadTokens": 900,
+              "outputTokens": 100,
+              "timedOutputTokens": 100,
+              "timedDurationMs": 1000,
+              "startedAt": "2026-10-16T12:00:00.000Z",
+              "lastUsedAt": "2026-10-16T12:00:00.000Z"
+            },
+            "codex:continuation": {
+              "sessionId": "continuation",
+              "nativeSessionId": "synthetic-native",
+              "client": "codex",
+              "title": "Sample conversation",
+              "totalTokens": 2300,
+              "costUsd": 2.3,
+              "models": {
+                "gpt-5": 2300
+              },
+              "messageCount": 3,
+              "inputTokens": 1900,
+              "cacheReadTokens": 100,
+              "outputTokens": 300,
+              "timedOutputTokens": 999,
+              "timedDurationMs": 9000,
+              "startedAt": "2026-10-16T12:00:00.000Z",
+              "lastUsedAt": "2026-10-16T12:01:00.000Z"
+            },
+            "codex:child": {
+              "sessionId": "child",
+              "parentSessionId": "main",
+              "client": "codex",
+              "totalTokens": 2000,
+              "costUsd": 0.5,
+              "models": {
+                "gpt-5": 2000
+              },
+              "messageCount": 5,
+              "outputTokens": 2000,
+              "timedOutputTokens": 2000,
+              "timedDurationMs": 0,
+              "startedAt": "2026-10-16T12:02:00.000Z",
+              "lastUsedAt": "2026-10-16T12:03:00.000Z"
+            }
+          }
+        },
+        "month": {
+          "totalTokens": 5400,
+          "costUsd": 4,
+          "clients": {
+            "codex": 5400
+          },
+          "clientCosts": {
+            "codex": 4
+          },
+          "models": {
+            "gpt-5": 5400
+          },
+          "modelCosts": {
+            "gpt-5": 4
+          },
+          "clientModels": {
+            "codex": {
+              "gpt-5": 5400
+            }
+          },
+          "sessions": {
+            "codex:main": {
+              "sessionId": "main",
+              "nativeSessionId": "synthetic-native",
+              "client": "codex",
+              "title": "Sample conversation",
+              "totalTokens": 1100,
+              "costUsd": 1.2,
+              "models": {
+                "gpt-5": 1100
+              },
+              "messageCount": 2,
+              "inputTokens": 100,
+              "cacheReadTokens": 900,
+              "outputTokens": 100,
+              "timedOutputTokens": 100,
+              "timedDurationMs": 1000,
+              "startedAt": "2026-10-16T12:00:00.000Z",
+              "lastUsedAt": "2026-10-16T12:00:00.000Z"
+            },
+            "codex:continuation": {
+              "sessionId": "continuation",
+              "nativeSessionId": "synthetic-native",
+              "client": "codex",
+              "title": "Sample conversation",
+              "totalTokens": 2300,
+              "costUsd": 2.3,
+              "models": {
+                "gpt-5": 2300
+              },
+              "messageCount": 3,
+              "inputTokens": 1900,
+              "cacheReadTokens": 100,
+              "outputTokens": 300,
+              "timedOutputTokens": 999,
+              "timedDurationMs": 9000,
+              "startedAt": "2026-10-16T12:00:00.000Z",
+              "lastUsedAt": "2026-10-16T12:01:00.000Z"
+            },
+            "codex:child": {
+              "sessionId": "child",
+              "parentSessionId": "main",
+              "client": "codex",
+              "totalTokens": 2000,
+              "costUsd": 0.5,
+              "models": {
+                "gpt-5": 2000
+              },
+              "messageCount": 5,
+              "outputTokens": 2000,
+              "timedOutputTokens": 2000,
+              "timedDurationMs": 0,
+              "startedAt": "2026-10-16T12:02:00.000Z",
+              "lastUsedAt": "2026-10-16T12:03:00.000Z"
+            }
+          }
+        },
+        "allTime": {
+          "totalTokens": 5400,
+          "costUsd": 4,
+          "clients": {
+            "codex": 5400
+          },
+          "clientCosts": {
+            "codex": 4
+          },
+          "models": {
+            "gpt-5": 5400
+          },
+          "modelCosts": {
+            "gpt-5": 4
+          },
+          "clientModels": {
+            "codex": {
+              "gpt-5": 5400
+            }
+          },
+          "sessions": {
+            "codex:main": {
+              "sessionId": "main",
+              "nativeSessionId": "synthetic-native",
+              "client": "codex",
+              "title": "Sample conversation",
+              "totalTokens": 1100,
+              "costUsd": 1.2,
+              "models": {
+                "gpt-5": 1100
+              },
+              "messageCount": 2,
+              "inputTokens": 100,
+              "cacheReadTokens": 900,
+              "outputTokens": 100,
+              "timedOutputTokens": 100,
+              "timedDurationMs": 1000,
+              "startedAt": "2026-10-16T12:00:00.000Z",
+              "lastUsedAt": "2026-10-16T12:00:00.000Z"
+            },
+            "codex:continuation": {
+              "sessionId": "continuation",
+              "nativeSessionId": "synthetic-native",
+              "client": "codex",
+              "title": "Sample conversation",
+              "totalTokens": 2300,
+              "costUsd": 2.3,
+              "models": {
+                "gpt-5": 2300
+              },
+              "messageCount": 3,
+              "inputTokens": 1900,
+              "cacheReadTokens": 100,
+              "outputTokens": 300,
+              "timedOutputTokens": 999,
+              "timedDurationMs": 9000,
+              "startedAt": "2026-10-16T12:00:00.000Z",
+              "lastUsedAt": "2026-10-16T12:01:00.000Z"
+            },
+            "codex:child": {
+              "sessionId": "child",
+              "parentSessionId": "main",
+              "client": "codex",
+              "totalTokens": 2000,
+              "costUsd": 0.5,
+              "models": {
+                "gpt-5": 2000
+              },
+              "messageCount": 5,
+              "outputTokens": 2000,
+              "timedOutputTokens": 2000,
+              "timedDurationMs": 0,
+              "startedAt": "2026-10-16T12:02:00.000Z",
+              "lastUsedAt": "2026-10-16T12:03:00.000Z"
+            }
+          }
+        }
+      },
+      "historyAvailable": true,
+      "history": {
+        "daily": [
+          {
+            "date": "2026-10-16",
+            "tokens": 5400,
+            "cost": 4,
+            "perClient": {
+              "codex": {
+                "tokens": 5400,
+                "cost": 4
+              }
+            },
+            "perModel": {
+              "gpt-5": {
+                "tokens": 5400,
+                "cost": 4
+              }
+            }
+          }
+        ],
+        "monthly": [
+          {
+            "month": "2026-10",
+            "tokens": 5400,
+            "cost": 4
+          }
+        ]
+      }
+    }
+  ]
+}

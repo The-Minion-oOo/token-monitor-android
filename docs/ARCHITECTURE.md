@@ -200,6 +200,12 @@ and settings. Shared presentation rules live alongside them in focused files:
   Session speed/cache-hit readings and optional cache estimates share the same
   presentation helpers with Sessions. A local title toggle affects both views
   without changing cached wire data. No new background work is added.
+  `SessionMetrics.kt` sums disjoint members' raw counters before calculating
+  group cache-hit and output-speed ratios. Untimed output is excluded per
+  member, not capped after aggregation. `SessionGrouping.kt` keeps the main
+  title but uses the latest member time and combined message count. The Home
+  and Sessions views share these readings; context and cache-TTL estimates
+  remain individual-session information.
 
 - **Settings.** `ConnectionSettings.kt` sections collapse to a header with a summary,
   like the desktop settings list. A fresh install shows `WelcomeSetup` instead

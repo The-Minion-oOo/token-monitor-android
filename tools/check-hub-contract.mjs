@@ -253,6 +253,61 @@ async function isolatedContract(source, output, upstream) {
         assert.equal(responses["allowances.json"].periods.today.clients.goose, 1500);
         const serializedAllowances = JSON.stringify(responses["allowances.json"]);
         for (const sentinel of [userId, ...workspaceIds, "NEVER_EXPORT"]) assert.ok(!serializedAllowances.includes(sentinel));
+        // v0.72: use the released Cursor normalizer, with all credentials and probe data synthetic.
+        const { fetchCursorLimits } = require("./src/shared/providers/cursor/limits.js");
+        const cursorUsage = { planPercent: 37, autoPercent: 12, apiPercent: 50, onDemandUsedUsd: 9,
+            billingCycleEnd: "2026-11-01T00:00:00Z", membershipType: "premium",
+            grokBot: { usedPercent: 37, isUnified: true, hasNonZeroIncludedLimit: true },
+            planInfo: { isMerged: true, includedUsagePeriod: "weekly", includedUsageResetsAt: "2026-10-19T00:00:00.000Z" },
+            prepaid: { availableUsd: 14.46 } };
+        for (const [name, usage, labels] of [
+            ["cursor-weekly", cursorUsage, ["Included usage", "Prepaid balance"]],
+            ["cursor-monthly", { ...cursorUsage, membershipType: "unified_ultra", prepaid: { availableUsd: 0 },
+                planInfo: { isMerged: true, includedUsagePeriod: "monthly" } }, ["Included usage"]],
+            ["cursor-unknown-reset", { ...cursorUsage, membershipType: "plus", prepaid: { availableUsd: -1 },
+                planInfo: { isMerged: true } }, ["Included usage"]],
+            ["cursor-fallback", { ...cursorUsage, planInfo: undefined, prepaid: undefined }, ["Included usage"]],
+            ["cursor-legacy", { ...cursorUsage, planInfo: { isMerged: false } },
+                ["Cursor Models", "Other Models", "Grok Bot", "On-demand spend"]],
+        ]) {
+            const cursor = await fetchCursorLimits({}, { now: () => Date.parse(now),
+                readActiveAccount: () => ({ id: `synthetic-${name}`, sessionToken: "NEVER_EXPORT_CURSOR_TOKEN" }),
+                probe: async () => ({ ok: true, usage, user: { sub: `synthetic-${name}` } }) });
+            assert.deepEqual(cursor.windows.map(window => window.label), labels);
+            const cursorHub = createHub({ port: 0, host: "127.0.0.1", secret, dataFile: join(source, `${name}.json`) });
+            cursorHub.ingest({ ...device, limits: { updatedAt: now, providers: [cursor] } });
+            responses[`${name}.json`] = cursorHub.getStats();
+            const exported = responses[`${name}.json`].limits.providers.find(entry => entry.provider === "cursor");
+            assert.deepEqual(exported.windows.map(window => window.label), labels);
+            if (name === "cursor-weekly") {
+                assert.equal(exported.windows[0].windowMinutes, 10080);
+                assert.equal(exported.windows[0].resetsAt, "2026-10-19T00:00:00.000Z");
+                assert.equal(exported.windows[1].remaining, 14.46);
+                assert.equal(exported.windows[1].showMeter, false);
+                assert.equal(exported.windows[1].remainingPercent, null);
+            }
+            if (["cursor-unknown-reset", "cursor-fallback"].includes(name)) assert.equal(exported.windows[0].resetsAt, null);
+            if (name === "cursor-monthly") assert.equal(exported.planLabel, "Ultra");
+            assert.ok(!JSON.stringify(responses[`${name}.json`]).includes("NEVER_EXPORT"));
+        }
+        // These raw records exercise weighted Android group metrics after real Hub normalization.
+        const metricRows = [
+            row("codex", "metric-main", "gpt-5", 1100, { nativeSessionId: parentNative, messageCount: 2,
+                inputTokens: 100, cacheReadTokens: 900, outputTokens: 100, timedOutputTokens: 100, timedDurationMs: 1000 }),
+            row("codex", "metric-continuation", "gpt-5", 2300, { nativeSessionId: parentNative, messageCount: 3,
+                inputTokens: 1900, cacheReadTokens: 100, outputTokens: 300, timedOutputTokens: 999, timedDurationMs: 9000 }),
+            row("codex", "metric-child", "gpt-5", 2000, { parentSessionId: "metric-main", messageCount: 5,
+                outputTokens: 2000, timedOutputTokens: 2000, timedDurationMs: 0 }),
+        ];
+        const metricHub = createHub({ port: 0, host: "127.0.0.1", secret, dataFile: join(source, "synthetic-metrics.json") });
+        metricHub.ingest({ ...device, trackedClients: ["codex"], periods: { today: { totalTokens: 5400, costUsd: 0.03,
+            clients: { codex: 5400 }, models: { "gpt-5": 5400 },
+            sessions: Object.fromEntries(metricRows.map(entry => [`codex:${entry.sessionId}`, entry])) } } });
+        responses["group-metrics.json"] = metricHub.getStats();
+        const metricSessions = responses["group-metrics.json"].periods.today.sessions;
+        assert.equal(metricSessions["codex:metric-continuation"].timedOutputTokens, 300);
+        assert.equal(metricSessions["codex:metric-child"].timedOutputTokens, 0);
+        assert.equal(metricSessions["codex:metric-child"].messageCount, 5);
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) await writeFile(join(output, name), `${JSON.stringify(value, null, 2)}\n`);
         console.log(`Actual ${upstream.tag} Hub passed authenticated reads, snapshot, freshness and changed-stat checks. Synthetic responses: ${output}`);

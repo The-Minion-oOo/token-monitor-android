@@ -60,12 +60,16 @@ internal fun sessionPromptCacheMinutes(session: SessionUsage, now: Long): Int? {
 
 internal fun sessionMetricLabels(session: SessionUsage, now: Long): String = buildList {
     if (session.dotsObservedOnly) add("Dots · observed only")
-    sessionCacheHitPercent(session)?.let { percent ->
+    sessionCounterLabels(sessionCacheHitPercent(session), sessionTokenRate(session)).takeIf { it.isNotBlank() }?.let { add(it) }
+    sessionPromptCacheMinutes(session, now)?.let { add("Cache estimate ~$it min left") }
+}.joinToString(" · ")
+
+internal fun sessionCounterLabels(cacheHitPercent: Double?, tokenRate: Double?): String = buildList {
+    cacheHitPercent?.let { percent ->
         val value = if (percent > 0 && percent < 1) "<1" else percent.roundToInt().toString()
         add("Cache hit $value%")
     }
-    sessionTokenRate(session)?.roundToInt()?.takeIf { it > 0 }?.let { add("$it tok/s") }
-    sessionPromptCacheMinutes(session, now)?.let { add("Cache estimate ~$it min left") }
+    tokenRate?.roundToInt()?.takeIf { it > 0 }?.let { add("$it tok/s") }
 }.joinToString(" · ")
 
 private const val SESSION_RUNNING_WINDOW_MS = 10 * 60_000L

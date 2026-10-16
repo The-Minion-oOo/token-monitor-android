@@ -102,7 +102,7 @@ in a fixture or screenshot.
 JVM tests cover protocol parsing, private-address rules, endpoint failover,
 stream recovery, ordered cache writes, history aggregation, presentation rules,
 and preferences. Versioned Hub fixtures live under
-`app/src/test/resources/protocol/`. The v0.71.0 set covers all five read
+`app/src/test/resources/protocol/`. The v0.72.0 set covers all five read
 endpoints, a complete stream frame, and a freshness-only frame. The v0.69.0
 fixtures retain session relationships and activity, the v0.68.0
 fixtures retain unpriced counts and Dots provenance, and the v0.67.0
@@ -141,6 +141,15 @@ sign-in states. The released-source check runs Notion's normalizer with stubbed
 responses and checks that cookies, raw user/workspace IDs and workspace names
 do not enter Hub responses. The presentation check captures Goose and the new
 allowances using synthetic data.
+
+The v0.72.0 fixtures add Cursor included-usage windows, a separate prepaid
+balance, and raw counters for a conversation with continuations and a subagent.
+The released-source harness runs Cursor's normalizer with synthetic probes,
+including legacy plans, monthly usage, unknown weekly resets and omitted
+zero/negative prepaid amounts. Group tests check weighted ratios, untimed
+output, large counters, the combined message count and latest member time.
+The presentation test captures Limits, collapsed and expanded Sessions, and
+the Home session summary.
 
 Instrumentation tests use the preview package to exercise navigation, dialogs,
 widgets, storage, and lifecycle behavior. Run them on an API 36 emulator before
@@ -261,7 +270,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 48 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 49 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.

@@ -4,7 +4,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.71.0**, released 2026-10-14.
+The verified baseline is upstream Token Monitor **v0.72.0**, released 2026-10-15.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -50,9 +50,9 @@ replaces the snapshot with the current read endpoints.
 
 ## Fixtures
 
-Synthetic v0.71.0 examples for all five read endpoints and the live stream live
-in `app/src/test/resources/protocol/v0.71.0/`; the retained v0.54.0, v0.55.0,
-v0.56.0, v0.60.0, v0.61.0, v0.62.0, v0.63.0, v0.63.1, v0.64.0, v0.65.0, v0.66.0, v0.67.0, v0.68.0, v0.69.0 and v0.70.0 fixtures prove backward compatibility. They contain no user secrets,
+Synthetic v0.72.0 examples for all five read endpoints and the live stream live
+in `app/src/test/resources/protocol/v0.72.0/`; the retained v0.54.0, v0.55.0,
+v0.56.0, v0.60.0, v0.61.0, v0.62.0, v0.63.0, v0.63.1, v0.64.0, v0.65.0, v0.66.0, v0.67.0, v0.68.0, v0.69.0, v0.70.0 and v0.71.0 fixtures prove backward compatibility. They contain no user secrets,
 machine paths, account identifiers, or real usage. Parser tests cover every
 read surface, the SSE envelope, omitted optional fields, and a future unknown
 field. The compatibility parser maps only the fields the dashboard needs and
@@ -345,3 +345,23 @@ The released-source check exercises Goose, normalized Notion allowances and
 multiple WorkBuddy accounts. The Android fixtures also cover a monthly-only
 allowance and a missing reset time. Pi/CodeBuddy transcript details, tray fixes
 and Dots executor detection stay on desktop. Android still reads no transcripts.
+
+## v0.72.0 Cursor unified plans and session metrics
+
+The Hub's read routes and session wire fields are unchanged. Cursor unified
+plans now export one **Included usage** window: `weekly` with an optional
+weekly reset, or `billing` for an explicit monthly period. A missing weekly
+reset must not borrow the billing reset. A positive **Prepaid balance** uses
+`metric: credits`, `currency: USD`, `remaining`, and `showMeter: false`; it has
+no percentage or reset. Zero, negative and missing prepaid amounts are omitted
+by desktop. Legacy model, Grok Bot and on-demand windows remain separate from
+the unified plan. Android continues to use the normalized windows as supplied.
+
+Session rows sum the disjoint members' message, input, cache-read/cache-write,
+timed-output and duration counters before calculating a grouped ratio. Each
+member's timed output is capped by its output and excluded when its duration
+is zero. Cache hit is read / (input + read + write); output speed is timed
+output / timed seconds. Unreported cache counters stay unknown, not zero.
+I don't infer the desktop renderer's cache-reported flag because the Hub does
+not export it. A group keeps the main conversation title and latest member
+time. The real-Hub harness and retained fixtures check these boundaries.

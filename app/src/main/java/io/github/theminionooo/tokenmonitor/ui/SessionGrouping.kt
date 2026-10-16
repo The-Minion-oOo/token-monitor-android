@@ -31,6 +31,7 @@ internal data class SessionRow(
 ) {
     val grouped: Boolean get() = kind != null
     val sessions: List<SessionUsage> get() = if (grouped) members.map { it.session } else listOf(display)
+    val usageMetrics: SessionMetrics = sessionMetrics(sessions)
 }
 
 internal fun sessionSortTime(session: SessionUsage): Long =
@@ -141,13 +142,14 @@ private fun groupConversations(sessions: List<SessionUsage>): List<SessionRow> {
         val representative = byKey[key] === session
         when {
             representative && key in grouped -> null
-            representative && key in children -> conversationRow(session, children.getValue(key), session.conversationIdentity() in conflicts)
+            representative && key in children -> conversationRow(session, children.getValue(key), session.conversationIdentity() in conflicts,
+                session.conversationIdentity() !in conflicts && parentLinks[session.conversationIdentity()] != null)
             else -> SessionRow(key = key, display = session, subagent = session.parentKey() != null)
         }
     }
 }
 
-private fun conversationRow(parent: SessionUsage, members: List<SessionUsage>, splitIdentity: Boolean): SessionRow {
+private fun conversationRow(parent: SessionUsage, members: List<SessionUsage>, splitIdentity: Boolean, rootSubagent: Boolean): SessionRow {
     val identity = parent.conversationIdentity()
     val all = listOf(parent) + members
     val main = all.filter { it.conversationIdentity() == identity }.newestFirst()
@@ -159,6 +161,7 @@ private fun conversationRow(parent: SessionUsage, members: List<SessionUsage>, s
         display = main.first(),
         kind = SessionGroupKind.Conversation,
         members = ordered,
+        subagent = rootSubagent,
         subagentCount = delegated.map { it.conversationIdentity() }.distinct().size,
         totalTokens = all.sumOf { it.totalTokens },
         costUsd = all.sumOf { it.costUsd },
@@ -204,10 +207,13 @@ internal fun sessionRowPresentation(row: SessionRow, showTitles: Boolean = true)
     SessionGroupKind.AutoReview -> SessionRowLabels("Codex Auto Review", "${row.members.size} background runs")
     SessionGroupKind.GrokBot -> SessionRowLabels("Grok Bot", "${row.members.size} activity records")
     SessionGroupKind.Conversation -> {
-        val labels = sessionRowLabels(row.display.copy(modelNames = topModelFirst(row)), showTitles)
+        val latest = row.sessions.maxByOrNull(::sessionSortTime) ?: row.display
+        val labels = sessionRowLabels(row.display.copy(modelNames = topModelFirst(row), lastUsedAt = latest.lastUsedAt.ifBlank { latest.startedAt },
+            messageCount = 0), showTitles)
         val count = row.subagentCount.takeIf { it > 0 }?.let { if (it == 1) "1 subagent" else "$it subagents" }
         // The count leads, so a narrow row shortens the project rather than hiding how many subagents ran.
-        SessionRowLabels(labels.title, listOfNotNull(count, labels.meta).joinToString(" · "))
+        val messages = row.usageMetrics.messageCount.takeIf { it > 0 }?.let { "$it messages" }
+        SessionRowLabels(labels.title, listOfNotNull(count, "Subagent".takeIf { row.subagent }, labels.meta, messages).joinToString(" · "))
     }
     null -> sessionRowLabels(row.display, showTitles).let { labels ->
         if (row.subagent) labels.copy(meta = "Subagent · ${labels.meta}") else labels

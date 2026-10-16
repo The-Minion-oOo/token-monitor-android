@@ -231,6 +231,9 @@ internal fun SessionGroupUsageRow(row: SessionRow, ratio: Float) {
             )
         }
         UsageBar(ratio, accentFor(client))
+        sessionRowMetricLabels(row, now).takeIf { it.isNotBlank() }?.let {
+            Text(it, color = Muted, style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(start = 20.dp))
+        }
         AnimatedVisibility(
             visible = expanded,
             enter = fadeIn(tween(if (motionEnabled) 160 else 0)) + expandVertically(tween(if (motionEnabled) 240 else 0, easing = DesktopEaseOut)),

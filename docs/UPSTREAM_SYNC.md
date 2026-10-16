@@ -2,10 +2,11 @@
 
 ## Version rule
 
-Android v0.71.0 r1 targets desktop tag `v0.71.0`, peeled commit
-`a514e2063563e318ef73c2a17fad68057c4e300c`, in Gradle and `upstream.json`.
-It names Goose and Notion AI, shows Notion's rolling/monthly allowances and
-keeps WorkBuddy accounts separate. The token number animation, session grouping and
+The Android v0.72.0 r1 candidate targets desktop tag `v0.72.0`, peeled commit
+`126e9a43dcc51d3d7b2609231eac9974ba73bed7`, in Gradle and `upstream.json`.
+It shows Cursor's unified included usage and prepaid balance, and corrects
+grouped-session ratios, counts and latest activity time. Goose, Notion AI,
+separate WorkBuddy accounts, token number animation, session grouping and
 waiting state, explicit unpriced-token counts, Dots labels, TM2 colors,
 separate MiMo product rows, title-consent checks and Wi-Fi recovery are
 retained. Collection, MiniMax billing-mode selection, activity watching,
@@ -45,7 +46,9 @@ it and starts again at release revision 1.
    Desktop-only window features do not become Android work by default.
 7. Update `upstream.json`, Gradle compatibility fields, README compatibility table,
    candidate release notes, and validation evidence together.
-8. Run unit tests, lint, debug/release builds, emulator interaction checks, and the physical-phone gate before publishing.
+8. Run unit tests, lint, debug/release builds and emulator interaction checks.
+   Use the phone gate for significant networking, lifecycle or widget changes;
+   otherwise say in the release notes that I haven't phone-tested the build.
 
 The scheduled check reports a release and closes obsolete automated review
 reminders already covered by the verified baseline. It preserves manual issues

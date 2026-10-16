@@ -1,6 +1,6 @@
-# Desktop parity for v0.71.0
+# Desktop parity for v0.72.0
 
-The Android adapter targets desktop Token Monitor v0.71.0 using
+The Android adapter targets desktop Token Monitor v0.72.0 using
 versioned fixtures and responses from the pinned released Hub. It mirrors
 the desktop information that the Hub can safely provide while keeping the phone
 read-only and lightweight.
@@ -163,6 +163,15 @@ Notion workspaces and WorkBuddy accounts. The marks use theme colors rather
 than desktop's white fill so they remain readable in light themes.
 I leave WorkBuddy sign-in, account management and its optional combined quota
 on desktop. Pi/CodeBuddy transcript details are not shared with Android.
+
+v0.72.0 shows Cursor's unified Included usage and optional positive Prepaid
+balance through the existing quota display. Weekly resets stay unknown when
+none is reported. I calculate a grouped row's cache-hit percentage and output
+speed from summed raw counters, show its combined message count, and use the
+latest member's time without replacing the main title. Untimed output cannot
+borrow another member's duration. No transcript or new permission is needed.
+Desktop automatic update checks, OpenCode collection fixes and the Windows
+Edge Dock unlock fix remain desktop-only.
 
 ## Mobile additions
 
