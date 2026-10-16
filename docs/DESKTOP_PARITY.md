@@ -1,6 +1,6 @@
-# Desktop parity for v0.72.0
+# Desktop parity for v0.73.0
 
-The Android adapter targets desktop Token Monitor v0.72.0 using
+The Android adapter targets desktop Token Monitor v0.73.0 using
 versioned fixtures and responses from the pinned released Hub. It mirrors
 the desktop information that the Hub can safely provide while keeping the phone
 read-only and lightweight.
@@ -172,6 +172,14 @@ latest member's time without replacing the main title. Untimed output cannot
 borrow another member's duration. No transcript or new permission is needed.
 Desktop automatic update checks, OpenCode collection fixes and the Windows
 Edge Dock unlock fix remain desktop-only.
+
+v0.73.0 hides only the unsupported private-use icon in an Oh My Pi title-card
+prefix, keeping its code and title text. Stored titles and the privacy toggle
+are unchanged. Android reads the corrected Cursor percentage and matched timing
+counters supplied by desktop, without probing provider accounts or estimating
+output from total-token coverage. Claude Desktop usage stays under Claude, and
+Windows Goose usage stays under Goose. Oh My Pi transcripts, hover previews,
+collector/archive fixes and desktop update history remain desktop features.
 
 ## Mobile additions
 

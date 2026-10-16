@@ -191,6 +191,8 @@ and settings. Shared presentation rules live alongside them in focused files:
   labels; `VendorPresentation.kt` maps tool and model names to marks and colors;
   `SessionPresentation.kt` owns the Running, Finished, and Idle window plus
   context-window calculations. Those rules are unit-tested without Compose.
+  Its OMP title-card cleanup is presentation-only: stored text stays intact,
+  and the same title helper is used by Home and expanded/grouped session rows.
 - **Home sessions.**
   `HomeSessions.kt` derives the five most recent sessions plus running overflow
   from month/today, deduplicated by client and ID. It uses the shared activity,

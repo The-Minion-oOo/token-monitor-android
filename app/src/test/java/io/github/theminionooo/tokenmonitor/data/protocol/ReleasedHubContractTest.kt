@@ -121,5 +121,23 @@ class ReleasedHubContractTest {
         assertEquals(5400L, group.totalTokens)
         assertEquals(10L, group.usageMetrics.messageCount)
         assertEquals("Cache hit 33% · 40 tok/s", io.github.theminionooo.tokenmonitor.ui.sessionRowMetricLabels(group, 0))
+        for ((name, used) in listOf("cursor-period" to 13.0, "cursor-period-zero" to 0.0,
+            "cursor-sand-fallback" to 13.0, "cursor-monthly-fallback" to 30.0)) {
+            val window = cursor(name).windows.single()
+            assertEquals(name, used, window.usedPercent!!, 0.0)
+            assertEquals(name, 100 - used, window.remainingPercent!!, 0.0)
+        }
+        assertTrue(cursor("cursor-weekly-unknown").windows.isEmpty())
+        val timing = HubProtocolParser.decodeStats(response("matched-timing")).periods.getValue("today")
+        val byId = timing.sessions.associateBy { it.id }
+        assertEquals(200L, byId.getValue("partial").outputTokens)
+        assertEquals(100L, byId.getValue("partial").timedOutputTokens)
+        assertEquals(0L, byId.getValue("zero").timedOutputTokens)
+        assertNull(io.github.theminionooo.tokenmonitor.ui.sessionTokenRate(byId.getValue("zero")))
+        assertEquals(120.0, io.github.theminionooo.tokenmonitor.ui.sessionTokenRate(byId.getValue("reasoning"))!!, 0.0)
+        assertEquals(220L, timing.timedOutputTokens)
+        val corrected = HubProtocolParser.decodeStats(response("corrected-zero")).periods.getValue("today")
+        assertEquals(0L, corrected.totalTokens)
+        assertTrue(corrected.sessions.isEmpty())
     }
 }

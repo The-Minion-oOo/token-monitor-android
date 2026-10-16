@@ -1,0 +1,367 @@
+{
+  "devices": [
+    {
+      "deviceId": "synthetic-desktop",
+      "hostname": "Sample desktop",
+      "platform": "linux",
+      "agentVersion": "0.73.0",
+      "updatedAt": "2026-10-16T20:00:00.000Z",
+      "receivedAt": "2026-10-16T20:00:00.000Z",
+      "trackedClients": [
+        "codex",
+        "claude",
+        "omp",
+        "goose"
+      ],
+      "periods": {
+        "today": {
+          "totalTokens": 1000,
+          "costUsd": 1,
+          "clients": {
+            "codex": 400,
+            "claude": 200,
+            "omp": 100,
+            "goose": 300
+          },
+          "clientCosts": {
+            "codex": 0.5,
+            "claude": 0.25,
+            "omp": 0,
+            "goose": 0.25
+          },
+          "models": {
+            "gpt-5": 400,
+            "claude-sonnet-4-5": 600
+          },
+          "sessions": {
+            "codex:mixed": {
+              "sessionId": "mixed",
+              "client": "codex",
+              "totalTokens": 200,
+              "costUsd": 0.25,
+              "models": {
+                "gpt-5": 200
+              },
+              "outputTokens": 200,
+              "messageCount": 1,
+              "startedAt": "2026-10-16T20:00:00.000Z",
+              "lastUsedAt": "2026-10-16T20:00:00.000Z",
+              "title": "Sample conversation",
+              "timedOutputTokens": 100,
+              "timedDurationMs": 1000
+            },
+            "codex:untimed": {
+              "sessionId": "untimed",
+              "client": "codex",
+              "totalTokens": 200,
+              "costUsd": 0.25,
+              "models": {
+                "gpt-5": 200
+              },
+              "outputTokens": 200,
+              "messageCount": 1,
+              "startedAt": "2026-10-16T20:00:00.000Z",
+              "lastUsedAt": "2026-10-16T20:00:00.000Z",
+              "parentSessionId": "mixed",
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0
+            },
+            "claude:zero-timed": {
+              "sessionId": "zero-timed",
+              "client": "claude",
+              "totalTokens": 200,
+              "costUsd": 0.25,
+              "models": {
+                "claude-sonnet-4-5": 200
+              },
+              "outputTokens": 200,
+              "messageCount": 1,
+              "startedAt": "2026-10-16T20:00:00.000Z",
+              "lastUsedAt": "2026-10-16T20:00:00.000Z",
+              "timedOutputTokens": 0,
+              "timedDurationMs": 1000
+            },
+            "omp:sample-omp": {
+              "sessionId": "sample-omp",
+              "client": "omp",
+              "totalTokens": 100,
+              "costUsd": 0,
+              "models": {
+                "claude-sonnet-4-5": 100
+              },
+              "outputTokens": 100,
+              "messageCount": 1,
+              "startedAt": "2026-10-16T20:00:00.000Z",
+              "lastUsedAt": "2026-10-16T20:00:00.000Z",
+              "title": " A1: Sample task"
+            },
+            "goose:sample-goose": {
+              "sessionId": "sample-goose",
+              "client": "goose",
+              "totalTokens": 300,
+              "costUsd": 0.25,
+              "models": {
+                "claude-sonnet-4-5": 300
+              },
+              "outputTokens": 300,
+              "messageCount": 1,
+              "startedAt": "2026-10-16T20:00:00.000Z",
+              "lastUsedAt": "2026-10-16T20:00:00.000Z",
+              "timedOutputTokens": 300,
+              "timedDurationMs": 3000
+            }
+          },
+          "capabilities": {
+            "throughput": true
+          },
+          "timedTokens": 400,
+          "timedOutputTokens": 400,
+          "timedDurationMs": 5000
+        },
+        "month": {
+          "totalTokens": 1000,
+          "costUsd": 1,
+          "clients": {
+            "codex": 400,
+            "claude": 200,
+            "omp": 100,
+            "goose": 300
+          },
+          "clientCosts": {
+            "codex": 0.5,
+            "claude": 0.25,
+            "omp": 0,
+            "goose": 0.25
+          },
+          "models": {
+            "gpt-5": 400,
+            "claude-sonnet-4-5": 600
+          },
+          "sessions": {
+            "codex:mixed": {
+              "sessionId": "mixed",
+              "client": "codex",
+              "totalTokens": 200,
+              "costUsd": 0.25,
+              "models": {
+                "gpt-5": 200
+              },
+              "outputTokens": 200,
+              "messageCount": 1,
+              "startedAt": "2026-10-16T20:00:00.000Z",
+              "lastUsedAt": "2026-10-16T20:00:00.000Z",
+              "title": "Sample conversation",
+              "timedOutputTokens": 100,
+              "timedDurationMs": 1000
+            },
+            "codex:untimed": {
+              "sessionId": "untimed",
+              "client": "codex",
+              "totalTokens": 200,
+              "costUsd": 0.25,
+              "models": {
+                "gpt-5": 200
+              },
+              "outputTokens": 200,
+              "messageCount": 1,
+              "startedAt": "2026-10-16T20:00:00.000Z",
+              "lastUsedAt": "2026-10-16T20:00:00.000Z",
+              "parentSessionId": "mixed",
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0
+            },
+            "claude:zero-timed": {
+              "sessionId": "zero-timed",
+              "client": "claude",
+              "totalTokens": 200,
+              "costUsd": 0.25,
+              "models": {
+                "claude-sonnet-4-5": 200
+              },
+              "outputTokens": 200,
+              "messageCount": 1,
+              "startedAt": "2026-10-16T20:00:00.000Z",
+              "lastUsedAt": "2026-10-16T20:00:00.000Z",
+              "timedOutputTokens": 0,
+              "timedDurationMs": 1000
+            },
+            "omp:sample-omp": {
+              "sessionId": "sample-omp",
+              "client": "omp",
+              "totalTokens": 100,
+              "costUsd": 0,
+              "models": {
+                "claude-sonnet-4-5": 100
+              },
+              "outputTokens": 100,
+              "messageCount": 1,
+              "startedAt": "2026-10-16T20:00:00.000Z",
+              "lastUsedAt": "2026-10-16T20:00:00.000Z",
+              "title": " A1: Sample task"
+            },
+            "goose:sample-goose": {
+              "sessionId": "sample-goose",
+              "client": "goose",
+              "totalTokens": 300,
+              "costUsd": 0.25,
+              "models": {
+                "claude-sonnet-4-5": 300
+              },
+              "outputTokens": 300,
+              "messageCount": 1,
+              "startedAt": "2026-10-16T20:00:00.000Z",
+              "lastUsedAt": "2026-10-16T20:00:00.000Z",
+              "timedOutputTokens": 300,
+              "timedDurationMs": 3000
+            }
+          },
+          "capabilities": {
+            "throughput": true
+          },
+          "timedTokens": 400,
+          "timedOutputTokens": 400,
+          "timedDurationMs": 5000
+        },
+        "allTime": {
+          "totalTokens": 1000,
+          "costUsd": 1,
+          "clients": {
+            "codex": 400,
+            "claude": 200,
+            "omp": 100,
+            "goose": 300
+          },
+          "clientCosts": {
+            "codex": 0.5,
+            "claude": 0.25,
+            "omp": 0,
+            "goose": 0.25
+          },
+          "models": {
+            "gpt-5": 400,
+            "claude-sonnet-4-5": 600
+          },
+          "sessions": {
+            "codex:mixed": {
+              "sessionId": "mixed",
+              "client": "codex",
+              "totalTokens": 200,
+              "costUsd": 0.25,
+              "models": {
+                "gpt-5": 200
+              },
+              "outputTokens": 200,
+              "messageCount": 1,
+              "startedAt": "2026-10-16T20:00:00.000Z",
+              "lastUsedAt": "2026-10-16T20:00:00.000Z",
+              "title": "Sample conversation",
+              "timedOutputTokens": 100,
+              "timedDurationMs": 1000
+            },
+            "codex:untimed": {
+              "sessionId": "untimed",
+              "client": "codex",
+              "totalTokens": 200,
+              "costUsd": 0.25,
+              "models": {
+                "gpt-5": 200
+              },
+              "outputTokens": 200,
+              "messageCount": 1,
+              "startedAt": "2026-10-16T20:00:00.000Z",
+              "lastUsedAt": "2026-10-16T20:00:00.000Z",
+              "parentSessionId": "mixed",
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0
+            },
+            "claude:zero-timed": {
+              "sessionId": "zero-timed",
+              "client": "claude",
+              "totalTokens": 200,
+              "costUsd": 0.25,
+              "models": {
+                "claude-sonnet-4-5": 200
+              },
+              "outputTokens": 200,
+              "messageCount": 1,
+              "startedAt": "2026-10-16T20:00:00.000Z",
+              "lastUsedAt": "2026-10-16T20:00:00.000Z",
+              "timedOutputTokens": 0,
+              "timedDurationMs": 1000
+            },
+            "omp:sample-omp": {
+              "sessionId": "sample-omp",
+              "client": "omp",
+              "totalTokens": 100,
+              "costUsd": 0,
+              "models": {
+                "claude-sonnet-4-5": 100
+              },
+              "outputTokens": 100,
+              "messageCount": 1,
+              "startedAt": "2026-10-16T20:00:00.000Z",
+              "lastUsedAt": "2026-10-16T20:00:00.000Z",
+              "title": " A1: Sample task"
+            },
+            "goose:sample-goose": {
+              "sessionId": "sample-goose",
+              "client": "goose",
+              "totalTokens": 300,
+              "costUsd": 0.25,
+              "models": {
+                "claude-sonnet-4-5": 300
+              },
+              "outputTokens": 300,
+              "messageCount": 1,
+              "startedAt": "2026-10-16T20:00:00.000Z",
+              "lastUsedAt": "2026-10-16T20:00:00.000Z",
+              "timedOutputTokens": 300,
+              "timedDurationMs": 3000
+            }
+          },
+          "capabilities": {
+            "throughput": true
+          },
+          "timedTokens": 400,
+          "timedOutputTokens": 400,
+          "timedDurationMs": 5000
+        }
+      },
+      "historyAvailable": true,
+      "history": {
+        "daily": [
+          {
+            "date": "2026-10-16",
+            "tokens": 1000,
+            "cost": 1,
+            "perClient": {
+              "codex": {
+                "tokens": 400,
+                "cost": 0.5
+              },
+              "claude": {
+                "tokens": 200,
+                "cost": 0.25
+              },
+              "omp": {
+                "tokens": 100,
+                "cost": 0
+              },
+              "goose": {
+                "tokens": 300,
+                "cost": 0.25
+              }
+            }
+          }
+        ],
+        "monthly": [
+          {
+            "month": "2026-10",
+            "tokens": 1000,
+            "cost": 1
+          }
+        ]
+      }
+    }
+  ]
+}

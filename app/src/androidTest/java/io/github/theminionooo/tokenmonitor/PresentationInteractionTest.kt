@@ -23,6 +23,41 @@ import java.time.LocalDate
 class PresentationInteractionTest {
     @get:Rule val compose = createComposeRule()
 
+    @Test fun ompTitlesAndPartialTimingKeepTheirMeaning() {
+        val instrumentation = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation()
+        val wire = instrumentation.context.assets.open("protocol/v0.73.0/stats.json").bufferedReader().use { it.readText() }
+        val snapshot = HubSnapshot(stats = io.github.theminionooo.tokenmonitor.data.protocol.HubProtocolParser.decodeStats(wire))
+        var destination by mutableStateOf(DashboardDestination.Sessions)
+        var home by mutableStateOf(false)
+        val palette = Palette.from(InterfaceTheme.Default)
+        compose.setContent { MaterialTheme(colorScheme = tokenMonitorColors(palette), typography = tokenMonitorTypography(1)) {
+            CompositionLocalProvider(LocalPalette provides palette, LocalInteractionMotion provides false) {
+                if (home) Column(Modifier.fillMaxSize().background(palette.shell)) { HomeSessionsModule(snapshot) {} }
+                else DashboardContent(Modifier.fillMaxSize().background(palette.shell), HubRepositoryState(snapshot = snapshot), destination,
+                    DashboardPeriod.Today, {}, {}, false, ServiceStatusState(), DisplayOptions(), {})
+            }
+        } }
+        fun capture(name: String) {
+            val bitmap = compose.onRoot().captureToImage().asAndroidBitmap()
+            instrumentation.targetContext.openFileOutput(name, 0).use { bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it) }
+        }
+        compose.onNodeWithText("A1: Sample task").assertIsDisplayed()
+        compose.onNodeWithText("\uE0A0 A1: Sample task").assertDoesNotExist()
+        compose.onAllNodesWithText("100 tok/s").assertCountEquals(2)
+        compose.onNodeWithText("200 tok/s").assertDoesNotExist()
+        capture("v073-sessions.png")
+        compose.onNodeWithText("Sample conversation").performClick()
+        compose.onNodeWithContentDescription("Collapse grouped sessions").assertExists()
+        capture("v073-members.png")
+        compose.runOnIdle { home = true }
+        compose.onNodeWithText("A1: Sample task").assertIsDisplayed()
+        capture("v073-home.png")
+        compose.runOnIdle { home = false; destination = DashboardDestination.Limits }
+        compose.onNodeWithText("87% left").assertIsDisplayed()
+        compose.onNodeWithText("100% left").assertIsDisplayed()
+        capture("v073-cursor.png")
+    }
+
     @Test fun cursorIncludedUsageAndGroupedMetricsMatchDesktop() {
         val instrumentation = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation()
         val wire = instrumentation.context.assets.open("protocol/v0.72.0/stats.json").bufferedReader().use { it.readText() }

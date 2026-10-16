@@ -4,7 +4,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.72.0**, released 2026-10-15.
+The verified baseline is upstream Token Monitor **v0.73.0**, released 2026-10-16.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -50,9 +50,9 @@ replaces the snapshot with the current read endpoints.
 
 ## Fixtures
 
-Synthetic v0.72.0 examples for all five read endpoints and the live stream live
-in `app/src/test/resources/protocol/v0.72.0/`; the retained v0.54.0, v0.55.0,
-v0.56.0, v0.60.0, v0.61.0, v0.62.0, v0.63.0, v0.63.1, v0.64.0, v0.65.0, v0.66.0, v0.67.0, v0.68.0, v0.69.0, v0.70.0 and v0.71.0 fixtures prove backward compatibility. They contain no user secrets,
+Synthetic v0.73.0 examples for all five read endpoints and the live stream live
+in `app/src/test/resources/protocol/v0.73.0/`; the retained v0.54.0, v0.55.0,
+v0.56.0, v0.60.0, v0.61.0, v0.62.0, v0.63.0, v0.63.1, v0.64.0, v0.65.0, v0.66.0, v0.67.0, v0.68.0, v0.69.0, v0.70.0, v0.71.0 and v0.72.0 fixtures prove backward compatibility. They contain no user secrets,
 machine paths, account identifiers, or real usage. Parser tests cover every
 read surface, the SSE envelope, omitted optional fields, and a future unknown
 field. The compatibility parser maps only the fields the dashboard needs and
@@ -365,3 +365,29 @@ output / timed seconds. Unreported cache counters stay unknown, not zero.
 I don't infer the desktop renderer's cache-reported flag because the Hub does
 not export it. A group keeps the main conversation title and latest member
 time. The real-Hub harness and retained fixtures check these boundaries.
+
+## v0.73.0 matched timing, Cursor quotas and title cards
+
+Read routes and wire field names are unchanged. The collector now derives
+`timedOutputTokens` from the same messages as `timedDurationMs`, including an
+explicit zero for input-only timed messages. It folds timed reasoning into
+output only for clients with disjoint output/reasoning buckets. Android uses
+these supplied counters without reconstructing output from `tokenCoverage`;
+older agents' approximate counters remain accepted as reported.
+
+Cursor's desktop probe now prefers current-period Included usage, including
+zero, then the unified sand reading. A monthly summary is a fallback only for
+an explicitly monthly plan. Android still reads normalized quota windows; it
+does not make Cursor requests. The released-source harness stubs the HTTP layer
+under the real probe, then sends its result through the Hub.
+
+Complete snapshots replace corrected usage, including zero. Freshness updates
+preserve that replacement and never restore earlier counters. Session archive
+reconciliation remains on desktop. Claude Desktop usage is collected into
+`claude`, and Windows Goose usage into `goose`, rather than new Android clients.
+
+Oh My Pi may synchronize a title card beginning with a private-use font icon,
+a space, and a one-to-six-character uppercase/digit code followed by a colon.
+`sessionTitleForDisplay` hides that icon only for `omp`, retaining the code and
+text. It never changes the stored title or bypasses title privacy. Transcript
+bodies and tool records remain local to desktop.

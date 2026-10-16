@@ -8,6 +8,24 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 
 class SessionPresentationTest {
+    @Test fun `OMP title cards hide only the private use prefix without changing source`() {
+        for (point in listOf(0xE000, 0xF8FF, 0xF0000, 0xFFFFD, 0x100000, 0x10FFFD)) {
+            val raw = String(Character.toChars(point)) + " A1: Sample task"
+            val record = session("").copy(client = "omp", title = raw)
+            assertEquals("A1: Sample task", sessionRowLabels(record).title)
+            assertEquals(raw, record.title)
+            assertEquals("Oh My Pi · gpt-6-astra", sessionRowLabels(record, false).title)
+            assertEquals(raw, sessionTitleForDisplay(record.copy(client = "pi")))
+        }
+    }
+
+    @Test fun `OMP plain titles emoji and nonmatching prefixes remain intact`() {
+        for (title in listOf("Plain title", "🚀 A1: Sample task", "\uE000 plain title", "\uE000 abc: Sample task",
+            "\uE000 ABCDEFG: Sample task", "\uE000 A1: ", "\uE000A1: Sample task", "A1: \uE000 Sample task")) {
+            assertEquals(title.trim(), sessionTitleForDisplay(session("").copy(client = "omp", title = title)))
+        }
+    }
+
     @Test fun `fx retains its lowercase name and upstream vendor mark`() {
         assertEquals("fx", "fx".displayName())
         assertEquals("fx", vendorOf("fx"))

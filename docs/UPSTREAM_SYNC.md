@@ -2,10 +2,11 @@
 
 ## Version rule
 
-Android v0.72.0 r1 targets desktop tag `v0.72.0`, peeled commit
-`126e9a43dcc51d3d7b2609231eac9974ba73bed7`, in Gradle and `upstream.json`.
-It shows Cursor's unified included usage and prepaid balance, and corrects
-grouped-session ratios, counts and latest activity time. Goose, Notion AI,
+The Android v0.73.0 r1 candidate targets desktop tag `v0.73.0`, peeled commit
+`1190260afdcacd8998938de311e0435c306a18ed`, in Gradle and `upstream.json`.
+It cleans up Oh My Pi title-card icons and reads desktop's corrected Cursor
+quotas and matched timing counters. Grouped-session ratios, counts and latest
+activity time, Goose, Notion AI,
 separate WorkBuddy accounts, token number animation, session grouping and
 waiting state, explicit unpriced-token counts, Dots labels, TM2 colors,
 separate MiMo product rows, title-consent checks and Wi-Fi recovery are

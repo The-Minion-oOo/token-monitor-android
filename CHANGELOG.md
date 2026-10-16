@@ -3,6 +3,16 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
+## Next release
+
+- I updated the desktop baseline to v0.73.0 and checked Cursor's current-period
+  quotas, matched timing counters and corrected zero usage against the released Hub.
+- I hide Oh My Pi's unsupported leading title icon while keeping its title code,
+  text and stored record intact.
+- Claude Desktop usage remains under Claude, and Windows Goose usage keeps its
+  Goose label. Collection and transcript details stay on desktop.
+- I kept the widget design, network rules, digit roll and on-demand updater unchanged.
+
 ## v0.72.0 r1 — 2026-10-16
 
 - I updated the desktop baseline to v0.72.0 and checked Cursor's included

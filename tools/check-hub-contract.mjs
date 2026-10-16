@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import http from "node:http";
+import { EventEmitter } from "node:events";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -308,6 +309,61 @@ async function isolatedContract(source, output, upstream) {
         assert.equal(metricSessions["codex:metric-continuation"].timedOutputTokens, 300);
         assert.equal(metricSessions["codex:metric-child"].timedOutputTokens, 0);
         assert.equal(metricSessions["codex:metric-child"].messageCount, 5);
+        // v0.73: run the released Cursor probe too, not just an already-normalized usage stub.
+        for (const [name, period, sand, monthly, expected] of [
+            ["cursor-period", 13, 40, false, 13], ["cursor-period-zero", 0, 40, false, 0],
+            ["cursor-sand-fallback", null, 13, false, 13], ["cursor-weekly-unknown", null, null, false, null],
+            ["cursor-monthly-fallback", null, null, true, 30],
+        ]) {
+            const payloads = {
+                "/api/usage-summary": { membershipType: "premium", billingCycleEnd: "2026-11-01T00:00:00Z",
+                    individualUsage: { plan: { totalPercentUsed: period === 13 ? 0 : 30 } } },
+                "/api/dashboard/get-plan-info": { isMerged: true, planInfo: {
+                    includedUsagePeriod: monthly ? "INCLUDED_USAGE_PERIOD_MONTHLY" : "INCLUDED_USAGE_PERIOD_WEEKLY" } },
+                "/api/dashboard/get-sand-usage-status": { isUnified: true, ...(sand === null ? {} : { usagePercent: sand }) },
+                "/aiserver.v1.DashboardService/GetCurrentPeriodUsage": period === null ? null : { planUsage: { totalPercentUsed: period } },
+            };
+            const cursor = await fetchCursorLimits({}, { now: () => Date.parse(now),
+                readActiveAccount: () => ({ id: "synthetic-account", sessionToken: "user_fixture%3A%3Aaa.bb.cc" }),
+                httpsLib: { request(options, callback) {
+                    const response = new EventEmitter();
+                    response.statusCode = payloads[options.path] === null ? 500 : 200;
+                    setImmediate(() => { callback(response); if (response.statusCode === 200) setImmediate(() => {
+                        response.emit("data", Buffer.from(JSON.stringify(payloads[options.path] || {}))); response.emit("end");
+                    }); });
+                    return { on() {}, end() {}, write() {}, setTimeout() {} };
+                } } });
+            const included = cursor.windows.find(window => window.label === "Included usage");
+            assert.equal(included?.usedPercent ?? null, expected, name);
+            const probeHub = createHub({ port: 0, host: "127.0.0.1", secret, dataFile: join(source, `${name}.json`) });
+            probeHub.ingest({ ...device, limits: { updatedAt: now, providers: [cursor] } });
+            responses[`${name}.json`] = probeHub.getStats();
+            assert.ok(!JSON.stringify(responses[`${name}.json`]).includes("aa.bb.cc"));
+        }
+        // Matched output subtotals, including zero, pass from the released collector through the Hub.
+        const { extractUsageFromTokscale } = require("./src/shared/usage.js");
+        const timingRows = [
+            { client: "claude", model: "shared-model", sessionId: "partial", output: 200, cost: 0.25,
+                performance: { totalDurationMs: 1000, timedOutputTokens: 100, timedReasoningTokens: 0, tokenCoverage: 0.5 } },
+            { client: "claude", model: "shared-model", sessionId: "zero", output: 200,
+                performance: { totalDurationMs: 1000, timedOutputTokens: 0 } },
+            { client: "codex", model: "gpt-5", sessionId: "reasoning", output: 200, reasoning: 80,
+                performance: { totalDurationMs: 1000, timedOutputTokens: 100, timedReasoningTokens: 20 } },
+        ];
+        const timingPeriod = extractUsageFromTokscale({ entries: timingRows });
+        assert.equal(timingPeriod.sessions["claude:partial"].timedOutputTokens, 100);
+        assert.equal(timingPeriod.sessions["claude:zero"].timedOutputTokens, 0);
+        assert.equal(timingPeriod.sessions["codex:reasoning"].timedOutputTokens, 120);
+        assert.equal(timingPeriod.timedOutputTokens, 220);
+        const timingHub = createHub({ port: 0, host: "127.0.0.1", secret, dataFile: join(source, "synthetic-matched-timing.json") });
+        timingHub.ingest({ ...device, trackedClients: ["claude", "codex"], periods: { today: timingPeriod, month: timingPeriod } });
+        responses["matched-timing.json"] = timingHub.getStats();
+        const correctedPeriod = extractUsageFromTokscale({ entries: [] });
+        timingHub.ingest({ ...device, trackedClients: ["claude", "codex"], updatedAt: new Date(Date.parse(now) + 1000).toISOString(),
+            periods: { today: correctedPeriod, month: correctedPeriod } });
+        responses["corrected-zero.json"] = timingHub.getStats();
+        assert.equal(responses["corrected-zero.json"].periods.today.totalTokens, 0);
+        assert.deepEqual(responses["corrected-zero.json"].periods.today.sessions, {});
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) await writeFile(join(output, name), `${JSON.stringify(value, null, 2)}\n`);
         console.log(`Actual ${upstream.tag} Hub passed authenticated reads, snapshot, freshness and changed-stat checks. Synthetic responses: ${output}`);
