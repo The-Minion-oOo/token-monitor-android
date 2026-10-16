@@ -2,7 +2,7 @@
 
 ## Version rule
 
-The Android v0.72.0 r1 candidate targets desktop tag `v0.72.0`, peeled commit
+Android v0.72.0 r1 targets desktop tag `v0.72.0`, peeled commit
 `126e9a43dcc51d3d7b2609231eac9974ba73bed7`, in Gradle and `upstream.json`.
 It shows Cursor's unified included usage and prepaid balance, and corrects
 grouped-session ratios, counts and latest activity time. Goose, Notion AI,
@@ -14,10 +14,10 @@ alias/pricing edits and title-sharing controls remain on desktop. Android is
 still read-only.
 
 The latest published release is
-[`android-v0.71.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.71.0-r1),
+[`android-v0.72.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.72.0-r1),
 recorded with its source commit in `release.json`. The earlier v0.66.0 r1
 upgrade on my phone preserved pairing and the placed Pages widget; later
-revisions, including v0.71.0 r1, have not been checked on it.
+revisions, including v0.72.0 r1, have not been checked on it.
 
 An Android-only fix increments `versionCode` and the GitHub release revision,
 for example `android-vX.Y.Z-rN`, without changing the visible compatibility

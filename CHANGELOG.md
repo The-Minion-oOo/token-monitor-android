@@ -3,7 +3,7 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
-## Next release
+## v0.72.0 r1 — 2026-10-16
 
 - I updated the desktop baseline to v0.72.0 and checked Cursor's included
   weekly/monthly usage and optional prepaid balance against the released Hub.
