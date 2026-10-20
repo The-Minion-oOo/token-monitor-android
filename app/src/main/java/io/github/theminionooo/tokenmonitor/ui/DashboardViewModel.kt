@@ -160,6 +160,7 @@ internal class DashboardViewModel(application: Application) : AndroidViewModel(a
     fun setHomeModuleVisible(module: String, visible: Boolean) = displayPreferences.setHomeModuleVisible(module, visible)
     fun moveView(view: String, offset: Int) = displayPreferences.moveView(view, offset)
     fun moveHomeModule(module: String, offset: Int) = displayPreferences.moveHomeModule(module, offset)
+    fun setHomeListCount(module: String, count: Int) = displayPreferences.setHomeListCount(module, count)
 
     fun saveConnection(url: String, fallbackUrl: String, secret: String, allowLocalNetwork: Boolean) {
         checkConnection(returnHome = true) { repository.validateAndSave(url, fallbackUrl, secret, allowLocalNetwork) }

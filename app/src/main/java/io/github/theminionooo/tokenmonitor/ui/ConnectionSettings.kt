@@ -104,6 +104,7 @@ internal fun ConnectionScreen(
     onRepairHomeAddress: (String) -> Unit = {},
     onAllowLocalNetwork: () -> Unit = {},
     onTokenNumberAnimationChange: (TokenNumberAnimation) -> Unit = {},
+    onHomeListCountChange: (String, Int) -> Unit = { _, _ -> },
 ) {
     val hasConnection = state.hasConnection
     var hubUrl by rememberSaveable(state.connectionUrl) { mutableStateOf(state.connectionUrl.orEmpty()) }
@@ -264,6 +265,9 @@ internal fun ConnectionScreen(
                         onCheckedChange = { onHomeModuleVisibleChange(module, it) },
                         onMove = { onMoveHomeModule(module, it) },
                     )
+                    if (module in DisplayOptions.defaultHomeListCounts && module in displayOptions.visibleHomeModules) {
+                        HomeListCountControl(module, displayOptions.homeListCount(module)) { onHomeListCountChange(module, it) }
+                    }
                 }
             }
             SettingsGroup("Usage presentation", summary = "${displayOptions.rankingMetric.name} · ${displayOptions.limitBarMetric.name}") {

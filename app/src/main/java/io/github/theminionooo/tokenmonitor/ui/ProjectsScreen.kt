@@ -122,8 +122,9 @@ internal fun LazyListScope.projectItems(projects: List<ProjectUsage>, period: Da
 
 @Composable
 internal fun ProjectUsageRow(project: ProjectUsage, ratio: Float) {
-    val expandable = project.clients.isNotEmpty()
+    val expandable = project.totalTokens > 0
     var expanded by rememberSaveable(project.id) { mutableStateOf(false) }
+    var modelShares by rememberSaveable(project.id) { mutableStateOf(false) }
     val motionEnabled = LocalInteractionMotion.current
     Column(
         modifier = Modifier.fillMaxWidth().then(
@@ -156,12 +157,20 @@ internal fun ProjectUsageRow(project: ProjectUsage, ratio: Float) {
             exit = fadeOut(tween(if (motionEnabled) 100 else 0)) + shrinkVertically(tween(if (motionEnabled) 180 else 0, easing = DesktopEaseOut)),
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                project.clients.entries.sortedByDescending { it.value }.forEach { (client, tokens) ->
+                ChoiceGroup(
+                    options = listOf("TOOLS" to "tools", "MODELS" to "models"),
+                    selected = if (modelShares) "models" else "tools",
+                    onSelect = { modelShares = it == "models" },
+                )
+                projectShares(project, modelShares).forEach { share ->
                     Row(modifier = Modifier.padding(start = 20.dp), verticalAlignment = Alignment.CenterVertically) {
-                        UpstreamToolMark(client, accentFor(client), size = 8.dp)
+                        if (share.unknown) StatusDot(Muted, size = 8.dp)
+                        else if (modelShares) ModelMark(share.name, Purple, size = 8.dp)
+                        else UpstreamToolMark(share.name, accentFor(share.name), size = 8.dp)
                         Spacer(Modifier.width(7.dp))
-                        Text(client.displayName(), color = Muted, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
-                        Text(formatTokens(tokens), color = Ink, style = MaterialTheme.typography.bodySmall)
+                        Text(if (share.unknown || modelShares) share.name else share.name.displayName(), color = Muted, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Spacer(Modifier.width(8.dp))
+                        Text("${formatCompactTokens(share.tokens)} · ${formatPercent(share.tokens.toDouble() / project.totalTokens * 100)}", color = Ink, style = MaterialTheme.typography.bodySmall)
                     }
                 }
             }

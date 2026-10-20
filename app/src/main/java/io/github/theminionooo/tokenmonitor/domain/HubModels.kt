@@ -61,6 +61,7 @@ data class ProjectUsage(
     val sessionCount: Int,
     val clients: Map<String, Long>,
     val unpricedTokens: Long = 0,
+    val models: Map<String, Long> = emptyMap(),
 )
 
 data class SessionUsage(

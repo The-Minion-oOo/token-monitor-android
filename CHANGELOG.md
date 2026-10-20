@@ -3,6 +3,20 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
+## Next release — v0.76.0 r1
+
+- I updated the desktop baseline to v0.76.0, including the changes in v0.74.0
+  and v0.75.0, and merged the Compose compiler 2.4.21 patch.
+- I added separate 1–50 Home list counts for Tools, Models, Sessions and
+  Devices, preserving saved layouts and the existing Android defaults.
+- Expanded projects can switch between Tools and Models. Missing model
+  attribution stays Unknown model rather than an estimated split.
+- Antigravity subagents group under their conversation. Grok Bot records need
+  an explicit open turn before recent usage can appear Running.
+- I checked Argon quotas, missing versus exhausted readings, Grok reasoning
+  totals and classified history zeros against the released desktop code.
+- I kept the widget layout, digit roll, network rules and updater unchanged.
+
 ## v0.73.0 r1 — 2026-10-16
 
 - I updated the desktop baseline to v0.73.0 and checked Cursor's current-period

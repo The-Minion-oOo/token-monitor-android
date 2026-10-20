@@ -13,10 +13,10 @@ import java.time.Instant
 
 /**
  * Home is a recent-session summary, independent of the selected usage period. Like the desktop it groups
- * subagents and continuations under their conversation, keeps the five newest rows and never hides a row
+ * subagents and continuations under their conversation, keeps the chosen number of newest rows and never hides a row
  * that is running or waiting for a reply.
  */
-internal fun recentHomeSessions(snapshot: HubSnapshot, now: Long): List<SessionRow> {
+internal fun recentHomeSessions(snapshot: HubSnapshot, now: Long, count: Int = 5): List<SessionRow> {
     val all = snapshot.month.sessions + snapshot.today.sessions
     val sessions = all.filter { it.sessionKind != "background-review" }
         .distinctBy { it.client to it.id }
@@ -26,14 +26,14 @@ internal fun recentHomeSessions(snapshot: HubSnapshot, now: Long): List<SessionR
     return groupSessions(sessions, evidence = all)
         .sortedByDescending { it.sortTime }
         .filterIndexed { index, row ->
-            index < 5 || sessionRowActivity(row, now) in setOf(SessionActivityState.Running, SessionActivityState.Waiting)
+            index < count.coerceIn(1, 50) || sessionRowActivity(row, now) in setOf(SessionActivityState.Running, SessionActivityState.Waiting)
         }
 }
 
 @Composable
-internal fun HomeSessionsModule(snapshot: HubSnapshot, onChoose: (DashboardDestination) -> Unit) {
+internal fun HomeSessionsModule(snapshot: HubSnapshot, count: Int = 5, onChoose: (DashboardDestination) -> Unit) {
     val now = LocalNow.current
-    val rows = recentHomeSessions(snapshot, now)
+    val rows = recentHomeSessions(snapshot, now, count)
     val states = rows.map { sessionRowActivity(it, now) }
     val waiting = states.count { it == SessionActivityState.Waiting }
     val meta = listOfNotNull("${states.count { it == SessionActivityState.Running }} running", waiting.takeIf { it > 0 }?.let { "$it waiting" })

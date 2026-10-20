@@ -14,7 +14,7 @@ internal fun SessionUsage.matchesSearch(query: String, showTitles: Boolean): Boo
 
 internal fun ProjectUsage.matchesSearch(query: String): Boolean {
     val text = query.trim()
-    return text.isEmpty() || (listOf(id, label) + clients.keys + clients.keys.map { it.displayName() })
+    return text.isEmpty() || (listOf(id, label) + clients.keys + clients.keys.map { it.displayName() } + models.keys)
         .any { it.contains(text, ignoreCase = true) }
 }
 

@@ -4,7 +4,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.73.0**, released 2026-10-16.
+The verified baseline is upstream Token Monitor **v0.76.0**, released 2026-10-20.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -50,9 +50,9 @@ replaces the snapshot with the current read endpoints.
 
 ## Fixtures
 
-Synthetic v0.73.0 examples for all five read endpoints and the live stream live
-in `app/src/test/resources/protocol/v0.73.0/`; the retained v0.54.0, v0.55.0,
-v0.56.0, v0.60.0, v0.61.0, v0.62.0, v0.63.0, v0.63.1, v0.64.0, v0.65.0, v0.66.0, v0.67.0, v0.68.0, v0.69.0, v0.70.0, v0.71.0 and v0.72.0 fixtures prove backward compatibility. They contain no user secrets,
+Synthetic v0.76.0 responses from the pinned Hub cover all five read endpoints
+and the live stream in `app/src/test/resources/protocol/v0.76.0/`; the retained v0.54.0, v0.55.0,
+v0.56.0, v0.60.0, v0.61.0, v0.62.0, v0.63.0, v0.63.1, v0.64.0, v0.65.0, v0.66.0, v0.67.0, v0.68.0, v0.69.0, v0.70.0, v0.71.0, v0.72.0 and v0.73.0 fixtures prove backward compatibility. They contain no user secrets,
 machine paths, account identifiers, or real usage. Parser tests cover every
 read surface, the SSE envelope, omitted optional fields, and a future unknown
 field. The compatibility parser maps only the fields the dashboard needs and
@@ -273,7 +273,8 @@ A session's activity state is decided in this order:
    for Claude Code and Codex unless its state is `unknown`.
 3. Otherwise the transcript decides. `turnEnded: true` means finished while the
    session is recent. For Codex, `waitingForInput` within the last 10 minutes means
-   waiting. Any other session active within 10 minutes is running, and an older
+   waiting. Grok Bot usage is idle unless `turnEnded: false` explicitly reports
+   an open turn. Any other session active within 10 minutes is running, and an older
    one is idle.
 
 Waiting is shown as **Waiting for you** in Home and Sessions. The synthetic
@@ -393,3 +394,32 @@ a space, and a one-to-six-character uppercase/digit code followed by a colon.
 `sessionTitleForDisplay` hides that icon only for `omp`, retaining the code and
 text. It never changes the stored title or bypasses title privacy. Transcript
 bodies and tool records remain local to desktop.
+
+## v0.74.0 through v0.76.0 projects, activity and quotas
+
+The five read routes, Bearer authentication and stream-v2 envelope are unchanged.
+Project rollups gain an optional `models` map keyed by normalized model ID. I
+keep it in the wire adapter and domain model, and bound displayed shares to
+the project total. Tokens outside the map remain **Unknown model**, including
+all tokens in an older rollup that omits the field. Android never estimates a
+model split from project cost or a period-wide model share.
+
+Antigravity sessions can carry `parentSessionId`; the existing grouping logic
+folds them under the visible parent and labels an orphan as a subagent. DeepSeek
+Harness project attribution arrives through the existing project fields.
+Grok reasoning joins output exactly once on desktop; Android reads those totals
+without adding reasoning again. Repeated daily-history merges retain explicit
+`unclassifiedTokens: 0` so classified input remains classified in rolling ranges.
+
+Grok Bot identity survives model aliases and different period copies. Recent
+cloud usage alone cannot prove that a bot is running. An explicit open turn
+is required; a recent ended turn still reads Finished.
+
+Antigravity's **Gemini 4 Argon** allowance is a separate normalized window.
+Missing percentages remain null and can carry `showMeter: false`, while a real
+zero remains exhausted. Limits labels an absent value **Not reported**, not
+Available. The contract harness runs the released quota mapper and pool reducer
+with synthetic probe results; it never reads an account or starts a collector.
+
+Home list counts are local presentation preferences, not Hub settings. Desktop
+notch/dock behavior, collection priority and quota-probe fixes remain on desktop.

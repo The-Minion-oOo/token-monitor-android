@@ -206,6 +206,7 @@ internal fun TokenMonitorApp(viewModel: DashboardViewModel) {
                     onRepairHomeAddress = { address -> withLocalNetworkAccess(true) { viewModel.repairHomeAddress(address) } },
                     onAllowLocalNetwork = { withLocalNetworkAccess(true, viewModel::onResume) },
                     onTokenNumberAnimationChange = viewModel::setTokenNumberAnimation,
+                    onHomeListCountChange = viewModel::setHomeListCount,
                 )
             }
         }
@@ -248,6 +249,7 @@ internal fun DashboardScaffold(
     onRepairHomeAddress: (String) -> Unit = {},
     onAllowLocalNetwork: () -> Unit = {},
     onTokenNumberAnimationChange: (TokenNumberAnimation) -> Unit = {},
+    onHomeListCountChange: (String, Int) -> Unit = { _, _ -> },
 ) {
     var periodName by rememberSaveable { mutableStateOf(displayOptions.defaultPeriod) }
     // The default steers the period only when the setting changes; a rotation or theme switch must keep the period picked in the header.
@@ -335,6 +337,7 @@ internal fun DashboardScaffold(
                 onRepairHomeAddress = onRepairHomeAddress,
                 onAllowLocalNetwork = onAllowLocalNetwork,
                 onTokenNumberAnimationChange = onTokenNumberAnimationChange,
+                onHomeListCountChange = onHomeListCountChange,
             )
         } else {
             // A period switch replaces every reading at once, so rolling totals sweep instead of ticking.

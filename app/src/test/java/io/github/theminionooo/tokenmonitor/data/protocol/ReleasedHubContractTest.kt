@@ -139,5 +139,26 @@ class ReleasedHubContractTest {
         val corrected = HubProtocolParser.decodeStats(response("corrected-zero")).periods.getValue("today")
         assertEquals(0L, corrected.totalTokens)
         assertTrue(corrected.sessions.isEmpty())
+        val modern = HubProtocolParser.decodeStats(response("modern"))
+        val modernToday = modern.periods.getValue("today")
+        assertEquals(150L, modernToday.projects.single().models["deepseek-v4"])
+        val parentRow = io.github.theminionooo.tokenmonitor.ui.groupSessions(modernToday.sessions)
+            .single { it.kind == io.github.theminionooo.tokenmonitor.ui.SessionGroupKind.Conversation }
+        assertEquals(850L, parentRow.totalTokens)
+        assertEquals(1, parentRow.subagentCount)
+        val bot = modernToday.sessions.single { it.client == "cursor" }
+        val botTime = Instant.parse(bot.lastUsedAt).toEpochMilli()
+        assertEquals(io.github.theminionooo.tokenmonitor.ui.SessionActivityState.Idle,
+            io.github.theminionooo.tokenmonitor.ui.sessionActivityState(bot, botTime))
+        val argon = modern.limits.providers.single().windows.single { it.label == "Gemini 4 Argon" }
+        assertEquals(65.0, argon.remainingPercent!!, 0.0)
+        val missing = modern.limits.providers.single().windows.single { it.label == "Gemini Pro" }
+        assertNull(missing.remainingPercent)
+        assertEquals(false, missing.showMeter)
+        val project = modern.periods.getValue("allTime").projects.single { it.label == "Partial project" }
+        assertEquals(40L, io.github.theminionooo.tokenmonitor.ui.projectShares(project, true).single { it.unknown }.tokens)
+        assertEquals(75L, modernToday.sessions.single { it.client == "grok" }.outputTokens)
+        val classified = HubProtocolParser.decodeSnapshot("{}", "{}", "{}", response("classified-history"), "{}", 0).history.daily.single()
+        assertEquals(0L, classified.perClient.getValue("grok").unclassifiedTokens)
     }
 }

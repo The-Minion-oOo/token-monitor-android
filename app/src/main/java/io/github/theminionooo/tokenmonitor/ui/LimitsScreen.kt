@@ -169,7 +169,7 @@ internal fun LimitAccountRow(account: LimitAccount, displayOptions: DisplayOptio
                                     usedPercent?.let { "${formatPercent(it)} used" }
                                 })
                                     ?: window.remaining?.let { formatWindowAmount(it, window.currency) }
-                                    ?: "Available"
+                                    ?: "Not reported"
                                 Text(display, color = Ink, style = MaterialTheme.typography.labelSmall)
                             }
                             val balance = balanceMeterPercent(account.provider, window)

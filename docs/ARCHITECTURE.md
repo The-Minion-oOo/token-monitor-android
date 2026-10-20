@@ -209,6 +209,12 @@ and settings. Shared presentation rules live alongside them in focused files:
   and Sessions views share these readings; context and cache-TTL estimates
   remain individual-session information.
 
+- **Projects and Home counts.** Optional project model maps pass through the
+  wire adapter into `ProjectUsage`. `ProjectBreakdown` bounds each share and
+  retains an explicit unknown remainder; expanded rows choose Tools or Models.
+  `DisplayPreferences` stores independent 1–50 Home list counts locally, without
+  changing saved module visibility/order, pairing, or widget composition.
+
 - **Settings.** `ConnectionSettings.kt` sections collapse to a header with a summary,
   like the desktop settings list. A fresh install shows `WelcomeSetup` instead
   of Settings until a Hub is saved.

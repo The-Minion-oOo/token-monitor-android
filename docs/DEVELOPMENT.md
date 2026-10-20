@@ -102,7 +102,7 @@ in a fixture or screenshot.
 JVM tests cover protocol parsing, private-address rules, endpoint failover,
 stream recovery, ordered cache writes, history aggregation, presentation rules,
 and preferences. Versioned Hub fixtures live under
-`app/src/test/resources/protocol/`. The v0.73.0 set covers all five read
+`app/src/test/resources/protocol/`. The v0.76.0 set covers all five read
 endpoints, a complete stream frame, and a freshness-only frame. The v0.69.0
 fixtures retain session relationships and activity, the v0.68.0
 fixtures retain unpriced counts and Dots provenance, and the v0.67.0
@@ -163,6 +163,14 @@ Instrumentation tests use the preview package to exercise navigation, dialogs,
 widgets, storage, and lifecycle behavior. Run them on an API 36 emulator before
 opening a pull request for a UI or lifecycle change. Visual changes also need a
 native screenshot at the affected phone or launcher size.
+
+The v0.76.0 fixtures are synthetic responses captured from the pinned Hub.
+They cover complete, partial and legacy project model maps; Antigravity parent
+links and separate Argon/unknown/exhausted quota windows; Grok disjoint reasoning;
+Grok Bot recency; and classified zeros after repeated history aggregation.
+Native tests switch project shares, change and reload a Home count, verify the
+rendered list limit, and capture quota wording. Home keeps running/waiting
+session overflow even when a smaller count is selected.
 
 Current coverage and physical-device limits are recorded in
 [Validation](VALIDATION.md).
@@ -278,7 +286,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 50 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 53 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.

@@ -1,6 +1,6 @@
-# Desktop parity for v0.73.0
+# Desktop parity for v0.76.0
 
-The Android adapter targets desktop Token Monitor v0.73.0 using
+The Android adapter targets desktop Token Monitor v0.76.0 using
 versioned fixtures and responses from the pinned released Hub. It mirrors
 the desktop information that the Hub can safely provide while keeping the phone
 read-only and lightweight.
@@ -10,13 +10,14 @@ read-only and lightweight.
 | Desktop surface | Android coverage |
 | --- | --- |
 | Home totals and period selection | Day, month, week, 7 days, 30 days, and total, with a configurable default |
-| Home Sessions | Five newest sessions plus all running sessions, raw reported titles, recent context, and a link to Sessions; independent of the totals period |
+| Home lists | Separate 1–50 item counts for Tools, Models, Sessions and Devices; existing Android defaults stay unchanged |
+| Home Sessions | The chosen number of newest sessions plus running/waiting overflow, reported titles, recent context, and a link to Sessions; independent of the totals period |
 | Limits | Provider windows, remaining or used bars, reset time, plan/source metadata, separate MiMo products, native-currency wallet/spend values, MiniMax pay-as-you-go balances, and hidden-by-default account email |
 | Tools | Token and cost totals, proportional bars, cache hit, cache miss, output, and unclassified details |
 | Status | Provider status, message, update time, and provider status-page link |
 | Devices | Device totals, clients, models, collection cadence, last upload, and retained history |
 | Models | Token or cost ranking, with the desktop vendor mark for recognized model families and a generic model mark for unknown names |
-| Projects | Totals, session/tool counts, date range, and tool breakdown |
+| Projects | Totals and expandable Tools/Models token shares, with Unknown model for missing attribution |
 | Sessions | Reported conversation title, project, tool, model, start/update time, session ID, tokens, cost, Running/Waiting for you/Finished/Idle activity, and recent context-window use; Codex subagents and continuations, T3 Code continuations, Grok Bot records and background reviews are grouped under one row with combined usage; untitled sessions retain the client/model label |
 | Usage dashboard | Overview cards, activity heatmap, and model/tool summaries |
 | Trends | By tool or model, Bars or K-line, and 7/30/90-day, one-year, or all-history ranges |
@@ -182,6 +183,12 @@ Windows Goose usage stays under Goose. Oh My Pi transcripts, hover previews,
 collector/archive fixes and desktop update history remain desktop features.
 
 ## Mobile additions
+
+For v0.76.0, I added Home list counts and project model shares, kept Antigravity
+children under their parent conversation, and aligned Grok Bot activity with
+desktop. Argon quota windows stay separate, and missing values are not shown as
+exhausted or available. I retained the Pages widget design and digit roll.
+macOS notch gestures, glass, dock stacking and scan priority remain desktop-only.
 
 - Live streaming while a dashboard is visible, efficient 30-second widget Live refreshes, refresh on resume, and an offline snapshot.
 - Tailscale-first address validation, with private LAN use behind an explicit

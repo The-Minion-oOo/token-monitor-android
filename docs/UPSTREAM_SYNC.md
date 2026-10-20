@@ -2,10 +2,14 @@
 
 ## Version rule
 
-Android v0.73.0 r1 targets desktop tag `v0.73.0`, peeled commit
-`1190260afdcacd8998938de311e0435c306a18ed`, in Gradle and `upstream.json`.
-It cleans up Oh My Pi title-card icons and reads desktop's corrected Cursor
-quotas and matched timing counters. Grouped-session ratios, counts and latest
+The v0.76.0 r1 candidate targets desktop tag `v0.76.0`, peeled commit
+`fbbe4c1cb04e3277b73499016d432338c1d2ab4e`, in Gradle and `upstream.json`.
+I reviewed the changes since v0.73.0, including v0.74.0 and v0.75.0. Android
+adds project model shares and Home list counts, groups Antigravity children,
+and requires an explicit open turn for Grok Bot activity. Separate Argon quotas,
+unknown readings, Grok reasoning and classified history zeros are covered by
+the released-source checks. Oh My Pi title cleanup, Cursor quotas, timing counters,
+grouped-session ratios, counts and latest
 activity time, Goose, Notion AI,
 separate WorkBuddy accounts, token number animation, session grouping and
 waiting state, explicit unpriced-token counts, Dots labels, TM2 colors,

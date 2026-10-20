@@ -78,7 +78,11 @@ internal fun isGrokBotSession(session: SessionUsage): Boolean {
  */
 internal fun groupSessions(sessions: List<SessionUsage>, evidence: List<SessionUsage> = emptyList()): List<SessionRow> {
     val botIds = (sessions + evidence).filter(::isGrokBotSession).map { it.id }.toSet()
-    val (bots, others) = sessions.partition { it.client == "cursor" && it.id in botIds }
+    // Project the identity onto every period's copy, including copies with only aliased models.
+    val identified = sessions.map { session ->
+        if (session.client == "cursor" && session.id in botIds) session.copy(grokBotSession = true) else session
+    }
+    val (bots, others) = identified.partition { it.client == "cursor" && it.id in botIds }
     val (reviews, primary) = others.partition { it.isBackgroundReview() }
     return buildList {
         addAll(groupConversations(primary))

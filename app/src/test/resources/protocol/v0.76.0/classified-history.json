@@ -1,0 +1,48 @@
+{
+  "daily": [
+    {
+      "date": "2026-10-20",
+      "tokens": 175,
+      "cost": 0,
+      "messages": 0,
+      "activeTimeMs": 0,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "outputTokens": 75,
+      "unclassifiedTokens": 0,
+      "tokenComponentsAvailable": true,
+      "perClient": {
+        "grok": {
+          "tokens": 175,
+          "cost": 0,
+          "messages": 0,
+          "outputTokens": 75,
+          "unclassifiedTokens": 0
+        }
+      },
+      "perModel": {
+        "grok-4": {
+          "tokens": 175,
+          "cost": 0,
+          "outputTokens": 75,
+          "unclassifiedTokens": 0
+        }
+      },
+      "tokenIntensity": 4,
+      "costIntensity": 0,
+      "intensity": 0
+    }
+  ],
+  "monthly": [],
+  "summary": {
+    "totalTokens": 0,
+    "totalCost": 0,
+    "activeDays": 1,
+    "currentStreak": 1,
+    "longestStreak": 1,
+    "peakDayTokens": 175,
+    "favoriteModel": "grok-4",
+    "messages": 0,
+    "activeTimeMs": 0
+  }
+}

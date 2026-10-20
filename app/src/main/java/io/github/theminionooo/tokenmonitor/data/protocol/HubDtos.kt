@@ -51,6 +51,7 @@ internal data class HubProjectDto(
     val sessionCount: Int = 0,
     val clients: Map<String, Long> = emptyMap(),
     val unpricedTokens: Long = 0,
+    val models: Map<String, Long> = emptyMap(),
 )
 
 internal data class HubSessionDto(

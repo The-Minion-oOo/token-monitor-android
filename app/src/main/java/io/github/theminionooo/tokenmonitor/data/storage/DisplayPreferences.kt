@@ -37,8 +37,14 @@ internal data class DisplayOptions(
     val defaultPeriod: String = "Today",
     val visibleViews: List<String> = defaultViews,
     val visibleHomeModules: List<String> = defaultHomeModules,
+    val homeListCounts: Map<String, Int> = defaultHomeListCounts,
 ) {
+    fun homeListCount(module: String): Int =
+        (homeListCounts[module] ?: defaultHomeListCounts[module] ?: 5).coerceIn(1, 50)
+
     companion object {
+        // Keep Android's existing defaults when upgrading a saved layout.
+        val defaultHomeListCounts = mapOf("Tools" to 5, "Models" to 5, "Sessions" to 5, "Devices" to 3)
         val defaultViews = listOf("Home", "Tools", "Status", "Devices", "Models", "Projects", "Sessions", "Limits", "Trends")
         val defaultHomeModules = listOf("Limits", "Tools", "Models", "Sessions", "Devices", "Activity")
     }
@@ -65,6 +71,9 @@ internal class DisplayPreferences(context: Context) {
     fun setShowSessionTitles(enabled: Boolean) = update { copy(showSessionTitles = enabled) }
     fun setLimitBarMetric(metric: LimitBarMetric) = update { copy(limitBarMetric = metric) }
     fun setDefaultPeriod(period: String) = update { copy(defaultPeriod = period) }
+    fun setHomeListCount(module: String, count: Int) = update {
+        if (module in DisplayOptions.defaultHomeListCounts) copy(homeListCounts = homeListCounts + (module to count.coerceIn(1, 50))) else this
+    }
 
     fun setViewVisible(view: String, visible: Boolean) = update {
         val next = toggleOrderedValue(visibleViews, view, visible, DisplayOptions.defaultViews)
@@ -98,6 +107,7 @@ internal class DisplayPreferences(context: Context) {
             putString(defaultPeriodKey, next.defaultPeriod)
             putString(visibleViewsKey, next.visibleViews.joinToString(","))
             putString(visibleHomeModulesKey, next.visibleHomeModules.joinToString(","))
+            DisplayOptions.defaultHomeListCounts.keys.forEach { module -> putInt("home_count_$module", next.homeListCount(module)) }
         }
         _options.value = next
     }
@@ -120,6 +130,7 @@ internal class DisplayPreferences(context: Context) {
         defaultPeriod = preferences.getString(defaultPeriodKey, "Today") ?: "Today",
         visibleViews = preferences.getString(visibleViewsKey, null).orderedValues(DisplayOptions.defaultViews),
         visibleHomeModules = preferences.getString(visibleHomeModulesKey, null).orderedValues(DisplayOptions.defaultHomeModules),
+        homeListCounts = DisplayOptions.defaultHomeListCounts.mapValues { (module, fallback) -> preferences.getInt("home_count_$module", fallback).coerceIn(1, 50) },
     )
 
     private companion object {

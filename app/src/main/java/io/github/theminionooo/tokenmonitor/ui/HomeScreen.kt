@@ -116,10 +116,10 @@ internal fun LazyListScope.homeItems(
     displayOptions.visibleHomeModules.forEach { module ->
         when (module) {
             "Limits" -> item { DesktopModule("LIMITS", DashboardDestination.Limits, onChoose) { HomeLimits(snapshot.stats.limits.providers, displayOptions) } }
-            "Tools" -> item { DesktopModule("TOOLS", DashboardDestination.Tools, onChoose) { HomeBreakdown(usage.clients, usage.clientCosts, displayOptions.rankingMetric, unpriced = usage.clientUnpricedTokens) } }
-            "Devices" -> item { DesktopModule("DEVICES", DashboardDestination.Devices, onChoose) { HomeDevices(snapshot.stats.devices, period = period, aggregateUsage = usage) } }
-            "Models" -> item { DesktopModule("MODELS", DashboardDestination.Models, onChoose) { HomeBreakdown(usage.models, usage.modelCosts, displayOptions.rankingMetric, modelRows = true, unpriced = usage.modelUnpricedTokens) } }
-            "Sessions" -> item { HomeSessionsModule(snapshot, onChoose) }
+            "Tools" -> item { DesktopModule("TOOLS", DashboardDestination.Tools, onChoose) { HomeBreakdown(usage.clients, usage.clientCosts, displayOptions.rankingMetric, unpriced = usage.clientUnpricedTokens, count = displayOptions.homeListCount("Tools")) } }
+            "Devices" -> item { DesktopModule("DEVICES", DashboardDestination.Devices, onChoose) { HomeDevices(snapshot.stats.devices, period = period, aggregateUsage = usage, count = displayOptions.homeListCount("Devices")) } }
+            "Models" -> item { DesktopModule("MODELS", DashboardDestination.Models, onChoose) { HomeBreakdown(usage.models, usage.modelCosts, displayOptions.rankingMetric, modelRows = true, unpriced = usage.modelUnpricedTokens, count = displayOptions.homeListCount("Models")) } }
+            "Sessions" -> item { HomeSessionsModule(snapshot, displayOptions.homeListCount("Sessions"), onChoose) }
             "Activity" -> item {
                 DesktopModule(
                     title = "ACTIVITY",
@@ -219,6 +219,7 @@ internal fun HomeBreakdown(
     rankingMetric: RankingMetric,
     modelRows: Boolean = false,
     unpriced: Map<String, Long> = emptyMap(),
+    count: Int = 5,
 ) {
     if (tokens.isEmpty()) {
         MutedCopy("No activity for this period")
@@ -226,7 +227,7 @@ internal fun HomeBreakdown(
     }
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         val total = tokens.values.sum().coerceAtLeast(1L)
-        tokens.entries.sortedByDescending { (name, count) -> if (rankingMetric == RankingMetric.Cost) costs[name] ?: 0.0 else count.toDouble() }.take(5).forEach { (name, count) ->
+        tokens.entries.sortedByDescending { (name, tokens) -> if (rankingMetric == RankingMetric.Cost) costs[name] ?: 0.0 else tokens.toDouble() }.take(count.coerceIn(1, 50)).forEach { (name, count) ->
             HomeListRow(
                 name = name,
                 primary = "${formatCompactTokens(count)}  ${formatPercent(count.toDouble() / total * 100.0)}",
@@ -239,13 +240,13 @@ internal fun HomeBreakdown(
 }
 
 @Composable
-internal fun HomeDevices(devices: List<DeviceUsage>, period: DashboardPeriod, aggregateUsage: UsagePeriod) {
+internal fun HomeDevices(devices: List<DeviceUsage>, period: DashboardPeriod, aggregateUsage: UsagePeriod, count: Int = 3) {
     if (devices.isEmpty()) {
         MutedCopy("No devices have checked in")
         return
     }
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        devices.take(3).forEach { device ->
+        devices.take(count.coerceIn(1, 50)).forEach { device ->
             val deviceUsage = period.usage(device)
             val deviceTokens = deviceUsage.totalTokens.takeIf { it > 0 }
                 ?: if (devices.size == 1) aggregateUsage.totalTokens else 0L

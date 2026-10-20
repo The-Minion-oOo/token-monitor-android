@@ -1,0 +1,1271 @@
+{
+  "updatedAt": "2026-10-20T12:00:00.000Z",
+  "periods": {
+    "today": {
+      "capabilities": {
+        "tokenComponents": true,
+        "throughput": true
+      },
+      "totalTokens": 1325,
+      "costUsd": 0,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "outputTokens": 325,
+      "unclassifiedTokens": 0,
+      "timedTokens": 0,
+      "timedOutputTokens": 0,
+      "timedDurationMs": 0,
+      "modelThroughput": {},
+      "clients": {
+        "antigravity": 850,
+        "dsh": 150,
+        "grok": 175,
+        "cursor": 150
+      },
+      "clientCosts": {},
+      "clientCacheReads": {},
+      "clientCacheWrites": {},
+      "clientOutputs": {
+        "antigravity": 150,
+        "dsh": 50,
+        "grok": 75,
+        "cursor": 50
+      },
+      "clientUnclassifiedTokens": {},
+      "models": {
+        "gemini-4-argon": 850,
+        "deepseek-v4": 150,
+        "grok-4": 175,
+        "grok-bot-default": 150
+      },
+      "modelCosts": {},
+      "modelCacheReads": {},
+      "modelCacheWrites": {},
+      "modelOutputs": {
+        "gemini-4-argon": 150,
+        "deepseek-v4": 50,
+        "grok-4": 75,
+        "grok-bot-default": 50
+      },
+      "modelUnclassifiedTokens": {},
+      "clientModels": {
+        "antigravity": {
+          "gemini-4-argon": 850
+        },
+        "dsh": {
+          "deepseek-v4": 150
+        },
+        "grok": {
+          "grok-4": 175
+        },
+        "cursor": {
+          "grok-bot-default": 150
+        }
+      },
+      "clientModelCosts": {},
+      "projects": {
+        "sample project": {
+          "label": "Sample project",
+          "tokens": 1325,
+          "costUsd": 0,
+          "clients": {
+            "antigravity": 850,
+            "dsh": 150,
+            "grok": 175,
+            "cursor": 150
+          },
+          "models": {
+            "deepseek-v4": 150,
+            "gemini-4-argon": 850,
+            "grok-4": 175,
+            "grok-bot-default": 150
+          }
+        }
+      },
+      "sessions": {
+        "antigravity:sample-parent": {
+          "client": "antigravity",
+          "sessionId": "sample-parent",
+          "totalTokens": 700,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 600,
+          "outputTokens": 100,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-20T12:00:00.000Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "synthetic-project",
+          "projectLabel": "Sample project",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "gemini-4-argon": 700
+          },
+          "modelCosts": {},
+          "providers": {}
+        },
+        "antigravity:sample-child": {
+          "client": "antigravity",
+          "sessionId": "sample-child",
+          "totalTokens": 150,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-20T12:00:00.000Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "synthetic-project",
+          "projectLabel": "Sample project",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "gemini-4-argon": 150
+          },
+          "modelCosts": {},
+          "providers": {},
+          "parentSessionId": "sample-parent"
+        },
+        "dsh:sample-dsh": {
+          "client": "dsh",
+          "sessionId": "sample-dsh",
+          "totalTokens": 150,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-20T12:00:00.000Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "synthetic-project",
+          "projectLabel": "Sample project",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "deepseek-v4": 150
+          },
+          "modelCosts": {},
+          "providers": {}
+        },
+        "grok:sample-grok": {
+          "client": "grok",
+          "sessionId": "sample-grok",
+          "totalTokens": 175,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 100,
+          "outputTokens": 75,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 25,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-20T12:00:00.000Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "synthetic-project",
+          "projectLabel": "Sample project",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "grok-4": 175
+          },
+          "modelCosts": {},
+          "providers": {}
+        },
+        "cursor:sand-subagent-sample-bot": {
+          "client": "cursor",
+          "sessionId": "sand-subagent-sample-bot",
+          "totalTokens": 150,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-20T12:00:00.000Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "synthetic-project",
+          "projectLabel": "Sample project",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "grok-bot-default": 150
+          },
+          "modelCosts": {},
+          "providers": {}
+        }
+      }
+    },
+    "month": {
+      "capabilities": {
+        "tokenComponents": true,
+        "throughput": true
+      },
+      "totalTokens": 1325,
+      "costUsd": 0,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "outputTokens": 325,
+      "unclassifiedTokens": 0,
+      "timedTokens": 0,
+      "timedOutputTokens": 0,
+      "timedDurationMs": 0,
+      "modelThroughput": {},
+      "clients": {
+        "antigravity": 850,
+        "dsh": 150,
+        "grok": 175,
+        "cursor": 150
+      },
+      "clientCosts": {},
+      "clientCacheReads": {},
+      "clientCacheWrites": {},
+      "clientOutputs": {
+        "antigravity": 150,
+        "dsh": 50,
+        "grok": 75,
+        "cursor": 50
+      },
+      "clientUnclassifiedTokens": {},
+      "models": {
+        "gemini-4-argon": 850,
+        "deepseek-v4": 150,
+        "grok-4": 175,
+        "grok-bot-default": 150
+      },
+      "modelCosts": {},
+      "modelCacheReads": {},
+      "modelCacheWrites": {},
+      "modelOutputs": {
+        "gemini-4-argon": 150,
+        "deepseek-v4": 50,
+        "grok-4": 75,
+        "grok-bot-default": 50
+      },
+      "modelUnclassifiedTokens": {},
+      "clientModels": {
+        "antigravity": {
+          "gemini-4-argon": 850
+        },
+        "dsh": {
+          "deepseek-v4": 150
+        },
+        "grok": {
+          "grok-4": 175
+        },
+        "cursor": {
+          "grok-bot-default": 150
+        }
+      },
+      "clientModelCosts": {},
+      "projects": {
+        "sample project": {
+          "label": "Sample project",
+          "tokens": 1325,
+          "costUsd": 0,
+          "clients": {
+            "antigravity": 850,
+            "dsh": 150,
+            "grok": 175,
+            "cursor": 150
+          },
+          "models": {
+            "deepseek-v4": 150,
+            "gemini-4-argon": 850,
+            "grok-4": 175,
+            "grok-bot-default": 150
+          }
+        }
+      },
+      "sessions": {
+        "antigravity:sample-parent": {
+          "client": "antigravity",
+          "sessionId": "sample-parent",
+          "totalTokens": 700,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 600,
+          "outputTokens": 100,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-20T12:00:00.000Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "synthetic-project",
+          "projectLabel": "Sample project",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "gemini-4-argon": 700
+          },
+          "modelCosts": {},
+          "providers": {}
+        },
+        "antigravity:sample-child": {
+          "client": "antigravity",
+          "sessionId": "sample-child",
+          "totalTokens": 150,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-20T12:00:00.000Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "synthetic-project",
+          "projectLabel": "Sample project",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "gemini-4-argon": 150
+          },
+          "modelCosts": {},
+          "providers": {},
+          "parentSessionId": "sample-parent"
+        },
+        "dsh:sample-dsh": {
+          "client": "dsh",
+          "sessionId": "sample-dsh",
+          "totalTokens": 150,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-20T12:00:00.000Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "synthetic-project",
+          "projectLabel": "Sample project",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "deepseek-v4": 150
+          },
+          "modelCosts": {},
+          "providers": {}
+        },
+        "grok:sample-grok": {
+          "client": "grok",
+          "sessionId": "sample-grok",
+          "totalTokens": 175,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 100,
+          "outputTokens": 75,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 25,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-20T12:00:00.000Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "synthetic-project",
+          "projectLabel": "Sample project",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "grok-4": 175
+          },
+          "modelCosts": {},
+          "providers": {}
+        },
+        "cursor:sand-subagent-sample-bot": {
+          "client": "cursor",
+          "sessionId": "sand-subagent-sample-bot",
+          "totalTokens": 150,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-20T12:00:00.000Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "synthetic-project",
+          "projectLabel": "Sample project",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "grok-bot-default": 150
+          },
+          "modelCosts": {},
+          "providers": {}
+        }
+      }
+    },
+    "allTime": {
+      "capabilities": {
+        "tokenComponents": true,
+        "throughput": true
+      },
+      "totalTokens": 1325,
+      "costUsd": 0,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "outputTokens": 325,
+      "unclassifiedTokens": 0,
+      "timedTokens": 0,
+      "timedOutputTokens": 0,
+      "timedDurationMs": 0,
+      "modelThroughput": {},
+      "clients": {
+        "antigravity": 850,
+        "dsh": 150,
+        "grok": 175,
+        "cursor": 150
+      },
+      "clientCosts": {},
+      "clientCacheReads": {},
+      "clientCacheWrites": {},
+      "clientOutputs": {
+        "antigravity": 150,
+        "dsh": 50,
+        "grok": 75,
+        "cursor": 50
+      },
+      "clientUnclassifiedTokens": {},
+      "models": {
+        "gemini-4-argon": 850,
+        "deepseek-v4": 150,
+        "grok-4": 175,
+        "grok-bot-default": 150
+      },
+      "modelCosts": {},
+      "modelCacheReads": {},
+      "modelCacheWrites": {},
+      "modelOutputs": {
+        "gemini-4-argon": 150,
+        "deepseek-v4": 50,
+        "grok-4": 75,
+        "grok-bot-default": 50
+      },
+      "modelUnclassifiedTokens": {},
+      "clientModels": {
+        "antigravity": {
+          "gemini-4-argon": 850
+        },
+        "dsh": {
+          "deepseek-v4": 150
+        },
+        "grok": {
+          "grok-4": 175
+        },
+        "cursor": {
+          "grok-bot-default": 150
+        }
+      },
+      "clientModelCosts": {},
+      "projects": {
+        "complete project": {
+          "label": "Complete project",
+          "tokens": 100,
+          "costUsd": 0,
+          "clients": {
+            "dsh": 100
+          },
+          "models": {
+            "deepseek-v4": 100
+          }
+        },
+        "partial project": {
+          "label": "Partial project",
+          "tokens": 100,
+          "costUsd": 0,
+          "clients": {
+            "grok": 100
+          },
+          "models": {
+            "grok-4": 60
+          }
+        },
+        "legacy project": {
+          "label": "Legacy project",
+          "tokens": 100,
+          "costUsd": 0,
+          "clients": {
+            "antigravity": 100
+          }
+        }
+      },
+      "sessions": {}
+    }
+  },
+  "devices": [
+    {
+      "deviceId": "contract-desktop",
+      "hostname": "Synthetic desktop",
+      "platform": "linux",
+      "agentVersion": "0.76.0",
+      "agentRuntime": "",
+      "updatedAt": "2026-10-20T12:00:00.000Z",
+      "receivedAt": "2026-10-20T12:00:00.000Z",
+      "ageMs": 1,
+      "stale": false,
+      "trackedClients": [
+        "antigravity",
+        "dsh",
+        "grok",
+        "cursor"
+      ],
+      "periods": {
+        "today": {
+          "capabilities": {
+            "tokenComponents": true,
+            "throughput": true
+          },
+          "totalTokens": 1325,
+          "costUsd": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 325,
+          "unclassifiedTokens": 0,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "modelThroughput": {},
+          "clients": {
+            "antigravity": 850,
+            "dsh": 150,
+            "grok": 175,
+            "cursor": 150
+          },
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {
+            "antigravity": 150,
+            "dsh": 50,
+            "grok": 75,
+            "cursor": 50
+          },
+          "clientUnclassifiedTokens": {},
+          "models": {
+            "gemini-4-argon": 850,
+            "deepseek-v4": 150,
+            "grok-4": 175,
+            "grok-bot-default": 150
+          },
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {
+            "gemini-4-argon": 150,
+            "deepseek-v4": 50,
+            "grok-4": 75,
+            "grok-bot-default": 50
+          },
+          "modelUnclassifiedTokens": {},
+          "clientModels": {
+            "antigravity": {
+              "gemini-4-argon": 850
+            },
+            "dsh": {
+              "deepseek-v4": 150
+            },
+            "grok": {
+              "grok-4": 175
+            },
+            "cursor": {
+              "grok-bot-default": 150
+            }
+          },
+          "clientModelCosts": {},
+          "projects": {
+            "sample project": {
+              "label": "Sample project",
+              "tokens": 1325,
+              "costUsd": 0,
+              "clients": {
+                "antigravity": 850,
+                "dsh": 150,
+                "grok": 175,
+                "cursor": 150
+              },
+              "models": {
+                "deepseek-v4": 150,
+                "gemini-4-argon": 850,
+                "grok-4": 175,
+                "grok-bot-default": 150
+              }
+            }
+          },
+          "sessions": {
+            "antigravity:sample-parent": {
+              "client": "antigravity",
+              "sessionId": "sample-parent",
+              "totalTokens": 700,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 600,
+              "outputTokens": 100,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-20T12:00:00.000Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "synthetic-project",
+              "projectLabel": "Sample project",
+              "title": "",
+              "sessionKind": "",
+              "models": {
+                "gemini-4-argon": 700
+              },
+              "modelCosts": {},
+              "providers": {}
+            },
+            "antigravity:sample-child": {
+              "client": "antigravity",
+              "sessionId": "sample-child",
+              "totalTokens": 150,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-20T12:00:00.000Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "synthetic-project",
+              "projectLabel": "Sample project",
+              "title": "",
+              "sessionKind": "",
+              "models": {
+                "gemini-4-argon": 150
+              },
+              "modelCosts": {},
+              "providers": {},
+              "parentSessionId": "sample-parent"
+            },
+            "dsh:sample-dsh": {
+              "client": "dsh",
+              "sessionId": "sample-dsh",
+              "totalTokens": 150,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-20T12:00:00.000Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "synthetic-project",
+              "projectLabel": "Sample project",
+              "title": "",
+              "sessionKind": "",
+              "models": {
+                "deepseek-v4": 150
+              },
+              "modelCosts": {},
+              "providers": {}
+            },
+            "grok:sample-grok": {
+              "client": "grok",
+              "sessionId": "sample-grok",
+              "totalTokens": 175,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 100,
+              "outputTokens": 75,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 25,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-20T12:00:00.000Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "synthetic-project",
+              "projectLabel": "Sample project",
+              "title": "",
+              "sessionKind": "",
+              "models": {
+                "grok-4": 175
+              },
+              "modelCosts": {},
+              "providers": {}
+            },
+            "cursor:sand-subagent-sample-bot": {
+              "client": "cursor",
+              "sessionId": "sand-subagent-sample-bot",
+              "totalTokens": 150,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-20T12:00:00.000Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "synthetic-project",
+              "projectLabel": "Sample project",
+              "title": "",
+              "sessionKind": "",
+              "models": {
+                "grok-bot-default": 150
+              },
+              "modelCosts": {},
+              "providers": {}
+            }
+          }
+        },
+        "month": {
+          "capabilities": {
+            "tokenComponents": true,
+            "throughput": true
+          },
+          "totalTokens": 1325,
+          "costUsd": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 325,
+          "unclassifiedTokens": 0,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "modelThroughput": {},
+          "clients": {
+            "antigravity": 850,
+            "dsh": 150,
+            "grok": 175,
+            "cursor": 150
+          },
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {
+            "antigravity": 150,
+            "dsh": 50,
+            "grok": 75,
+            "cursor": 50
+          },
+          "clientUnclassifiedTokens": {},
+          "models": {
+            "gemini-4-argon": 850,
+            "deepseek-v4": 150,
+            "grok-4": 175,
+            "grok-bot-default": 150
+          },
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {
+            "gemini-4-argon": 150,
+            "deepseek-v4": 50,
+            "grok-4": 75,
+            "grok-bot-default": 50
+          },
+          "modelUnclassifiedTokens": {},
+          "clientModels": {
+            "antigravity": {
+              "gemini-4-argon": 850
+            },
+            "dsh": {
+              "deepseek-v4": 150
+            },
+            "grok": {
+              "grok-4": 175
+            },
+            "cursor": {
+              "grok-bot-default": 150
+            }
+          },
+          "clientModelCosts": {},
+          "projects": {
+            "sample project": {
+              "label": "Sample project",
+              "tokens": 1325,
+              "costUsd": 0,
+              "clients": {
+                "antigravity": 850,
+                "dsh": 150,
+                "grok": 175,
+                "cursor": 150
+              },
+              "models": {
+                "deepseek-v4": 150,
+                "gemini-4-argon": 850,
+                "grok-4": 175,
+                "grok-bot-default": 150
+              }
+            }
+          },
+          "sessions": {
+            "antigravity:sample-parent": {
+              "client": "antigravity",
+              "sessionId": "sample-parent",
+              "totalTokens": 700,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 600,
+              "outputTokens": 100,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-20T12:00:00.000Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "synthetic-project",
+              "projectLabel": "Sample project",
+              "title": "",
+              "sessionKind": "",
+              "models": {
+                "gemini-4-argon": 700
+              },
+              "modelCosts": {},
+              "providers": {}
+            },
+            "antigravity:sample-child": {
+              "client": "antigravity",
+              "sessionId": "sample-child",
+              "totalTokens": 150,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-20T12:00:00.000Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "synthetic-project",
+              "projectLabel": "Sample project",
+              "title": "",
+              "sessionKind": "",
+              "models": {
+                "gemini-4-argon": 150
+              },
+              "modelCosts": {},
+              "providers": {},
+              "parentSessionId": "sample-parent"
+            },
+            "dsh:sample-dsh": {
+              "client": "dsh",
+              "sessionId": "sample-dsh",
+              "totalTokens": 150,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-20T12:00:00.000Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "synthetic-project",
+              "projectLabel": "Sample project",
+              "title": "",
+              "sessionKind": "",
+              "models": {
+                "deepseek-v4": 150
+              },
+              "modelCosts": {},
+              "providers": {}
+            },
+            "grok:sample-grok": {
+              "client": "grok",
+              "sessionId": "sample-grok",
+              "totalTokens": 175,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 100,
+              "outputTokens": 75,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 25,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-20T12:00:00.000Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "synthetic-project",
+              "projectLabel": "Sample project",
+              "title": "",
+              "sessionKind": "",
+              "models": {
+                "grok-4": 175
+              },
+              "modelCosts": {},
+              "providers": {}
+            },
+            "cursor:sand-subagent-sample-bot": {
+              "client": "cursor",
+              "sessionId": "sand-subagent-sample-bot",
+              "totalTokens": 150,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-20T12:00:00.000Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "synthetic-project",
+              "projectLabel": "Sample project",
+              "title": "",
+              "sessionKind": "",
+              "models": {
+                "grok-bot-default": 150
+              },
+              "modelCosts": {},
+              "providers": {}
+            }
+          }
+        },
+        "allTime": {
+          "capabilities": {
+            "tokenComponents": true,
+            "throughput": true
+          },
+          "totalTokens": 1325,
+          "costUsd": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 325,
+          "unclassifiedTokens": 0,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "modelThroughput": {},
+          "clients": {
+            "antigravity": 850,
+            "dsh": 150,
+            "grok": 175,
+            "cursor": 150
+          },
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {
+            "antigravity": 150,
+            "dsh": 50,
+            "grok": 75,
+            "cursor": 50
+          },
+          "clientUnclassifiedTokens": {},
+          "models": {
+            "gemini-4-argon": 850,
+            "deepseek-v4": 150,
+            "grok-4": 175,
+            "grok-bot-default": 150
+          },
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {
+            "gemini-4-argon": 150,
+            "deepseek-v4": 50,
+            "grok-4": 75,
+            "grok-bot-default": 50
+          },
+          "modelUnclassifiedTokens": {},
+          "clientModels": {
+            "antigravity": {
+              "gemini-4-argon": 850
+            },
+            "dsh": {
+              "deepseek-v4": 150
+            },
+            "grok": {
+              "grok-4": 175
+            },
+            "cursor": {
+              "grok-bot-default": 150
+            }
+          },
+          "clientModelCosts": {},
+          "projects": {
+            "complete project": {
+              "label": "Complete project",
+              "tokens": 100,
+              "costUsd": 0,
+              "clients": {
+                "dsh": 100
+              },
+              "models": {
+                "deepseek-v4": 100
+              }
+            },
+            "partial project": {
+              "label": "Partial project",
+              "tokens": 100,
+              "costUsd": 0,
+              "clients": {
+                "grok": 100
+              },
+              "models": {
+                "grok-4": 60
+              }
+            },
+            "legacy project": {
+              "label": "Legacy project",
+              "tokens": 100,
+              "costUsd": 0,
+              "clients": {
+                "antigravity": 100
+              }
+            }
+          },
+          "sessions": {}
+        }
+      },
+      "limits": {
+        "updatedAt": "2026-10-20T12:00:00.000Z",
+        "refreshMs": 300000,
+        "providers": [
+          {
+            "provider": "antigravity",
+            "accountKey": "sha256:b17c9302a4c6e61d00583cefc16154e53eeef8a1cedd4e861836f7ddcbb99d7c",
+            "accountLabel": "Pro",
+            "planLabel": "",
+            "accountName": "",
+            "accountEmail": "",
+            "workspaceKind": "",
+            "status": "ok",
+            "source": "rpc",
+            "sourceDetail": "",
+            "updatedAt": "2026-10-20T12:00:00.000Z",
+            "windows": [
+              {
+                "kind": "weekly",
+                "label": "Gemini Pro",
+                "used": null,
+                "limit": null,
+                "remaining": null,
+                "usedPercent": null,
+                "remainingPercent": null,
+                "resetsAt": null,
+                "windowMinutes": null,
+                "resetDescription": "",
+                "detail": "",
+                "currency": null,
+                "showMeter": false
+              },
+              {
+                "kind": "weekly",
+                "label": "Gemini Flash",
+                "used": null,
+                "limit": null,
+                "remaining": null,
+                "usedPercent": 100,
+                "remainingPercent": 0,
+                "resetsAt": null,
+                "windowMinutes": null,
+                "resetDescription": "",
+                "detail": "",
+                "currency": null,
+                "showMeter": true
+              },
+              {
+                "kind": "weekly",
+                "label": "Gemini 4 Argon",
+                "used": null,
+                "limit": null,
+                "remaining": null,
+                "usedPercent": 35,
+                "remainingPercent": 65,
+                "resetsAt": null,
+                "windowMinutes": null,
+                "resetDescription": "",
+                "detail": "",
+                "currency": null,
+                "showMeter": true
+              }
+            ],
+            "balanceUsd": null,
+            "balance": null,
+            "resetCredits": null,
+            "region": ""
+          }
+        ]
+      }
+    }
+  ],
+  "projectsIncomplete": false,
+  "limits": {
+    "updatedAt": "2026-10-20T12:00:00.000Z",
+    "providers": [
+      {
+        "provider": "antigravity",
+        "accountKey": "sha256:b17c9302a4c6e61d00583cefc16154e53eeef8a1cedd4e861836f7ddcbb99d7c",
+        "accountLabel": "Pro",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "rpc",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-20T12:00:00.000Z",
+        "windows": [
+          {
+            "kind": "weekly",
+            "label": "Gemini Pro",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": null,
+            "remainingPercent": null,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": false
+          },
+          {
+            "kind": "weekly",
+            "label": "Gemini Flash",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 100,
+            "remainingPercent": 0,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          },
+          {
+            "kind": "weekly",
+            "label": "Gemini 4 Argon",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 35,
+            "remainingPercent": 65,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "contract-desktop",
+        "stale": false
+      }
+    ]
+  },
+  "staleAfterMs": 600000,
+  "historyPreview": {
+    "daily": [
+      {
+        "date": "2026-10-20",
+        "tokens": 1234,
+        "cost": 0.42,
+        "activeTimeMs": 0,
+        "unpricedTokens": 321
+      }
+    ],
+    "monthly": [],
+    "summary": {
+      "totalTokens": 0,
+      "totalCost": 0,
+      "activeDays": 1,
+      "currentStreak": 1,
+      "longestStreak": 1,
+      "peakDayTokens": 1234,
+      "favoriteModel": "minimax-m2.5",
+      "messages": 0,
+      "activeTimeMs": 0
+    }
+  },
+  "historyRevision": "2e98ff2d3463acd1",
+  "deviceHistoryRevision": "9ce636627368ecae",
+  "subscriptionsUpdatedAt": "",
+  "syncSettingsRevisions": {
+    "modelAliases": 0,
+    "customPricing": 0
+  }
+}

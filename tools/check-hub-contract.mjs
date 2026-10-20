@@ -364,6 +364,64 @@ async function isolatedContract(source, output, upstream) {
         responses["corrected-zero.json"] = timingHub.getStats();
         assert.equal(responses["corrected-zero.json"].periods.today.totalTokens, 0);
         assert.deepEqual(responses["corrected-zero.json"].periods.today.sessions, {});
+        // v0.74-v0.76: project model attribution, Antigravity parent links/quotas, and Grok bot activity.
+        // All provider I/O is replaced with synthetic responses; no desktop credentials or collectors run.
+        const { fetchAntigravityLimits } = require("./src/shared/providers/antigravity/limits.js");
+        const antigravityProbe = require("./src/shared/providers/antigravity/probe.js");
+        assert.equal(antigravityProbe._poolForModel("Gemini 4 Argon", "gemini-4-argon"), "Gemini 4 Argon");
+        const pools = antigravityProbe._collapsePools([
+            { label: "Gemini 4 Argon", modelId: "gemini-4-argon", remainingFraction: null },
+            { label: "Gemini 4 Argon", modelId: "gemini-4-argon", remainingFraction: 0.65 },
+            { label: "Gemini Pro", modelId: "gemini-pro", remainingFraction: null },
+            { label: "Gemini Flash", modelId: "gemini-flash", remainingFraction: 0 },
+        ]);
+        const antigravity = await fetchAntigravityLimits({}, { now: () => Date.parse(now),
+            antigravityProbe: async () => ({ accountPlan: "Pro", pools }) });
+        const modernRows = [
+            { client: "antigravity", model: "gemini-4-argon", sessionId: "sample-parent", input: 600, output: 100, project: "NEVER_EXPORT_PATH" },
+            { client: "antigravity", model: "gemini-4-argon", sessionId: "sample-child", input: 100, output: 50 },
+            { client: "dsh", model: "deepseek-v4", sessionId: "sample-dsh", input: 100, output: 50 },
+            { client: "grok", model: "grok-4", sessionId: "sample-grok", input: 100, output: 50, reasoning: 25 },
+            { client: "cursor", model: "grok-bot-default", sessionId: "sand-subagent-sample-bot", input: 100, output: 50 },
+        ];
+        const modern = extractUsageFromTokscale({ entries: modernRows });
+        for (const session of Object.values(modern.sessions)) {
+            session.lastUsedAt = now;
+            session.projectId = "synthetic-project";
+            session.projectLabel = "Sample project";
+        }
+        modern.sessions["antigravity:sample-child"].parentSessionId = "sample-parent";
+        delete modern.projects; // Agent uploads omit daily/monthly rollups; the Hub rebuilds them from sessions.
+        assert.equal(modern.sessions["grok:sample-grok"].outputTokens, 75, "Grok reasoning is disjoint, folded once");
+        const modernHub = createHub({ port: 0, host: "127.0.0.1", secret, dataFile: join(source, "synthetic-modern.json") });
+        modernHub.ingest({ ...device, trackedClients: ["antigravity", "dsh", "grok", "cursor"],
+            periods: { today: modern, month: modern, allTime: { ...modern, projects: {
+                complete: { label: "Complete project", tokens: 100, clients: { dsh: 100 }, models: { "deepseek-v4": 100 } },
+                partial: { label: "Partial project", tokens: 100, clients: { grok: 100 }, models: { "grok-4": 60 } },
+                legacy: { label: "Legacy project", tokens: 100, clients: { antigravity: 100 } },
+            }, sessions: {} } }, limits: { updatedAt: now, providers: [antigravity] } });
+        responses["modern.json"] = modernHub.getStats();
+        const modernPeriod = responses["modern.json"].periods.today;
+        assert.equal(modernPeriod.sessions["antigravity:sample-child"].parentSessionId, "sample-parent");
+        assert.equal(Object.values(modernPeriod.projects)[0].models["deepseek-v4"], 150);
+        const bot = modernPeriod.sessions["cursor:sand-subagent-sample-bot"];
+        const sessionLive = require("./src/shared/sessionLive.js");
+        assert.equal(sessionLive.sessionActivityState(bot, Date.parse(now)), "idle");
+        assert.equal(sessionLive.sessionActivityState({ ...bot, turnEnded: false }, Date.parse(now)), "running");
+        const windows = responses["modern.json"].limits.providers.find(p => p.provider === "antigravity").windows;
+        assert.equal(windows.find(w => w.label === "Gemini 4 Argon").remainingPercent, 65);
+        assert.equal(windows.find(w => w.label === "Gemini Pro").remainingPercent, null);
+        assert.equal(windows.find(w => w.label === "Gemini Pro").showMeter, false);
+        assert.equal(windows.find(w => w.label === "Gemini Flash").remainingPercent, 0);
+        assert.ok(!JSON.stringify(responses["modern.json"]).includes("NEVER_EXPORT"));
+        const historyApi = require("./src/shared/history.js");
+        const graph = historyApi.parseGraphResult({ contributions: [{ date: day, clients: [
+            { client: "grok", modelId: "grok-4", tokens: { input: 100, output: 50, reasoning: 25, cacheRead: 0, cacheWrite: 0 } },
+        ] }] });
+        const classified = historyApi.mergeHistories([{ daily: graph.contributions }], { todayKey: day });
+        responses["classified-history.json"] = historyApi.mergeHistories([classified], { todayKey: day });
+        assert.equal(responses["classified-history.json"].daily[0].perClient.grok.unclassifiedTokens, 0);
+        assert.equal(responses["classified-history.json"].daily[0].perModel["grok-4"].outputTokens, 75);
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) await writeFile(join(output, name), `${JSON.stringify(value, null, 2)}\n`);
         console.log(`Actual ${upstream.tag} Hub passed authenticated reads, snapshot, freshness and changed-stat checks. Synthetic responses: ${output}`);

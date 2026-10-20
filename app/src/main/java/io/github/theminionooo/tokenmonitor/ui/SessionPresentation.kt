@@ -105,6 +105,7 @@ internal fun sessionActivityState(session: SessionUsage, now: Long): SessionActi
     val recent = now - lastUsed <= SESSION_RUNNING_WINDOW_MS
     return when {
         session.turnEnded == true -> if (recent) SessionActivityState.Finished else SessionActivityState.Idle
+        isGrokBotSession(session) && session.turnEnded != false -> SessionActivityState.Idle
         recent && session.client == "codex" && session.waitingForInput == true -> SessionActivityState.Waiting
         recent -> SessionActivityState.Running
         else -> SessionActivityState.Idle

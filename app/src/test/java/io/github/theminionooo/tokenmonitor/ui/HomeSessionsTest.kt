@@ -8,6 +8,16 @@ import org.junit.Test
 class HomeSessionsTest {
     private val now = Instant.parse("2026-09-30T12:00:00Z").toEpochMilli()
 
+    @Test fun `custom cap keeps live overflow and clamps to one through fifty`() {
+        val quiet = (0..59).map { session("s$it", now - it * 1000L, true) }
+        assertEquals(1, recentHomeSessions(snapshot(quiet), now, 0).size)
+        assertEquals(12, recentHomeSessions(snapshot(quiet), now, 12).size)
+        assertEquals(50, recentHomeSessions(snapshot(quiet), now, 99).size)
+        val live = quiet.last().copy(turnEnded = false)
+        val rows = recentHomeSessions(snapshot(quiet.dropLast(1) + live), now, 1)
+        assertEquals(listOf("s0", "s59"), rows.map { it.display.id })
+    }
+
     @Test fun `keeps five newest plus running sessions beyond the cap`() {
         val rows = (0..7).map { session("s$it", now - it * 60_000L, ended = it != 6) }
         assertEquals(listOf("s0", "s1", "s2", "s3", "s4", "s6"), recentHomeSessions(snapshot(rows), now).map { it.display.id })
