@@ -374,6 +374,8 @@ explicit zero for input-only timed messages. It folds timed reasoning into
 output only for clients with disjoint output/reasoning buckets. Android uses
 these supplied counters without reconstructing output from `tokenCoverage`;
 older agents' approximate counters remain accepted as reported.
+These are estimated output rates, not provider-side decoding measurements;
+the source interval may include queueing, network or tool waiting.
 
 Cursor's desktop probe now prefers current-period Included usage, including
 zero, then the unified sand reading. A monthly summary is a fallback only for
