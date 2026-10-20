@@ -9,10 +9,10 @@ the build it names.
 
 Every release goes through the same automated gate before I publish it:
 
-- **Unit tests and builds:** 245 JVM tests, run with the generated Hub contract
+- **Unit tests and builds:** 255 JVM tests, run with the generated Hub contract
   supplied and nothing skipped, plus Android lint, the preview debug build and
   the instrumentation APK.
-- **Instrumentation suite:** 50 tests on API 36 and API 37 emulators. A report
+- **Instrumentation suite:** 53 tests on API 36 and API 37 emulators. A report
   check requires every test to be present with no failures, errors or skips.
 - **API 26 smoke check:** the optimized R8 release APK installs, launches and
   resumes on the oldest supported version. This is not full Android 8
@@ -37,40 +37,40 @@ the exact `main` commit that gets tagged. None of these checks uses a private
 Hub or a vendor account. [Releasing](RELEASING.md) covers the process and
 [Development](DEVELOPMENT.md) covers running the checks locally.
 
-## Current release: v0.73.0 r1
+## Current release: v0.76.0 r1
 
-I checked desktop tag `v0.73.0`, commit
-`1190260afdcacd8998938de311e0435c306a18ed`. The released-source checks cover
-Cursor current-period precedence, explicit zero, weekly unknown and monthly
-fallback; matched timing subtotals and timed reasoning; and complete zero
-corrections. I reviewed the full diff and compared emulator captures of Oh My Pi
-titles, collapsed/expanded Sessions, Home and Limits. Stored titles, privacy,
-widget layouts, digit roll, network rules and on-demand updates are unchanged.
+I checked desktop tag `v0.76.0`, commit
+`fbbe4c1cb04e3277b73499016d432338c1d2ab4e`, including the changes since v0.73.0.
+The released-source checks cover project model maps, Antigravity parent links
+and Argon/unknown/exhausted quotas, Grok reasoning, bot activity and classified
+history zeros. I reviewed the full diff and native emulator captures of project
+shares, a saved Home count and quota wording. Widget layouts, digit roll,
+network rules, permissions and on-demand updates are unchanged.
 
-All 245 JVM tests passed with generated Hub responses supplied and nothing
+All 255 JVM tests passed with generated Hub responses supplied and nothing
 skipped, along with lint, debug/release builds and 14 Node tooling tests.
-Downloaded API 36 and API 37 reports each contain all 50 instrumentation tests
+Downloaded API 36 and API 37 reports each contain all 53 instrumentation tests
 without failures, errors or skips. The final signed APK also installed, launched
 and resumed on the API 26 emulator; that is a launch check, not full interaction
 coverage.
 
-- APK: `token-monitor-android-v0.73.0-r1.apk`, 2,485,848 bytes
-- Package: `io.github.theminionooo.tokenmonitor`, version code `730001`
+- APK: `token-monitor-android-v0.76.0-r1.apk`, 2,502,228 bytes
+- Package: `io.github.theminionooo.tokenmonitor`, version code `760001`
 - File SHA-256:
-  `a80f4ca0c13655cb99d432cac2f8eb80d88b718efb007aa4a81d3275ae94537a`
+  `15133c737ddfa758d56b958dc75f556e11e69226c90ff43a5e05106af59e9372`
 - Certificate SHA-256:
   `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`
 
 The release tag points to `main` commit
-`04dd4a36b83ef789c60f80af229d158b8c5dd3a6`, merged through
-[PR #53](https://github.com/The-Minion-oOo/token-monitor-android/pull/53).
+`7ebedd9b86638d902181ecd86c238fad439f9ee4`, merged through
+[PR #56](https://github.com/The-Minion-oOo/token-monitor-android/pull/56).
 The required checks passed on that exact push:
-[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/38962044797),
-[Android interaction and optimized API 26 smoke checks](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/38962044868),
-and [released Hub contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/38962044887).
+[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/39462040938),
+[Android interaction and optimized API 26 smoke checks](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/39462040788),
+and [released Hub contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/39462040760).
 I verified the APK, checksum and update manifest from the draft and from
 anonymous public downloads; all three match the staged files byte-for-byte.
-[android-v0.73.0-r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.73.0-r1)
+[android-v0.76.0-r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.76.0-r1)
 is the Latest release. I haven't tested it on my phone, and current battery use
 is not measured.
 
@@ -82,6 +82,7 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 
 | Release | Date | Desktop baseline | Main checks | Phone check |
 | --- | --- | --- | --- | --- |
+| v0.76.0 r1 | 2026-10-20 | v0.76.0 | Home list counts, project model shares, Antigravity quotas and Grok Bot activity | No |
 | v0.73.0 r1 | 2026-10-16 | v0.73.0 | Oh My Pi titles, Cursor current-period quotas and matched timing | No |
 | v0.72.0 r1 | 2026-10-16 | v0.72.0 | Cursor unified allowances and grouped-session metrics | No |
 | v0.71.0 r1 | 2026-10-14 | v0.71.0 | Goose, Notion allowances and separate WorkBuddy accounts | No |
@@ -100,11 +101,12 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 | v0.61.0 r1 | 2026-09-23 | v0.61.0 | Provider and client compatibility, current desktop labels | Yes: in-place upgrade kept pairing, preferences and widget |
 | v0.60.0 r7 | 2026-09-22 | v0.60.0 | Pages widget Breakdown and Activity layout | Yes: installed over r6, widget kept |
 
-APK SHA-256 for each published release (v0.73.0 r1 is listed above). All of
+APK SHA-256 for each published release (v0.76.0 r1 is listed above). All of
 them use package `io.github.theminionooo.tokenmonitor` and the same signing
 certificate, SHA-256
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
 
+- v0.73.0 r1 (`730001`): `a80f4ca0c13655cb99d432cac2f8eb80d88b718efb007aa4a81d3275ae94537a`
 - v0.72.0 r1 (`720001`): `8ef9a266882fe82082c3d0b58cc99980dbad8026cfa4d6237d19c5a8fd2a32b7`
 - v0.71.0 r1 (`710001`): `f6e71f7e7ae45f7d50abdb3c26183efc963230d1f9ee3d7ca52473757d2cff89`
 - v0.70.0 r1 (`700001`): `bfc4882613169f6090eb381c512acb86d3f0ba1228724df52e4c4e4491648ffd`
@@ -157,7 +159,7 @@ What I have confirmed on the phone:
   installed, not from Token Monitor; I removed it.
 
 The last build I tested on the phone is v0.66.0 r1 (`660001`). v0.66.0 r2,
-v0.67.0 r1, v0.68.0 r1, v0.68.0 r2, v0.69.0 r1, v0.70.0 r1, v0.71.0 r1, v0.72.0 r1 and v0.73.0 r1 have not been
+v0.67.0 r1, v0.68.0 r1, v0.68.0 r2, v0.69.0 r1, v0.70.0 r1, v0.71.0 r1, v0.72.0 r1, v0.73.0 r1 and v0.76.0 r1 have not been
 rechecked on a phone, and neither were v0.63.0 through v0.65.0 when they were released.
 
 ## Known limits

@@ -3,7 +3,7 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
-## Next release — v0.76.0 r1
+## v0.76.0 r1 — 2026-10-20
 
 - I updated the desktop baseline to v0.76.0, including the changes in v0.74.0
   and v0.75.0, and merged the Compose compiler 2.4.21 patch.

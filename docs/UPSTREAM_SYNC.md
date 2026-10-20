@@ -2,7 +2,7 @@
 
 ## Version rule
 
-The v0.76.0 r1 candidate targets desktop tag `v0.76.0`, peeled commit
+Android v0.76.0 r1 targets desktop tag `v0.76.0`, peeled commit
 `fbbe4c1cb04e3277b73499016d432338c1d2ab4e`, in Gradle and `upstream.json`.
 I reviewed the changes since v0.73.0, including v0.74.0 and v0.75.0. Android
 adds project model shares and Home list counts, groups Antigravity children,
@@ -19,10 +19,10 @@ alias/pricing edits and title-sharing controls remain on desktop. Android is
 still read-only.
 
 The latest published release is
-[`android-v0.73.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.73.0-r1),
+[`android-v0.76.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.76.0-r1),
 recorded with its source commit in `release.json`. The earlier v0.66.0 r1
 upgrade on my phone preserved pairing and the placed Pages widget; later
-revisions, including v0.73.0 r1, have not been checked on it.
+revisions, including v0.76.0 r1, have not been checked on it.
 
 An Android-only fix increments `versionCode` and the GitHub release revision,
 for example `android-vX.Y.Z-rN`, without changing the visible compatibility
