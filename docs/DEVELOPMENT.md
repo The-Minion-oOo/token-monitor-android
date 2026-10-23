@@ -104,7 +104,7 @@ in a fixture or screenshot.
 JVM tests cover protocol parsing, private-address rules, endpoint failover,
 stream recovery, ordered cache writes, history aggregation, presentation rules,
 and preferences. Versioned Hub fixtures live under
-`app/src/test/resources/protocol/`. The v0.77.0 set covers all five read
+`app/src/test/resources/protocol/`. The v0.78.0 set covers all five read
 endpoints, a complete stream frame, and a freshness-only frame. The v0.69.0
 fixtures retain session relationships and activity, the v0.68.0
 fixtures retain unpriced counts and Dots provenance, and the v0.67.0
@@ -166,7 +166,13 @@ widgets, storage, and lifecycle behavior. Run them on an API 36 emulator before
 opening a pull request for a UI or lifecycle change. Visual changes also need a
 native screenshot at the affected phone or launcher size.
 
-The v0.77.0 fixtures add synthetic endpoint, stream, New API spend, Cline identity
+The v0.78.0 fixtures add ZCode parent, child, workflow, fork and side-chat
+sessions with title sharing off, on and revoked. The released-source harness
+joins synthetic SQLite metadata before sending it through the real Hub. Native
+tests expand the child rows and check local title hiding and Hub revocation.
+No real CLI database or vendor account is opened.
+
+The retained v0.77.0 fixtures add synthetic endpoint, stream, New API spend, Cline identity
 and unknown Cursor responses from the pinned Hub. The retained v0.76.0 fixtures
 cover complete, partial and legacy project model maps; Antigravity parent
 links and separate Argon/unknown/exhausted quota windows; Grok disjoint reasoning;
@@ -206,7 +212,7 @@ and its source/data directory removed afterwards.
 
 `ReleasedHubContractTest` feeds those responses through the Android parser and
 stream reducer. Gradle tracks the supplied directory as a test input. Without
-`TOKEN_MONITOR_CONTRACT_DIR`, that one test is skipped; the versioned fixture
+`TOKEN_MONITOR_CONTRACT_DIR`, those tests are skipped; the versioned fixture
 tests still run normally. The contract workflow supplies it explicitly.
 
 ### Synthetic performance baseline
@@ -289,7 +295,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 67 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 70 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.

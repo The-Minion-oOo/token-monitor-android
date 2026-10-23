@@ -1,0 +1,2 @@
+event: freshness
+data: {"type":"freshness","reason":"ingest","stats":{"updatedAt":"2026-10-23T20:40:39.316Z","staleAfterMs":600000,"limits":{"updatedAt":"2026-10-23T20:40:39.316Z"},"devices":[{"deviceId":"contract-desktop","updatedAt":"2026-10-23T20:40:39.304Z","receivedAt":"2026-10-23T20:40:39.304Z","ageMs":12,"stale":false}]},"at":"2026-10-23T20:40:39.316Z"}

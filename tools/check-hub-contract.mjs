@@ -470,6 +470,58 @@ async function isolatedContract(source, output, upstream) {
         assert.equal(providers.filter(p => p.provider === "cline").length, 2);
         assert.equal(providers.find(p => p.provider === "thirdparty").adapterId, "newapi-account");
         assert.ok(!JSON.stringify(responses["billing.json"]).includes("NEVER_EXPORT"));
+
+        // ZCode metadata is collected only inside this disposable home. Android reads the
+        // resulting Hub fields; it never opens a CLI database or changes title consent.
+        const { DatabaseSync } = require("node:sqlite");
+        const zcodeDirectory = join(source, ".zcode", "cli", "db");
+        await mkdir(zcodeDirectory, { recursive: true });
+        const zcodeDb = new DatabaseSync(join(zcodeDirectory, "db.sqlite"));
+        const zcodeRows = [
+            ["sample-zcode-parent", "Plan the sample release", "interactive", null, 1000],
+            ["sample-zcode-child", "Inspect the sample tests", "subagent_child", "sample-zcode-parent", 200],
+            ["sample-zcode-workflow", "Check the sample docs", "workflow_child", "sample-zcode-parent", 300],
+            ["sample-zcode-fork", "Sample release alternative", "fork", "sample-zcode-parent", 400],
+            ["sample-zcode-side", "Sample release side chat", "selection_side_chat", "sample-zcode-parent", 500],
+        ];
+        try {
+            zcodeDb.exec("CREATE TABLE session (id TEXT PRIMARY KEY, title TEXT NOT NULL, task_type TEXT, parent_id TEXT)");
+            const insert = zcodeDb.prepare("INSERT INTO session VALUES (?, ?, ?, ?)");
+            for (const [id, title, type, parent] of zcodeRows) insert.run(id, title, type, parent);
+        } finally { zcodeDb.close(); }
+        const zcodeSessions = Object.fromEntries(zcodeRows.map(([id, , , , tokens]) => [`zcode:${id}`, {
+            sessionId: id, client: "zcode", totalTokens: tokens, costUsd: tokens / 10000,
+            models: { "glm-5": tokens }, lastUsedAt: now,
+            prompt: "NEVER_EXPORT_ZCODE_PROMPT", messages: ["NEVER_EXPORT_ZCODE_MESSAGES"],
+        }]));
+        const zcodePeriod = { totalTokens: 2400, costUsd: 0.24, clients: { zcode: 2400 },
+            models: { "glm-5": 2400 }, sessions: zcodeSessions };
+        const zcodePeriods = { today: zcodePeriod, month: structuredClone(zcodePeriod) };
+        require("./src/shared/sessionMetadata.js").applySessionMetadata(zcodePeriods, source, {
+            sqlite: { DatabaseSync }, zcodeSessionRowCache: new Map(), metadataCache: new Map(),
+            resolvedSessionKeys: new Set(), attemptedSessionKeys: new Set(),
+        });
+        assert.equal(zcodeSessions["zcode:sample-zcode-parent"].title, "Plan the sample release");
+        for (const id of ["child", "workflow"]) assert.equal(zcodeSessions[`zcode:sample-zcode-${id}`].parentSessionId, "sample-zcode-parent");
+        for (const id of ["parent", "fork", "side"]) assert.ok(!zcodeSessions[`zcode:sample-zcode-${id}`].parentSessionId);
+        const zcodeDevice = { ...device, periods: zcodePeriods };
+        const privateZcodeHub = createHub({ port: 0, host: "127.0.0.1", secret, dataFile: join(source, "synthetic-zcode-private.json") });
+        privateZcodeHub.ingest(zcodeDevice);
+        responses["zcode-private.json"] = privateZcodeHub.getStats();
+        const sharedZcodeHub = createHub({ port: 0, host: "127.0.0.1", secret, syncSessionTitles: true,
+            dataFile: join(source, "synthetic-zcode-shared.json") });
+        const zcodePolicy = sharedZcodeHub.setSyncTitlePolicy(device.deviceId, true);
+        sharedZcodeHub.ingest({ ...zcodeDevice, sessionTitleSyncGeneration: zcodePolicy.generation });
+        responses["zcode-titles.json"] = sharedZcodeHub.getStats();
+        sharedZcodeHub.setSyncTitlePolicy(device.deviceId, false);
+        responses["zcode-revoked.json"] = sharedZcodeHub.getStats();
+        for (const name of ["zcode-private.json", "zcode-titles.json", "zcode-revoked.json"]) {
+            const result = responses[name];
+            assert.equal(result.periods.today.totalTokens, 2400);
+            assert.equal(result.periods.today.sessions["zcode:sample-zcode-child"].parentSessionId, "sample-zcode-parent");
+            assert.ok(!JSON.stringify(result).includes("NEVER_EXPORT"));
+            assert.equal(JSON.stringify(result).includes("Plan the sample release"), name === "zcode-titles.json");
+        }
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) await writeFile(join(output, name), `${JSON.stringify(value, null, 2)}\n`);
         console.log(`Actual ${upstream.tag} Hub passed authenticated reads, snapshot, freshness and changed-stat checks. Synthetic responses: ${output}`);
