@@ -1,28 +1,30 @@
 # Android v0.78.0 r1
 
-I checked this release against desktop Token Monitor v0.78.0.
+This is a compatibility update for desktop Token Monitor v0.78.0. Its new
+ZCode session titles and subagent links use Android's existing session layout.
 
-## What's changed
+## What's new
 
-- ZCode's saved titles and tool/workflow subagents work with the existing
-  Sessions and Home rows. Deliberate forks and side chats remain separate.
-- I added released-source checks for ZCode title sharing off, on and revoked,
-  plus native tests for expanding children and hiding shared titles locally.
-- I corrected the internal compatibility label and retained the v0.77.0 r2
-  performance improvements, five-second complete-update limit and widget fixes.
+- ZCode conversations show their saved titles in Sessions and Home when title
+  sharing is enabled on desktop. Android's local title setting can hide them.
+- Tool- and workflow-created subagents stay under their parent conversation.
+  Deliberate forks and side chats remain separate.
+- Turning off title sharing on desktop removes the shared titles without
+  changing usage totals or conversation groups.
 
-Desktop Edge Dock glass, native tooltip changes and Claude CLI probe isolation
-remain desktop-only. Android adds no collector, permission or background work.
-The widget design and animations are unchanged.
+The performance improvements and widget fixes from v0.77.0 r2 are retained.
+The widget design, animations and five-second dashboard update limit are
+unchanged. Desktop glass, tooltip and collection changes remain on desktop;
+Android stays read-only.
 
 ## Updating
 
-Use **Settings → App updates** or install the signed APK over the current copy.
-There is no need to uninstall. ZCode titles appear only when title sharing is
-enabled on desktop; Android's local title preference can hide them.
+I signed the APK with the existing release key and increased the version code
+to 780001. Use **Settings → App updates**, or install the APK over the existing
+app without uninstalling. Android asks you to confirm installation. Android 8
+or newer is required.
+[Install and update](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md).
 
-I haven't phone-tested this build. The automated checks cover synthetic Hub
-data and emulators, not phone battery use or network switching.
-
-[Install and update](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md)
-· [Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md)
+I checked desktop Hub compatibility, unit tests, lint, builds and emulator
+behavior. I haven't tested this release on my phone, and battery use is not
+measured. [Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md).
