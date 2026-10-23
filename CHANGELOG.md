@@ -3,7 +3,7 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
-## v0.78.0 r1 — Unreleased
+## v0.78.0 r1 — 2026-10-23
 
 - I checked Android against desktop v0.78.0 and added released-Hub coverage for
   ZCode titles, subagent/workflow grouping and separate fork/side-chat rows.

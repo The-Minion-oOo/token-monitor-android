@@ -9,10 +9,10 @@ the build it names.
 
 Every release goes through the same automated gate before I publish it:
 
-- **Unit tests and builds:** 277 JVM tests, run with the generated Hub contract
+- **Unit tests and builds:** 284 JVM tests, run with the generated Hub contract
   supplied and nothing skipped, plus Android lint, the preview debug build and
   the instrumentation APK.
-- **Instrumentation suite:** 69 tests on API 36 and API 37 emulators. A report
+- **Instrumentation suite:** 70 tests on API 36 and API 37 emulators. A report
   check requires every test to be present with no failures, errors or skips.
 - **API 26 smoke check:** the optimized R8 release APK installs, launches and
   resumes on the oldest supported version. This is not full Android 8
@@ -37,90 +37,44 @@ the exact `main` commit that gets tagged. None of these checks uses a private
 Hub or a vendor account. [Releasing](RELEASING.md) covers the process and
 [Development](DEVELOPMENT.md) covers running the checks locally.
 
-## Current release: v0.77.0 r2
+## Current release: v0.78.0 r1
 
-This Android-only release keeps desktop compatibility at `v0.77.0`, commit
-`c83ee3aeb6d23505257113c29ef010040deb52f7`. It limits the dashboard to one
-complete stream update every five seconds, always ending on the newest. On my
-phone the Hub had sent 132 complete updates in five minutes, about 260 KB each,
-during an active coding session. Widget Live, the layout, animations and
-permissions are unchanged.
+I checked desktop tag `v0.78.0`, commit
+`d52e0b9cf970a03a30a5f5a1e9139693bb211cd8`, including the released ZCode
+metadata resolver and Hub. Tool/workflow children group under their parent;
+forks and side chats stay separate. Titles follow desktop consent and Android's
+local display preference. The v0.77.0 r2 performance fixes, five-second complete
+update limit, widgets, animations, permissions and network behavior are retained.
 
-After publishing, I updated my phone from r1 to r2 through **Settings → App
-updates** and went to the home screen without opening the app. The Pages widget
-redrew. A plain USB install, an install followed by force-stop, and an install
-followed by a forced recompile also redrew it each time, so I closed
-[issue #60](https://github.com/The-Minion-oOo/token-monitor-android/issues/60).
-I didn't check pairing, Live updates or the update frequency on the phone.
-
-Local checks passed: 277 JVM tests, lint, documentation, release metadata and 14
-tooling tests, and all 69 instrumentation tests on the API 37 emulator,
-including two new tests against a fixture Hub. The production-signed APK
-installed, launched and resumed on the API 26 emulator.
+Local checks passed: 284 JVM tests with generated responses and zero skips,
+lint, debug/test and production-signed builds, all 70 tests on API 36 and API 37,
+14 tooling tests, documentation, release metadata and whitespace. I inspected
+the native expanded ZCode capture and reviewed the full diff. The final signed
+APK installed, launched and resumed on API 26. I haven't phone-tested this build
+or measured its battery use.
 
 The release tag points to `main` commit
-`0015bf6af8f07bea5311cdcedbe814260b7716c6`, merged through
-[PR #62](https://github.com/The-Minion-oOo/token-monitor-android/pull/62).
+`90e6546125f4844125a909e7689b7c70f0e7bb9e`, merged through
+[PR #67](https://github.com/The-Minion-oOo/token-monitor-android/pull/67).
 All required checks passed on that exact push:
-[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/39702138064),
-[API 36/37 interaction and optimized API 26 smoke checks](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/39702138151),
-and [released Hub contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/39702138165).
-
-- APK: `token-monitor-android-v0.77.0-r2.apk`, 2,518,613 bytes
-- Package: `io.github.theminionooo.tokenmonitor`, version code `770002`
-- File SHA-256:
-  `9652f7e76817e26a5c78348af91de480c607892f8e7755f664be50d841ecbc88`
-- Certificate SHA-256:
-  `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`
-
-I verified the APK, checksum and updater manifest from the staged draft and the
-public downloads; all three match the staged files byte-for-byte.
-[android-v0.77.0-r2](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.77.0-r2)
-is the Latest release.
-
-## Previous release: v0.77.0 r1
-
-The release targets desktop tag `v0.77.0`, commit
-`c83ee3aeb6d23505257113c29ef010040deb52f7`. I checked its diff from v0.76.0
-and the actual released Hub with isolated synthetic input. Coverage includes
-New API billing periods, distinct same-email Cline accounts, unknown Cursor
-plans, all five read endpoints and complete/freshness stream delivery.
-
-The release includes dashboard JSON, preparation, cache and Live ownership
-improvements plus shared widget refreshes and measured chart sizing. The layout,
-animations and dashboard processing frequency are retained. I didn't phone-test
-this release. API 36/37 replacement checks on the preceding performance source
-recovered without opening the app; the phone check followed with r2.
-
-Local checks passed: all 271 JVM tests with generated v0.77.0 Hub responses and
-zero skips, lint with no errors, debug and optimized builds, 14 tooling tests,
-and all 67 instrumentation tests on each API 36 and API 37 emulator with no
-failures, errors or skips. I reviewed the full diff and a native capture of the
-New API spend rows. The optimized APK also installed, launched and resumed on
-API 26 using an emulator-only signing key. I separately installed, launched and
-resumed the final production-signed APK on API 26.
-
-The release tag points to `main` commit
-`c7c2f0d00861d6daac4d4858af5d9973dc59ad2e`, merged through
-[PR #59](https://github.com/The-Minion-oOo/token-monitor-android/pull/59).
-All required checks passed on that exact push:
-[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/39688600746),
-[API 36/37 interaction and optimized API 26 smoke checks](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/39688600709),
-and [released Hub contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/39688600682).
-Downloaded reports confirm 271 JVM tests and 67 instrumentation tests on each
+[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40023322764),
+[API 36/37 interaction and optimized API 26 smoke checks](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40023322768),
+and [released Hub contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40023322766).
+Downloaded reports confirm 284 JVM tests and 70 instrumentation tests on each
 API 36/37 emulator, with no failures, errors or skips.
 
-- APK: `token-monitor-android-v0.77.0-r1.apk`, 2,518,612 bytes
-- Package: `io.github.theminionooo.tokenmonitor`, version code `770001`
+- APK: `token-monitor-android-v0.78.0-r1.apk`, 2,518,621 bytes
+- Package: `io.github.theminionooo.tokenmonitor`, version code `780001`
 - File SHA-256:
-  `cfb3ba4e2d0cd6eb1ead8fb74f1b5ae2f18f87b356d4b097597cb1fcb3facb4c`
+  `923f5d6babcda54443bd23e0fdf9e4edf35645f65e5a246037cca9025fcd7b58`
 - Certificate SHA-256:
   `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`
 
-I verified the APK, checksum and updater manifest from the staged draft and
-anonymous public downloads; all three match the staged files byte-for-byte.
-[android-v0.77.0-r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.77.0-r1)
-was the Latest release until r2. Its battery use has not been measured on a phone.
+The draft and anonymous public APK, checksum and updater manifest match the
+staged bundle byte-for-byte.
+[android-v0.78.0-r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r1)
+is the Latest release. Earlier phone evidence remains attached to the releases
+named below, not to this build.
 
 ## Release history
 
@@ -130,6 +84,7 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 
 | Release | Date | Desktop baseline | Main checks | Phone check |
 | --- | --- | --- | --- | --- |
+| v0.78.0 r1 | 2026-10-23 | v0.78.0 | ZCode grouping, title consent/revocation, released Hub endpoints and stream | No |
 | v0.77.0 r2 | 2026-10-21 | v0.77.0 | One complete stream update every five seconds | Yes: in-app update from r1; Pages widget redrew without opening the app |
 | v0.77.0 r1 | 2026-10-21 | v0.77.0 | Dashboard JSON/UI preparation, Live ownership, shared widgets and chart sizing, New API spend | No |
 | v0.76.0 r1 | 2026-10-20 | v0.76.0 | Home list counts, project model shares, Antigravity quotas and Grok Bot activity | No |
@@ -151,11 +106,13 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 | v0.61.0 r1 | 2026-09-23 | v0.61.0 | Provider and client compatibility, current desktop labels | Yes: in-place upgrade kept pairing, preferences and widget |
 | v0.60.0 r7 | 2026-09-22 | v0.60.0 | Pages widget Breakdown and Activity layout | Yes: installed over r6, widget kept |
 
-APK SHA-256 for each published release (v0.77.0 r2 and v0.77.0 r1 are listed above). All of
+APK SHA-256 for earlier published releases (the current release is listed above). All of
 them use package `io.github.theminionooo.tokenmonitor` and the same signing
 certificate, SHA-256
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
 
+- v0.77.0 r2 (`770002`): `9652f7e76817e26a5c78348af91de480c607892f8e7755f664be50d841ecbc88`
+- v0.77.0 r1 (`770001`): `cfb3ba4e2d0cd6eb1ead8fb74f1b5ae2f18f87b356d4b097597cb1fcb3facb4c`
 - v0.76.0 r1 (`760001`): `15133c737ddfa758d56b958dc75f556e11e69226c90ff43a5e05106af59e9372`
 - v0.73.0 r1 (`730001`): `a80f4ca0c13655cb99d432cac2f8eb80d88b718efb007aa4a81d3275ae94537a`
 - v0.72.0 r1 (`720001`): `8ef9a266882fe82082c3d0b58cc99980dbad8026cfa4d6237d19c5a8fd2a32b7`
@@ -194,7 +151,10 @@ What I have confirmed on the phone:
   **Settings → App updates** and Android's user-confirmed installer. The
   dashboard reconnected, the widget refreshed, and no Token Monitor service
   was left running. I updated from v0.77.0 r1 to r2 the same way; the Pages
-  widget redrew without opening the app.
+  widget redrew without opening the app. A USB install, an install followed by
+  force-stop, and an install followed by a forced recompile also redrew it, so
+  I closed [issue #60](https://github.com/The-Minion-oOo/token-monitor-android/issues/60).
+  I didn't check pairing, Live or the update frequency in that r2 phone test.
 - **Widget layout and fonts:** One UI substitutes its own monospace face, and
   phone captures with real multi-tool, multi-model data showed crowded and
   overlapping rows that a two-row emulator fixture had hidden. That is why the
@@ -230,7 +190,7 @@ Pages widget redraw described above.
   had a median warm cache hydration of 169.9 ms and a median freshness update
   of 264.9 ms. These are local observations, not timing guarantees. Widget
   timings cover off-screen bitmap drawing only.
-- Battery use has not been measured for the v0.77.0 release itself. The short
+- Battery use has not been measured for the published v0.77.0 or v0.78.0 APKs. The short
   Widget Live comparison above used a local build of the same performance
   changes; it is not a measurement of the published APK.
 - API 26 is a smoke check of install, launch and resume, not full interaction

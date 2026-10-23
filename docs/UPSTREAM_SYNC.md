@@ -12,13 +12,12 @@ and CLI-probe changes remain desktop internals. Android keeps the v0.77.0 r2
 performance improvements, five-second complete-update limit, widgets, animations,
 GET endpoints and retry policy. Title-sharing controls remain on desktop.
 
-v0.78.0 r1 is a candidate until the signed release is published.
-
 The latest published release is
-[`android-v0.77.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.77.0-r2),
-recorded with its source commit in `release.json`. Its performance and widget
-changes have emulator coverage. On my phone, the in-app update from r1 redrew
-the Pages widget without opening the app.
+[`android-v0.78.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r1),
+recorded with its source commit in `release.json`. I checked it with synthetic
+Hub data and emulators, not my phone. The earlier v0.77.0 r2 in-app update
+redrew the Pages widget without opening the app; that evidence does not establish
+phone behavior for v0.78.0 r1.
 
 An Android-only fix increments `versionCode` and the GitHub release revision,
 for example `android-vX.Y.Z-rN`, without changing the visible compatibility

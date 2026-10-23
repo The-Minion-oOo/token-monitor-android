@@ -17,7 +17,7 @@ Tokens, account limits, models and trends from the desktop Token Monitor Hub, pl
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/github/actions/workflow/status/The-Minion-oOo/token-monitor-android/android.yml?branch=main&style=flat-square&logo=githubactions&logoColor=10221c&label=Android%20checks"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.77.0" src="https://img.shields.io/badge/Desktop-v0.77.0-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.78.0" src="https://img.shields.io/badge/Desktop-v0.78.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/releases"><img alt="Total GitHub release asset downloads" src="https://img.shields.io/github/downloads/The-Minion-oOo/token-monitor-android/total?label=Downloads&style=flat-square&color=73bdf5"></a>
@@ -136,12 +136,13 @@ Session rows also show generation speed, cache-hit percentage and prompt-cache e
 ## Get connected
 
 You need Android 8.0 or newer and a desktop running Token Monitor with Hub hosting
-on. The signed public release is Android v0.77.0 r2, checked against desktop
-v0.77.0 with synthetic Hub data and emulators. On my phone I updated from r1 to
-r2 through **Settings → App updates**, and the Pages widget redrew without
-opening the app.
+on. The signed public release is Android v0.78.0 r1, checked against desktop
+v0.78.0 with synthetic Hub data and emulators. ZCode titles and tool/workflow
+subagents use the existing session rows. I haven't phone-tested this build;
+the earlier v0.77.0 r2 in-app update and Pages widget redraw check still applies
+only to that release.
 
-1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.77.0 r2 APK.
+1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.78.0 r1 APK.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
 3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
 4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
@@ -155,12 +156,12 @@ Desktop v0.64's optional iCloud Drive sync does not replace the Hub connection f
 
 | | |
 | --- | --- |
-| Current public release | [`v0.77.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.77.0-r2) |
+| Current public release | [`v0.78.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r1) |
 | Earlier published upgrade check | signed `v0.66.0-r1` over v0.65.0 r1; pairing, home Wi-Fi reconnection and placed Pages widget preserved |
-| Current phone coverage | `v0.77.0-r2` in-app update from r1; Pages widget redrew without opening the app |
+| Current release phone coverage | Not phone-tested; latest phone evidence is the `v0.77.0-r2` in-app update and Pages widget redraw |
 | Remaining phone checks | Pairing and Live after the update, Tailscale/Wi-Fi transitions, screen-off expiry and battery behavior |
-| Desktop baseline | Token Monitor `v0.77.0` |
-| Upstream commit | [`c83ee3a`](https://github.com/Javis603/token-monitor/commit/c83ee3aeb6d23505257113c29ef010040deb52f7) |
+| Desktop baseline | Token Monitor `v0.78.0` |
+| Upstream commit | [`d52e0b9`](https://github.com/Javis603/token-monitor/commit/d52e0b9cf970a03a30a5f5a1e9139693bb211cd8) |
 
 The visible version matches the desktop release the phone understands. Android-only
 builds bump the release revision and internal version code while the compatibility

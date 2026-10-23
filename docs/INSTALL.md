@@ -3,13 +3,13 @@
 ## Requirements
 
 - Android 8.0 or newer.
-- Token Monitor desktop with Hub hosting enabled and a shared secret. Android v0.77.0 r2 is verified against desktop v0.77.0.
+- Token Monitor desktop with Hub hosting enabled and a shared secret. Android v0.78.0 r1 is verified against desktop v0.78.0.
 - A private route to the desktop: Tailscale is recommended; home Wi-Fi is optional.
 
 ## Install
 
-Download the signed v0.77.0 r2 APK from the public
-[release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.77.0-r2),
+Download the signed v0.78.0 r1 APK from the public
+[release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r1),
 or use **Settings → App updates** in v0.62.0 r1 or newer. It uses the same package
 and release certificate as earlier releases, with a higher version code. An
 in-app upgrade on my phone from v0.65.0 to v0.66.0 r1 preserved pairing and the
@@ -17,7 +17,8 @@ placed Pages widget; see [Validation](VALIDATION.md). I also updated my phone
 from v0.77.0 r1 to r2 through the in-app updater and confirmed that the Pages
 widget redrew without opening the app. I didn't recheck pairing, Live updates
 or the dashboard update frequency in that test. The older v0.61.0 r1 app has
-no in-app updater, so install a newer release manually once.
+no in-app updater, so install a newer release manually once. I haven't
+phone-tested v0.78.0 r1; the earlier checks apply only to their named builds.
 
 To build the current source, install JDK 17 and Android SDK 37, then run:
 
@@ -44,14 +45,14 @@ There is no Play Store or F-Droid listing.
 Each signed release includes an APK and a `.sha256` file. Compare the hash:
 
 ```powershell
-Get-FileHash .\token-monitor-android-v0.77.0-r2.apk -Algorithm SHA256
+Get-FileHash .\token-monitor-android-v0.78.0-r1.apk -Algorithm SHA256
 ```
 
 On macOS or Linux, use `shasum -a 256` or `sha256sum` instead:
 
 ```sh
-shasum -a 256 token-monitor-android-v0.77.0-r2.apk
-sha256sum token-monitor-android-v0.77.0-r2.apk
+shasum -a 256 token-monitor-android-v0.78.0-r1.apk
+sha256sum token-monitor-android-v0.78.0-r1.apk
 ```
 
 A matching checksum detects download corruption; download both files from the
@@ -65,7 +66,7 @@ Optionally, check the signature as well with `apksigner` from the Android SDK
 build tools:
 
 ```sh
-apksigner verify --print-certs token-monitor-android-v0.77.0-r2.apk
+apksigner verify --print-certs token-monitor-android-v0.78.0-r1.apk
 ```
 
 The printed SHA-256 certificate digest must equal the value above, which is also
