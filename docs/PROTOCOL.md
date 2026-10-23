@@ -4,7 +4,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The candidate baseline is upstream Token Monitor **v0.77.0**, released 2026-10-21.
+The verified baseline is upstream Token Monitor **v0.78.0**, released 2026-10-23.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -53,6 +53,19 @@ limits, provider details, and retained device history. A foreground refresh stil
 replaces the snapshot with the current read endpoints.
 
 ## Fixtures
+
+For v0.78.0, ZCode titles and parent links use the existing optional session
+fields. Tool- and workflow-spawned children fold under their parent; deliberate
+forks and side chats stay separate. Titles are absent unless desktop sharing is
+enabled and disappear again when consent is revoked. Android's local title
+preference can hide a shared title without changing desktop consent.
+
+The v0.78.0 fixtures cover all five read endpoints, complete/freshness stream
+frames and ZCode with sharing off, on and revoked. The contract harness creates
+a synthetic ZCode database in its disposable home, runs the released metadata
+resolver and passes the result through the actual Hub. Android never reads that
+database or calls a title-policy write endpoint. Prompt and message sentinels
+must stay out of every response.
 
 For v0.77.0, `thirdparty` accounts with `adapterId: "newapi-account"` can carry
 `balance.todaySpend`, `weekSpend`, `monthSpend` and `allTimeSpend` with a native

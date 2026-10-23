@@ -3,6 +3,15 @@
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 
+## v0.78.0 r1 — Unreleased
+
+- I checked Android against desktop v0.78.0 and added released-Hub coverage for
+  ZCode titles, subagent/workflow grouping and separate fork/side-chat rows.
+- I verified that titles stay private by default, follow desktop consent and
+  disappear on revocation. Android's local title preference still hides them.
+- I retained the v0.77.0 r2 performance fixes, five-second complete-update limit,
+  widget layouts, animations and existing read-only network behavior.
+
 ## v0.77.0 r2 — 2026-10-21
 
 - While a coding session is active the Hub sends a complete update every few

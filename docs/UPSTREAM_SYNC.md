@@ -2,16 +2,17 @@
 
 ## Version rule
 
-Android v0.77.0 r2 targets desktop tag `v0.77.0`, peeled commit
-`c83ee3aeb6d23505257113c29ef010040deb52f7`, in Gradle and `upstream.json`.
-I reviewed the changes since v0.76.0. New API account spend is mapped to the
-existing native Limits rows with provider-reported period labels. Released-source
-checks cover unknown Cursor plans and distinct Cline identities with a shared
-display email. The Hub's persistence batching, shutdown drain and shared SSE
-serialization remain desktop internals; Android keeps its current GET endpoints,
-stream framing, retry policy and update frequency. Earlier protocol fixtures and
-presentation behavior are retained. Collection, account configuration and
-title-sharing controls remain on desktop. Android is still read-only.
+Android v0.78.0 r1 targets desktop tag `v0.78.0`, peeled commit
+`d52e0b9cf970a03a30a5f5a1e9139693bb211cd8`, in Gradle and `upstream.json`.
+I reviewed the changes since v0.77.0. ZCode's saved titles and tool/workflow
+parent links pass through the existing parser and session grouping. Forks and
+side chats keep separate rows. Released-source checks cover title sharing off,
+on and revoked, without sending conversation bodies. Desktop glass, tooltip
+and CLI-probe changes remain desktop internals. Android keeps the v0.77.0 r2
+performance improvements, five-second complete-update limit, widgets, animations,
+GET endpoints and retry policy. Title-sharing controls remain on desktop.
+
+v0.78.0 r1 is a candidate until the signed release is published.
 
 The latest published release is
 [`android-v0.77.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.77.0-r2),

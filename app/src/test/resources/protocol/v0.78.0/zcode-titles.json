@@ -1,0 +1,834 @@
+{
+  "updatedAt": "2026-10-23T20:40:41.047Z",
+  "periods": {
+    "today": {
+      "capabilities": {
+        "tokenComponents": false,
+        "throughput": false
+      },
+      "totalTokens": 2400,
+      "costUsd": 0.24,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "outputTokens": 0,
+      "unclassifiedTokens": 2400,
+      "timedTokens": 0,
+      "timedOutputTokens": 0,
+      "timedDurationMs": 0,
+      "clients": {
+        "zcode": 2400
+      },
+      "clientCosts": {},
+      "clientCacheReads": {},
+      "clientCacheWrites": {},
+      "clientOutputs": {},
+      "clientUnclassifiedTokens": {
+        "zcode": 2400
+      },
+      "models": {
+        "glm-5": 2400
+      },
+      "modelCosts": {},
+      "modelCacheReads": {},
+      "modelCacheWrites": {},
+      "modelOutputs": {},
+      "modelUnclassifiedTokens": {
+        "glm-5": 2400
+      },
+      "clientModels": {},
+      "clientModelCosts": {},
+      "projects": {},
+      "sessions": {
+        "zcode:sample-zcode-parent": {
+          "client": "zcode",
+          "sessionId": "sample-zcode-parent",
+          "totalTokens": 1000,
+          "costUsd": 0.1,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-23T20:40:39.221Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "Plan the sample release",
+          "sessionKind": "",
+          "models": {
+            "glm-5": 1000
+          },
+          "modelCosts": {},
+          "providers": {}
+        },
+        "zcode:sample-zcode-child": {
+          "client": "zcode",
+          "sessionId": "sample-zcode-child",
+          "totalTokens": 200,
+          "costUsd": 0.02,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-23T20:40:39.221Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "Inspect the sample tests",
+          "sessionKind": "",
+          "models": {
+            "glm-5": 200
+          },
+          "modelCosts": {},
+          "providers": {},
+          "parentSessionId": "sample-zcode-parent"
+        },
+        "zcode:sample-zcode-workflow": {
+          "client": "zcode",
+          "sessionId": "sample-zcode-workflow",
+          "totalTokens": 300,
+          "costUsd": 0.03,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-23T20:40:39.221Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "Check the sample docs",
+          "sessionKind": "",
+          "models": {
+            "glm-5": 300
+          },
+          "modelCosts": {},
+          "providers": {},
+          "parentSessionId": "sample-zcode-parent"
+        },
+        "zcode:sample-zcode-fork": {
+          "client": "zcode",
+          "sessionId": "sample-zcode-fork",
+          "totalTokens": 400,
+          "costUsd": 0.04,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-23T20:40:39.221Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "Sample release alternative",
+          "sessionKind": "",
+          "models": {
+            "glm-5": 400
+          },
+          "modelCosts": {},
+          "providers": {}
+        },
+        "zcode:sample-zcode-side": {
+          "client": "zcode",
+          "sessionId": "sample-zcode-side",
+          "totalTokens": 500,
+          "costUsd": 0.05,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-23T20:40:39.221Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "Sample release side chat",
+          "sessionKind": "",
+          "models": {
+            "glm-5": 500
+          },
+          "modelCosts": {},
+          "providers": {}
+        }
+      }
+    },
+    "month": {
+      "capabilities": {
+        "tokenComponents": false,
+        "throughput": false
+      },
+      "totalTokens": 2400,
+      "costUsd": 0.24,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "outputTokens": 0,
+      "unclassifiedTokens": 2400,
+      "timedTokens": 0,
+      "timedOutputTokens": 0,
+      "timedDurationMs": 0,
+      "clients": {
+        "zcode": 2400
+      },
+      "clientCosts": {},
+      "clientCacheReads": {},
+      "clientCacheWrites": {},
+      "clientOutputs": {},
+      "clientUnclassifiedTokens": {
+        "zcode": 2400
+      },
+      "models": {
+        "glm-5": 2400
+      },
+      "modelCosts": {},
+      "modelCacheReads": {},
+      "modelCacheWrites": {},
+      "modelOutputs": {},
+      "modelUnclassifiedTokens": {
+        "glm-5": 2400
+      },
+      "clientModels": {},
+      "clientModelCosts": {},
+      "projects": {},
+      "sessions": {
+        "zcode:sample-zcode-parent": {
+          "client": "zcode",
+          "sessionId": "sample-zcode-parent",
+          "totalTokens": 1000,
+          "costUsd": 0.1,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-23T20:40:39.221Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "Plan the sample release",
+          "sessionKind": "",
+          "models": {
+            "glm-5": 1000
+          },
+          "modelCosts": {},
+          "providers": {}
+        },
+        "zcode:sample-zcode-child": {
+          "client": "zcode",
+          "sessionId": "sample-zcode-child",
+          "totalTokens": 200,
+          "costUsd": 0.02,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-23T20:40:39.221Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "Inspect the sample tests",
+          "sessionKind": "",
+          "models": {
+            "glm-5": 200
+          },
+          "modelCosts": {},
+          "providers": {},
+          "parentSessionId": "sample-zcode-parent"
+        },
+        "zcode:sample-zcode-workflow": {
+          "client": "zcode",
+          "sessionId": "sample-zcode-workflow",
+          "totalTokens": 300,
+          "costUsd": 0.03,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-23T20:40:39.221Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "Check the sample docs",
+          "sessionKind": "",
+          "models": {
+            "glm-5": 300
+          },
+          "modelCosts": {},
+          "providers": {},
+          "parentSessionId": "sample-zcode-parent"
+        },
+        "zcode:sample-zcode-fork": {
+          "client": "zcode",
+          "sessionId": "sample-zcode-fork",
+          "totalTokens": 400,
+          "costUsd": 0.04,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-23T20:40:39.221Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "Sample release alternative",
+          "sessionKind": "",
+          "models": {
+            "glm-5": 400
+          },
+          "modelCosts": {},
+          "providers": {}
+        },
+        "zcode:sample-zcode-side": {
+          "client": "zcode",
+          "sessionId": "sample-zcode-side",
+          "totalTokens": 500,
+          "costUsd": 0.05,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-23T20:40:39.221Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "Sample release side chat",
+          "sessionKind": "",
+          "models": {
+            "glm-5": 500
+          },
+          "modelCosts": {},
+          "providers": {}
+        }
+      }
+    },
+    "allTime": {
+      "capabilities": {
+        "tokenComponents": true,
+        "throughput": false
+      },
+      "totalTokens": 0,
+      "costUsd": 0,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "outputTokens": 0,
+      "unclassifiedTokens": 0,
+      "timedTokens": 0,
+      "timedOutputTokens": 0,
+      "timedDurationMs": 0,
+      "clients": {},
+      "clientCosts": {},
+      "clientCacheReads": {},
+      "clientCacheWrites": {},
+      "clientOutputs": {},
+      "clientUnclassifiedTokens": {},
+      "models": {},
+      "modelCosts": {},
+      "modelCacheReads": {},
+      "modelCacheWrites": {},
+      "modelOutputs": {},
+      "modelUnclassifiedTokens": {},
+      "clientModels": {},
+      "clientModelCosts": {},
+      "projects": {},
+      "sessions": {}
+    }
+  },
+  "devices": [
+    {
+      "deviceId": "contract-desktop",
+      "hostname": "Synthetic desktop",
+      "platform": "linux",
+      "agentVersion": "0.78.0",
+      "agentRuntime": "",
+      "updatedAt": "2026-10-23T20:40:39.221Z",
+      "receivedAt": "2026-10-23T20:40:41.047Z",
+      "ageMs": 0,
+      "stale": false,
+      "trackedClients": [
+        "mcode"
+      ],
+      "periods": {
+        "today": {
+          "capabilities": {
+            "tokenComponents": false,
+            "throughput": false
+          },
+          "totalTokens": 2400,
+          "costUsd": 0.24,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 0,
+          "unclassifiedTokens": 2400,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "clients": {
+            "zcode": 2400
+          },
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {},
+          "clientUnclassifiedTokens": {
+            "zcode": 2400
+          },
+          "models": {
+            "glm-5": 2400
+          },
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {},
+          "modelUnclassifiedTokens": {
+            "glm-5": 2400
+          },
+          "clientModels": {},
+          "clientModelCosts": {},
+          "projects": {},
+          "sessions": {
+            "zcode:sample-zcode-parent": {
+              "client": "zcode",
+              "sessionId": "sample-zcode-parent",
+              "totalTokens": 1000,
+              "costUsd": 0.1,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-23T20:40:39.221Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "Plan the sample release",
+              "sessionKind": "",
+              "models": {
+                "glm-5": 1000
+              },
+              "modelCosts": {},
+              "providers": {}
+            },
+            "zcode:sample-zcode-child": {
+              "client": "zcode",
+              "sessionId": "sample-zcode-child",
+              "totalTokens": 200,
+              "costUsd": 0.02,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-23T20:40:39.221Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "Inspect the sample tests",
+              "sessionKind": "",
+              "models": {
+                "glm-5": 200
+              },
+              "modelCosts": {},
+              "providers": {},
+              "parentSessionId": "sample-zcode-parent"
+            },
+            "zcode:sample-zcode-workflow": {
+              "client": "zcode",
+              "sessionId": "sample-zcode-workflow",
+              "totalTokens": 300,
+              "costUsd": 0.03,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-23T20:40:39.221Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "Check the sample docs",
+              "sessionKind": "",
+              "models": {
+                "glm-5": 300
+              },
+              "modelCosts": {},
+              "providers": {},
+              "parentSessionId": "sample-zcode-parent"
+            },
+            "zcode:sample-zcode-fork": {
+              "client": "zcode",
+              "sessionId": "sample-zcode-fork",
+              "totalTokens": 400,
+              "costUsd": 0.04,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-23T20:40:39.221Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "Sample release alternative",
+              "sessionKind": "",
+              "models": {
+                "glm-5": 400
+              },
+              "modelCosts": {},
+              "providers": {}
+            },
+            "zcode:sample-zcode-side": {
+              "client": "zcode",
+              "sessionId": "sample-zcode-side",
+              "totalTokens": 500,
+              "costUsd": 0.05,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-23T20:40:39.221Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "Sample release side chat",
+              "sessionKind": "",
+              "models": {
+                "glm-5": 500
+              },
+              "modelCosts": {},
+              "providers": {}
+            }
+          }
+        },
+        "month": {
+          "capabilities": {
+            "tokenComponents": false,
+            "throughput": false
+          },
+          "totalTokens": 2400,
+          "costUsd": 0.24,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 0,
+          "unclassifiedTokens": 2400,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "clients": {
+            "zcode": 2400
+          },
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {},
+          "clientUnclassifiedTokens": {
+            "zcode": 2400
+          },
+          "models": {
+            "glm-5": 2400
+          },
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {},
+          "modelUnclassifiedTokens": {
+            "glm-5": 2400
+          },
+          "clientModels": {},
+          "clientModelCosts": {},
+          "projects": {},
+          "sessions": {
+            "zcode:sample-zcode-parent": {
+              "client": "zcode",
+              "sessionId": "sample-zcode-parent",
+              "totalTokens": 1000,
+              "costUsd": 0.1,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-23T20:40:39.221Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "Plan the sample release",
+              "sessionKind": "",
+              "models": {
+                "glm-5": 1000
+              },
+              "modelCosts": {},
+              "providers": {}
+            },
+            "zcode:sample-zcode-child": {
+              "client": "zcode",
+              "sessionId": "sample-zcode-child",
+              "totalTokens": 200,
+              "costUsd": 0.02,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-23T20:40:39.221Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "Inspect the sample tests",
+              "sessionKind": "",
+              "models": {
+                "glm-5": 200
+              },
+              "modelCosts": {},
+              "providers": {},
+              "parentSessionId": "sample-zcode-parent"
+            },
+            "zcode:sample-zcode-workflow": {
+              "client": "zcode",
+              "sessionId": "sample-zcode-workflow",
+              "totalTokens": 300,
+              "costUsd": 0.03,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-23T20:40:39.221Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "Check the sample docs",
+              "sessionKind": "",
+              "models": {
+                "glm-5": 300
+              },
+              "modelCosts": {},
+              "providers": {},
+              "parentSessionId": "sample-zcode-parent"
+            },
+            "zcode:sample-zcode-fork": {
+              "client": "zcode",
+              "sessionId": "sample-zcode-fork",
+              "totalTokens": 400,
+              "costUsd": 0.04,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-23T20:40:39.221Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "Sample release alternative",
+              "sessionKind": "",
+              "models": {
+                "glm-5": 400
+              },
+              "modelCosts": {},
+              "providers": {}
+            },
+            "zcode:sample-zcode-side": {
+              "client": "zcode",
+              "sessionId": "sample-zcode-side",
+              "totalTokens": 500,
+              "costUsd": 0.05,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-10-23T20:40:39.221Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "Sample release side chat",
+              "sessionKind": "",
+              "models": {
+                "glm-5": 500
+              },
+              "modelCosts": {},
+              "providers": {}
+            }
+          }
+        },
+        "allTime": {
+          "capabilities": {
+            "tokenComponents": true,
+            "throughput": false
+          },
+          "totalTokens": 0,
+          "costUsd": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 0,
+          "unclassifiedTokens": 0,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "clients": {},
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {},
+          "clientUnclassifiedTokens": {},
+          "models": {},
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {},
+          "modelUnclassifiedTokens": {},
+          "clientModels": {},
+          "clientModelCosts": {},
+          "projects": {},
+          "sessions": {}
+        }
+      },
+      "limits": {
+        "updatedAt": null,
+        "refreshMs": 300000,
+        "providers": []
+      }
+    }
+  ],
+  "projectsIncomplete": false,
+  "limits": {
+    "updatedAt": "2026-10-23T20:40:41.047Z",
+    "providers": []
+  },
+  "staleAfterMs": 600000,
+  "historyPreview": {
+    "daily": [
+      {
+        "date": "2026-10-23",
+        "tokens": 1234,
+        "cost": 0.42,
+        "activeTimeMs": 0,
+        "unpricedTokens": 321
+      }
+    ],
+    "monthly": [],
+    "summary": {
+      "totalTokens": 0,
+      "totalCost": 0,
+      "activeDays": 1,
+      "currentStreak": 1,
+      "longestStreak": 1,
+      "peakDayTokens": 1234,
+      "favoriteModel": "minimax-m2.5",
+      "messages": 0,
+      "activeTimeMs": 0
+    }
+  },
+  "historyRevision": "efce0e3ce3e3b308",
+  "deviceHistoryRevision": "ea689651a7b87c4d",
+  "subscriptionsUpdatedAt": "",
+  "syncSettingsRevisions": {
+    "modelAliases": 0,
+    "customPricing": 0
+  }
+}

@@ -8,6 +8,22 @@ import org.junit.Test
 
 /** Responses produced by tools/check-hub-contract.mjs from the exact released desktop source. */
 class ReleasedHubContractTest {
+    @Test fun `released ZCode metadata survives transport and honors title consent`() {
+        val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
+        assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())
+        fun sessions(name: String) = HubProtocolParser.decodeStats(File(directory!!, "$name.json").readText()).periods.getValue("today").sessions
+        val shared = sessions("zcode-titles")
+        val rows = io.github.theminionooo.tokenmonitor.ui.groupSessions(shared)
+        assertEquals(3, rows.size)
+        val parent = rows.single { it.grouped }
+        assertEquals("Plan the sample release", parent.display.title)
+        assertEquals(2, parent.subagentCount)
+        assertEquals(1500L, parent.totalTokens)
+        for (name in listOf("zcode-private", "zcode-revoked")) {
+            assertEquals(shared.map { it.copy(title = "") }, sessions(name))
+        }
+    }
+
     @Test fun `released Hub endpoints and v2 stream preserve synthetic usage`() {
         val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
         assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())

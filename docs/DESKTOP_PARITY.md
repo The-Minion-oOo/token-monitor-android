@@ -1,9 +1,14 @@
-# Desktop parity for v0.77.0
+# Desktop parity for v0.78.0
 
-The Android adapter targets desktop Token Monitor v0.77.0 using
+The Android adapter targets desktop Token Monitor v0.78.0 using
 versioned fixtures and responses from the pinned released Hub. It mirrors
 the desktop information that the Hub can safely provide while keeping the phone
 read-only and lightweight.
+
+ZCode titles and tool/workflow subagents use Android's existing session rows.
+Deliberate forks and side chats remain separate, and title sharing stays under
+desktop control. The v0.78.0 Edge Dock glass, native tooltips and Claude CLI
+probe isolation are desktop features, not Android permissions or collectors.
 
 ## Dashboard coverage
 
