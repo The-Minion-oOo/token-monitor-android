@@ -1,6 +1,8 @@
 package io.github.theminionooo.tokenmonitor
 
 import android.graphics.Bitmap
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.GeneralClickAction
@@ -119,7 +121,15 @@ class InternetHubUiTest {
 
     private fun waitForDialogFocus() {
         compose.waitUntil(timeoutMillis = 5_000) {
-            compose.onAllNodes(hasText("Cancel") and isFocused()).fetchSemanticsNodes().isNotEmpty()
+            if (compose.onAllNodes(hasText("Cancel") and isFocused()).fetchSemanticsNodes().isEmpty()) false
+            else {
+                var keyboardVisible = false
+                onView(isRootView()).inRoot(isDialogWindow()).check { view, error ->
+                    if (error != null) throw error
+                    keyboardVisible = ViewCompat.getRootWindowInsets(view)?.isVisible(WindowInsetsCompat.Type.ime()) != false
+                }
+                !keyboardVisible
+            }
         }
     }
 
@@ -163,7 +173,8 @@ class InternetHubUiTest {
         val initial = internetPairing()
         screen(initial, InterfaceTheme.Porcelain)
         openConnection()
-        toggle().performClick()
+        compose.onNodeWithText(initial.connectionUrl!!).performScrollTo().performClick()
+        toggle().performScrollTo().performClick()
         compose.onNodeWithText(dialogTitle).assertIsDisplayed()
         captureDialog("light")
         pressBack()

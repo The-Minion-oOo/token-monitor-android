@@ -57,6 +57,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -117,6 +119,8 @@ internal fun ConnectionScreen(
     onDisablePublicHttps: () -> Unit = {},
 ) {
     val hasConnection = state.hasConnection
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
     var hubUrl by rememberSaveable(state.connectionUrl) { mutableStateOf(state.connectionUrl.orEmpty()) }
     var fallbackUrl by rememberSaveable(state.fallbackUrl) { mutableStateOf(state.fallbackUrl.orEmpty()) }
     var secret by remember { mutableStateOf("") }
@@ -165,6 +169,8 @@ internal fun ConnectionScreen(
             onAllowPublicHttpsChange = {
                 if (!it && state.hasConnection && state.allowPublicHttps &&
                     HubAddressValidator.routeLabel(state.connectionUrl) == "Internet (HTTPS)") {
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
                     confirmInternetOff = true
                 } else {
                     allowPublicHttps = it
