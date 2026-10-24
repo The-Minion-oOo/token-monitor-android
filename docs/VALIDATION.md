@@ -9,10 +9,10 @@ the build it names.
 
 Every release goes through the same automated gate before I publish it:
 
-- **Unit tests and builds:** 284 JVM tests, run with the generated Hub contract
+- **Unit tests and builds:** 294 JVM tests, run with the generated Hub contract
   supplied and nothing skipped, plus Android lint, the preview debug build and
   the instrumentation APK.
-- **Instrumentation suite:** 70 tests on API 36 and API 37 emulators. A report
+- **Instrumentation suite:** 73 tests on API 36 and API 37 emulators. A report
   check requires every test to be present with no failures, errors or skips.
 - **API 26 smoke check:** the optimized R8 release APK installs, launches and
   resumes on the oldest supported version. This is not full Android 8
@@ -37,38 +37,35 @@ the exact `main` commit that gets tagged. None of these checks uses a private
 Hub or a vendor account. [Releasing](RELEASING.md) covers the process and
 [Development](DEVELOPMENT.md) covers running the checks locally.
 
-## HTTPS candidate: v0.78.0 r2
+## Current release: v0.78.0 r2
 
-This revision is not published. HTTPS snapshot and live SSE checks against a
-disposable synthetic Hub passed on my phone over cellular. Local checks passed: 294 JVM tests with the
-Node and Worker generated contracts supplied (no skips), 73 instrumentation tests
-on the API 37 emulator, Android lint, preview debug/test APK and optimized unsigned release assembly, and
-14 Node tooling tests. Certificate-trust and hostname-mismatch tests confirm that
-TLS fails before the local test server receives HTTP headers. I also checked
-legacy pairing defaults, immediate consent revocation and the new screen captures.
+The optional internet HTTPS route starts off. I checked the pinned desktop
+v0.78.0 Node and Worker Hubs with synthetic data. All required checks passed on
+released source `cc2e4fe566c626bace6d62ed3eaa284a083c1ba1`:
+[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40046268701),
+[API 36/37 interaction and optimized API 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40046268671),
+and [Hub contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40046268654).
+Local checks passed 294 JVM tests without skips, lint, debug/test and signed
+release assembly, 73 API 37 interaction tests and 14 tooling tests.
 
-Lint reports no errors. Its cleartext-base warning reflects the documented need
-for Tailscale/LAN IP routes; internet HTTPS is enforced in code. These are local
-checks, not CI or phone evidence. CI on the merged commit and a signed release
-build have not been run for this candidate. Signed in-place upgrade, pairing retention and
-physical Tailscale/home-fallback regression checks remain release gates.
-A release history row is added only when the revision ships; the published release record below remains v0.78.0 r1.
+On my phone, the preview UI/storage checks and synthetic HTTPS snapshot,
+freshness and changed-stats tests passed over cellular with Wi-Fi and VPN off.
+The dashboard updated without a manual refresh. I closed the disposable endpoint.
+The signed r1 → r2 production upgrade retained the main address, home fallback
+and secret; Tailscale and Home Wi-Fi both connected. Internet consent stayed off.
+I restored the original Wi-Fi/VPN state. Widget expiry, battery use and long-term
+connection reliability were not remeasured for this revision.
 
-Physical-phone follow-up: the three targeted UI/storage tests passed. The preview
-app refused public HTTP, rejected internet HTTPS without opt-in, and paired with
-a disposable synthetic HTTPS Hub. Two production-repository SSE probes passed
-with cellular active and both Wi-Fi and VPN off before and after the requests.
-Freshness events preserved the totals, and full stats events changed them.
-I also watched the dashboard change from 2,345 to 4,567 synthetic tokens without
-refreshing, with Internet (HTTPS) displayed and cellular still active.
+The published APK is `token-monitor-android-v0.78.0-r2.apk`, 2,519,092 bytes,
+package `io.github.theminionooo.tokenmonitor`, version code `780002`.
+Its SHA-256 is `b5e47918c142c7fbc46b6a7ae86ec1d96f92ae0b20e353c8ee365b2bc422f961`;
+the release certificate remains
+`eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
+Draft and anonymous public downloads matched the staged APK, checksum and update
+manifest. [Android v0.78.0 r2](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r2)
+is the Latest release.
 
-The SSE check used a temporary HTTPS endpoint forwarded over SSH to a synthetic,
-loopback-only fixture. I closed the tunnel and fixture and cleared the disposable
-preview pairing. The production installation and pairing were not changed.
-The phone was left with Wi-Fi off, as selected for the test. This short check
-does not establish battery use or long-term connection reliability.
-
-## Current release: v0.78.0 r1
+## Previous release: v0.78.0 r1
 
 I checked desktop tag `v0.78.0`, commit
 `d52e0b9cf970a03a30a5f5a1e9139693bb211cd8`, including the released ZCode
@@ -104,7 +101,7 @@ API 36/37 emulator, with no failures, errors or skips.
 The draft and anonymous public APK, checksum and updater manifest match the
 staged bundle byte-for-byte.
 [android-v0.78.0-r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r1)
-is the Latest release. Earlier phone evidence remains attached to the releases
+was published before r2. Earlier phone evidence remains attached to the releases
 named below, not to this build.
 
 ## Release history
@@ -115,6 +112,7 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 
 | Release | Date | Desktop baseline | Main checks | Phone check |
 | --- | --- | --- | --- | --- |
+| v0.78.0 r2 | 2026-10-24 | v0.78.0 | Opt-in internet HTTPS, system TLS trust, Node/Worker contracts | Yes: signed r1 upgrade retained pairing; Tailscale/home fallback and synthetic cellular HTTPS/SSE |
 | v0.78.0 r1 | 2026-10-23 | v0.78.0 | ZCode grouping, title consent/revocation, released Hub endpoints and stream | No |
 | v0.77.0 r2 | 2026-10-21 | v0.77.0 | One complete stream update every five seconds | Yes: in-app update from r1; Pages widget redrew without opening the app |
 | v0.77.0 r1 | 2026-10-21 | v0.77.0 | Dashboard JSON/UI preparation, Live ownership, shared widgets and chart sizing, New API spend | No |

@@ -32,13 +32,12 @@ numbers to your phone, with home-screen widgets for quick checks.
 The desktop stays the collector and the source of truth. The phone reads its Hub
 over Tailscale (recommended), or home Wi-Fi when enabled, and shows what it finds.
 
-**In development: internet Hubs over HTTPS.** The next Android revision adds a
-separate **Allow an internet Hub over HTTPS** switch, off by default. It connects
-to an existing official Cloudflare Worker Hub or a Node Hub behind an HTTPS
-reverse proxy using a public DNS name. Turning it on does not expose your computer,
-open a port or deploy a Hub. The current published v0.78.0 r1 does not include
-this feature. I checked the candidate on my phone over cellular, including live
-updates; signed-upgrade and release checks remain open. [HTTPS pairing and safety](docs/PAIRING.md#optional-internet-hub-over-https).
+**Optional: internet Hubs over HTTPS.** Android v0.78.0 r2 adds a separate
+**Allow an internet Hub over HTTPS** switch, off by default for new and existing
+pairings. It connects to an existing official Cloudflare Worker Hub or a Node Hub
+behind an HTTPS reverse proxy using a public DNS name. Turning it on does not
+expose your computer, open a port or deploy a Hub. Tailscale remains recommended.
+[HTTPS pairing and safety](docs/PAIRING.md#optional-internet-hub-over-https).
 
 ## The desktop dashboard, made mobile
 
@@ -99,7 +98,7 @@ flowchart LR
 
 The phone talks to the Hub the desktop already runs. It reads five documented
 endpoints and one live stream over Tailscale, or home Wi-Fi when enabled. An
-opt-in HTTPS route is in development for an existing internet Hub. There is no
+opt-in HTTPS route supports an existing internet Hub. There is no
 app-operated relay or separate Token Monitor account.
 
 ## What it shows
@@ -145,14 +144,12 @@ Session rows also show generation speed, cache-hit percentage and prompt-cache e
 
 ## Get connected
 
-You need Android 8.0 or newer and a desktop running Token Monitor with Hub hosting
-on. The signed public release is Android v0.78.0 r1, checked against desktop
-v0.78.0 with synthetic Hub data and emulators. ZCode titles and tool/workflow
-subagents use the existing session rows. I haven't phone-tested this build;
-the earlier v0.77.0 r2 in-app update and Pages widget redraw check still applies
-only to that release.
+You need Android 8.0 or newer and a Token Monitor Hub. The signed public release
+is Android v0.78.0 r2, checked against desktop v0.78.0. I verified HTTPS live
+updates over cellular and installed the signed r2 APK over r1 on my phone:
+pairing survived, and both Tailscale and home Wi-Fi connected.
 
-1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.78.0 r1 APK.
+1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.78.0 r2 APK.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
 3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
 4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
@@ -166,10 +163,10 @@ Desktop v0.64's optional iCloud Drive sync does not replace the Hub connection f
 
 | | |
 | --- | --- |
-| Current public release | [`v0.78.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r1) |
+| Current public release | [`v0.78.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r2) |
 | Earlier published upgrade check | signed `v0.66.0-r1` over v0.65.0 r1; pairing, home Wi-Fi reconnection and placed Pages widget preserved |
-| Current release phone coverage | Not phone-tested; latest phone evidence is the `v0.77.0-r2` in-app update and Pages widget redraw |
-| Remaining phone checks | Pairing and Live after the update, Tailscale/Wi-Fi transitions, screen-off expiry and battery behavior |
+| Current release phone coverage | Signed r1 → r2 upgrade retained pairing; Tailscale/home fallback and synthetic HTTPS live updates checked |
+| Remaining phone checks | Widget Live/expiry, battery use and long-term connection reliability were not remeasured |
 | Desktop baseline | Token Monitor `v0.78.0` |
 | Upstream commit | [`d52e0b9`](https://github.com/Javis603/token-monitor/commit/d52e0b9cf970a03a30a5f5a1e9139693bb211cd8) |
 
