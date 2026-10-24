@@ -47,8 +47,7 @@ The optional internet route below uses the main Hub field and its own consent.
 
 ## Optional: internet Hub over HTTPS
 
-This feature is in development for the next Android revision; the published
-v0.78.0 r1 does not include it. Tailscale remains the recommended setup.
+Available in Android v0.78.0 r2. Tailscale remains the recommended setup.
 
 1. Set up a Hub separately: the desktop project's official Cloudflare Worker
    Hub, or a Node Hub behind an HTTPS reverse proxy with a valid certificate.

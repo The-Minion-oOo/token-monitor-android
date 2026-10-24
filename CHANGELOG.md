@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased — v0.78.0 r2 candidate
+## v0.78.0 r2 — 2026-10-24
 
 - I added an off-by-default internet HTTPS Hub route, with Tailscale still recommended.
 - I kept public HTTP blocked at saving, route and request boundaries, limited internet
@@ -9,7 +9,7 @@
   synthetic fixtures, consent migration tests and local HTTPS fixture tooling.
 - I prepared the README, pairing, security, protocol and widget documentation.
 - I verified HTTPS snapshots, freshness and changed stats on my phone over cellular.
-  This candidate is not published.
+- I checked the signed upgrade from r1: pairing survived and Tailscale/home Wi-Fi connected.
 
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.

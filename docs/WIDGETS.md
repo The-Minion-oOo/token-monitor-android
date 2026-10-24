@@ -128,7 +128,7 @@ identities and connection details.
 
 ## Internet Hub connections
 
-The next Android revision adds a separate, off-by-default internet HTTPS route.
+Android v0.78.0 r2 adds a separate, off-by-default internet HTTPS route.
 Widgets use the same saved pairing and route protections as the dashboard. An
 existing Cloudflare Worker or HTTPS Node Hub can serve that route once enabled;
 Tailscale remains recommended. The home fallback stays private-only. This feature
