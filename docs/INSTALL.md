@@ -3,13 +3,13 @@
 ## Requirements
 
 - Android 8.0 or newer.
-- Token Monitor desktop with Hub hosting enabled and a shared secret. Android v0.78.0 r3 is verified against desktop v0.78.0.
+- Token Monitor desktop with Hub hosting enabled and a shared secret. Android v0.78.0 r4 is verified against desktop v0.78.0.
 - A route to the Hub: Tailscale is recommended; home Wi-Fi and an existing internet HTTPS Hub are optional.
 
 ## Install
 
-Download the signed v0.78.0 r3 APK from the public
-[release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r3),
+Download the signed v0.78.0 r4 APK from the public
+[release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r4),
 or use **Settings → App updates** in v0.62.0 r1 or newer. It uses the same package
 and release certificate as earlier releases, with a higher version code. An
 in-app upgrade on my phone from v0.65.0 to v0.66.0 r1 preserved pairing and the
@@ -95,3 +95,6 @@ After updating, open the dashboard once to verify the saved connection. The
 original Usage widget remains resizable; the four-page Pages widget keeps one
 fixed 1.82:1 composition. Widget Live is an explicit session and may need to be
 started again.
+
+The signed r2-to-r4 upgrade retained pairing, home Wi-Fi connectivity and visible
+display settings on my phone. Background refresh starts Off with Wi-Fi only on.

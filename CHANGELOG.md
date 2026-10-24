@@ -1,6 +1,6 @@
 # Changelog
 
-## Next release: v0.78.0 r4
+## v0.78.0 r4 — 2026-10-24
 
 - I added optional background widget refresh at 30 or 60 minutes, starting Off
   with Wi-Fi only enabled. Runs yield to foreground activity and retain stale

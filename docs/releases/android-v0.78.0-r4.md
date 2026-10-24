@@ -23,7 +23,7 @@ and preferences; background refresh starts Off after upgrading.
 
 ## Testing
 
-Unit tests, lint, debug assembly and emulator checks passed on the feature commit.
+Unit tests, lint, the debug build and required CI passed on the released source.
 The pinned Node and Worker Hub contracts passed locally with synthetic data.
 Light/dark settings and the recaptured widget comparison are approved.
 
