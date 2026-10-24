@@ -2,9 +2,29 @@
 
 ## Network boundary
 
-The app accepts Tailscale addresses by default. Private LAN addresses require an
-explicit setting. Public targets are rejected to keep transport private and
-prevent Hub credentials from being sent to arbitrary internet hosts.
+The app accepts Tailscale addresses by default and recommends that route. Private
+LAN addresses require an explicit setting. A separate **Allow an internet Hub over
+HTTPS** setting starts off, including for existing pairings. It permits public DNS
+names only over HTTPS. Saving, the route guard and the HTTP client each enforce
+that choice and refuse public HTTP before opening a request, including for stale
+or altered saved addresses. IP literals, single-label names and private-use names
+are not internet Hub targets. The home Wi-Fi fallback remains private-only.
+
+The internet option connects to an already available HTTPS Hub, such as the
+official Cloudflare Worker or a Node Hub behind an HTTPS reverse proxy. It does
+not deploy a Hub, open a port or change desktop settings. TLS uses Android's
+system certificate store only, without user-installed CAs or Hub certificate
+pinning. Certificate and hostname failures stop the TLS handshake before HTTP
+credentials are sent. The app reports those failures without printing secrets.
+
+The network security configuration allows cleartext for existing Tailscale and
+LAN IP routes. Android's domain rules cannot scope that permission by IP subnet;
+the app therefore enforces HTTPS for internet routes in code at all three
+boundaries. No debug trust override broadens the system trust store.
+
+The Hub secret can also change Hub data, although Android only reads it. Use a
+long random secret. If a phone is lost, change the secret on the Hub and every
+connected desktop, then pair the phone again.
 
 [Tailscale](https://tailscale.com/docs/reference/connection-types) normally
 attempts a direct device-to-device connection and can fall back to an

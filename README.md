@@ -29,7 +29,16 @@ Your desktop [Token Monitor](https://github.com/Javis603/token-monitor) already
 tracks the usage. This app brings the same dashboard, visual language, and
 numbers to your phone, with home-screen widgets for quick checks.
 
-The desktop stays the collector and the source of truth. The phone reads its Hub over your own private network and shows what it finds. That is the whole trick.
+The desktop stays the collector and the source of truth. The phone reads its Hub
+over Tailscale (recommended), or home Wi-Fi when enabled, and shows what it finds.
+
+**In development: internet Hubs over HTTPS.** The next Android revision adds a
+separate **Allow an internet Hub over HTTPS** switch, off by default. It connects
+to an existing official Cloudflare Worker Hub or a Node Hub behind an HTTPS
+reverse proxy using a public DNS name. Turning it on does not expose your computer,
+open a port or deploy a Hub. The current published v0.78.0 r1 does not include
+this feature. I checked the candidate on my phone over cellular, including live
+updates; signed-upgrade and release checks remain open. [HTTPS pairing and safety](docs/PAIRING.md#optional-internet-hub-over-https).
 
 ## The desktop dashboard, made mobile
 
@@ -89,8 +98,9 @@ flowchart LR
 ```
 
 The phone talks to the Hub the desktop already runs. It reads five documented
-endpoints and one live stream over Tailscale, or home Wi-Fi when enabled. There
-is no public server, vendor relay, or separate Token Monitor account.
+endpoints and one live stream over Tailscale, or home Wi-Fi when enabled. An
+opt-in HTTPS route is in development for an existing internet Hub. There is no
+app-operated relay or separate Token Monitor account.
 
 ## What it shows
 

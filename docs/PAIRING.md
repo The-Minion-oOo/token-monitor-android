@@ -22,7 +22,7 @@ Tailscale may stay enabled at home. When both devices are on the same network it
 
 Settings has an optional **Home Wi-Fi URL** beside the Hub URL. Enter the desktop's private `10.x`, `172.16–31.x`, `192.168.x`, or `.local` address there and the phone switches on its own: it tries the address that answered last, and if that one is silent it tries the other. A Tailscale address is skipped while Tailscale is off, and the home address is skipped on mobile data unless a VPN such as a Tailscale subnet router carries it. Arriving home with Tailscale off, or leaving on mobile data, needs no manual change. While the stream is up, the header names the route that answered: `Tailscale`, `Home Wi-Fi`, or `Private network`. Settings → Hub status shows the same label.
 
-The main **Hub URL** must be a Tailscale address unless **Use Wi-Fi as the main Hub address** is enabled, which lets an isolated home network use a private address as the only Hub. The optional fallback is a separate choice. Tailscale remains preferred because it supplies an encrypted identity-aware path both at home and away.
+The main **Hub URL** uses Tailscale by default. **Use Wi-Fi as the main Hub address** permits a private address as the only Hub. The separate **Allow an internet Hub over HTTPS** switch permits a public DNS name over HTTPS, as described below. The optional fallback is a separate choice. Tailscale remains preferred because it supplies an encrypted identity-aware path both at home and away.
 
 ### Updating a home address
 
@@ -42,7 +42,44 @@ the Android app-settings link if the system no longer shows a prompt. Returning
 to the app rechecks permission, including changes made in Android Settings.
 Revoking access excludes home routes until permission is restored.
 
-Public IP addresses and ordinary public hostnames are rejected for both fields. Do not port-forward the Hub.
+The home Wi-Fi field remains private-only. Public IP addresses are rejected.
+The optional internet route below uses the main Hub field and its own consent.
+
+## Optional: internet Hub over HTTPS
+
+This feature is in development for the next Android revision; the published
+v0.78.0 r1 does not include it. Tailscale remains the recommended setup.
+
+1. Set up a Hub separately: the desktop project's official Cloudflare Worker
+   Hub, or a Node Hub behind an HTTPS reverse proxy with a valid certificate.
+2. In Android connection settings, turn on **Allow an internet Hub over HTTPS**.
+   It starts off, including after an upgrade with an existing pairing.
+3. Enter a public DNS name such as `hub.example.com`, or
+   `https://hub.example.com:8443`, in **Hub address**. A bare name gains HTTPS;
+   the default port is 443. Enter the Hub secret and choose **Connect**.
+
+Turning the internet switch off revokes saved permission immediately. To enable
+it again, check and save the connection with the Hub secret.
+
+The switch only permits a connection. It does not expose a computer, open a port
+or deploy anything. With a Cloudflare Worker, desktops upload to the Worker using
+outbound connections; they need no incoming public port. A Node Hub behind a public
+reverse proxy is deliberately internet-accessible. Never publish plain HTTP.
+
+Only public DNS names are accepted for this option. IP literals, single-label
+names, localhost, private-use suffixes, credentials in URLs, paths, queries and
+fragments are refused. The existing private home fallback works as before.
+Header and Hub status identify the route as **Internet (HTTPS)**.
+
+The Hub secret can also change data on the Hub. Use a long random secret. If the
+phone is lost, change the secret on the Hub and on every connected desktop.
+Android only reads the Hub; the secret itself has broader authority.
+
+Android must trust the server certificate through its system certificate store.
+User-installed CAs are not accepted, and the app does not pin a Hub certificate.
+Fix certificate, hostname or TLS errors on the Hub rather than bypassing them.
+Redirects are refused. The unauthenticated identity check runs before protected
+reads. [Security details](SECURITY.md).
 
 ## Manual pairing
 

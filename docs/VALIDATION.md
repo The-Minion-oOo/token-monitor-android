@@ -37,6 +37,37 @@ the exact `main` commit that gets tagged. None of these checks uses a private
 Hub or a vendor account. [Releasing](RELEASING.md) covers the process and
 [Development](DEVELOPMENT.md) covers running the checks locally.
 
+## HTTPS candidate: v0.78.0 r2
+
+This revision is not published. HTTPS snapshot and live SSE checks against a
+disposable synthetic Hub passed on my phone over cellular. Local checks passed: 294 JVM tests with the
+Node and Worker generated contracts supplied (no skips), 73 instrumentation tests
+on the API 37 emulator, Android lint, preview debug/test APK and optimized unsigned release assembly, and
+14 Node tooling tests. Certificate-trust and hostname-mismatch tests confirm that
+TLS fails before the local test server receives HTTP headers. I also checked
+legacy pairing defaults, immediate consent revocation and the new screen captures.
+
+Lint reports no errors. Its cleartext-base warning reflects the documented need
+for Tailscale/LAN IP routes; internet HTTPS is enforced in code. These are local
+checks, not CI or phone evidence. CI on the merged commit and a signed release
+build have not been run for this candidate. Signed in-place upgrade, pairing retention and
+physical Tailscale/home-fallback regression checks remain release gates.
+A release history row is added only when the revision ships; the published release record below remains v0.78.0 r1.
+
+Physical-phone follow-up: the three targeted UI/storage tests passed. The preview
+app refused public HTTP, rejected internet HTTPS without opt-in, and paired with
+a disposable synthetic HTTPS Hub. Two production-repository SSE probes passed
+with cellular active and both Wi-Fi and VPN off before and after the requests.
+Freshness events preserved the totals, and full stats events changed them.
+I also watched the dashboard change from 2,345 to 4,567 synthetic tokens without
+refreshing, with Internet (HTTPS) displayed and cellular still active.
+
+The SSE check used a temporary HTTPS endpoint forwarded over SSH to a synthetic,
+loopback-only fixture. I closed the tunnel and fixture and cleared the disposable
+preview pairing. The production installation and pairing were not changed.
+The phone was left with Wi-Fi off, as selected for the test. This short check
+does not establish battery use or long-term connection reliability.
+
 ## Current release: v0.78.0 r1
 
 I checked desktop tag `v0.78.0`, commit

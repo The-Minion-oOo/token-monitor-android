@@ -163,8 +163,14 @@ internal class DashboardViewModel(application: Application) : AndroidViewModel(a
     fun moveHomeModule(module: String, offset: Int) = displayPreferences.moveHomeModule(module, offset)
     fun setHomeListCount(module: String, count: Int) = displayPreferences.setHomeListCount(module, count)
 
-    fun saveConnection(url: String, fallbackUrl: String, secret: String, allowLocalNetwork: Boolean) {
-        checkConnection(returnHome = true) { repository.validateAndSave(url, fallbackUrl, secret, allowLocalNetwork) }
+    fun saveConnection(url: String, fallbackUrl: String, secret: String, allowLocalNetwork: Boolean, allowPublicHttps: Boolean = false) {
+        checkConnection(returnHome = true) { repository.validateAndSave(url, fallbackUrl, secret, allowLocalNetwork, allowPublicHttps) }
+    }
+
+    fun disablePublicHttps() {
+        WidgetLiveService.stop(getApplication())
+        repository.setWidgetActive(false)
+        repository.disablePublicHttps()
     }
 
     fun repairHomeAddress(address: String) {

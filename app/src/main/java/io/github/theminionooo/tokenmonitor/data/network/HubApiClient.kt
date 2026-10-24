@@ -154,6 +154,7 @@ internal class HubApiClient(
         accept: String = "application/json",
         headers: Map<String, String> = emptyMap(),
     ): HttpURLConnection {
+        HubAddressValidator.requireAllowed(connection)
         beforeRequest(connection)
         val http = (URL(connection.baseUrl + path).openConnection() as HttpURLConnection).apply {
             requestMethod = "GET"

@@ -9,9 +9,10 @@ data class HubConnection(
     val secret: String,
     val allowLocalNetwork: Boolean,
     val fallbackUrl: String? = null,
+    val allowPublicHttps: Boolean = false,
 ) {
     // The generated data-class text would print the secret into logs and crash reports.
-    override fun toString() = "HubConnection(baseUrl=$baseUrl, secret=<redacted>, allowLocalNetwork=$allowLocalNetwork, fallbackUrl=$fallbackUrl)"
+    override fun toString() = "HubConnection(baseUrl=$baseUrl, secret=<redacted>, allowLocalNetwork=$allowLocalNetwork, fallbackUrl=$fallbackUrl, allowPublicHttps=$allowPublicHttps)"
 }
 
 data class HubHealth(

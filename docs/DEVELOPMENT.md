@@ -295,7 +295,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 70 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 73 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.
@@ -326,3 +326,40 @@ Release signing and publishing are documented in [Releasing](RELEASING.md).
 
 Android permits only one active UiAutomation connection. Close any other
 UI-automation or inspection tool before running instrumentation tests.
+
+## Internet HTTPS candidate checks
+
+The released-Hub contract command also checks the pinned Cloudflare Worker in
+memory and writes responses under `app/build/hub-contract/worker`. No deployed
+Hub is contacted. Supply `TOKEN_MONITOR_CONTRACT_DIR` when running the JVM suite
+so both Node and Worker generated responses are parsed by Android.
+
+For repeat mobile-data checks, use only a disposable Hub with synthetic data
+and a new random test secret. The local fixture server now accepts these optional
+environment variables:
+
+- `TOKEN_MONITOR_FIXTURE_SECRET`: a disposable secret; HTTPS mode requires at least 32 characters.
+- `TOKEN_MONITOR_FIXTURE_TLS_CERT` and `TOKEN_MONITOR_FIXTURE_TLS_KEY`: certificate-chain and key files for an explicitly configured test HTTPS endpoint.
+- `TOKEN_MONITOR_FIXTURE_PORT`: local listener port, default 17321.
+
+Run `node tools/fixture-hub.mjs`. It binds only to loopback, including in HTTPS
+mode. A separately approved disposable HTTPS reverse proxy can reach that listener;
+this command does not configure a proxy, open a firewall or deploy a Worker. It
+serves committed synthetic fixtures, rejects writes and never reads desktop data.
+Do not reuse a production Hub secret. Remove the test endpoint and secret after
+the phone check. Keep keys and raw test logs outside tracked files.
+
+For live-update checks, use a proxy that passes SSE without buffering. Cloudflare
+Quick Tunnels do not support SSE; use a disposable SSE-capable endpoint instead.
+The fixture above sends an initial snapshot and heartbeat comments; use the pinned
+Hub contract harness or a synthetic changing fixture to verify freshness and
+changed-stats events. The candidate phone results are in [Validation](VALIDATION.md).
+
+On the phone, use the preview package and mobile data with Wi-Fi and Tailscale
+off. Confirm the new switch starts off, public HTTP is refused, HTTPS pairing and
+live updates work, and the header and Hub status say Internet (HTTPS). Confirm
+turning the switch off stops internet requests, then test a bad certificate and a
+hostname mismatch against disposable endpoints. Recheck Tailscale and the existing
+home fallback separately. Record the exact APK and outcome without publishing real
+addresses, credentials or phone identifiers. A self-signed or user-CA certificate
+must fail; do not weaken app trust for the test.

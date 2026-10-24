@@ -78,23 +78,25 @@ internal class SecureConnectionStore(context: Context) {
         }.generateKey()
     }
 
-    // Layout: url.secret.allowLocal[.fallbackUrl]. The fourth part was added for the
-    // home Wi-Fi fallback; records written before it still decode.
-    private fun encode(connection: HubConnection): String = listOfNotNull(
+    // Layout: url.secret.allowLocal.fallbackUrl.allowPublicHttps. Empty fallback
+    // keeps the consent field in a fixed position. Old 3/4-field records stay off.
+    internal fun encode(connection: HubConnection): String = listOf(
         encodePart(connection.baseUrl),
         encodePart(connection.secret),
         connection.allowLocalNetwork.toString(),
-        connection.fallbackUrl?.takeIf { it.isNotBlank() }?.let(::encodePart),
+        encodePart(connection.fallbackUrl.orEmpty()),
+        connection.allowPublicHttps.toString(),
     ).joinToString(".")
 
-    private fun decode(value: String): HubConnection? {
-        val parts = value.split('.', limit = 4)
-        if (parts.size !in 3..4) return null
+    internal fun decode(value: String): HubConnection? {
+        val parts = value.split('.', limit = 6)
+        if (parts.size !in 3..5) return null
         val url = decodePart(parts[0]) ?: return null
         val secret = decodePart(parts[1]) ?: return null
         val allowLocalNetwork = parts[2].toBooleanStrictOrNull() ?: return null
-        val fallbackUrl = parts.getOrNull(3)?.let { decodePart(it) ?: return null }
-        return HubConnection(url, secret, allowLocalNetwork, fallbackUrl)
+        val fallbackUrl = parts.getOrNull(3)?.let { decodePart(it) ?: return null }?.takeIf { it.isNotBlank() }
+        val allowPublicHttps = parts.getOrNull(4)?.let { it.toBooleanStrictOrNull() ?: return null } ?: false
+        return HubConnection(url, secret, allowLocalNetwork, fallbackUrl, allowPublicHttps)
     }
 
     private fun encodePart(value: String): String = Base64.encodeToString(

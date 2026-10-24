@@ -11,3 +11,7 @@ I can't promise a response time, but I read every report.
 
 The app's data, transport, storage and permission boundaries are documented in
 [Security and privacy](docs/SECURITY.md).
+
+Tailscale remains recommended. Internet Hub access is a separate opt-in, off by
+default, limited to public DNS names over system-trusted HTTPS. Enabling it does
+not expose a computer or deploy a Hub.

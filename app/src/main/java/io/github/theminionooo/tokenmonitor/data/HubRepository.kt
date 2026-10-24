@@ -8,6 +8,7 @@ import io.github.theminionooo.tokenmonitor.data.network.HubAddressValidation
 import io.github.theminionooo.tokenmonitor.data.network.HubAddressValidator
 import io.github.theminionooo.tokenmonitor.data.network.HubApiClient
 import io.github.theminionooo.tokenmonitor.data.network.HubApiException
+import io.github.theminionooo.tokenmonitor.data.network.hubTlsMessage
 import io.github.theminionooo.tokenmonitor.data.network.HubRouteGuard
 import io.github.theminionooo.tokenmonitor.data.network.HubStreamEvent
 import io.github.theminionooo.tokenmonitor.data.network.PhoneNetworks
@@ -55,6 +56,7 @@ internal data class HubRepositoryState(
     /** Whichever saved address answered most recently. */
     val activeUrl: String? = null,
     val allowLocalNetwork: Boolean = false,
+    val allowPublicHttps: Boolean = false,
     val localNetworkPermissionRequired: Boolean = false,
     val snapshot: HubSnapshot? = null,
     val refreshing: Boolean = false,
@@ -227,8 +229,8 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
         reconcileWork(forceRefresh = true)
     }
 
-    suspend fun validateAndSave(rawUrl: String, rawFallbackUrl: String, secret: String, allowLocalNetwork: Boolean): String? {
-        val primary = when (val result = HubAddressValidator.validate(rawUrl, secret, allowLocalNetwork)) {
+    suspend fun validateAndSave(rawUrl: String, rawFallbackUrl: String, secret: String, allowLocalNetwork: Boolean, allowPublicHttps: Boolean = false): String? {
+        val primary = when (val result = HubAddressValidator.validate(rawUrl, secret, allowLocalNetwork, allowPublicHttps)) {
             is HubAddressValidation.Allowed -> result.connection
             is HubAddressValidation.Rejected -> return result.reason
         }
@@ -275,8 +277,19 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
             null
         } catch (cancelled: CancellationException) { throw cancelled }
         catch (error: HubApiException) { error.presentation }
-        catch (_: Exception) { "The Hub could not be verified. Check the private address and try again." }
+        catch (error: Exception) { hubTlsMessage(error) ?: "The Hub could not be verified. Check the address and try again." }
         finally { api.close(); if (activeApi === api) activeApi = null }
+    }
+
+    /** Revoking internet consent takes effect without a request or re-entering the secret. */
+    fun disablePublicHttps() {
+        val saved = connection?.takeIf { it.allowPublicHttps } ?: return
+        val privateOnly = saved.copy(allowPublicHttps = false)
+        connectionStore.save(privateOnly)
+        stopForegroundWork()
+        connection = privateOnly
+        _state.update { it.copy(allowPublicHttps = false, message = "Internet Hub access is off. Use Tailscale or update the connection settings.") }
+        reconcileWork()
     }
 
     fun disconnect() {
@@ -305,6 +318,7 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
         fallbackUrl = connection?.fallbackUrl,
         activeUrl = activeUrl,
         allowLocalNetwork = connection?.allowLocalNetwork ?: false,
+        allowPublicHttps = connection?.allowPublicHttps ?: false,
         localNetworkPermissionRequired = needsLocalPermission(),
     )
 
@@ -377,7 +391,7 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
                         if (generation != token) break
                         val rejected = error is HubApiException && error.statusCode == 401
                         _state.update { it.copy(refreshing = false, streamActive = false, widgetLiveActive = false, secretRejected = rejected,
-                            message = if (error is HubApiException) error.presentation else "Hub unavailable. Showing the last successful snapshot; retrying...") }
+                            message = if (error is HubApiException) error.presentation else hubTlsMessage(error) ?: "Hub unavailable. Showing the last successful snapshot; retrying...") }
                         if (rejected) break
                         // A dropped stream on a route that just answered is retried there first; only a failed
                         // connection moves the other saved address to the front.
@@ -431,7 +445,7 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
         if (HubAddressValidator.isLocalAddress(route.baseUrl) && !LocalNetworkAccess.granted(appContext)) {
             throw HubApiException(0, LocalNetworkAccess.deniedMessage)
         }
-        HubRouteGuard.require(route.baseUrl, PhoneNetworks.read(appContext))
+        HubRouteGuard.require(route.baseUrl, PhoneNetworks.read(appContext), route.allowPublicHttps)
     }
 
     private fun permittedRoutes(saved: HubConnection, preferred: String?): List<String> {
@@ -450,7 +464,8 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
         _state.value = HubRepositoryState(
             hasConnection = connection != null, connectionUrl = connection?.baseUrl,
             fallbackUrl = connection?.fallbackUrl, activeUrl = activeUrl,
-            allowLocalNetwork = connection?.allowLocalNetwork ?: false, snapshot = snapshot,
+            allowLocalNetwork = connection?.allowLocalNetwork ?: false,
+            allowPublicHttps = connection?.allowPublicHttps ?: false, snapshot = snapshot,
             localNetworkPermissionRequired = needsLocalPermission(),
         )
     }

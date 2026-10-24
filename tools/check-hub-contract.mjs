@@ -7,6 +7,7 @@ import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { checkWorkerContract } from "./check-worker-contract.mjs";
 
 const script = fileURLToPath(import.meta.url);
 const root = resolve(dirname(script), "..");
@@ -536,6 +537,7 @@ const workerSource = option("--isolated-source");
 if (workerSource) {
     const upstream = JSON.parse(await readFile(join(workerSource, "contract-upstream.json"), "utf8"));
     await isolatedContract(workerSource, resolve(option("--output")), upstream);
+    await checkWorkerContract(workerSource, join(resolve(option("--output")), "worker"), upstream);
 } else {
     const upstream = JSON.parse(await readFile(join(root, "upstream.json"), "utf8"));
     const approved = option("--approved-commit");
@@ -547,7 +549,7 @@ if (workerSource) {
     const directory = await mkdtemp(join(tmpdir(), "token-monitor-hub-contract-"));
     try {
         // Export committed Hub/shared files only; never use the working tree, collectors, data, or .env.
-        const archive = execFileSync("git", ["-C", repository, "archive", "--format=tar", approved, "package.json", "src/hub", "src/shared"], { maxBuffer: 32 * 1024 * 1024 });
+        const archive = execFileSync("git", ["-C", repository, "archive", "--format=tar", approved, "package.json", "src/hub", "src/shared", "worker/package.json", "worker/src"], { maxBuffer: 32 * 1024 * 1024 });
         execFileSync("tar", ["-xf", "-", "-C", directory], { input: archive });
         await writeFile(join(directory, "contract-upstream.json"), JSON.stringify(upstream));
         const env = Object.fromEntries(["PATH", "Path", "SystemRoot", "SYSTEMROOT", "WINDIR", "TEMP", "TMP"]

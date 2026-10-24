@@ -163,7 +163,7 @@ class DashboardInteractionTest {
                 DashboardScaffold(
                     state = HubRepositoryState(snapshot = HubSnapshot(stats = HubStats(periods = mapOf("today" to usage, "allTime" to usage)))),
                     destination = destination, form = ConnectionFormState(), displayOptions = DisplayOptions(), serviceStatus = ServiceStatusState(),
-                    onChoose = { destination = it }, onRefresh = {}, onSaveConnection = { _, _, _, _ -> },
+                    onChoose = { destination = it }, onRefresh = {}, onSaveConnection = { _, _, _, _, _ -> },
                     onColorfulToolMarksChange = {}, onCompactTokenTotalChange = {}, onReduceMotionChange = {}, onTextScaleChange = {},
                     onThemeCodeChange = {}, onFollowSystemThemeChange = {}, onShowLiveIndicatorChange = {}, onShowToolIconsChange = {}, onRankingMetricChange = {},
                     onShowLimitSourceChange = {}, onShowAccountEmailsChange = {}, onLimitBarMetricChange = {}, onDefaultPeriodChange = {},

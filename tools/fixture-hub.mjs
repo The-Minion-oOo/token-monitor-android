@@ -1,4 +1,5 @@
 import http from "node:http";
+import https from "node:https";
 import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -26,12 +27,23 @@ if (showcaseMode) {
 }
 
 const port = Number.parseInt(process.env.TOKEN_MONITOR_FIXTURE_PORT ?? "17321", 10);
-const secret = showcaseMode ? "showcase" : "fixture-secret";
+const tlsCert = process.env.TOKEN_MONITOR_FIXTURE_TLS_CERT;
+const tlsKey = process.env.TOKEN_MONITOR_FIXTURE_TLS_KEY;
+if (Boolean(tlsCert) !== Boolean(tlsKey)) throw new Error("Provide both fixture TLS certificate and key paths.");
+const secret = process.env.TOKEN_MONITOR_FIXTURE_SECRET || (showcaseMode ? "showcase" : "fixture-secret");
+if (tlsCert && (!process.env.TOKEN_MONITOR_FIXTURE_SECRET || secret.length < 32)) {
+    throw new Error("HTTPS fixture tests need a disposable TOKEN_MONITOR_FIXTURE_SECRET of at least 32 characters.");
+}
 if (!Number.isInteger(port) || port < 1 || port > 65535) {
     throw new Error("TOKEN_MONITOR_FIXTURE_PORT must be a valid TCP port.");
 }
 
-const server = http.createServer((request, response) => {
+const handle = (request, response) => {
+    if (request.method !== "GET") {
+        response.writeHead(405, { Allow: "GET", "Content-Type": "application/json" });
+        response.end('{"error":"method_not_allowed"}');
+        return;
+    }
     if (request.url === "/api/health") {
         response.writeHead(200, { "Content-Type": "application/json" });
         response.end(responses[request.url]);
@@ -64,9 +76,12 @@ const server = http.createServer((request, response) => {
     }
     response.writeHead(404, { "Content-Type": "application/json" });
     response.end('{"error":"not_found"}');
-});
+};
+const server = tlsCert
+    ? https.createServer({ cert: await readFile(tlsCert), key: await readFile(tlsKey), minVersion: "TLSv1.2" }, handle)
+    : http.createServer(handle);
 
 server.listen(port, "127.0.0.1", () => {
     const mode = showcaseMode ? "showcase" : "test fixture";
-    console.log(`Sanitized Token Monitor ${mode} Hub listening on 127.0.0.1:${port}`);
+    console.log(`Sanitized Token Monitor ${mode} Hub listening on ${tlsCert ? "https" : "http"}://127.0.0.1:${port}`);
 });

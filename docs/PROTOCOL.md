@@ -26,6 +26,28 @@ The Hub also accepts `X-Token-Monitor-Secret`; this app intentionally uses one
 authentication style only. It does not call the Hub's ingest, subscription
 write, or device deletion endpoints.
 
+## Cloudflare Worker
+
+I also exercise `worker/src/index.js` from the same pinned v0.78.0 commit locally.
+Its five read routes use the same Bearer authentication and unauthenticated Hub
+identity check. Stream-v2 negotiates the same `snapshot`, complete `stats` and
+compact `freshness` envelopes. Ingest changes may produce freshness-only events;
+forced broadcasts such as subscription changes send complete stats. Heartbeats
+are SSE comments. No Android protocol change is needed for those routes.
+
+The Worker runs independently of the desktop process and reports a different
+runtime/build identity. Its subscriptions response includes `ok`; Android ignores
+that extra field. A Worker without a configured secret returns `503 secret_required`
+for protected routes. The existing unavailable path handles it.
+
+`check-hub-contract.mjs` exports the pinned Worker along with the Node Hub into
+the disposable contract directory. Its sibling `check-worker-contract.mjs`
+uses the actual Worker handler with in-memory synthetic storage and Request
+objects; it does not deploy or contact any Hub. It verifies missing/wrong auth,
+read responses, all three stream events, and conversation-content stripping.
+Android compatibility tests parse those generated responses and retain sanitized
+Worker fixtures alongside the Node fixtures.
+
 ## Errors and streaming
 
 The verified Hub returns `{ "error": "unauthorized" }` with HTTP 401 for a
