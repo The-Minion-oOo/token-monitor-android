@@ -96,8 +96,9 @@ When a dashboard becomes visible the repository:
    `BackoffPolicy` (bounded exponential with jitter), and reconnects while the
    dashboard is still visible.
 
-When neither dashboard nor widget session needs updates, network work stops
-immediately and the pending cache write is flushed. Returning to the app repeats
+When neither dashboard nor widget session needs updates, foreground network work
+stops immediately and the pending cache write is flushed. The separate optional
+background job can later take one bounded snapshot, as described below. Returning to the app repeats
 step 1 before streaming resumes. Cached data remains visible while that request
 completes.
 
@@ -169,8 +170,9 @@ explicit test-and-save action is the boundary between discovery and persistence.
 | `SecureConnectionStore` | Addresses, secret, private-network choice | AES-GCM with a non-exportable Android Keystore key; ciphertext in app-private preferences |
 | `SnapshotCache` | Last successful wire snapshot | One gzip file in private storage, written atomically; migrates the first release's preferences store on first read |
 | `DisplayPreferences` | Non-secret display choices | Plain app-private preferences, exposed as a `StateFlow` |
+| `WidgetRefreshPreferences` | Background consent, interval, Wi-Fi choice and run metadata | Plain app-private preferences; no Hub addresses, credentials or response contents |
 
-Backup and device-transfer rules exclude all three, so a phone migration does
+Backup and device-transfer rules exclude all four, so a phone migration does
 not carry the pairing with it.
 
 Cache writes during foreground updates are coalesced to at most one per minute,
@@ -189,7 +191,14 @@ plus transparent native touch targets for Previous, Next, Open, Refresh, and
 Live. It requests 4×2 but never switches composition when a launcher allocates a
 different physical size. The selected page is stored locally per widget. This
 avoids launcher collection transforms and keeps page changes local without fetching.
-Neither provider registers a periodic update.
+Neither provider registers a periodic widget update. On the background-refresh
+branch, one separate persisted JobScheduler job supports explicit 30/60-minute
+consent. It uses the shared repository for a bounded health/stats/history read,
+never SSE, with main-thread admission and cancellation before foreground work.
+Non-secret preferences retain consent, authentication rejection, failure age and
+received response bytes. A failed run preserves the cache and marks it stale;
+an older queued write cannot clear a later rejection. The job cancels when its
+widget/pairing/consent requirements stop being true.
 See [Android widget layouts](https://developer.android.com/develop/ui/views/appwidgets/layouts).
 
 ## Presentation
@@ -293,7 +302,9 @@ but exclude session changes and transport timestamps within that date.
   edits, no device deletion.
 - Desktop appearance, window, tray, collection, and credential settings remain
   desktop responsibilities.
-- Widget Live is an explicit, bounded foreground service with a Stop notification. No worker, wake lock, boot restart, or analytics.
+- Widget Live is an explicit, bounded foreground service with a Stop notification.
+  Background refresh is a separate opt-in periodic job; only that job is restored
+  by Android after reboot. No app wake lock, boot receiver or analytics.
 
 ## Widget Live and motion
 

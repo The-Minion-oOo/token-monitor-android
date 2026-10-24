@@ -15,6 +15,7 @@ import io.github.theminionooo.tokenmonitor.R
 import kotlin.concurrent.thread
 
 class SwipeWidgetProvider : AppWidgetProvider() {
+    override fun onEnabled(context: Context) = WidgetRefreshScheduler.reconcileAsync(context)
     override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = updateAsync(context, ids)
 
     override fun onAppWidgetOptionsChanged(context: Context, manager: AppWidgetManager, id: Int, options: Bundle) =

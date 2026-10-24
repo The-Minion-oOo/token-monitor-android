@@ -6,8 +6,8 @@ import io.github.theminionooo.tokenmonitor.widget.WidgetUpdateCoordinator
 import kotlin.concurrent.thread
 
 /**
- * Nothing runs at startup. The one job here is to redraw saved widgets when the phone switches
- * between light and dark while the process is alive, because a widget cannot observe that itself.
+ * Reconcile opted-in widget scheduling without starting a connection. Redraw saved widgets
+ * when the phone switches between light and dark while this process is alive.
  */
 class TokenMonitorApplication : Application() {
     private var nightMode = 0
@@ -15,6 +15,7 @@ class TokenMonitorApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        io.github.theminionooo.tokenmonitor.widget.WidgetRefreshScheduler.reconcileAsync(this)
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

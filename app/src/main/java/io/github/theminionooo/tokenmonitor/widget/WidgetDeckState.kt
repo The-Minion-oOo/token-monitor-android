@@ -36,8 +36,16 @@ internal fun loadWidgetSnapshot(context: Context): WidgetSnapshot {
             )
         }.getOrNull()
     }
-    val snapshot: HubSnapshot? = listOfNotNull(session.snapshot, cached).maxByOrNull { it.capturedAt }
-    return WidgetSnapshot(session, snapshot)
+    val latest = listOfNotNull(session.snapshot, cached).maxByOrNull { it.capturedAt }
+    val failed = io.github.theminionooo.tokenmonitor.data.storage.WidgetRefreshPreferences(context).record
+    // Dashboard cache reads are always "stale" until network verification. Widgets instead
+    // use the saved timestamp plus the persisted refresh outcome, as before this feature.
+    val snapshot = latest?.let { it.copy(stale = failed.stale(it.capturedAt)) }
+    // A completed quiet run supersedes an old explicit-session error. Failed quiet runs
+    // use STALE rather than retaining an unrelated process-local OFFLINE message.
+    val settled = snapshot != null && (failed.successAt >= snapshot.capturedAt || failed.stale(snapshot.capturedAt))
+    val displayedSession = if (settled && !session.enabled && !session.refreshing) session.copy(note = null) else session
+    return WidgetSnapshot(displayedSession, snapshot)
 }
 
 internal fun loadWidgetDeck(context: Context, widgetId: Int): WidgetDeckRenderState =

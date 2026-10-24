@@ -1,5 +1,12 @@
 # Changelog
 
+## Next release: v0.78.0 r4
+
+- I added optional background widget refresh at 30 or 60 minutes, starting Off
+  with Wi-Fi only enabled. Runs yield to foreground activity and retain stale
+  data on failure. An overnight preview phone check completed eight runs;
+  the optional battery baseline is tracked in #76.
+
 ## v0.78.0 r3 — 2026-10-23
 
 - I added confirmation before turning off internet access for a saved internet Hub.

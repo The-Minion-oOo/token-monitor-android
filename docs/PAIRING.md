@@ -1,5 +1,12 @@
 # Pairing with a desktop Hub
 
+On the background-refresh feature branch, I keep scheduled widget reads separate
+from pairing: they start Off, with Wi-Fi only on. Enabling internet access does
+not enable scheduled refresh. A rejected saved secret stops the scheduled job
+until successful verification; disconnecting cancels it immediately. Existing
+Tailscale, home fallback, HTTPS and Hub identity protections apply to every run.
+This option is not included in the published r3 APK.
+
 ## Recommended: Tailscale
 
 Each person uses their own Tailscale account and tailnet. No shared server or project account is required.
@@ -96,3 +103,6 @@ do not post it in screenshots or support requests.
 - **Unauthorized:** replace the saved Android connection with the current desktop Hub secret.
 - **Works at home but not away:** confirm both devices appear online in Tailscale and use the listed Tailscale address as the Hub URL, keeping the home-only LAN address in the Home Wi-Fi field.
 - **Old values:** check the timestamp shown in Android Settings. The app keeps the last snapshot visible when the Hub is unreachable.
+
+The signed r2-to-r4 upgrade on my phone retained pairing and reconnected over
+home Wi-Fi. Background refresh remained Off with Wi-Fi only on after upgrading.

@@ -4,6 +4,14 @@
 
 <h1 align="center">Token Monitor for Android</h1>
 
+**Next release: v0.78.0 r4.** I added optional background widget refresh,
+starting Off with Wi-Fi only enabled and 30- or 60-minute intervals. The
+screenshots, overnight preview run and reboot restoration check passed.
+The signed upgrade kept pairing and display settings; the matching battery
+baseline remains an optional follow-up in
+[issue #76](https://github.com/The-Minion-oOo/token-monitor-android/issues/76).
+See [widget refresh](docs/WIDGETS.md#background-refresh).
+
 <p align="center"><b>Your desktop usage. In your pocket.</b><br>
 Tokens, account limits, models and trends from the desktop Token Monitor Hub, plus home-screen widgets that stay useful with the app closed.</p>
 

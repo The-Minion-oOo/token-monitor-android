@@ -70,13 +70,13 @@ internal fun prepareWidgetDeck(
     val liveEnabled = session.enabled && session.expiresAt > now
     val age = snapshot?.capturedAt?.takeIf { it > 0 }?.let { (now - it).coerceAtLeast(0) }
     val staleAfter = snapshot?.stats?.staleAfterMs ?: 5 * 60_000L
-    val stale = age != null && age > staleAfter
+    val stale = snapshot?.stale == true || (age != null && age > staleAfter)
     val status = when {
         session.note != null -> "OFFLINE"
         liveEnabled && session.connected -> "LIVE"
         liveEnabled -> "CONNECTING"
         session.refreshing -> "UPDATING"
-        stale -> "STALE"
+        stale -> WidgetDeckGrid.Header.STALE_STATUS
         snapshot == null -> "NO DATA"
         else -> "SAVED"
     }
