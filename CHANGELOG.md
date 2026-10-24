@@ -1,5 +1,11 @@
 # Changelog
 
+## Next release
+
+- I added confirmation before turning off internet access for a saved internet Hub.
+  Cancel, Back and outside taps preserve the pairing. Private routes and initial
+  pairing keep the plain toggle. This small UI change was not phone-tested.
+
 ## v0.78.0 r2 — 2026-10-24
 
 - I added an off-by-default internet HTTPS Hub route, with Tailscale still recommended.

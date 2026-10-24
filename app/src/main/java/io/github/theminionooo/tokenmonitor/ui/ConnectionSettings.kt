@@ -31,6 +31,7 @@ import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -52,6 +53,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -64,6 +72,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import io.github.theminionooo.tokenmonitor.BuildConfig
 import io.github.theminionooo.tokenmonitor.data.HubRepositoryState
+import io.github.theminionooo.tokenmonitor.data.network.HubAddressValidator
 import io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions
 import io.github.theminionooo.tokenmonitor.data.storage.LimitBarMetric
 import io.github.theminionooo.tokenmonitor.data.storage.RankingMetric
@@ -110,11 +119,24 @@ internal fun ConnectionScreen(
     onDisablePublicHttps: () -> Unit = {},
 ) {
     val hasConnection = state.hasConnection
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
     var hubUrl by rememberSaveable(state.connectionUrl) { mutableStateOf(state.connectionUrl.orEmpty()) }
     var fallbackUrl by rememberSaveable(state.fallbackUrl) { mutableStateOf(state.fallbackUrl.orEmpty()) }
     var secret by remember { mutableStateOf("") }
     var allowLocalNetwork by rememberSaveable(state.allowLocalNetwork) { mutableStateOf(state.allowLocalNetwork) }
     var allowPublicHttps by rememberSaveable(state.allowPublicHttps) { mutableStateOf(state.allowPublicHttps) }
+    var confirmInternetOff by rememberSaveable(state.connectionUrl, state.allowPublicHttps, state.hasConnection) { mutableStateOf(false) }
+    if (confirmInternetOff) {
+        InternetAccessOffDialog(
+            onDismiss = { confirmInternetOff = false },
+            onConfirm = {
+                confirmInternetOff = false
+                allowPublicHttps = false
+                onDisablePublicHttps()
+            },
+        )
+    }
     // A discovery result fills the home address once. Recreating the screen must not put an old result over what was typed since.
     var appliedDiscovery by rememberSaveable { mutableStateOf(discovery.found) }
     LaunchedEffect(discovery.found) {
@@ -145,8 +167,15 @@ internal fun ConnectionScreen(
             onAllowLocalNetworkChange = { allowLocalNetwork = it },
             allowPublicHttps = allowPublicHttps,
             onAllowPublicHttpsChange = {
-                allowPublicHttps = it
-                if (!it && state.allowPublicHttps) onDisablePublicHttps()
+                if (!it && state.hasConnection && state.allowPublicHttps &&
+                    HubAddressValidator.routeLabel(state.connectionUrl) == "Internet (HTTPS)") {
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
+                    confirmInternetOff = true
+                } else {
+                    allowPublicHttps = it
+                    if (!it && state.allowPublicHttps) onDisablePublicHttps()
+                }
             },
             saving = form.saving,
             saveLabel = saveLabel,
@@ -337,6 +366,32 @@ internal fun ConnectionScreen(
             }
             Text("The dashboard streams immediately while visible. Widget Live uses a lighter 30-second refresh and stops after one hour.", color = Muted, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
         }
+    }
+}
+
+@Composable
+private fun InternetAccessOffDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
+    val cancelFocus = remember { FocusRequester() }
+    Dialog(onDismissRequest = onDismiss) {
+        val windowFocused = LocalWindowInfo.current.isWindowFocused
+        Surface(color = Shell, contentColor = Ink, shape = RoundedCornerShape(12.dp), border = BorderStroke(1.dp, StrongLine)) {
+            Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text("Turn off internet access?", color = Ink, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                HorizontalDivider(color = Line)
+                Text("This phone will stop connecting to your internet Hub. To turn it back on, you'll need to enter the Hub secret again.",
+                    color = Ink, style = MaterialTheme.typography.bodyMedium)
+                HorizontalDivider(color = Line)
+                Row(Modifier.align(Alignment.End), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    TextButton(onClick = onDismiss, modifier = Modifier.focusProperties { canFocus = true }.focusRequester(cancelFocus)) {
+                        Text("Cancel", color = Accent, style = MaterialTheme.typography.labelMedium)
+                    }
+                    TextButton(onClick = onConfirm) {
+                        Text("Turn off", color = Accent, style = MaterialTheme.typography.labelMedium)
+                    }
+                }
+            }
+        }
+        LaunchedEffect(windowFocused) { if (windowFocused) cancelFocus.requestFocus() }
     }
 }
 

@@ -1,11 +1,23 @@
 package io.github.theminionooo.tokenmonitor
 
 import android.graphics.Bitmap
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.GeneralClickAction
+import androidx.test.espresso.action.Press
+import androidx.test.espresso.action.Tap
+import androidx.test.espresso.matcher.RootMatchers.isDialog as isDialogWindow
+import androidx.test.espresso.matcher.ViewMatchers.isRoot as isRootView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.platform.testTag
@@ -26,20 +38,29 @@ class InternetHubUiTest {
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private var savedConsent: Boolean? = null
 
-    private fun screen(state: HubRepositoryState) {
+    private var disabledCalls = 0
+    private var savedPairing by mutableStateOf(HubRepositoryState())
+    private val dialogTitle = "Turn off internet access?"
+
+    private fun screen(state: HubRepositoryState, theme: InterfaceTheme = InterfaceTheme.Default) {
+        savedPairing = state
         check(context.packageName.endsWith(".preview"))
-        val palette = Palette.from(InterfaceTheme.Default)
+        val palette = Palette.from(theme)
         compose.setContent {
             MaterialTheme(colorScheme = tokenMonitorColors(palette), typography = tokenMonitorTypography(1)) {
                 CompositionLocalProvider(LocalPalette provides palette, LocalInteractionMotion provides false) {
                     Box(Modifier.size(393.dp, 820.dp).background(palette.shell).testTag("https-screen")) {
-                        DashboardScaffold(state = state, destination = DashboardDestination.Settings,
+                        DashboardScaffold(state = savedPairing, destination = DashboardDestination.Settings,
                             form = ConnectionFormState(), displayOptions = DisplayOptions(), serviceStatus = ServiceStatusState(),
                             onChoose = {}, onRefresh = {}, onSaveConnection = { _, _, _, _, internet -> savedConsent = internet },
                             onColorfulToolMarksChange = {}, onCompactTokenTotalChange = {}, onReduceMotionChange = {}, onTextScaleChange = {},
                             onThemeCodeChange = {}, onFollowSystemThemeChange = {}, onShowLiveIndicatorChange = {}, onShowToolIconsChange = {}, onRankingMetricChange = {},
                             onShowLimitSourceChange = {}, onShowAccountEmailsChange = {}, onLimitBarMetricChange = {}, onDefaultPeriodChange = {},
                             onViewVisibleChange = { _, _ -> }, onHomeModuleVisibleChange = { _, _ -> }, onMoveView = { _, _ -> }, onMoveHomeModule = { _, _ -> },
+                            onDisablePublicHttps = {
+                                disabledCalls++
+                                savedPairing = savedPairing.copy(allowPublicHttps = false)
+                            },
                             onDisconnect = {}, onOpenServicePage = {}, onOpenReleasePage = {}, discovery = HubDiscoveryState(), onFindHomeHub = {})
                     }
                 }
@@ -64,6 +85,10 @@ class InternetHubUiTest {
         compose.onNodeWithText("The Hub secret can also change data on the Hub.", substring = true).performScrollTo().assertIsDisplayed()
         compose.onNodeWithText("CONNECT", useUnmergedTree = true).performScrollTo()
         capture("pairing-on")
+        toggle.performScrollTo().performClick().assertIsOff()
+        compose.onNodeWithText(dialogTitle).assertDoesNotExist()
+        assertEquals(0, disabledCalls)
+        toggle.performClick().assertIsOn()
         compose.onNodeWithText("CONNECT", useUnmergedTree = true).performScrollTo().performClick()
         assertEquals(true, savedConsent)
     }
@@ -76,4 +101,118 @@ class InternetHubUiTest {
         compose.onNodeWithText("CHECK AND SAVE CONNECTION", useUnmergedTree = true).performScrollTo()
         capture("settings-on")
     }
+
+    private fun internetPairing() = HubRepositoryState(
+        hasConnection = true, connectionUrl = "https://hub.example.com", allowPublicHttps = true,
+    )
+
+    private fun toggle() = compose.onNodeWithContentDescription("Allow an internet Hub over HTTPS")
+
+    private fun openConnection() {
+        compose.onNodeWithText("CONNECTION", useUnmergedTree = true).performClick()
+        toggle().performScrollTo().assertIsOn()
+    }
+
+    private fun captureDialog(name: String) {
+        waitForDialogFocus()
+        val bitmap = compose.onNode(isDialog()).captureToImage().asAndroidBitmap()
+        context.openFileOutput("https-dialog-$name.png", 0).use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+    }
+
+    private fun waitForDialogFocus() {
+        compose.waitUntil(timeoutMillis = 5_000) {
+            if (compose.onAllNodes(hasText("Cancel") and isFocused()).fetchSemanticsNodes().isEmpty()) false
+            else {
+                var keyboardVisible = false
+                onView(isRootView()).inRoot(isDialogWindow()).check { view, error ->
+                    if (error != null) throw error
+                    keyboardVisible = ViewCompat.getRootWindowInsets(view)?.isVisible(WindowInsetsCompat.Type.ime()) != false
+                }
+                !keyboardVisible
+            }
+        }
+    }
+
+    private fun assertPairingUnchanged(initial: HubRepositoryState) {
+        compose.waitUntil(timeoutMillis = 5_000) {
+            compose.onAllNodesWithText(dialogTitle).fetchSemanticsNodes().isEmpty()
+        }
+        compose.onNodeWithText(dialogTitle).assertDoesNotExist()
+        toggle().assertIsOn()
+        compose.runOnIdle {
+            assertEquals(initial, savedPairing)
+            assertEquals(0, disabledCalls)
+        }
+    }
+
+    @Test fun savedInternetPairingRequiresConfirmationAndCancelIsTheDefault() {
+        val initial = internetPairing()
+        screen(initial)
+        openConnection()
+        // The saved route, rather than an unsaved edit, decides whether access is lost.
+        compose.onNodeWithText(initial.connectionUrl!!).performScrollTo().performTextReplacement("100.88.1.2")
+        toggle().performScrollTo().performClick()
+        compose.onNodeWithText(dialogTitle).assertIsDisplayed()
+        compose.onNodeWithText("Cancel").assertIsFocused()
+        compose.onNodeWithText("This phone will stop connecting to your internet Hub. To turn it back on, you'll need to enter the Hub secret again.").assertIsDisplayed()
+        compose.runOnIdle { assertEquals(initial, savedPairing); assertEquals(0, disabledCalls) }
+        captureDialog("dark")
+        compose.onNodeWithText("Cancel").performClick()
+        assertPairingUnchanged(initial)
+        toggle().performClick()
+        compose.onNodeWithText("Turn off").performClick()
+        compose.onNodeWithText(dialogTitle).assertDoesNotExist()
+        toggle().assertIsOff()
+        compose.runOnIdle {
+            assertEquals(1, disabledCalls)
+            assertEquals(initial.copy(allowPublicHttps = false), savedPairing)
+        }
+    }
+
+    @Test fun backDismissesTheLightDialogWithoutChangingPairing() {
+        val initial = internetPairing()
+        screen(initial, InterfaceTheme.Porcelain)
+        openConnection()
+        compose.onNodeWithText(initial.connectionUrl!!).performScrollTo().performClick()
+        toggle().performScrollTo().performClick()
+        compose.onNodeWithText(dialogTitle).assertIsDisplayed()
+        captureDialog("light")
+        pressBack()
+        assertPairingUnchanged(initial)
+    }
+
+    @Test fun outsideTapDismissesWithoutChangingPairing() {
+        val initial = internetPairing()
+        screen(initial)
+        openConnection()
+        toggle().performClick()
+        compose.onNodeWithText(dialogTitle).assertIsDisplayed()
+        waitForDialogFocus()
+        onView(isRootView()).inRoot(isDialogWindow()).perform(GeneralClickAction(Tap.SINGLE, { view ->
+            val origin = IntArray(2)
+            view.getLocationOnScreen(origin)
+            // Stay outside the native dialog window, away from the screen's gesture edge.
+            if (origin[0] > 10) floatArrayOf(origin[0] - 10f, origin[1] + view.height / 2f)
+            else floatArrayOf(origin[0] + view.width / 2f, origin[1] - 10f)
+        }, Press.FINGER))
+        compose.waitForIdle()
+        assertPairingUnchanged(initial)
+    }
+
+    private fun assertPrivatePairingTurnsOffSilently(url: String, local: Boolean = false) {
+        val initial = HubRepositoryState(hasConnection = true, connectionUrl = url, allowPublicHttps = true, allowLocalNetwork = local)
+        screen(initial)
+        openConnection()
+        toggle().performClick().assertIsOff()
+        compose.onNodeWithText(dialogTitle).assertDoesNotExist()
+        compose.runOnIdle {
+            assertEquals(1, disabledCalls)
+            assertEquals(initial.copy(allowPublicHttps = false), savedPairing)
+        }
+    }
+
+    @Test fun tailscalePairingTurnsOffWithoutADialog() = assertPrivatePairingTurnsOffSilently("http://100.88.1.2:17321")
+
+    @Test fun homeWifiPairingTurnsOffWithoutADialog() = assertPrivatePairingTurnsOffSilently("http://192.168.1.2:17321", local = true)
+
 }
