@@ -1,6 +1,6 @@
 # Changelog
 
-## Next release
+## Next release: v0.78.0 r5
 
 - I made **Wi-Fi only** for background widget refresh follow the network under
   Tailscale. Android can treat a VPN as metered even on home Wi-Fi, which could
