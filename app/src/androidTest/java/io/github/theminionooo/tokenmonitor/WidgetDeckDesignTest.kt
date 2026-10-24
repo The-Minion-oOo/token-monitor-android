@@ -233,6 +233,12 @@ class WidgetDeckDesignTest {
                             assertTrue("$page $size control $id needs an accessibility label", !control.contentDescription.isNullOrBlank())
                         }
                         capture(view, "widget-deck-${page.name.lowercase()}-${InterfaceTheme.idOf(theme)}-${size.width.toInt()}x${size.height.toInt()}.png")
+                        if (size == SizeF(360f, 220f) && theme in listOf(InterfaceTheme.Default, InterfaceTheme.Porcelain)) {
+                            val stale = prepareWidgetDeck(showcaseSnapshot().copy(stale = true), WidgetSession(), showcaseNow)
+                            val staleView = WidgetDeckRenderer.render(context, page, stale, theme, size).apply(context, FrameLayout(context))
+                            layout(staleView, size)
+                            capture(staleView, "widget-background-stale-${page.name.lowercase()}-${InterfaceTheme.idOf(theme)}.png")
+                        }
                     }
                     assertEquals("pages changed canvas size for $theme at $size: $renderedSizes", 1, renderedSizes.distinct().size)
                 }

@@ -10,6 +10,15 @@ import java.time.ZoneOffset
 import java.util.Locale
 
 class WidgetDeckDataTest {
+    @Test fun `a failed background run uses the existing stale label and preserves figures`() {
+        val before = prepareWidgetDeck(snapshot, WidgetSession(), capturedAt, ZoneOffset.UTC, Locale.US)
+        val failed = prepareWidgetDeck(snapshot.copy(stale = true), WidgetSession(), capturedAt, ZoneOffset.UTC, Locale.US)
+        assertEquals("STALE", failed.status)
+        assertEquals(before.tools, failed.tools)
+        assertEquals(before.week, failed.week)
+        assertEquals(snapshot.capturedAt, failed.snapshot?.capturedAt)
+        assertFalse(failed.liveEnabled)
+    }
     private val capturedAt = Instant.parse("2026-09-04T15:35:10Z").toEpochMilli()
     private val snapshot = HubProtocolParser.decodeSnapshot(
         healthRaw = resource("v0.54.0", "health.json"),

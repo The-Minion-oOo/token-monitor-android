@@ -15,6 +15,30 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 
 class HubApiClientTest {
+    @Test fun `widget fetch authenticates after health reads three endpoints and counts payload bytes`() {
+        val reads = mutableListOf<String>()
+        val bodies = mapOf("/api/health" to """{"ok":true,"role":"hub"}""", "/api/stats" to "{}", "/api/history" to "{}")
+        val server = HttpServer.create(InetSocketAddress(testHost, 0), 0).apply {
+            createContext("/api/") { exchange ->
+                val path = exchange.requestURI.path
+                reads += path
+                assertEquals(if (path == "/api/health") null else "Bearer synthetic-secret", exchange.requestHeaders.getFirst("Authorization"))
+                val body = bodies.getValue(path).toByteArray()
+                exchange.sendResponseHeaders(200, body.size.toLong())
+                exchange.responseBody.use { it.write(body) }
+            }
+            start()
+        }
+        try {
+            HubApiClient().use { api ->
+                val wire = api.loadWidgetSnapshot(HubConnection("http://$testHost:${server.address.port}", "synthetic-secret", true), null)
+                assertEquals(listOf("/api/health", "/api/stats", "/api/history"), reads)
+                assertNull(wire.devices)
+                assertNull(wire.subscriptions)
+                assertEquals(bodies.values.sumOf { it.toByteArray().size }.toLong(), api.receivedBytes)
+            }
+        } finally { server.stop(0) }
+    }
     // Synthetic servers use this machine's private address, with real LAN validation.
     private val testHost = java.net.NetworkInterface.getNetworkInterfaces().toList()
         .flatMap { it.inetAddresses.toList() }.first { it is java.net.Inet4Address && it.isSiteLocalAddress }.hostAddress

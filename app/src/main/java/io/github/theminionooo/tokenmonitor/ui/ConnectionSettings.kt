@@ -344,6 +344,7 @@ internal fun ConnectionScreen(
                 }
             }
             SettingsGroup("Home-screen widget", summary = "Live controls · resizable") {
+                WidgetBackgroundSettings()
                 val widgetContext = androidx.compose.ui.platform.LocalContext.current
                 val widgets = android.appwidget.AppWidgetManager.getInstance(widgetContext)
                 Text("A widget in your app theme with the full token count, tool marks, quota windows, and a seven-day chart as you make it taller. Reduce Motion also applies to the widget.", color = Muted, style = MaterialTheme.typography.bodySmall)
@@ -565,14 +566,14 @@ private fun SettingsGroup(
 }
 
 @Composable
-private fun SettingsToggle(label: String, description: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
+internal fun SettingsToggle(label: String, description: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
             Text(label, color = Ink, style = MaterialTheme.typography.bodyMedium)
             Text(description, color = Muted, style = MaterialTheme.typography.bodySmall, lineHeight = 17.sp)
         }
         Spacer(Modifier.width(12.dp))
-        Switch(checked = checked, onCheckedChange = onCheckedChange)
+        Switch(checked = checked, onCheckedChange = onCheckedChange, modifier = Modifier.semantics { contentDescription = label })
     }
 }
 

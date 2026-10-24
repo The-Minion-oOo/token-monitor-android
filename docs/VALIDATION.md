@@ -7,12 +7,25 @@ the build it names.
 
 ## How each release is checked
 
+The background-refresh feature branch is unreleased. The light/dark settings
+and recaptured widget comparison are approved. I skipped the overnight phone
+check for this feature; battery use, real network traffic and physical-device
+reboot behavior remain unverified. The prepared [phone checklist](WIDGETS.md#overnight-validation)
+remains available for a future check. A release-history row will be added
+only when this feature ships; r3's evidence does not cover it.
+
+Local development checks passed: 301 JVM tests, lint, debug assembly and 14
+tooling tests; 84-test emulator suites on API 36 and API 37, followed by 21
+focused widget/dialog regressions on each after the final stale-state fixes.
+The pinned Node and Worker Hub contracts passed with synthetic data. Feature
+CI is tracked in the feature PR. These local results are not phone evidence.
+
 Every release goes through the same automated gate before I publish it:
 
-- **Unit tests and builds:** 294 JVM tests, run with the generated Hub contract
+- **Unit tests and builds:** 301 JVM tests on the background-refresh branch, run with the generated Hub contract
   supplied and nothing skipped, plus Android lint, the preview debug build and
   the instrumentation APK.
-- **Instrumentation suite:** 78 tests on API 36 and API 37 emulators. A report
+- **Instrumentation suite:** 84 tests on API 36 and API 37 emulators. A report
   check requires every test to be present with no failures, errors or skips.
 - **API 26 smoke check:** the optimized R8 release APK installs, launches and
   resumes on the oldest supported version. This is not full Android 8

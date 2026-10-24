@@ -50,6 +50,8 @@ internal class HubApiClient(
 ) : Closeable {
     private val requests = mutableSetOf<HttpURLConnection>()
     private var closed = false
+    var receivedBytes: Long = 0
+        private set
 
     override fun close() {
         val pending = synchronized(requests) {
@@ -78,6 +80,15 @@ internal class HubApiClient(
             subscriptions = getOptional(connection, "/api/subscriptions"),
             capturedAt = System.currentTimeMillis(),
         )
+    }
+
+    /** Widgets use aggregate limits and history, not device details or subscriptions. */
+    fun loadWidgetSnapshot(connection: HubConnection, previous: WireHubSnapshot?): WireHubSnapshot {
+        val health = get(connection, "/api/health", authenticated = false)
+        val identity = HubProtocolParser.decodeHealth(health)
+        if (!identity.ok || identity.role != "hub") throw HubApiException(200, "The address is not a Token Monitor Hub.")
+        return WireHubSnapshot(health, get(connection, "/api/stats"), previous?.devices,
+            getOptional(connection, "/api/history"), previous?.subscriptions, System.currentTimeMillis())
     }
 
     fun getSubscriptions(connection: HubConnection): String = get(connection, "/api/subscriptions")
@@ -231,6 +242,7 @@ internal class HubApiClient(
         while (true) {
             val read = stream.read(buffer)
             if (read == -1) break
+            receivedBytes += read
             totalBytes += read
             if (totalBytes > maxResponseBytes) {
                 throw HubResponseTooLargeException()

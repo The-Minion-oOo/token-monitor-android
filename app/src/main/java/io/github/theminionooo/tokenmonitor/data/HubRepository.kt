@@ -45,6 +45,15 @@ import kotlinx.coroutines.sync.withLock
 import kotlin.coroutines.coroutineContext
 import io.github.theminionooo.tokenmonitor.data.network.HubNetworkObserver
 import io.github.theminionooo.tokenmonitor.widget.WidgetUpdateCoordinator
+import io.github.theminionooo.tokenmonitor.widget.WidgetRefreshScheduler
+import io.github.theminionooo.tokenmonitor.widget.WidgetRefreshDecision
+import io.github.theminionooo.tokenmonitor.widget.widgetRefreshDecision
+import io.github.theminionooo.tokenmonitor.widget.WidgetRuntime
+import io.github.theminionooo.tokenmonitor.data.storage.WidgetRefreshPreferences
+import io.github.theminionooo.tokenmonitor.data.network.widgetRefreshWifiAvailable
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.serialization.json.JsonObject
 
 internal data class HubRepositoryState(
@@ -157,6 +166,7 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
     val state: StateFlow<HubRepositoryState> = _state.asStateFlow()
     private var pendingCacheWrite: WireHubSnapshot? = null
     private var lastCacheWriteAt = 0L
+    private var lastCacheSave: Job? = null
     private var foregroundJob: Job? = null
     private var activeWorkMode = HubWorkMode.Idle
     private var subscriptionJob: Job? = null
@@ -173,6 +183,89 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
     @Volatile private var generation = 0L
     private var lastSubscriptionAttemptAt = 0L
     private var attemptedSubscriptionVersion = ""
+    private val widgetRefresh = WidgetRefreshPreferences(appContext)
+    private var backgroundApi: HubApiClient? = null
+
+    fun cancelWidgetBackgroundRefresh() {
+        backgroundApi?.close()
+    }
+
+    /** Main-thread admission and generation checks prevent a scheduled read competing with visible work. */
+    suspend fun refreshWidgetInBackground() {
+        val settings = widgetRefresh.settings
+        val decision = widgetRefreshDecision(settings.interval, WidgetUpdateCoordinator.hasWidgets(appContext),
+            connection != null, widgetRefresh.record.secretRejected, dashboardVisible,
+            WidgetRuntime.session.enabled || WidgetRuntime.session.refreshing || widgetActive,
+            activeApi != null || backgroundApi != null)
+        if (decision == WidgetRefreshDecision.Cancel) { WidgetRefreshScheduler.reconcileAsync(appContext); return }
+        if (decision == WidgetRefreshDecision.Skip || (settings.wifiOnly && !widgetRefreshWifiAvailable(appContext))) return
+        val saved = connection ?: return
+        val token = generation
+        val deadline = SystemClock.elapsedRealtime() + 45_000L
+        val api = HubApiClient { route ->
+            if (token != generation || SystemClock.elapsedRealtime() >= deadline || dashboardVisible || widgetActive ||
+                widgetRefresh.settings != settings || widgetRefresh.record.secretRejected || !WidgetUpdateCoordinator.hasWidgets(appContext)) {
+                throw CancellationException("Scheduled widget refresh ended")
+            }
+            if (settings.wifiOnly && !widgetRefreshWifiAvailable(appContext)) throw CancellationException("Wi-Fi unavailable")
+            requireRouteAllowed(route)
+        }
+        backgroundApi = api
+        val manager = appContext.getSystemService(android.net.ConnectivityManager::class.java)
+        val callback = object : android.net.ConnectivityManager.NetworkCallback() {
+            override fun onCapabilitiesChanged(network: android.net.Network, caps: android.net.NetworkCapabilities) {
+                if (settings.wifiOnly && !widgetRefreshWifiAvailable(appContext)) api.close()
+            }
+            override fun onLost(network: android.net.Network) {
+                if (settings.wifiOnly) api.close()
+            }
+        }
+        var observing = false
+        var completed = false
+        try {
+            manager.registerDefaultNetworkCallback(callback)
+            observing = true
+            coroutineScope {
+                // Socket IO is blocking: close it independently at the deadline, including a stuck read.
+                val timeout = launch { delay(45_000); api.close() }
+                try {
+                    withTimeout(45_000) {
+                        cacheLoadJob?.join()
+                        val (url, wire) = withContext(Dispatchers.IO) {
+                            EndpointFailover.run(permittedRoutes(saved, activeUrl)) {
+                                api.loadWidgetSnapshot(saved.copy(baseUrl = it), lastWireSnapshot)
+                            }
+                        }
+                        val snapshot = withContext(Dispatchers.IO) { parse(wire) }
+                        ensureActive()
+                        if (token == generation && connection === saved && !dashboardVisible && !widgetActive) {
+                            activeUrl = url
+                            applySuccess(wire, snapshot)
+                            lastCacheSave?.join()
+                            completed = true
+                        }
+                    }
+                } finally { timeout.cancel() }
+            }
+        } catch (_: TimeoutCancellationException) {
+            if (token == generation) widgetBackgroundFailure(false)
+        } catch (cancelled: CancellationException) { throw cancelled }
+        catch (error: Exception) {
+            if (token == generation) widgetBackgroundFailure(error is HubApiException && error.statusCode == 401)
+        } finally {
+            api.close()
+            if (observing) manager.unregisterNetworkCallback(callback)
+            widgetRefresh.traffic(api.receivedBytes, completed)
+            if (backgroundApi === api) backgroundApi = null
+        }
+    }
+
+    private fun widgetBackgroundFailure(rejected: Boolean) {
+        widgetRefresh.failure(System.currentTimeMillis(), rejected)
+        if (rejected) _state.update { it.copy(secretRejected = true) }
+        WidgetRefreshScheduler.reconcileAsync(appContext)
+        diskQueue.enqueue { WidgetUpdateCoordinator.refreshSaved(appContext) }
+    }
 
     internal val cacheLoadJob: Job? = connection?.let { saved ->
         scope.launch {
@@ -301,6 +394,8 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
         pendingCacheWrite = null
         decodedBodies.clear()
         connectionStore.clear()
+        widgetRefresh.clearRecord()
+        WidgetRefreshScheduler.reconcileAsync(appContext)
         diskQueue.enqueue { cache.clear(); WidgetUpdateCoordinator.refresh(appContext) }
         _state.value = HubRepositoryState()
     }
@@ -390,6 +485,10 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
                     catch (error: Exception) {
                         if (generation != token) break
                         val rejected = error is HubApiException && error.statusCode == 401
+                        if (rejected) {
+                            widgetRefresh.failure(System.currentTimeMillis(), true)
+                            WidgetRefreshScheduler.reconcileAsync(appContext)
+                        }
                         _state.update { it.copy(refreshing = false, streamActive = false, widgetLiveActive = false, secretRejected = rejected,
                             message = if (error is HubApiException) error.presentation else hubTlsMessage(error) ?: "Hub unavailable. Showing the last successful snapshot; retrying...") }
                         if (rejected) break
@@ -410,6 +509,7 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
     }
 
     private fun stopForegroundWork() {
+        cancelWidgetBackgroundRefresh()
         generation++
         activeApi?.close()
         activeApi = null
@@ -428,7 +528,10 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
         if (force || now - lastCacheWriteAt >= 60_000L) {
             pendingCacheWrite = null
             lastCacheWriteAt = now
-            diskQueue.enqueue { cache.save(wire); WidgetUpdateCoordinator.refreshSaved(appContext) }
+            lastCacheSave = diskQueue.enqueue {
+                cache.save(wire)
+                WidgetUpdateCoordinator.refreshSaved(appContext)
+            }
         } else pendingCacheWrite = wire
     }
 
@@ -459,6 +562,8 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
     }
 
     private fun applySuccess(wire: WireHubSnapshot, snapshot: HubSnapshot) {
+        widgetRefresh.success(wire.capturedAt)
+        WidgetRefreshScheduler.reconcileAsync(appContext)
         lastWireSnapshot = wire
         persist(wire, true)
         _state.value = HubRepositoryState(

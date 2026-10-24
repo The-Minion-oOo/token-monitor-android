@@ -113,8 +113,8 @@ widgets there. Whether yours does depends on the launcher, not the app.
 On Android 13 and newer, starting Live or Refresh asks for notification permission
 once, so the Stop control has somewhere to live. Declining leaves the dashboard and
 saved widgets working. A killed process, the hour expiring, or removing the last
-widget ends the session. There is no automatic restart, wake lock, page rotation, or updating
-outside the explicit foreground session.
+widget ends the session. Live does not automatically restart. The separate
+optional background job is described below; there is no app wake lock or page rotation.
 
 The hour includes time spent asleep. Waking the phone after expiry does not
 extend the session, and Refresh does not restart its clock. The repository checks
@@ -136,7 +136,73 @@ does not schedule background refresh or change widget visuals: saved, Refresh
 and the explicit one-hour Live session keep their existing behavior.
 See [HTTPS pairing](PAIRING.md#optional-internet-hub-over-https).
 
+## Background refresh (in development)
+
+I added **Settings → Home-screen widget → Background refresh** on the feature
+branch. The choices are Off, Every 30 minutes and Every 60 minutes. It starts
+Off for new and existing installations; Wi-Fi only starts on. Android schedules
+the work and may defer it during sleep, so the interval is not an exact timer.
+This feature is not included in the published r3 APK.
+
+One periodic job exists only with a placed widget, a saved pairing and consent.
+Removing the last widget, disconnecting, choosing Off or receiving a rejected
+secret cancels it. Successful connection verification allows scheduling again.
+Android restores an eligible persisted job after reboot; force-stopping the app
+can prevent work until it is opened again.
+
+A run lasts at most 45 seconds, yields to the dashboard and widget Live/Refresh,
+and never opens a stream or shows a notification. Wi-Fi only permits unmetered
+Wi-Fi and fails closed when a VPN's Wi-Fi transport cannot be confirmed. Turning
+it off permits cellular data, subject to the saved Hub route protections.
+Health, stats and history supply widget content; device details and subscriptions
+are not fetched. Failed runs preserve the saved figures and mark them STALE.
+The saved timestamp is never advanced by failure. A later successful snapshot
+clears that marker. Page changes remain local.
+
+The settings report response bytes from the last attempted run and the daily
+projection at the selected interval for a completed run. Failed or interrupted
+attempts are marked incomplete and have no daily projection. Those figures exclude network overhead and
+can underestimate a larger future payload. Run `node tools/measure-widget-refresh.mjs`
+for the synthetic fixture baseline. A 260 KB stats body alone would mean about
+12.5 MB/day at 30 minutes or 6.2 MB/day at 60 minutes, plus history and overhead.
+The screenshots and widget comparison are approved. I skipped the overnight
+phone check for this feature; real overnight battery use and data remain
+unmeasured. This feature has not been phone-tested.
+
+The pinned v0.78.0 fixture measures 18,499 response-body bytes per run: health
+487, stats 16,912 and history 1,100. That projects to 0.89 MB/day at 30 minutes
+or 0.44 MB/day at 60 minutes, before overhead. These small synthetic fixtures
+do not predict the size of a real Hub's session data.
+
+### Overnight validation
+
+The following checklist is prepared for a future check; it was not run for
+this feature.
+
+I record the exact APK checksum and build, the chosen interval, network choice,
+start/end times and battery levels. I use a disposable fixture pairing in the
+preview app, place both widget types, close the dashboard and stop Live/Refresh.
+For a first run I choose 60 minutes with Wi-Fi only on and leave the phone
+unplugged with its screen off for at least eight hours. I do not change battery
+exemptions or reset the phone's battery statistics.
+
+I compare the app's Android network and battery counters before and after,
+record response bytes from a completed run separately, and check whether the
+saved widget timestamp advanced without opening the dashboard. I also check an
+unreachable Hub, a rejected secret, choosing Off, removing the last widget and
+reboot restoration. A network constraint may defer the job; I report the
+observed runs and delays rather than assuming eight hourly runs occurred.
+I keep raw device diagnostics private and publish only the measured summary.
+
+For comparison I record a similar overnight period with background refresh Off.
+That comparison helps separate the job's impact from unrelated phone activity.
+
 ## Troubleshooting
+
+- If refreshes are delayed, check battery restrictions, Wi-Fi, Tailscale and the
+  Hub's availability. Android may defer jobs; I do not request a battery exemption.
+- If the secret is rejected, check and save pairing again. Repeated scheduled
+  requests will not repair the secret.
 
 - **The Usage widget kept its old shape after an update:** its dimensions belong
   to the launcher. Resize it, or remove and add it again.

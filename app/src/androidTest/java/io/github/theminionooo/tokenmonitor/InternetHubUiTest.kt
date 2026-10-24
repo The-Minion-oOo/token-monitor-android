@@ -153,6 +153,7 @@ class InternetHubUiTest {
         compose.onNodeWithText(initial.connectionUrl!!).performScrollTo().performTextReplacement("100.88.1.2")
         toggle().performScrollTo().performClick()
         compose.onNodeWithText(dialogTitle).assertIsDisplayed()
+        waitForDialogFocus()
         compose.onNodeWithText("Cancel").assertIsFocused()
         compose.onNodeWithText("This phone will stop connecting to your internet Hub. To turn it back on, you'll need to enter the Hub secret again.").assertIsDisplayed()
         compose.runOnIdle { assertEquals(initial, savedPairing); assertEquals(0, disabledCalls) }

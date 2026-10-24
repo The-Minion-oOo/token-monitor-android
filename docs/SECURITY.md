@@ -57,6 +57,10 @@ request cannot move the bearer secret to another host.
 - The Hub URL and secret are encrypted with a non-exportable Android Keystore key.
 - The app-private snapshot cache stores compressed Hub JSON responses, including usage and account/device/project metadata returned by the Hub. It is not separately encrypted by the app; Android app isolation protects access. Pairing credentials use the separate Keystore-backed store.
 - Android backup/data-transfer rules exclude pairing and snapshot storage.
+- Background-refresh preferences hold only consent, interval, Wi-Fi choice,
+  success/failure timestamps, secret-rejection state and response-byte metadata.
+  They contain no Hub address, secret or response content and are excluded from
+  backup and transfer by the shared-preference exclusion.
 - A secret typed into the connection form is held only in memory, not saved in
   Activity instance state. Home-address repair reads the existing encrypted
   pairing and does not expose its secret back to the form.
@@ -96,12 +100,38 @@ and pinned release signing certificate. Android controls installation approval.
 
 ## Lifecycle and resource use
 
+### Background widget refresh (in development)
+
+I am developing background refresh on `feature/widget-background-refresh`;
+it is not included in the published r3 release. Its security boundary permits one
+periodic JobScheduler job only after choosing 30 or 60 minutes. The default is
+Off, with Wi-Fi only enabled. A placed widget, saved pairing and a secret that
+has not been rejected are required; losing any requirement cancels the job.
+
+Each run must finish within 45 seconds, skip an active dashboard or widget
+Live/Refresh session, and use the existing validated read-only Hub routes. It
+must not open an SSE stream, display a notification, acquire an app wake lock,
+or add a dependency. Failure keeps the last successful snapshot and marks it
+stale; secret rejection stops scheduling until pairing is successfully verified.
+Wi-Fi only must prevent cellular requests, including when Tailscale is active.
+
+The persisted job requires `RECEIVE_BOOT_COMPLETED` solely because
+Android requires that permission for JobScheduler to restore a persisted job
+after reboot. Android restores the job; the app will register no boot receiver.
+The job must recheck eligibility and accessible pairing before any request.
+Response-body traffic is measured using synthetic data. I skipped the overnight
+phone battery/data check for this feature, so real overnight battery use,
+traffic and physical-device reboot behavior remain unverified.
+
+### Current foreground widget sessions
+
 A user-started dataSync foreground service supports widget Live for one hour with
 a 30-second refresh cadence, or a single refresh for up to 45 seconds. It shares
 the dashboard repository, requests notification permission to expose Stop, and
 stops without restarting after expiry, removal of the last widget, or a process
-kill. There is no wake lock, scheduled worker, boot receiver, analytics SDK, or
-advertising SDK.
+kill. These explicit sessions do not automatically restart. The separate opted-in
+periodic job is described above. There is no app wake lock, boot receiver,
+analytics SDK or advertising SDK.
 
 `ACCESS_NETWORK_STATE` lets an active dashboard or widget session reconnect after a route changes.
 On Android 17 and newer, `ACCESS_LOCAL_NETWORK` is requested for a chosen LAN

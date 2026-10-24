@@ -1,5 +1,12 @@
 # Pairing with a desktop Hub
 
+On the background-refresh feature branch, I keep scheduled widget reads separate
+from pairing: they start Off, with Wi-Fi only on. Enabling internet access does
+not enable scheduled refresh. A rejected saved secret stops the scheduled job
+until successful verification; disconnecting cancels it immediately. Existing
+Tailscale, home fallback, HTTPS and Hub identity protections apply to every run.
+This option is not included in the published r3 APK.
+
 ## Recommended: Tailscale
 
 Each person uses their own Tailscale account and tailnet. No shared server or project account is required.

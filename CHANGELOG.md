@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- I added optional background widget refresh at 30 or 60 minutes, with Off and
+  Wi-Fi only as the safe defaults. Runs yield to foreground activity and retain
+  stale data on failure. The overnight phone battery/data check was skipped;
+  this feature has not been phone-tested.
+
 ## v0.78.0 r3 — 2026-10-23
 
 - I added confirmation before turning off internet access for a saved internet Hub.

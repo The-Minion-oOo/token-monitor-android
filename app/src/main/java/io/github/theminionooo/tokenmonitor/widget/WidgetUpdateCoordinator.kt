@@ -5,6 +5,12 @@ import android.content.ComponentName
 import android.content.Context
 
 internal object WidgetUpdateCoordinator {
+    fun hasWidgets(context: Context): Boolean {
+        val manager = AppWidgetManager.getInstance(context)
+        return listOf(UsageWidgetProvider::class.java, SwipeWidgetProvider::class.java).any {
+            manager.getAppWidgetIds(ComponentName(context, it)).isNotEmpty()
+        }
+    }
     /** Live/Refresh already renders repository emissions; saving those emissions is not a second update. */
     fun refreshSaved(context: Context) {
         if (shouldRefreshSavedWidget(WidgetRuntime.session)) refresh(context)
@@ -24,6 +30,7 @@ internal object WidgetUpdateCoordinator {
     }
 
     fun stopLiveIfUnused(context: Context) {
+        WidgetRefreshScheduler.reconcileAsync(context)
         val manager = AppWidgetManager.getInstance(context)
         val hasResponsive = manager.getAppWidgetIds(ComponentName(context, UsageWidgetProvider::class.java)).isNotEmpty()
         val hasDeck = manager.getAppWidgetIds(ComponentName(context, SwipeWidgetProvider::class.java)).isNotEmpty()

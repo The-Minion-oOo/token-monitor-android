@@ -135,6 +135,7 @@ internal fun widgetStats(history: List<HistoryPoint>, date: LocalDate?): List<Pa
 }
 
 class UsageWidgetProvider : AppWidgetProvider() {
+    override fun onEnabled(context: Context) = WidgetRefreshScheduler.reconcileAsync(context)
     override fun onUpdate(context: Context, manager: AppWidgetManager, ids: IntArray) = updateAsync(context)
     override fun onAppWidgetOptionsChanged(context: Context, manager: AppWidgetManager, id: Int, options: Bundle) = updateAsync(context)
     override fun onDisabled(context: Context) = WidgetUpdateCoordinator.stopLiveIfUnused(context)
@@ -283,6 +284,7 @@ class UsageWidgetProvider : AppWidgetProvider() {
                 enabled && session.connected -> "LIVE"
                 enabled -> "CONNECTING"
                 session.refreshing -> "UPDATING"
+                snapshot.stale -> "STALE"
                 else -> "SAVED"
             }
             views.setTextViewText(R.id.widget_status, when {

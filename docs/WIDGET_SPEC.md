@@ -247,6 +247,11 @@ drawn only at columns that contain the first day of a month.
 
 ## Empty and non-ideal states
 
+- A failed scheduled background refresh keeps every figure and its saved timestamp.
+  It uses the existing STALE status until a newer successful snapshot arrives,
+  including after process restart. It does not enable Live or show UPDATING.
+  The status positions, colours, type sizes and touch targets stay the same.
+
 - No snapshot: header plus the centered empty message in body muted text,
   wrapped to the content width.
 - Missing limits, breakdown or history: the same centered message for that page.

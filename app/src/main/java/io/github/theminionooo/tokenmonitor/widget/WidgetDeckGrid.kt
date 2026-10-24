@@ -32,6 +32,8 @@ internal object WidgetDeckGrid {
         const val STATUS_GAP = 6f
         const val STATUS_RIGHT = 296f
         const val STATUS_BASELINE = 31f
+        /** Failed background reads use this existing-width status, without changing the grid. */
+        const val STALE_STATUS = "STALE"
         const val TOGGLE_LEFT = 306f
         const val TOGGLE_TOP = 16f
         const val TOGGLE_WIDTH = 40f
