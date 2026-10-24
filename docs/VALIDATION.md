@@ -7,7 +7,7 @@ the build it names.
 
 ## How each release is checked
 
-The r4 background-refresh candidate passed the feature CI and local checks:
+The r4 background-refresh release passed the required CI and local checks:
 301 JVM tests, lint, debug assembly and 14 tooling tests; 84-test emulator suites
 on API 36 and API 37, followed by 21 focused widget/dialog regressions on each.
 The pinned Node and Worker Hub contracts passed with synthetic data.
@@ -53,7 +53,30 @@ the exact `main` commit that gets tagged. None of these checks uses a private
 Hub or a vendor account. [Releasing](RELEASING.md) covers the process and
 [Development](DEVELOPMENT.md) covers running the checks locally.
 
-## Current release: v0.78.0 r3
+## Current release: v0.78.0 r4
+
+I released optional background widget refresh, starting Off with Wi-Fi only on.
+Required build, API 36/API 37 interaction, optimized API 26 and released-Hub
+contract CI passed on source `d32e91668d50abe740e4f9abb943ae1082446d36`. Local checks passed 301 JVM tests,
+lint, debug and signed release builds, 14 tooling tests and release bundle validation.
+I reviewed the full diff. The signed production upgrade from r2 retained pairing,
+home Wi-Fi connectivity and visible display settings; refresh stayed Off.
+
+The preview phone completed eight natural overnight runs with 2,088,840 response
+bytes and 8.229 seconds of total job time. Its persisted hourly Wi-Fi-only job
+returned after reboot without opening the app; a bounded read succeeded.
+Android's approximately 1.12 mAh attribution is an estimate, not a direct measure
+of the feature's incremental battery cost. The matching Off baseline remains
+optional in [#76](https://github.com/The-Minion-oOo/token-monitor-android/issues/76).
+Temporary preview components were removed after testing.
+
+APK SHA-256: `3a7400377c3512020e2bb9f52d8eeacb7dc36566805132ac81d44c30f15e4bf7`.
+Package and release signing certificate remain unchanged. I checked the staged
+and published APK, checksum and update manifest together.
+[Android v0.78.0 r4](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r4)
+is the Latest release.
+
+## Previous release: v0.78.0 r3
 
 I added a default-Cancel confirmation before disabling a saved internet Hub.
 Cancel, Back and outside taps leave pairing unchanged; private main routes and
@@ -154,6 +177,7 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 
 | Release | Date | Desktop baseline | Main checks | Phone check |
 | --- | --- | --- | --- | --- |
+| v0.78.0 r4 | 2026-10-24 | v0.78.0 | Optional background widget refresh, bounded persisted job, Wi-Fi/data controls | Yes: signed r2 upgrade; preview overnight refresh and reboot restoration |
 | v0.78.0 r3 | 2026-10-23 | v0.78.0 | Confirmation before disabling a saved internet Hub | No: small UI change; emulator coverage in light/dark themes |
 | v0.78.0 r2 | 2026-10-23 | v0.78.0 | Opt-in internet HTTPS, system TLS trust, Node/Worker contracts | Yes: signed r1 upgrade retained pairing; Tailscale/home fallback and synthetic cellular HTTPS/SSE |
 | v0.78.0 r1 | 2026-10-23 | v0.78.0 | ZCode grouping, title consent/revocation, released Hub endpoints and stream | No |

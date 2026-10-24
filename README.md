@@ -4,7 +4,7 @@
 
 <h1 align="center">Token Monitor for Android</h1>
 
-**Next release: v0.78.0 r4.** I added optional background widget refresh,
+**v0.78.0 r4 is available.** I added optional background widget refresh,
 starting Off with Wi-Fi only enabled and 30- or 60-minute intervals. The
 screenshots, overnight preview run and reboot restoration check passed.
 The signed upgrade kept pairing and display settings; the matching battery
@@ -153,11 +153,12 @@ Session rows also show generation speed, cache-hit percentage and prompt-cache e
 ## Get connected
 
 You need Android 8.0 or newer and a Token Monitor Hub. The signed public release
-is Android v0.78.0 r3, checked against desktop v0.78.0. It adds confirmation
-before disabling a saved internet Hub. This small UI revision was checked on
-emulators and was not phone-tested. The earlier r2 phone checks apply to r2.
+is Android v0.78.0 r4, checked against desktop v0.78.0. It adds optional
+background widget refresh, starting Off with Wi-Fi only enabled. Phone checks
+covered the signed upgrade, an overnight preview run and reboot restoration;
+see [Validation](docs/VALIDATION.md) for the evidence and remaining limits.
 
-1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.78.0 r3 APK.
+1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.78.0 r4 APK.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
 3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
 4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
@@ -171,10 +172,10 @@ Desktop v0.64's optional iCloud Drive sync does not replace the Hub connection f
 
 | | |
 | --- | --- |
-| Current public release | [`v0.78.0-r3`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r3) |
+| Current public release | [`v0.78.0-r4`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r4) |
 | Earlier published upgrade check | signed `v0.66.0-r1` over v0.65.0 r1; pairing, home Wi-Fi reconnection and placed Pages widget preserved |
-| Current release phone coverage | r3 was not phone-tested; r2 checks covered signed upgrade retention, Tailscale/home fallback and cellular HTTPS/SSE |
-| Remaining phone checks | Widget Live/expiry, battery use and long-term connection reliability were not remeasured |
+| Current release phone coverage | Signed r2-to-r4 upgrade retained pairing and display settings; preview overnight refresh and reboot restoration passed |
+| Remaining phone checks | Matching battery baseline is optional; widget Live/expiry and long-term reliability were not rechecked |
 | Desktop baseline | Token Monitor `v0.78.0` |
 | Upstream commit | [`d52e0b9`](https://github.com/Javis603/token-monitor/commit/d52e0b9cf970a03a30a5f5a1e9139693bb211cd8) |
 
