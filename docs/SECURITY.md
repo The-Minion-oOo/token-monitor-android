@@ -114,6 +114,8 @@ must not open an SSE stream, display a notification, acquire an app wake lock,
 or add a dependency. Failure keeps the last successful snapshot and marks it
 stale; secret rejection stops scheduling until pairing is successfully verified.
 Wi-Fi only must prevent cellular requests, including when Tailscale is active.
+The run decides from the physical network under the VPN, not from JobScheduler's
+network type, so a VPN that reports itself as metered cannot block or permit it.
 
 The persisted job requires `RECEIVE_BOOT_COMPLETED` solely because
 Android requires that permission for JobScheduler to restore a persisted job
@@ -121,8 +123,8 @@ after reboot. Android restores the job; the app will register no boot receiver.
 The job must recheck eligibility and accessible pairing before any request.
 An overnight preview phone run used synthetic data and completed eight bounded
 refreshes. The persisted job returned after reboot without opening the app and
-completed a post-reboot read. Android's per-app power attribution is an estimate;
-a matching Off baseline remains optional in [#76](https://github.com/The-Minion-oOo/token-monitor-android/issues/76).
+completed a post-reboot read. Android's per-app power attribution is an estimate,
+and a matching Off baseline was not measured.
 No UI test helper or persistent instrumentation was used on the phone.
 
 ### Current foreground widget sessions

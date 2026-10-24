@@ -31,8 +31,7 @@ An overnight preview check on my phone completed eight background runs, received
 about 2.09 MB of response data and recorded 8.229 seconds of total job time.
 Android attributed an estimated 1.12 mAh to the preview app across the capture
 interval. That estimate is not a direct measurement of the feature's incremental
-battery cost. A matching refresh-Off baseline remains an optional follow-up in
-[issue #76](https://github.com/The-Minion-oOo/token-monitor-android/issues/76).
+battery cost, and I did not measure a matching refresh-Off baseline.
 
 The hourly Wi-Fi-only job returned after a physical reboot without opening the
 preview app, and a bounded post-reboot read succeeded. The signed r2-to-r4
