@@ -4,19 +4,8 @@
 
 <h1 align="center">Token Monitor for Android</h1>
 
-**v0.78.0 r4 is available.** I added optional background widget refresh,
-starting Off with Wi-Fi only enabled and 30- or 60-minute intervals. The
-screenshots, overnight preview run and reboot restoration check passed.
-The signed upgrade kept pairing and display settings; the matching battery
-baseline remains an optional follow-up in
-[issue #76](https://github.com/The-Minion-oOo/token-monitor-android/issues/76).
-See [widget refresh](docs/WIDGETS.md#background-refresh).
-
-<p align="center"><b>Your desktop usage. In your pocket.</b><br>
-Tokens, account limits, models and trends from the desktop Token Monitor Hub, plus home-screen widgets that stay useful with the app closed.</p>
-
 <p align="center">
-  <a href="docs/INSTALL.md">Build or install</a> ·
+  <a href="https://github.com/The-Minion-oOo/token-monitor-android/releases/latest">Download APK</a> ·
   <a href="docs/PAIRING.md">Pair with your desktop</a> ·
   <a href="docs/WIDGETS.md">Widgets</a> ·
   <a href="CHANGELOG.md">What changed</a>
@@ -31,21 +20,30 @@ Tokens, account limits, models and trends from the desktop Token Monitor Hub, pl
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/releases"><img alt="Total GitHub release asset downloads" src="https://img.shields.io/github/downloads/The-Minion-oOo/token-monitor-android/total?label=Downloads&style=flat-square&color=73bdf5"></a>
 </p>
 
-<img src="docs/images/hero.png?v=0.61.0-r1-readme" alt="Token Monitor's Android dashboard showing synthetic usage data" width="100%">
+<p>
+  <a href="docs/images/hero-light.png#gh-light-mode-only"><img src="docs/images/hero-light.png" alt="Your desktop usage. In your pocket. Totals, account limits, models and trends from the Token Monitor Hub, shown in the Android app with synthetic data." width="100%"></a><a href="docs/images/hero-dark.png#gh-dark-mode-only"><img src="docs/images/hero-dark.png" alt="Your desktop usage. In your pocket. Totals, account limits, models and trends from the Token Monitor Hub, shown in the Android app with synthetic data." width="100%"></a>
+</p>
 
-Your desktop [Token Monitor](https://github.com/Javis603/token-monitor) already
-tracks the usage. This app brings the same dashboard, visual language, and
-numbers to your phone, with home-screen widgets for quick checks.
+## Get started
 
-The desktop stays the collector and the source of truth. The phone reads its Hub
-over Tailscale (recommended), or home Wi-Fi when enabled, and shows what it finds.
+You need Android 8.0 or newer and a [Token Monitor](https://github.com/Javis603/token-monitor)
+Hub. **Tailscale is the recommended connection.**
 
-**Optional: internet Hubs over HTTPS.** Android v0.78.0 r2 adds a separate
-**Allow an internet Hub over HTTPS** switch, off by default for new and existing
-pairings. It connects to an existing official Cloudflare Worker Hub or a Node Hub
-behind an HTTPS reverse proxy using a public DNS name. Turning it on does not
-expose your computer, open a port or deploy a Hub. Tailscale remains recommended.
-[HTTPS pairing and safety](docs/PAIRING.md#optional-internet-hub-over-https).
+1. Download the signed APK from [Releases](https://github.com/The-Minion-oOo/token-monitor-android/releases/latest),
+   or update an existing installation through **Settings → App updates**.
+2. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub**
+   and copy the Hub address and shared secret.
+3. Install [Tailscale](https://tailscale.com/) on the desktop and phone, signed
+   into the same tailnet.
+4. In the Android app, enter the desktop's `100.x` address and Hub secret,
+   then tap **Connect**.
+
+Home Wi-Fi is optional: tap **Find** while at home, then **Test and save home
+address**. An existing internet Hub uses a separate **Allow an internet Hub over
+HTTPS** switch, which starts off. Enabling it does not expose your computer,
+open a port or deploy a Hub.
+
+[Installation and updates](docs/INSTALL.md) · [Pairing and connection options](docs/PAIRING.md)
 
 ## The desktop dashboard, made mobile
 
@@ -67,134 +65,107 @@ expose your computer, open a port or deploy a Hub. Tailscale remains recommended
 
 ## One fixed card, four focused pages
 
-<a href="docs/images/widget-pages-gallery.png"><img src="docs/images/widget-pages-gallery.png" alt="The Pages widget showing Overview, Limits, Breakdown and Activity at one consistent size" width="100%"></a>
+<table>
+  <tr>
+    <td align="center" valign="top" width="50%"><a href="docs/images/widget-pages-overview.png"><img src="docs/images/widget-pages-overview.png" alt="Pages widget Overview with tokens, cost, recent activity and tool share" width="100%"></a><br><sub><b>Overview</b><br>Totals, cost, activity and tool share</sub></td>
+    <td align="center" valign="top" width="50%"><a href="docs/images/widget-pages-limits.png"><img src="docs/images/widget-pages-limits.png" alt="Pages widget Limits with account windows and reset times" width="100%"></a><br><sub><b>Limits</b><br>Account windows and reset times</sub></td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" width="50%"><a href="docs/images/widget-pages-breakdown.png"><img src="docs/images/widget-pages-breakdown.png" alt="Pages widget Breakdown with tools and models" width="100%"></a><br><sub><b>Breakdown</b><br>Leading tools and models</sub></td>
+    <td align="center" valign="top" width="50%"><a href="docs/images/widget-pages-activity.png"><img src="docs/images/widget-pages-activity.png" alt="Pages widget Activity with seven-day chart and thirteen-week heatmap" width="100%"></a><br><sub><b>Activity</b><br>Daily chart and activity heatmap</sub></td>
+  </tr>
+</table>
 
-**Token Monitor · Pages** is the redesigned widget shown above. It requests a
-wide 4×2 placement and always draws the same 1.82:1 composition. Android launchers
-can allocate different physical dimensions, and some may still show resize handles,
-but the Pages widget does not reflow, add rows, or switch layouts.
+**Token Monitor · Pages** has four manually selected pages in one fixed
+composition. Tap the left or right edge to switch pages; page changes stay local.
+It requests a wide 4×2 placement and fits the same layout into the space provided
+by your launcher.
 
-- **Overview** keeps the complete token total, cost, recent activity, streak, tool
-  share, and week summary together.
-- **Limits** shows the four tightest reported account windows with their reset or
-  expiry wording.
-- **Breakdown** compares up to three tools and three models on one shared row rhythm.
-- **Activity** pairs the labeled seven-day chart with a thirteen-week heatmap and
-  recent activity totals.
+The picker also includes **Token Monitor · Usage**, a responsive summary widget
+that reflows as you resize it. Both widgets follow the app's theme.
 
-Tap the left or right edge to change pages. The selected page and four position
-dots update locally without waking the Hub or starting background work. Refresh
-performs one bounded fetch; Live checks current stats every 30 seconds for up to
-one hour and can be stopped from the widget or its notification. When the Hub is
-offline, the last snapshot remains visible with a `SAVED` status.
+### Keep widgets current
 
-The widget picker also includes the original **Token Monitor · Usage** widget. It
-is a separate responsive provider that reflows a single summary as its launcher
-allocation changes; its layouts are not alternate sizes of the four Pages shown
-above. Both widgets follow the app theme, including desktop `TM1-…` theme codes
-and `TM2-…` codes with an independent chart color.
+- **Refresh** fetches one update.
+- **Live** checks stats every 30 seconds for up to one hour, with a Stop control
+  on the widget and its notification.
+- **Background refresh** optionally checks every 30 or 60 minutes. It starts
+  **Off**, with **Wi-Fi only** on, and shows no notification. Android may delay
+  runs while the phone sleeps.
 
-[Widget behavior and controls](docs/WIDGETS.md) · [Widget design notes](docs/WIDGET_DESIGN.md).
+Choose background refresh under **Settings → Home-screen widget**. Failed reads
+keep the last snapshot and mark it stale; changing pages never starts a fetch.
 
-## How it works
-
-```mermaid
-flowchart LR
-    D[Desktop Token Monitor<br>collects and hosts usage] -->|read-only Hub| T[Tailscale or home Wi-Fi<br>your private network]
-    T --> A[Android app<br>dashboard and widgets]
-```
-
-The phone talks to the Hub the desktop already runs. It reads five documented
-endpoints and one live stream over Tailscale, or home Wi-Fi when enabled. An
-opt-in HTTPS route supports an existing internet Hub. There is no
-app-operated relay or separate Token Monitor account.
+[Widget guide](docs/WIDGETS.md) · [Background refresh and data use](docs/WIDGETS.md#background-refresh)
 
 ## What it shows
 
-- Live totals while the app is open, an immediate refresh on return, pull-to-refresh, and a saved snapshot when the Hub is unavailable.
-- Day, week, month, rolling 7, 30 and 90 days, one year, all history and total.
-- Account limits with the desktop's reset countdowns, separate MiMo products,
-  reported wallet/spend values in their native currency and MiniMax pay-as-you-go balances.
-- Tools, devices, models, projects, sessions, subscriptions, service status, activity and trends, each with an `updated 5m ago` freshness.
-- Recent and running sessions on Home, reported conversation titles, and context-window use when the desktop provides them, without reading prompt or response bodies.
-- Goose usage and Notion AI Rolling/Monthly allowances, with separate workspaces and WorkBuddy accounts.
-- Expanded projects with Tools/Models token shares; missing attribution stays Unknown model.
-- Antigravity subagents grouped under their conversation, and Grok Bot activity that requires an explicit open turn.
-- Trends by tool or model, shown as bars or a K-line chart.
-- Cache hit, cache miss, output and unclassified token details where the Hub provides them.
-- Known cost subtotals with explicit unpriced-token warnings, and Codex Dots sessions labeled as observed-only rather than complete history.
-- The desktop's Default, Obsidian and Porcelain themes, theme codes pasted as-is, an option to follow the phone's light and dark setting, three text sizes, motion controls with the desktop's Digit roll or Count up token numbers, and reorderable views and Home modules.
-- A Back button that goes Home instead of quitting on you, and a light haptic tick on every tab.
+| View | Content |
+| --- | --- |
+| Home | Token and cost totals, account limits, tools, models, devices and recent sessions |
+| History and trends | Day, week, month and custom ranges; activity heatmaps and charts by tool or model |
+| Projects and sessions | Searchable usage, running sessions and available context, speed and cache details |
+| Accounts and services | Provider allowances, reported spend and wallet balances, subscriptions and service status |
+| Appearance | Default, Obsidian and Porcelain themes, desktop theme codes, text size and motion controls |
+| Dashboard layout | Reorderable views and Home modules, tool filters and adjustable row counts |
 
-The Hub does not carry prompt or response bodies. Desktop v0.67.0 strips
-conversation titles by default and shares them only with server and device
-consent. A received title may contain sensitive text; the phone shows it in Home
-and Sessions, never on a widget. Turn off **Show session titles** in Settings to
-hide them on the phone; this does not remove them from the local snapshot cache
-or change desktop sharing consent.
+Missing prices remain explicit rather than silently becoming zero. Details
+appear only when the desktop Hub provides them; the app does not collect usage
+or read prompt and response bodies itself.
 
-Home shows the chosen number of recent sessions plus any running or waiting
-sessions. Set separate 1–50 item counts for Tools, Models, Sessions and Devices
-under **Settings → Main dashboard → Home modules**. On an existing installation,
-enable **Sessions** there if needed; saved layouts are not reset.
-Session rows also show generation speed, cache-hit percentage and prompt-cache estimates when the Hub supplies them. Speed is a session average, not a live rate; cache retention is an estimate, not a guarantee.
+[Desktop feature coverage](docs/DESKTOP_PARITY.md)
 
-## Private and light
+## Connection and privacy
 
-- Read-only. The app cannot change desktop settings, usage data, or files.
-- Hub credentials live in an Android Keystore-backed store and are excluded from backups.
-- No ads, analytics, wake lock, scheduled background work or "please rate us" popup.
-- **Settings → App updates** checks published GitHub releases and verifies a downloaded signed APK before Android asks to install it; there is no background update check or silent install.
-- The visible dashboard streams immediately. Widget Live uses a lightweight 30-second stats refresh and stops after one hour.
-- Android 13 and newer asks for notification permission the first time you start a widget session, so the Stop control has somewhere to live. Android 17 also requests local-network permission when you choose home Wi-Fi access.
+```mermaid
+flowchart LR
+    H[Token Monitor Hub] -->|Tailscale recommended| A[Android dashboard and widgets]
+    H -->|Optional home Wi-Fi or internet HTTPS| A
+```
 
-[Privacy and security](docs/SECURITY.md) · [Report a concern](SECURITY.md).
+- The app reads Hub data; it cannot change desktop settings, usage or files.
+- Hub secrets use an Android Keystore-backed store and are excluded from backups.
+- Home Wi-Fi and internet HTTPS access are separate opt-ins. Internet Hubs require
+  a public DNS name and HTTPS.
+- No ads or analytics. Background widget refresh starts Off; dashboard streaming
+  ends when it is no longer visible unless an explicit widget Live session is active.
+- App update checks are manual. Downloaded APKs are verified before Android asks
+  to install them; there is no silent installation.
 
-## Get connected
+Session titles are shared only with desktop and device consent and never appear
+on widgets. Turning off **Show session titles** hides received titles on the
+phone; it does not erase the local snapshot cache or change desktop consent.
 
-You need Android 8.0 or newer and a Token Monitor Hub. The signed public release
-is Android v0.78.0 r4, checked against desktop v0.78.0. It adds optional
-background widget refresh, starting Off with Wi-Fi only enabled. Phone checks
-covered the signed upgrade, an overnight preview run and reboot restoration;
-see [Validation](docs/VALIDATION.md) for the evidence and remaining limits.
+[Privacy and security](docs/SECURITY.md) · [Report a concern](SECURITY.md)
 
-1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.78.0 r4 APK.
-2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
-3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
-4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
-5. At home, tap **Find** to fill in the desktop's Wi-Fi address, then use **Test and save home address** to verify and save it with the stored pairing secret.
-
-Desktop v0.64's optional iCloud Drive sync does not replace the Hub connection for Android.
-
-[Pairing and troubleshooting](docs/PAIRING.md) · [Installing and updating](docs/INSTALL.md).
-
-## Compatibility
+## Compatibility and validation
 
 | | |
 | --- | --- |
-| Current public release | [`v0.78.0-r4`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r4) |
-| Earlier published upgrade check | signed `v0.66.0-r1` over v0.65.0 r1; pairing, home Wi-Fi reconnection and placed Pages widget preserved |
-| Current release phone coverage | Signed r2-to-r4 upgrade retained pairing and display settings; preview overnight refresh and reboot restoration passed |
-| Remaining phone checks | Matching battery baseline is optional; widget Live/expiry and long-term reliability were not rechecked |
-| Desktop baseline | Token Monitor `v0.78.0` |
-| Upstream commit | [`d52e0b9`](https://github.com/Javis603/token-monitor/commit/d52e0b9cf970a03a30a5f5a1e9139693bb211cd8) |
+| Current release | [Android v0.78.0 r4](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r4) |
+| Desktop baseline | [Token Monitor v0.78.0](https://github.com/Javis603/token-monitor/releases/tag/v0.78.0) |
+| Minimum Android version | Android 8.0 |
 
-The visible version matches the desktop release the phone understands. Android-only
-builds bump the release revision and internal version code while the compatibility
-line stays on its verified desktop version. When desktop Token Monitor moves past that, the phone
-continues using the verified endpoints until a follow-up Android release checks
-the new protocol. Details are in [`upstream.json`](upstream.json) and
-[`RELEASING.md`](docs/RELEASING.md).
+R4 adds optional background widget refresh. Checks covered the signed upgrade,
+an overnight preview run and physical reboot restoration. The matching battery
+baseline remains an optional follow-up; test details and limits belong in
+[Validation](docs/VALIDATION.md).
+
+Android-only updates increment the release revision while keeping the verified
+desktop version. [Upstream pin](upstream.json) · [Release notes](CHANGELOG.md)
 
 ## Build and contribute
 
-JDK 17 or newer, Android SDK 37 and the bundled Gradle wrapper:
+Use JDK 17 or newer, Android SDK 37 and the bundled Gradle wrapper:
 
 ```powershell
 .\gradlew.bat :app:testDebugUnitTest :app:lintDebug :app:assembleDebug
 ```
 
-Add `-PtokenMonitorPreview=true` to install a separate `.preview` build next to the release without touching its pairing. [Development guide](docs/DEVELOPMENT.md) · [Contributing](CONTRIBUTING.md).
+Add `-PtokenMonitorPreview=true` for a separate preview installation that leaves
+the release app's pairing untouched.
+
+[Development guide](docs/DEVELOPMENT.md) · [Contributing](CONTRIBUTING.md)
 
 ## Documentation
 
@@ -205,7 +176,9 @@ Add `-PtokenMonitorPreview=true` to install a separate `.preview` build next to 
 | [Widgets](docs/WIDGETS.md) | [Desktop parity](docs/DESKTOP_PARITY.md) | [Releasing](docs/RELEASING.md) |
 | [Privacy](docs/SECURITY.md) | [Widget design](docs/WIDGET_DESIGN.md) | [Following upstream](docs/UPSTREAM_SYNC.md) |
 
-This project is independent of the upstream Token Monitor maintainers and of the services whose marks appear in the app. [MIT License](LICENSE) · [Third-party notices](THIRD_PARTY_NOTICES.md).
+I maintain this project independently of the upstream Token Monitor maintainers
+and the services whose marks appear in the app.
+[MIT License](LICENSE) · [Third-party notices](THIRD_PARTY_NOTICES.md).
 
 <p align="center">
   Made with ❤️ by <a href="https://github.com/The-Minion-oOo"><b>The_Minion_oOo</b></a><br>
