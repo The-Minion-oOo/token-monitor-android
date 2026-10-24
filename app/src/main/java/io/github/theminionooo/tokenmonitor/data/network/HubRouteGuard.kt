@@ -72,7 +72,9 @@ internal object HubRouteGuard {
     }
 
     /** Throws before any request when [url] cannot be used on [networks] or its name resolves outside the route's range. */
-    fun require(url: String, networks: PhoneNetworks, resolve: (String) -> List<InetAddress> = ::resolveAll) {
+    fun require(url: String, networks: PhoneNetworks, allowPublicHttps: Boolean = false, resolve: (String) -> List<InetAddress> = ::resolveAll) {
+        val validation = HubAddressValidator.validate(url, "route-check", true, allowPublicHttps)
+        if (validation is HubAddressValidation.Rejected) throw HubApiException(0, validation.reason)
         if (!usable(url, networks)) throw HubApiException(0, unavailableMessage(listOf(url), networks))
         val host = runCatching { URI(url).host }.getOrNull()?.trim('[', ']')?.lowercase() ?: return
         if (isLiteral(host)) return

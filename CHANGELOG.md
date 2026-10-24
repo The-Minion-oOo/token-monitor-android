@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased — v0.78.0 r2 candidate
+
+- I added an off-by-default internet HTTPS Hub route, with Tailscale still recommended.
+- I kept public HTTP blocked at saving, route and request boundaries, limited internet
+  targets to public DNS names, and added clear TLS errors and a Hub-secret warning.
+- I checked the pinned Cloudflare Worker locally alongside the Node Hub and added
+  synthetic fixtures, consent migration tests and local HTTPS fixture tooling.
+- I prepared the README, pairing, security, protocol and widget documentation.
+- I verified HTTPS snapshots, freshness and changed stats on my phone over cellular.
+  This candidate is not published.
+
 Android releases use the desktop protocol version plus an Android revision.
 Unreleased work stays under **Next release** until its signed APK is published.
 

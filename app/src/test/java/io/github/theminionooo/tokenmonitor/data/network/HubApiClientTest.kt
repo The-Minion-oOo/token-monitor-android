@@ -15,11 +15,15 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 
 class HubApiClientTest {
+    // Synthetic servers use this machine's private address, with real LAN validation.
+    private val testHost = java.net.NetworkInterface.getNetworkInterfaces().toList()
+        .flatMap { it.inetAddresses.toList() }.first { it is java.net.Inet4Address && it.isSiteLocalAddress }.hostAddress
+
     @Test
     fun `expired ownership prevents the next endpoint in a snapshot read`() {
         val checks = AtomicInteger()
         val reads = java.util.Collections.synchronizedList(mutableListOf<String>())
-        val server = HttpServer.create(InetSocketAddress("127.0.0.1", 0), 0).apply {
+        val server = HttpServer.create(InetSocketAddress(testHost, 0), 0).apply {
             createContext("/api/") { exchange ->
                 val path = exchange.requestURI.path
                 reads.add(path)
@@ -30,7 +34,7 @@ class HubApiClientTest {
             start()
         }
         try {
-            val connection = HubConnection("http://127.0.0.1:${server.address.port}", "synthetic-secret", true)
+            val connection = HubConnection("http://$testHost:${server.address.port}", "synthetic-secret", true)
             HubApiClient(beforeRequest = {
                 if (checks.incrementAndGet() == 3) throw CancellationException("Widget session expired")
             }).use { client ->
@@ -58,7 +62,7 @@ class HubApiClientTest {
         assertTrue(payload.length < 2 * 1024 * 1024)
         val server = streamServer(payload)
         try {
-            val connection = HubConnection("http://127.0.0.1:${server.address.port}", "synthetic-secret", true)
+            val connection = HubConnection("http://$testHost:${server.address.port}", "synthetic-secret", true)
             val events = mutableListOf<HubStreamEvent>()
             HubApiClient().use { client ->
                 client.streamStats(connection, onOpen = {}, onEvent = { events.add(it) })
@@ -78,7 +82,7 @@ class HubApiClientTest {
         val payload = "event: snapshot\ndata: {\"padding\":\"${"x".repeat(3 * 1024 * 1024)}\"}\n\n"
         val server = streamServer(payload)
         try {
-            val connection = HubConnection("http://127.0.0.1:${server.address.port}", "synthetic-secret", true)
+            val connection = HubConnection("http://$testHost:${server.address.port}", "synthetic-secret", true)
             HubApiClient().use { client ->
                 try {
                     client.streamStats(connection, onOpen = {}, onEvent = { fail("Oversized event must not be delivered") })
@@ -100,7 +104,7 @@ class HubApiClientTest {
             val reads = java.util.Collections.synchronizedList(mutableListOf<String>())
             val server = detailServer(reads, oversized = setOf("/api/devices", "/api/subscriptions"), announced = announced)
             try {
-                val connection = HubConnection("http://127.0.0.1:${server.address.port}", "synthetic-secret", true)
+                val connection = HubConnection("http://$testHost:${server.address.port}", "synthetic-secret", true)
                 val snapshot = HubApiClient().use { it.loadSnapshot(connection) }
                 assertNull(snapshot.devices)
                 assertNull(snapshot.subscriptions)
@@ -117,7 +121,7 @@ class HubApiClientTest {
     fun `an oversized stats response still fails the snapshot`() {
         val server = detailServer(java.util.Collections.synchronizedList(mutableListOf()), oversized = setOf("/api/stats"), announced = 0L)
         try {
-            val connection = HubConnection("http://127.0.0.1:${server.address.port}", "synthetic-secret", true)
+            val connection = HubConnection("http://$testHost:${server.address.port}", "synthetic-secret", true)
             try {
                 HubApiClient().use { it.loadSnapshot(connection) }
                 fail("Expected an oversized stats response to be rejected")
@@ -130,7 +134,7 @@ class HubApiClientTest {
     }
 
     private fun detailServer(reads: MutableList<String>, oversized: Set<String>, announced: Long): HttpServer =
-        HttpServer.create(InetSocketAddress("127.0.0.1", 0), 0).apply {
+        HttpServer.create(InetSocketAddress(testHost, 0), 0).apply {
             createContext("/api/") { exchange ->
                 val path = exchange.requestURI.path
                 reads.add(path)
@@ -151,7 +155,7 @@ class HubApiClientTest {
             start()
         }
 
-    private fun streamServer(payload: String): HttpServer = HttpServer.create(InetSocketAddress("127.0.0.1", 0), 0).apply {
+    private fun streamServer(payload: String): HttpServer = HttpServer.create(InetSocketAddress(testHost, 0), 0).apply {
         createContext("/api/stats/stream") { exchange ->
             // A bounded reader deliberately closes an oversized response early.
             try {
@@ -171,7 +175,7 @@ class HubApiClientTest {
         val authorization = AtomicReference<String?>()
         val statsReads = AtomicInteger()
         val detailReads = AtomicInteger()
-        val server = HttpServer.create(InetSocketAddress("127.0.0.1", 0), 0).apply {
+        val server = HttpServer.create(InetSocketAddress(testHost, 0), 0).apply {
             createContext("/api/stats") { exchange ->
                 authorization.set(exchange.requestHeaders.getFirst("Authorization"))
                 statsReads.incrementAndGet()
@@ -189,7 +193,7 @@ class HubApiClientTest {
             start()
         }
         try {
-            val connection = HubConnection("http://127.0.0.1:${server.address.port}", "private-secret", true)
+            val connection = HubConnection("http://$testHost:${server.address.port}", "private-secret", true)
             HubApiClient().use { client ->
                 assertEquals("""{"updatedAt":"now"}""", client.getStats(connection))
             }
@@ -204,7 +208,7 @@ class HubApiClientTest {
     @Test
     fun `authenticated reads do not follow redirects`() {
         val receivedAuthorization = AtomicReference<String?>()
-        val redirectTarget = HttpServer.create(InetSocketAddress("127.0.0.1", 0), 0).apply {
+        val redirectTarget = HttpServer.create(InetSocketAddress(testHost, 0), 0).apply {
             createContext("/capture") { exchange ->
                 receivedAuthorization.set(exchange.requestHeaders.getFirst("Authorization"))
                 exchange.sendResponseHeaders(200, 0)
@@ -212,21 +216,21 @@ class HubApiClientTest {
             }
             start()
         }
-        val hub = HttpServer.create(InetSocketAddress("127.0.0.1", 0), 0).apply {
+        val hub = HttpServer.create(InetSocketAddress(testHost, 0), 0).apply {
             createContext("/api/health") { exchange ->
                 val body = """{"ok":true,"role":"hub"}""".toByteArray()
                 exchange.sendResponseHeaders(200, body.size.toLong())
                 exchange.responseBody.use { it.write(body) }
             }
             createContext("/api/stats") { exchange ->
-                exchange.responseHeaders.add("Location", "http://127.0.0.1:${redirectTarget.address.port}/capture")
+                exchange.responseHeaders.add("Location", "http://$testHost:${redirectTarget.address.port}/capture")
                 exchange.sendResponseHeaders(302, -1)
                 exchange.close()
             }
             start()
         }
         try {
-            val connection = HubConnection("http://127.0.0.1:${hub.address.port}", "private-secret", true)
+            val connection = HubConnection("http://$testHost:${hub.address.port}", "private-secret", true)
             try {
                 HubApiClient().loadSnapshot(connection)
                 fail("Expected a redirect response to be rejected")
@@ -243,7 +247,7 @@ class HubApiClientTest {
     @Test
     fun `hub identity is checked before sending the secret`() {
         val receivedAuthorization = AtomicReference<String?>()
-        val server = HttpServer.create(InetSocketAddress("127.0.0.1", 0), 0).apply {
+        val server = HttpServer.create(InetSocketAddress(testHost, 0), 0).apply {
             createContext("/api/health") { exchange ->
                 val body = """{"ok":true,"role":"other"}""".toByteArray()
                 exchange.sendResponseHeaders(200, body.size.toLong())
@@ -257,7 +261,7 @@ class HubApiClientTest {
             start()
         }
         try {
-            val connection = HubConnection("http://127.0.0.1:${server.address.port}", "private-secret", true)
+            val connection = HubConnection("http://$testHost:${server.address.port}", "private-secret", true)
             try {
                 HubApiClient().loadSnapshot(connection)
                 fail("Expected a non-Hub identity to be rejected")

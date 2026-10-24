@@ -60,6 +60,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import io.github.theminionooo.tokenmonitor.BuildConfig
 import io.github.theminionooo.tokenmonitor.data.HubRepositoryState
 import io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions
@@ -78,7 +80,7 @@ internal fun ConnectionScreen(
     state: HubRepositoryState,
     form: ConnectionFormState,
     displayOptions: DisplayOptions,
-    onSaveConnection: (String, String, String, Boolean) -> Unit,
+    onSaveConnection: (String, String, String, Boolean, Boolean) -> Unit,
     onColorfulToolMarksChange: (Boolean) -> Unit,
     onCompactTokenTotalChange: (Boolean) -> Unit,
     onReduceMotionChange: (ReduceMotionMode) -> Unit,
@@ -105,12 +107,14 @@ internal fun ConnectionScreen(
     onAllowLocalNetwork: () -> Unit = {},
     onTokenNumberAnimationChange: (TokenNumberAnimation) -> Unit = {},
     onHomeListCountChange: (String, Int) -> Unit = { _, _ -> },
+    onDisablePublicHttps: () -> Unit = {},
 ) {
     val hasConnection = state.hasConnection
     var hubUrl by rememberSaveable(state.connectionUrl) { mutableStateOf(state.connectionUrl.orEmpty()) }
     var fallbackUrl by rememberSaveable(state.fallbackUrl) { mutableStateOf(state.fallbackUrl.orEmpty()) }
     var secret by remember { mutableStateOf("") }
     var allowLocalNetwork by rememberSaveable(state.allowLocalNetwork) { mutableStateOf(state.allowLocalNetwork) }
+    var allowPublicHttps by rememberSaveable(state.allowPublicHttps) { mutableStateOf(state.allowPublicHttps) }
     // A discovery result fills the home address once. Recreating the screen must not put an old result over what was typed since.
     var appliedDiscovery by rememberSaveable { mutableStateOf(discovery.found) }
     LaunchedEffect(discovery.found) {
@@ -139,10 +143,15 @@ internal fun ConnectionScreen(
             onSecretChange = { secret = it },
             allowLocalNetwork = allowLocalNetwork,
             onAllowLocalNetworkChange = { allowLocalNetwork = it },
+            allowPublicHttps = allowPublicHttps,
+            onAllowPublicHttpsChange = {
+                allowPublicHttps = it
+                if (!it && state.allowPublicHttps) onDisablePublicHttps()
+            },
             saving = form.saving,
             saveLabel = saveLabel,
             result = form.result,
-            onSave = { onSaveConnection(hubUrl, fallbackUrl, secret, allowLocalNetwork) },
+            onSave = { onSaveConnection(hubUrl, fallbackUrl, secret, allowLocalNetwork, allowPublicHttps) },
             discovery = discovery,
             onFindHomeHub = onFindHomeHub,
             canRepairHomeAddress = hasConnection && fallbackUrl.isNotBlank() && fallbackUrl != state.fallbackUrl,
@@ -161,10 +170,11 @@ internal fun ConnectionScreen(
         ) {
             val route = when {
                 state.fallbackUrl != null && state.activeUrl == state.fallbackUrl -> "Home Wi-Fi"
+                io.github.theminionooo.tokenmonitor.data.network.HubAddressValidator.routeLabel(state.connectionUrl) == "Internet (HTTPS)" -> "Internet (HTTPS)"
                 else -> state.connectionUrl.orEmpty().removePrefix("http://").removePrefix("https://").substringBefore(':')
             }
             SettingsGroup("Connection", summary = listOfNotNull(route, "home fallback".takeIf { state.fallbackUrl != null && route != "Home Wi-Fi" }).joinToString(" · ")) {
-                Text("This phone only reads your private desktop Hub. It cannot control the desktop or access its files.", color = Muted, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
+                Text("This phone only reads your Hub. It cannot control the desktop or access its files.", color = Muted, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
                 Text("Repair the home address with the saved pairing, or enter the secret again to replace the connection.", color = Accent, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
                 fields("CHECK AND SAVE CONNECTION")
                 OutlinedButton(onClick = onDisconnect, modifier = Modifier.fillMaxWidth()) { Text("DISCONNECT THIS PHONE") }
@@ -340,6 +350,8 @@ private fun ColumnScope.ConnectionFields(
     onSecretChange: (String) -> Unit,
     allowLocalNetwork: Boolean,
     onAllowLocalNetworkChange: (Boolean) -> Unit,
+    allowPublicHttps: Boolean,
+    onAllowPublicHttpsChange: (Boolean) -> Unit,
     saving: Boolean,
     saveLabel: String,
     result: String?,
@@ -353,9 +365,9 @@ private fun ColumnScope.ConnectionFields(
         value = hubUrl,
         onValueChange = onHubUrlChange,
         modifier = Modifier.fillMaxWidth(),
-        label = { Text("Tailscale address") },
-        placeholder = { Text("100.x.x.x") },
-        supportingText = { Text("Just the numbers. It always starts with 100. and is shown in the Tailscale app or the desktop's Multi-device Sync list.") },
+        label = { Text(if (allowPublicHttps || allowLocalNetwork) "Hub address" else "Tailscale address") },
+        placeholder = { Text(if (allowPublicHttps) "hub.example.com" else "100.x.x.x") },
+        supportingText = { Text(if (allowPublicHttps) "Use a public DNS name such as hub.example.com. HTTPS is required. Tailscale remains recommended." else "Tailscale is recommended. Use its 100.x address or .ts.net name. Internet Hubs need the separate HTTPS switch below.") },
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
     )
@@ -386,10 +398,22 @@ private fun ColumnScope.ConnectionFields(
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
             Text("Use Wi-Fi as the main Hub address", color = Ink, style = MaterialTheme.typography.bodyMedium)
-            Text("Allows a private address in the main field. A saved home fallback is enabled separately by entering its address. Public addresses are always rejected.", color = Muted, style = MaterialTheme.typography.bodySmall, lineHeight = 17.sp)
+            Text("Allows a private address in the main field. A saved home fallback is enabled separately by entering its address. Internet access uses its own switch below.", color = Muted, style = MaterialTheme.typography.bodySmall, lineHeight = 17.sp)
         }
         Spacer(Modifier.width(12.dp))
         Switch(checked = allowLocalNetwork, onCheckedChange = onAllowLocalNetworkChange)
+    }
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Text("Allow an internet Hub over HTTPS", color = Ink, style = MaterialTheme.typography.bodyMedium)
+            Text("Off by default. Connect to an existing HTTPS Hub with a public DNS name. This does not expose your computer. Tailscale is recommended.", color = Muted, style = MaterialTheme.typography.bodySmall, lineHeight = 17.sp)
+        }
+        Spacer(Modifier.width(12.dp))
+        Switch(checked = allowPublicHttps, onCheckedChange = onAllowPublicHttpsChange, enabled = !saving,
+            modifier = Modifier.semantics { contentDescription = "Allow an internet Hub over HTTPS" })
+    }
+    if (allowPublicHttps) {
+        Text("The Hub secret can also change data on the Hub. Use a long random secret. If this phone is lost, change the secret on the Hub and on every desktop.", color = Accent, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
     }
     Button(onClick = onSave, modifier = Modifier.fillMaxWidth(), enabled = !saving) { Text(if (saving) "CHECKING HUB…" else saveLabel) }
     result?.let { StatusMessage(it, stale = !it.startsWith("Connected") && !it.startsWith("The saved")) }
@@ -417,7 +441,7 @@ private fun WelcomeSetup(modifier: Modifier, fields: @Composable ColumnScope.(St
         Surface(color = Recessed.copy(alpha = 0.76f), border = BorderStroke(1.dp, Line), shape = MaterialTheme.shapes.medium, modifier = Modifier.fillMaxWidth().padding(top = 4.dp)) {
             Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { fields("CONNECT") }
         }
-        Text("Usage stays between this phone and your private Hub. App update checks contact GitHub.", color = Muted, style = MaterialTheme.typography.labelSmall, lineHeight = 15.sp)
+        Text("Connect privately with Tailscale (recommended), or enable an existing internet Hub over HTTPS. App update checks contact GitHub.", color = Muted, style = MaterialTheme.typography.labelSmall, lineHeight = 15.sp)
         SettingsGroup("App updates", summary = "${BuildConfig.VERSION_NAME} r${BuildConfig.VERSION_CODE % 1000}") {
             AppUpdatesPanel(onOpenReleasePage)
         }

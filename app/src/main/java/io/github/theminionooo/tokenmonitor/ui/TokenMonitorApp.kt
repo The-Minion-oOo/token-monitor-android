@@ -175,9 +175,9 @@ internal fun TokenMonitorApp(viewModel: DashboardViewModel) {
                     serviceStatus = serviceStatus,
                     onChoose = viewModel::choose,
                     onRefresh = viewModel::refresh,
-                    onSaveConnection = { url, fallback, secret, allowLocal ->
+                    onSaveConnection = { url, fallback, secret, allowLocal, allowInternet ->
                         withLocalNetworkAccess(HubAddressValidator.isLocalAddress(url) || HubAddressValidator.isLocalAddress(fallback)) {
-                            viewModel.saveConnection(url, fallback, secret, allowLocal)
+                            viewModel.saveConnection(url, fallback, secret, allowLocal, allowInternet)
                         }
                     },
                     onColorfulToolMarksChange = viewModel::setColorfulToolMarks,
@@ -207,6 +207,7 @@ internal fun TokenMonitorApp(viewModel: DashboardViewModel) {
                     onAllowLocalNetwork = { withLocalNetworkAccess(true, viewModel::onResume) },
                     onTokenNumberAnimationChange = viewModel::setTokenNumberAnimation,
                     onHomeListCountChange = viewModel::setHomeListCount,
+                    onDisablePublicHttps = viewModel::disablePublicHttps,
                 )
             }
         }
@@ -222,7 +223,7 @@ internal fun DashboardScaffold(
     serviceStatus: ServiceStatusState,
     onChoose: (DashboardDestination) -> Unit,
     onRefresh: () -> Unit,
-    onSaveConnection: (String, String, String, Boolean) -> Unit,
+    onSaveConnection: (String, String, String, Boolean, Boolean) -> Unit,
     onColorfulToolMarksChange: (Boolean) -> Unit,
     onCompactTokenTotalChange: (Boolean) -> Unit,
     onReduceMotionChange: (ReduceMotionMode) -> Unit,
@@ -250,6 +251,7 @@ internal fun DashboardScaffold(
     onAllowLocalNetwork: () -> Unit = {},
     onTokenNumberAnimationChange: (TokenNumberAnimation) -> Unit = {},
     onHomeListCountChange: (String, Int) -> Unit = { _, _ -> },
+    onDisablePublicHttps: () -> Unit = {},
 ) {
     var periodName by rememberSaveable { mutableStateOf(displayOptions.defaultPeriod) }
     // The default steers the period only when the setting changes; a rotation or theme switch must keep the period picked in the header.
@@ -312,6 +314,7 @@ internal fun DashboardScaffold(
                 form = form,
                 displayOptions = displayOptions,
                 onSaveConnection = onSaveConnection,
+                onDisablePublicHttps = onDisablePublicHttps,
                 onColorfulToolMarksChange = onColorfulToolMarksChange,
                 onCompactTokenTotalChange = onCompactTokenTotalChange,
                 onReduceMotionChange = onReduceMotionChange,

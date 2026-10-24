@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tailscale and LAN IP routes still need HTTP. Android domain rules cannot
+     restrict cleartext by IP subnet. Saving, the route guard and the HTTP client
+     separately enforce HTTPS and explicit consent for internet Hub requests. -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

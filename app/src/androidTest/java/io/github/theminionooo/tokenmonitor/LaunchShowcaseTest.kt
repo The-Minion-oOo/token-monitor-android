@@ -60,7 +60,7 @@ class LaunchShowcaseTest {
                 CompositionLocalProvider(LocalPalette provides palette, LocalInteractionMotion provides false, LocalNow provides captured, LocalColorfulToolMarks provides true) {
                     Box(Modifier.size(393.dp, 820.dp).background(Brush.linearGradient(colorStops = arrayOf(0f to palette.gradientTop, 0.38f to palette.shell, 1f to palette.gradientBottom))).testTag("showcase")) {
                         DashboardScaffold(state = state, destination = destination, form = ConnectionFormState(), displayOptions = DisplayOptions(colorfulToolMarks = true), serviceStatus = ServiceStatusState(),
-                    onChoose = { destination = it }, onRefresh = {}, onSaveConnection = { _, _, _, _ -> },
+                    onChoose = { destination = it }, onRefresh = {}, onSaveConnection = { _, _, _, _, _ -> },
                     onColorfulToolMarksChange = {}, onCompactTokenTotalChange = {}, onReduceMotionChange = {}, onTextScaleChange = {},
                     onThemeCodeChange = {}, onFollowSystemThemeChange = {}, onShowLiveIndicatorChange = {}, onShowToolIconsChange = {}, onRankingMetricChange = {},
                     onShowLimitSourceChange = {}, onShowAccountEmailsChange = {}, onLimitBarMetricChange = {}, onDefaultPeriodChange = {},

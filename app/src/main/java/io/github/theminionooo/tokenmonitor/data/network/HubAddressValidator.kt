@@ -4,9 +4,8 @@ import io.github.theminionooo.tokenmonitor.domain.HubConnection
 import java.net.URI
 
 /**
- * Limits the dashboard to private transport. A Hub secret must never be sent to
- * an arbitrary public endpoint. Tailscale is allowed by default; RFC1918 Wi-Fi
- * hosts and mDNS names require the explicit local-network switch.
+ * Tailscale is the default. LAN routes and internet HTTPS have separate consent;
+ * an internet target must be a public DNS name with no URL credentials or path.
  */
 object HubAddressValidator {
     private const val defaultPort = 17321
@@ -15,10 +14,14 @@ object HubAddressValidator {
         rawUrl: String,
         secret: String,
         allowLocalNetwork: Boolean,
+        allowPublicHttps: Boolean = false,
     ): HubAddressValidation {
         if (secret.isBlank()) return HubAddressValidation.Rejected("Enter the Hub secret before connecting.")
         val uri = try {
-            URI(normalize(rawUrl))
+            val normalized = normalize(rawUrl)
+            val initial = URI(normalized)
+            val publicName = !isTailscaleRoute(normalized) && !isLocalAddress(normalized)
+            URI(if (allowPublicHttps && publicName && "://" !in rawUrl) normalized.replaceFirst("http://", "https://") else initial.toString())
         } catch (_: Exception) {
             return HubAddressValidation.Rejected("Enter the address, such as 100.101.102.103.")
         }
@@ -39,23 +42,51 @@ object HubAddressValidator {
             return HubAddressValidation.Rejected("Use a valid Hub port.")
         }
 
-        val host = uri.host.lowercase().removePrefix("[").removeSuffix("]")
+        val host = uri.host.lowercase().removePrefix("[").removeSuffix("]").removeSuffix(".")
         val tailscale = host.endsWith(".ts.net") || isTailscaleAddress(host)
         val local = isPrivateIpv4(host) || host.endsWith(".local")
-        if (!tailscale && !(allowLocalNetwork && local)) {
+        val internet = !tailscale && !local
+        if (internet) {
+            if (scheme != "https") return HubAddressValidation.Rejected("Internet Hubs require https://. The secret was not sent.")
+            if (!allowPublicHttps) return HubAddressValidation.Rejected("Turn on Allow an internet Hub over HTTPS, or use Tailscale (recommended).")
+            if (!publicDnsName(host)) return HubAddressValidation.Rejected("Use a public DNS name for an internet Hub, without an IP address or private-use name.")
+        } else if (!tailscale && !(allowLocalNetwork && local)) {
             return HubAddressValidation.Rejected(
                 "Use a Tailscale address, or enable a private Wi-Fi address as the main Hub.",
             )
         }
-        val port = if (uri.port == -1) defaultPort else uri.port
+        val port = if (uri.port == -1) { if (internet) 443 else defaultPort } else uri.port
         val displayHost = if (host.contains(':')) "[$host]" else host
+        val authority = if (internet && port == 443) displayHost else "$displayHost:$port"
         return HubAddressValidation.Allowed(
             HubConnection(
-                baseUrl = "$scheme://$displayHost:$port",
+                baseUrl = "$scheme://$authority",
                 secret = secret.trim(),
                 allowLocalNetwork = allowLocalNetwork,
+                allowPublicHttps = allowPublicHttps,
             ),
         )
+    }
+
+    /** Revalidate persisted targets independently of the form before opening any socket. */
+    internal fun requireAllowed(connection: HubConnection) {
+        if (connection.baseUrl == connection.fallbackUrl &&
+            !isLocalAddress(connection.baseUrl) && !isTailscaleRoute(connection.baseUrl)) {
+            throw HubApiException(0, "The home fallback must use a private address.")
+        }
+        val result = validate(connection.baseUrl, connection.secret,
+            connection.allowLocalNetwork || connection.baseUrl == connection.fallbackUrl, connection.allowPublicHttps)
+        if (result is HubAddressValidation.Rejected) throw HubApiException(0, result.reason)
+    }
+
+    private fun publicDnsName(host: String): Boolean {
+        val labels = host.split('.')
+        if (host.length > 253 || labels.size < 2) return false
+        if (labels.any { !it.matches(Regex("[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?")) }) return false
+        // A numeric or hexadecimal-looking last label can be interpreted as an IP literal.
+        if (labels.last().all(Char::isDigit) || labels.last().startsWith("0x")) return false
+        val privateSuffixes = setOf("local", "localhost", "localdomain", "internal", "lan", "home", "arpa", "intranet", "corp", "onion", "alt", "invalid", "test", "example")
+        return labels.last() !in privateSuffixes
     }
 
     /**
@@ -80,19 +111,20 @@ object HubAddressValidator {
         return when {
             host.endsWith(".ts.net") || isTailscaleAddress(host) -> "Tailscale"
             isPrivateIpv4(host) -> "Private network"
+            runCatching { URI(normalize(url)).scheme == "https" && publicDnsName(host.removeSuffix(".")) }.getOrDefault(false) -> "Internet (HTTPS)"
             else -> "Hub"
         }
     }
 
     /** True only for the private LAN forms accepted by [validate], never the Tailscale range. */
     fun isLocalAddress(url: String): Boolean {
-        val host = runCatching { URI(normalize(url)).host }.getOrNull().orEmpty().trim('[', ']').lowercase()
+        val host = runCatching { URI(normalize(url)).host }.getOrNull().orEmpty().trim('[', ']').lowercase().removeSuffix(".")
         return isPrivateIpv4(host) || host.endsWith(".local")
     }
 
     /** True for a Tailscale address or MagicDNS name, which only routes while Tailscale is connected. */
     fun isTailscaleRoute(url: String): Boolean {
-        val host = runCatching { URI(normalize(url)).host }.getOrNull().orEmpty().trim('[', ']').lowercase()
+        val host = runCatching { URI(normalize(url)).host }.getOrNull().orEmpty().trim('[', ']').lowercase().removeSuffix(".")
         return host.endsWith(".ts.net") || isTailscaleAddress(host)
     }
 

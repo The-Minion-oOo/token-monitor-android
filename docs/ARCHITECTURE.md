@@ -9,18 +9,20 @@ another collector or a remote-control client.
 
 The desktop remains the source of truth. Pairing uses a private Tailscale address
 and Hub secret, with an explicitly enabled home Wi-Fi address as an optional
-fallback. There is no Token Monitor relay or supported public-Hub path.
+fallback. A separate, off-by-default internet setting permits an existing
+Hub at a public DNS name over HTTPS. It does not deploy a relay or expose a
+desktop. The same read-only repository and parser serve all routes.
 
 ## Responsibility split
 
 Desktop Token Monitor discovers local tools, parses their files, estimates
 cost, checks provider limits, and aggregates device history. The Android app
-does none of that. It reads the desktop Hub over a private network and presents
+does none of that. It reads the Hub over the selected route and presents
 the synchronized result. This keeps the phone light and avoids duplicating the
 desktop's adapters for dozens of tools.
 
 ```text
-Desktop collectors → Token Monitor Hub → Tailscale or home Wi-Fi → HubRepository → HubSnapshot → Compose views
+Desktop collectors → Token Monitor Hub → Tailscale, home Wi-Fi or opt-in HTTPS → HubRepository → HubSnapshot → Compose views
 ```
 
 ## Layers
@@ -133,6 +135,15 @@ VPN, a home address on mobile data without a VPN) and checks that private names
 resolve inside their range before any request.
 The active address is surfaced to the UI so the header and Hub status can say
 when the home route is in use.
+
+The internet setting is persisted inside the encrypted pairing. Legacy records
+without it decode as false. Public names gain HTTPS and port 443; Tailscale and
+home routes retain their existing scheme and port defaults. Saving, the route
+guard and the HTTP client independently revalidate targets before a request.
+The internet setting cannot authorize a public address in the home fallback slot.
+Android network security config trusts system CAs only. It permits cleartext for
+private IP routes; code enforces HTTPS on internet routes. TLS failure messages
+are shared by pairing and foreground delivery without exposing raw errors.
 
 On API 37 and newer, `LocalNetworkAccess` excludes LAN routes unless Android's
 local-network permission is granted. Tailscale remains eligible independently.
