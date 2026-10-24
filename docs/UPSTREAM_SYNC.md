@@ -2,7 +2,7 @@
 
 ## Version rule
 
-Android v0.78.0 r2 targets desktop tag `v0.78.0`, peeled commit
+Android v0.78.0 r3 targets desktop tag `v0.78.0`, peeled commit
 `d52e0b9cf970a03a30a5f5a1e9139693bb211cd8`, in Gradle and `upstream.json`.
 I reviewed the changes since v0.77.0. ZCode's saved titles and tool/workflow
 parent links pass through the existing parser and session grouping. Forks and
@@ -13,11 +13,11 @@ performance improvements, five-second complete-update limit, widgets, animations
 GET endpoints and retry policy. Title-sharing controls remain on desktop.
 
 The latest published release is
-[`android-v0.78.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r2),
-recorded with its source commit in `release.json`. This Android-only revision
-adds opt-in internet HTTPS access. I checked the pinned Node and Worker Hubs
-locally, verified synthetic HTTPS live updates over cellular, and installed the
-signed upgrade over r1 on my phone with pairing and private routes preserved.
+[`android-v0.78.0-r3`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r3),
+recorded with its source commit in `release.json`. This Android-only UI revision
+confirms disabling a saved internet Hub. I checked it on emulators, not my phone.
+The earlier r2 release added internet HTTPS and has separate phone evidence for
+cellular live updates, signed upgrade retention, Tailscale and home fallback.
 
 An Android-only fix increments `versionCode` and the GitHub release revision,
 for example `android-vX.Y.Z-rN`, without changing the visible compatibility

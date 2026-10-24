@@ -145,11 +145,11 @@ Session rows also show generation speed, cache-hit percentage and prompt-cache e
 ## Get connected
 
 You need Android 8.0 or newer and a Token Monitor Hub. The signed public release
-is Android v0.78.0 r2, checked against desktop v0.78.0. I verified HTTPS live
-updates over cellular and installed the signed r2 APK over r1 on my phone:
-pairing survived, and both Tailscale and home Wi-Fi connected.
+is Android v0.78.0 r3, checked against desktop v0.78.0. It adds confirmation
+before disabling a saved internet Hub. This small UI revision was checked on
+emulators and was not phone-tested. The earlier r2 phone checks apply to r2.
 
-1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.78.0 r2 APK.
+1. Follow [Installing and updating](docs/INSTALL.md) to get the signed v0.78.0 r3 APK.
 2. Put [Tailscale](https://tailscale.com/) on the desktop and the phone, signed into the same tailnet.
 3. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub** and copy the address and shared secret.
 4. In the app, type the address that starts with `100.`, paste the secret, tap **Connect**. Just the numbers are enough.
@@ -163,9 +163,9 @@ Desktop v0.64's optional iCloud Drive sync does not replace the Hub connection f
 
 | | |
 | --- | --- |
-| Current public release | [`v0.78.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r2) |
+| Current public release | [`v0.78.0-r3`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r3) |
 | Earlier published upgrade check | signed `v0.66.0-r1` over v0.65.0 r1; pairing, home Wi-Fi reconnection and placed Pages widget preserved |
-| Current release phone coverage | Signed r1 → r2 upgrade retained pairing; Tailscale/home fallback and synthetic HTTPS live updates checked |
+| Current release phone coverage | r3 was not phone-tested; r2 checks covered signed upgrade retention, Tailscale/home fallback and cellular HTTPS/SSE |
 | Remaining phone checks | Widget Live/expiry, battery use and long-term connection reliability were not remeasured |
 | Desktop baseline | Token Monitor `v0.78.0` |
 | Upstream commit | [`d52e0b9`](https://github.com/Javis603/token-monitor/commit/d52e0b9cf970a03a30a5f5a1e9139693bb211cd8) |

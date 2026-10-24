@@ -57,8 +57,8 @@ Available in Android v0.78.0 r2. Tailscale remains the recommended setup.
    `https://hub.example.com:8443`, in **Hub address**. A bare name gains HTTPS;
    the default port is 443. Enter the Hub secret and choose **Connect**.
 
-If the saved main address is an internet Hub, turning the switch off asks for
-confirmation. Cancel, Back or a tap outside keeps access enabled. Choosing
+From Android v0.78.0 r3, turning the switch off asks for confirmation when the
+saved main address is an internet Hub. Cancel, Back or a tap outside keeps access enabled. Choosing
 **Turn off** revokes saved permission immediately. A saved Tailscale or home
 Wi-Fi main address turns it off without a dialog. To enable
 it again, check and save the connection with the Hub secret.
