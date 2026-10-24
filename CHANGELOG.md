@@ -1,11 +1,11 @@
 # Changelog
 
-## Unreleased
+## Next release: v0.78.0 r4
 
-- I added optional background widget refresh at 30 or 60 minutes, with Off and
-  Wi-Fi only as the safe defaults. Runs yield to foreground activity and retain
-  stale data on failure. The overnight phone battery/data check was skipped;
-  this feature has not been phone-tested.
+- I added optional background widget refresh at 30 or 60 minutes, starting Off
+  with Wi-Fi only enabled. Runs yield to foreground activity and retain stale
+  data on failure. An overnight preview phone check completed eight runs;
+  the optional battery baseline is tracked in #76.
 
 ## v0.78.0 r3 — 2026-10-23
 

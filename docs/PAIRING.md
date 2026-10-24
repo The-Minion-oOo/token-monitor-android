@@ -103,3 +103,6 @@ do not post it in screenshots or support requests.
 - **Unauthorized:** replace the saved Android connection with the current desktop Hub secret.
 - **Works at home but not away:** confirm both devices appear online in Tailscale and use the listed Tailscale address as the Hub URL, keeping the home-only LAN address in the Home Wi-Fi field.
 - **Old values:** check the timestamp shown in Android Settings. The app keeps the last snapshot visible when the Hub is unreachable.
+
+The signed r2-to-r4 upgrade on my phone retained pairing and reconnected over
+home Wi-Fi. Background refresh remained Off with Wi-Fi only on after upgrading.

@@ -136,13 +136,12 @@ does not schedule background refresh or change widget visuals: saved, Refresh
 and the explicit one-hour Live session keep their existing behavior.
 See [HTTPS pairing](PAIRING.md#optional-internet-hub-over-https).
 
-## Background refresh (in development)
+## Background refresh
 
-I added **Settings → Home-screen widget → Background refresh** on the feature
-branch. The choices are Off, Every 30 minutes and Every 60 minutes. It starts
+I added **Settings → Home-screen widget → Background refresh** in r4. The choices are Off, Every 30 minutes and Every 60 minutes. It starts
 Off for new and existing installations; Wi-Fi only starts on. Android schedules
 the work and may defer it during sleep, so the interval is not an exact timer.
-This feature is not included in the published r3 APK.
+The r4 candidate includes this feature; the published r3 APK does not.
 
 One periodic job exists only with a placed widget, a saved pairing and consent.
 Removing the last widget, disconnecting, choosing Off or receiving a rejected
@@ -165,9 +164,15 @@ attempts are marked incomplete and have no daily projection. Those figures exclu
 can underestimate a larger future payload. Run `node tools/measure-widget-refresh.mjs`
 for the synthetic fixture baseline. A 260 KB stats body alone would mean about
 12.5 MB/day at 30 minutes or 6.2 MB/day at 60 minutes, plus history and overhead.
-The screenshots and widget comparison are approved. I skipped the overnight
-phone check for this feature; real overnight battery use and data remain
-unmeasured. This feature has not been phone-tested.
+The screenshots and widget comparison are approved. An overnight preview phone
+check completed eight natural runs, receiving about 2.09 MB of response data
+with 8.229 seconds of total job time. The persisted hourly Wi-Fi-only job
+returned after reboot without opening the app; a bounded post-reboot read
+succeeded. The signed r2-to-r4 upgrade retained pairing, connected over home
+Wi-Fi and kept the display settings, with refresh Off and Wi-Fi only on.
+Android estimated about 1.12 mAh of preview app power across the overnight
+capture interval. This is not a direct measurement of incremental battery cost;
+a matching Off baseline remains optional in [#76](https://github.com/The-Minion-oOo/token-monitor-android/issues/76).
 
 The pinned v0.78.0 fixture measures 18,499 response-body bytes per run: health
 487, stats 16,912 and history 1,100. That projects to 0.89 MB/day at 30 minutes
@@ -176,8 +181,8 @@ do not predict the size of a real Hub's session data.
 
 ### Overnight validation
 
-The following checklist is prepared for a future check; it was not run for
-this feature.
+This checklist supports repeatable measurements. The r4 preview overnight run
+and reboot restoration are recorded above; a matching Off baseline is optional.
 
 I record the exact APK checksum and build, the chosen interval, network choice,
 start/end times and battery levels. I use a disposable fixture pairing in the
@@ -194,7 +199,7 @@ reboot restoration. A network constraint may defer the job; I report the
 observed runs and delays rather than assuming eight hourly runs occurred.
 I keep raw device diagnostics private and publish only the measured summary.
 
-For comparison I record a similar overnight period with background refresh Off.
+For an optional comparison I record a similar overnight period with background refresh Off.
 That comparison helps separate the job's impact from unrelated phone activity.
 
 ## Troubleshooting

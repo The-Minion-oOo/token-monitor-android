@@ -7,18 +7,21 @@ the build it names.
 
 ## How each release is checked
 
-The background-refresh feature branch is unreleased. The light/dark settings
-and recaptured widget comparison are approved. I skipped the overnight phone
-check for this feature; battery use, real network traffic and physical-device
-reboot behavior remain unverified. The prepared [phone checklist](WIDGETS.md#overnight-validation)
-remains available for a future check. A release-history row will be added
-only when this feature ships; r3's evidence does not cover it.
+The r4 background-refresh candidate passed the feature CI and local checks:
+301 JVM tests, lint, debug assembly and 14 tooling tests; 84-test emulator suites
+on API 36 and API 37, followed by 21 focused widget/dialog regressions on each.
+The pinned Node and Worker Hub contracts passed with synthetic data.
 
-Local development checks passed: 301 JVM tests, lint, debug assembly and 14
-tooling tests; 84-test emulator suites on API 36 and API 37, followed by 21
-focused widget/dialog regressions on each after the final stale-state fixes.
-The pinned Node and Worker Hub contracts passed with synthetic data. Feature
-CI is tracked in the feature PR. These local results are not phone evidence.
+An overnight preview phone check completed eight natural background runs,
+received 2,088,840 response-body bytes and recorded 8.229 seconds of total job
+time. Android's estimated app power increased by about 1.12 mAh; this includes
+attribution estimates and is not a measured incremental battery cost. The
+matching Off baseline is an optional follow-up in [#76](https://github.com/The-Minion-oOo/token-monitor-android/issues/76).
+The persisted hourly Wi-Fi-only job returned after reboot without opening the
+preview app and completed a bounded read. The signed r2-to-r4 production upgrade
+retained pairing, home Wi-Fi connectivity and display settings; refresh remained
+Off and Wi-Fi only on. The temporary preview app/widget were removed afterward.
+The light/dark settings and recaptured widget comparison are approved.
 
 Every release goes through the same automated gate before I publish it:
 
