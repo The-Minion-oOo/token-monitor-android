@@ -24,39 +24,18 @@
   <a href="docs/images/hero-light.png#gh-light-mode-only"><img src="docs/images/hero-light.png" alt="Your desktop usage. In your pocket. Totals, account limits, models and trends from the Token Monitor Hub, shown in the Android app with synthetic data." width="100%"></a><a href="docs/images/hero-dark.png#gh-dark-mode-only"><img src="docs/images/hero-dark.png" alt="Your desktop usage. In your pocket. Totals, account limits, models and trends from the Token Monitor Hub, shown in the Android app with synthetic data." width="100%"></a>
 </p>
 
-## Get started
-
-You need Android 8.0 or newer and a [Token Monitor](https://github.com/Javis603/token-monitor)
-Hub. **Tailscale is the recommended connection.**
-
-1. Download the signed APK from [Releases](https://github.com/The-Minion-oOo/token-monitor-android/releases/latest),
-   or update an existing installation through **Settings → App updates**.
-2. In desktop Token Monitor, open **Settings → Multi-device Sync → Host Hub**
-   and copy the Hub address and shared secret.
-3. Install [Tailscale](https://tailscale.com/) on the desktop and phone, signed
-   into the same tailnet.
-4. In the Android app, enter the desktop's `100.x` address and Hub secret,
-   then tap **Connect**.
-
-Home Wi-Fi is optional: tap **Find** while at home, then **Test and save home
-address**. An existing internet Hub uses a separate **Allow an internet Hub over
-HTTPS** switch, which starts off. Enabling it does not expose your computer,
-open a port or deploy a Hub.
-
-[Installation and updates](docs/INSTALL.md) · [Pairing and connection options](docs/PAIRING.md)
-
 ## The desktop dashboard, made mobile
 
 <table>
   <tr>
-    <td align="center" valign="top" width="33%"><a href="docs/images/home.png"><img src="docs/images/framed-home.png" alt="Home dashboard with totals, limits, tools, devices and models" width="100%"></a><br><sub><b>Command center</b><br>Totals, limits, tools, devices, models</sub></td>
-    <td align="center" valign="top" width="33%"><a href="docs/images/filtered-models.png"><img src="docs/images/framed-filtered-models.png" alt="Models filtered to Codex after tapping it in the tools list" width="100%"></a><br><sub><b>Tap a tool</b><br>See the models behind it</sub></td>
-    <td align="center" valign="top" width="33%"><a href="docs/images/trends.png"><img src="docs/images/framed-trends.png" alt="Usage overview cards and an activity heatmap with a selected day" width="100%"></a><br><sub><b>Find the busy days</b><br>Cards, heatmap, daily series</sub></td>
+    <td align="center" valign="top" width="33%"><a href="docs/images/home.png"><img src="docs/images/framed-home.png" alt="Home dashboard with totals, limits, tools, devices and models" width="100%"></a><br><b>Command center</b><br>Totals, limits, tools, devices, models</td>
+    <td align="center" valign="top" width="33%"><a href="docs/images/filtered-models.png"><img src="docs/images/framed-filtered-models.png" alt="Models filtered to Codex after tapping it in the tools list" width="100%"></a><br><b>Tap a tool</b><br>See the models behind it</td>
+    <td align="center" valign="top" width="33%"><a href="docs/images/trends.png"><img src="docs/images/framed-trends.png" alt="Usage overview cards and an activity heatmap with a selected day" width="100%"></a><br><b>Find the busy days</b><br>Cards, heatmap, daily series</td>
   </tr>
   <tr>
-    <td align="center" valign="top" width="33%"><a href="docs/images/devices.png"><img src="docs/images/framed-devices.png" alt="Usage grouped by two made-up desktop devices" width="100%"></a><br><sub><b>Every desktop</b><br>What each machine contributes</sub></td>
-    <td align="center" valign="top" width="33%"><a href="docs/images/projects.png"><img src="docs/images/framed-projects.png" alt="Searchable project usage with token and cost totals" width="100%"></a><br><sub><b>Projects and sessions</b><br>Searchable, without transcripts</sub></td>
-    <td align="center" valign="top" width="33%"><a href="docs/images/settings.png"><img src="docs/images/framed-settings.png" alt="Appearance, dashboard, widget and connection settings" width="100%"></a><br><sub><b>Make it yours</b><br>Themes, text size, motion, views</sub></td>
+    <td align="center" valign="top" width="33%"><a href="docs/images/devices.png"><img src="docs/images/framed-devices.png" alt="Usage grouped by two made-up desktop devices" width="100%"></a><br><b>Every desktop</b><br>What each machine contributes</td>
+    <td align="center" valign="top" width="33%"><a href="docs/images/projects.png"><img src="docs/images/framed-projects.png" alt="Searchable project usage with token and cost totals" width="100%"></a><br><b>Projects and sessions</b><br>Searchable, without transcripts</td>
+    <td align="center" valign="top" width="33%"><a href="docs/images/settings.png"><img src="docs/images/framed-settings.png" alt="Appearance, dashboard, widget and connection settings" width="100%"></a><br><b>Make it yours</b><br>Themes, text size, motion, views</td>
   </tr>
 </table>
 
@@ -67,12 +46,12 @@ open a port or deploy a Hub.
 
 <table>
   <tr>
-    <td align="center" valign="top" width="50%"><a href="docs/images/widget-pages-overview.png"><img src="docs/images/widget-pages-overview.png" alt="Pages widget Overview with tokens, cost, recent activity and tool share" width="100%"></a><br><sub><b>Overview</b><br>Totals, cost, activity and tool share</sub></td>
-    <td align="center" valign="top" width="50%"><a href="docs/images/widget-pages-limits.png"><img src="docs/images/widget-pages-limits.png" alt="Pages widget Limits with account windows and reset times" width="100%"></a><br><sub><b>Limits</b><br>Account windows and reset times</sub></td>
+    <td align="center" valign="top" width="50%"><a href="docs/images/widget-pages-overview.png"><img src="docs/images/widget-pages-overview.png" alt="Pages widget Overview with tokens, cost, recent activity and tool share" width="100%"></a><br><b>Overview</b><br>Totals, cost, activity and tool share</td>
+    <td align="center" valign="top" width="50%"><a href="docs/images/widget-pages-limits.png"><img src="docs/images/widget-pages-limits.png" alt="Pages widget Limits with account windows and reset times" width="100%"></a><br><b>Limits</b><br>Account windows and reset times</td>
   </tr>
   <tr>
-    <td align="center" valign="top" width="50%"><a href="docs/images/widget-pages-breakdown.png"><img src="docs/images/widget-pages-breakdown.png" alt="Pages widget Breakdown with tools and models" width="100%"></a><br><sub><b>Breakdown</b><br>Leading tools and models</sub></td>
-    <td align="center" valign="top" width="50%"><a href="docs/images/widget-pages-activity.png"><img src="docs/images/widget-pages-activity.png" alt="Pages widget Activity with seven-day chart and thirteen-week heatmap" width="100%"></a><br><sub><b>Activity</b><br>Daily chart and activity heatmap</sub></td>
+    <td align="center" valign="top" width="50%"><a href="docs/images/widget-pages-breakdown.png"><img src="docs/images/widget-pages-breakdown.png" alt="Pages widget Breakdown with tools and models" width="100%"></a><br><b>Breakdown</b><br>Leading tools and models</td>
+    <td align="center" valign="top" width="50%"><a href="docs/images/widget-pages-activity.png"><img src="docs/images/widget-pages-activity.png" alt="Pages widget Activity with seven-day chart and thirteen-week heatmap" width="100%"></a><br><b>Activity</b><br>Daily chart and activity heatmap</td>
   </tr>
 </table>
 
@@ -84,7 +63,7 @@ by your launcher.
 The picker also includes **Token Monitor · Usage**, a responsive summary widget
 that reflows as you resize it. Both widgets follow the app's theme.
 
-### Keep widgets current
+### Keep widgets current without opening the app
 
 - **Refresh** fetches one update.
 - **Live** checks stats every 30 seconds for up to one hour, with a Stop control
@@ -97,6 +76,60 @@ Choose background refresh under **Settings → Home-screen widget**. Failed read
 keep the last snapshot and mark it stale; changing pages never starts a fetch.
 
 [Widget guide](docs/WIDGETS.md) · [Background refresh and data use](docs/WIDGETS.md#background-refresh)
+
+## Get started
+
+Your desktop usage, wherever you check it. Choose how your phone reaches the
+[Token Monitor](https://github.com/Javis603/token-monitor) Hub:
+
+<table>
+  <tr>
+    <td align="center" valign="top" width="33%"><b>Tailscale</b><br>At home and away, over your private network.<br><b>Recommended</b><br><a href="#tailscale-setup"><kbd>Set up Tailscale</kbd></a></td>
+    <td align="center" valign="top" width="33%"><b>Home Wi-Fi</b><br>A direct connection on your home network.<br>Optional · home only<br><a href="#home-wi-fi-setup"><kbd>Set up home Wi-Fi</kbd></a></td>
+    <td align="center" valign="top" width="33%"><b>Internet (HTTPS)</b><br>Reach an existing HTTPS Hub without Tailscale.<br>Optional · off by default<br><a href="#internet-https-setup"><kbd>Set up HTTPS</kbd></a></td>
+  </tr>
+</table>
+
+**Install first:** on Android 8 or newer, download the signed APK from
+[Releases](https://github.com/The-Minion-oOo/token-monitor-android/releases/latest).
+Already installed? Use **Settings → App updates**.
+
+### Tailscale setup
+
+1. Install [Tailscale](https://tailscale.com/) on the desktop and phone, and sign
+   both into the same tailnet.
+2. In desktop Token Monitor, open **Settings → Multi-device Sync** and choose
+   **Host hub on this device**. Keep Token Monitor running.
+3. Copy the desktop's Tailscale address (`100.x`) and Hub secret into Android,
+   then tap **Connect**.
+
+### Home Wi-Fi setup
+
+1. Connect the desktop and phone to the same home network. In desktop Token
+   Monitor, enable **Host hub on this device** under **Settings → Multi-device Sync**.
+2. For a home-only connection, enable **Use Wi-Fi as the main Hub address** in
+   Android, enter the desktop's private address and Hub secret, then tap **Connect**.
+3. Already paired through Tailscale? Add a **Home Wi-Fi URL** instead. Tap **Find**,
+   then **Test and save home address** to keep it as an optional fallback.
+
+Allow Android's local-network permission if prompted. The home route is for your
+private network; use Tailscale or an HTTPS Hub when away.
+
+### Internet HTTPS setup
+
+1. Set up a Hub separately: the desktop project's Cloudflare Worker Hub, or a Node
+   Hub behind an HTTPS reverse proxy with a valid certificate.
+2. In Android connection settings, enable **Allow an internet Hub over HTTPS**.
+   This separate permission starts **off**.
+3. Enter the public DNS name, such as `https://hub.example.com`, and Hub secret,
+   then tap **Connect**. A bare name gains HTTPS and defaults to port 443.
+
+The switch does not expose your computer, open a port or deploy a Hub. A Worker
+uses outbound desktop connections; a public reverse proxy deliberately exposes
+its Hub. Use a long random secret: it can also change Hub data. If the phone is
+lost, change that secret on the Hub and every connected desktop.
+
+[Installation and updates](docs/INSTALL.md) · [Pairing and connection options](docs/PAIRING.md)
 
 ## What it shows
 
