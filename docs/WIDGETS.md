@@ -151,8 +151,12 @@ can prevent work until it is opened again.
 
 A run lasts at most 45 seconds, yields to the dashboard and widget Live/Refresh,
 and never opens a stream or shows a notification. Wi-Fi only permits unmetered
-Wi-Fi and fails closed when a VPN's Wi-Fi transport cannot be confirmed. Turning
-it off permits cellular data, subject to the saved Hub route protections.
+Wi-Fi. With Tailscale on, the check follows the network underneath the VPN,
+because a VPN can report itself as metered even over home Wi-Fi; it fails closed
+over cellular or when the Wi-Fi underneath cannot be confirmed. The job itself
+asks Android for any network, so each run applies this check before and during
+its requests. Turning Wi-Fi only off permits cellular data, subject to the saved
+Hub route protections.
 Health, stats and history supply widget content; device details and subscriptions
 are not fetched. Failed runs preserve the saved figures and mark them STALE.
 The saved timestamp is never advanced by failure. A later successful snapshot
@@ -171,8 +175,8 @@ returned after reboot without opening the app; a bounded post-reboot read
 succeeded. The signed r2-to-r4 upgrade retained pairing, connected over home
 Wi-Fi and kept the display settings, with refresh Off and Wi-Fi only on.
 Android estimated about 1.12 mAh of preview app power across the overnight
-capture interval. This is not a direct measurement of incremental battery cost;
-a matching Off baseline remains optional in [#76](https://github.com/The-Minion-oOo/token-monitor-android/issues/76).
+capture interval. This is not a direct measurement of incremental battery cost,
+and I did not measure a matching Off baseline.
 
 The pinned v0.78.0 fixture measures 18,499 response-body bytes per run: health
 487, stats 16,912 and history 1,100. That projects to 0.89 MB/day at 30 minutes
@@ -182,7 +186,7 @@ do not predict the size of a real Hub's session data.
 ### Overnight validation
 
 This checklist supports repeatable measurements. The r4 preview overnight run
-and reboot restoration are recorded above; a matching Off baseline is optional.
+and reboot restoration are recorded above; a matching Off baseline was not measured.
 
 I record the exact APK checksum and build, the chosen interval, network choice,
 start/end times and battery levels. I use a disposable fixture pairing in the

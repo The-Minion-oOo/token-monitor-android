@@ -15,8 +15,8 @@ The pinned Node and Worker Hub contracts passed with synthetic data.
 An overnight preview phone check completed eight natural background runs,
 received 2,088,840 response-body bytes and recorded 8.229 seconds of total job
 time. Android's estimated app power increased by about 1.12 mAh; this includes
-attribution estimates and is not a measured incremental battery cost. The
-matching Off baseline is an optional follow-up in [#76](https://github.com/The-Minion-oOo/token-monitor-android/issues/76).
+attribution estimates and is not a measured incremental battery cost. I did
+not measure a matching Off baseline.
 The persisted hourly Wi-Fi-only job returned after reboot without opening the
 preview app and completed a bounded read. The signed r2-to-r4 production upgrade
 retained pairing, home Wi-Fi connectivity and display settings; refresh remained
@@ -66,8 +66,8 @@ The preview phone completed eight natural overnight runs with 2,088,840 response
 bytes and 8.229 seconds of total job time. Its persisted hourly Wi-Fi-only job
 returned after reboot without opening the app; a bounded read succeeded.
 Android's approximately 1.12 mAh attribution is an estimate, not a direct measure
-of the feature's incremental battery cost. The matching Off baseline remains
-optional in [#76](https://github.com/The-Minion-oOo/token-monitor-android/issues/76).
+of the feature's incremental battery cost. I did not measure a matching Off
+baseline.
 Temporary preview components were removed after testing.
 
 APK SHA-256: `3a7400377c3512020e2bb9f52d8eeacb7dc36566805132ac81d44c30f15e4bf7`.

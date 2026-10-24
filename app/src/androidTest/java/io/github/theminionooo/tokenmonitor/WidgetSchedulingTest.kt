@@ -42,7 +42,8 @@ class WidgetSchedulingTest {
             assertTrue(manager.bindAppWidgetIdIfAllowed(id, ComponentName(context, SwipeWidgetProvider::class.java)))
             WidgetRefreshScheduler.reconcile(context)
             assertEquals(30 * 60_000L, pending()?.intervalMillis)
-            assertEquals(JobInfo.NETWORK_TYPE_UNMETERED, pending()?.networkType)
+            // Wi-Fi only is checked by the run itself, so a VPN that reports metered cannot block it.
+            assertEquals(JobInfo.NETWORK_TYPE_ANY, pending()?.networkType)
             assertTrue(pending()?.isPersisted == true)
             prefs.save(WidgetRefreshSettings(WidgetRefreshInterval.Sixty, false))
             WidgetRefreshScheduler.reconcile(context)

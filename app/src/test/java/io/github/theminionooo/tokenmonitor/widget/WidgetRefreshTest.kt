@@ -3,6 +3,7 @@ package io.github.theminionooo.tokenmonitor.widget
 import io.github.theminionooo.tokenmonitor.data.storage.WidgetRefreshInterval
 import io.github.theminionooo.tokenmonitor.data.storage.WidgetRefreshSettings
 import io.github.theminionooo.tokenmonitor.data.storage.WidgetRefreshRecord
+import io.github.theminionooo.tokenmonitor.data.network.RefreshNetworkFacts
 import io.github.theminionooo.tokenmonitor.data.network.widgetRefreshWifiAllowed
 import org.junit.Assert.*
 import org.junit.Test
@@ -31,13 +32,37 @@ class WidgetRefreshTest {
         assertEquals(WidgetRefreshDecision.Cancel, widgetRefreshDecision(WidgetRefreshInterval.Off, true, true, false, true, true))
     }
 
-    @Test fun `wifi only excludes metered wifi cellular ethernet and uncertain VPN underlays`() {
-        assertTrue(widgetRefreshWifiAllowed(true, false, true))
-        assertFalse(widgetRefreshWifiAllowed(true, false, false))
-        assertFalse(widgetRefreshWifiAllowed(false, true, true))
-        assertFalse(widgetRefreshWifiAllowed(true, true, true))
-        assertFalse(widgetRefreshWifiAllowed(false, false, true))
+    @Test fun `wifi only excludes metered wifi cellular and ethernet without a VPN`() {
+        assertTrue(widgetRefreshWifiAllowed(net(wifi = true), emptyList()))
+        assertFalse(widgetRefreshWifiAllowed(net(wifi = true, unmetered = false), emptyList()))
+        assertFalse(widgetRefreshWifiAllowed(net(cellular = true), emptyList()))
+        assertFalse(widgetRefreshWifiAllowed(net(wifi = true, cellular = true), emptyList()))
+        assertFalse(widgetRefreshWifiAllowed(net(), emptyList()))
     }
+
+    @Test fun `tailscale over unmetered wifi is allowed even when the VPN reports metered`() {
+        val homeWifi = net(wifi = true)
+        assertTrue(widgetRefreshWifiAllowed(net(wifi = true, vpn = true, unmetered = false), listOf(homeWifi)))
+        assertTrue(widgetRefreshWifiAllowed(net(wifi = true, vpn = true), listOf(homeWifi, net(cellular = true, unmetered = false))))
+    }
+
+    @Test fun `tailscale over cellular or metered wifi stays off`() {
+        assertFalse(widgetRefreshWifiAllowed(net(cellular = true, vpn = true), listOf(net(cellular = true, unmetered = false))))
+        assertFalse(widgetRefreshWifiAllowed(net(wifi = true, cellular = true, vpn = true), listOf(net(wifi = true))))
+        assertFalse(widgetRefreshWifiAllowed(net(wifi = true, vpn = true), listOf(net(wifi = true, unmetered = false))))
+        assertFalse(widgetRefreshWifiAllowed(net(wifi = true, vpn = true), emptyList()))
+    }
+
+    @Test fun `android 8 VPN without an underlying transport needs validated unmetered wifi`() {
+        val vpnOnly = net(vpn = true, unmetered = false)
+        assertTrue(widgetRefreshWifiAllowed(vpnOnly, listOf(net(wifi = true), net(cellular = true, unmetered = false))))
+        assertFalse(widgetRefreshWifiAllowed(vpnOnly, listOf(net(wifi = true, validated = false), net(cellular = true, unmetered = false))))
+        assertFalse(widgetRefreshWifiAllowed(vpnOnly, listOf(net(cellular = true, unmetered = false))))
+        assertFalse(widgetRefreshWifiAllowed(vpnOnly, emptyList()))
+    }
+
+    private fun net(wifi: Boolean = false, cellular: Boolean = false, vpn: Boolean = false, unmetered: Boolean = true, validated: Boolean = true) =
+        RefreshNetworkFacts(wifi, cellular, vpn, unmetered, validated)
 
     @Test fun `failed run marks only the retained or older snapshot stale until newer success`() {
         val failed = WidgetRefreshRecord(successAt = 100, failureAt = 200)

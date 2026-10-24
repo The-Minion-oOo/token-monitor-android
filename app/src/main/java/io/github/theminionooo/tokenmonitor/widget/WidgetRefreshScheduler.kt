@@ -44,8 +44,10 @@ internal object WidgetRefreshScheduler {
             return
         }
         val period = settings.interval.minutes * 60_000L
-        // Wi-Fi transport is checked again at each request, including VPN underlay checks.
-        val network = if (settings.wifiOnly) JobInfo.NETWORK_TYPE_UNMETERED else JobInfo.NETWORK_TYPE_ANY
+        // JobScheduler judges the active network, which is the VPN while Tailscale is on, and a VPN can
+        // count as metered even over Wi-Fi. Wi-Fi only is enforced by the run itself, from the network
+        // underneath, before and during each request.
+        val network = JobInfo.NETWORK_TYPE_ANY
         val existing = scheduler.getPendingJob(JOB_ID)
         @Suppress("DEPRECATION") // The network-type API is available on the minimum supported API 26.
         if (existing?.isPeriodic == true && existing.intervalMillis == period &&

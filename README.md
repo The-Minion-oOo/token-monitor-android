@@ -180,8 +180,8 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 | Minimum Android version | Android 8.0 |
 
 R4 adds optional background widget refresh. Checks covered the signed upgrade,
-an overnight preview run and physical reboot restoration. The matching battery
-baseline remains an optional follow-up; test details and limits belong in
+an overnight preview run and physical reboot restoration. A matching battery
+baseline was not measured; test details and limits belong in
 [Validation](docs/VALIDATION.md).
 
 Android-only updates increment the release revision while keeping the verified
