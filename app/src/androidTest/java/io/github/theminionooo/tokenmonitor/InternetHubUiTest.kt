@@ -1,10 +1,13 @@
 package io.github.theminionooo.tokenmonitor
 
 import android.graphics.Bitmap
-import android.os.SystemClock
-import android.view.InputDevice
-import android.view.MotionEvent
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.GeneralClickAction
+import androidx.test.espresso.action.Press
+import androidx.test.espresso.action.Tap
+import androidx.test.espresso.matcher.RootMatchers.isDialog as isDialogWindow
+import androidx.test.espresso.matcher.ViewMatchers.isRoot as isRootView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -109,12 +112,21 @@ class InternetHubUiTest {
     }
 
     private fun captureDialog(name: String) {
-        compose.waitForIdle()
+        waitForDialogFocus()
         val bitmap = compose.onNode(isDialog()).captureToImage().asAndroidBitmap()
         context.openFileOutput("https-dialog-$name.png", 0).use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }
 
+    private fun waitForDialogFocus() {
+        compose.waitUntil(timeoutMillis = 5_000) {
+            compose.onAllNodes(hasText("Cancel") and isFocused()).fetchSemanticsNodes().isNotEmpty()
+        }
+    }
+
     private fun assertPairingUnchanged(initial: HubRepositoryState) {
+        compose.waitUntil(timeoutMillis = 5_000) {
+            compose.onAllNodesWithText(dialogTitle).fetchSemanticsNodes().isEmpty()
+        }
         compose.onNodeWithText(dialogTitle).assertDoesNotExist()
         toggle().assertIsOn()
         compose.runOnIdle {
@@ -164,13 +176,14 @@ class InternetHubUiTest {
         openConnection()
         toggle().performClick()
         compose.onNodeWithText(dialogTitle).assertIsDisplayed()
-        val automation = InstrumentationRegistry.getInstrumentation().uiAutomation
-        val now = SystemClock.uptimeMillis()
-        for (action in listOf(MotionEvent.ACTION_DOWN, MotionEvent.ACTION_UP)) {
-            val event = MotionEvent.obtain(now, SystemClock.uptimeMillis(), action, 1f, context.resources.displayMetrics.heightPixels / 2f, 0)
-            event.source = InputDevice.SOURCE_TOUCHSCREEN
-            try { assertTrue(automation.injectInputEvent(event, true)) } finally { event.recycle() }
-        }
+        waitForDialogFocus()
+        onView(isRootView()).inRoot(isDialogWindow()).perform(GeneralClickAction(Tap.SINGLE, { view ->
+            val origin = IntArray(2)
+            view.getLocationOnScreen(origin)
+            // Stay outside the native dialog window, away from the screen's gesture edge.
+            if (origin[0] > 10) floatArrayOf(origin[0] - 10f, origin[1] + view.height / 2f)
+            else floatArrayOf(origin[0] + view.width / 2f, origin[1] - 10f)
+        }, Press.FINGER))
         compose.waitForIdle()
         assertPairingUnchanged(initial)
     }

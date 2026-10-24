@@ -143,6 +143,10 @@ class DashboardInteractionTest {
                 HomeSessionsModule(HomeSessionInputs(snapshot.month.sessions, snapshot.today.sessions)) { chosen = it }
             } }
         }
+        // Session grouping runs on Dispatchers.Default before the row is laid out.
+        compose.waitUntil(timeoutMillis = 5_000) {
+            compose.onNodeWithText("fix a mixedCase bug").isDisplayed()
+        }
         compose.onNodeWithText("fix a mixedCase bug").assertIsDisplayed()
         compose.onNodeWithText("1 running").assertIsDisplayed()
         compose.onNodeWithText("Context 75% left").assertIsDisplayed()
