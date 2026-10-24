@@ -21,5 +21,9 @@ networking protections and widgets are unchanged.
 
 This small UI change was not phone-tested. I checked the dialog on the emulator
 in light and dark themes, including cancellation, Back, outside taps and confirmed
-revocation. Unit tests, lint, debug assembly and CI must pass before publication.
+revocation, plus an address field with the keyboard open. I passed 294 JVM tests,
+78 interaction tests on each of API 36 and API 37, lint, debug and signed release
+assembly, and 14 tooling tests. All required CI jobs passed on the released main
+commit. I verified the APK package, version, signature, checksum and updater
+manifest, and checked the downloaded release assets.
 [Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md).

@@ -4,16 +4,16 @@
   "packageName": "io.github.theminionooo.tokenmonitor",
   "signingCertificateSha256": "eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c",
   "candidate": {
-    "status": "candidate",
+    "status": "published",
     "tag": "android-v0.78.0-r3",
     "versionName": "v0.78.0",
     "versionCode": 780003
   },
   "published": {
-    "tag": "android-v0.78.0-r2",
+    "tag": "android-v0.78.0-r3",
     "versionName": "v0.78.0",
-    "versionCode": 780002,
-    "sourceCommit": "cc2e4fe566c626bace6d62ed3eaa284a083c1ba1"
+    "versionCode": 780003,
+    "sourceCommit": "21776feb5279a77bdddda7286d5aca33435376aa"
   },
   "requiredChecks": [
     { "workflow": "android.yml", "jobs": ["build"] },
