@@ -175,14 +175,14 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 | | |
 | --- | --- |
-| Current release | [Android v0.78.0 r4](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r4) |
+| Current release | [Android v0.78.0 r5](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r5) |
 | Desktop baseline | [Token Monitor v0.78.0](https://github.com/Javis603/token-monitor/releases/tag/v0.78.0) |
 | Minimum Android version | Android 8.0 |
 
-R4 adds optional background widget refresh. Checks covered the signed upgrade,
-an overnight preview run and physical reboot restoration. A matching battery
-baseline was not measured; test details and limits belong in
-[Validation](docs/VALIDATION.md).
+R5 fixes Wi-Fi-only background refresh while Tailscale is connected; it was not
+phone-tested. R4 added the refresh, with a signed upgrade, an overnight preview
+run and physical reboot restoration checked on my phone. Test details and
+limits belong in [Validation](docs/VALIDATION.md).
 
 Android-only updates increment the release revision while keeping the verified
 desktop version. [Upstream pin](upstream.json) · [Release notes](CHANGELOG.md)

@@ -1,12 +1,12 @@
 # Changelog
 
-## Next release: v0.78.0 r5
+## v0.78.0 r5 — 2026-10-24
 
 - I made **Wi-Fi only** for background widget refresh follow the network under
   Tailscale. Android can treat a VPN as metered even on home Wi-Fi, which could
   stop the job from ever running. The job now asks Android for any network, and
-  each run checks the Wi-Fi underneath before and during its requests. This is
-  not phone-tested yet.
+  each run checks the Wi-Fi underneath before and during its requests. This
+  release was not phone-tested.
 
 ## v0.78.0 r4 — 2026-10-24
 

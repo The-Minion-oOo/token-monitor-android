@@ -53,7 +53,32 @@ the exact `main` commit that gets tagged. None of these checks uses a private
 Hub or a vendor account. [Releasing](RELEASING.md) covers the process and
 [Development](DEVELOPMENT.md) covers running the checks locally.
 
-## Current release: v0.78.0 r4
+## Current release: v0.78.0 r5
+
+I fixed Wi-Fi-only background widget refresh while Tailscale is connected. The
+run now decides from the physical network under the VPN, and the job is
+scheduled for any network. All required checks passed on released source
+`4944b4600029a1a9adec3d7217f9992ce5f3c113`:
+[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40130827580),
+[API 36/37 interaction and optimized API 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40130827597),
+and [Hub contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40130827573).
+Local checks on that commit passed 304 JVM tests (2 skipped), lint, debug and
+signed release builds, and release bundle validation. New unit tests cover
+Wi-Fi, metered Wi-Fi, cellular, Tailscale over Wi-Fi and over cellular, and
+Android 8. This revision was not phone-tested; the Tailscale Wi-Fi-only check
+from [#83](https://github.com/The-Minion-oOo/token-monitor-android/issues/83)
+is still to do on my phone.
+
+The published APK is `token-monitor-android-v0.78.0-r5.apk`, 2,535,547 bytes,
+package `io.github.theminionooo.tokenmonitor`, version code `780005`.
+Its SHA-256 is `6acb35da901df68991e80c4db40118672a22d82613b11c435658bfb32e18402c`;
+the release certificate remains
+`eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
+Draft and anonymous public downloads matched the staged APK, checksum and update
+manifest. [Android v0.78.0 r5](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r5)
+is the Latest release.
+
+## Previous release: v0.78.0 r4
 
 I released optional background widget refresh, starting Off with Wi-Fi only on.
 Required build, API 36/API 37 interaction, optimized API 26 and released-Hub
@@ -74,7 +99,7 @@ APK SHA-256: `3a7400377c3512020e2bb9f52d8eeacb7dc36566805132ac81d44c30f15e4bf7`.
 Package and release signing certificate remain unchanged. I checked the staged
 and published APK, checksum and update manifest together.
 [Android v0.78.0 r4](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r4)
-is the Latest release.
+was the Latest release until r5.
 
 ## Previous release: v0.78.0 r3
 
@@ -177,6 +202,7 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 
 | Release | Date | Desktop baseline | Main checks | Phone check |
 | --- | --- | --- | --- | --- |
+| v0.78.0 r5 | 2026-10-24 | v0.78.0 | Wi-Fi-only refresh follows the network under Tailscale | No: not phone-tested; unit tests cover the network cases |
 | v0.78.0 r4 | 2026-10-24 | v0.78.0 | Optional background widget refresh, bounded persisted job, Wi-Fi/data controls | Yes: signed r2 upgrade; preview overnight refresh and reboot restoration |
 | v0.78.0 r3 | 2026-10-23 | v0.78.0 | Confirmation before disabling a saved internet Hub | No: small UI change; emulator coverage in light/dark themes |
 | v0.78.0 r2 | 2026-10-23 | v0.78.0 | Opt-in internet HTTPS, system TLS trust, Node/Worker contracts | Yes: signed r1 upgrade retained pairing; Tailscale/home fallback and synthetic cellular HTTPS/SSE |

@@ -141,7 +141,8 @@ See [HTTPS pairing](PAIRING.md#optional-internet-hub-over-https).
 I added **Settings → Home-screen widget → Background refresh** in r4. The choices are Off, Every 30 minutes and Every 60 minutes. It starts
 Off for new and existing installations; Wi-Fi only starts on. Android schedules
 the work and may defer it during sleep, so the interval is not an exact timer.
-This feature is available in v0.78.0 r4.
+This feature is available from v0.78.0 r4. In r5, Wi-Fi only also works while
+Tailscale is connected.
 
 One periodic job exists only with a placed widget, a saved pairing and consent.
 Removing the last widget, disconnecting, choosing Off or receiving a rejected
