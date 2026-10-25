@@ -25,10 +25,10 @@ The light/dark settings and recaptured widget comparison are approved.
 
 Every release goes through the same automated gate before I publish it:
 
-- **Unit tests and builds:** 301 JVM tests on the background-refresh branch, run with the generated Hub contract
+- **Unit tests and builds:** 311 JVM tests, run with the generated Hub contract
   supplied and nothing skipped, plus Android lint, the preview debug build and
   the instrumentation APK.
-- **Instrumentation suite:** 84 tests on API 36 and API 37 emulators. A report
+- **Instrumentation suite:** 86 tests on API 36 and API 37 emulators. A report
   check requires every test to be present with no failures, errors or skips.
 - **API 26 smoke check:** the optimized R8 release APK installs, launches and
   resumes on the oldest supported version. This is not full Android 8
@@ -53,29 +53,30 @@ the exact `main` commit that gets tagged. None of these checks uses a private
 Hub or a vendor account. [Releasing](RELEASING.md) covers the process and
 [Development](DEVELOPMENT.md) covers running the checks locally.
 
-## Current release: v0.78.0 r5
+## Current release: v0.79.0 r1
 
-I fixed Wi-Fi-only background widget refresh while Tailscale is connected. The
-run now decides from the physical network under the VPN, and the job is
-scheduled for any network. All required checks passed on released source
-`4944b4600029a1a9adec3d7217f9992ce5f3c113`:
-[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40130827580),
-[API 36/37 interaction and optimized API 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40130827597),
-and [Hub contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40130827573).
-Local checks on that commit passed 304 JVM tests (2 skipped), lint, debug and
-signed release builds, and release bundle validation. New unit tests cover
-Wi-Fi, metered Wi-Fi, cellular, Tailscale over Wi-Fi and over cellular, and
-Android 8. This revision was not phone-tested; the Tailscale Wi-Fi-only check
+I checked desktop v0.79.0 at `a935478d25c66b0ac2e7c9fbb019b5fea40592b7` and
+published Android source `d177975488c8498618d0c5817c4d254244f2aaf1` through
+[PR #89](https://github.com/The-Minion-oOo/token-monitor-android/pull/89).
+All required checks passed on that source:
+[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40218213941),
+[API 36/37 interaction and optimized API 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40218213945),
+and [Node/Worker Hub contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40218213961).
+Downloaded reports confirm 311 JVM tests and 86 interaction tests per emulator,
+with no failures or skips. Local checks passed lint, debug and signed release
+builds, 14 tooling tests and an API 26 install/launch/resume smoke check.
+I inspected the new native tool and quota/balance captures and reviewed the full
+diff. This release was not phone-tested; the r5 Tailscale Wi-Fi-only follow-up
 from [#83](https://github.com/The-Minion-oOo/token-monitor-android/issues/83)
-is still to do on my phone.
+remains unverified on my phone.
 
-The published APK is `token-monitor-android-v0.78.0-r5.apk`, 2,535,547 bytes,
-package `io.github.theminionooo.tokenmonitor`, version code `780005`.
-Its SHA-256 is `6acb35da901df68991e80c4db40118672a22d82613b11c435658bfb32e18402c`;
+The published APK is `token-monitor-android-v0.79.0-r1.apk`, 2,535,550 bytes,
+package `io.github.theminionooo.tokenmonitor`, version code `790001`.
+Its SHA-256 is `6f9692e0eaa937eb3c53f6f862a72f39dd40ca8b10e9ef65b92c1a99c541beb4`;
 the release certificate remains
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
 Draft and anonymous public downloads matched the staged APK, checksum and update
-manifest. [Android v0.78.0 r5](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r5)
+manifest. [Android v0.79.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.79.0-r1)
 is the Latest release.
 
 ## Previous release: v0.78.0 r4
@@ -202,6 +203,7 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 
 | Release | Date | Desktop baseline | Main checks | Phone check |
 | --- | --- | --- | --- | --- |
+| v0.79.0 r1 | 2026-10-25 | v0.79.0 | OmO Native, OpenCode Console quotas/balances, Node/Worker contracts | No: 86-test API 36/37 suites and optimized API 26 smoke |
 | v0.78.0 r5 | 2026-10-24 | v0.78.0 | Wi-Fi-only refresh follows the network under Tailscale | No: not phone-tested; unit tests cover the network cases |
 | v0.78.0 r4 | 2026-10-24 | v0.78.0 | Optional background widget refresh, bounded persisted job, Wi-Fi/data controls | Yes: signed r2 upgrade; preview overnight refresh and reboot restoration |
 | v0.78.0 r3 | 2026-10-23 | v0.78.0 | Confirmation before disabling a saved internet Hub | No: small UI change; emulator coverage in light/dark themes |
@@ -233,6 +235,7 @@ them use package `io.github.theminionooo.tokenmonitor` and the same signing
 certificate, SHA-256
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
 
+- v0.78.0 r5 (`780005`): `6acb35da901df68991e80c4db40118672a22d82613b11c435658bfb32e18402c`
 - v0.77.0 r2 (`770002`): `9652f7e76817e26a5c78348af91de480c607892f8e7755f664be50d841ecbc88`
 - v0.77.0 r1 (`770001`): `cfb3ba4e2d0cd6eb1ead8fb74f1b5ae2f18f87b356d4b097597cb1fcb3facb4c`
 - v0.76.0 r1 (`760001`): `15133c737ddfa758d56b958dc75f556e11e69226c90ff43a5e05106af59e9372`
@@ -312,7 +315,7 @@ Pages widget redraw described above.
   had a median warm cache hydration of 169.9 ms and a median freshness update
   of 264.9 ms. These are local observations, not timing guarantees. Widget
   timings cover off-screen bitmap drawing only.
-- Battery use has not been measured for the published v0.77.0 or v0.78.0 APKs. The short
+- Battery use has not been measured for the published v0.77.0, v0.78.0 or v0.79.0 APKs. The short
   Widget Live comparison above used a local build of the same performance
   changes; it is not a measurement of the published APK.
 - API 26 is a smoke check of install, launch and resume, not full interaction
