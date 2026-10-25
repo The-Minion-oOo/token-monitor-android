@@ -1,9 +1,15 @@
-# Desktop parity for v0.78.0
+# Desktop parity for v0.79.0
 
-The Android adapter targets desktop Token Monitor v0.78.0 using
+The Android adapter targets desktop Token Monitor v0.79.0 using
 versioned fixtures and responses from the pinned released Hub. It mirrors
 the desktop information that the Hub can safely provide while keeping the phone
 read-only and lightweight.
+
+OmO Native has its own label and cyan tool colour, separate from Pi and Oh My
+Pi. OpenCode Console Go quotas and Zen balances use the existing Limits rows,
+including unknown resets and real zero or negative balances. Enable OmO Native
+under Tools on desktop if it is not already collecting. Desktop notch
+navigation, display-mode previews and tray changes stay on desktop.
 
 ZCode titles and tool/workflow subagents use Android's existing session rows.
 Deliberate forks and side chats remain separate, and title sharing stays under

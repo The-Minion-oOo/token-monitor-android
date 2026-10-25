@@ -104,7 +104,7 @@ in a fixture or screenshot.
 JVM tests cover protocol parsing, private-address rules, endpoint failover,
 stream recovery, ordered cache writes, history aggregation, presentation rules,
 and preferences. Versioned Hub fixtures live under
-`app/src/test/resources/protocol/`. The v0.78.0 set covers all five read
+`app/src/test/resources/protocol/`. The v0.79.0 set covers all five read
 endpoints, a complete stream frame, and a freshness-only frame. The v0.69.0
 fixtures retain session relationships and activity, the v0.68.0
 fixtures retain unpriced counts and Dots provenance, and the v0.67.0
@@ -165,6 +165,14 @@ Instrumentation tests use the preview package to exercise navigation, dialogs,
 widgets, storage, and lifecycle behavior. Run them on an API 36 emulator before
 opening a pull request for a UI or lifecycle change. Visual changes also need a
 native screenshot at the affected phone or launcher size.
+
+The v0.79.0 fixtures add OmO Native alongside Pi and Oh My Pi, with reasoning
+already included in output. The released OpenCode collector runs against fake
+Console responses before its output passes through the actual Hub. Cases cover
+Go session, weekly and billing quotas, Zen balances, absent windows and reset
+times, real zero and negative balances, and an independently failing source.
+Native tests check tool selection and rendered quota/balance wording. The full
+instrumentation suites require 86 tests on both API 36 and API 37.
 
 The v0.78.0 fixtures add ZCode parent, child, workflow, fork and side-chat
 sessions with title sharing off, on and revoked. The released-source harness

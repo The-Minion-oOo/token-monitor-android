@@ -8,6 +8,20 @@ import org.junit.Test
 
 /** Responses produced by tools/check-hub-contract.mjs from the exact released desktop source. */
 class ReleasedHubContractTest {
+    @Test fun `released OmO usage and OpenCode Console data remain compatible`() {
+        val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
+        assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())
+        fun stats(name: String) = HubProtocolParser.decodeStats(File(directory!!, "$name.json").readText())
+        val omo = stats("omo-native").periods.getValue("today")
+        assertEquals(180L, omo.clients["senpi"])
+        assertEquals(80L, omo.sessions.single { it.client == "senpi" }.outputTokens)
+        val combined = stats("opencode-console").limits.providers.single().windows
+        assertEquals(listOf(75.0, 60.0, 90.0), combined.filter { it.metric != "credits" }.map { it.remainingPercent })
+        assertEquals(27.86781005, combined.single { it.metric == "credits" }.remaining!!, 0.0)
+        assertEquals(-1.0, stats("opencode-negative").limits.providers.single().windows.single().remaining!!, 0.0)
+        assertEquals(0.0, stats("opencode-zero").limits.providers.single().windows.single().remaining!!, 0.0)
+    }
+
     @Test fun `released ZCode metadata survives transport and honors title consent`() {
         val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
         assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())

@@ -523,6 +523,82 @@ async function isolatedContract(source, output, upstream) {
             assert.ok(!JSON.stringify(result).includes("NEVER_EXPORT"));
             assert.equal(JSON.stringify(result).includes("Plan the sample release"), name === "zcode-titles.json");
         }
+        // Run the released Console collector only with fake GET responses. No account,
+        // browser cookie store, local ledger or provider endpoint is used.
+        const { fetchOpenCodeLimits } = require("./src/shared/providers/opencode/limits.js");
+        const consoleCase = async (name, { go = "full", balance = "2786781005", goStatus = 200, zenStatus = 200 } = {}) => {
+            const calls = [];
+            const provider = await fetchOpenCodeLimits({ opencodeCookie: "__Host-console_session=NEVER_EXPORT_COOKIE" }, {
+                now: () => Date.parse(now), env: {}, opencodeReadGoApiKey: () => "",
+                opencodeCollectGoApi: async () => ({ status: "notConfigured", windows: [] }),
+                fetch: async (url, init) => {
+                    const parsed = new URL(url);
+                    assert.equal(parsed.origin, "https://opencode.ai");
+                    assert.equal(init.method, "GET");
+                    assert.equal(init.redirect, "manual");
+                    assert.equal(init.credentials, "omit");
+                    calls.push(parsed.pathname);
+                    let body, status = 200;
+                    if (parsed.pathname === "/console/api/orgs") {
+                        assert.equal(init.headers["x-org-id"], undefined);
+                        body = [{ id: "org_SYNTHETIC" }];
+                    } else {
+                        assert.equal(init.headers["x-org-id"], "org_SYNTHETIC");
+                        if (parsed.pathname === "/console/api/go/status") {
+                            status = goStatus;
+                            const meters = { fiveHour: { usedMicroCents: "25", limitMicroCents: "100" } };
+                            if (go === "full") Object.assign(meters, { week: { usedMicroCents: "40", limitMicroCents: "100", resetsAt: "2026-11-01T00:00:00Z" },
+                                month: { usedMicroCents: "10", limitMicroCents: "100" } });
+                            body = go === "none" ? { access: null } : { access: { endsAt: "2026-11-25T00:00:00Z", meters } };
+                        } else {
+                            assert.equal(parsed.pathname, "/console/api/billing/status");
+                            status = zenStatus;
+                            body = { billingMode: "prepaid", mode: "pay-as-you-go", balanceMicroCents: balance, availableMicroCents: "9999999999" };
+                        }
+                    }
+                    return { status, text: async () => JSON.stringify(body) };
+                },
+            });
+            assert.equal(calls.filter(path => path === "/console/api/orgs").length, 1);
+            const consoleHub = createHub({ port: 0, host: "127.0.0.1", secret, dataFile: join(source, `synthetic-${name}.json`) });
+            consoleHub.ingest({ ...device, limits: { updatedAt: now, providers: [provider] } });
+            responses[`${name}.json`] = consoleHub.getStats();
+            assert.ok(!JSON.stringify(responses[`${name}.json`]).includes("NEVER_EXPORT"));
+            return responses[`${name}.json`].limits.providers[0];
+        };
+        const combined = await consoleCase("opencode-console");
+        assert.deepEqual(combined.windows.filter(window => window.metric !== "credits").map(window => window.remainingPercent), [75, 60, 90]);
+        assert.equal(combined.windows.find(window => window.metric === "credits").remaining, 27.86781005);
+        for (const [name, balance] of [["zero", "0"], ["negative", "-100000000"]]) {
+            const account = await consoleCase(`opencode-${name}`, { go: "none", balance });
+            assert.equal(account.windows.length, 1);
+            assert.equal(account.windows[0].remaining, Number(balance) / 1e8);
+            assert.equal(account.windows[0].showMeter, false);
+        }
+        const missing = await consoleCase("opencode-missing", { go: "session" });
+        assert.equal(missing.windows.filter(window => window.metric !== "credits").length, 1);
+        assert.equal(missing.windows[0].resetsAt, null);
+        const healthyZen = await consoleCase("opencode-go-unavailable", { goStatus: 403 });
+        assert.equal(healthyZen.windows.length, 1);
+        assert.equal(healthyZen.windows[0].metric, "credits");
+        const healthyGo = await consoleCase("opencode-zen-unauthorized", { zenStatus: 401 });
+        assert.equal(healthyGo.windows.length, 3);
+        assert.ok(healthyGo.windows.every(window => window.metric !== "credits"));
+
+        const omo = extractUsageFromTokscale({ entries: [
+            { client: "Senpi (OmO Native)", model: "claude-sonnet-4-5", sessionId: "sample-omo", input: 100, output: 80, reasoning: 30 },
+            { client: "pi", model: "gpt-5", sessionId: "sample-pi", input: 100, output: 20 },
+            { client: "omp", model: "gpt-5", sessionId: "sample-omp", input: 100, output: 40 },
+        ] });
+        assert.equal(omo.clients.senpi, 180, "OmO reasoning is already included in output");
+        assert.equal(omo.sessions["senpi:sample-omo"].outputTokens, 80);
+        const omoHub = createHub({ port: 0, host: "127.0.0.1", secret, dataFile: join(source, "synthetic-omo.json") });
+        omoHub.ingest({ ...device, trackedClients: ["senpi", "pi", "omp"],
+            history: { daily: [{ date: day, tokens: omo.totalTokens, cost: omo.costUsd,
+                perClient: Object.fromEntries(Object.entries(omo.clients).map(([client, tokens]) => [client, { tokens }])) }], monthly: [] },
+            periods: { today: omo, month: omo, allTime: omo } });
+        responses["omo-native.json"] = omoHub.getStats();
+        assert.equal(responses["omo-native.json"].periods.today.clients.senpi, 180);
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) await writeFile(join(output, name), `${JSON.stringify(value, null, 2)}\n`);
         console.log(`Actual ${upstream.tag} Hub passed authenticated reads, snapshot, freshness and changed-stat checks. Synthetic responses: ${output}`);

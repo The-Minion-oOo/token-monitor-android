@@ -1,0 +1,21 @@
+{
+  "type": "freshness",
+  "reason": "ingest",
+  "stats": {
+    "updatedAt": "2026-10-25T17:27:23.842Z",
+    "staleAfterMs": 600000,
+    "limits": {
+      "updatedAt": "2026-10-25T17:27:23.842Z"
+    },
+    "devices": [
+      {
+        "deviceId": "synthetic-worker-desktop",
+        "updatedAt": "2026-10-25T17:27:24.707Z",
+        "receivedAt": "2026-10-25T17:27:23.731Z",
+        "ageMs": 111,
+        "stale": false
+      }
+    ]
+  },
+  "at": "2026-10-25T17:27:23.843Z"
+}
