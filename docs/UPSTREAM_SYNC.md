@@ -12,9 +12,9 @@ zero and negative balances, and failures isolated to one Console source.
 Notch navigation, desktop display modes and tray changes stay on desktop.
 
 The latest published release is
-[`android-v0.78.0-r5`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r5),
-recorded with its source commit in `release.json`, while v0.79.0 r1 is a candidate.
-The candidate retains opt-in HTTPS, optional background widget refresh and the
+[`android-v0.79.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.79.0-r1),
+recorded with its source commit in `release.json`.
+It retains opt-in HTTPS, optional background widget refresh and the
 r5 physical-network check underneath Tailscale. Earlier phone evidence applies
 only to the builds named in [Validation](VALIDATION.md).
 

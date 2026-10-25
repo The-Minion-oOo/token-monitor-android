@@ -14,7 +14,7 @@
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/github/actions/workflow/status/The-Minion-oOo/token-monitor-android/android.yml?branch=main&style=flat-square&logo=githubactions&logoColor=10221c&label=Android%20checks"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.78.0" src="https://img.shields.io/badge/Desktop-v0.78.0-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.79.0" src="https://img.shields.io/badge/Desktop-v0.79.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/releases"><img alt="Total GitHub release asset downloads" src="https://img.shields.io/github/downloads/The-Minion-oOo/token-monitor-android/total?label=Downloads&style=flat-square&color=73bdf5"></a>
@@ -175,14 +175,15 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 | | |
 | --- | --- |
-| Current release | [Android v0.78.0 r5](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r5) |
-| Desktop baseline | [Token Monitor v0.78.0](https://github.com/Javis603/token-monitor/releases/tag/v0.78.0) |
+| Current release | [Android v0.79.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.79.0-r1) |
+| Desktop baseline | [Token Monitor v0.79.0](https://github.com/Javis603/token-monitor/releases/tag/v0.79.0) |
 | Minimum Android version | Android 8.0 |
 
-R5 fixes Wi-Fi-only background refresh while Tailscale is connected; it was not
-phone-tested. R4 added the refresh, with a signed upgrade, an overnight preview
-run and physical reboot restoration checked on my phone. Test details and
-limits belong in [Validation](docs/VALIDATION.md).
+Android v0.79.0 adds OmO Native's name and tool colour and supports the desktop's updated
+OpenCode Go quotas and Zen balances. Optional HTTPS, background widget refresh
+and the r5 Tailscale Wi-Fi-only fix are retained. I haven't phone-tested this
+release; earlier phone and battery observations apply only to the builds named
+in [Validation](docs/VALIDATION.md).
 
 Android-only updates increment the release revision while keeping the verified
 desktop version. [Upstream pin](upstream.json) · [Release notes](CHANGELOG.md)

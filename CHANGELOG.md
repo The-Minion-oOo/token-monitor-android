@@ -1,6 +1,6 @@
 # Changelog
 
-## Next release — v0.79.0 r1
+## v0.79.0 r1 — 2026-10-25
 
 - I added the OmO Native label and cyan tool colour, separate from Pi and Oh My Pi.
 - Checked desktop v0.79.0 OpenCode Console quotas and Zen balances, including
