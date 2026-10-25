@@ -48,6 +48,7 @@ internal fun vendorOf(name: String): String? {
     if (key == "openrouter" || key.startsWith("openrouter/")) return "openrouter"
     if (key == "zed" || key.startsWith("zed-")) return "zed"
     if (key == "opencode") return "opencode"
+    if (key == "senpi" || key == "omo native") return "senpi"
     return modelVendorRules.firstOrNull { (pattern, _) -> pattern.containsMatchIn(key) }?.second
 }
 
@@ -72,6 +73,7 @@ internal fun originalToolColor(name: String, fallback: Color): Color = when (ven
     "stepfun" -> fallback
     "openrouter" -> Color(0xFF6566F1)
     "zed" -> Color(0xFF4173E7)
+    "senpi" -> Color(0xFF00D4FF)
     else -> fallback
 }
 

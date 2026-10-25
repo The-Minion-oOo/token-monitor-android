@@ -1,5 +1,14 @@
 # Changelog
 
+## Next release — v0.79.0 r1
+
+- I added the OmO Native label and cyan tool colour, separate from Pi and Oh My Pi.
+- Checked desktop v0.79.0 OpenCode Console quotas and Zen balances, including
+  unknown resets, missing windows, real zero and negative balances, and partial
+  source failures. Android continues to read these values from the Hub.
+- Retained optional HTTPS, background widget refresh and the r5 Tailscale
+  Wi-Fi-only fix. Widget layouts and connection ownership are unchanged.
+
 ## v0.78.0 r5 — 2026-10-24
 
 - I made **Wi-Fi only** for background widget refresh follow the network under

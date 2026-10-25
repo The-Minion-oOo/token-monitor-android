@@ -2,22 +2,21 @@
 
 ## Version rule
 
-Android v0.78.0 r3 targets desktop tag `v0.78.0`, peeled commit
-`d52e0b9cf970a03a30a5f5a1e9139693bb211cd8`, in Gradle and `upstream.json`.
-I reviewed the changes since v0.77.0. ZCode's saved titles and tool/workflow
-parent links pass through the existing parser and session grouping. Forks and
-side chats keep separate rows. Released-source checks cover title sharing off,
-on and revoked, without sending conversation bodies. Desktop glass, tooltip
-and CLI-probe changes remain desktop internals. Android keeps the v0.77.0 r2
-performance improvements, five-second complete-update limit, widgets, animations,
-GET endpoints and retry policy. Title-sharing controls remain on desktop.
+Android v0.79.0 r1 targets desktop tag `v0.79.0`, peeled commit
+`a935478d25c66b0ac2e7c9fbb019b5fea40592b7`, in Gradle and `upstream.json`.
+I reviewed the changes since v0.78.0. OmO Native (`senpi`) has its own label and
+cyan tool colour, separate from Pi and Oh My Pi. Its reported output already
+includes reasoning. OpenCode Console Go quotas and Zen balances pass through
+the existing parser; released-source checks cover missing windows and resets,
+zero and negative balances, and failures isolated to one Console source.
+Notch navigation, desktop display modes and tray changes stay on desktop.
 
 The latest published release is
-[`android-v0.78.0-r3`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r3),
-recorded with its source commit in `release.json`. This Android-only UI revision
-confirms disabling a saved internet Hub. I checked it on emulators, not my phone.
-The earlier r2 release added internet HTTPS and has separate phone evidence for
-cellular live updates, signed upgrade retention, Tailscale and home fallback.
+[`android-v0.78.0-r5`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r5),
+recorded with its source commit in `release.json`, while v0.79.0 r1 is a candidate.
+The candidate retains opt-in HTTPS, optional background widget refresh and the
+r5 physical-network check underneath Tailscale. Earlier phone evidence applies
+only to the builds named in [Validation](VALIDATION.md).
 
 An Android-only fix increments `versionCode` and the GitHub release revision,
 for example `android-vX.Y.Z-rN`, without changing the visible compatibility

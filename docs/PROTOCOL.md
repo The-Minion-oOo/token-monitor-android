@@ -4,9 +4,17 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.78.0**, released 2026-10-23.
+The verified baseline is upstream Token Monitor **v0.79.0**, released 2026-10-25.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
+
+The v0.79.0 fixtures include OmO Native (`senpi`) independently of Pi and Oh My
+Pi. Reasoning is already included in its output count. OpenCode Console fixtures
+come from the released collector through the Hub and retain Go quota windows
+separately from the Zen USD balance. Missing windows stay absent, missing reset
+times stay unknown, and a real zero or negative balance stays numeric. A failed
+Go or Zen request does not discard the healthy source. Android reads the Hub;
+it never receives the Console cookie or contacts the Console itself.
 
 The current Node Hub binds to loopback when no secret is configured. A secret is
 therefore required before the Hub can bind to a Tailscale or LAN address. The
