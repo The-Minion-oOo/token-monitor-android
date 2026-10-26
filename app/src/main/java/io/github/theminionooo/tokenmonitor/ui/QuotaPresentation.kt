@@ -30,6 +30,13 @@ internal fun balanceMeterPercent(provider: String, window: LimitWindow): Double?
 /** A window's percent left, whether the Hub reports it directly or as the complement of percent used. */
 internal fun quotaPercentLeft(window: LimitWindow): Int? = quotaPercentLeft(quotaRemainingPercent(window), 100.0)
 
+/** Spend and Ollama credit rows show money; their meters keep the reported ratio. */
+internal fun limitReportedAmount(provider: String, window: LimitWindow): Double? = when {
+    window.metric == "spend" -> window.used
+    provider == "ollama" && window.metric == "credits" -> window.remaining
+    else -> null
+}
+
 internal fun prioritizeAvailableLimits(providers: List<LimitAccount>): List<LimitAccount> = providers.withIndex()
     .sortedWith(compareBy<IndexedValue<LimitAccount>> { it.value.windows.isEmpty() }
         .thenBy { account -> account.value.windows.mapNotNull(::quotaRemainingPercent).minOrNull() ?: 101.0 }

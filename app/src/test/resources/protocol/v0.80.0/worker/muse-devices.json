@@ -1,0 +1,111 @@
+{
+  "limits": {
+    "updatedAt": "2026-10-26T22:09:02.849Z",
+    "providers": [
+      {
+        "provider": "muse",
+        "accountKey": "",
+        "accountLabel": "",
+        "planLabel": "Muse Code High Usage",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "cli",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-26T22:09:01.321Z",
+        "windows": [
+          {
+            "kind": "session",
+            "label": "Session",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 25,
+            "remainingPercent": 75,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          },
+          {
+            "kind": "weekly",
+            "boundaryKind": "reset",
+            "label": "Weekly",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 80,
+            "remainingPercent": 20,
+            "resetsAt": "2026-11-02T00:00:00.000Z",
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-muse-devices-0",
+        "stale": false
+      },
+      {
+        "provider": "muse",
+        "accountKey": "",
+        "accountLabel": "",
+        "planLabel": "Muse Code High Usage",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "cli",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-26T22:09:01.321Z",
+        "windows": [
+          {
+            "kind": "session",
+            "label": "Session",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 25,
+            "remainingPercent": 75,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          },
+          {
+            "kind": "weekly",
+            "boundaryKind": "reset",
+            "label": "Weekly",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 80,
+            "remainingPercent": 20,
+            "resetsAt": "2026-11-02T00:00:00.000Z",
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-muse-devices-1",
+        "stale": false
+      }
+    ]
+  }
+}

@@ -252,8 +252,8 @@ internal fun <T> uniqueKeys(items: List<T>, key: (T) -> String): List<String> {
     }
 }
 
-/** Products from one MiMo account are distinct rows even when their names match. */
+/** MiMo products and device-local Muse observations keep distinct row state. */
 internal fun limitAccountIdentity(account: io.github.theminionooo.tokenmonitor.domain.LimitAccount): String =
     account.provider + ":" + account.productLabel + ":" + account.accountKey.ifBlank {
         listOf(account.accountName, account.accountEmail, account.productLabel).joinToString(":")
-    }
+    } + if (account.provider == "muse") ":device:${account.sourceDeviceId}" else ""

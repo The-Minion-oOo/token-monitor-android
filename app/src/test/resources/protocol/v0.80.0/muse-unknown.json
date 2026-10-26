@@ -1,0 +1,27 @@
+{
+  "limits": {
+    "updatedAt": "2026-10-26T22:09:01.955Z",
+    "providers": [
+      {
+        "provider": "muse",
+        "accountKey": "",
+        "accountLabel": "",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "unavailable",
+        "source": "cli",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-26T22:09:01.321Z",
+        "windows": [],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-muse-unknown-0",
+        "stale": false
+      }
+    ]
+  }
+}

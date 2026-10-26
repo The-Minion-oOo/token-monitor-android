@@ -1,0 +1,43 @@
+{
+  "limits": {
+    "updatedAt": "2026-10-26T22:09:01.974Z",
+    "providers": [
+      {
+        "provider": "ollama",
+        "accountKey": "sha256:74f1559067accf8609466ba777f56c9fe0817b935de5ca9a9aad15a2ae88d48b",
+        "accountLabel": "pro",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "sample@example.com",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "api",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-26T22:09:01.321Z",
+        "windows": [
+          {
+            "kind": "session",
+            "label": "",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 100,
+            "remainingPercent": 0,
+            "resetsAt": null,
+            "windowMinutes": 300,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-ollama-legacy-0",
+        "stale": false
+      }
+    ]
+  }
+}

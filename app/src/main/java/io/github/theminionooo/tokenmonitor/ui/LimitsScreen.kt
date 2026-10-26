@@ -164,7 +164,8 @@ internal fun LimitAccountRow(account: LimitAccount, displayOptions: DisplayOptio
                             val usedPercent = window.usedPercent ?: window.remainingPercent?.let { 100.0 - it }
                             Row {
                                 Text(windowTitle(window, account.windows), color = Muted, style = MaterialTheme.typography.labelSmall, modifier = Modifier.weight(1f), maxLines = 1)
-                                val display = (if (displayOptions.limitBarMetric == LimitBarMetric.Remaining) {
+                                val amount = limitReportedAmount(account.provider, window)
+                                val display = amount?.let { formatWindowAmount(it, window.currency) } ?: (if (displayOptions.limitBarMetric == LimitBarMetric.Remaining) {
                                     quotaPercentLeft(window)?.let { appText(R.string.ui_1_s_left_e96f9, "%1\$s%% left", it) }
                                 } else {
                                     usedPercent?.let { appText(R.string.ui_1_s_used_f116e, "%1\$s used", formatPercent(it)) }

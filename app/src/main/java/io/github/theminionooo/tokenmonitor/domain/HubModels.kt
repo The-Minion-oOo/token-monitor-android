@@ -145,6 +145,7 @@ data class LimitWindow(
     val detail: String,
     val showMeter: Boolean?,
     val boundaryKind: String = "",
+    val used: Double? = null,
 )
 
 data class LimitAccount(

@@ -12,9 +12,17 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.79.0**, released 2026-10-25.
+The verified baseline is upstream Token Monitor **v0.80.0**, released 2026-10-26.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
+
+Desktop v0.80.0 adds Muse Code session/weekly quotas and device-scoped observations,
+Ollama API/Cookie credits and multiple Claude Web accounts alongside automatic
+Claude Code readings. The parser keeps optional window `used` amounts for
+reported spend and Ollama's legacy plan label. Included credit meters retain
+their reported ratio; purchased balances and spend with `showMeter: false`
+do not acquire an invented percentage. Zero and negative purchased balances
+remain distinct from missing data. Credentials and account management stay on desktop.
 
 The v0.79.0 fixtures include OmO Native (`senpi`) independently of Pi and Oh My
 Pi. Reasoning is already included in its output count. OpenCode Console fixtures

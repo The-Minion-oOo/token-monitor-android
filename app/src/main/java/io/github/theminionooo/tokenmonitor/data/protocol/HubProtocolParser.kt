@@ -34,7 +34,7 @@ import kotlinx.serialization.json.longOrNull
  * Android client renders and intentionally ignores unknown fields.
  */
 object HubProtocolParser {
-    const val SUPPORTED_UPSTREAM_VERSION = "v0.79.0"
+    const val SUPPORTED_UPSTREAM_VERSION = "v0.80.0"
 
     private val LIVE_ACTIVITY_STATES = setOf("running", "waiting", "idle", "unknown")
 
@@ -282,8 +282,8 @@ object HubProtocolParser {
         accountName = string("accountName"),
         accountEmail = string("accountEmail").ifBlank { string("email") },
         plan = string("plan").ifBlank { string("planLabel") }.ifBlank {
-            // MiniMax names its billing type here (Token Plan or Pay-as-you-go); the desktop shows it as the plan.
-            if (string("provider") in setOf("typesafe", "stepfun", "minimax")) string("accountLabel") else ""
+            // These providers keep the legacy billing/plan label here, including Ollama's API-key lane.
+            if (string("provider") in setOf("typesafe", "stepfun", "minimax", "ollama")) string("accountLabel") else ""
         },
         status = string("status"),
         sourceDeviceId = string("sourceDeviceId"),
@@ -325,6 +325,7 @@ object HubProtocolParser {
     )
 
     private fun JsonObject.toLimitWindowDto() = HubLimitWindowDto(
+        used = double("used")?.takeIf { it.isFinite() && it >= 0 },
         kind = string("kind"),
         label = string("label"),
         usedPercent = double("usedPercent"),
@@ -553,6 +554,7 @@ object HubProtocolParser {
     )
 
     private fun HubLimitWindowDto.toDomain() = LimitWindow(
+        used = used,
         kind = kind,
         label = label,
         usedPercent = usedPercent,
