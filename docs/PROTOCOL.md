@@ -1,6 +1,6 @@
 # Hub protocol compatibility
 
-The v0.79.0 r2 candidate additionally retains optional `resetCredits` (including
+The v0.79.0 r2 release additionally retains optional `resetCredits` (including
 expiry/grants), `usageSummary`, period `modelThroughput`, and subscription
 `kind`, `intervalCount`, `binding`, `topUps`, renewal/end dates and notes. Missing
 optional blocks keep older Hubs compatible. Top-up payments and recurring

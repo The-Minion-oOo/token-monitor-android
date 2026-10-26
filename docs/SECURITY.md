@@ -1,6 +1,6 @@
 # Security and privacy
 
-## Optional display features in the r2 candidate
+## Optional display features in the r2 release
 
 Automatic currency conversion contacts the same public currency services as
 desktop: jsDelivr's `@fawazahmed0/currency-api` feed, with the project's

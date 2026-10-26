@@ -5,58 +5,42 @@ do not cover. I report emulator and CI results as exactly that, and I never
 describe them as results from a physical phone. Phone evidence applies only to
 the build it names.
 
-## Current candidate: v0.79.0 r2
+## Current release: v0.79.0 r2
 
-The candidate targets the same released desktop v0.79.0 pin as r1 and uses
-version code `790002`. Local checks passed **330 JVM tests**, with generated
-released-Hub responses supplied and no skips; lint, preview debug and test APK
-assembly; **95 interaction tests on each of API 36 and API 37**, with no failures,
-errors or skips; 14 Node tooling tests; documentation/release metadata and
-twelve-language resource checks.
+I published source `fc1f582ccf03e3dae962d48eae64a3007863e7af` from
+[PR #95](https://github.com/The-Minion-oOo/token-monitor-android/pull/95), targeting
+desktop v0.79.0 at `a935478d25c66b0ac2e7c9fbb019b5fea40592b7`.
+All required checks passed on that exact main commit:
+[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40392560178),
+[API 36/37 interaction and optimized API 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40392560181),
+and [released Node/Worker contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40392560272).
+The first main API 26 attempt timed out during emulator installation, before app
+launch. Another attempt passed install/launch/resume but hung during emulator
+shutdown until the job timeout. The complete matrix passed on retry without a
+source change.
 
-The pinned Node and Worker contracts passed locally with synthetic data. The
-Node check additionally reads actual normalized payment, reset-credit, provider
-summary and model-throughput responses and feeds them to Android's parser.
-The R8 optimized candidate installed, launched and resumed on API 26 using a
-disposable emulator signing key. It is not a production-signed release bundle.
+Reports confirm **330 JVM tests** with no failures or skips and **95 interaction
+tests on each of API 36 and API 37**, with no failures, errors or skips. Nine
+focused feature/language cases also passed locally on API 26/36/37. Synthetic
+captures exercise Home and all four Pages renders across twelve languages,
+including responsive-widget labels inflated by a launcher in another language.
+Lint, debug/test and signed R8 builds, 14 tooling tests, language resources,
+documentation and release metadata checks passed. I reviewed the full diff.
 
-The new interaction cases cover payment/privacy details, quota grants, local
-pin/restore, manual currency, diagnostic preview/redaction, matched live rates,
-language switching/recreation and consistent visibility in both widgets and the
-Live notification. Synthetic captures exercise Home and all four Pages widget
-renders across all twelve languages. Native-speaker wording review and physical
-launcher/battery behaviour are not established by these tests.
+The published APK is `token-monitor-android-v0.79.0-r2.apk`, **3,347,144 bytes**,
+package `io.github.theminionooo.tokenmonitor`, version code **790002**.
+Its SHA-256 is `e67e63167f622f49c38ace5c821df655279431671b64b2a078e417d2540170be` and the release certificate remains
+`eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
+Draft and anonymous public downloads matched the staged APK, checksum and update
+manifest. [Android v0.79.0 r2](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.79.0-r2) is the Latest release.
 
-After final wording and test-lifecycle cleanup, all nine focused parity/language
-cases passed again on API 26, 36 and 37. These include applying the responsive
-widget into a launcher context with a different language. The API 26 check adds
-legacy language-picker coverage; it is not the full 95-test suite on Android 8.
-
-There is no physical-phone result for r2. The follow-up in
-[#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94) is
-nonblocking once the automated/emulator gates pass. It covers the signed upgrade,
-pairing/settings retention, fonts/wrapping, widget/Live lifecycle and comparable
-CPU/battery checks. The published download remains r1. Required CI on the reviewed
-main commit and production signing/bundle checks still apply before publication;
-see [Releasing](RELEASING.md).
+This release was not phone-tested. Upgrade/pairing retention, physical launcher
+behaviour, Live lifecycle and comparable CPU/battery checks remain in
+[#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94), a
+nonblocking follow-up. Native-speaker wording review is not claimed. Earlier
+phone evidence applies only to its named builds.
 
 ## How each release is checked
-
-The r4 background-refresh release passed the required CI and local checks:
-301 JVM tests, lint, debug assembly and 14 tooling tests; 84-test emulator suites
-on API 36 and API 37, followed by 21 focused widget/dialog regressions on each.
-The pinned Node and Worker Hub contracts passed with synthetic data.
-
-An overnight preview phone check completed eight natural background runs,
-received 2,088,840 response-body bytes and recorded 8.229 seconds of total job
-time. Android's estimated app power increased by about 1.12 mAh; this includes
-attribution estimates and is not a measured incremental battery cost. I did
-not measure a matching Off baseline.
-The persisted hourly Wi-Fi-only job returned after reboot without opening the
-preview app and completed a bounded read. The signed r2-to-r4 production upgrade
-retained pairing, home Wi-Fi connectivity and display settings; refresh remained
-Off and Wi-Fi only on. The temporary preview app/widget were removed afterward.
-The light/dark settings and recaptured widget comparison are approved.
 
 Every release goes through the same automated gate before I publish it:
 
@@ -88,33 +72,7 @@ the exact `main` commit that gets tagged. None of these checks uses a private
 Hub or a vendor account. [Releasing](RELEASING.md) covers the process and
 [Development](DEVELOPMENT.md) covers running the checks locally.
 
-## Current release: v0.79.0 r1
-
-I checked desktop v0.79.0 at `a935478d25c66b0ac2e7c9fbb019b5fea40592b7` and
-published Android source `d177975488c8498618d0c5817c4d254244f2aaf1` through
-[PR #89](https://github.com/The-Minion-oOo/token-monitor-android/pull/89).
-All required checks passed on that source:
-[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40218213941),
-[API 36/37 interaction and optimized API 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40218213945),
-and [Node/Worker Hub contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40218213961).
-Downloaded reports confirm 311 JVM tests and 86 interaction tests per emulator,
-with no failures or skips. Local checks passed lint, debug and signed release
-builds, 14 tooling tests and an API 26 install/launch/resume smoke check.
-I inspected the new native tool and quota/balance captures and reviewed the full
-diff. This release was not phone-tested; the r5 Tailscale Wi-Fi-only follow-up
-from [#83](https://github.com/The-Minion-oOo/token-monitor-android/issues/83)
-remains unverified on my phone.
-
-The published APK is `token-monitor-android-v0.79.0-r1.apk`, 2,535,550 bytes,
-package `io.github.theminionooo.tokenmonitor`, version code `790001`.
-Its SHA-256 is `6f9692e0eaa937eb3c53f6f862a72f39dd40ca8b10e9ef65b92c1a99c541beb4`;
-the release certificate remains
-`eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
-Draft and anonymous public downloads matched the staged APK, checksum and update
-manifest. [Android v0.79.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.79.0-r1)
-is the Latest release.
-
-## Previous release: v0.78.0 r4
+## Earlier release: v0.78.0 r4
 
 I released optional background widget refresh, starting Off with Wi-Fi only on.
 Required build, API 36/API 37 interaction, optimized API 26 and released-Hub
@@ -137,7 +95,7 @@ and published APK, checksum and update manifest together.
 [Android v0.78.0 r4](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r4)
 was the Latest release until r5.
 
-## Previous release: v0.78.0 r3
+## Earlier release: v0.78.0 r3
 
 I added a default-Cancel confirmation before disabling a saved internet Hub.
 Cancel, Back and outside taps leave pairing unchanged; private main routes and
@@ -161,9 +119,9 @@ the release certificate remains
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
 Draft and anonymous public downloads matched the staged APK, checksum and update
 manifest. [Android v0.78.0 r3](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r3)
-is the Latest release.
+was the Latest release until r4.
 
-## Previous release: v0.78.0 r2
+## Earlier release: v0.78.0 r2
 
 The optional internet HTTPS route starts off. I checked the pinned desktop
 v0.78.0 Node and Worker Hubs with synthetic data. All required checks passed on
@@ -191,7 +149,7 @@ Draft and anonymous public downloads matched the staged APK, checksum and update
 manifest. [Android v0.78.0 r2](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.78.0-r2)
 was published before r3.
 
-## Previous release: v0.78.0 r1
+## Earlier release: v0.78.0 r1
 
 I checked desktop tag `v0.78.0`, commit
 `d52e0b9cf970a03a30a5f5a1e9139693bb211cd8`, including the released ZCode
@@ -238,6 +196,7 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 
 | Release | Date | Desktop baseline | Main checks | Phone check |
 | --- | --- | --- | --- | --- |
+| v0.79.0 r2 | 2026-10-26 | v0.79.0 | Payments, provider details, local display controls, currency, diagnostics, live rates and 12 languages; 330 JVM / 95 tests per API 36/37; optimized API 26 | Not phone-tested; nonblocking #94 |
 | v0.79.0 r1 | 2026-10-25 | v0.79.0 | OmO Native, OpenCode Console quotas/balances, Node/Worker contracts | No: 86-test API 36/37 suites and optimized API 26 smoke |
 | v0.78.0 r5 | 2026-10-24 | v0.78.0 | Wi-Fi-only refresh follows the network under Tailscale | No: not phone-tested; unit tests cover the network cases |
 | v0.78.0 r4 | 2026-10-24 | v0.78.0 | Optional background widget refresh, bounded persisted job, Wi-Fi/data controls | Yes: signed r2 upgrade; preview overnight refresh and reboot restoration |
