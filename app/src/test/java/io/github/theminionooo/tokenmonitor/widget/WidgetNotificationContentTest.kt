@@ -14,6 +14,13 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class WidgetNotificationContentTest {
+    @Test fun `saved display currency also converts the Live notification`() {
+        val snapshot = HubSnapshot(stats = HubStats(periods = mapOf("today" to UsagePeriod(totalTokens = 42, costUsd = 2.0))))
+        val value = widgetNotificationContent(WidgetSession(snapshot = snapshot), false,
+            currency = io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency("INR", 80.0))
+        assertTrue(value.headline.contains("160"))
+        assertFalse(value.headline.contains("$2.00"))
+    }
     @Test
     fun `fetch timestamp alone does not repost the notification`() {
         val snapshot = HubSnapshot(

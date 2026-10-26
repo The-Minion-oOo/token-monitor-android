@@ -101,13 +101,13 @@ internal data class QuotaRow(val provider: String, val window: LimitWindow, val 
 internal fun remainingPercent(window: LimitWindow): Double? =
     io.github.theminionooo.tokenmonitor.ui.quotaPercentLeft(window)?.toDouble()
 
-internal fun quotaRows(snapshot: HubSnapshot): List<QuotaRow> = snapshot.stats.limits.providers.mapNotNull { account ->
+internal fun quotaRows(snapshot: HubSnapshot, options: io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions = io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions()): List<QuotaRow> = io.github.theminionooo.tokenmonitor.data.storage.visibleLimitAccounts(snapshot.stats.limits.providers, options).mapNotNull { account ->
     account.windows.mapNotNull { window -> remainingPercent(window)?.let { QuotaRow(account.provider, window, it, account.windows) } }
         .minByOrNull { it.remainingPercent }
 }.distinctBy { it.provider }.take(2)
 
 /** Up to two providers, each with its two tightest windows, for the detailed layout. */
-internal fun quotaBlocks(snapshot: HubSnapshot): List<Pair<LimitAccount, List<LimitWindow>>> = snapshot.stats.limits.providers
+internal fun quotaBlocks(snapshot: HubSnapshot, options: io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions = io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions()): List<Pair<LimitAccount, List<LimitWindow>>> = io.github.theminionooo.tokenmonitor.data.storage.visibleLimitAccounts(snapshot.stats.limits.providers, options)
     .map { account -> account to account.windows.filter { remainingPercent(it) != null }.sortedBy { remainingPercent(it) }.take(2) }
     .filter { it.second.isNotEmpty() }
     .sortedBy { (_, windows) -> remainingPercent(windows.first()) }
@@ -115,10 +115,10 @@ internal fun quotaBlocks(snapshot: HubSnapshot): List<Pair<LimitAccount, List<Li
     .take(2)
 
 /** Today's split by tool as (name, share) pairs, largest first, at most three. */
-internal fun toolShares(snapshot: HubSnapshot): List<Pair<String, Double>> {
+internal fun toolShares(snapshot: HubSnapshot, options: io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions = io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions()): List<Pair<String, Double>> {
     val total = snapshot.today.clients.values.sum().toDouble()
     if (total <= 0) return emptyList()
-    return snapshot.today.clients.entries.sortedByDescending { it.value }.take(3).map { (name, tokens) -> name to tokens / total }
+    return io.github.theminionooo.tokenmonitor.data.storage.orderedTools(snapshot.today.clients, snapshot.today.clientCosts, options).take(3).map { (name, tokens) -> name to tokens / total }
 }
 
 /** Messages, active time and streak for today; the week total fills in when a day has no such data. */
@@ -220,8 +220,9 @@ class UsageWidgetProvider : AppWidgetProvider() {
             session: WidgetSession = WidgetSession(),
             size: SizeF = SizeF(layout.width.toFloat(), layout.height.toFloat()),
             chartMeasurements: WidgetChartMeasurements? = null,
+            displayOptions: io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions = DisplayPreferences(context).options.value,
         ): RemoteViews {
-            val currency = io.github.theminionooo.tokenmonitor.data.storage.usageCurrency(DisplayPreferences(context).options.value)
+            val currency = io.github.theminionooo.tokenmonitor.data.storage.usageCurrency(displayOptions)
             val palette = Palette.from(theme)
             val enabled = session.enabled && session.expiresAt > System.currentTimeMillis()
             if (snapshot == null) return empty(context, layout, session, palette, enabled)
@@ -319,7 +320,7 @@ class UsageWidgetProvider : AppWidgetProvider() {
 
             // Tool split
             if (layout != WidgetLayout.Wide) {
-                val shares = toolShares(snapshot)
+                val shares = toolShares(snapshot, displayOptions)
                 val showTools = shares.isNotEmpty() && (layout != WidgetLayout.Compact || heightDp >= 170)
                 views.setViewVisibility(R.id.widget_tools, if (showTools) View.VISIBLE else View.GONE)
                 if (showTools) {
@@ -344,7 +345,7 @@ class UsageWidgetProvider : AppWidgetProvider() {
 
             // Limits
             if (layout == WidgetLayout.Large) {
-                val quota = quotaBlocks(snapshot)
+                val quota = quotaBlocks(snapshot, displayOptions)
                 views.setViewVisibility(R.id.widget_no_limits, if (quota.isEmpty()) View.VISIBLE else View.GONE)
                 val blockIds = listOf(
                     LargeBlockIds(R.id.widget_quota_1, R.id.widget_logo_1, R.id.widget_provider_1,
@@ -383,7 +384,7 @@ class UsageWidgetProvider : AppWidgetProvider() {
                     }
                 }
             } else if (layout != WidgetLayout.Wide) {
-                val limits = quotaRows(snapshot).take(if (layout == WidgetLayout.Compact) 1 else 2)
+                val limits = quotaRows(snapshot, displayOptions).take(if (layout == WidgetLayout.Compact) 1 else 2)
                 val showLimits = limits.isNotEmpty() && (layout != WidgetLayout.Compact || heightDp >= 195)
                 // An empty limits block still says so, except in a Compact too short to hold the line.
                 views.setViewVisibility(R.id.widget_limits, if (showLimits || (limits.isEmpty() && (layout != WidgetLayout.Compact || heightDp >= 195))) View.VISIBLE else View.GONE)

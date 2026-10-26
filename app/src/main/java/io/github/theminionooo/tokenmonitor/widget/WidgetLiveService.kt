@@ -63,12 +63,14 @@ internal fun widgetNotificationContent(
     now: Long = System.currentTimeMillis(),
     zoneId: ZoneId = ZoneId.systemDefault(),
     locale: Locale = io.github.theminionooo.tokenmonitor.ui.AppLanguage.locale(),
+    currency: io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency = io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency(),
+    displayOptions: io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions = io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions(),
 ): WidgetNotificationContent {
     val snapshot = session.snapshot
     val connected = session.connected && snapshot?.fromCache != true && session.note == null
     val clock = DateTimeFormatter.ofPattern("HH:mm", locale).withZone(zoneId)
     val headline = snapshot?.let {
-        val totals = appText(R.string.ui_1_s_tokens_2_s_8aebf, "%1\$s tokens · %2\$s", widgetTokens(it.today.totalTokens), formatUsageCost(it.today.costUsd, it.today.unpricedTokens))
+        val totals = appText(R.string.ui_1_s_tokens_2_s_8aebf, "%1\$s tokens · %2\$s", widgetTokens(it.today.totalTokens), formatUsageCost(it.today.costUsd, it.today.unpricedTokens, currency = currency))
         val day = snapshotDate(it, zoneId)
         when {
             !connected -> appText(R.string.ui_saved_1_s_432ed, "Saved · %1\$s", totals)
@@ -84,7 +86,7 @@ internal fun widgetNotificationContent(
             appText(R.string.ui_last_updated_cb5f4, "Last updated ") + if (age < 60_000) appText(R.string.ui_less_than_a_minute_ago_abff0, "less than a minute ago") else appText(R.string.ui_1_s_ago_1d3b1, "%1\$s ago", formatDuration(age / 60_000 * 60_000))
         }
     }
-    val windows = snapshot?.let(::quotaRows).orEmpty().joinToString("\n") { row ->
+    val windows = snapshot?.let { quotaRows(it, displayOptions) }.orEmpty().joinToString("\n") { row ->
         val reset = formatBoundary(row.window.resetsAt, row.window.boundaryKind, now)
         appText(R.string.ui_1_s_2_s_3_s_left_f1c0b, "%1\$s %2\$s %3\$s%% left", row.provider.providerLabel(), windowTitle(row.window, row.siblings), row.remainingPercent.toInt()) +
             if (reset.isNotBlank()) " · $reset" else ""
@@ -137,7 +139,7 @@ class WidgetLiveService : Service() {
         if (intent?.action !in listOf(ACTION_LIVE, ACTION_REFRESH) || finishing) {
             // Every start arrives through startForegroundService, which Android only accepts once
             // startForeground has run, even when this start ends straight away.
-            runCatching { enterForeground(widgetNotificationContent(WidgetRuntime.session, false)); stopForeground(STOP_FOREGROUND_REMOVE) }
+            runCatching { enterForeground(notificationContent(WidgetRuntime.session, false)); stopForeground(STOP_FOREGROUND_REMOVE) }
             stopSelf(startId)
             return START_NOT_STICKY
         }
@@ -153,7 +155,7 @@ class WidgetLiveService : Service() {
         deadline = activeDeadline
         WidgetRuntime.session = WidgetRuntime.session.copy(enabled = live, refreshing = true, expiresAt = activeDeadline.displayExpiresAt, note = null)
         try {
-            val content = widgetNotificationContent(WidgetRuntime.session, live)
+            val content = notificationContent(WidgetRuntime.session, live)
             shownNotification = content
             enterForeground(content)
         } catch (_: RuntimeException) {
@@ -230,7 +232,12 @@ class WidgetLiveService : Service() {
      * Android 16 it asks to be promoted, which is what puts it on the lock screen and in the status
      * bar chip for the hour it runs.
      */
-    private fun notification(content: WidgetNotificationContent = widgetNotificationContent(WidgetRuntime.session, live)): Notification {
+    private fun notificationContent(session: WidgetSession, live: Boolean): WidgetNotificationContent {
+        val options = io.github.theminionooo.tokenmonitor.data.storage.DisplayPreferences(this).options.value
+        return widgetNotificationContent(session, live, currency = io.github.theminionooo.tokenmonitor.data.storage.usageCurrency(options), displayOptions = options)
+    }
+
+    private fun notification(content: WidgetNotificationContent = notificationContent(WidgetRuntime.session, live)): Notification {
         val stop = PendingIntent.getBroadcast(this, 21, Intent(this, WidgetStopReceiver::class.java), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val open = PendingIntent.getActivity(this, 22, Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val builder = Notification.Builder(this, CHANNEL)
@@ -250,7 +257,7 @@ class WidgetLiveService : Service() {
 
     /** Re-posts the notification only when its text would change, so the shade never flickers. */
     private fun showNotification() {
-        val content = widgetNotificationContent(WidgetRuntime.session, live)
+        val content = notificationContent(WidgetRuntime.session, live)
         if (content == shownNotification || finishing) return
         shownNotification = content
         runCatching { getSystemService(NotificationManager::class.java).notify(NOTIFICATION_ID, notification(content)) }
