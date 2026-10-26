@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 internal enum class RankingMetric { Tokens, Cost }
 internal enum class LimitBarMetric { Remaining, Used }
+internal enum class LiveRateMode { Off, Speed, Burn }
 internal enum class ReduceMotionMode { System, On, Off }
 
 /** The desktop v0.70 Appearance choice for changing token totals; Roll is its default. */
@@ -49,6 +50,8 @@ internal data class DisplayOptions(
     val exchangeRates: Map<String, Double> = emptyMap(),
     val exchangeRateDate: String = "",
     val exchangeRateFetchedAt: Long = 0,
+    val liveRateMode: LiveRateMode = LiveRateMode.Off,
+    val showLiveRateModels: Boolean = false,
 ) {
     fun homeListCount(module: String): Int =
         (homeListCounts[module] ?: defaultHomeListCounts[module] ?: 5).coerceIn(1, 50)
@@ -132,6 +135,8 @@ internal class DisplayPreferences(context: Context) {
             putString("currency_rates", encodeRates(next.exchangeRates))
             putString("currency_rate_date", next.exchangeRateDate)
             putLong("currency_rate_fetched", next.exchangeRateFetchedAt)
+            putString("live_rate_mode", next.liveRateMode.name)
+            putBoolean("live_rate_models", next.showLiveRateModels)
         }
         _options.value = next
     }
@@ -166,6 +171,8 @@ internal class DisplayPreferences(context: Context) {
         exchangeRates = decodeRates(preferences.getString("currency_rates", null)),
         exchangeRateDate = preferences.getString("currency_rate_date", "").orEmpty(),
         exchangeRateFetchedAt = preferences.getLong("currency_rate_fetched", 0),
+        liveRateMode = preferences.getString("live_rate_mode", null).enumOrDefault(LiveRateMode.Off),
+        showLiveRateModels = preferences.getBoolean("live_rate_models", false),
     )
 
     private companion object {

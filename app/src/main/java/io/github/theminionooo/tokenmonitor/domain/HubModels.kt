@@ -52,7 +52,10 @@ data class UsagePeriod(
     val clientUnpricedTokens: Map<String, Long> = emptyMap(),
     val modelUnpricedTokens: Map<String, Long> = emptyMap(),
     val clientModelUnpricedTokens: Map<String, Map<String, Long>> = emptyMap(),
+    val modelThroughput: Map<String, ThroughputCounters> = emptyMap(),
 )
+
+data class ThroughputCounters(val timedTokens: Long, val timedOutputTokens: Long, val timedDurationMs: Long)
 
 data class ProjectUsage(
     val id: String,

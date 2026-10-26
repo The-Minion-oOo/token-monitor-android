@@ -41,7 +41,10 @@ internal data class HubPeriodDto(
     val clientUnpricedTokens: Map<String, Long> = emptyMap(),
     val modelUnpricedTokens: Map<String, Long> = emptyMap(),
     val clientModelUnpricedTokens: Map<String, Map<String, Long>> = emptyMap(),
+    val modelThroughput: Map<String, HubThroughputDto> = emptyMap(),
 )
+
+internal data class HubThroughputDto(val timedTokens: Long, val timedOutputTokens: Long, val timedDurationMs: Long)
 
 internal data class HubProjectDto(
     val id: String = "",

@@ -165,6 +165,13 @@ object HubProtocolParser {
         ).all { (camel, snake) -> long(camel) != null || long(snake) != null }
         return HubPeriodDto(
             throughputAvailable = throughputCapability ?: hasThroughputShape,
+            modelThroughput = objectField("modelThroughput")?.mapNotNull { (model, value) ->
+                val counters = value.objectOrNull() ?: return@mapNotNull null
+                val tokens = counters.long("timedTokens")?.takeIf { it >= 0 } ?: return@mapNotNull null
+                val output = counters.long("timedOutputTokens")?.takeIf { it >= 0 } ?: return@mapNotNull null
+                val duration = counters.long("timedDurationMs")?.takeIf { it >= 0 } ?: return@mapNotNull null
+                model to HubThroughputDto(tokens, output, duration)
+            }?.toMap().orEmpty(),
             timedTokens = (long("timedTokens") ?: long("timed_tokens") ?: 0).coerceAtLeast(0),
             timedOutputTokens = (long("timedOutputTokens") ?: long("timed_output_tokens") ?: 0).coerceAtLeast(0),
             timedDurationMs = (long("timedDurationMs") ?: long("timed_duration_ms") ?: 0).coerceAtLeast(0),
@@ -425,6 +432,7 @@ object HubProtocolParser {
         val byClient = boundedUnpricedMap(clientUnpricedTokens, clients, missing)
         return UsagePeriod(
             throughputAvailable = throughputAvailable,
+            modelThroughput = modelThroughput.mapValues { (_, value) -> io.github.theminionooo.tokenmonitor.domain.ThroughputCounters(value.timedTokens, value.timedOutputTokens, value.timedDurationMs) },
             timedTokens = timedTokens,
             timedOutputTokens = timedOutputTokens,
             timedDurationMs = timedDurationMs,

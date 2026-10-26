@@ -161,6 +161,9 @@ internal fun DashboardContent(
         verticalArrangement = Arrangement.spacedBy(if (destination in listOf(DashboardDestination.Models, DashboardDestination.Projects, DashboardDestination.Tools)) 4.dp else 10.dp),
     ) {
         item { TotalPanel(if (destination == DashboardDestination.Models) modelUsage else usage, displayOptions.compactTokenTotal) }
+        if (displayOptions.liveRateMode != io.github.theminionooo.tokenmonitor.data.storage.LiveRateMode.Off) item {
+            LiveRatePanel(snapshot, displayOptions, state.streamActive, state.connectionUrl)
+        }
         if (destination == DashboardDestination.Models && filteredTool != null) item {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
