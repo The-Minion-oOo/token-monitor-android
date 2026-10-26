@@ -1,0 +1,44 @@
+{
+  "limits": {
+    "updatedAt": "2026-10-26T22:09:01.973Z",
+    "providers": [
+      {
+        "provider": "ollama",
+        "accountKey": "sha256:74f1559067accf8609466ba777f56c9fe0817b935de5ca9a9aad15a2ae88d48b",
+        "accountLabel": "pro",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "sample@example.com",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "api",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-26T22:09:01.321Z",
+        "windows": [
+          {
+            "kind": "billing",
+            "metric": "credits",
+            "label": "Credit balance",
+            "used": null,
+            "limit": null,
+            "remaining": -1,
+            "usedPercent": null,
+            "remainingPercent": null,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": "USD",
+            "showMeter": false
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-ollama-negative-0",
+        "stale": false
+      }
+    ]
+  }
+}

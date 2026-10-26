@@ -1,0 +1,115 @@
+{
+  "limits": {
+    "updatedAt": "2026-10-26T22:09:02.859Z",
+    "providers": [
+      {
+        "provider": "claude",
+        "accountKey": "sha256:74df8a5dd661944bede7a317d8c7450b49c647e14cb8201c243f9e18ab81dceb",
+        "accountLabel": "",
+        "planLabel": "",
+        "accountName": "Sample a",
+        "accountEmail": "a@example.com",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "web",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-26T22:09:01.321Z",
+        "windows": [
+          {
+            "kind": "session",
+            "label": "",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 10,
+            "remainingPercent": 90,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-claude-accounts-0",
+        "stale": false
+      },
+      {
+        "provider": "claude",
+        "accountKey": "sha256:3595381adeb67d4acbfb073ca5fa1dbd081b903df764245ac0ab46eab331fbe5",
+        "accountLabel": "",
+        "planLabel": "",
+        "accountName": "Sample b",
+        "accountEmail": "b@example.com",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "web",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-26T22:09:01.321Z",
+        "windows": [
+          {
+            "kind": "session",
+            "label": "",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 20,
+            "remainingPercent": 80,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-claude-accounts-0",
+        "stale": false
+      },
+      {
+        "provider": "claude",
+        "accountKey": "sha256:e30db00bdb834af4c253f68678e812be2079bcaea38abbaea6bc944427e244dc",
+        "accountLabel": "",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "c@example.com",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "oauth",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-26T22:09:01.321Z",
+        "windows": [
+          {
+            "kind": "session",
+            "label": "",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 20,
+            "remainingPercent": 80,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-claude-accounts-0",
+        "stale": false
+      }
+    ]
+  }
+}

@@ -126,6 +126,7 @@ internal data class HubLimitWindowDto(
     val detail: String = "",
     val showMeter: Boolean? = null,
     val boundaryKind: String = "",
+    val used: Double? = null,
 )
 
 internal data class HubLimitAccountDto(

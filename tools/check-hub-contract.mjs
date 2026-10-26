@@ -8,6 +8,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { checkWorkerContract } from "./check-worker-contract.mjs";
+import { checkV080Limits } from "./check-v080-limits.mjs";
 
 const script = fileURLToPath(import.meta.url);
 const root = resolve(dirname(script), "..");
@@ -629,9 +630,12 @@ async function isolatedContract(source, output, upstream) {
             assert.equal(responses["parity-subscriptions.json"].subscriptions[0].kind, "topup");
             assert.equal(responses["parity-subscriptions.json"].subscriptions[0].topUps[0].amountMinor, 1200);
         } finally { await parityHub.stop(); }
+        const limitChecks = await checkV080Limits(require, { createHub, source, secret, device, now });
+        Object.assign(responses, limitChecks.responses);
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) await writeFile(join(output, name), `${JSON.stringify(value, null, 2)}\n`);
         console.log(`Actual ${upstream.tag} Hub passed authenticated reads, snapshot, freshness and changed-stat checks. Synthetic responses: ${output}`);
+        return limitChecks.cases;
     } finally {
         stream?.destroy();
         hub.server.closeAllConnections();
@@ -642,8 +646,8 @@ async function isolatedContract(source, output, upstream) {
 const workerSource = option("--isolated-source");
 if (workerSource) {
     const upstream = JSON.parse(await readFile(join(workerSource, "contract-upstream.json"), "utf8"));
-    await isolatedContract(workerSource, resolve(option("--output")), upstream);
-    await checkWorkerContract(workerSource, join(resolve(option("--output")), "worker"), upstream);
+    const limitCases = await isolatedContract(workerSource, resolve(option("--output")), upstream);
+    await checkWorkerContract(workerSource, join(resolve(option("--output")), "worker"), upstream, limitCases);
 } else {
     const upstream = JSON.parse(await readFile(join(root, "upstream.json"), "utf8"));
     const approved = option("--approved-commit");

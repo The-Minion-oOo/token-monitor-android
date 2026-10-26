@@ -166,7 +166,7 @@ internal fun DesktopModule(
 @Composable
 internal fun HomeLimits(accounts: List<LimitAccount>, displayOptions: DisplayOptions) {
     val visible = prioritizeAvailableLimits(io.github.theminionooo.tokenmonitor.data.storage.visibleLimitAccounts(accounts, displayOptions)
-        .filter { account -> account.windows.any { it.remainingPercent != null || it.usedPercent != null || it.remaining != null } })
+        .filter { account -> account.windows.any { it.remainingPercent != null || it.usedPercent != null || it.remaining != null || limitReportedAmount(account.provider, it) != null } })
         .take(3)
     if (visible.isEmpty()) {
         MutedCopy(appText(R.string.ui_no_account_limits_available_9054f, "No account limits available"))
@@ -193,7 +193,8 @@ internal fun HomeLimits(accounts: List<LimitAccount>, displayOptions: DisplayOpt
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(windowTitle(window, account.windows), color = Muted, style = MaterialTheme.typography.labelSmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                                 val remainingPercent = quotaRemainingPercent(window)
-                                val amount = quotaPercentLeft(window)?.let { appText(R.string.ui_1_s_left_e96f9, "%1\$s%% left", it) }
+                                val amount = limitReportedAmount(account.provider, window)?.let { formatWindowAmount(it, window.currency) }
+                                    ?: quotaPercentLeft(window)?.let { appText(R.string.ui_1_s_left_e96f9, "%1\$s%% left", it) }
                                     ?: window.remaining?.let { formatWindowAmount(it, window.currency) }
                                     ?: "—"
                                 // Like the desktop Home module, a nearly spent window is flagged in place.

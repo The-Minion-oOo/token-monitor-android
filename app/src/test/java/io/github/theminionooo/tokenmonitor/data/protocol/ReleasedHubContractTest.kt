@@ -8,6 +8,17 @@ import org.junit.Test
 
 /** Responses produced by tools/check-hub-contract.mjs from the exact released desktop source. */
 class ReleasedHubContractTest {
+    @Test fun `released v080 providers retain Muse devices Ollama spend and Claude accounts`() {
+        val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
+        assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())
+        for (prefix in listOf("", "worker/")) {
+            fun providers(name: String) = HubProtocolParser.decodeStats(File(directory!!, "$prefix$name.json").readText()).limits.providers
+            assertEquals(2, providers("muse-devices").size)
+            assertEquals(5.0, providers("ollama-credits").single().windows.single { it.metric == "spend" }.used!!, 0.0)
+            assertEquals(3, providers("claude-accounts").size)
+            assertEquals(2, providers("claude-deduped").size)
+        }
+    }
     @Test fun `released optional payment provider and model timing fields survive Android parsing`() {
         val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
         assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())

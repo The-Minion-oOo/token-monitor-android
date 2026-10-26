@@ -16,7 +16,7 @@ class HubCatPawAndBalanceTest {
             resource("history.json"), resource("subscriptions.json"), 0,
         )
         assertEquals("v0.70.0", snapshot.health.hubBuild)
-        assertEquals("v0.79.0", HubProtocolParser.SUPPORTED_UPSTREAM_VERSION)
+        assertEquals("v0.80.0", HubProtocolParser.SUPPORTED_UPSTREAM_VERSION)
         val today = snapshot.today
         assertEquals(20_300L, today.totalTokens)
         assertEquals(today.totalTokens, today.sessions.sumOf { it.totalTokens })

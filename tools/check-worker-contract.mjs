@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
 /** Called only inside the disposable, pinned-source contract process. No sockets or deployment. */
-export async function checkWorkerContract(source, output, upstream) {
+export async function checkWorkerContract(source, output, upstream, limitCases = {}) {
     const { HubDO } = await import(pathToFileURL(join(source, "worker/src/index.js")));
     const records = new Map();
     const storage = {
@@ -95,6 +95,37 @@ export async function checkWorkerContract(source, output, upstream) {
         await hub.broadcast("subscriptions");
         const forced = await waitForFrame();
         assert.equal(forced.event, "stats", "Non-ingest changes require complete stats");
+        for (const [name, fixture] of Object.entries(limitCases)) {
+            const caseRecords = new Map();
+            const caseHub = new HubDO({ storage: {
+                async get(key) { return caseRecords.get(key); },
+                async put(key, value) { caseRecords.set(key, structuredClone(value)); },
+                async delete(key) { caseRecords.delete(key); },
+                async list({ prefix } = {}) { return new Map([...caseRecords].filter(([key]) => !prefix || key.startsWith(prefix))); },
+            } }, { TOKEN_MONITOR_SECRET: secret, STALE_AFTER_MS: "600000" });
+            try {
+                for (const record of fixture.records) {
+                    const result = await caseHub.fetch(new Request("https://hub.example.com/api/ingest", {
+                        method: "POST", headers: { Authorization: `Bearer ${secret}`, "content-type": "application/json" },
+                        body: JSON.stringify(record),
+                    }));
+                    assert.equal(result.status, 200);
+                    await result.text();
+                }
+                const result = await caseHub.fetch(new Request("https://hub.example.com/api/stats", {
+                    headers: { Authorization: `Bearer ${secret}` },
+                }));
+                assert.equal(result.status, 200);
+                const stats = await result.json();
+                const comparable = providers => providers.map(({ provider, accountKey, sourceDeviceId, planLabel, windows, status }) =>
+                    ({ provider, accountKey, sourceDeviceId, planLabel, windows, status }));
+                assert.deepEqual(comparable(stats.limits.providers), comparable(fixture.providers));
+                responses[`${name}.json`] = stats;
+            } finally {
+                if (caseHub.broadcastTimer) clearTimeout(caseHub.broadcastTimer);
+                if (caseHub.heartbeatTimer) clearInterval(caseHub.heartbeatTimer);
+            }
+        }
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) {
             assert.ok(!JSON.stringify(value).includes("NEVER_EXPORT"));
