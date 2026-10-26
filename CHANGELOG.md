@@ -1,6 +1,6 @@
 # Changelog
 
-## Next release — v0.79.0 r2 candidate
+## v0.79.0 r2 — 2026-10-26
 
 - I added payment details and dated top-up ledgers, with separate recurring
   subscription intervals, renewal/end dates, account binding and notes.
@@ -15,7 +15,7 @@
   Spanish, Hindi, Gujarati, Bengali, Tamil and Telugu, alongside English,
   Korean, Japanese and Brazilian Portuguese.
 - Expanded emulator checks and documentation. Physical-phone follow-up is
-  tracked separately in #94; no phone result is claimed for this candidate.
+  tracked separately in #94; this release was not phone-tested.
 
 ## v0.79.0 r1 — 2026-10-25
 

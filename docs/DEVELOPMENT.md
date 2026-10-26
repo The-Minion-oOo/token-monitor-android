@@ -101,7 +101,7 @@ in a fixture or screenshot.
 
 ## Tests
 
-The r2 candidate adds payment/top-up, reset-credit/grant, provider token summary,
+The r2 release adds payment/top-up, reset-credit/grant, provider token summary,
 local item controls, currency, diagnostic redaction and matched live-rate tests.
 The pinned released-source harness also emits `parity-stats.json` and
 `parity-subscriptions.json`; Android parses those actual normalized responses.

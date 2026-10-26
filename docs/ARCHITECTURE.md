@@ -55,7 +55,7 @@ New API account billing periods map to the existing Limits spend rows. They keep
 their native currency and are distinguished from MiMo's locally tracked daily
 and weekly deltas. Missing or invalid values stay absent; reported zero is retained.
 
-## Local presentation in the r2 candidate
+## Local presentation in the r2 release
 
 The parser retains subscription kind, payment ledgers, bindings, renewal/end
 dates and notes, plus optional provider reset-credit/grant and usage-summary

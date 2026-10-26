@@ -28,21 +28,21 @@
 
 ## The desktop dashboard, made mobile
 
-**Coming in v0.79.0 r2:** twelve interface languages, detailed payments and reset
+**New in v0.79.0 r2:** twelve interface languages, detailed payments and reset
 credits, local tool/quota controls, nine display currencies, optional recent live
-speed and a report you can review before sharing. The download above remains
-the published r1 build until r2 is released. [Feature coverage](docs/DESKTOP_PARITY.md).
+speed and a report you can review before sharing. The signed r2 APK is available
+from the download link above. [Feature coverage](docs/DESKTOP_PARITY.md).
 
 **Read it your way:** English · 简体中文 · 繁體中文 · 한국어 · 日本語 · Português
 (Brasil) · Español · हिन्दी · ગુજરાતી · বাংলা · தமிழ் · తెలుగు.
 [Language settings and introductions](docs/LANGUAGES.md).
 
 <details>
-<summary>See the r2 candidate in Chinese and Telugu</summary>
+<summary>See the app in Chinese and Telugu</summary>
 
 <table><tr>
-  <td width="50%"><img src="docs/images/widget-language-zh-CN.png" alt="The r2 Pages widget with Simplified Chinese labels and synthetic showcase data" width="100%"></td>
-  <td width="50%"><img src="docs/images/widget-language-te.png" alt="The r2 Pages widget with Telugu labels and synthetic showcase data" width="100%"></td>
+  <td width="50%"><img src="docs/images/widget-language-zh-CN.png" alt="The Pages widget with Simplified Chinese labels and synthetic showcase data" width="100%"></td>
+  <td width="50%"><img src="docs/images/widget-language-te.png" alt="The Pages widget with Telugu labels and synthetic showcase data" width="100%"></td>
 </tr></table>
 
 These are captures of the production Pages renderer using made-up data. The
@@ -67,8 +67,8 @@ supplied by the Hub.
 - **Share less when troubleshooting:** preview an allowlisted diagnostic report
   before copying or sharing it. Addresses, secrets and conversation text stay out.
 
-These are r2 candidate features. Pairing still uses the same read-only Hub API;
-the dashboard update frequency and widget layout stay unchanged.
+These features are available in v0.79.0 r2. Pairing still uses the same read-only
+Hub API; the dashboard update frequency and widget layout stay unchanged.
 
 <table>
   <tr>

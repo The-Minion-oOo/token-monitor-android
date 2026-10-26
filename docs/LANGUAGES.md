@@ -1,8 +1,8 @@
 # Languages
 
-The **v0.79.0 r2 candidate** adds twelve interface languages. The published r1
-APK has an English interface. The language packs are bundled; selecting a
-language never contacts a translation service.
+**v0.79.0 r2** adds twelve interface languages. Earlier APKs have an English
+interface. The language packs are bundled; selecting a language never contacts
+a translation service.
 
 Choose **Settings → App language**, or use Android's per-app language setting
 on Android 13 and newer. **Follow phone language** is the default. The in-app
@@ -42,7 +42,7 @@ Token Monitor Android 是桌面 Token Monitor 的只读移动看板。查看 Tok
 
 从本仓库的 [Releases](https://github.com/The-Minion-oOo/token-monitor-android/releases/latest)
 下载 APK。在桌面应用中启用 Hub，推荐通过 Tailscale 连接。首次配对输入 Hub 地址
-和共享密钥。手机不会控制桌面，也不会读取对话正文。r2 候选版可在应用语言设置中选择简体中文或繁體中文。
+和共享密钥。手机不会控制桌面，也不会读取对话正文。r2 可在应用语言设置中选择简体中文或繁體中文。
 
 ## Quick introductions
 

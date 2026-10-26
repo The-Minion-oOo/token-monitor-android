@@ -1,36 +1,46 @@
 # Android v0.79.0 r2
 
-This is a release candidate for desktop Token Monitor v0.79.0. The published
-download remains r1 until the signed r2 APK is released.
+I added more of the desktop dashboard to Android, with twelve interface languages
+and more control over what appears on your phone and widgets. This release
+targets desktop Token Monitor v0.79.0.
 
-I added the useful read-only dashboard features that were still missing from
-the Android companion:
-
-- Payment details, recurring intervals, renewal/coverage dates and dated top-up
-  ledgers. Top-ups no longer look like zero-cost monthly subscriptions.
-- Reset credits, expiry and grant explanations, plus reported provider token
-  summaries.
-- Local tool hide/pin/order and provider/quota-window visibility controls.
-- Nine usage display currencies with saved automatic or manual exchange rates.
-  Provider balances and recorded payments keep their original currency.
-- Optional recent output speed and token burn, including reported model rates.
-  It starts Off, expires idle samples and uses the existing dashboard updates.
-- A diagnostic report that can be previewed before copying or sharing, with
-  addresses, secrets, identities and conversation text excluded.
-- Twelve interface languages: English, Simplified/Traditional Chinese, Korean,
+- **Payments:** distinguish subscriptions from top-ups, expand dated payment
+  records and see renewal or coverage dates, account details and notes.
+- **Provider details:** see reported reset credits, expiry and grant eligibility,
+  plus detailed token summaries.
+- **Your useful rows:** hide, pin and reorder tools; choose which providers,
+  quota windows and details appear. Both widgets and the Live notification
+  follow those choices.
+- **Display currency:** choose among nine currencies with saved automatic or
+  manual exchange rates. Provider balances and recorded payments keep their
+  original currency. Automatic rate checks run only while the app is visible.
+- **Recent live rates:** optional output speed and token burn, including model
+  rates when reported. It starts Off and uses the existing dashboard updates.
+- **Diagnostics:** preview a redacted report before copying or sharing it.
+  Addresses, secrets, account identities, conversation text and cached responses
+  are excluded.
+- **Languages:** English, Simplified Chinese, Traditional Chinese, Korean,
   Japanese, Brazilian Portuguese, Spanish, Hindi, Gujarati, Bengali, Tamil and
-  Telugu. Widgets use the chosen language too.
+  Telugu. Widget labels follow the app language too.
 
-The dashboard processing limit, Kotlin/Compose layout, animations, read-only
-Hub boundary and widget geometry are preserved. Currency requests are optional
-and foreground-only; there is no runtime translation service.
+The existing layout, animations, widget geometry and dashboard processing limit
+are preserved. Android remains a read-only companion; collection and provider
+sign-in stay on desktop. Language packs are bundled and make no translation
+requests.
 
-This candidate was not tested on a physical phone. The follow-up is
-[#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94), separately
-from the automated and emulator release gates. See
-[Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md)
-for the results and their limits.
+Desktop v0.80.0 was released during this work. Its compatibility review remains
+in [#96](https://github.com/The-Minion-oOo/token-monitor-android/issues/96);
+this APK targets the verified v0.79.0 baseline.
 
-[Installation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md) ·
+Update through **Settings → App updates**, or install the APK below using
+Android's normal installer. See
+[Install and update](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md).
+
+This release was not phone-tested. Upgrade retention, physical-launcher behaviour
+and CPU/battery comparisons remain in
+[#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94) as a
+nonblocking follow-up. Native-speaker wording corrections are welcome.
+
+[Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md) ·
 [Languages](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/LANGUAGES.md) ·
 [Desktop coverage](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/DESKTOP_PARITY.md)
