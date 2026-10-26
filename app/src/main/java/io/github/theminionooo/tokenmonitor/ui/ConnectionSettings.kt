@@ -358,6 +358,7 @@ internal fun ConnectionScreen(
                 }
             }
             DisplayItemSettings(state.snapshot, displayOptions, LocalDisplayChange.current)
+            CurrencySettings(displayOptions, LocalDisplayChange.current)
             SettingsGroup("Compatibility", summary = "Desktop v${BuildConfig.UPSTREAM_VERSION}") {
                 StatusLine("Android app", BuildConfig.VERSION_NAME)
                 StatusLine("Desktop baseline", "Token Monitor v${BuildConfig.UPSTREAM_VERSION}")

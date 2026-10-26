@@ -56,6 +56,7 @@ internal data class WidgetDeckData(
     val week: List<HistoryPoint>,
     val activeDays: Int,
     val messagesToday: Long,
+    val currency: io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency = io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency(),
 ) {
     val hasData: Boolean get() = snapshot != null
 }
@@ -144,5 +145,6 @@ internal fun prepareWidgetDeck(
         week = week,
         activeDays = buildActivityHeatmap(history, date).activeDays,
         messagesToday = today?.messages ?: 0,
+        currency = io.github.theminionooo.tokenmonitor.data.storage.usageCurrency(displayOptions),
     )
 }

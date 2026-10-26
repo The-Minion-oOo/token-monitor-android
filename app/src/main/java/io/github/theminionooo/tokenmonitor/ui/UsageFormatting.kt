@@ -44,9 +44,14 @@ internal fun formatCompactTokens(tokens: Long): String {
 internal fun formatMoney(value: Double): String = currencyFormat.format(value)
 
 /** A missing catalog price is not a zero rate. Keep the known subtotal explicit. */
-internal fun formatUsageCost(value: Double, unpricedTokens: Long = 0, compact: Boolean = false): String {
-    if (unpricedTokens <= 0) return formatMoney(value)
-    val known = if (value > 0) formatMoney(value) else "—"
+internal fun formatUsageCost(value: Double, unpricedTokens: Long = 0, compact: Boolean = false,
+    currency: io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency = io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency()): String {
+    val converted = value * currency.rate
+    val amount = if (currency.code == "USD") formatMoney(value) else if (converted.isFinite()) NumberFormat.getCurrencyInstance(Locale.US).apply {
+        this.currency = java.util.Currency.getInstance(currency.code)
+    }.format(converted) else "Not reported"
+    if (unpricedTokens <= 0) return amount
+    val known = if (value > 0) amount else "—"
     if (compact) return if (value > 0) "$known + ?" else "— (?)"
     val missing = "${formatCompactTokens(unpricedTokens)} unpriced"
     return if (value > 0) "$known + $missing" else "— ($missing)"

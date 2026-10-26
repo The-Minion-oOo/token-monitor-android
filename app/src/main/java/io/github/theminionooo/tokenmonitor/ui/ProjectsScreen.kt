@@ -147,7 +147,7 @@ internal fun ProjectUsageRow(project: ProjectUsage, ratio: Float) {
             Spacer(Modifier.width(10.dp))
             Column(horizontalAlignment = Alignment.End) {
                 RowTokenValue(project.totalTokens)
-                Text(formatUsageCost(project.costUsd, project.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
+                Text(displayUsageCost(project.costUsd, project.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
             }
         }
         UsageBar(ratio, Purple)
@@ -229,7 +229,7 @@ internal fun SessionGroupUsageRow(row: SessionRow, ratio: Float) {
             Spacer(Modifier.width(10.dp))
             Column(horizontalAlignment = Alignment.End) {
                 RowTokenValue(row.totalTokens)
-                Text(formatUsageCost(row.costUsd, row.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
+                Text(displayUsageCost(row.costUsd, row.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
             }
             Spacer(Modifier.width(4.dp))
             Icon(
@@ -271,7 +271,7 @@ private fun SessionMemberLine(member: SessionMember, kind: SessionGroupKind?, no
         Spacer(Modifier.width(8.dp))
         Column(horizontalAlignment = Alignment.End) {
             Text(formatTokens(session.totalTokens), color = Ink, style = MaterialTheme.typography.bodySmall)
-            Text(formatUsageCost(session.costUsd, session.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
+            Text(displayUsageCost(session.costUsd, session.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
         }
         // Lines the figures up with the group's, which leave room for the chevron.
         Spacer(Modifier.width(20.dp))
@@ -330,7 +330,7 @@ internal fun SessionUsageRow(session: SessionUsage, title: String, meta: String,
             Spacer(Modifier.width(10.dp))
             Column(horizontalAlignment = Alignment.End) {
                 RowTokenValue(session.totalTokens)
-                Text(formatUsageCost(session.costUsd, session.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
+                Text(displayUsageCost(session.costUsd, session.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
             }
             Spacer(Modifier.width(4.dp))
             Icon(

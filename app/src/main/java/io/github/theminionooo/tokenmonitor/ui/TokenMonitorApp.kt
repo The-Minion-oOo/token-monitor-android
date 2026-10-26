@@ -147,10 +147,14 @@ internal fun TokenMonitorApp(viewModel: DashboardViewModel) {
             }
         }
     }
+    CurrencyRateEffect(displayOptions, viewModel::setDisplayOptions) { refreshRates, rateStatus ->
     MaterialTheme(colorScheme = remember(palette) { tokenMonitorColors(palette) }, typography = typography) {
         CompositionLocalProvider(
             LocalDisplayOptions provides displayOptions,
             LocalDisplayChange provides viewModel::setDisplayOptions,
+            LocalUsageCurrency provides io.github.theminionooo.tokenmonitor.data.storage.usageCurrency(displayOptions),
+            LocalRefreshRates provides refreshRates,
+            LocalRateStatus provides rateStatus,
             LocalPalette provides palette,
             LocalColorfulToolMarks provides displayOptions.colorfulToolMarks,
             LocalToolIcons provides displayOptions.showToolIcons,
@@ -216,6 +220,7 @@ internal fun TokenMonitorApp(viewModel: DashboardViewModel) {
                 )
             }
         }
+    }
     }
 }
 

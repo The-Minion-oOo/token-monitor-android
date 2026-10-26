@@ -43,6 +43,12 @@ internal data class DisplayOptions(
     val toolOrder: List<String> = emptyList(),
     val hiddenProviders: Set<String> = emptySet(),
     val hiddenLimitItems: Set<String> = emptySet(),
+    val currencyCode: String = "USD",
+    val manualCurrencyRate: Boolean = false,
+    val manualRates: Map<String, Double> = emptyMap(),
+    val exchangeRates: Map<String, Double> = emptyMap(),
+    val exchangeRateDate: String = "",
+    val exchangeRateFetchedAt: Long = 0,
 ) {
     fun homeListCount(module: String): Int =
         (homeListCounts[module] ?: defaultHomeListCounts[module] ?: 5).coerceIn(1, 50)
@@ -120,6 +126,12 @@ internal class DisplayPreferences(context: Context) {
             putString("tool_order", encodeDisplayList(next.toolOrder))
             putString("hidden_providers", encodeDisplayList(next.hiddenProviders))
             putString("hidden_limit_items", encodeDisplayList(next.hiddenLimitItems))
+            putString("currency_code", next.currencyCode)
+            putBoolean("currency_manual", next.manualCurrencyRate)
+            putString("currency_manual_rates", encodeRates(next.manualRates))
+            putString("currency_rates", encodeRates(next.exchangeRates))
+            putString("currency_rate_date", next.exchangeRateDate)
+            putLong("currency_rate_fetched", next.exchangeRateFetchedAt)
         }
         _options.value = next
     }
@@ -148,6 +160,12 @@ internal class DisplayPreferences(context: Context) {
         toolOrder = decodeDisplayList(preferences.getString("tool_order", null)),
         hiddenProviders = decodeDisplayList(preferences.getString("hidden_providers", null)).toSet(),
         hiddenLimitItems = decodeDisplayList(preferences.getString("hidden_limit_items", null)).toSet(),
+        currencyCode = preferences.getString("currency_code", "USD")?.takeIf { it in usageCurrencies } ?: "USD",
+        manualCurrencyRate = preferences.getBoolean("currency_manual", false),
+        manualRates = decodeRates(preferences.getString("currency_manual_rates", null)),
+        exchangeRates = decodeRates(preferences.getString("currency_rates", null)),
+        exchangeRateDate = preferences.getString("currency_rate_date", "").orEmpty(),
+        exchangeRateFetchedAt = preferences.getLong("currency_rate_fetched", 0),
     )
 
     private companion object {

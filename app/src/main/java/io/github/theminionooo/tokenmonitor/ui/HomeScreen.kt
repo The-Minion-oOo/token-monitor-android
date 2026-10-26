@@ -236,7 +236,7 @@ internal fun HomeBreakdown(
             HomeListRow(
                 name = name,
                 primary = "${formatCompactTokens(count)}  ${formatPercent(count.toDouble() / total * 100.0)}",
-                secondary = if (name in costs || (unpriced[name] ?: 0) > 0) formatUsageCost(costs[name] ?: 0.0, unpriced[name] ?: 0) else "",
+                secondary = if (name in costs || (unpriced[name] ?: 0) > 0) displayUsageCost(costs[name] ?: 0.0, unpriced[name] ?: 0) else "",
                 upstreamName = name,
                 modelRow = modelRows,
             )

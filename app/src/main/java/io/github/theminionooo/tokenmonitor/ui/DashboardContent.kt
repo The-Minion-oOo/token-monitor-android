@@ -241,7 +241,7 @@ internal fun TotalPanel(usage: UsagePeriod, compact: Boolean) {
             fadeBottom = 4.dp,
             overflow = TextOverflow.Ellipsis,
         )
-        Text(formatUsageCost(cost, usage.unpricedTokens), color = Muted, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp))
+        Text(displayUsageCost(cost, usage.unpricedTokens), color = Muted, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp))
     }
 }
 

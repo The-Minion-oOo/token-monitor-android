@@ -127,7 +127,7 @@ internal fun LazyListScope.breakdownItems(
             DesktopUsageRow(
                 name = name,
                 totalTokens = count,
-                detail = if (name in costs || (unpriced[name] ?: 0) > 0) formatUsageCost(costs[name] ?: 0.0, unpriced[name] ?: 0) else "",
+                detail = if (name in costs || (unpriced[name] ?: 0) > 0) displayUsageCost(costs[name] ?: 0.0, unpriced[name] ?: 0) else "",
                 ratio = count.toFloat() / maximum,
                 cacheReadTokens = cacheReads[name] ?: 0L,
                 outputTokens = outputs[name] ?: 0L,

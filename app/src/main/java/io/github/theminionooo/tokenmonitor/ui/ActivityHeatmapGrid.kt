@@ -198,7 +198,7 @@ internal fun ActivityHeatmapGrid(activity: ActivityHeatmap, history: List<Histor
                         Text(picked.date.format(dayFormat), color = Muted, style = MaterialTheme.typography.labelSmall)
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                             Text(point?.let { "${formatCompactTokens(it.tokens)} tokens" } ?: "No recorded usage", color = Ink, style = MaterialTheme.typography.bodySmall)
-                            if (point != null) Text(formatMoney(point.costUsd), color = Ink, style = MaterialTheme.typography.bodySmall)
+                            if (point != null) Text(displayUsageCost(point.costUsd), color = Ink, style = MaterialTheme.typography.bodySmall)
                         }
                     }
                 }

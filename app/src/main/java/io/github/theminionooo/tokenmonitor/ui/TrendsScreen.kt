@@ -61,7 +61,7 @@ internal fun LazyListScope.trendItems(snapshot: HubSnapshot, history: List<Histo
         val months = snapshot.history.monthly.takeLast(12).reversed()
         val keys = uniqueKeys(months) { it.label }
         itemsIndexed(months, key = { index, _ -> keys[index] }) { _, point ->
-            DesktopDetailRow(point.label, "", formatTokens(point.tokens), formatUsageCost(point.costUsd, point.unpricedTokens), Blue)
+            DesktopDetailRow(point.label, "", formatTokens(point.tokens), displayUsageCost(point.costUsd, point.unpricedTokens), Blue)
         }
     }
 }
@@ -97,7 +97,7 @@ private class OverviewSummary(
     val tokensByTool: Map<String, Long>,
 )
 
-private fun summarizeOverview(history: List<HistoryPoint>, today: LocalDate): OverviewSummary {
+private fun summarizeOverview(history: List<HistoryPoint>, today: LocalDate, currency: io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency): OverviewSummary {
     val totalTokens = history.sumOf { it.tokens }
     val unpricedTokens = history.sumOf { it.unpricedTokens }
     val tokensByModel = history.flatMap { it.perModel.entries }.groupingBy { it.key }.fold(0L) { sum, entry -> sum + entry.value.tokens }
@@ -105,7 +105,7 @@ private fun summarizeOverview(history: List<HistoryPoint>, today: LocalDate): Ov
     val topModel = tokensByModel.maxByOrNull { it.value }?.key.orEmpty()
     val stats = listOf(
         "TOTAL TOKENS" to formatCompactTokens(totalTokens),
-        (if (unpricedTokens > 0) "KNOWN COST" else "TOTAL COST") to formatUsageCost(history.sumOf { it.costUsd }, unpricedTokens, compact = true),
+        (if (unpricedTokens > 0) "KNOWN COST" else "TOTAL COST") to formatUsageCost(history.sumOf { it.costUsd }, unpricedTokens, compact = true, currency = currency),
         "ACTIVE DAYS" to history.count { it.tokens > 0 }.toString(),
         "CURRENT STREAK" to currentStreak(history, today).toString(),
         "ACTIVE TIME" to formatActiveDuration(history.sumOf { it.activeTimeMs }),
@@ -125,7 +125,8 @@ private fun UsageOverview(history: List<HistoryPoint>) {
         return
     }
     val today = currentPresentationDate()
-    val overview = remember(history, today) { summarizeOverview(history, today) }
+    val currency = LocalUsageCurrency.current
+    val overview = remember(history, today, currency) { summarizeOverview(history, today, currency) }
     val heatmap = remember(history, activityMetric, today) { buildActivityHeatmap(history, endDate = today, metric = activityMetric) }
     val unpricedTokens = overview.unpricedTokens
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -225,7 +226,7 @@ private fun TrendsPanel(history: List<HistoryPoint>) {
         Row(verticalAlignment = Alignment.Bottom) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(formatCompactTokens(trend.totalTokens), color = Ink, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text("${trend.days.size} recorded days · ${formatUsageCost(trend.days.sumOf { it.costUsd }, trend.days.sumOf { it.unpricedTokens })}", color = Muted, style = MaterialTheme.typography.labelSmall)
+                Text("${trend.days.size} recorded days · ${displayUsageCost(trend.days.sumOf { it.costUsd }, trend.days.sumOf { it.unpricedTokens })}", color = Muted, style = MaterialTheme.typography.labelSmall)
             }
             Text(if (group == TrendGroup.Tool) "BY TOOL" else "BY MODEL", color = Muted, style = MaterialTheme.typography.labelSmall)
         }

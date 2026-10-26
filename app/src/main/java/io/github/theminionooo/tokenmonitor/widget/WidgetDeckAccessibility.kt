@@ -10,13 +10,13 @@ import kotlin.math.roundToInt
 internal fun widgetDeckPageSummary(page: WidgetDeckPage, data: WidgetDeckData): String {
     val snapshot = data.snapshot ?: return data.emptyMessage
     fun usage(row: WidgetDeckUsageRow, tool: Boolean): String =
-        "${if (tool) row.name.displayName() else row.name}: ${formatTokens(row.tokens)} tokens, ${(row.share * 100).roundToInt()}% share, ${formatUsageCost(row.costUsd, row.unpricedTokens)} estimated cost."
+        "${if (tool) row.name.displayName() else row.name}: ${formatTokens(row.tokens)} tokens, ${(row.share * 100).roundToInt()}% share, ${formatUsageCost(row.costUsd, row.unpricedTokens, currency = data.currency)} estimated cost."
     return when (page) {
         WidgetDeckPage.Overview -> buildString {
-            append("${formatTokens(snapshot.today.totalTokens)} tokens, ${formatUsageCost(snapshot.today.costUsd, snapshot.today.unpricedTokens)} estimated cost for ${data.date}. ")
+            append("${formatTokens(snapshot.today.totalTokens)} tokens, ${formatUsageCost(snapshot.today.costUsd, snapshot.today.unpricedTokens, currency = data.currency)} estimated cost for ${data.date}. ")
             data.stats.take(3).forEach { (value, label) -> append("$label: $value. ") }
             data.tools.take(3).forEach { append("${it.name.displayName()}: ${(it.share * 100).roundToInt()}% share. ") }
-            append("Last seven days: ${formatTokens(data.week.sumOf { it.tokens })} recorded tokens, ${formatUsageCost(data.week.sumOf { it.costUsd }, data.week.sumOf { it.unpricedTokens })} estimated cost.")
+            append("Last seven days: ${formatTokens(data.week.sumOf { it.tokens })} recorded tokens, ${formatUsageCost(data.week.sumOf { it.costUsd }, data.week.sumOf { it.unpricedTokens }, currency = data.currency)} estimated cost.")
         }
         WidgetDeckPage.Limits -> data.limitGroups.take(WidgetDeckGrid.Limits.ROW_TOPS.size).flatMap { group ->
             group.windows.take(2).map { window ->
@@ -35,11 +35,11 @@ internal fun widgetDeckPageSummary(page: WidgetDeckPage, data: WidgetDeckData): 
             }
         }
         WidgetDeckPage.Activity -> if (data.history.isEmpty()) "No activity history reported." else buildString {
-            append("Seven days ending ${data.date}: ${formatTokens(data.week.sumOf { it.tokens })} tokens, ${formatUsageCost(data.week.sumOf { it.costUsd }, data.week.sumOf { it.unpricedTokens })} estimated cost. ")
+            append("Seven days ending ${data.date}: ${formatTokens(data.week.sumOf { it.tokens })} tokens, ${formatUsageCost(data.week.sumOf { it.costUsd }, data.week.sumOf { it.unpricedTokens }, currency = data.currency)} estimated cost. ")
             append("${data.week.size} recorded days; ${(7 - data.week.size).coerceAtLeast(0)} days have no observation. ")
             append("Peak day: ${formatTokens(data.week.maxOfOrNull { it.tokens } ?: 0)} tokens. ${data.activeDays} active days in the activity grid. ")
             if (data.messagesToday > 0) append("${data.messagesToday} messages for ${data.date}.")
-            else append("${formatUsageCost(snapshot.today.costUsd, snapshot.today.unpricedTokens)} estimated cost for ${data.date}.")
+            else append("${formatUsageCost(snapshot.today.costUsd, snapshot.today.unpricedTokens, currency = data.currency)} estimated cost for ${data.date}.")
         }
     }.trim()
 }

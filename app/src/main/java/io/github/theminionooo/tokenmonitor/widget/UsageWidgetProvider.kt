@@ -218,6 +218,7 @@ class UsageWidgetProvider : AppWidgetProvider() {
             size: SizeF = SizeF(layout.width.toFloat(), layout.height.toFloat()),
             chartMeasurements: WidgetChartMeasurements? = null,
         ): RemoteViews {
+            val currency = io.github.theminionooo.tokenmonitor.data.storage.usageCurrency(DisplayPreferences(context).options.value)
             val palette = Palette.from(theme)
             val enabled = session.enabled && session.expiresAt > System.currentTimeMillis()
             if (snapshot == null) return empty(context, layout, session, palette, enabled)
@@ -249,9 +250,9 @@ class UsageWidgetProvider : AppWidgetProvider() {
             if (narrow) views.setTextViewText(R.id.widget_date, shortDate)
             val history = usageHistory(snapshot)
             val today = history.firstOrNull { it.label.take(10) == date?.toString() }
-            val cost = formatUsageCost(snapshot.today.costUsd, snapshot.today.unpricedTokens, compact = true)
+            val cost = formatUsageCost(snapshot.today.costUsd, snapshot.today.unpricedTokens, compact = true, currency = currency)
             views.setContentDescription(R.id.widget_cost, if (snapshot.today.unpricedTokens > 0)
-                "${formatUsageCost(snapshot.today.costUsd, snapshot.today.unpricedTokens)} estimated cost" else null)
+                "${formatUsageCost(snapshot.today.costUsd, snapshot.today.unpricedTokens, currency = currency)} estimated cost" else null)
             views.setTextViewText(R.id.widget_cost, when {
                 narrow -> if (today != null && today.messages > 0) "$cost · ${formatCompactTokens(today.messages)} msgs" else "$cost est. cost"
                 layout == WidgetLayout.Wide -> "$cost · $longDate · $savedAt"
@@ -417,10 +418,10 @@ class UsageWidgetProvider : AppWidgetProvider() {
                     val weekPoints = week.mapNotNull { byDay[it.toString()] }
                     views.setTextViewText(R.id.widget_chart_title, "7 DAYS")
                     views.setTextColor(R.id.widget_chart_title, ink)
-                    views.setTextViewText(R.id.widget_chart_total, "${formatCompactTokens(weekPoints.sumOf { it.tokens })} · ${formatUsageCost(weekPoints.sumOf { it.costUsd }, weekPoints.sumOf { it.unpricedTokens }, compact = true)}")
+                    views.setTextViewText(R.id.widget_chart_total, "${formatCompactTokens(weekPoints.sumOf { it.tokens })} · ${formatUsageCost(weekPoints.sumOf { it.costUsd }, weekPoints.sumOf { it.unpricedTokens }, compact = true, currency = currency)}")
                     views.setTextColor(R.id.widget_chart_total, muted)
                     views.setContentDescription(R.id.widget_chart_total, if (weekPoints.any { it.unpricedTokens > 0 })
-                        "${formatTokens(weekPoints.sumOf { it.tokens })} tokens, ${formatUsageCost(weekPoints.sumOf { it.costUsd }, weekPoints.sumOf { it.unpricedTokens })} estimated cost" else null)
+                        "${formatTokens(weekPoints.sumOf { it.tokens })} tokens, ${formatUsageCost(weekPoints.sumOf { it.costUsd }, weekPoints.sumOf { it.unpricedTokens }, currency = currency)} estimated cost" else null)
                     val dayIds = listOf(R.id.widget_day_0, R.id.widget_day_1, R.id.widget_day_2, R.id.widget_day_3, R.id.widget_day_4, R.id.widget_day_5, R.id.widget_day_6)
                     dayIds.forEachIndexed { index, id ->
                         views.setTextViewText(id, week[index].format(DateTimeFormatter.ofPattern("EEE", Locale.getDefault())).uppercase(Locale.getDefault()))
