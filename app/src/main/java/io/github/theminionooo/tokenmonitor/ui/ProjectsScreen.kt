@@ -139,15 +139,15 @@ internal fun ProjectUsageRow(project: ProjectUsage, ratio: Float) {
                 Text(project.label.ifBlank { project.id }, color = Ink, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 val meta = when {
                     project.clients.isNotEmpty() -> project.clients.keys.joinToString { it.displayName() }
-                    project.sessionCount > 0 -> "${project.sessionCount} sessions"
-                    else -> "Project total"
+                    project.sessionCount > 0 -> appText(R.string.ui_1_s_sessions_5ee6e, "%1\$s sessions", project.sessionCount)
+                    else -> appText(R.string.ui_project_total_8d7d3, "Project total")
                 }
                 Text(meta, color = Muted, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
             Spacer(Modifier.width(10.dp))
             Column(horizontalAlignment = Alignment.End) {
                 RowTokenValue(project.totalTokens)
-                Text(formatUsageCost(project.costUsd, project.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
+                Text(displayUsageCost(project.costUsd, project.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
             }
         }
         UsageBar(ratio, Purple)
@@ -158,7 +158,7 @@ internal fun ProjectUsageRow(project: ProjectUsage, ratio: Float) {
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 ChoiceGroup(
-                    options = listOf("TOOLS" to "tools", "MODELS" to "models"),
+                    options = listOf(appText(R.string.ui_tools_9d0e5, "TOOLS") to "tools", appText(R.string.ui_models_441ba, "MODELS") to "models"),
                     selected = if (modelShares) "models" else "tools",
                     onSelect = { modelShares = it == "models" },
                 )
@@ -229,12 +229,12 @@ internal fun SessionGroupUsageRow(row: SessionRow, ratio: Float) {
             Spacer(Modifier.width(10.dp))
             Column(horizontalAlignment = Alignment.End) {
                 RowTokenValue(row.totalTokens)
-                Text(formatUsageCost(row.costUsd, row.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
+                Text(displayUsageCost(row.costUsd, row.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
             }
             Spacer(Modifier.width(4.dp))
             Icon(
                 imageVector = Icons.Outlined.KeyboardArrowDown,
-                contentDescription = if (expanded) "Collapse grouped sessions" else "Expand grouped sessions",
+                contentDescription = if (expanded) appText(R.string.ui_collapse_grouped_sessions_fcc39, "Collapse grouped sessions") else appText(R.string.ui_expand_grouped_sessions_ae201, "Expand grouped sessions"),
                 tint = Muted,
                 modifier = Modifier.size(16.dp).rotate(rememberChevronRotation(expanded)),
             )
@@ -260,7 +260,7 @@ internal fun SessionGroupUsageRow(row: SessionRow, ratio: Float) {
 private fun SessionMemberLine(member: SessionMember, kind: SessionGroupKind?, now: Long) {
     val session = member.session
     val labels = sessionRowLabels(session, LocalSessionTitles.current)
-    val role = if (kind == SessionGroupKind.Conversation) (if (member.main) "Main session" else "Subagent") else ""
+    val role = if (kind == SessionGroupKind.Conversation) (if (member.main) appText(R.string.ui_main_session_36cd7, "Main session") else appText(R.string.ui_subagent_b639a, "Subagent")) else ""
     Row(verticalAlignment = Alignment.CenterVertically) {
         UpstreamToolMark(session.client, accentFor(session.client), size = 8.dp)
         Spacer(Modifier.width(7.dp))
@@ -271,7 +271,7 @@ private fun SessionMemberLine(member: SessionMember, kind: SessionGroupKind?, no
         Spacer(Modifier.width(8.dp))
         Column(horizontalAlignment = Alignment.End) {
             Text(formatTokens(session.totalTokens), color = Ink, style = MaterialTheme.typography.bodySmall)
-            Text(formatUsageCost(session.costUsd, session.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
+            Text(displayUsageCost(session.costUsd, session.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
         }
         // Lines the figures up with the group's, which leave room for the chevron.
         Spacer(Modifier.width(20.dp))
@@ -330,12 +330,12 @@ internal fun SessionUsageRow(session: SessionUsage, title: String, meta: String,
             Spacer(Modifier.width(10.dp))
             Column(horizontalAlignment = Alignment.End) {
                 RowTokenValue(session.totalTokens)
-                Text(formatUsageCost(session.costUsd, session.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
+                Text(displayUsageCost(session.costUsd, session.unpricedTokens), color = Muted, style = MaterialTheme.typography.labelSmall)
             }
             Spacer(Modifier.width(4.dp))
             Icon(
                 imageVector = Icons.Outlined.KeyboardArrowDown,
-                contentDescription = if (expanded) "Collapse session details" else "Expand session details",
+                contentDescription = if (expanded) appText(R.string.ui_collapse_session_details_ad28d, "Collapse session details") else appText(R.string.ui_expand_session_details_24b9f, "Expand session details"),
                 tint = Muted,
                 modifier = Modifier.size(16.dp).rotate(rememberChevronRotation(expanded)),
             )
@@ -351,8 +351,8 @@ internal fun SessionUsageRow(session: SessionUsage, title: String, meta: String,
                 else -> Muted
             }
             Row(modifier = Modifier.fillMaxWidth().padding(start = 20.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text("Context ${reading.percentUsed}% used", color = Muted, style = MaterialTheme.typography.labelSmall)
-                Text("${reading.percentLeft}% left", color = contextColor, style = MaterialTheme.typography.labelSmall)
+                Text(appText(R.string.ui_context_1_s_used_03c26, "Context %1\$s%% used", reading.percentUsed), color = Muted, style = MaterialTheme.typography.labelSmall)
+                Text(appText(R.string.ui_1_s_left_e96f9, "%1\$s%% left", reading.percentLeft), color = contextColor, style = MaterialTheme.typography.labelSmall)
             }
             UsageBar(reading.percentUsed / 100f, contextColor)
         }
@@ -362,12 +362,12 @@ internal fun SessionUsageRow(session: SessionUsage, title: String, meta: String,
             exit = fadeOut(tween(if (motionEnabled) 100 else 0)) + shrinkVertically(tween(if (motionEnabled) 180 else 0, easing = DesktopEaseOut)),
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                if (session.projectLabel.isNotBlank()) DetailLine("Project", session.projectLabel)
-                if (session.startedAt.isNotBlank()) DetailLine("Started", session.startedAt.shortTime())
+                if (session.projectLabel.isNotBlank()) DetailLine(appText(R.string.ui_project_f6f4d, "Project"), session.projectLabel)
+                if (session.startedAt.isNotBlank()) DetailLine(appText(R.string.ui_started_faa9e, "Started"), session.startedAt.shortTime())
                 if (session.modelNames.isNotEmpty()) DetailLine("Models", session.modelNames.joinToString { it.displayName() })
-                DetailLine("Session", session.id)
+                DetailLine(appText(R.string.ui_session_f7f19, "Session"), session.id)
                 if (session.dotsObservedOnly) Text(
-                    "Dots usage covers observations while the desktop was connected, not complete history.",
+                    appText(R.string.ui_dots_usage_covers_observations_while_the_desktop_was_91afa, "Dots usage covers observations while the desktop was connected, not complete history."),
                     color = Muted, style = MaterialTheme.typography.labelSmall,
                 )
                 Text(

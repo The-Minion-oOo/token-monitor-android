@@ -2,6 +2,12 @@
 
 ## Version rule
 
+The v0.79.0 r2 candidate uses the same released desktop pin as r1. I added the
+read-only payment/provider details and local presentation choices listed in
+[Desktop parity](DESKTOP_PARITY.md), without changing collection, desktop state
+or the five-second dashboard processing limit. Published release identity stays
+separate from candidate metadata in `release.json`.
+
 Android v0.79.0 r1 targets desktop tag `v0.79.0`, peeled commit
 `a935478d25c66b0ac2e7c9fbb019b5fea40592b7`, in Gradle and `upstream.json`.
 I reviewed the changes since v0.78.0. OmO Native (`senpi`) has its own label and

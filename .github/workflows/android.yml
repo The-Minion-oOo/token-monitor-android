@@ -31,6 +31,8 @@ jobs:
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6
       - name: Check documentation links
         run: node tools/check-docs.mjs
+      - name: Check translated resources
+        run: node tools/check-locales.mjs
       - name: Check release metadata and tooling regressions
         run: |
           node tools/check-release.mjs

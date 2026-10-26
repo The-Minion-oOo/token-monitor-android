@@ -1,5 +1,18 @@
 # Install and update
 
+**Source candidate:** v0.79.0 r2 (`790002`) adds the display features and languages
+described in [Desktop parity](DESKTOP_PARITY.md). The public download remains
+v0.79.0 r1 until a signed r2 release is published. The r2 candidate has not been
+tested on a physical phone; [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94)
+tracks that follow-up separately.
+
+In r2, open **Settings → App language**, **Display currency**, **Tools and quotas**
+or **Live throughput** for the new local choices. Language starts with the phone
+setting, currency starts in USD and live rates start Off. Automatic rates use
+public exchange-rate services while the app is visible; manual rates avoid that
+request. **Preview diagnostic report** shows exactly what will be copied/shared.
+No report is sent automatically.
+
 ## Requirements
 
 - Android 8.0 or newer.

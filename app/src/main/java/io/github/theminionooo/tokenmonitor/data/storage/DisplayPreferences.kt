@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 internal enum class RankingMetric { Tokens, Cost }
 internal enum class LimitBarMetric { Remaining, Used }
+internal enum class LiveRateMode { Off, Speed, Burn }
 internal enum class ReduceMotionMode { System, On, Off }
 
 /** The desktop v0.70 Appearance choice for changing token totals; Roll is its default. */
@@ -38,6 +39,20 @@ internal data class DisplayOptions(
     val visibleViews: List<String> = defaultViews,
     val visibleHomeModules: List<String> = defaultHomeModules,
     val homeListCounts: Map<String, Int> = defaultHomeListCounts,
+    val hiddenTools: Set<String> = emptySet(),
+    val pinnedTools: List<String> = emptyList(),
+    val toolOrder: List<String> = emptyList(),
+    val hiddenProviders: Set<String> = emptySet(),
+    val hiddenLimitItems: Set<String> = emptySet(),
+    val currencyCode: String = "USD",
+    val manualCurrencyRate: Boolean = false,
+    val manualRates: Map<String, Double> = emptyMap(),
+    val exchangeRates: Map<String, Double> = emptyMap(),
+    val exchangeRateDate: String = "",
+    val exchangeRateFetchedAt: Long = 0,
+    val exchangeRateAttemptedAt: Long = 0,
+    val liveRateMode: LiveRateMode = LiveRateMode.Off,
+    val showLiveRateModels: Boolean = false,
 ) {
     fun homeListCount(module: String): Int =
         (homeListCounts[module] ?: defaultHomeListCounts[module] ?: 5).coerceIn(1, 50)
@@ -55,6 +70,8 @@ internal class DisplayPreferences(context: Context) {
     private val preferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
     private val _options = MutableStateFlow(load())
     val options: StateFlow<DisplayOptions> = _options.asStateFlow()
+
+    fun setOptions(options: DisplayOptions) = update { options }
 
     fun setColorfulToolMarks(enabled: Boolean) = update { copy(colorfulToolMarks = enabled) }
     fun setCompactTokenTotal(enabled: Boolean) = update { copy(compactTokenTotal = enabled) }
@@ -108,6 +125,20 @@ internal class DisplayPreferences(context: Context) {
             putString(visibleViewsKey, next.visibleViews.joinToString(","))
             putString(visibleHomeModulesKey, next.visibleHomeModules.joinToString(","))
             DisplayOptions.defaultHomeListCounts.keys.forEach { module -> putInt("home_count_$module", next.homeListCount(module)) }
+            putString("hidden_tools", encodeDisplayList(next.hiddenTools))
+            putString("pinned_tools", encodeDisplayList(next.pinnedTools))
+            putString("tool_order", encodeDisplayList(next.toolOrder))
+            putString("hidden_providers", encodeDisplayList(next.hiddenProviders))
+            putString("hidden_limit_items", encodeDisplayList(next.hiddenLimitItems))
+            putString("currency_code", next.currencyCode)
+            putBoolean("currency_manual", next.manualCurrencyRate)
+            putString("currency_manual_rates", encodeRates(next.manualRates))
+            putString("currency_rates", encodeRates(next.exchangeRates))
+            putString("currency_rate_date", next.exchangeRateDate)
+            putLong("currency_rate_fetched", next.exchangeRateFetchedAt)
+            putLong("currency_rate_attempted", next.exchangeRateAttemptedAt)
+            putString("live_rate_mode", next.liveRateMode.name)
+            putBoolean("live_rate_models", next.showLiveRateModels)
         }
         _options.value = next
     }
@@ -131,6 +162,20 @@ internal class DisplayPreferences(context: Context) {
         visibleViews = preferences.getString(visibleViewsKey, null).orderedValues(DisplayOptions.defaultViews),
         visibleHomeModules = preferences.getString(visibleHomeModulesKey, null).orderedValues(DisplayOptions.defaultHomeModules),
         homeListCounts = DisplayOptions.defaultHomeListCounts.mapValues { (module, fallback) -> preferences.getInt("home_count_$module", fallback).coerceIn(1, 50) },
+        hiddenTools = decodeDisplayList(preferences.getString("hidden_tools", null)).toSet(),
+        pinnedTools = decodeDisplayList(preferences.getString("pinned_tools", null)),
+        toolOrder = decodeDisplayList(preferences.getString("tool_order", null)),
+        hiddenProviders = decodeDisplayList(preferences.getString("hidden_providers", null)).toSet(),
+        hiddenLimitItems = decodeDisplayList(preferences.getString("hidden_limit_items", null)).toSet(),
+        currencyCode = preferences.getString("currency_code", "USD")?.takeIf { it in usageCurrencies } ?: "USD",
+        manualCurrencyRate = preferences.getBoolean("currency_manual", false),
+        manualRates = decodeRates(preferences.getString("currency_manual_rates", null)),
+        exchangeRates = decodeRates(preferences.getString("currency_rates", null)),
+        exchangeRateDate = preferences.getString("currency_rate_date", "").orEmpty(),
+        exchangeRateFetchedAt = preferences.getLong("currency_rate_fetched", 0),
+        exchangeRateAttemptedAt = preferences.getLong("currency_rate_attempted", 0),
+        liveRateMode = preferences.getString("live_rate_mode", null).enumOrDefault(LiveRateMode.Off),
+        showLiveRateModels = preferences.getBoolean("live_rate_models", false),
     )
 
     private companion object {

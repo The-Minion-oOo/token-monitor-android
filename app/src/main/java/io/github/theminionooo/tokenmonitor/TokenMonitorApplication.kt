@@ -11,19 +11,25 @@ import kotlin.concurrent.thread
  */
 class TokenMonitorApplication : Application() {
     private var nightMode = 0
+    private var languages = ""
 
     override fun onCreate() {
         super.onCreate()
+        io.github.theminionooo.tokenmonitor.ui.AppLanguage.bind(this)
         nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        languages = resources.configuration.locales.toLanguageTags()
         io.github.theminionooo.tokenmonitor.widget.WidgetRefreshScheduler.reconcileAsync(this)
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
+        io.github.theminionooo.tokenmonitor.ui.AppLanguage.bind(this)
         val next = newConfig.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        if (next != nightMode) {
+        val nextLanguages = newConfig.locales.toLanguageTags()
+        if (next != nightMode || nextLanguages != languages) {
             nightMode = next
-            thread(name = "widget-night-mode") { WidgetUpdateCoordinator.refresh(applicationContext) }
+            languages = nextLanguages
+            thread(name = "widget-configuration") { WidgetUpdateCoordinator.refresh(applicationContext) }
         }
     }
 }

@@ -115,16 +115,19 @@ internal fun LazyListScope.breakdownItems(
     modelRows: Boolean = false,
     onToolSelected: ((String) -> Unit)? = null,
     unpriced: Map<String, Long> = emptyMap(),
+    displayOptions: DisplayOptions = DisplayOptions(),
 ) {
     if (tokens.isEmpty()) {
         item { MutedCopy(emptyMessage, modifier = Modifier.padding(vertical = 12.dp)) }
     } else {
         val maximum = tokens.values.maxOrNull()?.coerceAtLeast(1L) ?: 1L
-        items(tokens.entries.sortedByDescending { (name, count) -> if (rankingMetric == RankingMetric.Cost) costs[name] ?: 0.0 else count.toDouble() }, key = { it.key }) { (name, count) ->
+        val ordered = if (modelRows) tokens.entries.sortedByDescending { (name, count) -> if (rankingMetric == RankingMetric.Cost) costs[name] ?: 0.0 else count.toDouble() }
+            else io.github.theminionooo.tokenmonitor.data.storage.orderedTools(tokens, costs, displayOptions.copy(rankingMetric = rankingMetric))
+        items(ordered, key = { it.key }) { (name, count) ->
             DesktopUsageRow(
                 name = name,
                 totalTokens = count,
-                detail = if (name in costs || (unpriced[name] ?: 0) > 0) formatUsageCost(costs[name] ?: 0.0, unpriced[name] ?: 0) else "",
+                detail = if (name in costs || (unpriced[name] ?: 0) > 0) displayUsageCost(costs[name] ?: 0.0, unpriced[name] ?: 0) else "",
                 ratio = count.toFloat() / maximum,
                 cacheReadTokens = cacheReads[name] ?: 0L,
                 outputTokens = outputs[name] ?: 0L,
@@ -152,7 +155,7 @@ internal fun DesktopUsageRow(
     var expanded by rememberSaveable(name) { mutableStateOf(false) }
     val motionEnabled = LocalInteractionMotion.current
     val rowModifier = if (onToolSelected != null) {
-        Modifier.fillMaxWidth().clickable(onClickLabel = "Models used through $name") { onToolSelected(name) }.padding(vertical = 2.dp)
+        Modifier.fillMaxWidth().clickable(onClickLabel = appText(R.string.ui_models_used_through_1_s_0366e, "Models used through %1\$s", name)) { onToolSelected(name) }.padding(vertical = 2.dp)
     } else if (hasBreakdown) {
         Modifier.fillMaxWidth().clickable { expanded = !expanded }.padding(vertical = 2.dp)
     } else {
@@ -203,10 +206,10 @@ internal fun TokenComponentBreakdown(
     val hit = if (input > 0) cacheRead.toDouble() / input * 100.0 else 0.0
     val miss = if (input > 0) 100.0 - hit else 0.0
     val rows = buildList {
-        add(Triple("Input (Cache Hit)", cacheRead, hit))
-        add(Triple("Input (Cache Miss)", cacheMiss, miss))
-        add(Triple("Output", output, null))
-        if (unclassified > 0) add(Triple("Unclassified", unclassified, null))
+        add(Triple(appText(R.string.ui_input_cache_hit_5b6f7, "Input (Cache Hit)"), cacheRead, hit))
+        add(Triple(appText(R.string.ui_input_cache_miss_08248, "Input (Cache Miss)"), cacheMiss, miss))
+        add(Triple(appText(R.string.ui_output_4bed3, "Output"), output, null))
+        if (unclassified > 0) add(Triple(appText(R.string.ui_unclassified_390c4, "Unclassified"), unclassified, null))
     }
     Column(modifier = Modifier.padding(start = 20.dp, end = 2.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
         rows.forEach { (label, value, percent) ->

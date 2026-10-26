@@ -52,7 +52,10 @@ data class UsagePeriod(
     val clientUnpricedTokens: Map<String, Long> = emptyMap(),
     val modelUnpricedTokens: Map<String, Long> = emptyMap(),
     val clientModelUnpricedTokens: Map<String, Map<String, Long>> = emptyMap(),
+    val modelThroughput: Map<String, ThroughputCounters> = emptyMap(),
 )
+
+data class ThroughputCounters(val timedTokens: Long, val timedOutputTokens: Long, val timedDurationMs: Long)
 
 data class ProjectUsage(
     val id: String,
@@ -156,7 +159,15 @@ data class LimitAccount(
     val accountKey: String = "",
     val productLabel: String = "",
     val spend: LimitSpend? = null,
+    val resetCredits: ResetCredits? = null,
+    val usageSummary: LimitUsageSummary? = null,
 )
+
+data class ResetCredits(val availableCount: Long?, val nextExpiresAt: String, val expirations: List<String>, val grants: List<ResetGrant>)
+data class ResetGrant(val id: String, val label: String, val resetsLeft: Long?, val resetsTotal: Long?, val startsAt: String,
+    val endsAt: String, val usableNow: Boolean?, val useRequiresLimit: Boolean?, val clears: List<String>)
+data class LimitUsageSummary(val period: String, val totalTokens: Long?, val todayTokens: Long?, val weekTokens: Long?,
+    val inputTokens: Long?, val outputTokens: Long?, val requests: Long?, val standardCost: Double?)
 
 /** Provider-reported native-currency spend; daily/weekly values may be locally tracked. */
 data class LimitSpend(
@@ -214,7 +225,18 @@ data class Subscription(
     val startDate: String,
     val interval: String,
     val autoRenew: Boolean,
+    val kind: String = "subscription",
+    val intervalCount: Int = 1,
+    val binding: SubscriptionBinding = SubscriptionBinding(),
+    val topUps: List<SubscriptionTopUp> = emptyList(),
+    val nextRenewalOverride: String = "",
+    val endDate: String = "",
+    val note: String = "",
+    val amountReported: Boolean = true,
 )
+
+data class SubscriptionBinding(val profileName: String = "", val accountKey: String = "", val accountEmail: String = "")
+data class SubscriptionTopUp(val id: String, val date: String, val amountMinor: Long)
 
 data class HubSubscriptions(
     val updatedAt: String = "",

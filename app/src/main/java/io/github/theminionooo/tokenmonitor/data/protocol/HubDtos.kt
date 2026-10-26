@@ -41,7 +41,10 @@ internal data class HubPeriodDto(
     val clientUnpricedTokens: Map<String, Long> = emptyMap(),
     val modelUnpricedTokens: Map<String, Long> = emptyMap(),
     val clientModelUnpricedTokens: Map<String, Map<String, Long>> = emptyMap(),
+    val modelThroughput: Map<String, HubThroughputDto> = emptyMap(),
 )
+
+internal data class HubThroughputDto(val timedTokens: Long, val timedOutputTokens: Long, val timedDurationMs: Long)
 
 internal data class HubProjectDto(
     val id: String = "",
@@ -137,7 +140,15 @@ internal data class HubLimitAccountDto(
     val accountKey: String = "",
     val productLabel: String = "",
     val spend: HubLimitSpendDto? = null,
+    val resetCredits: HubResetCreditsDto? = null,
+    val usageSummary: HubLimitUsageSummaryDto? = null,
 )
+
+internal data class HubResetCreditsDto(val availableCount: Long?, val nextExpiresAt: String, val expirations: List<String>, val grants: List<HubResetGrantDto>)
+internal data class HubResetGrantDto(val id: String, val label: String, val resetsLeft: Long?, val resetsTotal: Long?, val startsAt: String,
+    val endsAt: String, val usableNow: Boolean?, val useRequiresLimit: Boolean?, val clears: List<String>)
+internal data class HubLimitUsageSummaryDto(val period: String, val totalTokens: Long?, val todayTokens: Long?, val weekTokens: Long?,
+    val inputTokens: Long?, val outputTokens: Long?, val requests: Long?, val standardCost: Double?)
 
 internal data class HubLimitSpendDto(
     val currency: String,
@@ -200,7 +211,19 @@ internal data class HubSubscriptionDto(
     val startDate: String = "",
     val interval: String = "month",
     val autoRenew: Boolean = true,
+    val kind: String = "subscription",
+    val intervalCount: Int = 1,
+    val profileName: String = "",
+    val accountKey: String = "",
+    val accountEmail: String = "",
+    val topUps: List<HubTopUpDto> = emptyList(),
+    val nextRenewalOverride: String = "",
+    val endDate: String = "",
+    val note: String = "",
+    val amountReported: Boolean = true,
 )
+
+internal data class HubTopUpDto(val id: String, val date: String, val amountMinor: Long)
 
 internal data class HubSubscriptionsDto(
     val updatedAt: String = "",

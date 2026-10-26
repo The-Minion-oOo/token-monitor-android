@@ -1,225 +1,59 @@
 # Desktop parity for v0.79.0
 
-The Android adapter targets desktop Token Monitor v0.79.0 using
-versioned fixtures and responses from the pinned released Hub. It mirrors
-the desktop information that the Hub can safely provide while keeping the phone
-read-only and lightweight.
+I compare the Android companion with released desktop source, rather than
+unreleased desktop changes. The baseline is tag `v0.79.0`, commit
+`a935478d25c66b0ac2e7c9fbb019b5fea40592b7`. Android remains a read-only
+dashboard: the desktop collects usage, signs in to providers and hosts the Hub.
 
-OmO Native has its own label and cyan tool colour, separate from Pi and Oh My
-Pi. OpenCode Console Go quotas and Zen balances use the existing Limits rows,
-including unknown resets and real zero or negative balances. Enable OmO Native
-under Tools on desktop if it is not already collecting. Desktop notch
-navigation, display-mode previews and tray changes stay on desktop.
+The latest published APK is **v0.79.0 r1**. Items marked **r2 candidate** below
+are implemented in the next Android revision; they are not in the r1 download.
 
-ZCode titles and tool/workflow subagents use Android's existing session rows.
-Deliberate forks and side chats remain separate, and title sharing stays under
-desktop control. The v0.78.0 Edge Dock glass, native tooltips and Claude CLI
-probe isolation are desktop features, not Android permissions or collectors.
-
-## Dashboard coverage
-
-| Desktop surface | Android coverage |
+| Desktop feature | Android coverage |
 | --- | --- |
-| Home totals and period selection | Day, month, week, 7 days, 30 days, and total, with a configurable default |
-| Home lists | Separate 1–50 item counts for Tools, Models, Sessions and Devices; existing Android defaults stay unchanged |
-| Home Sessions | The chosen number of newest sessions plus running/waiting overflow, reported titles, recent context, and a link to Sessions; independent of the totals period |
-| Limits | Provider windows, remaining or used bars, reset time, plan/source metadata, separate MiMo products, native-currency wallet/spend values, MiniMax pay-as-you-go balances, and hidden-by-default account email |
-| New API account spend | Today, Month, rolling seven-day and All-time billing totals when supplied by the Hub; missing periods stay absent |
-| Tools | Token and cost totals, proportional bars, cache hit, cache miss, output, and unclassified details |
-| Status | Provider status, message, update time, and provider status-page link |
-| Devices | Device totals, clients, models, collection cadence, last upload, and retained history |
-| Models | Token or cost ranking, with the desktop vendor mark for recognized model families and a generic model mark for unknown names |
-| Projects | Totals and expandable Tools/Models token shares, with Unknown model for missing attribution |
-| Sessions | Reported conversation title, project, tool, model, start/update time, session ID, tokens, cost, Running/Waiting for you/Finished/Idle activity, and recent context-window use; Codex subagents and continuations, T3 Code continuations, Grok Bot records and background reviews are grouped under one row with combined usage; untitled sessions retain the client/model label |
-| Usage dashboard | Overview cards, activity heatmap, and model/tool summaries |
-| Trends | By tool or model, Bars or K-line, and 7/30/90-day, one-year, or all-history ranges |
-| Display settings | View and Home-module visibility/order, ranking metric, limit-bar metric/source/email visibility, compact total, tool colors, default range, reduce motion, the Digit roll or Count up token number animation, and a three-step text size in place of the desktop Zoom slider |
-| Appearance | Interface theme with the desktop's Default, Obsidian, and Porcelain presets, desktop `TM1-…` and `TM2-…` theme codes pasted as-is, an independent TM2 chart color, the Live indicator and Tool icons toggles, and a phone-only **Follow phone light and dark** switch: Porcelain by day, the chosen dark preset at night. Glass and Depth are desktop window effects with no Android equivalent |
+| Totals and periods | Day, month, week, rolling 7/30 days and total; configurable default |
+| Home | Reorder or hide modules; separate 1–50 item counts for Tools, Models, Sessions and Devices |
+| Tools and models | Tokens, estimated cost, ranking, cache/input/output detail; tap a tool to filter models |
+| Local item controls | **r2 candidate:** hide, pin and reorder tools; hide providers, individual quota windows, provider details and spend |
+| Limits | Provider windows, remaining/used bars, reset/expiry countdowns, plan, source and optional account email; native-currency balances and spend |
+| Provider details | **r2 candidate:** reset-credit counts, expiry and grant eligibility; reported TypeSafe period/today/week tokens, input/output, requests and estimated spend |
+| Recorded payments | **r2 candidate:** recurring intervals and renewal/end dates, account binding, notes and dated top-up ledgers. Top-ups are not monthly subscriptions |
+| Display currency | **r2 candidate:** USD, CNY, TWD, HKD, INR, EUR, JPY, KRW and BRL; saved automatic or manual rates. Provider balances and payments retain their reported currency |
+| Live speed and burn | **r2 candidate:** optional recent aggregate/per-model output tokens/s or tokens/min from matched cumulative counters. Off by default; separate from existing session-average speed |
+| Languages | **r2 candidate:** English, Simplified/Traditional Chinese, Korean, Japanese, Brazilian Portuguese, Spanish, Hindi, Gujarati, Bengali, Tamil and Telugu; follows the phone or an explicit app choice |
+| Diagnostics | **r2 candidate:** preview, copy or share an allowlisted report with versions and state flags; no addresses, secrets, account identities, conversation text or cached responses |
+| Devices | Reported totals, clients, models, collection cadence, last upload and retained history |
+| Projects and sessions | Search, expandable tool/model shares, reported titles and session relationships. Codex/T3 continuations and subagents are grouped; forks and side chats stay separate |
+| Session context | Reported Running/Waiting/Idle state, context-window use, cache-hit percentage and optional prompt-cache estimates |
+| History | Overview cards, daily heatmap, period comparisons, model/tool exploration, bars and K-line ranges; missing days stay missing |
+| Service status | Claude, OpenAI, Cursor and DeepSeek status, incidents and status-page links |
+| Appearance | Desktop TM1/TM2 themes, independent chart colour, light/dark following, tool marks, compact totals, text size, reduced motion and number animations |
+| Widgets | Responsive Usage widget and fixed four-page Pages widget; saved snapshots, one-shot Refresh, bounded one-hour Live and optional 30/60-minute background refresh |
+| Connections | Recommended Tailscale, optional home Wi-Fi/failover and separate opt-in public DNS HTTPS with system-CA TLS |
 
-All expandable rows, selectors, values, bars, and screen changes use short
-interaction-driven motion. **Reduce motion** can follow Android, minimize motion,
-or leave the app's animations enabled. There is no continuous decorative
-animation.
+Local visibility controls change presentation, never collection or the Hub's
+accounting totals. Live-rate attribution depends on what the Hub sends; large
+desktop sync payloads can omit per-model throughput. Android re-baselines when
+sources or capabilities change and expires idle samples after eight seconds.
+It does not infer a model rate from a lifetime average or request updates faster.
 
-Desktop interface colors are user-configurable, so a different selected palette
-is not treated as a parity failure. Android keeps a touch-oriented native theme
-and preserves the desktop app's translucent segmented controls with their
-sliding selection, recessed panels, hierarchy, spacing, and semantic accents.
-Time-based labels follow the desktop wording: limit windows count down with
-`Reset 1h 59m`, `Expires 1h 59m`, or `Changes in 1h 59m` for a mixed boundary, and devices, providers, and limit accounts show ages such as
-`Updated 5m ago`, refreshed on a slow clock between Hub events. Desktop
-glass/backdrop, window opacity, zoom, title-bar layout, and desktop font
-controls are window-specific rather than Hub dashboard features.
+## Intentional desktop responsibilities
 
-## Intentional boundaries
+Provider sign-in, account management, collector settings, pricing/alias edits,
+subscription editing, Hub hosting, device deletion and shared-setting writes
+remain on desktop. Android does not read transcript bodies, local credential
+files, collector logs or absolute project paths. Its diagnostic report describes
+the companion, not the desktop's files.
 
-The following remain on desktop because they collect data, change configuration,
-control a desktop window, or need information outside Android's read-only endpoints:
+Tray, notch, Edge Dock, floating bubbles, macOS haptics, global shortcuts,
+Discord presence and desktop startup/window effects have no direct Android
+equivalent. The phone uses native screens and launcher widgets.
 
-- tool discovery, account sign-in, collection cadence, diagnostics, export, and
-  subscription editing;
-- Hub hosting/receiver setup, device deletion, tray/widget/bubble behavior,
-  startup behavior, global shortcuts, Discord presence, and desktop updates;
-- prompt and response transcript bodies, absolute project paths, local
-  credential state, and collector logs;
-- exact renderer-only attribution that is not present in the Hub response.
-- live period/per-model token-rate presentation. Period throughput counters are
-  parsed compatibly; the session-average speed added in v0.65.0 is separate.
-- the Edge Dock, floating AI bubble, macOS haptics, and their desktop-window
-  behavior. Sessions remain a normal mobile dashboard destination.
+## Evidence
 
-v0.61.0 presentation parity includes canonical Xiaomi MiMo and Devin usage,
-Cline and Devin limits, GitHub Copilot labeling, and the desktop provider names.
-Those are display mappings over the existing Hub data, not new phone-side
-collection.
+Versioned fixtures and the pinned Node/Worker Hub contract cover the external
+protocol. Emulator checks cover UI behaviour and local settings. Physical-phone
+results apply only to the build named in [Validation](VALIDATION.md).
+The r2 phone follow-up is [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94).
 
-v0.62.0 distinguishes Oh My Pi (`omp`) from Pi and shows TypeSafe's plan and
-balance plus Devin's reported plan. Detailed TypeSafe token summaries and
-Claude reset-grant explanations remain desktop-only for now.
-
-v0.63.0 can attach locally resolved conversation titles to Cursor sessions.
-Android displays a reported title in Home and the Sessions list and otherwise keeps its
-existing label. Titles may contain private text, so they are not used in widgets
-or public examples. The v0.63.0 glass styles, background-image control, and
-credential setup are desktop-only; collector fixes change the numbers supplied
-by the Hub without adding phone-side collection.
-
-v0.63.1 consolidates Cursor Auto under `cursor-auto` in usage and history and
-includes reasoning tokens in the ZCode and OpenCode totals it reports. Android
-displays those source values as received, without a second normalization or
-token addition. Background scan, client-mode publish, and Electron renderer
-performance changes remain desktop responsibilities.
-
-v0.64.0 adds Muse Code's label and Meta mark, StepFun Coding and Token Plan
-windows, richer Grok Build session titles, and Codex Pro/Pro More/Pro Max plan
-labels. Android reads the normalized Hub data, including OpenRouter's resetting
-key allowance; provider sign-in and quota calculation remain on desktop. Home
-Sessions uses month and today, excludes background reviews, deduplicates by client
-and session ID, and never marks archived/deleted sessions as running. New installs
-show it by default; saved Home layouts keep their existing module choices.
-
-v0.65.0 adds fx's label and mark, session-average generation speed, cache-hit
-percentage and optional prompt-cache estimates to Home and Sessions. Settings
-can hide reported session titles locally without removing them from the snapshot
-cache. Countdown labels are estimates, not guaranteed provider retention.
-Desktop hover scrolling, Edge Dock quota animations, per-provider hidden usage
-items, and collector changes remain desktop responsibilities.
-
-v0.66.0 recognizes MiniMax Code (`mcode`) with its label and MiniMax mark in
-the existing tool, session, device and widget surfaces. Its usage remains separate
-from the `minimax` quota provider. Corrected custom-pricing and cache-write costs
-are read from the Hub, including history; Android does not recompute them.
-MiniMax API-region selection, sync/device management, T3 Code title discovery,
-large-transcript handling, JSON exports and bundled Tokscale updates remain
-desktop responsibilities. Hub-stripped titles keep the existing client/model fallback.
-
-Optional macOS iCloud Drive sync, Edge Dock fullscreen/quota pins, Claude Web
-organization selection, and collection/watch fixes remain desktop features.
-Android still requires a hosted Hub over its private network.
-
-v0.67.0 adds TM2 theme codes with an independent chart color and distinguishes
-MiMo Console from Desktop Membership. Wallet balances and spend retain their
-reported currency; today/week spend is labeled tracked rather than a provider
-total. The Hub strips conversation titles by default and sends them only with
-server and device consent. Android displays a received title according to its
-local visibility setting; it does not grant sharing consent or change Hub settings.
-Shared alias/pricing documents remain on desktop. Android displays the names and
-costs already reported in usage rather than fetching or applying those documents.
-
-v0.68.0 preserves the Hub's explicit unpriced-token counts in current usage,
-selected history ranges and tool/model attribution. Cost labels distinguish the
-known subtotal from unpriced usage; zero cost alone does not create a warning.
-Codex Dots sessions carry an observed-only label, not a claim of full history.
-Dots collection/visibility controls, MiMo cookie discovery, batch alias editing
-and Edge Dock refinements stay on desktop. Android does not recollect or deduplicate
-the Hub's usage. Older Hubs without these optional fields keep their previous display.
-
-v0.69.0 adds optional session identity, relationship and activity fields.
-Android groups Codex subagents and continuation files, T3 Code continuations and
-delegated runs under their main session with combined usage, groups Cursor Grok
-Bot activity records and gathers Codex background reviews as **Codex Auto
-Review**. Grouping changes presentation only; every session keeps its own usage
-and the period totals stay as the Hub reports them. Claude Code and Codex
-sessions that are waiting on a reply or approval show **Waiting for you**. A
-fresh provider observation wins over the transcript, and Codex question waiting
-is bounded by the transcript's ten-minute window. The Edge Dock, the desktop's
-local session-detail views, activity collection and the Electron-only bot-id
-projection stay on desktop. Older Hubs keep their previous flat session list.
-
-v0.70.0 adds CatPaw as an opt-in tool, and Android shows it by its desktop name
-in tools, sessions and models. CatPaw models are never priced, so its tokens
-count as unpriced, with no invented cost. A MiniMax key in pay-as-you-go mode
-reports a balance instead of Token Plan quota windows: yuan for the China
-region, dollars for international. Limits shows it with a symbol and two
-decimals and a bar that is full while money remains and empty at zero, as the
-desktop does, and keeps a zero or negative balance as reported. The MiniMax
-billing type appears as the plan. Every balance and spend figure now shows a
-`¥` or `$` symbol and two decimals like the desktop; Android keeps thousands
-separators. Token totals use the desktop's token number animation.
-**Digit roll** is the default and **Count up** is the previous behavior; both
-are under **Settings → Appearance**, and Reduce motion still turns animation
-off. The roll keeps the desktop's timing, scale and fade but not its brief
-blur: blurring every glyph crashed the Android emulator's renderer during
-testing, and the roll reads the same without it. Large
-session lists skip grouping work when no session links to another, as the
-desktop's faster session lists do. CatPaw collection, MiniMax billing-mode and
-region selection, Codex compressed-log reading, StepFun sign-in renewal,
-Hermes reasoning accounting and Edge Dock changes stay on desktop. Android
-shows the numbers the Hub reports.
-
-The Android app does not replace these with remote commands. It reads only the
-documented Hub endpoints listed in [`SECURITY.md`](SECURITY.md).
-
-v0.71.0 adds Goose usage and Notion AI allowances. Android uses their desktop
-labels and marks, shows both Rolling and Monthly quotas, and keeps separate
-Notion workspaces and WorkBuddy accounts. The marks use theme colors rather
-than desktop's white fill so they remain readable in light themes.
-I leave WorkBuddy sign-in, account management and its optional combined quota
-on desktop. Pi/CodeBuddy transcript details are not shared with Android.
-
-v0.72.0 shows Cursor's unified Included usage and optional positive Prepaid
-balance through the existing quota display. Weekly resets stay unknown when
-none is reported. I calculate a grouped row's cache-hit percentage and output
-speed from summed raw counters, show its combined message count, and use the
-latest member's time without replacing the main title. Untimed output cannot
-borrow another member's duration. No transcript or new permission is needed.
-Desktop automatic update checks, OpenCode collection fixes and the Windows
-Edge Dock unlock fix remain desktop-only.
-
-v0.73.0 hides only the unsupported private-use icon in an Oh My Pi title-card
-prefix, keeping its code and title text. Stored titles and the privacy toggle
-are unchanged. Android reads the corrected Cursor percentage and matched timing
-counters supplied by desktop, without probing provider accounts or estimating
-output from total-token coverage. Claude Desktop usage stays under Claude, and
-Windows Goose usage stays under Goose. Oh My Pi transcripts, hover previews,
-collector/archive fixes and desktop update history remain desktop features.
-
-## Mobile additions
-
-For v0.76.0, I added Home list counts and project model shares, kept Antigravity
-children under their parent conversation, and aligned Grok Bot activity with
-desktop. Argon quota windows stay separate, and missing values are not shown as
-exhausted or available. I retained the Pages widget design and digit roll.
-macOS notch gestures, glass, dock stacking and scan priority remain desktop-only.
-
-- Live streaming while a dashboard is visible, efficient 30-second widget Live refreshes, refresh on resume, and an offline snapshot.
-- Tailscale-first address validation, with private LAN use behind an explicit
-  opt-in and public targets rejected.
-- An optional home Wi-Fi fallback address. The phone tries the address that
-  answered last and moves to the other when it is silent, for snapshot reads
-  and the live stream alike.
-- Android Keystore-backed pairing storage, with the saved Hub address shown in
-  Settings so the phone never has to guess which Hub it is paired to.
-- Dense mobile navigation plus configurable view and Home-module order.
-- System Back returns to Home from any view and from Settings to the view that
-  opened it, instead of leaving the app.
-- Pull down on any dashboard view to request a fresh snapshot.
-- A light haptic tick on tab and view changes.
-- An on-demand check for signed Android releases, with a Releases link and no
-  background polling or silent installation.
-- A four-page home-screen widget for Overview, Limits, Breakdown, and Activity.
-  It changes pages locally inside one fixed 1.82:1 card, without adding a network
-  request, timer, or background task.
-
-When upstream changes, update the fixtures and compatibility adapter first.
-See [`UPSTREAM_SYNC.md`](UPSTREAM_SYNC.md) for the repeatable process.
+See [Architecture](ARCHITECTURE.md), [Protocol](PROTOCOL.md),
+[Languages](LANGUAGES.md) and [Upstream sync](UPSTREAM_SYNC.md).

@@ -9,13 +9,15 @@ import java.time.LocalDate
 import java.time.temporal.WeekFields
 import java.util.Locale
 
-internal enum class DashboardPeriod(val label: String, val statsKey: String? = null) {
+internal enum class DashboardPeriod(private val englishLabel: String, val statsKey: String? = null) {
     Today("DAY", "today"),
     Month("MONTH", "month"),
     Week("WEEK"),
     Last7("7 DAYS"),
     Last30("30 DAYS"),
     AllTime("TOTAL", "allTime");
+
+    val label: String get() = displayLabel(englishLabel)
 
     fun usage(snapshot: HubSnapshot): UsagePeriod = when (this) {
         Today -> snapshot.today
@@ -51,10 +53,10 @@ private fun aggregateDeviceHistory(device: DeviceUsage, startDate: LocalDate): U
 }
 
 internal fun periodRangeLabel(period: DashboardPeriod): String = when (period) {
-    DashboardPeriod.Month -> "This month"
-    DashboardPeriod.Week -> "This week"
-    DashboardPeriod.Last7 -> "Last 7 days"
-    DashboardPeriod.Last30 -> "Last 30 days"
+    DashboardPeriod.Month -> displayLabel("This month")
+    DashboardPeriod.Week -> displayLabel("This week")
+    DashboardPeriod.Last7 -> displayLabel("Last 7 days")
+    DashboardPeriod.Last30 -> displayLabel("Last 30 days")
     else -> period.label
 }
 

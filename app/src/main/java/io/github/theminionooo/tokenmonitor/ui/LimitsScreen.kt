@@ -106,33 +106,34 @@ import kotlin.math.roundToLong
  * Limits and Subscriptions lists.
  */
 internal fun LazyListScope.limitItems(snapshot: HubSnapshot, displayOptions: DisplayOptions) {
-    item { LimitAttentionPanel(snapshot) }
-    if (snapshot.stats.limits.providers.isEmpty()) item { MutedCopy("No account limits are available from this Hub yet.", modifier = Modifier.padding(vertical = 12.dp)) }
+    val visibleAccounts = io.github.theminionooo.tokenmonitor.data.storage.visibleLimitAccounts(snapshot.stats.limits.providers, displayOptions)
+    item { LimitAttentionPanel(snapshot.copy(stats = snapshot.stats.copy(limits = snapshot.stats.limits.copy(providers = visibleAccounts)))) }
+    if (snapshot.stats.limits.providers.isEmpty()) item { MutedCopy(appText(R.string.ui_no_account_limits_are_available_from_this_hub_yet_ed63e, "No account limits are available from this Hub yet."), modifier = Modifier.padding(vertical = 12.dp)) }
     else {
-        val providers = prioritizeAvailableLimits(snapshot.stats.limits.providers)
+        val providers = prioritizeAvailableLimits(visibleAccounts)
         val keys = uniqueKeys(providers, ::limitAccountIdentity)
         itemsIndexed(providers, key = { index, _ -> keys[index] }) { _, account ->
             LimitAccountRow(account, displayOptions)
         }
     }
     if (snapshot.subscriptions.entries.isNotEmpty()) {
-        item { Text("SUBSCRIPTIONS", color = Ink, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 8.dp)) }
+        item { Text(appText(R.string.ui_subscriptions_5c8f4, "SUBSCRIPTIONS"), color = Ink, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 8.dp)) }
         val subscriptions = snapshot.subscriptions.entries
         val keys = uniqueKeys(subscriptions) { it.id }
-        itemsIndexed(subscriptions, key = { index, _ -> keys[index] }) { _, subscription -> SubscriptionRow(subscription) }
+        itemsIndexed(subscriptions, key = { index, _ -> keys[index] }) { _, subscription -> SubscriptionRow(subscription, displayOptions.showAccountEmails) }
     }
 }
 
 /** The desktop's wording for a provider row that has no quota window to draw. */
 internal fun limitStatusLabel(status: String): String = when (status) {
-    "notConfigured" -> "Not signed in"
-    "unauthorized" -> "Sign in again"
-    "disabled" -> "Disabled"
-    "noSyncedData" -> "No synced data"
-    "rateLimited", "sourceRateLimited" -> "Limited"
-    "unavailable", "error" -> "Unavailable"
-    "ok" -> "No quota reported"
-    else -> "Not available"
+    "notConfigured" -> appText(R.string.ui_not_signed_in_848d8, "Not signed in")
+    "unauthorized" -> appText(R.string.ui_sign_in_again_7842f, "Sign in again")
+    "disabled" -> appText(R.string.ui_disabled_f4f44, "Disabled")
+    "noSyncedData" -> appText(R.string.ui_no_synced_data_10b38, "No synced data")
+    "rateLimited", "sourceRateLimited" -> appText(R.string.ui_limited_ceeaa, "Limited")
+    "unavailable", "error" -> appText(R.string.ui_unavailable_2c9c1, "Unavailable")
+    "ok" -> appText(R.string.ui_no_quota_reported_6a147, "No quota reported")
+    else -> appText(R.string.ui_not_available_d1a17, "Not available")
 }
 
 @Composable
@@ -142,10 +143,10 @@ internal fun LimitAccountRow(account: LimitAccount, displayOptions: DisplayOptio
             UpstreamToolMark(account.provider, Blue, size = 10.dp)
             Spacer(Modifier.width(8.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text(account.provider.ifBlank { "Provider" }.providerLabel(), color = Ink, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(account.provider.ifBlank { appText(R.string.ui_provider_7ceee, "Provider") }.providerLabel(), color = Ink, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 val email = account.accountEmail.takeIf { displayOptions.showAccountEmails }.orEmpty()
-                val source = account.sourceDeviceId.takeIf { displayOptions.showLimitSource && it.isNotBlank() }?.let { "Source ${it.displayName()}" }
-                val updated = account.updatedAt.relativeAge(LocalNow.current).takeIf { it.isNotBlank() }?.let { "Updated $it" }
+                val source = account.sourceDeviceId.takeIf { displayOptions.showLimitSource && it.isNotBlank() }?.let { appText(R.string.ui_source_1_s_ab512, "Source %1\$s", it.displayName()) }
+                val updated = account.updatedAt.relativeAge(LocalNow.current).takeIf { it.isNotBlank() }?.let { appText(R.string.ui_updated_1_s_62d23, "Updated %1\$s", it) }
                 val meta = listOf(account.productLabel, account.accountName, account.plan, email, source, updated).filterNotNull().filter { it.isNotBlank() }.joinToString(" · ")
                 if (meta.isNotBlank()) Text(meta, color = Muted, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
@@ -164,12 +165,12 @@ internal fun LimitAccountRow(account: LimitAccount, displayOptions: DisplayOptio
                             Row {
                                 Text(windowTitle(window, account.windows), color = Muted, style = MaterialTheme.typography.labelSmall, modifier = Modifier.weight(1f), maxLines = 1)
                                 val display = (if (displayOptions.limitBarMetric == LimitBarMetric.Remaining) {
-                                    quotaPercentLeft(window)?.let { "$it% left" }
+                                    quotaPercentLeft(window)?.let { appText(R.string.ui_1_s_left_e96f9, "%1\$s%% left", it) }
                                 } else {
-                                    usedPercent?.let { "${formatPercent(it)} used" }
+                                    usedPercent?.let { appText(R.string.ui_1_s_used_f116e, "%1\$s used", formatPercent(it)) }
                                 })
                                     ?: window.remaining?.let { formatWindowAmount(it, window.currency) }
-                                    ?: "Not reported"
+                                    ?: appText(R.string.ui_not_reported_98e85, "Not reported")
                                 Text(display, color = Ink, style = MaterialTheme.typography.labelSmall)
                             }
                             val balance = balanceMeterPercent(account.provider, window)
@@ -185,26 +186,15 @@ internal fun LimitAccountRow(account: LimitAccount, displayOptions: DisplayOptio
                 }
             }
         }
-        account.spend?.let { spend ->
+        if (io.github.theminionooo.tokenmonitor.data.storage.providerDetailKey(account.provider, "details") !in displayOptions.hiddenLimitItems) ProviderDetailRows(account)
+        account.spend?.takeIf { io.github.theminionooo.tokenmonitor.data.storage.providerDetailKey(account.provider, "spend") !in displayOptions.hiddenLimitItems }?.let { spend ->
             limitSpendRows(spend).forEach { (label, amount) ->
                 Text("$label ${formatWindowAmount(amount, spend.currency)}", color = Muted, style = MaterialTheme.typography.labelSmall)
             }
             if (spend.locallyTracked && (spend.today != null || spend.week != null) && spend.trackingSince.isNotBlank()) {
-                Text("Tracked since ${spend.trackingSince}", color = Muted, style = MaterialTheme.typography.labelSmall)
+                Text(appText(R.string.ui_tracked_since_1_s_3065e, "Tracked since %1\$s", spend.trackingSince), color = Muted, style = MaterialTheme.typography.labelSmall)
             }
         }
         HorizontalDivider(color = Line)
     }
-}
-
-@Composable
-internal fun SubscriptionRow(subscription: Subscription) {
-    DesktopDetailRow(
-        label = subscription.provider.providerLabel(),
-        subtitle = subscription.planName.ifBlank { "Subscription" },
-        value = formatSubscriptionAmount(subscription.amountMinor, subscription.currency),
-        detail = subscription.interval.displayName(),
-        color = Purple,
-        upstreamName = subscription.provider,
-    )
 }

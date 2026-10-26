@@ -107,6 +107,9 @@ internal fun android.content.Context.findActivity(): Activity? = when (this) {
     else -> null
 }
 
+internal val LocalDisplayOptions = compositionLocalOf { DisplayOptions() }
+internal val LocalDisplayChange = compositionLocalOf<(DisplayOptions) -> Unit> { {} }
+
 @Composable
 internal fun TokenMonitorApp(viewModel: DashboardViewModel) {
     val repositoryState by viewModel.hubState.collectAsState()
@@ -144,8 +147,14 @@ internal fun TokenMonitorApp(viewModel: DashboardViewModel) {
             }
         }
     }
+    CurrencyRateEffect(displayOptions, viewModel::setDisplayOptions) { refreshRates, rateStatus ->
     MaterialTheme(colorScheme = remember(palette) { tokenMonitorColors(palette) }, typography = typography) {
         CompositionLocalProvider(
+            LocalDisplayOptions provides displayOptions,
+            LocalDisplayChange provides viewModel::setDisplayOptions,
+            LocalUsageCurrency provides io.github.theminionooo.tokenmonitor.data.storage.usageCurrency(displayOptions),
+            LocalRefreshRates provides refreshRates,
+            LocalRateStatus provides rateStatus,
             LocalPalette provides palette,
             LocalColorfulToolMarks provides displayOptions.colorfulToolMarks,
             LocalToolIcons provides displayOptions.showToolIcons,
@@ -211,6 +220,7 @@ internal fun TokenMonitorApp(viewModel: DashboardViewModel) {
                 )
             }
         }
+    }
     }
 }
 

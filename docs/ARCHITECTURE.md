@@ -55,6 +55,42 @@ New API account billing periods map to the existing Limits spend rows. They keep
 their native currency and are distinguished from MiMo's locally tracked daily
 and weekly deltas. Missing or invalid values stay absent; reported zero is retained.
 
+## Local presentation in the r2 candidate
+
+The parser retains subscription kind, payment ledgers, bindings, renewal/end
+dates and notes, plus optional provider reset-credit/grant and usage-summary
+blocks. Missing fields remain absent. Top-up records use their dated payments,
+not the normalizer's recurring-subscription default fields.
+
+`DisplayPreferences` owns tool hide/pin/order, quota visibility, currency and
+optional live-rate settings. Keys are stable protocol/local identifiers; their
+translated labels are never written back as identifiers. Filtering copies the
+presentation lists and keeps raw Hub totals intact. The Pages widget consumes
+the same saved display choices without changing `WidgetDeckGrid` geometry.
+
+Usage estimates remain USD internally. `UsageCurrency` applies a valid saved
+automatic or manual conversion at display time; a missing rate falls back to
+USD. Provider balances and recorded payments keep their reported currency.
+`ExchangeRateClient` reads the desktop's public rate sources with bounded
+timeouts and response size, no redirects and no Hub information. Automatic
+refresh belongs to the visible app; widgets only read saved rates.
+
+`LiveThroughputTracker` compares matched cumulative token/output/duration
+counters, re-baselines on source/capability changes and discards regressed or
+idle samples. The optional panel starts Off, expires samples after eight
+seconds and does not create a faster Hub request or processing loop.
+
+`AppLanguage` uses Android 13's `LocaleManager` and a private language preference
+with wrapped contexts on Android 8–12. Activity recreation keeps repository
+ownership in the existing ViewModel lifecycle. Explicit resource IDs translate
+app copy; Hub names, notes, titles and protocol keys stay as received. Widgets
+redraw from the cache on a language change. Packs are bundled and use platform
+font fallback; there is no runtime translation request.
+
+`DiagnosticReport` constructs a fixed allowlist of version/state fields. It
+does not serialize repository state, errors, URLs or cached payloads. The UI
+requires preview followed by an explicit copy/share action.
+
 ## Connection lifecycle
 
 `MainActivity` forwards resume and pause to `DashboardViewModel`, which tells

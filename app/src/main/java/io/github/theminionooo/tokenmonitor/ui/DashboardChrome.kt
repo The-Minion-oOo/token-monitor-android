@@ -126,11 +126,11 @@ internal fun DesktopHeader(
                 }
             }
             val status = when {
-                settingsOpen -> HubAddressValidator.routeLabel(state.activeUrl ?: state.connectionUrl, state.fallbackUrl)
-                state.snapshot?.stale == true -> "Saved snapshot · ${formatCapturedAt(state.snapshot.capturedAt)}"
+                settingsOpen -> displayLabel(HubAddressValidator.routeLabel(state.activeUrl ?: state.connectionUrl, state.fallbackUrl))
+                state.snapshot?.stale == true -> appText(R.string.ui_saved_snapshot_1_s_94588, "Saved snapshot · %1\$s", formatCapturedAt(state.snapshot.capturedAt))
                 // Name the route that is answering, so Tailscale gets a label the way home Wi-Fi does.
-                state.streamActive -> HubAddressValidator.routeLabel(state.activeUrl ?: state.connectionUrl, state.fallbackUrl)
-                state.refreshing -> "Refreshing"
+                state.streamActive -> displayLabel(HubAddressValidator.routeLabel(state.activeUrl ?: state.connectionUrl, state.fallbackUrl))
+                state.refreshing -> appText(R.string.ui_refreshing_505dd, "Refreshing")
                 state.message != null -> state.message
                 else -> null
             }
@@ -138,7 +138,7 @@ internal fun DesktopHeader(
         }
         if (settingsOpen) {
             IconButton(onClick = onGoHome, modifier = Modifier.size(30.dp)) {
-                Icon(painterResource(R.drawable.action_arrow_left), contentDescription = "Back to Home", tint = Muted, modifier = Modifier.size(18.dp))
+                Icon(painterResource(R.drawable.action_arrow_left), contentDescription = appText(R.string.ui_back_to_home_ce747, "Back to Home"), tint = Muted, modifier = Modifier.size(18.dp))
             }
         } else {
             DesktopPeriodTabs(period = period, onPeriodChange = onPeriodChange)
@@ -190,7 +190,7 @@ internal fun DesktopFooter(
         Spacer(Modifier.weight(1f))
         if (!state.streamActive || state.refreshing) {
             IconButton(onClick = onRefresh, enabled = !state.refreshing, modifier = Modifier.size(30.dp)) {
-                Icon(Icons.Outlined.Refresh, contentDescription = "Refresh", tint = if (state.refreshing) Muted.copy(alpha = 0.5f) else Muted, modifier = Modifier.size(18.dp))
+                Icon(Icons.Outlined.Refresh, contentDescription = appText(R.string.ui_refresh_56e3b, "Refresh"), tint = if (state.refreshing) Muted.copy(alpha = 0.5f) else Muted, modifier = Modifier.size(18.dp))
             }
             Spacer(Modifier.width(6.dp))
         }
@@ -201,7 +201,7 @@ internal fun DesktopFooter(
             modifier = Modifier.size(34.dp),
         ) {
             IconButton(onClick = { onChoose(DashboardDestination.Settings) }) {
-                Icon(painterResource(R.drawable.action_settings), contentDescription = "Settings", tint = Ink, modifier = Modifier.size(16.dp))
+                Icon(painterResource(R.drawable.action_settings), contentDescription = displayLabel("Settings"), tint = Ink, modifier = Modifier.size(16.dp))
             }
         }
     }
@@ -229,17 +229,17 @@ internal fun DesktopViewSwitcher(
                 ) {
                     Icon(painterResource(destination.iconRes()), contentDescription = null, tint = Muted, modifier = Modifier.size(14.dp))
                     Spacer(Modifier.width(6.dp))
-                    Text(destination.title, color = if (expanded) Ink else Muted, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(destination.displayTitle, color = if (expanded) Ink else Muted, style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
                 Spacer(Modifier.width(1.dp).fillMaxHeight().background(if (expanded) Accent.copy(alpha = 0.24f) else StrongLine))
                 IconButton(onClick = { expanded = !expanded }, modifier = Modifier.size(30.dp)) {
-                    Icon(Icons.Outlined.KeyboardArrowDown, contentDescription = "Choose view", tint = Muted, modifier = Modifier.size(16.dp))
+                    Icon(Icons.Outlined.KeyboardArrowDown, contentDescription = appText(R.string.ui_choose_view_0035d, "Choose view"), tint = Muted, modifier = Modifier.size(16.dp))
                 }
             }
         }
         AnchoredMenu(expanded = expanded, onDismissRequest = { expanded = false }, above = true) {
             displayOptions.visibleViews.mapNotNull { title -> DashboardDestination.entries.firstOrNull { it.title == title } }.forEach { option ->
-                MenuRow(label = option.title, selected = option == destination, iconRes = option.iconRes()) {
+                MenuRow(label = option.displayTitle, selected = option == destination, iconRes = option.iconRes()) {
                     expanded = false
                     if (option != destination) haptic.performHapticFeedback(HapticFeedbackType.SegmentTick)
                     onChoose(option)

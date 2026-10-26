@@ -9,6 +9,10 @@ The fx mark is adapted from [Token Monitor v0.65.0](https://github.com/Javis603/
 which traces the official vercel-labs fx icon.
 I adapted the Goose and Notion marks from
 [Token Monitor v0.71.0](https://github.com/Javis603/token-monitor/tree/v0.71.0/assets/icons).
+Shared interface translations are adapted from the
+[v0.79.0 language catalog](https://github.com/Javis603/token-monitor/blob/v0.79.0/src/electron/renderer/i18n.js).
+Android-specific labels and the additional Spanish and Indian language packs
+are maintained in this repository.
 
 Upstream's MIT notice is reproduced below. Service names and logos remain the
 marks of their respective owners; their display identifies data sources and

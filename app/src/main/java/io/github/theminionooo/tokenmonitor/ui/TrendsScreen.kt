@@ -1,5 +1,6 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+import io.github.theminionooo.tokenmonitor.R
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -48,7 +49,7 @@ private enum class TrendGroup { Tool, Model }
 private enum class TrendStyle { Bars, KLine }
 private enum class DashboardTab { Overview, Trends }
 private enum class TrendRange(val label: String, val days: Int?) {
-    Seven("7 DAYS", 7), Thirty("30 DAYS", 30), Ninety("90 DAYS", 90), Year("1 YEAR", 365), All("ALL", null)
+    Seven(appText(R.string.ui_7_days_ba6e9, "7 DAYS"), 7), Thirty(appText(R.string.ui_30_days_f1f09, "30 DAYS"), 30), Ninety(appText(R.string.ui_90_days_52ad3, "90 DAYS"), 90), Year(appText(R.string.ui_1_year_e8895, "1 YEAR"), 365), All(appText(R.string.ui_all_6b428, "ALL"), null)
 }
 
 /** [history] is the Hub's daily history, built once per snapshot by the caller and shared by every panel here. */
@@ -57,11 +58,11 @@ internal fun LazyListScope.trendItems(snapshot: HubSnapshot, history: List<Histo
     item { UsageComparisonPanel(history) }
     item { UsageExplorer(history) }
     if (snapshot.history.monthly.isNotEmpty()) {
-        item { Text("MONTHLY HISTORY", color = Ink, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 8.dp)) }
+        item { Text(appText(R.string.ui_monthly_history_3f837, "MONTHLY HISTORY"), color = Ink, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 8.dp)) }
         val months = snapshot.history.monthly.takeLast(12).reversed()
         val keys = uniqueKeys(months) { it.label }
         itemsIndexed(months, key = { index, _ -> keys[index] }) { _, point ->
-            DesktopDetailRow(point.label, "", formatTokens(point.tokens), formatUsageCost(point.costUsd, point.unpricedTokens), Blue)
+            DesktopDetailRow(point.label, "", formatTokens(point.tokens), displayUsageCost(point.costUsd, point.unpricedTokens), Blue)
         }
     }
 }
@@ -73,7 +74,7 @@ private fun UsageDashboardPanel(history: List<HistoryPoint>) {
     val motionEnabled = LocalInteractionMotion.current
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         ChoiceGroup(
-            options = listOf("OVERVIEW" to DashboardTab.Overview.name, "TRENDS" to DashboardTab.Trends.name),
+            options = listOf(appText(R.string.ui_overview_f275f, "OVERVIEW") to DashboardTab.Overview.name, appText(R.string.ui_trends_ad4e9, "TRENDS") to DashboardTab.Trends.name),
             selected = tabName,
             onSelect = { tabName = it },
             modifier = Modifier.fillMaxWidth(),
@@ -97,21 +98,21 @@ private class OverviewSummary(
     val tokensByTool: Map<String, Long>,
 )
 
-private fun summarizeOverview(history: List<HistoryPoint>, today: LocalDate): OverviewSummary {
+private fun summarizeOverview(history: List<HistoryPoint>, today: LocalDate, currency: io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency): OverviewSummary {
     val totalTokens = history.sumOf { it.tokens }
     val unpricedTokens = history.sumOf { it.unpricedTokens }
     val tokensByModel = history.flatMap { it.perModel.entries }.groupingBy { it.key }.fold(0L) { sum, entry -> sum + entry.value.tokens }
     val tokensByTool = history.flatMap { it.perClient.entries }.groupingBy { it.key }.fold(0L) { sum, entry -> sum + entry.value.tokens }
     val topModel = tokensByModel.maxByOrNull { it.value }?.key.orEmpty()
     val stats = listOf(
-        "TOTAL TOKENS" to formatCompactTokens(totalTokens),
-        (if (unpricedTokens > 0) "KNOWN COST" else "TOTAL COST") to formatUsageCost(history.sumOf { it.costUsd }, unpricedTokens, compact = true),
-        "ACTIVE DAYS" to history.count { it.tokens > 0 }.toString(),
-        "CURRENT STREAK" to currentStreak(history, today).toString(),
-        "ACTIVE TIME" to formatActiveDuration(history.sumOf { it.activeTimeMs }),
-        "PEAK DAY" to formatCompactTokens(history.maxOfOrNull { it.tokens } ?: 0L),
-        "TOP MODEL" to topModel.displayName().ifBlank { "—" },
-        "MESSAGES" to formatCompactTokens(history.sumOf { it.messages }),
+        appText(R.string.ui_total_tokens_7ea54, "TOTAL TOKENS") to formatCompactTokens(totalTokens),
+        (if (unpricedTokens > 0) appText(R.string.ui_known_cost_7f342, "KNOWN COST") else appText(R.string.ui_total_cost_b5ba2, "TOTAL COST")) to formatUsageCost(history.sumOf { it.costUsd }, unpricedTokens, compact = true, currency = currency),
+        appText(R.string.ui_active_days_9ebaa, "ACTIVE DAYS") to history.count { it.tokens > 0 }.toString(),
+        appText(R.string.ui_current_streak_54d92, "CURRENT STREAK") to currentStreak(history, today).toString(),
+        appText(R.string.ui_active_time_4dd80, "ACTIVE TIME") to formatActiveDuration(history.sumOf { it.activeTimeMs }),
+        appText(R.string.ui_peak_day_07d84, "PEAK DAY") to formatCompactTokens(history.maxOfOrNull { it.tokens } ?: 0L),
+        appText(R.string.ui_top_model_890fc, "TOP MODEL") to topModel.displayName().ifBlank { "—" },
+        appText(R.string.ui_messages_85cda, "MESSAGES") to formatCompactTokens(history.sumOf { it.messages }),
     )
     return OverviewSummary(stats, unpricedTokens, totalTokens, tokensByModel, tokensByTool)
 }
@@ -121,11 +122,12 @@ private fun UsageOverview(history: List<HistoryPoint>) {
     var activityMetricName by rememberSaveable { mutableStateOf(ActivityMetric.Cost.name) }
     val activityMetric = ActivityMetric.entries.firstOrNull { it.name == activityMetricName } ?: ActivityMetric.Cost
     if (history.isEmpty()) {
-        MutedCopy("No daily history is available yet.", modifier = Modifier.padding(vertical = 12.dp))
+        MutedCopy(appText(R.string.ui_no_daily_history_is_available_yet_23cff, "No daily history is available yet."), modifier = Modifier.padding(vertical = 12.dp))
         return
     }
     val today = currentPresentationDate()
-    val overview = remember(history, today) { summarizeOverview(history, today) }
+    val currency = LocalUsageCurrency.current
+    val overview = remember(history, today, currency) { summarizeOverview(history, today, currency) }
     val heatmap = remember(history, activityMetric, today) { buildActivityHeatmap(history, endDate = today, metric = activityMetric) }
     val unpricedTokens = overview.unpricedTokens
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -136,20 +138,20 @@ private fun UsageOverview(history: List<HistoryPoint>) {
             }
         }
         if (unpricedTokens > 0) {
-            MutedCopy("${formatCompactTokens(unpricedTokens)} tokens have no reported price. Cost shading uses known subtotals; choose Tokens to see all usage.")
+            MutedCopy(appText(R.string.ui_1_s_tokens_have_no_reported_price_cost_shading_uses_22e1d, "%1\$s tokens have no reported price. Cost shading uses known subtotals; choose Tokens to see all usage.", formatCompactTokens(unpricedTokens)))
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("TOKEN ACTIVITY", color = Ink, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+            Text(appText(R.string.ui_token_activity_3a72e, "TOKEN ACTIVITY"), color = Ink, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
             ChoiceGroup(
-                options = listOf("TOKENS" to ActivityMetric.Tokens.name, "COST" to ActivityMetric.Cost.name),
+                options = listOf(appText(R.string.ui_tokens_00341, "TOKENS") to ActivityMetric.Tokens.name, appText(R.string.ui_cost_75fde, "COST") to ActivityMetric.Cost.name),
                 selected = activityMetricName,
                 onSelect = { activityMetricName = it },
                 modifier = Modifier.width(150.dp),
             )
         }
         ActivityHeatmapGrid(heatmap, history)
-        OverviewBreakdown("BY MODEL · AVAILABLE HISTORY", overview.tokensByModel, overview.totalTokens, modelRows = true)
-        OverviewBreakdown("BY TOOL · AVAILABLE HISTORY", overview.tokensByTool, overview.totalTokens)
+        OverviewBreakdown(appText(R.string.ui_by_model_available_history_0188e, "BY MODEL · AVAILABLE HISTORY"), overview.tokensByModel, overview.totalTokens, modelRows = true)
+        OverviewBreakdown(appText(R.string.ui_by_tool_available_history_63c3d, "BY TOOL · AVAILABLE HISTORY"), overview.tokensByTool, overview.totalTokens)
     }
 }
 
@@ -204,13 +206,13 @@ private fun TrendsPanel(history: List<HistoryPoint>) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             ChoiceGroup(
-                options = listOf("BY TOOL" to TrendGroup.Tool.name, "BY MODEL" to TrendGroup.Model.name),
+                options = listOf(appText(R.string.ui_by_tool_c2917, "BY TOOL") to TrendGroup.Tool.name, appText(R.string.ui_by_model_5d75a, "BY MODEL") to TrendGroup.Model.name),
                 selected = groupName,
                 onSelect = { groupName = it },
                 modifier = Modifier.weight(1f),
             )
             ChoiceGroup(
-                options = listOf("BARS" to TrendStyle.Bars.name, "K-LINE" to TrendStyle.KLine.name),
+                options = listOf(appText(R.string.ui_bars_1b402, "BARS") to TrendStyle.Bars.name, appText(R.string.ui_k_line_1dd2b, "K-LINE") to TrendStyle.KLine.name),
                 selected = styleName,
                 onSelect = { styleName = it },
                 modifier = Modifier.weight(1f),
@@ -225,9 +227,9 @@ private fun TrendsPanel(history: List<HistoryPoint>) {
         Row(verticalAlignment = Alignment.Bottom) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(formatCompactTokens(trend.totalTokens), color = Ink, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Text("${trend.days.size} recorded days · ${formatUsageCost(trend.days.sumOf { it.costUsd }, trend.days.sumOf { it.unpricedTokens })}", color = Muted, style = MaterialTheme.typography.labelSmall)
+                Text(appText(R.string.ui_1_s_recorded_days_2_s_adaa3, "%1\$s recorded days · %2\$s", trend.days.size, displayUsageCost(trend.days.sumOf { it.costUsd }, trend.days.sumOf { it.unpricedTokens })), color = Muted, style = MaterialTheme.typography.labelSmall)
             }
-            Text(if (group == TrendGroup.Tool) "BY TOOL" else "BY MODEL", color = Muted, style = MaterialTheme.typography.labelSmall)
+            Text(if (group == TrendGroup.Tool) appText(R.string.ui_by_tool_c2917, "BY TOOL") else appText(R.string.ui_by_model_5d75a, "BY MODEL"), color = Muted, style = MaterialTheme.typography.labelSmall)
         }
         if (style == TrendStyle.Bars) {
             StackedTrendChart(trend = trend, height = 178.dp)
@@ -238,16 +240,16 @@ private fun TrendsPanel(history: List<HistoryPoint>) {
             Text(trend.start.toString(), color = Muted, style = MaterialTheme.typography.labelSmall)
             Text(trend.end.toString(), color = Muted, style = MaterialTheme.typography.labelSmall)
         }
-        if (trend.missingDays > 0) Text("${trend.missingDays} days have no observation; gaps are left blank.", color = Muted, style = MaterialTheme.typography.labelSmall)
-        if (style == TrendStyle.KLine) Text("Each candle covers up to ${trendCandleDays(trend.calendarDays)} consecutive recorded days: first, last, highest and lowest daily totals.", color = Muted, style = MaterialTheme.typography.labelSmall)
-        if (style == TrendStyle.Bars && trend.days.any { it.inconsistentAttribution }) Text("Some reported breakdowns conflict with their daily totals. Those days are shown as unattributed.", color = Muted, style = MaterialTheme.typography.labelSmall)
+        if (trend.missingDays > 0) Text(appText(R.string.ui_1_s_days_have_no_observation_gaps_are_left_blank_636e3, "%1\$s days have no observation; gaps are left blank.", trend.missingDays), color = Muted, style = MaterialTheme.typography.labelSmall)
+        if (style == TrendStyle.KLine) Text(appText(R.string.ui_each_candle_covers_up_to_1_s_consecutive_recorded_da_a073f, "Each candle covers up to %1\$s consecutive recorded days: first, last, highest and lowest daily totals.", trendCandleDays(trend.calendarDays)), color = Muted, style = MaterialTheme.typography.labelSmall)
+        if (style == TrendStyle.Bars && trend.days.any { it.inconsistentAttribution }) Text(appText(R.string.ui_some_reported_breakdowns_conflict_with_their_daily_t_f9fb6, "Some reported breakdowns conflict with their daily totals. Those days are shown as unattributed."), color = Muted, style = MaterialTheme.typography.labelSmall)
         if (style == TrendStyle.Bars) {
             trend.series.forEachIndexed { index, series ->
                 val value = trend.days.sumOf { it.segments[series] ?: 0L }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     StatusDot(if (series.name == null) Muted else trendSeriesColor(LocalPalette.current, index), size = 8.dp)
                     Spacer(Modifier.width(7.dp))
-                    Text(series.name?.let { if (series.other) it else it.displayName() } ?: "Unattributed", color = Ink, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(series.name?.let { if (series.other) it else it.displayName() } ?: appText(R.string.ui_unattributed_61047, "Unattributed"), color = Ink, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Text(formatCompactTokens(value), color = Ink, style = MaterialTheme.typography.bodySmall)
                     Text(String.format(Locale.US, "  %.1f%%", value.toDouble() / total * 100.0), color = Muted, style = MaterialTheme.typography.bodySmall)
                 }

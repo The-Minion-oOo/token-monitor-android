@@ -1,5 +1,6 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+import io.github.theminionooo.tokenmonitor.R
 import io.github.theminionooo.tokenmonitor.domain.HistoryPoint
 import io.github.theminionooo.tokenmonitor.domain.historyInRange
 import java.time.LocalDate
@@ -58,7 +59,7 @@ internal fun prepareTrends(
     val ranked = rawDays.flatMap { it.segments.entries }.filter { it.key.name != null }
         .groupBy { it.key }.entries.sortedByDescending { (_, entries) -> entries.sumOf { it.value } }.map { it.key }
     val visible = ranked.take(7).toSet()
-    val other = TrendSeries(if (byModel) "Other models" else "Other tools", other = true)
+    val other = TrendSeries(if (byModel) appText(R.string.ui_other_models_6b641, "Other models") else appText(R.string.ui_other_tools_e9c83, "Other tools"), other = true)
     val days = rawDays.map { day ->
         val parts = day.segments.filterKeys { it.name == null || it in visible }.toMutableMap()
         val otherTokens = day.segments.filterKeys { it.name != null && it !in visible }.values.sum()
@@ -102,10 +103,10 @@ internal fun trendCandles(trend: TrendPresentation): List<TrendCandle> {
 }
 
 internal fun trendChartDescription(trend: TrendPresentation, candles: Boolean): String = buildString {
-    append(if (candles) "Usage range chart. " else "Daily usage bar chart. ")
-    append("${formatTokens(trend.totalTokens)} tokens across ${trend.days.size} recorded days, ${trend.start} to ${trend.end}. ")
-    if (trend.missingDays > 0) append("${trend.missingDays} days have no observation and are left blank. ")
-    trend.days.maxByOrNull { it.tokens }?.let { append("Highest day: ${it.date}, ${formatTokens(it.tokens)} tokens. ") }
-    if (candles) append("Each candle covers up to ${trendCandleDays(trend.calendarDays)} consecutive recorded days: first, last, highest and lowest daily totals.")
-    else if (trend.unattributedTokens > 0) append("${formatTokens(trend.unattributedTokens)} tokens have no reliable breakdown and are shown as unattributed.")
+    append(if (candles) appText(R.string.ui_usage_range_chart_fb5ca, "Usage range chart. ") else appText(R.string.ui_daily_usage_bar_chart_b0599, "Daily usage bar chart. "))
+    append(appText(R.string.ui_1_s_tokens_across_2_s_recorded_days_3_s_to_4_s_77fab, "%1\$s tokens across %2\$s recorded days, %3\$s to %4\$s. ", formatTokens(trend.totalTokens), trend.days.size, trend.start, trend.end))
+    if (trend.missingDays > 0) append(appText(R.string.ui_1_s_days_have_no_observation_and_are_left_blank_d778b, "%1\$s days have no observation and are left blank. ", trend.missingDays))
+    trend.days.maxByOrNull { it.tokens }?.let { append(appText(R.string.ui_highest_day_1_s_2_s_tokens_3cad8, "Highest day: %1\$s, %2\$s tokens. ", it.date, formatTokens(it.tokens))) }
+    if (candles) append(appText(R.string.ui_each_candle_covers_up_to_1_s_consecutive_recorded_da_a073f, "Each candle covers up to %1\$s consecutive recorded days: first, last, highest and lowest daily totals.", trendCandleDays(trend.calendarDays)))
+    else if (trend.unattributedTokens > 0) append(appText(R.string.ui_1_s_tokens_have_no_reliable_breakdown_and_are_shown_b140c, "%1\$s tokens have no reliable breakdown and are shown as unattributed.", formatTokens(trend.unattributedTokens)))
 }

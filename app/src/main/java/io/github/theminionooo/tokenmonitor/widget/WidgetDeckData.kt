@@ -1,5 +1,6 @@
 package io.github.theminionooo.tokenmonitor.widget
 
+import io.github.theminionooo.tokenmonitor.ui.appText
 import io.github.theminionooo.tokenmonitor.R
 import io.github.theminionooo.tokenmonitor.domain.HistoryPoint
 import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
@@ -56,6 +57,7 @@ internal data class WidgetDeckData(
     val week: List<HistoryPoint>,
     val activeDays: Int,
     val messagesToday: Long,
+    val currency: io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency = io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency(),
 ) {
     val hasData: Boolean get() = snapshot != null
 }
@@ -65,7 +67,8 @@ internal fun prepareWidgetDeck(
     session: WidgetSession,
     now: Long = System.currentTimeMillis(),
     zoneId: ZoneId = ZoneId.systemDefault(),
-    locale: Locale = Locale.getDefault(),
+    locale: Locale = io.github.theminionooo.tokenmonitor.ui.AppLanguage.locale(),
+    displayOptions: io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions = io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions(),
 ): WidgetDeckData {
     val liveEnabled = session.enabled && session.expiresAt > now
     val age = snapshot?.capturedAt?.takeIf { it > 0 }?.let { (now - it).coerceAtLeast(0) }
@@ -83,15 +86,15 @@ internal fun prepareWidgetDeck(
     val clock = DateTimeFormatter.ofPattern("HH:mm", locale).withZone(zoneId)
     val saved = snapshot?.capturedAt?.takeIf { it > 0 }?.let { clock.format(Instant.ofEpochMilli(it)) }
     val statusDescription = buildString {
-        append(status.lowercase(locale).replaceFirstChar { it.titlecase(locale) })
-        saved?.let { append(". Snapshot saved at $it") }
+        append(io.github.theminionooo.tokenmonitor.ui.displayLabel(status).lowercase(locale).replaceFirstChar { it.titlecase(locale) })
+        saved?.let { append(appText(R.string.ui_snapshot_saved_at_1_s_bb686, ". Snapshot saved at %1\$s", it)) }
         session.note?.let { append(". $it") }
     }
     val emptyMessage = when {
-        liveEnabled -> "Connecting to your Hub…"
-        session.refreshing -> "Refreshing your saved usage…"
-        session.note != null -> "Hub offline. Open Token Monitor to check the connection."
-        else -> "Open Token Monitor to connect or refresh your Hub."
+        liveEnabled -> appText(R.string.ui_connecting_to_your_hub_588c6, "Connecting to your Hub…")
+        session.refreshing -> appText(R.string.ui_refreshing_your_saved_usage_cfa3c, "Refreshing your saved usage…")
+        session.note != null -> appText(R.string.ui_hub_offline_open_token_monitor_to_check_the_connecti_1565d, "Hub offline. Open Token Monitor to check the connection.")
+        else -> appText(R.string.ui_open_token_monitor_to_connect_or_refresh_your_hub_59e24, "Open Token Monitor to connect or refresh your Hub.")
     }
     val date = snapshot?.let { snapshotDate(it, zoneId) } ?: Instant.ofEpochMilli(now).atZone(zoneId).toLocalDate()
     val history = snapshot?.let(::usageHistory).orEmpty()
@@ -101,14 +104,15 @@ internal fun prepareWidgetDeck(
     }
     val today = history.lastOrNull { it.label.take(10) == date.toString() }
     val period = snapshot?.today
-    fun rows(tokens: Map<String, Long>, costs: Map<String, Double>, unpriced: Map<String, Long>, limit: Int): List<WidgetDeckUsageRow> {
+    fun rows(tokens: Map<String, Long>, costs: Map<String, Double>, unpriced: Map<String, Long>, limit: Int, tools: Boolean = false): List<WidgetDeckUsageRow> {
         val total = tokens.values.sum().toDouble()
         if (total <= 0) return emptyList()
-        return tokens.entries.sortedByDescending { it.value }.take(limit).map { (name, value) ->
+        val entries = if (tools) io.github.theminionooo.tokenmonitor.data.storage.orderedTools(tokens, costs, displayOptions) else tokens.entries.sortedByDescending { it.value }
+        return entries.take(limit).map { (name, value) ->
             WidgetDeckUsageRow(name, value, costs[name] ?: 0.0, value / total, unpriced[name] ?: 0)
         }
     }
-    val limitsByProvider = snapshot?.stats?.limits?.providers.orEmpty().map { account ->
+    val limitsByProvider = io.github.theminionooo.tokenmonitor.data.storage.visibleLimitAccounts(snapshot?.stats?.limits?.providers.orEmpty(), displayOptions).map { account ->
         account.provider to account.windows.mapNotNull { window ->
             remainingPercent(window)?.let { remaining ->
                 WidgetDeckLimitRow(
@@ -135,12 +139,13 @@ internal fun prepareWidgetDeck(
         date = date,
         history = history,
         stats = widgetStats(history, date).take(3),
-        tools = period?.let { rows(it.clients, it.clientCosts, it.clientUnpricedTokens, 3) }.orEmpty(),
+        tools = period?.let { rows(it.clients, it.clientCosts, it.clientUnpricedTokens, 3, tools = true) }.orEmpty(),
         models = period?.let { rows(it.models, it.modelCosts, it.modelUnpricedTokens, 4) }.orEmpty(),
         limits = limits,
         limitGroups = limitGroups,
         week = week,
         activeDays = buildActivityHeatmap(history, date).activeDays,
         messagesToday = today?.messages ?: 0,
+        currency = io.github.theminionooo.tokenmonitor.data.storage.usageCurrency(displayOptions),
     )
 }

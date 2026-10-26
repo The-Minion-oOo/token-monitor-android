@@ -1,5 +1,6 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+import io.github.theminionooo.tokenmonitor.R
 import android.content.SharedPreferences
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectable
@@ -43,7 +44,7 @@ internal fun WidgetBackgroundControls(
     record: WidgetRefreshRecord,
     onChange: (WidgetRefreshSettings) -> Unit,
 ) {
-    Text("Background refresh", color = Ink, style = MaterialTheme.typography.bodyMedium)
+    Text(appText(R.string.ui_background_refresh_332cc, "Background refresh"), color = Ink, style = MaterialTheme.typography.bodyMedium)
     // Separate rows keep the full interval labels readable on small screens and with larger text.
     WidgetRefreshInterval.entries.forEach { interval ->
         Row(Modifier.fillMaxWidth().selectable(settings.interval == interval,
@@ -54,16 +55,16 @@ internal fun WidgetBackgroundControls(
             Text(interval.label, color = Ink, style = MaterialTheme.typography.bodyMedium)
         }
     }
-    SettingsToggle("Wi-Fi only", "Use unmetered Wi-Fi, including when Tailscale is connected. Skip when the route cannot be confirmed.",
+    SettingsToggle(appText(R.string.ui_wi_fi_only_119cb, "Wi-Fi only"), appText(R.string.ui_use_unmetered_wi_fi_including_when_tailscale_is_conn_34b2f, "Use unmetered Wi-Fi, including when Tailscale is connected. Skip when the route cannot be confirmed."),
         settings.wifiOnly) { onChange(settings.copy(wifiOnly = it)) }
-    Text("Runs only with a saved Hub and a placed widget. Android may delay updates while asleep. Live and Refresh take priority; background updates show no notification.",
+    Text(appText(R.string.ui_runs_only_with_a_saved_hub_and_a_placed_widget_andro_e4bc8, "Runs only with a saved Hub and a placed widget. Android may delay updates while asleep. Live and Refresh take priority; background updates show no notification."),
         color = Muted, style = MaterialTheme.typography.bodySmall)
-    if (record.secretRejected) Text("Background refresh paused: the Hub rejected the secret. Check and save the connection again.",
+    if (record.secretRejected) Text(appText(R.string.ui_background_refresh_paused_the_hub_rejected_the_secre_09c59, "Background refresh paused: the Hub rejected the secret. Check and save the connection again."),
         color = Muted, style = MaterialTheme.typography.bodySmall)
     if (record.receivedBytes > 0) {
         val runs = if (settings.interval.minutes > 0) 1440 / settings.interval.minutes else 0
-        Text("Last attempt: ${record.receivedBytes / 1000} KB of response data" +
-            if (!record.completed) " (incomplete)." else if (runs > 0) " · about ${String.format(Locale.US, "%.1f", record.receivedBytes * runs / 1_000_000.0)} MB/day at this interval, plus network overhead." else ".",
+        Text(appText(R.string.ui_last_attempt_1_s_kb_of_response_data_65c84, "Last attempt: %1\$s KB of response data", record.receivedBytes / 1000) +
+            if (!record.completed) appText(R.string.ui_incomplete_69b4a, " (incomplete).") else if (runs > 0) appText(R.string.ui_about_1_s_mb_day_at_this_interval_plus_network_overh_99a60, " · about %1\$s MB/day at this interval, plus network overhead.", String.format(Locale.US, "%.1f", record.receivedBytes * runs / 1_000_000.0)) else ".",
             color = Muted, style = MaterialTheme.typography.bodySmall)
     }
 }

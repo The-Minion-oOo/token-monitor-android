@@ -165,6 +165,13 @@ object HubProtocolParser {
         ).all { (camel, snake) -> long(camel) != null || long(snake) != null }
         return HubPeriodDto(
             throughputAvailable = throughputCapability ?: hasThroughputShape,
+            modelThroughput = objectField("modelThroughput")?.mapNotNull { (model, value) ->
+                val counters = value.objectOrNull() ?: return@mapNotNull null
+                val tokens = counters.long("timedTokens")?.takeIf { it >= 0 } ?: return@mapNotNull null
+                val output = counters.long("timedOutputTokens")?.takeIf { it >= 0 } ?: return@mapNotNull null
+                val duration = counters.long("timedDurationMs")?.takeIf { it >= 0 } ?: return@mapNotNull null
+                model to HubThroughputDto(tokens, output, duration)
+            }?.toMap().orEmpty(),
             timedTokens = (long("timedTokens") ?: long("timed_tokens") ?: 0).coerceAtLeast(0),
             timedOutputTokens = (long("timedOutputTokens") ?: long("timed_output_tokens") ?: 0).coerceAtLeast(0),
             timedDurationMs = (long("timedDurationMs") ?: long("timed_duration_ms") ?: 0).coerceAtLeast(0),
@@ -299,6 +306,22 @@ object HubProtocolParser {
                 locallyTracked = string("provider") == "mimo",
             )
         } else null,
+        resetCredits = objectField("resetCredits")?.let { credits ->
+            HubResetCreditsDto(
+                credits.long("availableCount")?.takeIf { it >= 0 }, credits.string("nextExpiresAt"),
+                credits.array("expirations").mapNotNull { it.stringOrNull() }.distinct(),
+                credits.array("grants").mapNotNull { value -> value.objectOrNull()?.let { grant ->
+                    HubResetGrantDto(grant.string("id"), grant.string("label"), grant.long("resetsLeft")?.takeIf { it >= 0 },
+                        grant.long("resetsTotal")?.takeIf { it >= 0 }, grant.string("startsAt"), grant.string("endsAt"),
+                        grant.boolean("usableNow"), grant.boolean("useRequiresLimit"), grant.array("clears").mapNotNull { it.stringOrNull() })
+                } },
+            )
+        },
+        usageSummary = objectField("usageSummary")?.let { usage ->
+            fun count(key: String) = usage.long(key)?.takeIf { it >= 0 }
+            HubLimitUsageSummaryDto(usage.string("period"), count("totalTokens"), count("todayTokens"), count("weekTokens"),
+                count("inputTokens"), count("outputTokens"), count("requests"), usage.double("standardCost")?.takeIf { it >= 0 })
+        },
     )
 
     private fun JsonObject.toLimitWindowDto() = HubLimitWindowDto(
@@ -366,6 +389,22 @@ object HubProtocolParser {
         startDate = string("startDate"),
         interval = string("interval").ifBlank { "month" },
         autoRenew = boolean("autoRenew") ?: true,
+        kind = string("kind").ifBlank { "subscription" },
+        intervalCount = (long("intervalCount") ?: 1).coerceIn(1, 120).toInt(),
+        profileName = objectField("binding")?.string("profileName").orEmpty(),
+        accountKey = objectField("binding")?.string("accountKey").orEmpty(),
+        accountEmail = objectField("binding")?.string("accountEmail").orEmpty(),
+        topUps = array("topUps").mapNotNull { value ->
+            val entry = value.objectOrNull() ?: return@mapNotNull null
+            val date = entry.string("date")
+            val amount = entry.long("amountMinor")?.takeIf { it >= 0 } ?: return@mapNotNull null
+            if (runCatching { java.time.LocalDate.parse(date) }.isFailure) null
+            else HubTopUpDto(entry.string("id"), date, amount)
+        }.sortedByDescending { it.date },
+        nextRenewalOverride = string("nextRenewalOverride"),
+        endDate = string("endDate"),
+        note = string("note"),
+        amountReported = long("amountMinor")?.let { it >= 0 } == true,
     )
 
     private fun HubHealthDto.toDomain() = HubHealth(
@@ -393,6 +432,7 @@ object HubProtocolParser {
         val byClient = boundedUnpricedMap(clientUnpricedTokens, clients, missing)
         return UsagePeriod(
             throughputAvailable = throughputAvailable,
+            modelThroughput = modelThroughput.mapValues { (_, value) -> io.github.theminionooo.tokenmonitor.domain.ThroughputCounters(value.timedTokens, value.timedOutputTokens, value.timedDurationMs) },
             timedTokens = timedTokens,
             timedOutputTokens = timedOutputTokens,
             timedDurationMs = timedDurationMs,
@@ -503,6 +543,13 @@ object HubProtocolParser {
                 it.currency, it.today, it.week, it.month, it.allTime, it.trackingSince, it.locallyTracked,
             )
         },
+        resetCredits = resetCredits?.let { credits -> io.github.theminionooo.tokenmonitor.domain.ResetCredits(
+            credits.availableCount, credits.nextExpiresAt, credits.expirations, credits.grants.map { grant ->
+                io.github.theminionooo.tokenmonitor.domain.ResetGrant(grant.id, grant.label, grant.resetsLeft, grant.resetsTotal,
+                    grant.startsAt, grant.endsAt, grant.usableNow, grant.useRequiresLimit, grant.clears)
+            }) },
+        usageSummary = usageSummary?.let { io.github.theminionooo.tokenmonitor.domain.LimitUsageSummary(it.period, it.totalTokens,
+            it.todayTokens, it.weekTokens, it.inputTokens, it.outputTokens, it.requests, it.standardCost) },
     )
 
     private fun HubLimitWindowDto.toDomain() = LimitWindow(
@@ -564,6 +611,14 @@ object HubProtocolParser {
         startDate = startDate,
         interval = interval,
         autoRenew = autoRenew,
+        kind = kind,
+        intervalCount = intervalCount,
+        binding = io.github.theminionooo.tokenmonitor.domain.SubscriptionBinding(profileName, accountKey, accountEmail),
+        topUps = topUps.map { io.github.theminionooo.tokenmonitor.domain.SubscriptionTopUp(it.id, it.date, it.amountMinor) },
+        nextRenewalOverride = nextRenewalOverride,
+        endDate = endDate,
+        note = note,
+        amountReported = amountReported,
     )
 
     private fun boundedUnpricedMap(counts: Map<String, Long>, tokens: Map<String, Long>, total: Long): Map<String, Long> {

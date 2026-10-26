@@ -1,5 +1,6 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+import io.github.theminionooo.tokenmonitor.R
 import java.text.NumberFormat
 import java.time.Instant
 import java.time.LocalDate
@@ -14,10 +15,10 @@ private val twoDecimalFormat: NumberFormat = NumberFormat.getNumberInstance(Loca
     minimumFractionDigits = 2
     maximumFractionDigits = 2
 }
-private val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("MMM d, h:mm a")
+private val dateTimeFormat: DateTimeFormatter get() = DateTimeFormatter.ofPattern("MMM d, h:mm a", AppLanguage.locale())
 private val clockFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 private val shortDateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("M/d")
-internal val dayFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE, MMM d", Locale.US)
+internal val dayFormat: DateTimeFormatter get() = DateTimeFormatter.ofPattern("EEE, MMM d", AppLanguage.locale())
 
 internal fun formatTokens(tokens: Long): String = wholeNumberFormat.format(tokens)
 
@@ -44,11 +45,16 @@ internal fun formatCompactTokens(tokens: Long): String {
 internal fun formatMoney(value: Double): String = currencyFormat.format(value)
 
 /** A missing catalog price is not a zero rate. Keep the known subtotal explicit. */
-internal fun formatUsageCost(value: Double, unpricedTokens: Long = 0, compact: Boolean = false): String {
-    if (unpricedTokens <= 0) return formatMoney(value)
-    val known = if (value > 0) formatMoney(value) else "—"
+internal fun formatUsageCost(value: Double, unpricedTokens: Long = 0, compact: Boolean = false,
+    currency: io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency = io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency()): String {
+    val converted = value * currency.rate
+    val amount = if (currency.code == "USD") formatMoney(value) else if (converted.isFinite()) NumberFormat.getCurrencyInstance(Locale.US).apply {
+        this.currency = java.util.Currency.getInstance(currency.code)
+    }.format(converted) else appText(R.string.format_not_reported, "Not reported")
+    if (unpricedTokens <= 0) return amount
+    val known = if (value > 0) amount else "—"
     if (compact) return if (value > 0) "$known + ?" else "— (?)"
-    val missing = "${formatCompactTokens(unpricedTokens)} unpriced"
+    val missing = appText(R.string.format_unpriced, "%1\$s unpriced", formatCompactTokens(unpricedTokens))
     return if (value > 0) "$known + $missing" else "— ($missing)"
 }
 
@@ -96,18 +102,18 @@ internal fun formatActiveDuration(milliseconds: Long): String {
 internal fun formatReset(resetsAt: String, now: Long): String {
     val target = runCatching { Instant.parse(resetsAt).toEpochMilli() }.getOrNull() ?: return ""
     val remaining = target - now
-    return if (remaining <= 0) "Reset now" else "Reset ${formatDuration(remaining)}"
+    return if (remaining <= 0) appText(R.string.format_reset_now, "Reset now") else appText(R.string.format_reset, "Reset %1\$s", formatDuration(remaining))
 }
 
 /** v0.56 keeps one timestamp but tells readers whether it resets, expires, or does both. */
 internal fun formatBoundary(resetsAt: String, boundaryKind: String, now: Long): String {
     val target = runCatching { Instant.parse(resetsAt).toEpochMilli() }.getOrNull() ?: return ""
     val remaining = target - now
-    val suffix = if (remaining <= 0) "now" else formatDuration(remaining)
+    val suffix = if (remaining <= 0) appText(R.string.format_now, "now") else formatDuration(remaining)
     return when (boundaryKind.lowercase()) {
-        "expiry" -> "Expires $suffix"
-        "mixed" -> "Changes${if (remaining <= 0) "" else " in"} $suffix"
-        else -> "Reset $suffix"
+        "expiry" -> appText(R.string.format_expires, "Expires %1\$s", suffix)
+        "mixed" -> if (remaining <= 0) appText(R.string.format_changes_now, "Changes now") else appText(R.string.format_changes, "Changes in %1\$s", suffix)
+        else -> appText(R.string.format_reset, "Reset %1\$s", suffix)
     }
 }
 
@@ -116,9 +122,9 @@ internal fun formatRelativeAge(timestamp: Long, now: Long): String {
     if (timestamp <= 0) return ""
     val age = (now - timestamp).coerceAtLeast(0L)
     return when {
-        age < 5_000 -> "just now"
-        age < 60_000 -> "${age / 1_000}s ago"
-        else -> "${formatDuration(age)} ago"
+        age < 5_000 -> appText(R.string.format_just_now, "just now")
+        age < 60_000 -> appText(R.string.format_seconds_ago, "%1\$ss ago", age / 1_000)
+        else -> appText(R.string.format_duration_ago, "%1\$s ago", formatDuration(age))
     }
 }
 
@@ -127,15 +133,17 @@ internal fun String.relativeAge(now: Long): String =
 
 internal fun formatPercent(value: Double): String = "${value.toInt()}%"
 
+internal fun formatLiveRate(value: Double): String = String.format(AppLanguage.locale(), "%.1f", value)
+
 internal fun formatHubBuild(value: String): String {
-    if (value.isBlank()) return "Not reported"
+    if (value.isBlank()) return appText(R.string.format_not_reported, "Not reported")
     val normalized = value.removePrefix("sha256:")
     return if (normalized.length > 14) "${normalized.take(14)}…" else normalized
 }
 
-internal fun formatCapturedAt(timestamp: Long): String = if (timestamp <= 0) "an unknown time" else runCatching {
+internal fun formatCapturedAt(timestamp: Long): String = if (timestamp <= 0) appText(R.string.format_unknown_time, "an unknown time") else runCatching {
     Instant.ofEpochMilli(timestamp).atZone(ZoneId.systemDefault()).format(dateTimeFormat)
-}.getOrDefault("recently")
+}.getOrDefault(appText(R.string.format_recently, "recently"))
 
 internal fun String.shortTime(): String = runCatching {
     Instant.parse(this).atZone(ZoneId.systemDefault()).format(dateTimeFormat)

@@ -1,5 +1,6 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+import io.github.theminionooo.tokenmonitor.R
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -34,12 +35,15 @@ internal enum class DashboardDestination(val title: String) {
     Sessions("Sessions"),
     Limits("Limits"),
     Trends("Trends"),
-    Settings("Settings"),
+    Settings("Settings");
+
+    val displayTitle: String get() = displayLabel(title)
 }
 
 internal data class ConnectionFormState(
     val saving: Boolean = false,
     val result: String? = null,
+    val successful: Boolean = false,
 )
 
 internal data class ServiceStatusState(
@@ -133,6 +137,10 @@ internal class DashboardViewModel(application: Application) : AndroidViewModel(a
     }
 
     fun setColorfulToolMarks(enabled: Boolean) = displayPreferences.setColorfulToolMarks(enabled)
+    fun setDisplayOptions(options: io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions) {
+        displayPreferences.setOptions(options)
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) { WidgetUpdateCoordinator.refresh(getApplication()) }
+    }
     fun setCompactTokenTotal(enabled: Boolean) = displayPreferences.setCompactTokenTotal(enabled)
     fun setReduceMotion(mode: ReduceMotionMode) = displayPreferences.setReduceMotion(mode)
     fun setTokenNumberAnimation(animation: TokenNumberAnimation) = displayPreferences.setTokenNumberAnimation(animation)
@@ -190,13 +198,13 @@ internal class DashboardViewModel(application: Application) : AndroidViewModel(a
                 WidgetLiveService.stop(getApplication())
                 repository.setWidgetActive(false)
                 val error = operation()
-                _connectionForm.value = ConnectionFormState(result = error ?: "Connected. The home address is verified and saved.")
+                _connectionForm.value = ConnectionFormState(result = error ?: appText(R.string.ui_connected_the_home_address_is_verified_and_saved_ec8b8, "Connected. The home address is verified and saved."), successful = error == null)
                 if (error == null) {
                     _discovery.value = HubDiscoveryState()
                     if (returnHome) choose(DashboardDestination.Home)
                 }
             } catch (cancelled: kotlinx.coroutines.CancellationException) {
-                _connectionForm.value = ConnectionFormState(result = "Connection check paused. Try again.")
+                _connectionForm.value = ConnectionFormState(result = appText(R.string.ui_connection_check_paused_try_again_4d00c, "Connection check paused. Try again."))
                 throw cancelled
             } finally {
                 _connectionForm.value = _connectionForm.value.copy(saving = false)
@@ -216,8 +224,8 @@ internal class DashboardViewModel(application: Application) : AndroidViewModel(a
             val found = runCatching { hubDiscovery.findOnLocalNetwork() }.getOrNull()
             _discovery.value = HubDiscoveryState(
                 found = found,
-                message = if (found != null) "Found a Hub. Test and save this address to use it."
-                else "No Hub answered on this Wi-Fi. Check that the desktop app is running with Host Hub on, then try again.",
+                message = if (found != null) appText(R.string.ui_found_a_hub_test_and_save_this_address_to_use_it_7681b, "Found a Hub. Test and save this address to use it.")
+                else appText(R.string.ui_no_hub_answered_on_this_wi_fi_check_that_the_desktop_00505, "No Hub answered on this Wi-Fi. Check that the desktop app is running with Host Hub on, then try again."),
             )
         }
     }
@@ -227,7 +235,7 @@ internal class DashboardViewModel(application: Application) : AndroidViewModel(a
         repository.setWidgetActive(false)
         repository.disconnect()
         choose(DashboardDestination.Settings)
-        _connectionForm.value = ConnectionFormState(result = "The saved Hub connection was removed from this phone.")
+        _connectionForm.value = ConnectionFormState(result = appText(R.string.ui_the_saved_hub_connection_was_removed_from_this_phone_9bbae, "The saved Hub connection was removed from this phone."), successful = true)
     }
 
     override fun onCleared() {

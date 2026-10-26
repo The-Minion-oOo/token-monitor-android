@@ -6,6 +6,13 @@ renderer positions content by any other means. When the design needs to change,
 change this file first, then make the renderer match it, then recapture the
 gallery images. Do not nudge coordinates in code without updating this page.
 
+The r2 language packs replace app-owned labels inside the same slots. All
+coordinates, type sizes and card proportions below stay fixed. Non-Latin text
+uses Android's font fallback; existing text bounds handle translated labels.
+Tool/provider names and reported quota titles stay as supplied by the Hub.
+Saved visibility/order choices filter the data before drawing and never move
+the grid. Each language is captured with the same dense showcase fixture.
+
 The reference images are the four concept cards approved on September 21, 2026.
 The card in each is 1382 pixels wide, so one reference unit below is
 1382 / 364 ≈ 3.8 image pixels.
