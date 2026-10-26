@@ -15,8 +15,8 @@ v0.79.0 r2 are retained. Android still uses the five-second complete-update limi
 Published release identity stays separate from candidate metadata in `release.json`.
 
 The latest published release is
-[`android-v0.79.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.79.0-r2),
-recorded with its source commit in `release.json`; v0.80.0 r1 is a candidate.
+[`android-v0.80.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.80.0-r1),
+recorded with its source commit in `release.json`.
 It retains opt-in HTTPS, optional background widget refresh and the
 r5 physical-network check underneath Tailscale. Earlier phone evidence applies
 only to the builds named in [Validation](VALIDATION.md).

@@ -198,8 +198,7 @@ already included in output. The released OpenCode collector runs against fake
 Console responses before its output passes through the actual Hub. Cases cover
 Go session, weekly and billing quotas, Zen balances, absent windows and reset
 times, real zero and negative balances, and an independently failing source.
-Native tests check tool selection and rendered quota/balance wording. The full
-instrumentation suites require 86 tests on both API 36 and API 37.
+Native tests check tool selection and rendered quota/balance wording.
 
 The v0.78.0 fixtures add ZCode parent, child, workflow, fork and side-chat
 sessions with title sharing off, on and revoked. The released-source harness

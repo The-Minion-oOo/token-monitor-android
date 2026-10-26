@@ -1,12 +1,13 @@
 # Install and update
 
-**Current release:** v0.79.0 r2 (`790002`) adds the display features and languages
+**Current release:** v0.80.0 r1 (`800001`) supports Muse Code quotas, Ollama credits
+and multiple Claude accounts, and retains the display features and languages
 described in [Desktop parity](DESKTOP_PARITY.md). This release has not been
 tested on a physical phone; [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94)
 tracks that follow-up separately.
 
-In r2, open **Settings → App language**, **Display currency**, **Tools and quotas**
-or **Live throughput** for the new local choices. Language starts with the phone
+Open **Settings → App language**, **Display currency**, **Tools and quotas**
+or **Live throughput** for the local choices. Language starts with the phone
 setting, currency starts in USD and live rates start Off. Automatic rates use
 public exchange-rate services while the app is visible; manual rates avoid that
 request. **Preview diagnostic report** shows exactly what will be copied/shared.
@@ -15,13 +16,13 @@ No report is sent automatically.
 ## Requirements
 
 - Android 8.0 or newer.
-- Token Monitor desktop with Hub hosting enabled and a shared secret. Android v0.79.0 r2 is verified against desktop v0.79.0.
+- Token Monitor desktop with Hub hosting enabled and a shared secret. Android v0.80.0 r1 is verified against desktop v0.80.0.
 - A route to the Hub: Tailscale is recommended; home Wi-Fi and an existing internet HTTPS Hub are optional.
 
 ## Install
 
-Download the signed v0.79.0 r2 APK from the public
-[release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.79.0-r2),
+Download the signed v0.80.0 r1 APK from the public
+[release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.80.0-r1),
 or use **Settings → App updates** in v0.62.0 r1 or newer. It uses the same package
 and release certificate as earlier releases, with a higher version code. An
 in-app upgrade on my phone from v0.65.0 to v0.66.0 r1 preserved pairing and the
@@ -33,7 +34,7 @@ no in-app updater, so install a newer release manually once. I installed the
 signed v0.78.0 r2 APK over r1 on my phone and confirmed pairing, Tailscale and
 home Wi-Fi still worked. Earlier widget checks apply only to their named builds.
 The r3 confirmation dialog fix was checked on emulators and was not phone-tested.
-I haven't phone-tested v0.79.0 r2.
+I haven't phone-tested v0.79.0 r2 or v0.80.0 r1.
 
 To build the current source, install JDK 17 and Android SDK 37, then run:
 

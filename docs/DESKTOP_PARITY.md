@@ -5,7 +5,7 @@ unreleased desktop changes. The baseline is tag `v0.80.0`, commit
 `c61cbe998d69725589c03511f2f56d43714f4c0f`. Android remains a read-only
 dashboard: the desktop collects usage, signs in to providers and hosts the Hub.
 
-The latest published APK is **v0.79.0 r2**, with **v0.80.0 r1** in preparation.
+The latest published APK is **v0.80.0 r1**.
 Items marked **r2** below were introduced in v0.79.0 r2 and are retained.
 
 Desktop v0.80.0 adds Muse Code session/weekly quotas, keeps its device observations
