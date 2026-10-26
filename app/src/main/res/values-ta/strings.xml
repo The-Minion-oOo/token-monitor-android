@@ -260,15 +260,15 @@
     <string name="ui_updated_1_s_62d23">%1$s புதுப்பிக்கப்பட்டது</string>
     <string name="ui_1_s_used_f116e">%1$s பயன்படுத்தப்பட்டது</string>
     <string name="ui_tracked_since_1_s_3065e">%1$s முதல் கண்காணிக்கப்பட்டது</string>
-    <string name="ui_recent_token_burn_056aa">சமீபத்திய டோக்கன் பர்ன்</string>
-    <string name="ui_recent_output_speed_1289e">சமீபத்திய வெளியீட்டு வேகம்</string>
+    <string name="ui_recent_token_burn_056aa">அண்மைய டோக்கன் நுகர்வு</string>
+    <string name="ui_recent_output_speed_1289e">அண்மைய வெளியீட்டு வேகம்</string>
     <string name="ui_waiting_for_matched_live_samples_9d2e5">பொருந்திய நேரலை மாதிரிகளுக்காகக் காத்திருக்கிறது</string>
     <string name="ui_live_throughput_ab5cc">நேரடி செயல்திறன்</string>
     <string name="ui_recent_matched_counter_changes_not_session_average_s_90965">சமீபத்தில் பொருந்திய கவுண்டர் மாற்றங்கள், அமர்வு-சராசரி வேகம் அல்ல. எட்டு வினாடிகளுக்குப் பிறகு மாதிரிகள் காலாவதியாகும். புதுப்பிப்பு அதிர்வெண் அப்படியே இருக்கும்.</string>
     <string name="ui_off_ad504">ஆஃப்</string>
     <string name="ui_output_s_c2f88">வெளியீடு/எஸ்</string>
     <string name="ui_tokens_min_3a4a4">டோக்கன்கள்/நிமிடம்</string>
-    <string name="ui_show_model_rates_4435d">மாதிரி கட்டணங்களைக் காட்டு</string>
+    <string name="ui_show_model_rates_4435d">மாதிரி வாரியான வேகத்தைக் காட்டு</string>
     <string name="ui_show_up_to_five_active_reported_models_below_the_tot_9396f">மொத்தத்திற்குக் கீழே ஐந்து செயலில் உள்ள அறிக்கை மாதிரிகள் வரை காண்பிக்கவும்.</string>
     <string name="ui_waiting_for_activity_from_your_saved_hub_e67ff">நீங்கள் சேமித்த Hub இலிருந்து செயல்பாட்டிற்காகக் காத்திருக்கிறது.</string>
     <string name="ui_connect_a_hub_to_see_desktop_activity_here_tailscale_9635e">டெஸ்க்டாப் செயல்பாட்டை இங்கே பார்க்க Hub ஐ இணைக்கவும். Tailscale பரிந்துரைக்கப்படுகிறது.</string>
@@ -576,14 +576,14 @@
     <string name="widget_deck_label">Token Monitor · பக்கங்கள்</string>
     <string name="widget_deck_description">மேலோட்டம், வரம்புகள், முறிவு மற்றும் செயல்பாடு ஆகியவற்றுக்கு இடையே நகர அட்டையின் விளிம்புகளைத் தட்டவும். ஒவ்வொரு பக்கமும் ஒரே முழு விட்ஜெட் அளவு மற்றும் சேமிக்கப்பட்ட ஸ்னாப்ஷாட்டைப் பயன்படுத்துகிறது.</string>
     <string name="widget_deck_empty">உங்கள் Hub ஐ இணைக்க அல்லது புதுப்பிக்க Token Monitor ஐ திறக்கவும்.</string>
-    <string name="widget_deck_overview">மேலோட்டம் · 1/4</string>
-    <string name="widget_deck_limits">வரம்புகள் · 2/4</string>
-    <string name="widget_deck_breakdown">முறிவு · 3/4</string>
+    <string name="widget_deck_overview">கண்ணோட்டம் · 1/4</string>
+    <string name="widget_deck_limits">ஒதுக்கீடு · 2/4</string>
+    <string name="widget_deck_breakdown">விவரம் · 3/4</string>
     <string name="widget_deck_activity">செயல்பாடு · 4/4</string>
     <string name="format_not_reported">புகாரளிக்கப்படவில்லை</string>
     <string name="format_unpriced">%1$s விலையில்லாது</string>
     <string name="format_reset_now">மீட்டமைப்பு நேரம்</string>
-    <string name="format_reset">%1$s மீட்டமை</string>
+    <string name="format_reset">மீட்டமைப்பு: %1$s</string>
     <string name="format_now">இப்போது</string>
     <string name="format_expires">%1$s காலாவதியாகிறது</string>
     <string name="format_changes">%1$s இல் மாற்றங்கள்</string>
@@ -598,4 +598,7 @@
     <string name="format_minutes">%1$s மீ</string>
     <string name="format_under_minute">&lt;1நி</string>
     <string name="language_no_pairing_qr">v%1$s டெஸ்க்டாப் பயன்பாடு இணைத்தல் QR குறியீட்டை உருவாக்காது.</string>
+    <string name="label_left">மீதி</string>
+    <string name="label_next_renewal">அடுத்த புதுப்பிப்பு</string>
+    <string name="label_coverage_ends">காலம் முடியும் நாள்</string>
 </resources>

@@ -258,15 +258,15 @@
     <string name="ui_updated_1_s_62d23">Actualizado %1$s</string>
     <string name="ui_1_s_used_f116e">%1$s usado</string>
     <string name="ui_tracked_since_1_s_3065e">Seguimiento desde %1$s</string>
-    <string name="ui_recent_token_burn_056aa">QUEMADURA DE TOKEN RECIENTE</string>
-    <string name="ui_recent_output_speed_1289e">VELOCIDAD DE SALIDA RECIENTE</string>
+    <string name="ui_recent_token_burn_056aa">CONSUMO RECIENTE DE TOKENS</string>
+    <string name="ui_recent_output_speed_1289e">VELOCIDAD RECIENTE DE SALIDA</string>
     <string name="ui_waiting_for_matched_live_samples_9d2e5">Esperando muestras en vivo coincidentes</string>
     <string name="ui_live_throughput_ab5cc">Rendimiento en vivo</string>
     <string name="ui_recent_matched_counter_changes_not_session_average_s_90965">Cambios recientes en el contador coincidente, no velocidad promedio de la sesión. Las muestras caducan después de ocho segundos. La frecuencia de actualización sigue siendo la misma.</string>
     <string name="ui_off_ad504">APAGADO</string>
     <string name="ui_output_s_c2f88">SALIDA/S</string>
     <string name="ui_tokens_min_3a4a4">TOKENS/MIN</string>
-    <string name="ui_show_model_rates_4435d">Mostrar tarifas de modelo</string>
+    <string name="ui_show_model_rates_4435d">Mostrar tasas por modelo</string>
     <string name="ui_show_up_to_five_active_reported_models_below_the_tot_9396f">Muestra hasta cinco modelos activos reportados debajo del total.</string>
     <string name="ui_waiting_for_activity_from_your_saved_hub_e67ff">Esperando actividad desde su Hub guardado.</string>
     <string name="ui_connect_a_hub_to_see_desktop_activity_here_tailscale_9635e">Conecte un Hub para ver la actividad del escritorio aquí. Se recomienda Tailscale.</string>
@@ -575,13 +575,13 @@
     <string name="widget_deck_description">Toque los bordes de la tarjeta para moverse entre descripción general, límites, desglose y actividad. Cada página utiliza el mismo tamaño de widget completo y la misma instantánea guardada.</string>
     <string name="widget_deck_empty">Abra Token Monitor para conectar o actualizar su Hub.</string>
     <string name="widget_deck_overview">RESUMEN · 1/4</string>
-    <string name="widget_deck_limits">LÍMITES · 2/4</string>
+    <string name="widget_deck_limits">CUOTAS · 2/4</string>
     <string name="widget_deck_breakdown">DESGLOSE · 3/4</string>
     <string name="widget_deck_activity">ACTIVIDAD · 4/4</string>
     <string name="format_not_reported">No informado</string>
     <string name="format_unpriced">%1$s sin precio</string>
     <string name="format_reset_now">Reinicio pendiente</string>
-    <string name="format_reset">Restablecer %1$s</string>
+    <string name="format_reset">Reinicio: %1$s</string>
     <string name="format_now">ahora</string>
     <string name="format_expires">Vence %1$s</string>
     <string name="format_changes">Cambios en %1$s</string>
@@ -596,4 +596,7 @@
     <string name="format_minutes">%1$sm</string>
     <string name="format_under_minute">&lt;1m</string>
     <string name="language_no_pairing_qr">La aplicación de escritorio v%1$s no genera un código QR de emparejamiento.</string>
+    <string name="label_left">libre</string>
+    <string name="label_next_renewal">Próxima renovación</string>
+    <string name="label_coverage_ends">Fin de cobertura</string>
 </resources>

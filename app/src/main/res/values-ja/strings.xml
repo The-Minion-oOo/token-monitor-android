@@ -258,7 +258,7 @@
     <string name="ui_updated_1_s_62d23">%1$s を更新しました</string>
     <string name="ui_1_s_used_f116e">%1$s 使用</string>
     <string name="ui_tracked_since_1_s_3065e">%1$s 以降追跡</string>
-    <string name="ui_recent_token_burn_056aa">最近のトークンバーン</string>
+    <string name="ui_recent_token_burn_056aa">最近のトークン消費</string>
     <string name="ui_recent_output_speed_1289e">最近の出力速度</string>
     <string name="ui_waiting_for_matched_live_samples_9d2e5">一致するライブサンプルを待っています</string>
     <string name="ui_live_throughput_ab5cc">ライブスループット</string>
@@ -266,7 +266,7 @@
     <string name="ui_off_ad504">オフ</string>
     <string name="ui_output_s_c2f88">出力/S</string>
     <string name="ui_tokens_min_3a4a4">トークン/分</string>
-    <string name="ui_show_model_rates_4435d">モデル料金を表示</string>
+    <string name="ui_show_model_rates_4435d">モデル別の速度を表示</string>
     <string name="ui_show_up_to_five_active_reported_models_below_the_tot_9396f">合計の下に最大 5 つのアクティブなレポート モデルを表示します。</string>
     <string name="ui_waiting_for_activity_from_your_saved_hub_e67ff">保存した Hub からのアクティビティを待っています。</string>
     <string name="ui_connect_a_hub_to_see_desktop_activity_here_tailscale_9635e">Hub を接続して、ここでデスクトップのアクティビティを確認します。 Tailscaleをお勧めします。</string>
@@ -575,7 +575,7 @@
     <string name="widget_deck_description">カードの端をタップして、概要、制限、内訳、アクティビティの間を移動します。すべてのページで同じ完全なウィジェット サイズと保存されたスナップショットが使用されます。</string>
     <string name="widget_deck_empty">Token Monitor を開いて、Hub を接続または更新します。</string>
     <string name="widget_deck_overview">概要 · 1/4</string>
-    <string name="widget_deck_limits">制限 · 2/4</string>
+    <string name="widget_deck_limits">利用枠 · 2/4</string>
     <string name="widget_deck_breakdown">内訳 · 3/4</string>
     <string name="widget_deck_activity">アクティビティ · 4/4</string>
     <string name="format_not_reported">未報告</string>
@@ -598,4 +598,7 @@
     <string name="format_minutes">%1$s m</string>
     <string name="format_under_minute">&lt;1m</string>
     <string name="language_no_pairing_qr">v%1$s デスクトップ アプリはペアリング QR コードを生成しません。</string>
+    <string name="label_left">残り</string>
+    <string name="label_next_renewal">次回更新</string>
+    <string name="label_coverage_ends">利用期間終了</string>
 </resources>

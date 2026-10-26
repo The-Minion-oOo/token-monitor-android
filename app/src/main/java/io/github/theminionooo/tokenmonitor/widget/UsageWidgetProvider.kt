@@ -235,8 +235,8 @@ class UsageWidgetProvider : AppWidgetProvider() {
             val heightDp = size.height
             val now = System.currentTimeMillis()
             val views = RemoteViews(context.packageName, layout.resource)
-            val clock = DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault()).withZone(ZoneId.systemDefault())
-            val stamp = DateTimeFormatter.ofPattern("MMM d, HH:mm", Locale.getDefault()).withZone(ZoneId.systemDefault())
+            val clock = DateTimeFormatter.ofPattern("HH:mm", AppLanguage.locale()).withZone(ZoneId.systemDefault())
+            val stamp = DateTimeFormatter.ofPattern("MMM d, HH:mm", AppLanguage.locale()).withZone(ZoneId.systemDefault())
             val savedAt = clock.format(Instant.ofEpochMilli(snapshot.capturedAt))
 
             // Figure
@@ -249,8 +249,8 @@ class UsageWidgetProvider : AppWidgetProvider() {
             if (frame.changed) views.setDisplayedChild(R.id.widget_counter, frame.child)
 
             val date = snapshotDate(snapshot)
-            val shortDate = date?.format(DateTimeFormatter.ofPattern("MMM d", Locale.getDefault()))?.uppercase(Locale.getDefault()) ?: "TODAY"
-            val longDate = date?.format(DateTimeFormatter.ofPattern("EEE, MMM d", Locale.getDefault()))?.uppercase(Locale.getDefault()) ?: "TODAY"
+            val shortDate = date?.format(DateTimeFormatter.ofPattern("MMM d", AppLanguage.locale()))?.uppercase(AppLanguage.locale()) ?: "TODAY"
+            val longDate = date?.format(DateTimeFormatter.ofPattern("EEE, MMM d", AppLanguage.locale()))?.uppercase(AppLanguage.locale()) ?: "TODAY"
             if (narrow) views.setTextViewText(R.id.widget_date, shortDate)
             val history = usageHistory(snapshot)
             val today = history.firstOrNull { it.label.take(10) == date?.toString() }
@@ -299,7 +299,7 @@ class UsageWidgetProvider : AppWidgetProvider() {
                 status == "SAVED" -> if (size.width < 300) displayLabel("SAVED") else appText(R.string.ui_saved_1_s_bb2d3, "SAVED · %1\$s", savedAt)
                 else -> displayLabel(status)
             })
-            views.setContentDescription(R.id.widget_status, status.lowercase(Locale.getDefault()).replaceFirstChar { it.titlecase(Locale.getDefault()) })
+            views.setContentDescription(R.id.widget_status, status.lowercase(AppLanguage.locale()).replaceFirstChar { it.titlecase(AppLanguage.locale()) })
             views.setTextColor(R.id.widget_status, if (enabled && session.connected) accent else muted)
             val updated = appText(R.string.ui_updated_1_s_62d23, "Updated %1\$s", stamp.format(Instant.ofEpochMilli(snapshot.capturedAt)))
             val detail = updated + when {
@@ -320,6 +320,10 @@ class UsageWidgetProvider : AppWidgetProvider() {
 
             // Tool split
             if (layout != WidgetLayout.Wide) {
+                // RemoteViews is inflated by the launcher. Explicit text also applies the
+                // app's private language choice on Android 8–12, outside our Activity context.
+                views.setTextViewText(R.id.widget_no_limits, AppLanguage.wrap(context).getString(R.string.widget_no_limits))
+                if (layout == WidgetLayout.Large) views.setTextViewText(R.id.widget_limits_title, AppLanguage.wrap(context).getString(R.string.widget_limits))
                 val shares = toolShares(snapshot, displayOptions)
                 val showTools = shares.isNotEmpty() && (layout != WidgetLayout.Compact || heightDp >= 170)
                 views.setViewVisibility(R.id.widget_tools, if (showTools) View.VISIBLE else View.GONE)
@@ -428,7 +432,7 @@ class UsageWidgetProvider : AppWidgetProvider() {
                         appText(R.string.ui_1_s_tokens_2_s_estimated_cost_ce601, "%1\$s tokens, %2\$s estimated cost", formatTokens(weekPoints.sumOf { it.tokens }), formatUsageCost(weekPoints.sumOf { it.costUsd }, weekPoints.sumOf { it.unpricedTokens }, currency = currency)) else null)
                     val dayIds = listOf(R.id.widget_day_0, R.id.widget_day_1, R.id.widget_day_2, R.id.widget_day_3, R.id.widget_day_4, R.id.widget_day_5, R.id.widget_day_6)
                     dayIds.forEachIndexed { index, id ->
-                        views.setTextViewText(id, week[index].format(DateTimeFormatter.ofPattern("EEE", Locale.getDefault())).uppercase(Locale.getDefault()))
+                        views.setTextViewText(id, week[index].format(DateTimeFormatter.ofPattern("EEE", AppLanguage.locale())).uppercase(AppLanguage.locale()))
                         views.setTextColor(id, if (index == 6) ink else muted)
                     }
                     views.setContentDescription(R.id.widget_chart, appText(R.string.ui_seven_calendar_days_of_tokens_a_dash_means_no_record_6b877, "Seven calendar days of tokens; a dash means no recorded data"))
@@ -485,7 +489,7 @@ class UsageWidgetProvider : AppWidgetProvider() {
             val padding = (layout.padding * density).toInt()
             views.setViewPadding(R.id.widget_root, padding, (4 * density).toInt(), padding, padding)
             views.setTextViewText(R.id.widget_title, if (narrow) appText(R.string.ui_usage_cf3bf, "USAGE") else appText(R.string.ui_token_monitor_b3a62, "TOKEN MONITOR"))
-            views.setTextViewText(R.id.widget_status, if (narrow) "" else if (enabled) appText(R.string.ui_waiting_c271b, "WAITING") else "NO DATA")
+            views.setTextViewText(R.id.widget_status, if (narrow) "" else if (enabled) appText(R.string.ui_waiting_c271b, "WAITING") else displayLabel("NO DATA"))
             views.setContentDescription(R.id.widget_status, if (enabled) appText(R.string.ui_connecting_to_hub_2ac86, "Connecting to Hub") else appText(R.string.ui_no_saved_data_c2434, "No saved data"))
             val waiting = enabled || session.refreshing
             views.setTextViewText(R.id.widget_empty_title, if (waiting) { if (small) appText(R.string.ui_connecting_c1f3b, "Connecting") else appText(R.string.ui_waiting_for_usage_f46e7, "Waiting for usage") } else if (small) appText(R.string.ui_no_data_yet_8c48f, "No data yet") else appText(R.string.ui_no_saved_usage_e6df3, "No saved usage"))

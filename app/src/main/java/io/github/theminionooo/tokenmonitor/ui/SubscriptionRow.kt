@@ -37,7 +37,10 @@ internal fun SubscriptionRow(subscription: Subscription, showEmail: Boolean = fa
                 color = Purple, upstreamName = subscription.provider,
             )
         }
-        if (boundary != null) Text("${if (subscription.autoRenew && subscription.endDate.isBlank()) "Next renewal" else "Coverage ends"}: $boundary", color = Muted, style = MaterialTheme.typography.labelSmall)
+        if (boundary != null) {
+            val label = if (subscription.autoRenew && subscription.endDate.isBlank()) appText(R.string.label_next_renewal, "Next renewal") else appText(R.string.label_coverage_ends, "Coverage ends")
+            Text("$label: $boundary", color = Muted, style = MaterialTheme.typography.labelSmall)
+        }
         if (!subscription.autoRenew && !topUp) Text(appText(R.string.ui_auto_renew_off_836e5, "Auto-renew off"), color = Muted, style = MaterialTheme.typography.labelSmall)
         val identity = listOf(subscription.binding.profileName, subscription.binding.accountEmail.takeIf { showEmail }.orEmpty()).filter(String::isNotBlank).joinToString(" · ")
         if (identity.isNotBlank()) Text(identity, color = Muted, style = MaterialTheme.typography.labelSmall)

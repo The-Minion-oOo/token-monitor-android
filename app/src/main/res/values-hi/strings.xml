@@ -258,7 +258,7 @@
     <string name="ui_updated_1_s_62d23">अद्यतन %1$s</string>
     <string name="ui_1_s_used_f116e">%1$s का उपयोग किया गया</string>
     <string name="ui_tracked_since_1_s_3065e">%1$s से ट्रैक किया गया</string>
-    <string name="ui_recent_token_burn_056aa">हाल का टोकन बर्न</string>
+    <string name="ui_recent_token_burn_056aa">हाल की टोकन खपत</string>
     <string name="ui_recent_output_speed_1289e">हाल की आउटपुट गति</string>
     <string name="ui_waiting_for_matched_live_samples_9d2e5">मिलान किए गए जीवित नमूनों की प्रतीक्षा है</string>
     <string name="ui_live_throughput_ab5cc">लाइव थ्रूपुट</string>
@@ -266,7 +266,7 @@
     <string name="ui_off_ad504">बंद</string>
     <string name="ui_output_s_c2f88">आउटपुट/एस</string>
     <string name="ui_tokens_min_3a4a4">टोकन/मिनट</string>
-    <string name="ui_show_model_rates_4435d">मॉडल दरें दिखाएं</string>
+    <string name="ui_show_model_rates_4435d">मॉडल की दरें दिखाएँ</string>
     <string name="ui_show_up_to_five_active_reported_models_below_the_tot_9396f">कुल से नीचे अधिकतम पांच सक्रिय रिपोर्ट किए गए मॉडल दिखाएं।</string>
     <string name="ui_waiting_for_activity_from_your_saved_hub_e67ff">आपके सहेजे गए Hub से गतिविधि की प्रतीक्षा की जा रही है।</string>
     <string name="ui_connect_a_hub_to_see_desktop_activity_here_tailscale_9635e">यहां डेस्कटॉप गतिविधि देखने के लिए Hub कनेक्ट करें। Tailscale की अनुशंसा की जाती है।</string>
@@ -571,17 +571,17 @@
     <string name="widget_description">छोटी शुरुआत। सीमाओं और सात-दिवसीय चार्ट के लिए आकार बदलें। डैशबोर्ड खोले बिना रीफ़्रेश करें या लाइव चालू करें।</string>
     <string name="widget_week">7 दिन</string>
     <string name="widget_open_app">ऐप खोलें</string>
-    <string name="widget_deck_label">Token Monitor · पेज</string>
+    <string name="widget_deck_label">Token Monitor · पृष्ठ</string>
     <string name="widget_deck_description">अवलोकन, सीमा, विश्लेषण और गतिविधि के बीच जाने के लिए कार्ड के किनारों को टैप करें। प्रत्येक पृष्ठ समान पूर्ण विजेट आकार और सहेजे गए स्नैपशॉट का उपयोग करता है।</string>
     <string name="widget_deck_empty">अपने Hub को कनेक्ट करने या रीफ्रेश करने के लिए Token Monitor खोलें।</string>
     <string name="widget_deck_overview">अवलोकन · 1/4</string>
-    <string name="widget_deck_limits">सीमाएं · 2/4</string>
-    <string name="widget_deck_breakdown">ब्रेकडाउन · 3/4</string>
+    <string name="widget_deck_limits">कोटा · 2/4</string>
+    <string name="widget_deck_breakdown">विवरण · 3/4</string>
     <string name="widget_deck_activity">गतिविधि · 4/4</string>
     <string name="format_not_reported">रिपोर्ट नहीं की गई</string>
     <string name="format_unpriced">%1$s कम कीमत वाला</string>
     <string name="format_reset_now">रीसेट का समय</string>
-    <string name="format_reset">%1$s रीसेट करें</string>
+    <string name="format_reset">रीसेट: %1$s</string>
     <string name="format_now">अभी</string>
     <string name="format_expires">%1$s की समाप्ति</string>
     <string name="format_changes">%1$s में परिवर्तन</string>
@@ -596,4 +596,7 @@
     <string name="format_minutes">%1$s मी</string>
     <string name="format_under_minute">&lt;1मी</string>
     <string name="language_no_pairing_qr">v%1$s डेस्कटॉप ऐप पेयरिंग क्यूआर कोड उत्पन्न नहीं करता है।</string>
+    <string name="label_left">शेष</string>
+    <string name="label_next_renewal">अगला नवीनीकरण</string>
+    <string name="label_coverage_ends">अवधि समाप्त</string>
 </resources>

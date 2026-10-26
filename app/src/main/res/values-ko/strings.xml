@@ -258,7 +258,7 @@
     <string name="ui_updated_1_s_62d23">%1$s 업데이트됨</string>
     <string name="ui_1_s_used_f116e">%1$s 사용됨</string>
     <string name="ui_tracked_since_1_s_3065e">%1$s 이후 추적됨</string>
-    <string name="ui_recent_token_burn_056aa">최근 토큰 소각</string>
+    <string name="ui_recent_token_burn_056aa">최근 토큰 소비</string>
     <string name="ui_recent_output_speed_1289e">최근 출력 속도</string>
     <string name="ui_waiting_for_matched_live_samples_9d2e5">일치하는 라이브 샘플을 기다리는 중</string>
     <string name="ui_live_throughput_ab5cc">실시간 처리량</string>
@@ -266,7 +266,7 @@
     <string name="ui_off_ad504">끔</string>
     <string name="ui_output_s_c2f88">출력/S</string>
     <string name="ui_tokens_min_3a4a4">토큰/분</string>
-    <string name="ui_show_model_rates_4435d">모델 요금 표시</string>
+    <string name="ui_show_model_rates_4435d">모델별 속도 표시</string>
     <string name="ui_show_up_to_five_active_reported_models_below_the_tot_9396f">전체 아래에 최대 5개의 활성 보고 모델을 표시합니다.</string>
     <string name="ui_waiting_for_activity_from_your_saved_hub_e67ff">저장된 Hub의 활동을 기다리는 중입니다.</string>
     <string name="ui_connect_a_hub_to_see_desktop_activity_here_tailscale_9635e">여기에서 데스크톱 활동을 보려면 Hub를 연결하세요. Tailscale를 권장합니다.</string>
@@ -576,13 +576,13 @@
     <string name="widget_deck_description">개요, 한도, 분석, 활동 사이를 이동하려면 카드 가장자리를 탭하세요. 모든 페이지는 동일한 전체 위젯 크기와 저장된 스냅샷을 사용합니다.</string>
     <string name="widget_deck_empty">Token Monitor를 열어 Hub를 연결하거나 새로 고치세요.</string>
     <string name="widget_deck_overview">개요 · 1/4</string>
-    <string name="widget_deck_limits">제한 · 2/4</string>
-    <string name="widget_deck_breakdown">분석 · 3/4</string>
+    <string name="widget_deck_limits">할당량 · 2/4</string>
+    <string name="widget_deck_breakdown">상세 · 3/4</string>
     <string name="widget_deck_activity">활동 · 4/4</string>
     <string name="format_not_reported">보고되지 않음</string>
     <string name="format_unpriced">%1$s 가격 미정</string>
     <string name="format_reset_now">초기화 시각</string>
-    <string name="format_reset">%1$s 재설정</string>
+    <string name="format_reset">초기화: %1$s</string>
     <string name="format_now">지금</string>
     <string name="format_expires">%1$s 만료</string>
     <string name="format_changes">%1$s의 변경 사항</string>
@@ -597,4 +597,7 @@
     <string name="format_minutes">%1$sm</string>
     <string name="format_under_minute">&lt;1분</string>
     <string name="language_no_pairing_qr">v%1$s 데스크톱 앱은 페어링 QR 코드를 생성하지 않습니다.</string>
+    <string name="label_left">남음</string>
+    <string name="label_next_renewal">다음 갱신</string>
+    <string name="label_coverage_ends">이용 종료</string>
 </resources>

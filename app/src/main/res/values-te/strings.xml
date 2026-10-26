@@ -258,7 +258,7 @@
     <string name="ui_updated_1_s_62d23">%1$s నవీకరించబడింది</string>
     <string name="ui_1_s_used_f116e">%1$s ఉపయోగించబడింది</string>
     <string name="ui_tracked_since_1_s_3065e">%1$s నుండి ట్రాక్ చేయబడింది</string>
-    <string name="ui_recent_token_burn_056aa">ఇటీవలి టోకెన్ బర్న్</string>
+    <string name="ui_recent_token_burn_056aa">ఇటీవలి టోకెన్ వినియోగం</string>
     <string name="ui_recent_output_speed_1289e">ఇటీవలి అవుట్‌పుట్ వేగం</string>
     <string name="ui_waiting_for_matched_live_samples_9d2e5">సరిపోలిన ప్రత్యక్ష నమూనాల కోసం వేచి ఉంది</string>
     <string name="ui_live_throughput_ab5cc">ప్రత్యక్ష నిర్గమాంశ</string>
@@ -266,7 +266,7 @@
     <string name="ui_off_ad504">ఆఫ్</string>
     <string name="ui_output_s_c2f88">అవుట్‌పుట్/S</string>
     <string name="ui_tokens_min_3a4a4">టోకెన్లు/నిమి</string>
-    <string name="ui_show_model_rates_4435d">మోడల్ ధరలను చూపు</string>
+    <string name="ui_show_model_rates_4435d">మోడల్ వారీ రేట్లను చూపు</string>
     <string name="ui_show_up_to_five_active_reported_models_below_the_tot_9396f">మొత్తం కంటే దిగువన ఐదు వరకు సక్రియంగా నివేదించబడిన మోడల్‌లను చూపండి.</string>
     <string name="ui_waiting_for_activity_from_your_saved_hub_e67ff">మీరు సేవ్ చేసిన Hub నుండి కార్యాచరణ కోసం వేచి ఉంది.</string>
     <string name="ui_connect_a_hub_to_see_desktop_activity_here_tailscale_9635e">డెస్క్‌టాప్ కార్యాచరణను ఇక్కడ చూడటానికి Hubని కనెక్ట్ చేయండి. Tailscale సిఫార్సు చేయబడింది.</string>
@@ -575,13 +575,13 @@
     <string name="widget_deck_description">ఓవర్‌వ్యూ, పరిమితులు, బ్రేక్‌డౌన్ మరియు యాక్టివిటీ మధ్య కదలడానికి కార్డ్ అంచులను నొక్కండి. ప్రతి పేజీ ఒకే పూర్తి విడ్జెట్ పరిమాణాన్ని మరియు సేవ్ చేయబడిన స్నాప్‌షాట్‌ను ఉపయోగిస్తుంది.</string>
     <string name="widget_deck_empty">మీ Hubని కనెక్ట్ చేయడానికి లేదా రిఫ్రెష్ చేయడానికి Token Monitorని తెరవండి.</string>
     <string name="widget_deck_overview">అవలోకనం · 1/4</string>
-    <string name="widget_deck_limits">పరిమితులు · 2/4</string>
-    <string name="widget_deck_breakdown">బ్రేక్‌డౌన్ · 3/4</string>
+    <string name="widget_deck_limits">కోటా · 2/4</string>
+    <string name="widget_deck_breakdown">వివరాలు · 3/4</string>
     <string name="widget_deck_activity">కార్యాచరణ · 4/4</string>
     <string name="format_not_reported">నివేదించబడలేదు</string>
     <string name="format_unpriced">%1$s ధర లేనిది</string>
     <string name="format_reset_now">రీసెట్ సమయం</string>
-    <string name="format_reset">%1$s రీసెట్ చేయండి</string>
+    <string name="format_reset">రీసెట్: %1$s</string>
     <string name="format_now">ఇప్పుడు</string>
     <string name="format_expires">%1$s గడువు ముగుస్తుంది</string>
     <string name="format_changes">%1$sలో మార్పులు</string>
@@ -596,4 +596,7 @@
     <string name="format_minutes">%1$s m</string>
     <string name="format_under_minute">&lt;1మి</string>
     <string name="language_no_pairing_qr">v%1$s డెస్క్‌టాప్ యాప్ జత చేసే QR కోడ్‌ను రూపొందించదు.</string>
+    <string name="label_left">మిగులు</string>
+    <string name="label_next_renewal">తదుపరి పునరుద్ధరణ</string>
+    <string name="label_coverage_ends">వ్యవధి ముగింపు</string>
 </resources>

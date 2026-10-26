@@ -33,6 +33,7 @@ internal object AppLanguage {
 
     fun choose(context: Context, tag: String) {
         require(tag in choices)
+        if (selected(context) == tag) return
         if (Build.VERSION.SDK_INT >= 33) {
             context.getSystemService(LocaleManager::class.java).applicationLocales = LocaleList.forLanguageTags(tag)
         } else {

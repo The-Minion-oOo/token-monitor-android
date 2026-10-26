@@ -39,7 +39,7 @@ internal fun LiveRatePanel(snapshot: HubSnapshot, options: DisplayOptions, activ
 
 @Composable
 internal fun LiveRateSettings(options: DisplayOptions, onChange: (DisplayOptions) -> Unit) {
-    SettingsGroup(appText(R.string.ui_live_throughput_ab5cc, "Live throughput"), summary = options.liveRateMode.name) {
+    SettingsGroup(appText(R.string.ui_live_throughput_ab5cc, "Live throughput"), summary = displayLabel(options.liveRateMode.name)) {
         Text(appText(R.string.ui_recent_matched_counter_changes_not_session_average_s_90965, "Recent matched counter changes, not session-average speed. Samples expire after eight seconds. Update frequency stays the same."), color = Muted, style = MaterialTheme.typography.bodySmall)
         TactileSegmentedControl(listOf(appText(R.string.ui_off_ad504, "OFF") to LiveRateMode.Off, appText(R.string.ui_output_s_c2f88, "OUTPUT/S") to LiveRateMode.Speed, appText(R.string.ui_tokens_min_3a4a4, "TOKENS/MIN") to LiveRateMode.Burn), options.liveRateMode) { onChange(options.copy(liveRateMode = it)) }
         SettingsToggle(appText(R.string.ui_show_model_rates_4435d, "Show model rates"), appText(R.string.ui_show_up_to_five_active_reported_models_below_the_tot_9396f, "Show up to five active reported models below the total."), options.showLiveRateModels) { onChange(options.copy(showLiveRateModels = it)) }

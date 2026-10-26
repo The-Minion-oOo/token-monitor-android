@@ -305,7 +305,7 @@ private class DeckCanvas(
                 val fullTitle = "${group.provider.providerLabel()} · ${window.title}"
                 text(if (measure(fullTitle, titleType) <= cellWidth) fullTitle else window.title, cellLeft, top + g.TITLE_OFFSET, titleType, label, maxWidth = cellWidth)
                 val percent = text("${window.remainingPercent.roundToInt()}%", cellLeft, top + g.VALUE_OFFSET, figure, if (window.remainingPercent > 35) ink else WidgetDeckDrawing.textTone(palette, window.remainingPercent).toArgb())
-                text("left", cellLeft + percent + 6f, top + g.VALUE_OFFSET, DeckType(mono, g.LEFT_LABEL_SIZE), ink, maxWidth = cellWidth - percent - 6f)
+                text(appText(R.string.label_left, "left"), cellLeft + percent + 6f, top + g.VALUE_OFFSET, DeckType(mono, g.LEFT_LABEL_SIZE), ink, maxWidth = cellWidth - percent - 6f)
                 drawBar(RectF(cellLeft, top + g.BAR_TOP_OFFSET, cellRight, top + g.BAR_BOTTOM_OFFSET), window.remainingPercent / 100.0, tone)
                 text(window.reset.ifBlank { appText(R.string.ui_reset_not_reported_13aea, "Reset not reported") }, cellLeft, top + g.RESET_OFFSET, secondary, muted, maxWidth = cellWidth)
             }
@@ -321,8 +321,8 @@ private class DeckCanvas(
             return
         }
         vline(g.DIVIDER_X, g.DIVIDER_TOP, g.DIVIDER_BOTTOM, line)
-        text("Tools", left, g.SECTION_BASELINE, section, label)
-        text("Models", g.MODELS_X, g.SECTION_BASELINE, section, label)
+        text(displayLabel("Tools"), left, g.SECTION_BASELINE, section, label)
+        text(displayLabel("Models"), g.MODELS_X, g.SECTION_BASELINE, section, label)
         if (data.tools.size <= 1 && data.models.size <= 1) {
             data.tools.firstOrNull()?.let { row ->
                 val color = vendorColor(row.name, 0)

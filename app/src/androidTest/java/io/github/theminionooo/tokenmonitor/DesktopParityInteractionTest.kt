@@ -95,8 +95,8 @@ class DesktopParityInteractionTest {
         compose.onNodeWithText("Preview diagnostic report").performClick()
         compose.onNodeWithText("private-marker", substring = true).assertDoesNotExist()
         compose.onNodeWithText("SECRET_MARKER", substring = true).assertDoesNotExist()
-        compose.onNodeWithText("Copy report").performClick()
-        compose.onNodeWithText("Copied").assertIsDisplayed()
+        compose.onNodeWithText("Copy report").performScrollTo().performClick()
+        compose.onNodeWithText("Copied").performScrollTo().assertIsDisplayed()
         compose.onNodeWithText("Close").performClick()
         compose.onNodeWithText("Share report").assertDoesNotExist()
     }
@@ -125,6 +125,12 @@ class DesktopParityInteractionTest {
             compose.onNodeWithText(localized.getString(R.string.label_home)).assertIsDisplayed()
             assertEquals("Home", DashboardDestination.Home.title)
             assertEquals("today", DashboardPeriod.Today.statsKey)
+            instrumentation.runOnMainSync {
+                val responsive = io.github.theminionooo.tokenmonitor.widget.UsageWidgetProvider.render(localized, snapshot,
+                    InterfaceTheme.Default, io.github.theminionooo.tokenmonitor.widget.WidgetLayout.Large)
+                    .apply(context, android.widget.FrameLayout(context))
+                assertEquals(localized.getString(R.string.widget_limits), responsive.findViewById<android.widget.TextView>(R.id.widget_limits_title).text.toString())
+            }
             context.openFileOutput("locale-$language.png", 0).use {
                 compose.onRoot().captureToImage().asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 100, it)
             }

@@ -258,7 +258,7 @@
     <string name="ui_updated_1_s_62d23">আপডেট করা হয়েছে %1$s</string>
     <string name="ui_1_s_used_f116e">%1$s ব্যবহার করা হয়েছে</string>
     <string name="ui_tracked_since_1_s_3065e">%1$s থেকে ট্র্যাক করা হয়েছে</string>
-    <string name="ui_recent_token_burn_056aa">সাম্প্রতিক টোকেন বার্ন</string>
+    <string name="ui_recent_token_burn_056aa">সাম্প্রতিক টোকেন খরচ</string>
     <string name="ui_recent_output_speed_1289e">সাম্প্রতিক আউটপুট গতি</string>
     <string name="ui_waiting_for_matched_live_samples_9d2e5">মিলে যাওয়া লাইভ নমুনার জন্য অপেক্ষা করা হচ্ছে</string>
     <string name="ui_live_throughput_ab5cc">লাইভ থ্রুপুট</string>
@@ -266,7 +266,7 @@
     <string name="ui_off_ad504">বন্ধ</string>
     <string name="ui_output_s_c2f88">আউটপুট/এস</string>
     <string name="ui_tokens_min_3a4a4">টোকেন/মিনিট</string>
-    <string name="ui_show_model_rates_4435d">মডেলের হার দেখান</string>
+    <string name="ui_show_model_rates_4435d">মডেল অনুযায়ী হার দেখান</string>
     <string name="ui_show_up_to_five_active_reported_models_below_the_tot_9396f">মোটের নিচে পাঁচটি সক্রিয় রিপোর্ট করা মডেল দেখান।</string>
     <string name="ui_waiting_for_activity_from_your_saved_hub_e67ff">আপনার সংরক্ষিত Hub থেকে কার্যকলাপের জন্য অপেক্ষা করা হচ্ছে।</string>
     <string name="ui_connect_a_hub_to_see_desktop_activity_here_tailscale_9635e">এখানে ডেস্কটপ কার্যকলাপ দেখতে একটি Hub সংযোগ করুন। Tailscale সুপারিশ করা হয়.</string>
@@ -571,17 +571,17 @@
     <string name="widget_description">ছোট শুরু হয়। সীমা এবং সাত দিনের চার্টের জন্য আকার পরিবর্তন করুন। ড্যাশবোর্ড না খুলে রিফ্রেশ করুন বা লাইভ চালু করুন।</string>
     <string name="widget_week">৭ দিন</string>
     <string name="widget_open_app">অ্যাপ খুলুন</string>
-    <string name="widget_deck_label">Token Monitor · পৃষ্ঠাগুলি</string>
+    <string name="widget_deck_label">Token Monitor · পৃষ্ঠা</string>
     <string name="widget_deck_description">ওভারভিউ, সীমা, ব্রেকডাউন এবং কার্যকলাপের মধ্যে সরাতে কার্ডের প্রান্তে ট্যাপ করুন। প্রতিটি পৃষ্ঠা একই পূর্ণ উইজেট আকার এবং সংরক্ষিত স্ন্যাপশট ব্যবহার করে।</string>
     <string name="widget_deck_empty">আপনার Hub সংযোগ বা রিফ্রেশ করতে Token Monitor খুলুন।</string>
-    <string name="widget_deck_overview">ওভারভিউ · 1/4</string>
-    <string name="widget_deck_limits">সীমা · 2/4</string>
-    <string name="widget_deck_breakdown">ব্রেকডাউন · 3/4</string>
+    <string name="widget_deck_overview">সারসংক্ষেপ · 1/4</string>
+    <string name="widget_deck_limits">কোটা · 2/4</string>
+    <string name="widget_deck_breakdown">বিবরণ · 3/4</string>
     <string name="widget_deck_activity">কার্যকলাপ · 4/4</string>
     <string name="format_not_reported">রিপোর্ট করা হয়নি</string>
     <string name="format_unpriced">%1$s মূল্যহীন</string>
     <string name="format_reset_now">রিসেটের সময়</string>
-    <string name="format_reset">%1$s রিসেট করুন</string>
+    <string name="format_reset">রিসেট: %1$s</string>
     <string name="format_now">এখন</string>
     <string name="format_expires">মেয়াদ শেষ হবে %1$s</string>
     <string name="format_changes">%1$s-এ পরিবর্তন</string>
@@ -596,4 +596,7 @@
     <string name="format_minutes">%1$s মি</string>
     <string name="format_under_minute">&lt;1মি</string>
     <string name="language_no_pairing_qr">v%1$s ডেস্কটপ অ্যাপ পেয়ারিং QR কোড তৈরি করে না।</string>
+    <string name="label_left">বাকি</string>
+    <string name="label_next_renewal">পরবর্তী নবায়ন</string>
+    <string name="label_coverage_ends">মেয়াদ শেষ</string>
 </resources>

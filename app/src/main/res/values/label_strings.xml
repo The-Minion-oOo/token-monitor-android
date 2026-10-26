@@ -42,4 +42,7 @@
     <string name="label_saved">SAVED</string>
     <string name="label_offline">OFFLINE</string>
     <string name="label_no_data">NO DATA</string>
+    <string name="label_left">left</string>
+    <string name="label_next_renewal">Next renewal</string>
+    <string name="label_coverage_ends">Coverage ends</string>
 </resources>
