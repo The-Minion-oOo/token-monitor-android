@@ -1,0 +1,20 @@
+<resources>
+    <string name="format_not_reported">Not reported</string>
+    <string name="format_unpriced">%1$s unpriced</string>
+    <string name="format_reset_now">Reset now</string>
+    <string name="format_reset">Reset %1$s</string>
+    <string name="format_now">now</string>
+    <string name="format_expires">Expires %1$s</string>
+    <string name="format_changes">Changes in %1$s</string>
+    <string name="format_changes_now">Changes now</string>
+    <string name="format_just_now">just now</string>
+    <string name="format_seconds_ago">%1$ss ago</string>
+    <string name="format_duration_ago">%1$s ago</string>
+    <string name="format_unknown_time">an unknown time</string>
+    <string name="format_recently">recently</string>
+    <string name="format_days_hours">%1$s d %2$s h</string>
+    <string name="format_hours_minutes">%1$s h %2$s m</string>
+    <string name="format_minutes">%1$s m</string>
+    <string name="format_under_minute">&lt;1m</string>
+    <string name="language_no_pairing_qr">The v%1$s desktop app does not generate a pairing QR code.</string>
+</resources>

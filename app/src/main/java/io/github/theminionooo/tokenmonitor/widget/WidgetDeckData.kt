@@ -1,5 +1,6 @@
 package io.github.theminionooo.tokenmonitor.widget
 
+import io.github.theminionooo.tokenmonitor.ui.appText
 import io.github.theminionooo.tokenmonitor.R
 import io.github.theminionooo.tokenmonitor.domain.HistoryPoint
 import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
@@ -66,7 +67,7 @@ internal fun prepareWidgetDeck(
     session: WidgetSession,
     now: Long = System.currentTimeMillis(),
     zoneId: ZoneId = ZoneId.systemDefault(),
-    locale: Locale = Locale.getDefault(),
+    locale: Locale = io.github.theminionooo.tokenmonitor.ui.AppLanguage.locale(),
     displayOptions: io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions = io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions(),
 ): WidgetDeckData {
     val liveEnabled = session.enabled && session.expiresAt > now
@@ -85,15 +86,15 @@ internal fun prepareWidgetDeck(
     val clock = DateTimeFormatter.ofPattern("HH:mm", locale).withZone(zoneId)
     val saved = snapshot?.capturedAt?.takeIf { it > 0 }?.let { clock.format(Instant.ofEpochMilli(it)) }
     val statusDescription = buildString {
-        append(status.lowercase(locale).replaceFirstChar { it.titlecase(locale) })
-        saved?.let { append(". Snapshot saved at $it") }
+        append(io.github.theminionooo.tokenmonitor.ui.displayLabel(status).lowercase(locale).replaceFirstChar { it.titlecase(locale) })
+        saved?.let { append(appText(R.string.ui_snapshot_saved_at_1_s_bb686, ". Snapshot saved at %1\$s", it)) }
         session.note?.let { append(". $it") }
     }
     val emptyMessage = when {
-        liveEnabled -> "Connecting to your Hub…"
-        session.refreshing -> "Refreshing your saved usage…"
-        session.note != null -> "Hub offline. Open Token Monitor to check the connection."
-        else -> "Open Token Monitor to connect or refresh your Hub."
+        liveEnabled -> appText(R.string.ui_connecting_to_your_hub_588c6, "Connecting to your Hub…")
+        session.refreshing -> appText(R.string.ui_refreshing_your_saved_usage_cfa3c, "Refreshing your saved usage…")
+        session.note != null -> appText(R.string.ui_hub_offline_open_token_monitor_to_check_the_connecti_1565d, "Hub offline. Open Token Monitor to check the connection.")
+        else -> appText(R.string.ui_open_token_monitor_to_connect_or_refresh_your_hub_59e24, "Open Token Monitor to connect or refresh your Hub.")
     }
     val date = snapshot?.let { snapshotDate(it, zoneId) } ?: Instant.ofEpochMilli(now).atZone(zoneId).toLocalDate()
     val history = snapshot?.let(::usageHistory).orEmpty()

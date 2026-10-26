@@ -1,5 +1,6 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+import io.github.theminionooo.tokenmonitor.R
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
@@ -15,7 +16,7 @@ import kotlin.math.roundToInt
 @Composable
 internal fun HomeListCountControl(module: String, count: Int, onChange: (Int) -> Unit) {
     Column {
-        Text(if (count == 1) "1 item" else "$count items", color = Muted, style = MaterialTheme.typography.labelSmall)
+        Text(if (count == 1) appText(R.string.ui_1_item_19884, "1 item") else appText(R.string.ui_1_s_items_cabff, "%1\$s items", count), color = Muted, style = MaterialTheme.typography.labelSmall)
         Slider(
             value = count.coerceIn(1, 50).toFloat(),
             onValueChange = { onChange(it.roundToInt().coerceIn(1, 50)) },
@@ -28,7 +29,7 @@ internal fun HomeListCountControl(module: String, count: Int, onChange: (Int) ->
                 activeTickColor = Color.Transparent,
                 inactiveTickColor = Color.Transparent,
             ),
-            modifier = Modifier.semantics { contentDescription = "$module items on Home" },
+            modifier = Modifier.semantics { contentDescription = appText(R.string.ui_1_s_items_on_home_bfd1c, "%1\$s items on Home", displayLabel(module)) },
         )
     }
 }

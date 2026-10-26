@@ -1,5 +1,6 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+import io.github.theminionooo.tokenmonitor.R
 import io.github.theminionooo.tokenmonitor.domain.Subscription
 import java.time.LocalDate
 import java.time.YearMonth
@@ -29,10 +30,10 @@ internal fun topUpTotalMinor(record: Subscription, month: YearMonth? = null): Lo
 }.getOrNull()
 
 internal fun subscriptionCadence(record: Subscription): String = when {
-    record.isTopUp() -> "Top-ups"
-    record.kind != "subscription" -> "Payment record"
-    record.interval !in setOf("month", "year") -> "Interval not reported"
-    record.intervalCount == 1 -> if (record.interval == "year") "Yearly" else "Monthly"
-    record.interval == "year" -> "Every ${record.intervalCount} years"
-    else -> "Every ${record.intervalCount} months"
+    record.isTopUp() -> appText(R.string.ui_top_ups_3d9e3, "Top-ups")
+    record.kind != "subscription" -> appText(R.string.ui_payment_record_ed523, "Payment record")
+    record.interval !in setOf("month", "year") -> appText(R.string.ui_interval_not_reported_f77ef, "Interval not reported")
+    record.intervalCount == 1 -> if (record.interval == "year") appText(R.string.ui_yearly_7622e, "Yearly") else appText(R.string.ui_monthly_d31ed, "Monthly")
+    record.interval == "year" -> appText(R.string.ui_every_1_s_years_5fc2d, "Every %1\$s years", record.intervalCount)
+    else -> appText(R.string.ui_every_1_s_months_d5dd8, "Every %1\$s months", record.intervalCount)
 }

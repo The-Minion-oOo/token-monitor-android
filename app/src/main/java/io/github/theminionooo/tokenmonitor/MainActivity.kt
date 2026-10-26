@@ -10,10 +10,15 @@ import io.github.theminionooo.tokenmonitor.ui.DashboardViewModel
 import io.github.theminionooo.tokenmonitor.ui.TokenMonitorApp
 
 class MainActivity : ComponentActivity() {
+    override fun attachBaseContext(newBase: android.content.Context) {
+        super.attachBaseContext(io.github.theminionooo.tokenmonitor.ui.AppLanguage.wrap(newBase))
+    }
+
     private val viewModel: DashboardViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        io.github.theminionooo.tokenmonitor.ui.AppLanguage.bind(this)
         enableEdgeToEdge()
         WindowCompat.getInsetsController(window, window.decorView).apply {
             isAppearanceLightStatusBars = false

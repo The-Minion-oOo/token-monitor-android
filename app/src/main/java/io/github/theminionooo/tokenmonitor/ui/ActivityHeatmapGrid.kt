@@ -139,8 +139,8 @@ internal fun ActivityHeatmapGrid(activity: ActivityHeatmap, history: List<Histor
                     .width((activity.weeks * 12 - 3).coerceAtLeast(1).dp)
                     .height(97.dp)
                     .semantics {
-                        contentDescription = "Activity heatmap. Open daily details or use the day navigation below."
-                        onClick("Open latest recorded day") {
+                        contentDescription = appText(R.string.ui_activity_heatmap_open_daily_details_or_use_the_day_n_71d5e, "Activity heatmap. Open daily details or use the day navigation below.")
+                        onClick(appText(R.string.ui_open_latest_recorded_day_63a32, "Open latest recorded day")) {
                             detailDate = history.filter { it.label.take(10) <= today.toString() }.maxByOrNull { it.label }?.label?.take(10)
                             detailDate != null
                         }
@@ -197,7 +197,7 @@ internal fun ActivityHeatmapGrid(activity: ActivityHeatmap, history: List<Histor
                     Column(Modifier.fillMaxWidth().padding(vertical = 6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text(picked.date.format(dayFormat), color = Muted, style = MaterialTheme.typography.labelSmall)
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text(point?.let { "${formatCompactTokens(it.tokens)} tokens" } ?: "No recorded usage", color = Ink, style = MaterialTheme.typography.bodySmall)
+                            Text(point?.let { appText(R.string.ui_1_s_tokens_44298, "%1\$s tokens", formatCompactTokens(it.tokens)) } ?: appText(R.string.ui_no_recorded_usage_59dec, "No recorded usage"), color = Ink, style = MaterialTheme.typography.bodySmall)
                             if (point != null) Text(displayUsageCost(point.costUsd), color = Ink, style = MaterialTheme.typography.bodySmall)
                         }
                     }
@@ -205,9 +205,9 @@ internal fun ActivityHeatmapGrid(activity: ActivityHeatmap, history: List<Histor
             }
         }
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            TextButton(onClick = { selectedDate = previousDay?.date?.toString() }, enabled = previousDay != null, modifier = Modifier.weight(1f)) { Text("PREVIOUS", style = MaterialTheme.typography.labelMedium) }
-            TextButton(onClick = { detailDate = selected?.date?.toString() }, enabled = selected != null, modifier = Modifier.weight(1f)) { Text("DETAILS", style = MaterialTheme.typography.labelMedium) }
-            TextButton(onClick = { selectedDate = nextDay?.date?.toString() }, enabled = nextDay != null, modifier = Modifier.weight(1f)) { Text("NEXT DAY", style = MaterialTheme.typography.labelMedium) }
+            TextButton(onClick = { selectedDate = previousDay?.date?.toString() }, enabled = previousDay != null, modifier = Modifier.weight(1f)) { Text(appText(R.string.ui_previous_049a5, "PREVIOUS"), style = MaterialTheme.typography.labelMedium) }
+            TextButton(onClick = { detailDate = selected?.date?.toString() }, enabled = selected != null, modifier = Modifier.weight(1f)) { Text(appText(R.string.ui_details_91204, "DETAILS"), style = MaterialTheme.typography.labelMedium) }
+            TextButton(onClick = { selectedDate = nextDay?.date?.toString() }, enabled = nextDay != null, modifier = Modifier.weight(1f)) { Text(appText(R.string.ui_next_day_788b4, "NEXT DAY"), style = MaterialTheme.typography.labelMedium) }
         }
         detailDate?.let { DayUsageDialog(it, history) { detailDate = null } }
 

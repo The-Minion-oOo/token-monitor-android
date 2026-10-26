@@ -1,5 +1,6 @@
 package io.github.theminionooo.tokenmonitor.widget
 
+import io.github.theminionooo.tokenmonitor.ui.appText
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -61,52 +62,52 @@ internal fun widgetNotificationContent(
     live: Boolean,
     now: Long = System.currentTimeMillis(),
     zoneId: ZoneId = ZoneId.systemDefault(),
-    locale: Locale = Locale.getDefault(),
+    locale: Locale = io.github.theminionooo.tokenmonitor.ui.AppLanguage.locale(),
 ): WidgetNotificationContent {
     val snapshot = session.snapshot
     val connected = session.connected && snapshot?.fromCache != true && session.note == null
     val clock = DateTimeFormatter.ofPattern("HH:mm", locale).withZone(zoneId)
     val headline = snapshot?.let {
-        val totals = "${widgetTokens(it.today.totalTokens)} tokens · ${formatUsageCost(it.today.costUsd, it.today.unpricedTokens)}"
+        val totals = appText(R.string.ui_1_s_tokens_2_s_8aebf, "%1\$s tokens · %2\$s", widgetTokens(it.today.totalTokens), formatUsageCost(it.today.costUsd, it.today.unpricedTokens))
         val day = snapshotDate(it, zoneId)
         when {
-            !connected -> "Saved · $totals"
-            day == Instant.ofEpochMilli(now).atZone(zoneId).toLocalDate() -> "$totals today"
-            day != null -> "$totals for $day"
+            !connected -> appText(R.string.ui_saved_1_s_432ed, "Saved · %1\$s", totals)
+            day == Instant.ofEpochMilli(now).atZone(zoneId).toLocalDate() -> appText(R.string.ui_1_s_today_4398d, "%1\$s today", totals)
+            day != null -> appText(R.string.ui_1_s_for_2_s_c9074, "%1\$s for %2\$s", totals, day)
             else -> totals
         }
     }
-        ?: if (live) "Waiting for the Hub" else "Fetching a fresh Hub snapshot"
+        ?: if (live) appText(R.string.ui_waiting_for_the_hub_43049, "Waiting for the Hub") else appText(R.string.ui_fetching_a_fresh_hub_snapshot_cda7e, "Fetching a fresh Hub snapshot")
     val lastUpdated = snapshot?.takeUnless { connected }?.let {
-        if (it.capturedAt <= 0) "Last update time unavailable" else {
+        if (it.capturedAt <= 0) appText(R.string.ui_last_update_time_unavailable_fac67, "Last update time unavailable") else {
             val age = (now - it.capturedAt).coerceAtLeast(0L)
-            "Last updated " + if (age < 60_000) "less than a minute ago" else "${formatDuration(age / 60_000 * 60_000)} ago"
+            appText(R.string.ui_last_updated_cb5f4, "Last updated ") + if (age < 60_000) appText(R.string.ui_less_than_a_minute_ago_abff0, "less than a minute ago") else appText(R.string.ui_1_s_ago_1d3b1, "%1\$s ago", formatDuration(age / 60_000 * 60_000))
         }
     }
     val windows = snapshot?.let(::quotaRows).orEmpty().joinToString("\n") { row ->
         val reset = formatBoundary(row.window.resetsAt, row.window.boundaryKind, now)
-        "${row.provider.providerLabel()} ${windowTitle(row.window, row.siblings)} ${row.remainingPercent.toInt()}% left" +
+        appText(R.string.ui_1_s_2_s_3_s_left_f1c0b, "%1\$s %2\$s %3\$s%% left", row.provider.providerLabel(), windowTitle(row.window, row.siblings), row.remainingPercent.toInt()) +
             if (reset.isNotBlank()) " · $reset" else ""
     }
     val until = when {
         live && session.expiresAt > 0 -> "${if (connected) "Live until" else "Session ends"} ${clock.format(Instant.ofEpochMilli(session.expiresAt))}"
-        live -> "Widget updates for one hour"
+        live -> appText(R.string.ui_widget_updates_for_one_hour_f38cd, "Widget updates for one hour")
         else -> null
     }
     return WidgetNotificationContent(
         title = when {
-            !live -> "Refreshing Token Monitor"
-            connected -> "Token Monitor · Live"
-            snapshot != null -> "Token Monitor · Reconnecting"
-            else -> "Token Monitor · Connecting"
+            !live -> appText(R.string.ui_refreshing_token_monitor_82285, "Refreshing Token Monitor")
+            connected -> appText(R.string.ui_token_monitor_live_ef514, "Token Monitor · Live")
+            snapshot != null -> appText(R.string.ui_token_monitor_reconnecting_23229, "Token Monitor · Reconnecting")
+            else -> appText(R.string.ui_token_monitor_connecting_c6cd1, "Token Monitor · Connecting")
         },
         headline = headline,
         detail = listOfNotNull(headline, lastUpdated, windows.ifBlank { null }, until).joinToString("\n"),
         subtext = until,
         shortText = when {
             connected && snapshot != null -> formatCompactTokens(snapshot.today.totalTokens)
-            snapshot != null -> "Offline"
-            else -> "Waiting"
+            snapshot != null -> appText(R.string.ui_offline_e01fa, "Offline")
+            else -> appText(R.string.ui_waiting_33d30, "Waiting")
         },
     )
 }
@@ -132,7 +133,7 @@ class WidgetLiveService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val manager = getSystemService(NotificationManager::class.java)
-        manager.createNotificationChannel(NotificationChannel(CHANNEL, "Widget live updates", NotificationManager.IMPORTANCE_LOW))
+        manager.createNotificationChannel(NotificationChannel(CHANNEL, appText(R.string.ui_widget_live_updates_e64fb, "Widget live updates"), NotificationManager.IMPORTANCE_LOW))
         if (intent?.action !in listOf(ACTION_LIVE, ACTION_REFRESH) || finishing) {
             // Every start arrives through startForegroundService, which Android only accepts once
             // startForeground has run, even when this start ends straight away.
@@ -156,12 +157,12 @@ class WidgetLiveService : Service() {
             shownNotification = content
             enterForeground(content)
         } catch (_: RuntimeException) {
-            finishSession("Live unavailable. Tap to retry.")
+            finishSession(appText(R.string.ui_live_unavailable_tap_to_retry_e2d5b, "Live unavailable. Tap to retry."))
             return START_NOT_STICKY
         }
         val hub = repository ?: HubRepositoryPool.acquire(this).also { repository = it }
         if (!hub.state.value.hasConnection) {
-            finishSession("Open the app to connect your Hub")
+            finishSession(appText(R.string.ui_open_the_app_to_connect_your_hub_cd8a1, "Open the app to connect your Hub"))
             return START_NOT_STICKY
         }
         collection?.cancel()
@@ -172,22 +173,22 @@ class WidgetLiveService : Service() {
             hub.state.collectLatest { state ->
                 if (expireIfNeeded()) return@collectLatest
                 if (!state.hasConnection) {
-                    finishSession("Connect your Hub in the app")
+                    finishSession(appText(R.string.ui_connect_your_hub_in_the_app_9425c, "Connect your Hub in the app"))
                     return@collectLatest
                 }
                 // The repository has stopped retrying a rejected secret, so there is nothing left to wait for.
                 if (state.secretRejected) {
-                    finishSession("Hub rejected the secret · open the app")
+                    finishSession(appText(R.string.ui_hub_rejected_the_secret_open_the_app_c1cae, "Hub rejected the secret · open the app"))
                     return@collectLatest
                 }
                 WidgetRuntime.session = WidgetRuntime.session.copy(
                     connected = state.streamActive || state.widgetLiveActive, refreshing = state.refreshing,
-                    snapshot = state.snapshot, note = if (state.message != null) "Hub offline · retrying" else null,
+                    snapshot = state.snapshot, note = if (state.message != null) appText(R.string.ui_hub_offline_retrying_a9d88, "Hub offline · retrying") else null,
                 )
                 withContext(Dispatchers.IO) { WidgetUpdateCoordinator.refresh(this@WidgetLiveService) }
                 showNotification()
                 if (!live && ((state.snapshot !== before && state.snapshot?.fromCache == false) || state.message != null)) {
-                    finishSession(if (state.message != null) "Refresh failed · showing saved data" else null)
+                    finishSession(if (state.message != null) appText(R.string.ui_refresh_failed_showing_saved_data_bb1cc, "Refresh failed · showing saved data") else null)
                 }
             }
         }
@@ -215,12 +216,12 @@ class WidgetLiveService : Service() {
 
     private fun expireIfNeeded(): Boolean {
         if (deadline?.hasExpired(SystemClock.elapsedRealtime()) != true) return false
-        finishSession(if (live) "Live session ended" else "Refresh timed out")
+        finishSession(if (live) appText(R.string.ui_live_session_ended_e4637, "Live session ended") else appText(R.string.ui_refresh_timed_out_c439a, "Refresh timed out"))
         return true
     }
 
     override fun onTimeout(startId: Int, fgsType: Int) {
-        finishSession("Android paused Live. Tap to retry.")
+        finishSession(appText(R.string.ui_android_paused_live_tap_to_retry_a217f, "Android paused Live. Tap to retry."))
     }
 
     /**
@@ -239,7 +240,7 @@ class WidgetLiveService : Service() {
             .setStyle(Notification.BigTextStyle().bigText(content.detail))
             .setContentIntent(open)
             .setOngoing(true).setOnlyAlertOnce(true)
-            .addAction(Notification.Action.Builder(null, "Stop", stop).build())
+            .addAction(Notification.Action.Builder(null, appText(R.string.ui_stop_9e253, "Stop"), stop).build())
         content.subtext?.let(builder::setSubText)
         // Promotion (lock screen, status bar chip) arrived in the Android 16 minor release, so check the full version.
         if (Build.VERSION.SDK_INT >= 36) builder.setShortCriticalText(content.shortText)

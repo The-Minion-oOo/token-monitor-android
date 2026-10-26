@@ -1,5 +1,8 @@
 package io.github.theminionooo.tokenmonitor.widget
 
+import io.github.theminionooo.tokenmonitor.ui.AppLanguage
+import io.github.theminionooo.tokenmonitor.ui.displayLabel
+import io.github.theminionooo.tokenmonitor.ui.appText
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -85,10 +88,10 @@ internal object WidgetDeckRenderer {
             setImageViewBitmap(R.id.swipe_page_bitmap, bitmap)
             setContentDescription(R.id.swipe_page_bitmap, description(context, page, data))
             setContentDescription(R.id.swipe_page_open, description(context, page, data))
-            setContentDescription(R.id.swipe_page_previous, "Previous Token Monitor page")
-            setContentDescription(R.id.swipe_page_next, "Next Token Monitor page")
-            setContentDescription(R.id.widget_refresh, if (data.status == "UPDATING") "Refreshing widget" else "Refresh widget now")
-            setContentDescription(R.id.widget_live, if (data.liveEnabled) "Turn widget Live off" else "Turn widget Live on for one hour")
+            setContentDescription(R.id.swipe_page_previous, appText(R.string.ui_previous_token_monitor_page_1a48c, "Previous Token Monitor page"))
+            setContentDescription(R.id.swipe_page_next, appText(R.string.ui_next_token_monitor_page_7a813, "Next Token Monitor page"))
+            setContentDescription(R.id.widget_refresh, if (data.status == "UPDATING") appText(R.string.ui_refreshing_widget_02b07, "Refreshing widget") else appText(R.string.ui_refresh_widget_now_0a2d5, "Refresh widget now"))
+            setContentDescription(R.id.widget_live, if (data.liveEnabled) appText(R.string.ui_turn_widget_live_off_771bc, "Turn widget Live off") else appText(R.string.ui_turn_widget_live_on_for_one_hour_9c50a, "Turn widget Live on for one hour"))
         }
     }
 
@@ -112,7 +115,7 @@ internal object WidgetDeckRenderer {
 
     private fun description(context: Context, page: WidgetDeckPage, data: WidgetDeckData): String {
         val summary = widgetDeckPageSummary(page, data)
-        return "Token Monitor ${context.getString(page.subtitle)}. $summary ${data.statusDescription}. Tap the left or right edge to change page, or tap the content to open."
+        return "Token Monitor ${AppLanguage.wrap(context).getString(page.subtitle)}. $summary ${data.statusDescription}. Tap the left or right edge to change page, or tap the content to open."
     }
 }
 
@@ -204,12 +207,12 @@ private class DeckCanvas(
     private fun drawHeader(page: WidgetDeckPage, data: WidgetDeckData) {
         val h = WidgetDeckGrid.Header
         drawDrawable(R.drawable.token_monitor_icon, h.ICON_X, h.ICON_Y, h.ICON_SIZE, h.ICON_SIZE)
-        val refreshX = h.refreshX(measure(data.status, status))
+        val refreshX = h.refreshX(measure(displayLabel(data.status), status))
         text("Token Monitor", h.TEXT_X, h.BRAND_BASELINE, brand, ink, maxWidth = refreshX - h.TEXT_X - 8f)
-        text(context.getString(page.subtitle), h.TEXT_X, h.PAGE_BASELINE, pageType, muted, maxWidth = refreshX - h.TEXT_X - 8f)
+        text(AppLanguage.wrap(context).getString(page.subtitle), h.TEXT_X, h.PAGE_BASELINE, pageType, muted, maxWidth = refreshX - h.TEXT_X - 8f)
         drawDrawable(R.drawable.ic_widget_refresh, refreshX, h.REFRESH_Y, h.REFRESH_SIZE, h.REFRESH_SIZE, ink)
         val live = data.liveEnabled && data.status == "LIVE"
-        text(data.status, h.STATUS_RIGHT, h.STATUS_BASELINE, status, if (live) accent else muted, Paint.Align.RIGHT)
+        text(displayLabel(data.status), h.STATUS_RIGHT, h.STATUS_BASELINE, status, if (live) accent else muted, Paint.Align.RIGHT)
         val toggle = RectF(h.TOGGLE_LEFT, h.TOGGLE_TOP, h.TOGGLE_LEFT + h.TOGGLE_WIDTH, h.TOGGLE_TOP + h.TOGGLE_HEIGHT)
         val trackRadius = h.TOGGLE_HEIGHT / 2f
         val track = if (data.liveEnabled) palette.accent.copy(alpha = 0.18f).compositeOver(palette.shell) else palette.overlay.compositeOver(palette.shell)
@@ -250,9 +253,9 @@ private class DeckCanvas(
     private fun drawOverview(data: WidgetDeckData) {
         val g = WidgetDeckGrid.Overview
         val snapshot = requireNotNull(data.snapshot)
-        text("Total tokens", left, g.SECTION_BASELINE, section, label)
+        text(appText(R.string.ui_total_tokens_e6dad, "Total tokens"), left, g.SECTION_BASELINE, section, label)
         fitText(formatTokens(snapshot.today.totalTokens), left, g.TOTAL_BASELINE, display, Type.DISPLAY_MIN, ink, g.TOTAL_RIGHT - left)
-        text("${formatUsageCost(snapshot.today.costUsd, snapshot.today.unpricedTokens, compact = true, currency = currency)} estimated cost", left, g.COST_BASELINE, body, muted, maxWidth = g.TOTAL_RIGHT - left)
+        text(appText(R.string.ui_1_s_estimated_cost_bf81a, "%1\$s estimated cost", formatUsageCost(snapshot.today.costUsd, snapshot.today.unpricedTokens, compact = true, currency = currency)), left, g.COST_BASELINE, body, muted, maxWidth = g.TOTAL_RIGHT - left)
         vline(g.DIVIDER_X, g.DIVIDER_TOP, g.DIVIDER_BOTTOM, line)
         val statsWidth = right - g.STATS_X
         data.stats.take(3).forEachIndexed { index, (value, name) ->
@@ -271,12 +274,12 @@ private class DeckCanvas(
         hline(left, right, g.RULE_Y, line)
         val weekTokens = data.week.sumOf { it.tokens }
         val weekCost = data.week.sumOf { it.costUsd }
-        text("This week", left, g.WEEK_BASELINE, caption, muted)
+        text(appText(R.string.ui_this_week_7b728, "This week"), left, g.WEEK_BASELINE, caption, muted)
         if (weekTokens > 0) {
             val advance = text(formatCompactTokens(weekTokens), g.WEEK_VALUE_X, g.WEEK_BASELINE, stat, ink)
-            text("· ${formatUsageCost(weekCost, data.week.sumOf { it.unpricedTokens }, compact = true, currency = currency)}", g.WEEK_VALUE_X + advance + 8f, g.WEEK_BASELINE, body, muted, maxWidth = right - g.WEEK_VALUE_X - advance - 8f)
+            text(appText(R.string.ui_1_s_4f857, "· %1\$s", formatUsageCost(weekCost, data.week.sumOf { it.unpricedTokens }, compact = true, currency = currency)), g.WEEK_VALUE_X + advance + 8f, g.WEEK_BASELINE, body, muted, maxWidth = right - g.WEEK_VALUE_X - advance - 8f)
         } else {
-            text("No history yet", g.WEEK_VALUE_X, g.WEEK_BASELINE, body, muted)
+            text(appText(R.string.ui_no_history_yet_a21ab, "No history yet"), g.WEEK_VALUE_X, g.WEEK_BASELINE, body, muted)
         }
     }
 
@@ -285,7 +288,7 @@ private class DeckCanvas(
     private fun drawLimits(data: WidgetDeckData) {
         val g = WidgetDeckGrid.Limits
         if (data.limitGroups.isEmpty()) {
-            drawCentered(context.getString(R.string.widget_no_limits))
+            drawCentered(AppLanguage.wrap(context).getString(R.string.widget_no_limits))
             return
         }
         val groups = data.limitGroups.take(g.ROW_TOPS.size)
@@ -304,7 +307,7 @@ private class DeckCanvas(
                 val percent = text("${window.remainingPercent.roundToInt()}%", cellLeft, top + g.VALUE_OFFSET, figure, if (window.remainingPercent > 35) ink else WidgetDeckDrawing.textTone(palette, window.remainingPercent).toArgb())
                 text("left", cellLeft + percent + 6f, top + g.VALUE_OFFSET, DeckType(mono, g.LEFT_LABEL_SIZE), ink, maxWidth = cellWidth - percent - 6f)
                 drawBar(RectF(cellLeft, top + g.BAR_TOP_OFFSET, cellRight, top + g.BAR_BOTTOM_OFFSET), window.remainingPercent / 100.0, tone)
-                text(window.reset.ifBlank { "Reset not reported" }, cellLeft, top + g.RESET_OFFSET, secondary, muted, maxWidth = cellWidth)
+                text(window.reset.ifBlank { appText(R.string.ui_reset_not_reported_13aea, "Reset not reported") }, cellLeft, top + g.RESET_OFFSET, secondary, muted, maxWidth = cellWidth)
             }
         }
     }
@@ -314,7 +317,7 @@ private class DeckCanvas(
     private fun drawBreakdown(data: WidgetDeckData) {
         val g = WidgetDeckGrid.Breakdown
         if (data.tools.isEmpty() && data.models.isEmpty()) {
-            drawCentered("No tool or model breakdown reported")
+            drawCentered(appText(R.string.ui_no_tool_or_model_breakdown_reported_5b8ab, "No tool or model breakdown reported"))
             return
         }
         vline(g.DIVIDER_X, g.DIVIDER_TOP, g.DIVIDER_BOTTOM, line)
@@ -327,10 +330,10 @@ private class DeckCanvas(
                 text(row.name.displayName(), g.SPARSE_TOOL_NAME_X, g.SPARSE_IDENTITY_BASELINE, bodyStrong, ink, maxWidth = g.TOOL_RIGHT - g.SPARSE_TOOL_NAME_X)
                 fitText(compactFigure(row.tokens), left, g.SPARSE_VALUE_BASELINE, figure, Type.STAT, ink, 72f)
                 text(sharePercent(row.share), g.TOOL_RIGHT, g.SPARSE_VALUE_BASELINE, figure, ink, Paint.Align.RIGHT, 68f)
-                text("Tokens", left, g.SPARSE_CAPTION_BASELINE, caption, muted)
-                text("Share", g.TOOL_RIGHT, g.SPARSE_CAPTION_BASELINE, caption, muted, Paint.Align.RIGHT)
+                text(appText(R.string.ui_tokens_c38c6, "Tokens"), left, g.SPARSE_CAPTION_BASELINE, caption, muted)
+                text(appText(R.string.ui_share_09ca5, "Share"), g.TOOL_RIGHT, g.SPARSE_CAPTION_BASELINE, caption, muted, Paint.Align.RIGHT)
                 drawBar(RectF(left, g.SPARSE_BAR_TOP, g.TOOL_RIGHT, g.SPARSE_BAR_BOTTOM), row.share, color)
-                if (row.costUsd > 0 || row.unpricedTokens > 0) text("${formatUsageCost(row.costUsd, row.unpricedTokens, compact = true, currency = currency)} estimated cost", left, g.SPARSE_COST_BASELINE, secondary, muted)
+                if (row.costUsd > 0 || row.unpricedTokens > 0) text(appText(R.string.ui_1_s_estimated_cost_bf81a, "%1\$s estimated cost", formatUsageCost(row.costUsd, row.unpricedTokens, compact = true, currency = currency)), left, g.SPARSE_COST_BASELINE, secondary, muted)
             }
             data.models.firstOrNull()?.let { row ->
                 val color = vendorColor(row.name, 0)
@@ -338,8 +341,8 @@ private class DeckCanvas(
                 text(row.name, g.SPARSE_MODEL_NAME_X, g.SPARSE_IDENTITY_BASELINE, bodyStrong, ink, maxWidth = right - g.SPARSE_MODEL_NAME_X)
                 fitText(compactFigure(row.tokens), g.MODELS_X, g.SPARSE_VALUE_BASELINE, figure, Type.STAT, ink, 72f)
                 text(sharePercent(row.share), right, g.SPARSE_VALUE_BASELINE, figure, ink, Paint.Align.RIGHT, 68f)
-                text("Tokens", g.MODELS_X, g.SPARSE_CAPTION_BASELINE, caption, muted)
-                text("Share", right, g.SPARSE_CAPTION_BASELINE, caption, muted, Paint.Align.RIGHT)
+                text(appText(R.string.ui_tokens_c38c6, "Tokens"), g.MODELS_X, g.SPARSE_CAPTION_BASELINE, caption, muted)
+                text(appText(R.string.ui_share_09ca5, "Share"), right, g.SPARSE_CAPTION_BASELINE, caption, muted, Paint.Align.RIGHT)
                 drawBar(RectF(g.MODELS_X, g.SPARSE_BAR_TOP, right, g.SPARSE_BAR_BOTTOM), row.share, color)
             }
             return
@@ -368,7 +371,7 @@ private class DeckCanvas(
     private fun drawActivity(data: WidgetDeckData) {
         val g = WidgetDeckGrid.Activity
         if (data.history.isEmpty()) {
-            drawCentered("No activity history reported")
+            drawCentered(appText(R.string.ui_no_activity_history_reported_96628, "No activity history reported"))
             return
         }
         vline(g.DIVIDER_X, g.DIVIDER_TOP, g.DIVIDER_BOTTOM, line)
@@ -376,11 +379,11 @@ private class DeckCanvas(
         val weekTokens = data.week.sumOf { it.tokens }
         val weekCost = data.week.sumOf { it.costUsd }
         val peak = data.week.maxOfOrNull { it.tokens } ?: 0L
-        text("7 days", left, g.SECTION_BASELINE, section, label)
+        text(appText(R.string.ui_7_days_0a8dd, "7 days"), left, g.SECTION_BASELINE, section, label)
         val advance = text(compactFigure(weekTokens), left, g.SUMMARY_BASELINE, stat, ink)
-        val peakWidth = measure("Peak ${compactFigure(peak)}", caption)
-        text("tokens · ${formatUsageCost(weekCost, data.week.sumOf { it.unpricedTokens }, compact = true, currency = currency)}", left + advance + 6f, g.SUMMARY_BASELINE, secondary, muted, maxWidth = g.LEFT_RIGHT_EDGE - peakWidth - 10f - left - advance - 6f)
-        text("Peak ${compactFigure(peak)}", g.LEFT_RIGHT_EDGE, g.SUMMARY_BASELINE, caption, muted, Paint.Align.RIGHT)
+        val peakWidth = measure(appText(R.string.ui_peak_1_s_4cd6d, "Peak %1\$s", compactFigure(peak)), caption)
+        text(appText(R.string.ui_tokens_1_s_f6e4e, "tokens · %1\$s", formatUsageCost(weekCost, data.week.sumOf { it.unpricedTokens }, compact = true, currency = currency)), left + advance + 6f, g.SUMMARY_BASELINE, secondary, muted, maxWidth = g.LEFT_RIGHT_EDGE - peakWidth - 10f - left - advance - 6f)
+        text(appText(R.string.ui_peak_1_s_4cd6d, "Peak %1\$s", compactFigure(peak)), g.LEFT_RIGHT_EDGE, g.SUMMARY_BASELINE, caption, muted, Paint.Align.RIGHT)
         drawWeekChart(data.history, data.date)
 
         text("Activity", g.RIGHT_X, g.SECTION_BASELINE, section, label)
@@ -388,14 +391,14 @@ private class DeckCanvas(
         hline(g.RIGHT_X, right, g.RULE_Y, line)
         vline(g.STAT_DIVIDER_X, g.STAT_DIVIDER_TOP, g.STAT_DIVIDER_BOTTOM, line)
         text(data.activeDays.toString(), g.RIGHT_X, g.STAT_VALUE_BASELINE, stat, ink)
-        fitCaption("Active days", "Days", g.RIGHT_X, g.STAT_DIVIDER_X - g.RIGHT_X - 6f)
+        fitCaption(appText(R.string.ui_active_days_340f3, "Active days"), appText(R.string.ui_days_f6bb0, "Days"), g.RIGHT_X, g.STAT_DIVIDER_X - g.RIGHT_X - 6f)
         if (data.messagesToday > 0) {
             text(compactFigure(data.messagesToday), g.STAT_RIGHT_X, g.STAT_VALUE_BASELINE, stat, ink)
-            fitCaption("Messages today", "Messages", g.STAT_RIGHT_X, right - g.STAT_RIGHT_X)
+            fitCaption(appText(R.string.ui_messages_today_4401b, "Messages today"), appText(R.string.ui_messages_f1702, "Messages"), g.STAT_RIGHT_X, right - g.STAT_RIGHT_X)
         } else {
             // The Hub reports no message count for today; a zero here would be a false figure.
             text(formatUsageCost(data.snapshot?.today?.costUsd ?: 0.0, data.snapshot?.today?.unpricedTokens ?: 0, compact = true, currency = currency), g.STAT_RIGHT_X, g.STAT_VALUE_BASELINE, stat, ink)
-            fitCaption("Cost today", "Cost", g.STAT_RIGHT_X, right - g.STAT_RIGHT_X)
+            fitCaption(appText(R.string.ui_cost_today_ef1ea, "Cost today"), appText(R.string.ui_cost_64ae4, "Cost"), g.STAT_RIGHT_X, right - g.STAT_RIGHT_X)
         }
     }
 

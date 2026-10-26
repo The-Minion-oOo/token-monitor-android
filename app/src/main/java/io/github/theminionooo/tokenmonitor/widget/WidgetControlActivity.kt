@@ -1,5 +1,7 @@
 package io.github.theminionooo.tokenmonitor.widget
 
+import io.github.theminionooo.tokenmonitor.ui.appText
+import io.github.theminionooo.tokenmonitor.R
 import android.Manifest
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -34,7 +36,7 @@ class WidgetControlActivity : Activity() {
         if (grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) requestAccessAndStart()
         else {
             val message = if (requestCode == 2) LocalNetworkAccess.deniedMessage
-                else "Allow notifications to use widget updates with a visible Stop control."
+                else appText(R.string.ui_allow_notifications_to_use_widget_updates_with_a_vis_c1459, "Allow notifications to use widget updates with a visible Stop control.")
             Toast.makeText(this, message, Toast.LENGTH_LONG).show()
             finish()
         }
@@ -55,7 +57,7 @@ class WidgetControlActivity : Activity() {
         try {
             startForegroundService(Intent(this, WidgetLiveService::class.java).setAction(requestedAction()))
         } catch (_: RuntimeException) {
-            Toast.makeText(this, "Android could not start widget updates. Tap again to retry.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, appText(R.string.ui_android_could_not_start_widget_updates_tap_again_to_d4a15, "Android could not start widget updates. Tap again to retry."), Toast.LENGTH_LONG).show()
         }
         finish()
     }

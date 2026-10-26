@@ -105,7 +105,7 @@ import kotlin.math.roundToLong
  * Devices list with expandable per-device detail.
  */
 internal fun LazyListScope.deviceItems(devices: List<DeviceUsage>, period: DashboardPeriod) {
-    if (devices.isEmpty()) item { MutedCopy("No devices have checked in to this Hub.", modifier = Modifier.padding(vertical = 12.dp)) }
+    if (devices.isEmpty()) item { MutedCopy(appText(R.string.ui_no_devices_have_checked_in_to_this_hub_e461f, "No devices have checked in to this Hub."), modifier = Modifier.padding(vertical = 12.dp)) }
     else {
         val values = devices.associateWith { device -> period.usage(device).totalTokens }
         val maximum = values.values.maxOrNull()?.coerceAtLeast(1L) ?: 1L
@@ -114,7 +114,7 @@ internal fun LazyListScope.deviceItems(devices: List<DeviceUsage>, period: Dashb
             val operatingSystem = listOf(device.osName.ifBlank { device.platform.displayName() }, device.osVersion)
                 .filter { it.isNotBlank() }
                 .joinToString(" ")
-            val syncCadence = device.syncUploadIntervalMs?.takeIf { it > 0 }?.let { "Uploads every ${formatDuration(it)}" } ?: "Live uploads"
+            val syncCadence = device.syncUploadIntervalMs?.takeIf { it > 0 }?.let { appText(R.string.ui_uploads_every_1_s_76b6c, "Uploads every %1\$s", formatDuration(it)) } ?: appText(R.string.ui_live_uploads_185db, "Live uploads")
             DeviceUsageRow(
                 device = device,
                 usage = usage,
@@ -150,7 +150,7 @@ internal fun DeviceUsageRow(
             Column(modifier = Modifier.weight(1f)) {
                 Text(device.hostname.ifBlank { device.id }, color = Ink, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Text(
-                    listOf(operatingSystem, if (device.stale) "Stale" else "Synced ${device.updatedAt.relativeAge(LocalNow.current)}".trimEnd()).filter { it.isNotBlank() }.joinToString(" · "),
+                    listOf(operatingSystem, if (device.stale) appText(R.string.ui_stale_189cc, "Stale") else appText(R.string.ui_synced_1_s_66884, "Synced %1\$s", device.updatedAt.relativeAge(LocalNow.current)).trimEnd()).filter { it.isNotBlank() }.joinToString(" · "),
                     color = Muted,
                     style = MaterialTheme.typography.labelSmall,
                     maxLines = 1,
@@ -181,7 +181,7 @@ internal fun DeviceUsageRow(
                 }
                 if (usage.models.isNotEmpty()) {
                     HorizontalDivider(color = Line, modifier = Modifier.padding(start = 20.dp, top = 6.dp, bottom = 4.dp))
-                    Text("TOP MODELS ON THIS DEVICE", color = Muted, style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(start = 20.dp))
+                    Text(appText(R.string.ui_top_models_on_this_device_fd9dc, "TOP MODELS ON THIS DEVICE"), color = Muted, style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(start = 20.dp))
                 }
                 usage.models.entries.sortedByDescending { it.value }.take(4).forEach { (model, tokens) ->
                     Row(modifier = Modifier.padding(start = 20.dp, top = 3.dp, bottom = 3.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -192,7 +192,7 @@ internal fun DeviceUsageRow(
                     }
                 }
                 Text(
-                    listOf(syncCadence, if (device.historyAvailable == true) "History available" else null).filterNotNull().joinToString(" · "),
+                    listOf(syncCadence, if (device.historyAvailable == true) appText(R.string.ui_history_available_f6cf4, "History available") else null).filterNotNull().joinToString(" · "),
                     color = Muted,
                     style = MaterialTheme.typography.labelSmall,
                     modifier = Modifier.padding(start = 20.dp, top = 2.dp),

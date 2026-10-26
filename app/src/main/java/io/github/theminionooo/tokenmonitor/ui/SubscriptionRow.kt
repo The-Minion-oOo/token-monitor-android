@@ -1,5 +1,6 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+import io.github.theminionooo.tokenmonitor.R
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,28 +28,28 @@ internal fun SubscriptionRow(subscription: Subscription, showEmail: Boolean = fa
     val amount = if (topUp) topUpTotalMinor(subscription) else subscription.amountMinor.takeIf { subscription.amountReported && subscription.kind == "subscription" }
     val boundary = subscriptionBoundary(subscription, LocalDate.now())
     Column(Modifier.fillMaxWidth().padding(bottom = 8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Column(Modifier.clickable(onClickLabel = "Show payment details") { expanded = !expanded }) {
+        Column(Modifier.clickable(onClickLabel = appText(R.string.ui_show_payment_details_740d1, "Show payment details")) { expanded = !expanded }) {
             DesktopDetailRow(
                 label = subscription.provider.providerLabel(),
-                subtitle = subscription.planName.ifBlank { if (topUp) "Top-ups" else "Subscription" },
-                value = amount?.let { formatSubscriptionAmount(it, subscription.currency) } ?: "Not reported",
-                detail = if (topUp) "Total paid" else subscriptionCadence(subscription),
+                subtitle = subscription.planName.ifBlank { if (topUp) appText(R.string.ui_top_ups_3d9e3, "Top-ups") else appText(R.string.ui_subscription_8fde4, "Subscription") },
+                value = amount?.let { formatSubscriptionAmount(it, subscription.currency) } ?: appText(R.string.ui_not_reported_98e85, "Not reported"),
+                detail = if (topUp) appText(R.string.ui_total_paid_3c6c3, "Total paid") else subscriptionCadence(subscription),
                 color = Purple, upstreamName = subscription.provider,
             )
         }
         if (boundary != null) Text("${if (subscription.autoRenew && subscription.endDate.isBlank()) "Next renewal" else "Coverage ends"}: $boundary", color = Muted, style = MaterialTheme.typography.labelSmall)
-        if (!subscription.autoRenew && !topUp) Text("Auto-renew off", color = Muted, style = MaterialTheme.typography.labelSmall)
+        if (!subscription.autoRenew && !topUp) Text(appText(R.string.ui_auto_renew_off_836e5, "Auto-renew off"), color = Muted, style = MaterialTheme.typography.labelSmall)
         val identity = listOf(subscription.binding.profileName, subscription.binding.accountEmail.takeIf { showEmail }.orEmpty()).filter(String::isNotBlank).joinToString(" · ")
         if (identity.isNotBlank()) Text(identity, color = Muted, style = MaterialTheme.typography.labelSmall)
-        TextButton(onClick = { expanded = !expanded }) { Text(if (expanded) "Hide payment details" else "Show payment details") }
+        TextButton(onClick = { expanded = !expanded }) { Text(if (expanded) appText(R.string.ui_hide_payment_details_ed3a2, "Hide payment details") else appText(R.string.ui_show_payment_details_740d1, "Show payment details")) }
         if (expanded) {
-            if (subscription.startDate.isNotBlank() && !topUp) Text("Started: ${subscription.startDate}", color = Muted, style = MaterialTheme.typography.labelSmall)
+            if (subscription.startDate.isNotBlank() && !topUp) Text(appText(R.string.ui_started_1_s_3245b, "Started: %1\$s", subscription.startDate), color = Muted, style = MaterialTheme.typography.labelSmall)
             if (subscription.note.isNotBlank()) Text(subscription.note, color = Muted, style = MaterialTheme.typography.bodySmall)
-            if (topUp && subscription.topUps.isEmpty()) Text("No recorded top-ups", color = Muted, style = MaterialTheme.typography.labelSmall)
+            if (topUp && subscription.topUps.isEmpty()) Text(appText(R.string.ui_no_recorded_top_ups_32c60, "No recorded top-ups"), color = Muted, style = MaterialTheme.typography.labelSmall)
             subscription.topUps.take(shownPayments).forEach { payment ->
                 Text("${payment.date} · ${formatSubscriptionAmount(payment.amountMinor, subscription.currency)}", color = Ink, style = MaterialTheme.typography.bodySmall)
             }
-            if (subscription.topUps.size > shownPayments) TextButton(onClick = { shownPayments += 10 }) { Text("Show more payments") }
+            if (subscription.topUps.size > shownPayments) TextButton(onClick = { shownPayments += 10 }) { Text(appText(R.string.ui_show_more_payments_1d9ec, "Show more payments")) }
         }
     }
 }

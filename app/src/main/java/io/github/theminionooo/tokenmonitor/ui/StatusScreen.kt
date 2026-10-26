@@ -111,9 +111,9 @@ internal fun LazyListScope.statusItems(
     onOpenServicePage: (String) -> Unit,
 ) {
     if (serviceStatus.loading && serviceStatus.snapshot == null) {
-        item { MutedCopy("Checking Claude, OpenAI, Cursor, and DeepSeek…", modifier = Modifier.padding(vertical = 8.dp)) }
+        item { MutedCopy(appText(R.string.ui_checking_claude_openai_cursor_and_deepseek_c4aea, "Checking Claude, OpenAI, Cursor, and DeepSeek…"), modifier = Modifier.padding(vertical = 8.dp)) }
     } else if (serviceStatus.failed) {
-        item { MutedCopy("Service status is unavailable right now.", modifier = Modifier.padding(vertical = 8.dp)) }
+        item { MutedCopy(appText(R.string.ui_service_status_is_unavailable_right_now_06e2d, "Service status is unavailable right now."), modifier = Modifier.padding(vertical = 8.dp)) }
     }
     serviceStatus.snapshot?.providers?.let { providers ->
         items(providers, key = { it.id }) { provider ->
@@ -136,16 +136,16 @@ internal fun ServiceStatusRow(provider: ServiceProviderStatus, onOpenServicePage
         else -> tone
     }
     val label = when (provider.health) {
-        ServiceHealth.Ok -> "Operational"
-        ServiceHealth.Degraded -> "Degraded"
-        ServiceHealth.Outage -> "Outage"
-        ServiceHealth.Unknown -> "Unknown"
+        ServiceHealth.Ok -> appText(R.string.ui_operational_8459f, "Operational")
+        ServiceHealth.Degraded -> appText(R.string.ui_degraded_13c27, "Degraded")
+        ServiceHealth.Outage -> appText(R.string.ui_outage_c708d, "Outage")
+        ServiceHealth.Unknown -> appText(R.string.ui_unknown_bc781, "Unknown")
     }
     val details = buildList {
-        if (provider.affectedComponents > 0) add("${provider.affectedComponents} affected")
-        if (provider.incidentCount > 0) add("${provider.incidentCount} incident${if (provider.incidentCount == 1) "" else "s"}")
-        if (provider.maintenanceCount > 0) add("${provider.maintenanceCount} maintenance")
-        if (isEmpty() && provider.health == ServiceHealth.Ok) add("No ongoing issues")
+        if (provider.affectedComponents > 0) add(appText(R.string.ui_1_s_affected_6f6d4, "%1\$s affected", provider.affectedComponents))
+        if (provider.incidentCount > 0) add(appText(R.string.ui_1_s_incident_2_s_074aa, "Incidents: %1\$s", provider.incidentCount, if (provider.incidentCount == 1) "" else "s"))
+        if (provider.maintenanceCount > 0) add(appText(R.string.ui_1_s_maintenance_2c3be, "%1\$s maintenance", provider.maintenanceCount))
+        if (isEmpty() && provider.health == ServiceHealth.Ok) add(appText(R.string.ui_no_ongoing_issues_d7bd9, "No ongoing issues"))
         add(formatRelativeAge(provider.checkedAt, LocalNow.current))
     }.joinToString(" · ")
     Column(

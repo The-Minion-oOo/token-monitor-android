@@ -113,22 +113,22 @@ internal fun LazyListScope.homeItems(
 ) {
     displayOptions.visibleHomeModules.forEach { module ->
         when (module) {
-            "Limits" -> item { DesktopModule("LIMITS", DashboardDestination.Limits, onChoose) { HomeLimits(snapshot.stats.limits.providers, displayOptions) } }
-            "Tools" -> item { DesktopModule("TOOLS", DashboardDestination.Tools, onChoose) { HomeBreakdown(usage.clients, usage.clientCosts, displayOptions.rankingMetric, unpriced = usage.clientUnpricedTokens, count = displayOptions.homeListCount("Tools")) } }
-            "Devices" -> item { DesktopModule("DEVICES", DashboardDestination.Devices, onChoose) { HomeDevices(snapshot.stats.devices, period = period, aggregateUsage = usage, count = displayOptions.homeListCount("Devices")) } }
-            "Models" -> item { DesktopModule("MODELS", DashboardDestination.Models, onChoose) { HomeBreakdown(usage.models, usage.modelCosts, displayOptions.rankingMetric, modelRows = true, unpriced = usage.modelUnpricedTokens, count = displayOptions.homeListCount("Models")) } }
+            "Limits" -> item { DesktopModule(appText(R.string.ui_limits_83fa9, "LIMITS"), DashboardDestination.Limits, onChoose) { HomeLimits(snapshot.stats.limits.providers, displayOptions) } }
+            "Tools" -> item { DesktopModule(appText(R.string.ui_tools_9d0e5, "TOOLS"), DashboardDestination.Tools, onChoose) { HomeBreakdown(usage.clients, usage.clientCosts, displayOptions.rankingMetric, unpriced = usage.clientUnpricedTokens, count = displayOptions.homeListCount("Tools")) } }
+            "Devices" -> item { DesktopModule(appText(R.string.ui_devices_51f4a, "DEVICES"), DashboardDestination.Devices, onChoose) { HomeDevices(snapshot.stats.devices, period = period, aggregateUsage = usage, count = displayOptions.homeListCount("Devices")) } }
+            "Models" -> item { DesktopModule(appText(R.string.ui_models_441ba, "MODELS"), DashboardDestination.Models, onChoose) { HomeBreakdown(usage.models, usage.modelCosts, displayOptions.rankingMetric, modelRows = true, unpriced = usage.modelUnpricedTokens, count = displayOptions.homeListCount("Models")) } }
             "Sessions" -> item { HomeSessionsModule(HomeSessionInputs(snapshot.month.sessions, snapshot.today.sessions), displayOptions.homeListCount("Sessions"), onChoose) }
             "Activity" -> item {
                 val history = rememberUsageHistory(snapshot)
                 val date = currentPresentationDate()
                 val activity = remember(history, date) { history?.let { buildActivityHeatmap(it, date) } }
                 DesktopModule(
-                    title = "ACTIVITY",
+                    title = appText(R.string.ui_activity_15c51, "ACTIVITY"),
                     destination = DashboardDestination.Trends,
                     onChoose = onChoose,
-                    meta = activity?.let { "${it.activeDays} active day${if (it.activeDays == 1) "" else "s"}" },
+                    meta = activity?.let { appText(R.string.ui_1_s_active_day_2_s_e995e, "Active days: %1\$s", it.activeDays, if (it.activeDays == 1) "" else "s") },
                 ) {
-                    if (activity == null || history == null) MutedCopy("Loading activity…")
+                    if (activity == null || history == null) MutedCopy(appText(R.string.ui_loading_activity_4c959, "Loading activity…"))
                     else HomeActivity(activity, history)
                 }
             }
@@ -148,7 +148,7 @@ internal fun DesktopModule(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClickLabel = "Open ${destination.title}") { onChoose(destination) }
+            .clickable(onClickLabel = appText(R.string.ui_open_1_s_416b5, "Open %1\$s", destination.displayTitle)) { onChoose(destination) }
             .padding(bottom = 12.dp),
         verticalArrangement = Arrangement.spacedBy(7.dp),
     ) {
@@ -169,7 +169,7 @@ internal fun HomeLimits(accounts: List<LimitAccount>, displayOptions: DisplayOpt
         .filter { account -> account.windows.any { it.remainingPercent != null || it.usedPercent != null || it.remaining != null } })
         .take(3)
     if (visible.isEmpty()) {
-        MutedCopy("No account limits available")
+        MutedCopy(appText(R.string.ui_no_account_limits_available_9054f, "No account limits available"))
         return
     }
     Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
@@ -178,14 +178,14 @@ internal fun HomeLimits(accounts: List<LimitAccount>, displayOptions: DisplayOpt
                 UpstreamToolMark(account.provider, Blue, size = 6.dp)
                 Spacer(Modifier.width(8.dp))
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(account.provider.ifBlank { "Provider" }.providerLabel(), color = Ink, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(account.provider.ifBlank { appText(R.string.ui_provider_7ceee, "Provider") }.providerLabel(), color = Ink, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     val email = account.accountEmail.takeIf { displayOptions.showAccountEmails }.orEmpty()
                     val meta = listOf(account.productLabel, account.accountName, account.plan, email).filter { it.isNotBlank() }.joinToString(" · ")
                     if (meta.isNotBlank()) Text(meta, color = Muted, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
             }
             if (account.windows.isEmpty()) {
-                MutedCopy("No quota windows reported", modifier = Modifier.padding(start = 14.dp))
+                MutedCopy(appText(R.string.ui_no_quota_windows_reported_e8041, "No quota windows reported"), modifier = Modifier.padding(start = 14.dp))
             } else {
                 Row(modifier = Modifier.padding(start = 14.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     account.windows.take(2).forEach { window ->
@@ -193,7 +193,7 @@ internal fun HomeLimits(accounts: List<LimitAccount>, displayOptions: DisplayOpt
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(windowTitle(window, account.windows), color = Muted, style = MaterialTheme.typography.labelSmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                                 val remainingPercent = quotaRemainingPercent(window)
-                                val amount = quotaPercentLeft(window)?.let { "$it% left" }
+                                val amount = quotaPercentLeft(window)?.let { appText(R.string.ui_1_s_left_e96f9, "%1\$s%% left", it) }
                                     ?: window.remaining?.let { formatWindowAmount(it, window.currency) }
                                     ?: "—"
                                 // Like the desktop Home module, a nearly spent window is flagged in place.
@@ -224,7 +224,7 @@ internal fun HomeBreakdown(
     count: Int = 5,
 ) {
     if (tokens.isEmpty()) {
-        MutedCopy("No activity for this period")
+        MutedCopy(appText(R.string.ui_no_activity_for_this_period_eeb25, "No activity for this period"))
         return
     }
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -247,7 +247,7 @@ internal fun HomeBreakdown(
 @Composable
 internal fun HomeDevices(devices: List<DeviceUsage>, period: DashboardPeriod, aggregateUsage: UsagePeriod, count: Int = 3) {
     if (devices.isEmpty()) {
-        MutedCopy("No devices have checked in")
+        MutedCopy(appText(R.string.ui_no_devices_have_checked_in_759b6, "No devices have checked in"))
         return
     }
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -257,8 +257,8 @@ internal fun HomeDevices(devices: List<DeviceUsage>, period: DashboardPeriod, ag
                 ?: if (devices.size == 1) aggregateUsage.totalTokens else 0L
             HomeListRow(
                 name = device.hostname.ifBlank { device.id },
-                primary = if (device.stale) "Stale" else formatCompactTokens(deviceTokens),
-                secondary = listOf(device.osName, if (device.stale) "Stale" else "Synced").filter { it.isNotBlank() }.joinToString(" · "),
+                primary = if (device.stale) appText(R.string.ui_stale_189cc, "Stale") else formatCompactTokens(deviceTokens),
+                secondary = listOf(device.osName, if (device.stale) appText(R.string.ui_stale_189cc, "Stale") else appText(R.string.ui_synced_b2ef6, "Synced")).filter { it.isNotBlank() }.joinToString(" · "),
                 color = if (device.stale) Muted else Blue,
             )
         }
@@ -297,8 +297,8 @@ internal fun HomeActivity(activity: ActivityHeatmap, history: List<HistoryPoint>
         ActivityHeatmapGrid(activity, history)
         val recent = history.takeLast(45)
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("TREND", color = Ink, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
-            Text("Peak ${formatCompactTokens(history.maxOfOrNull { it.tokens } ?: 0L)}", color = Muted, style = MaterialTheme.typography.labelSmall)
+            Text(appText(R.string.ui_trend_fbb1c, "TREND"), color = Ink, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+            Text(appText(R.string.ui_peak_1_s_4cd6d, "Peak %1\$s", formatCompactTokens(history.maxOfOrNull { it.tokens } ?: 0L)), color = Muted, style = MaterialTheme.typography.labelSmall)
         }
         TrendChart(recent.map { it.tokens }, height = 70.dp)
         if (recent.isNotEmpty()) {

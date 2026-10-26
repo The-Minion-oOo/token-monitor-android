@@ -155,7 +155,7 @@ internal fun DesktopUsageRow(
     var expanded by rememberSaveable(name) { mutableStateOf(false) }
     val motionEnabled = LocalInteractionMotion.current
     val rowModifier = if (onToolSelected != null) {
-        Modifier.fillMaxWidth().clickable(onClickLabel = "Models used through $name") { onToolSelected(name) }.padding(vertical = 2.dp)
+        Modifier.fillMaxWidth().clickable(onClickLabel = appText(R.string.ui_models_used_through_1_s_0366e, "Models used through %1\$s", name)) { onToolSelected(name) }.padding(vertical = 2.dp)
     } else if (hasBreakdown) {
         Modifier.fillMaxWidth().clickable { expanded = !expanded }.padding(vertical = 2.dp)
     } else {
@@ -206,10 +206,10 @@ internal fun TokenComponentBreakdown(
     val hit = if (input > 0) cacheRead.toDouble() / input * 100.0 else 0.0
     val miss = if (input > 0) 100.0 - hit else 0.0
     val rows = buildList {
-        add(Triple("Input (Cache Hit)", cacheRead, hit))
-        add(Triple("Input (Cache Miss)", cacheMiss, miss))
-        add(Triple("Output", output, null))
-        if (unclassified > 0) add(Triple("Unclassified", unclassified, null))
+        add(Triple(appText(R.string.ui_input_cache_hit_5b6f7, "Input (Cache Hit)"), cacheRead, hit))
+        add(Triple(appText(R.string.ui_input_cache_miss_08248, "Input (Cache Miss)"), cacheMiss, miss))
+        add(Triple(appText(R.string.ui_output_4bed3, "Output"), output, null))
+        if (unclassified > 0) add(Triple(appText(R.string.ui_unclassified_390c4, "Unclassified"), unclassified, null))
     }
     Column(modifier = Modifier.padding(start = 20.dp, end = 2.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
         rows.forEach { (label, value, percent) ->

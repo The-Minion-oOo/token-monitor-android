@@ -1,5 +1,6 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+import io.github.theminionooo.tokenmonitor.R
 import io.github.theminionooo.tokenmonitor.domain.SessionUsage
 
 /** Raw accounting totals for a row; ratios are calculated only after disjoint members are summed. */
@@ -34,7 +35,7 @@ internal fun sessionMetrics(sessions: List<SessionUsage>): SessionMetrics = Sess
 internal fun sessionRowMetricLabels(row: SessionRow, now: Long): String {
     if (!row.grouped) return sessionMetricLabels(row.display, now)
     return listOfNotNull(
-        "Dots · observed only".takeIf { row.sessions.any { it.dotsObservedOnly } },
+        appText(R.string.ui_dots_observed_only_92493, "Dots · observed only").takeIf { row.sessions.any { it.dotsObservedOnly } },
         sessionCounterLabels(row.usageMetrics.cacheHitPercent, row.usageMetrics.tokenRate).takeIf { it.isNotBlank() },
     ).joinToString(" · ")
 }

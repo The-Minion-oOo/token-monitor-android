@@ -1,5 +1,6 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+import io.github.theminionooo.tokenmonitor.R
 import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
 import io.github.theminionooo.tokenmonitor.domain.LimitAccount
 import io.github.theminionooo.tokenmonitor.domain.LimitWindow
@@ -48,8 +49,8 @@ internal fun limitAttention(snapshot: HubSnapshot, now: Long): List<String> = sn
         val reset = runCatching { Instant.parse(window.resetsAt).toEpochMilli() }.getOrNull()
         val label = window.label.ifBlank { window.kind }
         when {
-            reset != null && reset <= now -> QuotaNote("$provider $label: ${formatBoundary(window.resetsAt, window.boundaryKind, now)}; awaiting updated quota", 1, boundary = reset)
-            remaining != null && (quotaPercentLeft(window) ?: 100) <= 20 -> QuotaNote("$provider $label: ${quotaPercentLeft(window)}% left", 0, remaining)
+            reset != null && reset <= now -> QuotaNote(appText(R.string.ui_1_s_2_s_3_s_awaiting_updated_quota_3e4e5, "%1\$s %2\$s: %3\$s; awaiting updated quota", provider, label, formatBoundary(window.resetsAt, window.boundaryKind, now)), 1, boundary = reset)
+            remaining != null && (quotaPercentLeft(window) ?: 100) <= 20 -> QuotaNote(appText(R.string.ui_1_s_2_s_3_s_left_003dd, "%1\$s %2\$s: %3\$s%% left", provider, label, quotaPercentLeft(window)), 0, remaining)
             reset != null && reset - now <= 3_600_000L -> QuotaNote("$provider $label: ${formatBoundary(window.resetsAt, window.boundaryKind, now)}", 2, boundary = reset)
             else -> null
         }

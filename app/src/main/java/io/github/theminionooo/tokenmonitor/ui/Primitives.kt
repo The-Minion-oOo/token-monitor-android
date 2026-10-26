@@ -168,9 +168,9 @@ internal fun TrendChart(values: List<Long>, height: androidx.compose.ui.unit.Dp)
 internal fun EmptyDashboard(modifier: Modifier, message: String?, onOpenSettings: () -> Unit, hasConnection: Boolean = false) {
     Column(modifier = modifier.fillMaxSize().padding(24.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.Start) {
         Text("Token Monitor", color = Ink, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-        Text(if (hasConnection) "Waiting for activity from your saved Hub." else "Connect a Hub to see desktop activity here. Tailscale is recommended.", color = Muted, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 7.dp))
+        Text(if (hasConnection) appText(R.string.ui_waiting_for_activity_from_your_saved_hub_e67ff, "Waiting for activity from your saved Hub.") else appText(R.string.ui_connect_a_hub_to_see_desktop_activity_here_tailscale_9635e, "Connect a Hub to see desktop activity here. Tailscale is recommended."), color = Muted, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 7.dp))
         Spacer(Modifier.height(16.dp))
-        Button(onClick = onOpenSettings) { Text("OPEN CONNECTION SETTINGS") }
+        Button(onClick = onOpenSettings) { Text(appText(R.string.ui_open_connection_settings_9249f, "OPEN CONNECTION SETTINGS")) }
         message?.let { StatusMessage(it, stale = true) }
     }
 }

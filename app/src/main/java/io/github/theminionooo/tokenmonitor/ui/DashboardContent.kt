@@ -167,19 +167,19 @@ internal fun DashboardContent(
         if (destination == DashboardDestination.Models && filteredTool != null) item {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                    Text("${filteredTool.displayName()} · Models", color = Ink, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
-                    TextButton(onClick = onClearModelFilter) { Text("ALL MODELS") }
+                    Text(appText(R.string.ui_1_s_models_93aed, "%1\$s · Models", filteredTool.displayName()), color = Ink, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
+                    TextButton(onClick = onClearModelFilter) { Text(appText(R.string.ui_all_models_92372, "ALL MODELS")) }
                 }
-                Text("Usage through this tool in the selected period", color = Muted, style = MaterialTheme.typography.labelSmall)
-                TextButton(onClick = { onChoose(DashboardDestination.Tools) }) { Text("← Back to Tools") }
+                Text(appText(R.string.ui_usage_through_this_tool_in_the_selected_period_92a0a, "Usage through this tool in the selected period"), color = Muted, style = MaterialTheme.typography.labelSmall)
+                TextButton(onClick = { onChoose(DashboardDestination.Tools) }) { Text(appText(R.string.ui_back_to_tools_87019, "← Back to Tools")) }
             }
         }
         if (state.message != null && !state.streamActive) item { StatusMessage(state.message, state.snapshot.stale) }
         if (destination != DashboardDestination.Home && homeReturnVisible && modelFilter == null) item { BackToHomeRow { onChoose(DashboardDestination.Home) } }
         if (destination == DashboardDestination.Sessions || destination == DashboardDestination.Projects) {
             item { CompactSearchField(search, { search = it }, if (destination == DashboardDestination.Sessions) {
-                if (showSessionTitles) "Search title, ID, tool, model, or project" else "Search ID, tool, model, or project"
-            } else "Search project, ID, or tool") }
+                if (showSessionTitles) appText(R.string.ui_search_title_id_tool_model_or_project_63387, "Search title, ID, tool, model, or project") else appText(R.string.ui_search_id_tool_model_or_project_b45a9, "Search ID, tool, model, or project")
+            } else appText(R.string.ui_search_project_id_or_tool_0bdf0, "Search project, ID, or tool")) }
         }
         when (destination) {
             DashboardDestination.Home -> homeItems(snapshot, usage, period, displayOptions, onChoose)
@@ -192,7 +192,7 @@ internal fun DashboardContent(
                 outputs = usage.clientOutputs,
                 unclassified = usage.clientUnclassifiedTokens,
                 onToolSelected = onOpenToolModels,
-                emptyMessage = "No tool activity is available for this period.",
+                emptyMessage = appText(R.string.ui_no_tool_activity_is_available_for_this_period_6ac2a, "No tool activity is available for this period."),
                 rankingMetric = displayOptions.rankingMetric,
             )
             DashboardDestination.Status -> statusItems(snapshot, state, serviceStatus, onOpenServicePage)
@@ -204,7 +204,7 @@ internal fun DashboardContent(
                 cacheReads = modelUsage.modelCacheReads,
                 outputs = modelUsage.modelOutputs,
                 unclassified = modelUsage.modelUnclassifiedTokens,
-                emptyMessage = if (modelFilter != null) "No tool-to-model breakdown was supplied for this period." else "No model activity is available for this period.",
+                emptyMessage = if (modelFilter != null) appText(R.string.ui_no_tool_to_model_breakdown_was_supplied_for_this_per_7d538, "No tool-to-model breakdown was supplied for this period.") else appText(R.string.ui_no_model_activity_is_available_for_this_period_34210, "No model activity is available for this period."),
                 rankingMetric = displayOptions.rankingMetric,
                 modelRows = true,
             )
@@ -216,7 +216,7 @@ internal fun DashboardContent(
                 query = search,
             )
             DashboardDestination.Limits -> limitItems(snapshot, displayOptions)
-            DashboardDestination.Trends -> if (trendHistory == null) item { MutedCopy("Loading activity…") }
+            DashboardDestination.Trends -> if (trendHistory == null) item { MutedCopy(appText(R.string.ui_loading_activity_4c959, "Loading activity…")) }
                 else trendItems(snapshot, trendHistory)
             DashboardDestination.Settings -> Unit
         }
@@ -232,7 +232,7 @@ internal fun TotalPanel(usage: UsagePeriod, compact: Boolean) {
     val tokens = if (roll) usage.totalTokens else rememberRollingValue(usage.totalTokens.toDouble()).roundToLong()
     val cost = if (roll) usage.costUsd else rememberRollingValue(usage.costUsd)
     Column(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
-        Text("TOTAL TOKENS", color = Muted, style = MaterialTheme.typography.labelMedium)
+        Text(appText(R.string.ui_total_tokens_7ea54, "TOTAL TOKENS"), color = Muted, style = MaterialTheme.typography.labelMedium)
         RollingTokenText(
             value = tokens,
             text = if (compact) formatCompactTokens(tokens) else formatTokens(tokens),
@@ -259,6 +259,6 @@ internal fun BackToHomeRow(onClick: () -> Unit) {
         horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         Icon(painterResource(R.drawable.action_arrow_left), contentDescription = null, tint = Muted, modifier = Modifier.size(14.dp))
-        Text("Back to Home", color = Muted, style = MaterialTheme.typography.labelMedium)
+        Text(appText(R.string.ui_back_to_home_ce747, "Back to Home"), color = Muted, style = MaterialTheme.typography.labelMedium)
     }
 }

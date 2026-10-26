@@ -1,0 +1,5 @@
+<resources>
+    <string name="language_title">App language</string>
+    <string name="language_system">Follow phone language</string>
+    <string name="language_help">Choose a language for the app and widget labels. Tool names, reported titles and desktop notes stay as supplied by the Hub.</string>
+</resources>

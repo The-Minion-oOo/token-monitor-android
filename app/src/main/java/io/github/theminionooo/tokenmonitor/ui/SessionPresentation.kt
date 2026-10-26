@@ -1,5 +1,6 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+import io.github.theminionooo.tokenmonitor.R
 import io.github.theminionooo.tokenmonitor.domain.SessionUsage
 import java.time.Instant
 import kotlin.math.roundToInt
@@ -36,12 +37,12 @@ internal fun sessionRowLabels(session: SessionUsage, showTitles: Boolean = true)
     val reportedTitle = if (showTitles) sessionTitleForDisplay(session) else ""
     val title = reportedTitle.ifBlank {
         listOf(client, session.modelNames.firstOrNull()).filter { !it.isNullOrBlank() }.joinToString(" · ")
-    }.ifBlank { "Session" }
+    }.ifBlank { appText(R.string.ui_session_f7f19, "Session") }
     val meta = listOf(
         client.takeIf { reportedTitle.isNotBlank() }.orEmpty(),
         session.lastUsedAt.shortClockTime(),
         session.projectLabel,
-        session.messageCount.takeIf { it > 0 }?.let { "$it messages" }.orEmpty(),
+        session.messageCount.takeIf { it > 0 }?.let { appText(R.string.ui_1_s_messages_d4b92, "%1\$s messages", it) }.orEmpty(),
     ).filter { it.isNotBlank() }.joinToString(" · ").ifBlank { session.id }
     return SessionRowLabels(title, meta)
 }
@@ -73,17 +74,17 @@ internal fun sessionPromptCacheMinutes(session: SessionUsage, now: Long): Int? {
 }
 
 internal fun sessionMetricLabels(session: SessionUsage, now: Long): String = buildList {
-    if (session.dotsObservedOnly) add("Dots · observed only")
+    if (session.dotsObservedOnly) add(appText(R.string.ui_dots_observed_only_92493, "Dots · observed only"))
     sessionCounterLabels(sessionCacheHitPercent(session), sessionTokenRate(session)).takeIf { it.isNotBlank() }?.let { add(it) }
-    sessionPromptCacheMinutes(session, now)?.let { add("Cache estimate ~$it min left") }
+    sessionPromptCacheMinutes(session, now)?.let { add(appText(R.string.ui_cache_estimate_1_s_min_left_42d48, "Cache estimate ~%1\$s min left", it)) }
 }.joinToString(" · ")
 
 internal fun sessionCounterLabels(cacheHitPercent: Double?, tokenRate: Double?): String = buildList {
     cacheHitPercent?.let { percent ->
         val value = if (percent > 0 && percent < 1) "<1" else percent.roundToInt().toString()
-        add("Cache hit $value%")
+        add(appText(R.string.ui_cache_hit_1_s_b1e5e, "Cache hit %1\$s%%", value))
     }
-    tokenRate?.roundToInt()?.takeIf { it > 0 }?.let { add("$it tok/s") }
+    tokenRate?.roundToInt()?.takeIf { it > 0 }?.let { add(appText(R.string.ui_1_s_tok_s_59360, "%1\$s tok/s", it)) }
 }.joinToString(" · ")
 
 private const val SESSION_RUNNING_WINDOW_MS = 10 * 60_000L
@@ -127,9 +128,9 @@ private fun liveActivityState(session: SessionUsage, now: Long): SessionActivity
 
 /** The state's words in a row; idle says nothing. */
 internal fun sessionActivityLabel(state: SessionActivityState): String = when (state) {
-    SessionActivityState.Running -> "Running"
-    SessionActivityState.Waiting -> "Waiting for you"
-    SessionActivityState.Finished -> "Finished"
+    SessionActivityState.Running -> appText(R.string.ui_running_73989, "Running")
+    SessionActivityState.Waiting -> appText(R.string.ui_waiting_for_you_e235e, "Waiting for you")
+    SessionActivityState.Finished -> appText(R.string.ui_finished_355bc, "Finished")
     SessionActivityState.Idle -> ""
 }
 
