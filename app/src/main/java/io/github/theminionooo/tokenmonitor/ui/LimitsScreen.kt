@@ -185,6 +185,7 @@ internal fun LimitAccountRow(account: LimitAccount, displayOptions: DisplayOptio
                 }
             }
         }
+        ProviderDetailRows(account)
         account.spend?.let { spend ->
             limitSpendRows(spend).forEach { (label, amount) ->
                 Text("$label ${formatWindowAmount(amount, spend.currency)}", color = Muted, style = MaterialTheme.typography.labelSmall)

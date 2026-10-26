@@ -156,7 +156,15 @@ data class LimitAccount(
     val accountKey: String = "",
     val productLabel: String = "",
     val spend: LimitSpend? = null,
+    val resetCredits: ResetCredits? = null,
+    val usageSummary: LimitUsageSummary? = null,
 )
+
+data class ResetCredits(val availableCount: Long?, val nextExpiresAt: String, val expirations: List<String>, val grants: List<ResetGrant>)
+data class ResetGrant(val id: String, val label: String, val resetsLeft: Long?, val resetsTotal: Long?, val startsAt: String,
+    val endsAt: String, val usableNow: Boolean?, val useRequiresLimit: Boolean?, val clears: List<String>)
+data class LimitUsageSummary(val period: String, val totalTokens: Long?, val todayTokens: Long?, val weekTokens: Long?,
+    val inputTokens: Long?, val outputTokens: Long?, val requests: Long?, val standardCost: Double?)
 
 /** Provider-reported native-currency spend; daily/weekly values may be locally tracked. */
 data class LimitSpend(

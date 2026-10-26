@@ -137,7 +137,15 @@ internal data class HubLimitAccountDto(
     val accountKey: String = "",
     val productLabel: String = "",
     val spend: HubLimitSpendDto? = null,
+    val resetCredits: HubResetCreditsDto? = null,
+    val usageSummary: HubLimitUsageSummaryDto? = null,
 )
+
+internal data class HubResetCreditsDto(val availableCount: Long?, val nextExpiresAt: String, val expirations: List<String>, val grants: List<HubResetGrantDto>)
+internal data class HubResetGrantDto(val id: String, val label: String, val resetsLeft: Long?, val resetsTotal: Long?, val startsAt: String,
+    val endsAt: String, val usableNow: Boolean?, val useRequiresLimit: Boolean?, val clears: List<String>)
+internal data class HubLimitUsageSummaryDto(val period: String, val totalTokens: Long?, val todayTokens: Long?, val weekTokens: Long?,
+    val inputTokens: Long?, val outputTokens: Long?, val requests: Long?, val standardCost: Double?)
 
 internal data class HubLimitSpendDto(
     val currency: String,

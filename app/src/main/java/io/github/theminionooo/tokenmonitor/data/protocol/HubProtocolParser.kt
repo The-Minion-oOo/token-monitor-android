@@ -299,6 +299,22 @@ object HubProtocolParser {
                 locallyTracked = string("provider") == "mimo",
             )
         } else null,
+        resetCredits = objectField("resetCredits")?.let { credits ->
+            HubResetCreditsDto(
+                credits.long("availableCount")?.takeIf { it >= 0 }, credits.string("nextExpiresAt"),
+                credits.array("expirations").mapNotNull { it.stringOrNull() }.distinct(),
+                credits.array("grants").mapNotNull { value -> value.objectOrNull()?.let { grant ->
+                    HubResetGrantDto(grant.string("id"), grant.string("label"), grant.long("resetsLeft")?.takeIf { it >= 0 },
+                        grant.long("resetsTotal")?.takeIf { it >= 0 }, grant.string("startsAt"), grant.string("endsAt"),
+                        grant.boolean("usableNow"), grant.boolean("useRequiresLimit"), grant.array("clears").mapNotNull { it.stringOrNull() })
+                } },
+            )
+        },
+        usageSummary = objectField("usageSummary")?.let { usage ->
+            fun count(key: String) = usage.long(key)?.takeIf { it >= 0 }
+            HubLimitUsageSummaryDto(usage.string("period"), count("totalTokens"), count("todayTokens"), count("weekTokens"),
+                count("inputTokens"), count("outputTokens"), count("requests"), usage.double("standardCost")?.takeIf { it >= 0 })
+        },
     )
 
     private fun JsonObject.toLimitWindowDto() = HubLimitWindowDto(
@@ -519,6 +535,13 @@ object HubProtocolParser {
                 it.currency, it.today, it.week, it.month, it.allTime, it.trackingSince, it.locallyTracked,
             )
         },
+        resetCredits = resetCredits?.let { credits -> io.github.theminionooo.tokenmonitor.domain.ResetCredits(
+            credits.availableCount, credits.nextExpiresAt, credits.expirations, credits.grants.map { grant ->
+                io.github.theminionooo.tokenmonitor.domain.ResetGrant(grant.id, grant.label, grant.resetsLeft, grant.resetsTotal,
+                    grant.startsAt, grant.endsAt, grant.usableNow, grant.useRequiresLimit, grant.clears)
+            }) },
+        usageSummary = usageSummary?.let { io.github.theminionooo.tokenmonitor.domain.LimitUsageSummary(it.period, it.totalTokens,
+            it.todayTokens, it.weekTokens, it.inputTokens, it.outputTokens, it.requests, it.standardCost) },
     )
 
     private fun HubLimitWindowDto.toDomain() = LimitWindow(
