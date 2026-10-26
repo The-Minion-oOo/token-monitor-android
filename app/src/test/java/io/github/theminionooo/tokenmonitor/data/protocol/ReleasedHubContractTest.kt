@@ -8,6 +8,20 @@ import org.junit.Test
 
 /** Responses produced by tools/check-hub-contract.mjs from the exact released desktop source. */
 class ReleasedHubContractTest {
+    @Test fun `released optional payment provider and model timing fields survive Android parsing`() {
+        val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
+        assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())
+        val stats = HubProtocolParser.decodeStats(File(directory!!, "parity-stats.json").readText())
+        val provider = stats.limits.providers.single()
+        assertEquals(0L, provider.resetCredits!!.availableCount)
+        assertEquals(false, provider.resetCredits.grants.single().usableNow)
+        assertEquals(4L, provider.usageSummary!!.requests)
+        assertEquals(100L, stats.periods.getValue("today").modelThroughput.getValue("synthetic-model").timedOutputTokens)
+        val record = HubProtocolParser.decodeSubscriptions(File(directory, "parity-subscriptions.json").readText()).entries.single()
+        assertEquals("topup", record.kind)
+        assertEquals(1200L, record.topUps.single().amountMinor)
+        assertEquals("Synthetic profile", record.binding.profileName)
+    }
     @Test fun `released OmO usage and OpenCode Console data remain compatible`() {
         val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
         assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())

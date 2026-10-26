@@ -599,6 +599,36 @@ async function isolatedContract(source, output, upstream) {
             periods: { today: omo, month: omo, allTime: omo } });
         responses["omo-native.json"] = omoHub.getStats();
         assert.equal(responses["omo-native.json"].periods.today.clients.senpi, 180);
+        // Exercise the optional payment/provider/throughput shape in the released normalizer.
+        // Setup writes are confined to this disposable Hub; the companion contract reads remain GETs.
+        const parityHub = createHub({ port: 0, host: "127.0.0.1", secret, dataFile: join(source, "synthetic-parity.json") });
+        parityHub.ingest({ ...device, periods: { today: { ...period, outputTokens: 100, timedTokens: 300, timedOutputTokens: 100,
+            timedDurationMs: 2000, modelThroughput: { "synthetic-model": { timedTokens: 300, timedOutputTokens: 100, timedDurationMs: 2000 } } } },
+            limits: { updatedAt: now, providers: [{ provider: "claude", accountName: "Synthetic account", status: "ok", updatedAt: now,
+                windows: [], resetCredits: { availableCount: 0, nextExpiresAt: "2026-12-01T00:00:00Z",
+                    grants: [{ id: "g", label: "Synthetic grant", resetsLeft: 0, resetsTotal: 2, usableNow: false, useRequiresLimit: true }] },
+                usageSummary: { period: "month", totalTokens: 1200, todayTokens: 0, weekTokens: 300, inputTokens: 800,
+                    outputTokens: 400, requests: 4, standardCost: 0.5 } }] } });
+        parityHub.setSubscriptions([{ id: "synthetic-topup", provider: "openai", planName: "Synthetic API credit", kind: "topup",
+            currency: "USD", startDate: "2026-01-31", binding: { profileName: "Synthetic profile", accountEmail: "sample@example.com" },
+            topUps: [{ id: "p", date: "2026-10-01", amountMinor: 1200 }], note: "Synthetic payment note" }], "");
+        await parityHub.start();
+        try {
+            for (const name of ["stats", "subscriptions"]) {
+                const response = await fetch(`http://127.0.0.1:${parityHub.server.address().port}/api/${name}`, {
+                    headers: { Authorization: `Bearer ${secret}` }, redirect: "error", signal: AbortSignal.timeout(5000),
+                });
+                assert.equal(response.status, 200);
+                responses[`parity-${name}.json`] = await response.json();
+            }
+            const provider = responses["parity-stats.json"].limits.providers[0];
+            assert.equal(provider.resetCredits.availableCount, 0);
+            assert.equal(provider.resetCredits.grants[0].usableNow, false);
+            assert.equal(provider.usageSummary.requests, 4);
+            assert.equal(responses["parity-stats.json"].periods.today.modelThroughput["synthetic-model"].timedOutputTokens, 100);
+            assert.equal(responses["parity-subscriptions.json"].subscriptions[0].kind, "topup");
+            assert.equal(responses["parity-subscriptions.json"].subscriptions[0].topUps[0].amountMinor, 1200);
+        } finally { await parityHub.stop(); }
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) await writeFile(join(output, name), `${JSON.stringify(value, null, 2)}\n`);
         console.log(`Actual ${upstream.tag} Hub passed authenticated reads, snapshot, freshness and changed-stat checks. Synthetic responses: ${output}`);
