@@ -186,6 +186,7 @@ internal fun ConnectionScreen(
             canRepairHomeAddress = hasConnection && fallbackUrl.isNotBlank() && fallbackUrl != state.fallbackUrl,
             onRepairHomeAddress = { onRepairHomeAddress(fallbackUrl) },
         )
+        DiagnosticActions(state, displayOptions)
     }
     if (!hasConnection) {
         WelcomeSetup(modifier = modifier, fields = fields, onOpenReleasePage = onOpenReleasePage)
