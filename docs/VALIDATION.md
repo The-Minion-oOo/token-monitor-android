@@ -5,34 +5,28 @@ do not cover. I report emulator and CI results as exactly that, and I never
 describe them as results from a physical phone. Phone evidence applies only to
 the build it names.
 
-## Current release: v0.79.0 r2
+## Current release: v0.80.0 r1
 
-I published source `fc1f582ccf03e3dae962d48eae64a3007863e7af` from
-[PR #95](https://github.com/The-Minion-oOo/token-monitor-android/pull/95), targeting
-desktop v0.79.0 at `a935478d25c66b0ac2e7c9fbb019b5fea40592b7`.
+I published source `59b5e9370084bc7ce878455ef72dbf39c233fd99` from
+[PR #98](https://github.com/The-Minion-oOo/token-monitor-android/pull/98), targeting
+desktop v0.80.0 at `c61cbe998d69725589c03511f2f56d43714f4c0f`.
 All required checks passed on that exact main commit:
-[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40392560178),
-[API 36/37 interaction and optimized API 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40392560181),
-and [released Node/Worker contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40392560272).
-The first main API 26 attempt timed out during emulator installation, before app
-launch. Another attempt passed install/launch/resume but hung during emulator
-shutdown until the job timeout. The complete matrix passed on retry without a
-source change.
+[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40413055593),
+[API 36/37 interaction and optimized API 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40413055610),
+and [released Node/Worker contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40413055658).
+Downloaded reports confirm **339 JVM tests** and **98 interaction tests on each
+of API 36 and API 37**, without failures or skips. Local lint, debug/test and
+signed R8 builds, 14 tooling tests and an optimized API 26 install/launch/resume
+check passed. I inspected the new native provider captures and reviewed the
+full diff. Muse, Ollama and Claude fixtures pass through the released collectors
+with fake inputs and through both actual Hub implementations.
 
-Reports confirm **330 JVM tests** with no failures or skips and **95 interaction
-tests on each of API 36 and API 37**, with no failures, errors or skips. Nine
-focused feature/language cases also passed locally on API 26/36/37. Synthetic
-captures exercise Home and all four Pages renders across twelve languages,
-including responsive-widget labels inflated by a launcher in another language.
-Lint, debug/test and signed R8 builds, 14 tooling tests, language resources,
-documentation and release metadata checks passed. I reviewed the full diff.
-
-The published APK is `token-monitor-android-v0.79.0-r2.apk`, **3,347,144 bytes**,
-package `io.github.theminionooo.tokenmonitor`, version code **790002**.
-Its SHA-256 is `e67e63167f622f49c38ace5c821df655279431671b64b2a078e417d2540170be` and the release certificate remains
+The published APK is `token-monitor-android-v0.80.0-r1.apk`, **3,347,150 bytes**,
+package `io.github.theminionooo.tokenmonitor`, version code **800001**.
+Its SHA-256 is `d1005df329c257b66448518d58568ed881e77a5ebd8edd2423fe3139a75c5c6b` and the release certificate remains
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
 Draft and anonymous public downloads matched the staged APK, checksum and update
-manifest. [Android v0.79.0 r2](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.79.0-r2) is the Latest release.
+manifest. [Android v0.80.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.80.0-r1) is the Latest release.
 
 This release was not phone-tested. Upgrade/pairing retention, physical launcher
 behaviour, Live lifecycle and comparable CPU/battery checks remain in
@@ -44,10 +38,10 @@ phone evidence applies only to its named builds.
 
 Every release goes through the same automated gate before I publish it:
 
-- **Unit tests and builds:** 330 JVM tests, run with the generated Hub contract
+- **Unit tests and builds:** 339 JVM tests, run with the generated Hub contract
   supplied and nothing skipped, plus Android lint, the preview debug build and
   the instrumentation APK.
-- **Instrumentation suite:** 95 tests on API 36 and API 37 emulators. A report
+- **Instrumentation suite:** 98 tests on API 36 and API 37 emulators. A report
   check requires every test to be present with no failures, errors or skips.
 - **API 26 smoke check:** the optimized R8 release APK installs, launches and
   resumes on the oldest supported version. This is not full Android 8
@@ -196,6 +190,7 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 
 | Release | Date | Desktop baseline | Main checks | Phone check |
 | --- | --- | --- | --- | --- |
+| v0.80.0 r1 | 2026-10-26 | v0.80.0 | Muse device quotas, Ollama credits/spend, Claude accounts; 339 JVM / 98 tests per API 36/37; optimized API 26 | Not phone-tested; #94 remains open |
 | v0.79.0 r2 | 2026-10-26 | v0.79.0 | Payments, provider details, local display controls, currency, diagnostics, live rates and 12 languages; 330 JVM / 95 tests per API 36/37; optimized API 26 | Not phone-tested; nonblocking #94 |
 | v0.79.0 r1 | 2026-10-25 | v0.79.0 | OmO Native, OpenCode Console quotas/balances, Node/Worker contracts | No: 86-test API 36/37 suites and optimized API 26 smoke |
 | v0.78.0 r5 | 2026-10-24 | v0.78.0 | Wi-Fi-only refresh follows the network under Tailscale | No: not phone-tested; unit tests cover the network cases |
@@ -229,6 +224,7 @@ them use package `io.github.theminionooo.tokenmonitor` and the same signing
 certificate, SHA-256
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
 
+- v0.79.0 r2 (`790002`): `e67e63167f622f49c38ace5c821df655279431671b64b2a078e417d2540170be`
 - v0.78.0 r5 (`780005`): `6acb35da901df68991e80c4db40118672a22d82613b11c435658bfb32e18402c`
 - v0.77.0 r2 (`770002`): `9652f7e76817e26a5c78348af91de480c607892f8e7755f664be50d841ecbc88`
 - v0.77.0 r1 (`770001`): `cfb3ba4e2d0cd6eb1ead8fb74f1b5ae2f18f87b356d4b097597cb1fcb3facb4c`
@@ -309,7 +305,7 @@ Pages widget redraw described above.
   had a median warm cache hydration of 169.9 ms and a median freshness update
   of 264.9 ms. These are local observations, not timing guarantees. Widget
   timings cover off-screen bitmap drawing only.
-- Battery use has not been measured for the published v0.77.0, v0.78.0 or v0.79.0 APKs. The short
+- Battery use has not been measured for the published v0.77.0, v0.78.0, v0.79.0 or v0.80.0 APKs. The short
   Widget Live comparison above used a local build of the same performance
   changes; it is not a measurement of the published APK.
 - API 26 is a smoke check of install, launch and resume, not full interaction

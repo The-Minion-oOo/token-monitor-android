@@ -1,6 +1,6 @@
 # Changelog
 
-## Next release — v0.80.0 r1
+## v0.80.0 r1 — 2026-10-26
 
 - I updated compatibility to desktop v0.80.0, including Muse Code quotas,
   Ollama credit balances and multiple Claude Web accounts.

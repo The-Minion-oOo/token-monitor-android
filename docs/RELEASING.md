@@ -8,7 +8,7 @@ Android-only releases keep `versionName` and increment the final three digits of
 
 | Build | Version name | Version code | Tag |
 | --- | --- | --- | --- |
-| Published | v0.79.0 | 790002 | `android-v0.79.0-r2` |
+| Published | v0.80.0 | 800001 | `android-v0.80.0-r1` |
 
 For desktop `0.<minor>.<patch>`, the version code is
 `minor × 10000 + patch × 1000 + revision`. For example, v0.68.0 r1 is 680001
@@ -31,7 +31,7 @@ record cannot be prepared as another draft.
 
 ## Release checks
 
-For r2, the physical-phone follow-up is tracked in
+For v0.79.0 r2, the physical-phone follow-up is tracked in
 [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94).
 It is nonblocking once the automated and emulator gates pass. The release notes
 must still state that r2 was not phone-tested; earlier phone evidence does not
