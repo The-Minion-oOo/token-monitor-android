@@ -116,14 +116,14 @@ production Home screen and all four Pages widget renders for every language,
 using synthetic showcase data. Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite now contains **95 tests** per emulator. The report checker
+The interaction suite now contains **98 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
 
 JVM tests cover protocol parsing, private-address rules, endpoint failover,
 stream recovery, ordered cache writes, history aggregation, presentation rules,
 and preferences. Versioned Hub fixtures live under
-`app/src/test/resources/protocol/`. The v0.79.0 set covers all five read
+`app/src/test/resources/protocol/`. The v0.80.0 set covers all five read
 endpoints, a complete stream frame, and a freshness-only frame. The v0.69.0
 fixtures retain session relationships and activity, the v0.68.0
 fixtures retain unpriced counts and Dots provenance, and the v0.67.0
@@ -184,6 +184,14 @@ Instrumentation tests use the preview package to exercise navigation, dialogs,
 widgets, storage, and lifecycle behavior. Run them on an API 36 emulator before
 opening a pull request for a UI or lifecycle change. Visual changes also need a
 native screenshot at the affected phone or launcher size.
+
+The v0.80.0 fixtures cover Muse quotas from distinct devices, Ollama API/Cookie
+credits, zero/negative balances, monthly spend and legacy quotas, plus separate
+and deduplicated Claude accounts. The contract runs released collectors with
+injected fake responses and a fake Muse process, then sends their results
+through both actual Hub implementations. Focused fixtures retain the limits
+envelope without duplicating unrelated usage. Native checks exercise the
+rendered money values, plan/source labels and account rows.
 
 The v0.79.0 fixtures add OmO Native alongside Pi and Oh My Pi, with reasoning
 already included in output. The released OpenCode collector runs against fake

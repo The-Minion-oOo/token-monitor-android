@@ -2,28 +2,21 @@
 
 ## Version rule
 
-Desktop v0.80.0 is tracked in
-[#96](https://github.com/The-Minion-oOo/token-monitor-android/issues/96).
-It is not yet a verified Android baseline.
+Android v0.80.0 r1 targets desktop tag `v0.80.0`, peeled commit
+`c61cbe998d69725589c03511f2f56d43714f4c0f`, in Gradle and `upstream.json`.
+I reviewed the Muse Code quota collector, Ollama API/Cookie credits and Claude
+managed accounts against the released Node and Worker Hubs. Muse readings stay
+separate by device. Credit amounts and monthly spend retain their currency, and
+absent quotas stay unknown. Credential storage, login renewal and account
+management remain on desktop, along with Notch Panel changes.
 
-Android v0.79.0 r2 uses the same released desktop pin as r1. I added the
-read-only payment/provider details and local presentation choices listed in
-[Desktop parity](DESKTOP_PARITY.md), without changing collection, desktop state
-or the five-second dashboard processing limit. Published release identity stays
-separate from candidate metadata in `release.json`.
-
-Android v0.79.0 r2 targets desktop tag `v0.79.0`, peeled commit
-`a935478d25c66b0ac2e7c9fbb019b5fea40592b7`, in Gradle and `upstream.json`.
-I reviewed the changes since v0.78.0. OmO Native (`senpi`) has its own label and
-cyan tool colour, separate from Pi and Oh My Pi. Its reported output already
-includes reasoning. OpenCode Console Go quotas and Zen balances pass through
-the existing parser; released-source checks cover missing windows and resets,
-zero and negative balances, and failures isolated to one Console source.
-Notch navigation, desktop display modes and tray changes stay on desktop.
+The twelve languages, payment/provider details and display controls from
+v0.79.0 r2 are retained. Android still uses the five-second complete-update limit.
+Published release identity stays separate from candidate metadata in `release.json`.
 
 The latest published release is
 [`android-v0.79.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.79.0-r2),
-recorded with its source commit in `release.json`.
+recorded with its source commit in `release.json`; v0.80.0 r1 is a candidate.
 It retains opt-in HTTPS, optional background widget refresh and the
 r5 physical-network check underneath Tailscale. Earlier phone evidence applies
 only to the builds named in [Validation](VALIDATION.md).

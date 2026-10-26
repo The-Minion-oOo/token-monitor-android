@@ -1,12 +1,19 @@
-# Desktop parity for v0.79.0
+# Desktop parity for v0.80.0
 
 I compare the Android companion with released desktop source, rather than
-unreleased desktop changes. The baseline is tag `v0.79.0`, commit
-`a935478d25c66b0ac2e7c9fbb019b5fea40592b7`. Android remains a read-only
+unreleased desktop changes. The baseline is tag `v0.80.0`, commit
+`c61cbe998d69725589c03511f2f56d43714f4c0f`. Android remains a read-only
 dashboard: the desktop collects usage, signs in to providers and hosts the Hub.
 
-The latest published APK is **v0.79.0 r2**. Items marked **r2** below were
-added in this Android revision.
+The latest published APK is **v0.79.0 r2**, with **v0.80.0 r1** in preparation.
+Items marked **r2** below were introduced in v0.79.0 r2 and are retained.
+
+Desktop v0.80.0 adds Muse Code session/weekly quotas, keeps its device observations
+separate, and displays Ollama's included/purchased credits and monthly spend in
+their native currency. Claude Web accounts appear alongside automatic Claude
+Code readings. Login renewal, account enable/removal and Ollama credentials
+remain desktop settings; Android reads the resulting Hub rows. Notch Panel
+spacing, hover and session-summary changes remain desktop-only.
 
 | Desktop feature | Android coverage |
 | --- | --- |

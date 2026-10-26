@@ -1,5 +1,14 @@
 # Changelog
 
+## Next release — v0.80.0 r1
+
+- I updated compatibility to desktop v0.80.0, including Muse Code quotas,
+  Ollama credit balances and multiple Claude Web accounts.
+- Kept Muse observations separate by device and retained Ollama plan labels.
+  Included/purchased credits and monthly spend show their reported money values.
+- Retained the twelve languages, payments, display controls, currencies,
+  diagnostics and optional live rates from v0.79.0 r2.
+
 ## v0.79.0 r2 — 2026-10-26
 
 - I added payment details and dated top-up ledgers, with separate recurring
