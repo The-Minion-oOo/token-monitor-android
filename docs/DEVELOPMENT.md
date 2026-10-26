@@ -101,6 +101,25 @@ in a fixture or screenshot.
 
 ## Tests
 
+The r2 candidate adds payment/top-up, reset-credit/grant, provider token summary,
+local item controls, currency, diagnostic redaction and matched live-rate tests.
+The pinned released-source harness also emits `parity-stats.json` and
+`parity-subscriptions.json`; Android parses those actual normalized responses.
+Use `TOKEN_MONITOR_CONTRACT_DIR=app/build/hub-contract` when running all JVM
+tests so the contract tests are not skipped.
+
+Run `node tools/check-locales.mjs` after changing resources. It checks all twelve
+packs for complete keys, matching format placeholders and unresolved markers.
+Keep proper names and sample-only resources marked non-translatable. Do not use
+translated labels as saved keys. The language interaction test captures the
+production Home screen and all four Pages widget renders for every language,
+using synthetic showcase data. Review narrow layouts and platform font fallback;
+native-speaker wording review remains a separate contribution.
+
+The interaction suite now contains **95 tests** per emulator. The report checker
+expects one emulator report per directory in CI. When running two local emulators
+together, call its exported `verifyInstrumentationReport` for each XML report.
+
 JVM tests cover protocol parsing, private-address rules, endpoint failover,
 stream recovery, ordered cache writes, history aggregation, presentation rules,
 and preferences. Versioned Hub fixtures live under

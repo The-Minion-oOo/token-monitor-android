@@ -1,5 +1,26 @@
 # Security and privacy
 
+## Optional display features in the r2 candidate
+
+Automatic currency conversion contacts the same public currency services as
+desktop: jsDelivr's `@fawazahmed0/currency-api` feed, with the project's
+`currency-api.pages.dev` feed as fallback. Requests contain no Hub address,
+secret, account or usage data. HTTPS uses system certificate authorities;
+redirects are rejected, reads are bounded, and requests stop when the app leaves
+the foreground. Widgets use saved rates. USD and manual-rate display need no
+currency request.
+
+The diagnostic report is an allowlist of versions, route category and state
+flags/counters. It excludes addresses, secrets, account identities, raw errors,
+conversation text and cached responses. Preview precedes copy/share; neither
+action is automatic. Sharing uses Android's chooser. The chosen recipient or
+clipboard reader receives the previewed report.
+
+Language resources are bundled. App language, display currency, visibility and
+tool ordering do not change Hub settings or provider credentials. Payment notes
+and account bindings remain local snapshot content and may be private; they are
+not included in diagnostic reports or widget labels.
+
 ## Network boundary
 
 The app accepts Tailscale addresses by default and recommends that route. Private

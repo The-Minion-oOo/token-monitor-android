@@ -1,5 +1,22 @@
 # Changelog
 
+## Next release — v0.79.0 r2 candidate
+
+- I added payment details and dated top-up ledgers, with separate recurring
+  subscription intervals, renewal/end dates, account binding and notes.
+- Added provider reset credits, grant/expiry explanations and token summaries.
+- Added local tool hide/pin/order and provider/quota-window visibility controls.
+- Added nine usage display currencies with cached automatic or manual rates;
+  provider-native balances and recorded payments are preserved.
+- Added preview, copy and share for a redacted diagnostic report.
+- Added optional recent aggregate/per-model output speed and token burn,
+  starting Off and using the existing dashboard update frequency.
+- Added twelve app/widget languages, including Simplified/Traditional Chinese,
+  Spanish, Hindi, Gujarati, Bengali, Tamil and Telugu, alongside English,
+  Korean, Japanese and Brazilian Portuguese.
+- Expanded emulator checks and documentation. Physical-phone follow-up is
+  tracked separately in #94; no phone result is claimed for this candidate.
+
 ## v0.79.0 r1 — 2026-10-25
 
 - I added the OmO Native label and cyan tool colour, separate from Pi and Oh My Pi.

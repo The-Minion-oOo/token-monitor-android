@@ -11,6 +11,8 @@
   <a href="CHANGELOG.md">What changed</a>
 </p>
 
+<p align="center"><a href="README.zh-CN.md">简体中文</a> · <a href="docs/LANGUAGES.md">Languages / भाषाएँ / ભાષાઓ / భాషలు</a></p>
+
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/github/actions/workflow/status/The-Minion-oOo/token-monitor-android/android.yml?branch=main&style=flat-square&logo=githubactions&logoColor=10221c&label=Android%20checks"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
@@ -25,6 +27,48 @@
 </p>
 
 ## The desktop dashboard, made mobile
+
+**Coming in v0.79.0 r2:** twelve interface languages, detailed payments and reset
+credits, local tool/quota controls, nine display currencies, optional recent live
+speed and a report you can review before sharing. The download above remains
+the published r1 build until r2 is released. [Feature coverage](docs/DESKTOP_PARITY.md).
+
+**Read it your way:** English · 简体中文 · 繁體中文 · 한국어 · 日本語 · Português
+(Brasil) · Español · हिन्दी · ગુજરાતી · বাংলা · தமிழ் · తెలుగు.
+[Language settings and introductions](docs/LANGUAGES.md).
+
+<details>
+<summary>See the r2 candidate in Chinese and Telugu</summary>
+
+<table><tr>
+  <td width="50%"><img src="docs/images/widget-language-zh-CN.png" alt="The r2 Pages widget with Simplified Chinese labels and synthetic showcase data" width="100%"></td>
+  <td width="50%"><img src="docs/images/widget-language-te.png" alt="The r2 Pages widget with Telugu labels and synthetic showcase data" width="100%"></td>
+</tr></table>
+
+These are captures of the production Pages renderer using made-up data. The
+language changes the labels within the same card; reported tool names stay as
+supplied by the Hub.
+
+</details>
+
+### More useful details, with the desktop still doing the work
+
+- **Know what you paid:** distinguish subscriptions from top-ups, inspect dated
+  payments and see the next renewal or coverage end.
+- **Understand the quota:** see reported reset credits, expiry and grant
+  eligibility, plus detailed provider token summaries.
+- **Keep the useful rows:** pin favourite tools, reorder or hide them, and choose
+  which quota windows and provider details appear.
+- **Read costs in your currency:** use a saved automatic or manual exchange rate;
+  provider balances and recorded payments keep their original currency.
+- **See recent output:** optional aggregate and per-model speed or token burn,
+  using existing updates and clearing idle samples. Session-average speed stays
+  separate.
+- **Share less when troubleshooting:** preview an allowlisted diagnostic report
+  before copying or sharing it. Addresses, secrets and conversation text stay out.
+
+These are r2 candidate features. Pairing still uses the same read-only Hub API;
+the dashboard update frequency and widget layout stay unchanged.
 
 <table>
   <tr>

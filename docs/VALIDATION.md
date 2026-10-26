@@ -5,6 +5,41 @@ do not cover. I report emulator and CI results as exactly that, and I never
 describe them as results from a physical phone. Phone evidence applies only to
 the build it names.
 
+## Current candidate: v0.79.0 r2
+
+The candidate targets the same released desktop v0.79.0 pin as r1 and uses
+version code `790002`. Local checks passed **330 JVM tests**, with generated
+released-Hub responses supplied and no skips; lint, preview debug and test APK
+assembly; **95 interaction tests on each of API 36 and API 37**, with no failures,
+errors or skips; 14 Node tooling tests; documentation/release metadata and
+twelve-language resource checks.
+
+The pinned Node and Worker contracts passed locally with synthetic data. The
+Node check additionally reads actual normalized payment, reset-credit, provider
+summary and model-throughput responses and feeds them to Android's parser.
+The R8 optimized candidate installed, launched and resumed on API 26 using a
+disposable emulator signing key. It is not a production-signed release bundle.
+
+The new interaction cases cover payment/privacy details, quota grants, local
+pin/restore, manual currency, diagnostic preview/redaction, matched live rates,
+language switching/recreation and consistent visibility in both widgets and the
+Live notification. Synthetic captures exercise Home and all four Pages widget
+renders across all twelve languages. Native-speaker wording review and physical
+launcher/battery behaviour are not established by these tests.
+
+After final wording and test-lifecycle cleanup, all nine focused parity/language
+cases passed again on API 26, 36 and 37. These include applying the responsive
+widget into a launcher context with a different language. The API 26 check adds
+legacy language-picker coverage; it is not the full 95-test suite on Android 8.
+
+There is no physical-phone result for r2. The follow-up in
+[#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94) is
+nonblocking once the automated/emulator gates pass. It covers the signed upgrade,
+pairing/settings retention, fonts/wrapping, widget/Live lifecycle and comparable
+CPU/battery checks. The published download remains r1. Required CI on the reviewed
+main commit and production signing/bundle checks still apply before publication;
+see [Releasing](RELEASING.md).
+
 ## How each release is checked
 
 The r4 background-refresh release passed the required CI and local checks:
@@ -25,10 +60,10 @@ The light/dark settings and recaptured widget comparison are approved.
 
 Every release goes through the same automated gate before I publish it:
 
-- **Unit tests and builds:** 311 JVM tests, run with the generated Hub contract
+- **Unit tests and builds:** 330 JVM tests, run with the generated Hub contract
   supplied and nothing skipped, plus Android lint, the preview debug build and
   the instrumentation APK.
-- **Instrumentation suite:** 86 tests on API 36 and API 37 emulators. A report
+- **Instrumentation suite:** 95 tests on API 36 and API 37 emulators. A report
   check requires every test to be present with no failures, errors or skips.
 - **API 26 smoke check:** the optimized R8 release APK installs, launches and
   resumes on the oldest supported version. This is not full Android 8
