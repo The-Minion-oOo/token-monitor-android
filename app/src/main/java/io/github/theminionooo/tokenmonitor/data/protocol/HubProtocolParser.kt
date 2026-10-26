@@ -366,6 +366,22 @@ object HubProtocolParser {
         startDate = string("startDate"),
         interval = string("interval").ifBlank { "month" },
         autoRenew = boolean("autoRenew") ?: true,
+        kind = string("kind").ifBlank { "subscription" },
+        intervalCount = (long("intervalCount") ?: 1).coerceIn(1, 120).toInt(),
+        profileName = objectField("binding")?.string("profileName").orEmpty(),
+        accountKey = objectField("binding")?.string("accountKey").orEmpty(),
+        accountEmail = objectField("binding")?.string("accountEmail").orEmpty(),
+        topUps = array("topUps").mapNotNull { value ->
+            val entry = value.objectOrNull() ?: return@mapNotNull null
+            val date = entry.string("date")
+            val amount = entry.long("amountMinor")?.takeIf { it >= 0 } ?: return@mapNotNull null
+            if (runCatching { java.time.LocalDate.parse(date) }.isFailure) null
+            else HubTopUpDto(entry.string("id"), date, amount)
+        }.sortedByDescending { it.date },
+        nextRenewalOverride = string("nextRenewalOverride"),
+        endDate = string("endDate"),
+        note = string("note"),
+        amountReported = long("amountMinor")?.let { it >= 0 } == true,
     )
 
     private fun HubHealthDto.toDomain() = HubHealth(
@@ -564,6 +580,14 @@ object HubProtocolParser {
         startDate = startDate,
         interval = interval,
         autoRenew = autoRenew,
+        kind = kind,
+        intervalCount = intervalCount,
+        binding = io.github.theminionooo.tokenmonitor.domain.SubscriptionBinding(profileName, accountKey, accountEmail),
+        topUps = topUps.map { io.github.theminionooo.tokenmonitor.domain.SubscriptionTopUp(it.id, it.date, it.amountMinor) },
+        nextRenewalOverride = nextRenewalOverride,
+        endDate = endDate,
+        note = note,
+        amountReported = amountReported,
     )
 
     private fun boundedUnpricedMap(counts: Map<String, Long>, tokens: Map<String, Long>, total: Long): Map<String, Long> {

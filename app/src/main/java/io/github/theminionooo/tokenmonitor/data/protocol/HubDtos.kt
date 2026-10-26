@@ -200,7 +200,19 @@ internal data class HubSubscriptionDto(
     val startDate: String = "",
     val interval: String = "month",
     val autoRenew: Boolean = true,
+    val kind: String = "subscription",
+    val intervalCount: Int = 1,
+    val profileName: String = "",
+    val accountKey: String = "",
+    val accountEmail: String = "",
+    val topUps: List<HubTopUpDto> = emptyList(),
+    val nextRenewalOverride: String = "",
+    val endDate: String = "",
+    val note: String = "",
+    val amountReported: Boolean = true,
 )
+
+internal data class HubTopUpDto(val id: String, val date: String, val amountMinor: Long)
 
 internal data class HubSubscriptionsDto(
     val updatedAt: String = "",

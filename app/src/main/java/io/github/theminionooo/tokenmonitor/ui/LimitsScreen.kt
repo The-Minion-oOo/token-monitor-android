@@ -119,7 +119,7 @@ internal fun LazyListScope.limitItems(snapshot: HubSnapshot, displayOptions: Dis
         item { Text("SUBSCRIPTIONS", color = Ink, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 8.dp)) }
         val subscriptions = snapshot.subscriptions.entries
         val keys = uniqueKeys(subscriptions) { it.id }
-        itemsIndexed(subscriptions, key = { index, _ -> keys[index] }) { _, subscription -> SubscriptionRow(subscription) }
+        itemsIndexed(subscriptions, key = { index, _ -> keys[index] }) { _, subscription -> SubscriptionRow(subscription, displayOptions.showAccountEmails) }
     }
 }
 
@@ -195,16 +195,4 @@ internal fun LimitAccountRow(account: LimitAccount, displayOptions: DisplayOptio
         }
         HorizontalDivider(color = Line)
     }
-}
-
-@Composable
-internal fun SubscriptionRow(subscription: Subscription) {
-    DesktopDetailRow(
-        label = subscription.provider.providerLabel(),
-        subtitle = subscription.planName.ifBlank { "Subscription" },
-        value = formatSubscriptionAmount(subscription.amountMinor, subscription.currency),
-        detail = subscription.interval.displayName(),
-        color = Purple,
-        upstreamName = subscription.provider,
-    )
 }

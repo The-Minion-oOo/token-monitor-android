@@ -214,7 +214,18 @@ data class Subscription(
     val startDate: String,
     val interval: String,
     val autoRenew: Boolean,
+    val kind: String = "subscription",
+    val intervalCount: Int = 1,
+    val binding: SubscriptionBinding = SubscriptionBinding(),
+    val topUps: List<SubscriptionTopUp> = emptyList(),
+    val nextRenewalOverride: String = "",
+    val endDate: String = "",
+    val note: String = "",
+    val amountReported: Boolean = true,
 )
+
+data class SubscriptionBinding(val profileName: String = "", val accountKey: String = "", val accountEmail: String = "")
+data class SubscriptionTopUp(val id: String, val date: String, val amountMinor: Long)
 
 data class HubSubscriptions(
     val updatedAt: String = "",
