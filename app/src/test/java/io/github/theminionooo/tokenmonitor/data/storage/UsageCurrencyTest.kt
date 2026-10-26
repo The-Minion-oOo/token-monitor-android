@@ -7,6 +7,13 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class UsageCurrencyTest {
+    @org.junit.Test fun `failed automatic attempts back off but a day later can refresh`() {
+        val options = DisplayOptions(currencyCode = "INR", exchangeRateAttemptedAt = 1000)
+        org.junit.Assert.assertFalse(shouldRefreshRates(options, 2000))
+        org.junit.Assert.assertTrue(shouldRefreshRates(options, 86_401_000))
+        org.junit.Assert.assertFalse(shouldRefreshRates(options.copy(manualCurrencyRate = true), 86_401_000))
+        org.junit.Assert.assertFalse(shouldRefreshRates(DisplayOptions(), 86_401_000))
+    }
     @Test fun `conversion changes displayed usage only and native payment currency stays intact`() {
         val currency = usageCurrency(DisplayOptions(currencyCode = "INR", manualCurrencyRate = true, manualRates = mapOf("INR" to 83.0)))
         assertEquals("INR", currency.code)

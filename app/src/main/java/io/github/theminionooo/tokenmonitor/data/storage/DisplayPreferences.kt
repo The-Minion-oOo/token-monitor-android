@@ -50,6 +50,7 @@ internal data class DisplayOptions(
     val exchangeRates: Map<String, Double> = emptyMap(),
     val exchangeRateDate: String = "",
     val exchangeRateFetchedAt: Long = 0,
+    val exchangeRateAttemptedAt: Long = 0,
     val liveRateMode: LiveRateMode = LiveRateMode.Off,
     val showLiveRateModels: Boolean = false,
 ) {
@@ -135,6 +136,7 @@ internal class DisplayPreferences(context: Context) {
             putString("currency_rates", encodeRates(next.exchangeRates))
             putString("currency_rate_date", next.exchangeRateDate)
             putLong("currency_rate_fetched", next.exchangeRateFetchedAt)
+            putLong("currency_rate_attempted", next.exchangeRateAttemptedAt)
             putString("live_rate_mode", next.liveRateMode.name)
             putBoolean("live_rate_models", next.showLiveRateModels)
         }
@@ -171,6 +173,7 @@ internal class DisplayPreferences(context: Context) {
         exchangeRates = decodeRates(preferences.getString("currency_rates", null)),
         exchangeRateDate = preferences.getString("currency_rate_date", "").orEmpty(),
         exchangeRateFetchedAt = preferences.getLong("currency_rate_fetched", 0),
+        exchangeRateAttemptedAt = preferences.getLong("currency_rate_attempted", 0),
         liveRateMode = preferences.getString("live_rate_mode", null).enumOrDefault(LiveRateMode.Off),
         showLiveRateModels = preferences.getBoolean("live_rate_models", false),
     )

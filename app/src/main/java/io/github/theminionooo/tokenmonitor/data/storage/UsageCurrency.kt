@@ -7,6 +7,11 @@ import kotlinx.serialization.json.doubleOrNull
 
 internal data class UsageCurrency(val code: String = "USD", val rate: Double = 1.0)
 internal val usageCurrencies = listOf("USD", "CNY", "TWD", "HKD", "INR", "EUR", "JPY", "KRW", "BRL")
+internal fun shouldRefreshRates(options: DisplayOptions, now: Long): Boolean {
+    if (options.currencyCode == "USD" || options.manualCurrencyRate) return false
+    val last = maxOf(options.exchangeRateFetchedAt, options.exchangeRateAttemptedAt)
+    return last <= 0 || now < last || now - last >= 86_400_000
+}
 internal fun usageCurrency(options: DisplayOptions): UsageCurrency {
     if (options.currencyCode == "USD" || options.currencyCode !in usageCurrencies) return UsageCurrency()
     val rate = (if (options.manualCurrencyRate) options.manualRates else options.exchangeRates)[options.currencyCode]

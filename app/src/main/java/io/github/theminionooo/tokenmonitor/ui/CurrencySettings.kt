@@ -34,6 +34,7 @@ internal fun CurrencyRateEffect(options: DisplayOptions, onChange: (DisplayOptio
     var status by remember { mutableStateOf("") }
     val refresh: () -> Unit = {
         if (job?.isActive != true) job = scope.launch {
+            callback(current.copy(exchangeRateAttemptedAt = System.currentTimeMillis()))
             status = appText(R.string.ui_updating_exchange_rates_9d274, "Updating exchange rates…")
             try {
                 val rates = withContext(Dispatchers.IO) { client.fetch() }
@@ -47,15 +48,13 @@ internal fun CurrencyRateEffect(options: DisplayOptions, onChange: (DisplayOptio
     DisposableEffect(owner, client) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_PAUSE) { client.close(); job?.cancel() }
-            if (event == Lifecycle.Event.ON_RESUME && current.currencyCode != "USD" && !current.manualCurrencyRate &&
-                (current.exchangeRates.isEmpty() || System.currentTimeMillis() - current.exchangeRateFetchedAt >= 86_400_000)) refresh()
+            if (event == Lifecycle.Event.ON_RESUME && shouldRefreshRates(current, System.currentTimeMillis())) refresh()
         }
         owner?.lifecycle?.addObserver(observer)
         onDispose { owner?.lifecycle?.removeObserver(observer); client.close(); job?.cancel() }
     }
     LaunchedEffect(options.currencyCode, options.manualCurrencyRate) {
-        if (options.currencyCode != "USD" && !options.manualCurrencyRate &&
-            (options.exchangeRates.isEmpty() || System.currentTimeMillis() - options.exchangeRateFetchedAt >= 86_400_000)) refresh()
+        if (shouldRefreshRates(options, System.currentTimeMillis())) refresh()
     }
     content(refresh, status)
 }
