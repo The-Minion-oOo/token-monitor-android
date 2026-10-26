@@ -451,7 +451,7 @@
     <string name="ui_1_s_tokens_2_s_estimated_cost_for_3_s_65e59">%1$s টোকেন, %2$s %3$s এর জন্য আনুমানিক খরচ।</string>
     <string name="ui_1_s_2_s_share_3d76b">%1$s: %2$s%% শেয়ার।</string>
     <string name="ui_last_seven_days_1_s_recorded_tokens_2_s_estimated_co_12f4d">গত সাত দিন: %1$s রেকর্ড করা টোকেন, %2$s আনুমানিক খরচ।</string>
-    <string name="ui_1_s_2_s_3_s_left_4_s_313e9">%1$s %2$s: %3$s%% বাকি। %4$s.</string>
+    <string name="ui_1_s_2_s_3_s_left_4_s_313e9">%1$s %2$s: %3$s%% বাকি. %4$s.</string>
     <string name="ui_no_quota_windows_reported_8ba8c">কোনো কোটা উইন্ডো রিপোর্ট করা হয়নি।</string>
     <string name="ui_no_tool_or_model_breakdown_reported_660ff">কোন টুল বা মডেল ব্রেকডাউন রিপোর্ট করা হয়নি।</string>
     <string name="ui_tools_beb93">টুল।</string>
@@ -553,12 +553,12 @@
     <string name="label_private_network">ব্যক্তিগত নেটওয়ার্ক</string>
     <string name="label_tailscale">Tailscale</string>
     <string name="label_live">লাইভ</string>
-    <string name="label_connecting">সংযোগ করা হচ্ছে</string>
-    <string name="label_updating">আপডেট করা হচ্ছে</string>
-    <string name="label_stale">বাসি</string>
+    <string name="label_connecting">সংযোগ হচ্ছে</string>
+    <string name="label_updating">আপডেট হচ্ছে</string>
+    <string name="label_stale">পুরোনো</string>
     <string name="label_saved">সংরক্ষিত</string>
     <string name="label_offline">অফলাইন</string>
-    <string name="label_no_data">কোন ডেটা নেই</string>
+    <string name="label_no_data">তথ্য নেই</string>
     <string name="language_title">অ্যাপের ভাষা</string>
     <string name="language_system">ফোনের ভাষা অনুসরণ করুন</string>
     <string name="language_help">অ্যাপ এবং উইজেট লেবেলের জন্য একটি ভাষা বেছে নিন। টুলের নাম, রিপোর্ট করা শিরোনাম এবং ডেস্কটপ নোট Hub দ্বারা সরবরাহ করা হয়।</string>

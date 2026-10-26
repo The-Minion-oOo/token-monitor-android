@@ -232,7 +232,7 @@
     <string name="ui_1_s_subagents_74d31">%1$s サブエージェント</string>
     <string name="ui_1_s_activity_records_2cade">%1$s 活動記録</string>
     <string name="ui_idle_cc1eb">待機中</string>
-    <string name="ui_context_1_s_left_15dbf">コンテキスト %1$s%% 左</string>
+    <string name="ui_context_1_s_left_15dbf">コンテキスト 残り %1$s%%</string>
     <string name="ui_quota_at_a_glance_d7262">クォータの概要</string>
     <string name="ui_1_s_more_quota_notices_see_the_accounts_below_34cc3">%1$s 追加のクォータ通知。以下のアカウントを参照してください。</string>
     <string name="ui_no_quota_windows_were_reported_53886">クォータ ウィンドウは報告されませんでした。</string>
@@ -306,7 +306,7 @@
     <string name="ui_requests_1_s_17086">リクエスト: %1$s</string>
     <string name="ui_reported_estimated_spend_1_s_67ab8">報告された推定費用: %1$s</string>
     <string name="ui_1_s_2_s_3_s_awaiting_updated_quota_3e4e5">%1$s %2$s: %3$s;更新された割り当てを待っています</string>
-    <string name="ui_1_s_2_s_3_s_left_003dd">%1$s %2$s: %3$s%% 残り</string>
+    <string name="ui_1_s_2_s_3_s_left_003dd">%1$s %2$s: 残り %3$s%%</string>
     <string name="ui_dots_observed_only_92493">ドット · 観察のみ</string>
     <string name="ui_1_s_messages_d4b92">%1$s メッセージ</string>
     <string name="ui_cache_estimate_1_s_min_left_42d48">キャッシュ推定残り時間 ~%1$s 分</string>
@@ -451,7 +451,7 @@
     <string name="ui_1_s_tokens_2_s_estimated_cost_for_3_s_65e59">%1$s トークン、%2$s の %3$s の推定コスト。</string>
     <string name="ui_1_s_2_s_share_3d76b">%1$s: %2$s%% シェア。</string>
     <string name="ui_last_seven_days_1_s_recorded_tokens_2_s_estimated_co_12f4d">過去 7 日間: %1$s がトークンを記録し、%2$s がコストを見積もりました。</string>
-    <string name="ui_1_s_2_s_3_s_left_4_s_313e9">%1$s %2$s: %3$s%% 残っています。 %4$s。</string>
+    <string name="ui_1_s_2_s_3_s_left_4_s_313e9">%1$s %2$s: 残り %3$s%%. %4$s.</string>
     <string name="ui_no_quota_windows_reported_8ba8c">クォータ ウィンドウは報告されませんでした。</string>
     <string name="ui_no_tool_or_model_breakdown_reported_660ff">ツールやモデルの内訳は報告されていません。</string>
     <string name="ui_tools_beb93">ツール。</string>
@@ -497,7 +497,7 @@
     <string name="ui_last_updated_cb5f4">最終更新日</string>
     <string name="ui_less_than_a_minute_ago_abff0">1 分以内</string>
     <string name="ui_1_s_ago_1d3b1">%1$s 前</string>
-    <string name="ui_1_s_2_s_3_s_left_f1c0b">%1$s %2$s %3$s%% 残り</string>
+    <string name="ui_1_s_2_s_3_s_left_f1c0b">%1$s %2$s 残り %3$s%%</string>
     <string name="ui_widget_updates_for_one_hour_f38cd">ウィジェットの更新は 1 時間です</string>
     <string name="ui_refreshing_token_monitor_82285">爽やかな Token Monitor</string>
     <string name="ui_token_monitor_live_ef514">Token Monitor · ライブ</string>
@@ -552,11 +552,11 @@
     <string name="label_internet_https">インターネット (HTTPS)</string>
     <string name="label_private_network">プライベート ネットワーク</string>
     <string name="label_tailscale">Tailscale</string>
-    <string name="label_live">リアルタイム</string>
+    <string name="label_live">ライブ</string>
     <string name="label_connecting">接続中</string>
     <string name="label_updating">更新中</string>
-    <string name="label_stale">データが古い</string>
-    <string name="label_saved">保存しました</string>
+    <string name="label_stale">期限切れ</string>
+    <string name="label_saved">保存済み</string>
     <string name="label_offline">オフライン</string>
     <string name="label_no_data">データなし</string>
     <string name="language_title">アプリ言語</string>

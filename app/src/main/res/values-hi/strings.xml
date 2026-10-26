@@ -232,7 +232,7 @@
     <string name="ui_1_s_subagents_74d31">%1$s उपएजेंट</string>
     <string name="ui_1_s_activity_records_2cade">%1$s गतिविधि रिकॉर्ड</string>
     <string name="ui_idle_cc1eb">निष्क्रिय</string>
-    <string name="ui_context_1_s_left_15dbf">प्रसंग %1$s%% बायां</string>
+    <string name="ui_context_1_s_left_15dbf">संदर्भ %1$s%% शेष</string>
     <string name="ui_quota_at_a_glance_d7262">कोटा एक नज़र में</string>
     <string name="ui_1_s_more_quota_notices_see_the_accounts_below_34cc3">%1$s अधिक कोटा नोटिस; नीचे दिए गए खाते देखें.</string>
     <string name="ui_no_quota_windows_were_reported_53886">कोई कोटा विंडो रिपोर्ट नहीं की गई।</string>
@@ -306,7 +306,7 @@
     <string name="ui_requests_1_s_17086">अनुरोध: %1$s</string>
     <string name="ui_reported_estimated_spend_1_s_67ab8">रिपोर्ट किया गया अनुमानित व्यय: %1$s</string>
     <string name="ui_1_s_2_s_3_s_awaiting_updated_quota_3e4e5">%1$s %2$s: %3$s; अद्यतन कोटा की प्रतीक्षा है</string>
-    <string name="ui_1_s_2_s_3_s_left_003dd">%1$s %2$s: %3$s%% बाएँ</string>
+    <string name="ui_1_s_2_s_3_s_left_003dd">%1$s %2$s: %3$s%% शेष</string>
     <string name="ui_dots_observed_only_92493">बिंदु · केवल अवलोकन किया गया</string>
     <string name="ui_1_s_messages_d4b92">%1$s संदेश</string>
     <string name="ui_cache_estimate_1_s_min_left_42d48">कैश अनुमान ~%1$s मिनट शेष</string>
@@ -451,7 +451,7 @@
     <string name="ui_1_s_tokens_2_s_estimated_cost_for_3_s_65e59">%1$s टोकन, %3$s के लिए %2$s अनुमानित लागत।</string>
     <string name="ui_1_s_2_s_share_3d76b">%1$s: %2$s%% शेयर।</string>
     <string name="ui_last_seven_days_1_s_recorded_tokens_2_s_estimated_co_12f4d">पिछले सात दिन: %1$s रिकॉर्ड किए गए टोकन, %2$s अनुमानित लागत।</string>
-    <string name="ui_1_s_2_s_3_s_left_4_s_313e9">%1$s %2$s: %3$s%% बाएँ। %4$s.</string>
+    <string name="ui_1_s_2_s_3_s_left_4_s_313e9">%1$s %2$s: %3$s%% शेष. %4$s.</string>
     <string name="ui_no_quota_windows_reported_8ba8c">कोई कोटा विंडो रिपोर्ट नहीं की गई।</string>
     <string name="ui_no_tool_or_model_breakdown_reported_660ff">किसी उपकरण या मॉडल के ख़राब होने की सूचना नहीं दी गई।</string>
     <string name="ui_tools_beb93">उपकरण.</string>
@@ -497,7 +497,7 @@
     <string name="ui_last_updated_cb5f4">अंतिम अद्यतन</string>
     <string name="ui_less_than_a_minute_ago_abff0">एक मिनट से भी कम समय पहले</string>
     <string name="ui_1_s_ago_1d3b1">%1$s पहले</string>
-    <string name="ui_1_s_2_s_3_s_left_f1c0b">%1$s %2$s %3$s%% बाएँ</string>
+    <string name="ui_1_s_2_s_3_s_left_f1c0b">%1$s %2$s %3$s%% शेष</string>
     <string name="ui_widget_updates_for_one_hour_f38cd">एक घंटे के लिए विजेट अपडेट</string>
     <string name="ui_refreshing_token_monitor_82285">ताज़ा Token Monitor</string>
     <string name="ui_token_monitor_live_ef514">Token Monitor · लाइव</string>
@@ -553,12 +553,12 @@
     <string name="label_private_network">निजी नेटवर्क</string>
     <string name="label_tailscale">Tailscale</string>
     <string name="label_live">लाइव</string>
-    <string name="label_connecting">कनेक्ट हो रहा है</string>
-    <string name="label_updating">अद्यतन हो रहा है</string>
-    <string name="label_stale">बासी</string>
+    <string name="label_connecting">जुड़ रहा है</string>
+    <string name="label_updating">अपडेट हो रहा है</string>
+    <string name="label_stale">पुराना</string>
     <string name="label_saved">सहेजा गया</string>
     <string name="label_offline">ऑफ़लाइन</string>
-    <string name="label_no_data">कोई डेटा नहीं</string>
+    <string name="label_no_data">डेटा नहीं</string>
     <string name="language_title">ऐप भाषा</string>
     <string name="language_system">फ़ोन भाषा का पालन करें</string>
     <string name="language_help">ऐप और विजेट लेबल के लिए एक भाषा चुनें। टूल नाम, रिपोर्ट किए गए शीर्षक और डेस्कटॉप नोट्स Hub द्वारा आपूर्ति किए गए अनुसार ही रहेंगे।</string>

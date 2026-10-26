@@ -308,7 +308,7 @@
     <string name="ui_requests_1_s_17086">கோரிக்கைகள்: %1$s</string>
     <string name="ui_reported_estimated_spend_1_s_67ab8">மதிப்பிடப்பட்ட செலவு: %1$s</string>
     <string name="ui_1_s_2_s_3_s_awaiting_updated_quota_3e4e5">%1$s %2$s: %3$s; புதுப்பிக்கப்பட்ட ஒதுக்கீட்டிற்காக காத்திருக்கிறது</string>
-    <string name="ui_1_s_2_s_3_s_left_003dd">%1$s %2$s: %3$s%% இடது</string>
+    <string name="ui_1_s_2_s_3_s_left_003dd">%1$s %2$s: %3$s%% மீதி</string>
     <string name="ui_dots_observed_only_92493">புள்ளிகள் · அனுசரிக்கப்பட்டது மட்டுமே</string>
     <string name="ui_1_s_messages_d4b92">%1$s செய்திகள்</string>
     <string name="ui_cache_estimate_1_s_min_left_42d48">Cache மதிப்பீடு ~%1$s நிமிடம் மீதமுள்ளது</string>
@@ -453,7 +453,7 @@
     <string name="ui_1_s_tokens_2_s_estimated_cost_for_3_s_65e59">%1$s டோக்கன்கள், %3$s க்கான %2$s மதிப்பிடப்பட்ட விலை.</string>
     <string name="ui_1_s_2_s_share_3d76b">%1$s: %2$s%% பங்கு.</string>
     <string name="ui_last_seven_days_1_s_recorded_tokens_2_s_estimated_co_12f4d">கடந்த ஏழு நாட்கள்: %1$s பதிவு செய்யப்பட்ட டோக்கன்கள், %2$s மதிப்பிடப்பட்ட விலை.</string>
-    <string name="ui_1_s_2_s_3_s_left_4_s_313e9">%1$s %2$s: %3$s%% விட்டு. %4$s.</string>
+    <string name="ui_1_s_2_s_3_s_left_4_s_313e9">%1$s %2$s: %3$s%% மீதி. %4$s.</string>
     <string name="ui_no_quota_windows_reported_8ba8c">ஒதுக்கீடு சாளரங்கள் எதுவும் தெரிவிக்கப்படவில்லை.</string>
     <string name="ui_no_tool_or_model_breakdown_reported_660ff">கருவி அல்லது மாதிரி முறிவு எதுவும் தெரிவிக்கப்படவில்லை.</string>
     <string name="ui_tools_beb93">கருவிகள்.</string>
@@ -499,7 +499,7 @@
     <string name="ui_last_updated_cb5f4">கடைசியாக புதுப்பிக்கப்பட்டது</string>
     <string name="ui_less_than_a_minute_ago_abff0">ஒரு நிமிடத்திற்கு முன்பு</string>
     <string name="ui_1_s_ago_1d3b1">%1$s முன்பு</string>
-    <string name="ui_1_s_2_s_3_s_left_f1c0b">%1$s %2$s %3$s%% உள்ளது</string>
+    <string name="ui_1_s_2_s_3_s_left_f1c0b">%1$s %2$s %3$s%% மீதி</string>
     <string name="ui_widget_updates_for_one_hour_f38cd">ஒரு மணிநேரத்திற்கு விட்ஜெட் புதுப்பிப்புகள்</string>
     <string name="ui_refreshing_token_monitor_82285">புத்துணர்ச்சியூட்டும் Token Monitor</string>
     <string name="ui_token_monitor_live_ef514">Token Monitor · நேரலை</string>
@@ -558,8 +558,8 @@
     <string name="label_connecting">இணைக்கிறது</string>
     <string name="label_updating">புதுப்பிக்கிறது</string>
     <string name="label_stale">பழையது</string>
-    <string name="label_saved">சேமிக்கப்பட்டது</string>
-    <string name="label_offline">ஆஃப்லைனில்</string>
+    <string name="label_saved">சேமித்தது</string>
+    <string name="label_offline">ஆஃப்லைன்</string>
     <string name="label_no_data">தரவு இல்லை</string>
     <string name="language_title">பயன்பாட்டு மொழி</string>
     <string name="language_system">தொலைபேசி மொழியைப் பின்பற்றவும்</string>
