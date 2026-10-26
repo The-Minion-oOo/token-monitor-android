@@ -107,6 +107,9 @@ internal fun android.content.Context.findActivity(): Activity? = when (this) {
     else -> null
 }
 
+internal val LocalDisplayOptions = compositionLocalOf { DisplayOptions() }
+internal val LocalDisplayChange = compositionLocalOf<(DisplayOptions) -> Unit> { {} }
+
 @Composable
 internal fun TokenMonitorApp(viewModel: DashboardViewModel) {
     val repositoryState by viewModel.hubState.collectAsState()
@@ -146,6 +149,8 @@ internal fun TokenMonitorApp(viewModel: DashboardViewModel) {
     }
     MaterialTheme(colorScheme = remember(palette) { tokenMonitorColors(palette) }, typography = typography) {
         CompositionLocalProvider(
+            LocalDisplayOptions provides displayOptions,
+            LocalDisplayChange provides viewModel::setDisplayOptions,
             LocalPalette provides palette,
             LocalColorfulToolMarks provides displayOptions.colorfulToolMarks,
             LocalToolIcons provides displayOptions.showToolIcons,

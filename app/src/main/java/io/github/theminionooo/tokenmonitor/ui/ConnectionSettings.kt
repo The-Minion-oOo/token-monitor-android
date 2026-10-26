@@ -357,6 +357,7 @@ internal fun ConnectionScreen(
                     Text("Long-press your home screen, choose Widgets, then Token Monitor.", color = Ink, style = MaterialTheme.typography.bodySmall)
                 }
             }
+            DisplayItemSettings(state.snapshot, displayOptions, LocalDisplayChange.current)
             SettingsGroup("Compatibility", summary = "Desktop v${BuildConfig.UPSTREAM_VERSION}") {
                 StatusLine("Android app", BuildConfig.VERSION_NAME)
                 StatusLine("Desktop baseline", "Token Monitor v${BuildConfig.UPSTREAM_VERSION}")
@@ -518,7 +519,7 @@ private fun WelcomeStep(number: Int, title: String, detail: String) {
 }
 
 @Composable
-private fun SettingsGroup(
+internal fun SettingsGroup(
     title: String,
     summary: String? = null,
     collapsible: Boolean = true,

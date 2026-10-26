@@ -181,6 +181,7 @@ internal fun DashboardContent(
         when (destination) {
             DashboardDestination.Home -> homeItems(snapshot, usage, period, displayOptions, onChoose)
             DashboardDestination.Tools -> breakdownItems(
+                displayOptions = displayOptions,
                 tokens = usage.clients,
                 costs = usage.clientCosts,
                 unpriced = usage.clientUnpricedTokens,

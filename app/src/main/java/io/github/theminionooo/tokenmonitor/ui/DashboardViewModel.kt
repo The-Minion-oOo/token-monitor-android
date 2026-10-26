@@ -133,6 +133,10 @@ internal class DashboardViewModel(application: Application) : AndroidViewModel(a
     }
 
     fun setColorfulToolMarks(enabled: Boolean) = displayPreferences.setColorfulToolMarks(enabled)
+    fun setDisplayOptions(options: io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions) {
+        displayPreferences.setOptions(options)
+        viewModelScope.launch(kotlinx.coroutines.Dispatchers.IO) { WidgetUpdateCoordinator.refresh(getApplication()) }
+    }
     fun setCompactTokenTotal(enabled: Boolean) = displayPreferences.setCompactTokenTotal(enabled)
     fun setReduceMotion(mode: ReduceMotionMode) = displayPreferences.setReduceMotion(mode)
     fun setTokenNumberAnimation(animation: TokenNumberAnimation) = displayPreferences.setTokenNumberAnimation(animation)

@@ -115,12 +115,15 @@ internal fun LazyListScope.breakdownItems(
     modelRows: Boolean = false,
     onToolSelected: ((String) -> Unit)? = null,
     unpriced: Map<String, Long> = emptyMap(),
+    displayOptions: DisplayOptions = DisplayOptions(),
 ) {
     if (tokens.isEmpty()) {
         item { MutedCopy(emptyMessage, modifier = Modifier.padding(vertical = 12.dp)) }
     } else {
         val maximum = tokens.values.maxOrNull()?.coerceAtLeast(1L) ?: 1L
-        items(tokens.entries.sortedByDescending { (name, count) -> if (rankingMetric == RankingMetric.Cost) costs[name] ?: 0.0 else count.toDouble() }, key = { it.key }) { (name, count) ->
+        val ordered = if (modelRows) tokens.entries.sortedByDescending { (name, count) -> if (rankingMetric == RankingMetric.Cost) costs[name] ?: 0.0 else count.toDouble() }
+            else io.github.theminionooo.tokenmonitor.data.storage.orderedTools(tokens, costs, displayOptions.copy(rankingMetric = rankingMetric))
+        items(ordered, key = { it.key }) { (name, count) ->
             DesktopUsageRow(
                 name = name,
                 totalTokens = count,

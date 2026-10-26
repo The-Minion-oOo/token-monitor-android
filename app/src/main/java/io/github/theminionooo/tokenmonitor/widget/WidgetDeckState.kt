@@ -56,7 +56,7 @@ internal fun loadWidgetDeck(context: Context, widgetId: Int, source: WidgetSnaps
     val systemDark = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
     val theme = resolveInterfaceTheme(display.themeCode, display.followSystemTheme, systemDark)
     return WidgetDeckRenderState(
-        data = prepareWidgetDeck(source.snapshot, source.session),
+        data = prepareWidgetDeck(source.snapshot, source.session, displayOptions = display),
         theme = theme,
         size = widgetDeckSize(context, widgetId),
     )

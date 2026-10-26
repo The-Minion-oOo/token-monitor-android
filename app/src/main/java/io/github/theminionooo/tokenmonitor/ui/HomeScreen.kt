@@ -165,7 +165,7 @@ internal fun DesktopModule(
 
 @Composable
 internal fun HomeLimits(accounts: List<LimitAccount>, displayOptions: DisplayOptions) {
-    val visible = prioritizeAvailableLimits(accounts
+    val visible = prioritizeAvailableLimits(io.github.theminionooo.tokenmonitor.data.storage.visibleLimitAccounts(accounts, displayOptions)
         .filter { account -> account.windows.any { it.remainingPercent != null || it.usedPercent != null || it.remaining != null } })
         .take(3)
     if (visible.isEmpty()) {
@@ -229,7 +229,10 @@ internal fun HomeBreakdown(
     }
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         val total = tokens.values.sum().coerceAtLeast(1L)
-        tokens.entries.sortedByDescending { (name, tokens) -> if (rankingMetric == RankingMetric.Cost) costs[name] ?: 0.0 else tokens.toDouble() }.take(count.coerceIn(1, 50)).forEach { (name, count) ->
+        val display = LocalDisplayOptions.current
+        val entries = if (modelRows) tokens.entries.sortedByDescending { (name, value) -> if (rankingMetric == RankingMetric.Cost) costs[name] ?: 0.0 else value.toDouble() }
+            else io.github.theminionooo.tokenmonitor.data.storage.orderedTools(tokens, costs, display.copy(rankingMetric = rankingMetric))
+        entries.take(count.coerceIn(1, 50)).forEach { (name, count) ->
             HomeListRow(
                 name = name,
                 primary = "${formatCompactTokens(count)}  ${formatPercent(count.toDouble() / total * 100.0)}",

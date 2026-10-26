@@ -38,6 +38,11 @@ internal data class DisplayOptions(
     val visibleViews: List<String> = defaultViews,
     val visibleHomeModules: List<String> = defaultHomeModules,
     val homeListCounts: Map<String, Int> = defaultHomeListCounts,
+    val hiddenTools: Set<String> = emptySet(),
+    val pinnedTools: List<String> = emptyList(),
+    val toolOrder: List<String> = emptyList(),
+    val hiddenProviders: Set<String> = emptySet(),
+    val hiddenLimitItems: Set<String> = emptySet(),
 ) {
     fun homeListCount(module: String): Int =
         (homeListCounts[module] ?: defaultHomeListCounts[module] ?: 5).coerceIn(1, 50)
@@ -55,6 +60,8 @@ internal class DisplayPreferences(context: Context) {
     private val preferences = context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
     private val _options = MutableStateFlow(load())
     val options: StateFlow<DisplayOptions> = _options.asStateFlow()
+
+    fun setOptions(options: DisplayOptions) = update { options }
 
     fun setColorfulToolMarks(enabled: Boolean) = update { copy(colorfulToolMarks = enabled) }
     fun setCompactTokenTotal(enabled: Boolean) = update { copy(compactTokenTotal = enabled) }
@@ -108,6 +115,11 @@ internal class DisplayPreferences(context: Context) {
             putString(visibleViewsKey, next.visibleViews.joinToString(","))
             putString(visibleHomeModulesKey, next.visibleHomeModules.joinToString(","))
             DisplayOptions.defaultHomeListCounts.keys.forEach { module -> putInt("home_count_$module", next.homeListCount(module)) }
+            putString("hidden_tools", encodeDisplayList(next.hiddenTools))
+            putString("pinned_tools", encodeDisplayList(next.pinnedTools))
+            putString("tool_order", encodeDisplayList(next.toolOrder))
+            putString("hidden_providers", encodeDisplayList(next.hiddenProviders))
+            putString("hidden_limit_items", encodeDisplayList(next.hiddenLimitItems))
         }
         _options.value = next
     }
@@ -131,6 +143,11 @@ internal class DisplayPreferences(context: Context) {
         visibleViews = preferences.getString(visibleViewsKey, null).orderedValues(DisplayOptions.defaultViews),
         visibleHomeModules = preferences.getString(visibleHomeModulesKey, null).orderedValues(DisplayOptions.defaultHomeModules),
         homeListCounts = DisplayOptions.defaultHomeListCounts.mapValues { (module, fallback) -> preferences.getInt("home_count_$module", fallback).coerceIn(1, 50) },
+        hiddenTools = decodeDisplayList(preferences.getString("hidden_tools", null)).toSet(),
+        pinnedTools = decodeDisplayList(preferences.getString("pinned_tools", null)),
+        toolOrder = decodeDisplayList(preferences.getString("tool_order", null)),
+        hiddenProviders = decodeDisplayList(preferences.getString("hidden_providers", null)).toSet(),
+        hiddenLimitItems = decodeDisplayList(preferences.getString("hidden_limit_items", null)).toSet(),
     )
 
     private companion object {

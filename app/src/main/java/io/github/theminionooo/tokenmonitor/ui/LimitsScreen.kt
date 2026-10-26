@@ -106,10 +106,11 @@ import kotlin.math.roundToLong
  * Limits and Subscriptions lists.
  */
 internal fun LazyListScope.limitItems(snapshot: HubSnapshot, displayOptions: DisplayOptions) {
-    item { LimitAttentionPanel(snapshot) }
+    val visibleAccounts = io.github.theminionooo.tokenmonitor.data.storage.visibleLimitAccounts(snapshot.stats.limits.providers, displayOptions)
+    item { LimitAttentionPanel(snapshot.copy(stats = snapshot.stats.copy(limits = snapshot.stats.limits.copy(providers = visibleAccounts)))) }
     if (snapshot.stats.limits.providers.isEmpty()) item { MutedCopy("No account limits are available from this Hub yet.", modifier = Modifier.padding(vertical = 12.dp)) }
     else {
-        val providers = prioritizeAvailableLimits(snapshot.stats.limits.providers)
+        val providers = prioritizeAvailableLimits(visibleAccounts)
         val keys = uniqueKeys(providers, ::limitAccountIdentity)
         itemsIndexed(providers, key = { index, _ -> keys[index] }) { _, account ->
             LimitAccountRow(account, displayOptions)
@@ -185,8 +186,8 @@ internal fun LimitAccountRow(account: LimitAccount, displayOptions: DisplayOptio
                 }
             }
         }
-        ProviderDetailRows(account)
-        account.spend?.let { spend ->
+        if (io.github.theminionooo.tokenmonitor.data.storage.providerDetailKey(account.provider, "details") !in displayOptions.hiddenLimitItems) ProviderDetailRows(account)
+        account.spend?.takeIf { io.github.theminionooo.tokenmonitor.data.storage.providerDetailKey(account.provider, "spend") !in displayOptions.hiddenLimitItems }?.let { spend ->
             limitSpendRows(spend).forEach { (label, amount) ->
                 Text("$label ${formatWindowAmount(amount, spend.currency)}", color = Muted, style = MaterialTheme.typography.labelSmall)
             }

@@ -66,6 +66,7 @@ internal fun prepareWidgetDeck(
     now: Long = System.currentTimeMillis(),
     zoneId: ZoneId = ZoneId.systemDefault(),
     locale: Locale = Locale.getDefault(),
+    displayOptions: io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions = io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions(),
 ): WidgetDeckData {
     val liveEnabled = session.enabled && session.expiresAt > now
     val age = snapshot?.capturedAt?.takeIf { it > 0 }?.let { (now - it).coerceAtLeast(0) }
@@ -101,14 +102,15 @@ internal fun prepareWidgetDeck(
     }
     val today = history.lastOrNull { it.label.take(10) == date.toString() }
     val period = snapshot?.today
-    fun rows(tokens: Map<String, Long>, costs: Map<String, Double>, unpriced: Map<String, Long>, limit: Int): List<WidgetDeckUsageRow> {
+    fun rows(tokens: Map<String, Long>, costs: Map<String, Double>, unpriced: Map<String, Long>, limit: Int, tools: Boolean = false): List<WidgetDeckUsageRow> {
         val total = tokens.values.sum().toDouble()
         if (total <= 0) return emptyList()
-        return tokens.entries.sortedByDescending { it.value }.take(limit).map { (name, value) ->
+        val entries = if (tools) io.github.theminionooo.tokenmonitor.data.storage.orderedTools(tokens, costs, displayOptions) else tokens.entries.sortedByDescending { it.value }
+        return entries.take(limit).map { (name, value) ->
             WidgetDeckUsageRow(name, value, costs[name] ?: 0.0, value / total, unpriced[name] ?: 0)
         }
     }
-    val limitsByProvider = snapshot?.stats?.limits?.providers.orEmpty().map { account ->
+    val limitsByProvider = io.github.theminionooo.tokenmonitor.data.storage.visibleLimitAccounts(snapshot?.stats?.limits?.providers.orEmpty(), displayOptions).map { account ->
         account.provider to account.windows.mapNotNull { window ->
             remainingPercent(window)?.let { remaining ->
                 WidgetDeckLimitRow(
@@ -135,7 +137,7 @@ internal fun prepareWidgetDeck(
         date = date,
         history = history,
         stats = widgetStats(history, date).take(3),
-        tools = period?.let { rows(it.clients, it.clientCosts, it.clientUnpricedTokens, 3) }.orEmpty(),
+        tools = period?.let { rows(it.clients, it.clientCosts, it.clientUnpricedTokens, 3, tools = true) }.orEmpty(),
         models = period?.let { rows(it.models, it.modelCosts, it.modelUnpricedTokens, 4) }.orEmpty(),
         limits = limits,
         limitGroups = limitGroups,
