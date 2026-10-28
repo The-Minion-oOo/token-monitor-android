@@ -10,15 +10,16 @@ Read [Architecture](ARCHITECTURE.md) before changing runtime behavior and
 | JDK | 17 or newer |
 | Android SDK | Platform 37 (`37.0` in the SDK package feed) and current build tools |
 | Gradle | Wrapper included in the repository |
-| Node.js | 22 or newer for fixture, contract, and release tools |
+| Node.js | 22.19.0 or newer for fixture, contract, and release tools |
 | Emulator | API 36 Google APIs image recommended |
 
 `local.properties` must point to the Android SDK and is ignored by Git.
 
 Install the Node tooling dependencies once with `npm ci --prefix tools`. The
 image tools use Sharp and font tooling; the released-Hub contract harness uses
-Undici 7.30.0, matching the reviewed upstream lockfile, to load the New API collector.
-Its network responses are stubbed; it never contacts a vendor account.
+Undici 8.12.3 to load the New API collector from the pinned desktop source.
+The Node and Worker contract checks verify that source with the updated tooling
+dependency. Its network responses are stubbed; it never contacts a vendor account.
 
 ## Common commands
 
