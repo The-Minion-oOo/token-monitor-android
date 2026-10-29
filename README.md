@@ -16,7 +16,7 @@
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/github/actions/workflow/status/The-Minion-oOo/token-monitor-android/android.yml?branch=main&style=flat-square&logo=githubactions&logoColor=10221c&label=Android%20checks"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.80.0" src="https://img.shields.io/badge/Desktop-v0.80.0-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.81.0" src="https://img.shields.io/badge/Desktop-v0.81.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/releases"><img alt="Total GitHub release asset downloads" src="https://img.shields.io/github/downloads/The-Minion-oOo/token-monitor-android/total?label=Downloads&style=flat-square&color=73bdf5"></a>
@@ -28,10 +28,10 @@
 
 ## The desktop dashboard, made mobile
 
-**New in v0.80.0 r1:** Muse Code quotas, Ollama included/purchased credits and
-multiple Claude Web accounts. The twelve languages, detailed payments, reset
-credits, display controls, currencies, optional live rates and diagnostics from
-v0.79.0 r2 are included. [Feature coverage](docs/DESKTOP_PARITY.md).
+**New in v0.81.0 r1:** smaller live updates through the released v4 Hub stream,
+session reasoning effort and personal Volcengine quotas. Muse and Ollama
+accounts, the twelve languages, payments, currencies, display controls and
+diagnostics remain available. [Feature coverage](docs/DESKTOP_PARITY.md).
 
 **Read it your way:** English · 简体中文 · 繁體中文 · 한국어 · 日本語 · Português
 (Brasil) · Español · हिन्दी · ગુજરાતી · বাংলা · தமிழ் · తెలుగు.
@@ -67,7 +67,7 @@ supplied by the Hub.
 - **Share less when troubleshooting:** preview an allowlisted diagnostic report
   before copying or sharing it. Addresses, secrets and conversation text stay out.
 
-These features are available in v0.80.0 r1. Pairing still uses the same read-only
+These features are available in v0.81.0 r1. Pairing still uses the same read-only
 Hub API; the dashboard update frequency and widget layout stay unchanged.
 
 <table>
@@ -219,12 +219,13 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 | | |
 | --- | --- |
-| Current release | [Android v0.80.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.80.0-r1) |
-| Desktop baseline | [Token Monitor v0.80.0](https://github.com/Javis603/token-monitor/releases/tag/v0.80.0) |
+| Current release | [Android v0.81.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.81.0-r1) |
+| Desktop baseline | [Token Monitor v0.81.0](https://github.com/Javis603/token-monitor/releases/tag/v0.81.0) |
 | Minimum Android version | Android 8.0 |
 
-I checked Muse Code quotas, Ollama credits and multiple Claude accounts against
-desktop v0.80.0. Optional HTTPS, background widget refresh and the Tailscale
+I checked ordered v4 streams, session reasoning effort and personal Volcengine
+quotas against the released desktop v0.81.0 Node Hub and Worker.
+Optional HTTPS, background widget refresh and the Tailscale
 Wi-Fi-only fix are retained. I haven't phone-tested this
 release; earlier phone and battery observations apply only to the builds named
 in [Validation](docs/VALIDATION.md).

@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.81.0 r1 (candidate)
+## v0.81.0 r1 — 2026-10-29
 
 - Updated desktop compatibility to v0.81.0.
 - Added ordered v4 live updates with revision checks, freshness clocks and complete-snapshot recovery.
