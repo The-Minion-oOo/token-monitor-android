@@ -12,6 +12,7 @@ internal class StatsStreamReceiver {
 
     fun receive(event: HubStreamEvent): HubStreamEvent? {
         if (event.type !in setOf("snapshot", "stats", "message", "delta", "freshness")) return null
+        requireStreamJsonLimits(event.data)
         val envelope = json.parseToJsonElement(event.data) as? JsonObject ?: invalid()
         val next: JsonObject
         val nextRevision: Long?
@@ -20,7 +21,8 @@ internal class StatsStreamReceiver {
             "snapshot", "stats", "message" -> {
                 next = (envelope["stats"] ?: envelope) as? JsonObject ?: invalid()
                 nextRevision = envelope["revision"]?.let { revisionNumber(it) ?: invalid() }
-                nextChars = next.toString().length
+                // Received envelope/whitespace makes this a conservative size budget, without serializing again.
+                nextChars = event.data.length
             }
             "delta" -> {
                 nextRevision = requireNext(envelope)
@@ -43,7 +45,7 @@ internal class StatsStreamReceiver {
         baselineChars = nextChars
         revision = nextRevision
         // Immutable trees can wait in the coalescer. Serialize/decode only the latest one.
-        return HubStreamEvent(if (event.type == "snapshot") "snapshot" else "stats", "", next)
+        return HubStreamEvent(if (event.type == "snapshot") "snapshot" else "stats", "", next, sourceType = event.type)
     }
 
     private fun requireNext(envelope: JsonObject): Long {
@@ -62,10 +64,10 @@ internal class StatsStreamReceiver {
 
 /** RFC 6902 add/remove/replace, applied atomically to immutable JSON containers. */
 internal fun applyStatsPatch(stats: JsonObject, patch: JsonArray): JsonObject {
-    return patchStats(stats, patch, stats.toString().length).first
+    return patchStats(stats, patch, encodeStreamStats(stats).length).first
 }
 
-private const val MAX_BASELINE_CHARS = 2 * 1024 * 1024
+private const val MAX_BASELINE_CHARS = MAX_STREAM_EVENT_CHARS
 
 /** Freshness reuses untouched nodes; count only changed leaves without serializing the baseline. */
 private fun jsonSizeChange(before: JsonElement, after: JsonElement): Int {
@@ -96,6 +98,7 @@ private fun patchStats(stats: JsonObject, patch: JsonArray, initialChars: Int): 
         if (op !in setOf("add", "remove", "replace") || op != "remove" && "value" !in entry) invalid()
         if (path.isEmpty()) {
             if (op == "remove") invalid()
+            requireStreamTreeDepth(entry.getValue("value"))
             result = entry.getValue("value")
             chars = result.toString().length
             if (chars > MAX_BASELINE_CHARS) invalid()
@@ -103,7 +106,8 @@ private fun patchStats(stats: JsonObject, patch: JsonArray, initialChars: Int): 
         }
         if (!path.startsWith('/') || Regex("~(?![01])").containsMatchIn(path)) invalid()
         val keys = path.substring(1).split('/').map { it.replace("~1", "/").replace("~0", "~") }
-        if (keys.size > 128) invalid()
+        if (keys.size > MAX_STREAM_JSON_DEPTH) invalid()
+        if (op != "remove") requireStreamTreeDepth(entry.getValue("value"), keys.size)
         fun edit(parent: JsonElement, depth: Int): JsonElement {
             val key = keys[depth]
             val leaf = depth == keys.lastIndex

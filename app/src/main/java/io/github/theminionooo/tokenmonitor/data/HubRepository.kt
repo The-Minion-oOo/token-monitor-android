@@ -12,11 +12,13 @@ import io.github.theminionooo.tokenmonitor.data.network.hubTlsMessage
 import io.github.theminionooo.tokenmonitor.data.network.HubRouteGuard
 import io.github.theminionooo.tokenmonitor.data.network.HubStreamEvent
 import io.github.theminionooo.tokenmonitor.data.network.PhoneNetworks
+import io.github.theminionooo.tokenmonitor.data.network.StreamConnectionHealth
 import io.github.theminionooo.tokenmonitor.data.network.LocalNetworkAccess
 import io.github.theminionooo.tokenmonitor.data.network.prepareHomeAddressRepair
 import io.github.theminionooo.tokenmonitor.data.network.WireHubSnapshot
 import io.github.theminionooo.tokenmonitor.data.protocol.HubProtocolParser
 import io.github.theminionooo.tokenmonitor.data.protocol.HubStreamProtocol
+import io.github.theminionooo.tokenmonitor.data.protocol.encodeStreamStats
 import io.github.theminionooo.tokenmonitor.data.storage.SecureConnectionStore
 import io.github.theminionooo.tokenmonitor.data.storage.SerialDiskQueue
 import io.github.theminionooo.tokenmonitor.data.storage.SnapshotCache
@@ -431,6 +433,7 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
             try {
                 while (desiredWorkMode == mode && generation == token) {
                     var connected = false
+                    var streamHealth: StreamConnectionHealth? = null
                     try {
                         _state.update { it.copy(refreshing = true, message = null, secretRejected = false) }
                         val (url, wire) = withContext(Dispatchers.IO) {
@@ -448,12 +451,14 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
                                 withContext(Dispatchers.IO) {
                                     api.streamStats(saved.copy(baseUrl = url),
                                         onOpen = { withContext(Dispatchers.Main.immediate) {
+                                            streamHealth = StreamConnectionHealth(SystemClock.elapsedRealtime())
                                             if (generation == token) _state.update { it.copy(streamActive = true, widgetLiveActive = false) }
                                         } },
                                         onEvent = { event -> withContext(Dispatchers.Main.immediate) {
                                             if (generation == token) {
+                                                streamHealth?.observe(event.sourceType)
                                                 val ready = streamUpdates.offer(event, SystemClock.elapsedRealtime())
-                                                if (applyStreamEvents(ready, token)) attempt = 0
+                                                applyStreamEvents(ready, token)
                                                 scheduleStreamFlush(saved, api, token)
                                                 refreshSubscriptions(saved, api, token)
                                             }
@@ -461,6 +466,7 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
                                     )
                                 }
                             } finally {
+                                if (streamHealth?.healthy(SystemClock.elapsedRealtime()) == true) attempt = 0
                                 // A reconnect starts with a complete snapshot; an update held from this stream is stale.
                                 cancelStreamFlush()
                             }
@@ -579,7 +585,9 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
     private suspend fun applyStreamEvents(events: List<HubStreamEvent>, token: Long): Boolean = streamApplyLock.withLock {
         var applied = false
         events.forEach { event ->
-            val raw = withContext(Dispatchers.IO) { event.completeStats?.toString() ?: event.data }
+            val raw = withContext(Dispatchers.IO) {
+                event.completeStats?.let(::encodeStreamStats) ?: event.data
+            }
             if (applyStatsUpdate(raw, token, streamEventType = event.type)) applied = true
         }
         applied

@@ -37,6 +37,7 @@ internal data class HubStreamEvent(
     val type: String,
     val data: String,
     val completeStats: JsonObject? = null,
+    val sourceType: String = type,
 )
 
 internal open class HubApiException(
@@ -213,7 +214,7 @@ internal class HubApiClient(
                 eventType = line.removePrefix("event:").trim().ifBlank { "message" }
             } else if (line.startsWith("data:")) {
                 val payload = line.removePrefix("data:").trimStart()
-                if (data.length + payload.length > maxSseEventChars) {
+                if (data.length + payload.length + (if (data.isEmpty()) 0 else 1) > maxSseEventChars) {
                     throw HubApiException(200, "The Hub stream event is too large for this phone dashboard.")
                 }
                 if (data.isNotEmpty()) data.append('\n')
@@ -267,7 +268,7 @@ internal class HubApiClient(
     private companion object {
         const val maxResponseBytes = 2 * 1024 * 1024
         // A stats response accepted by GET must also fit inside the stream's JSON envelope.
-        const val maxSseEventChars = maxResponseBytes + 16 * 1024
+        const val maxSseEventChars = io.github.theminionooo.tokenmonitor.data.protocol.MAX_STREAM_EVENT_CHARS
         const val maxSseLineChars = maxSseEventChars + 6
     }
 }
