@@ -1,0 +1,118 @@
+{
+  "limits": {
+    "updatedAt": "2026-10-29T17:19:05.412Z",
+    "providers": [
+      {
+        "provider": "codex",
+        "accountKey": "synthetic-codex-0",
+        "accountLabel": "Pro 100",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "plan-0@example.com",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "rpc",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-29T17:19:03.216Z",
+        "windows": [
+          {
+            "kind": "session",
+            "limitId": "codex",
+            "label": "",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 10,
+            "remainingPercent": 90,
+            "resetsAt": null,
+            "windowMinutes": 300,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "v081-codex-desktop",
+        "stale": false
+      },
+      {
+        "provider": "codex",
+        "accountKey": "synthetic-codex-1",
+        "accountLabel": "Pro 200",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "plan-1@example.com",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "rpc",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-29T17:19:03.216Z",
+        "windows": [
+          {
+            "kind": "session",
+            "limitId": "codex",
+            "label": "",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 10,
+            "remainingPercent": 90,
+            "resetsAt": null,
+            "windowMinutes": 300,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "v081-codex-desktop",
+        "stale": false
+      },
+      {
+        "provider": "codex",
+        "accountKey": "synthetic-codex-2",
+        "accountLabel": "Pro 500",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "plan-2@example.com",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "rpc",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-29T17:19:03.216Z",
+        "windows": [
+          {
+            "kind": "session",
+            "limitId": "codex",
+            "label": "",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 10,
+            "remainingPercent": 90,
+            "resetsAt": null,
+            "windowMinutes": 300,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "v081-codex-desktop",
+        "stale": false
+      }
+    ]
+  }
+}

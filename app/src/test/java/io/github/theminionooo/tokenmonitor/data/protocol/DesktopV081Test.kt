@@ -132,4 +132,12 @@ class DesktopV081Test {
             assertTrue(rows("volc-unavailable").any { it.status == "unavailable" })
         }
     }
+
+    @Test fun `Codex price tier labels use the released legacy plan field`() {
+        for (prefix in listOf("", "worker/")) {
+            val accounts = HubProtocolParser.decodeStats(fixture("${prefix}codex-pro-plans")).limits.providers
+            assertEquals(listOf("Pro 100", "Pro 200", "Pro 500"), accounts.map { it.plan })
+            assertEquals(3, accounts.map { it.accountKey }.distinct().size)
+        }
+    }
 }

@@ -5,7 +5,7 @@
       "type": "stats",
       "reason": "snapshot",
       "stats": {
-        "updatedAt": "2026-10-29T17:08:28.546Z",
+        "updatedAt": "2026-10-29T17:19:04.558Z",
         "periods": {
           "today": {
             "capabilities": {
@@ -55,7 +55,7 @@
                 "timedOutputTokens": 0,
                 "timedDurationMs": 0,
                 "startedAt": "",
-                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "lastUsedAt": "2026-10-29T17:18:54.552Z",
                 "contextTokens": 0,
                 "contextWindow": 0,
                 "projectId": "",
@@ -70,7 +70,7 @@
                 "reasoningEffort": "high",
                 "liveActivity": {
                   "state": "running",
-                  "observedAt": "2026-10-29T17:08:18.539Z"
+                  "observedAt": "2026-10-29T17:18:54.552Z"
                 }
               },
               "codex:sample/1~key": {
@@ -87,7 +87,7 @@
                 "timedOutputTokens": 0,
                 "timedDurationMs": 0,
                 "startedAt": "",
-                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "lastUsedAt": "2026-10-29T17:18:54.552Z",
                 "contextTokens": 0,
                 "contextWindow": 0,
                 "projectId": "",
@@ -102,7 +102,7 @@
                 "reasoningEffort": "high",
                 "liveActivity": {
                   "state": "running",
-                  "observedAt": "2026-10-29T17:08:18.539Z"
+                  "observedAt": "2026-10-29T17:18:54.552Z"
                 }
               },
               "codex:sample/2~key": {
@@ -119,7 +119,7 @@
                 "timedOutputTokens": 0,
                 "timedDurationMs": 0,
                 "startedAt": "",
-                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "lastUsedAt": "2026-10-29T17:18:54.552Z",
                 "contextTokens": 0,
                 "contextWindow": 0,
                 "projectId": "",
@@ -134,7 +134,7 @@
                 "reasoningEffort": "high",
                 "liveActivity": {
                   "state": "running",
-                  "observedAt": "2026-10-29T17:08:18.539Z"
+                  "observedAt": "2026-10-29T17:18:54.552Z"
                 }
               },
               "codex:sample/3~key": {
@@ -151,7 +151,7 @@
                 "timedOutputTokens": 0,
                 "timedDurationMs": 0,
                 "startedAt": "",
-                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "lastUsedAt": "2026-10-29T17:18:54.552Z",
                 "contextTokens": 0,
                 "contextWindow": 0,
                 "projectId": "",
@@ -166,7 +166,7 @@
                 "reasoningEffort": "high",
                 "liveActivity": {
                   "state": "running",
-                  "observedAt": "2026-10-29T17:08:18.539Z"
+                  "observedAt": "2026-10-29T17:18:54.552Z"
                 }
               },
               "codex:sample/4~key": {
@@ -183,7 +183,7 @@
                 "timedOutputTokens": 0,
                 "timedDurationMs": 0,
                 "startedAt": "",
-                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "lastUsedAt": "2026-10-29T17:18:54.552Z",
                 "contextTokens": 0,
                 "contextWindow": 0,
                 "projectId": "",
@@ -198,7 +198,7 @@
                 "reasoningEffort": "high",
                 "liveActivity": {
                   "state": "running",
-                  "observedAt": "2026-10-29T17:08:18.539Z"
+                  "observedAt": "2026-10-29T17:18:54.552Z"
                 }
               },
               "codex:sample/5~key": {
@@ -215,7 +215,7 @@
                 "timedOutputTokens": 0,
                 "timedDurationMs": 0,
                 "startedAt": "",
-                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "lastUsedAt": "2026-10-29T17:18:54.552Z",
                 "contextTokens": 0,
                 "contextWindow": 0,
                 "projectId": "",
@@ -230,7 +230,7 @@
                 "reasoningEffort": "high",
                 "liveActivity": {
                   "state": "running",
-                  "observedAt": "2026-10-29T17:08:18.539Z"
+                  "observedAt": "2026-10-29T17:18:54.552Z"
                 }
               },
               "codex:sample/6~key": {
@@ -247,7 +247,7 @@
                 "timedOutputTokens": 0,
                 "timedDurationMs": 0,
                 "startedAt": "",
-                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "lastUsedAt": "2026-10-29T17:18:54.552Z",
                 "contextTokens": 0,
                 "contextWindow": 0,
                 "projectId": "",
@@ -262,7 +262,7 @@
                 "reasoningEffort": "high",
                 "liveActivity": {
                   "state": "running",
-                  "observedAt": "2026-10-29T17:08:18.539Z"
+                  "observedAt": "2026-10-29T17:18:54.552Z"
                 }
               },
               "codex:sample/7~key": {
@@ -279,7 +279,7 @@
                 "timedOutputTokens": 0,
                 "timedDurationMs": 0,
                 "startedAt": "",
-                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "lastUsedAt": "2026-10-29T17:18:54.552Z",
                 "contextTokens": 0,
                 "contextWindow": 0,
                 "projectId": "",
@@ -294,7 +294,7 @@
                 "reasoningEffort": "high",
                 "liveActivity": {
                   "state": "running",
-                  "observedAt": "2026-10-29T17:08:18.539Z"
+                  "observedAt": "2026-10-29T17:18:54.552Z"
                 }
               }
             }
@@ -369,9 +369,9 @@
             "platform": "",
             "agentVersion": "0.81.0",
             "agentRuntime": "",
-            "updatedAt": "2026-10-29T17:08:18.539Z",
-            "receivedAt": "2026-10-29T17:08:28.541Z",
-            "ageMs": 5,
+            "updatedAt": "2026-10-29T17:18:54.552Z",
+            "receivedAt": "2026-10-29T17:19:04.554Z",
+            "ageMs": 4,
             "stale": false,
             "periods": {
               "today": {
@@ -422,7 +422,7 @@
                     "timedOutputTokens": 0,
                     "timedDurationMs": 0,
                     "startedAt": "",
-                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "lastUsedAt": "2026-10-29T17:18:54.552Z",
                     "contextTokens": 0,
                     "contextWindow": 0,
                     "projectId": "",
@@ -437,7 +437,7 @@
                     "reasoningEffort": "high",
                     "liveActivity": {
                       "state": "running",
-                      "observedAt": "2026-10-29T17:08:18.539Z"
+                      "observedAt": "2026-10-29T17:18:54.552Z"
                     }
                   },
                   "codex:sample/1~key": {
@@ -454,7 +454,7 @@
                     "timedOutputTokens": 0,
                     "timedDurationMs": 0,
                     "startedAt": "",
-                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "lastUsedAt": "2026-10-29T17:18:54.552Z",
                     "contextTokens": 0,
                     "contextWindow": 0,
                     "projectId": "",
@@ -469,7 +469,7 @@
                     "reasoningEffort": "high",
                     "liveActivity": {
                       "state": "running",
-                      "observedAt": "2026-10-29T17:08:18.539Z"
+                      "observedAt": "2026-10-29T17:18:54.552Z"
                     }
                   },
                   "codex:sample/2~key": {
@@ -486,7 +486,7 @@
                     "timedOutputTokens": 0,
                     "timedDurationMs": 0,
                     "startedAt": "",
-                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "lastUsedAt": "2026-10-29T17:18:54.552Z",
                     "contextTokens": 0,
                     "contextWindow": 0,
                     "projectId": "",
@@ -501,7 +501,7 @@
                     "reasoningEffort": "high",
                     "liveActivity": {
                       "state": "running",
-                      "observedAt": "2026-10-29T17:08:18.539Z"
+                      "observedAt": "2026-10-29T17:18:54.552Z"
                     }
                   },
                   "codex:sample/3~key": {
@@ -518,7 +518,7 @@
                     "timedOutputTokens": 0,
                     "timedDurationMs": 0,
                     "startedAt": "",
-                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "lastUsedAt": "2026-10-29T17:18:54.552Z",
                     "contextTokens": 0,
                     "contextWindow": 0,
                     "projectId": "",
@@ -533,7 +533,7 @@
                     "reasoningEffort": "high",
                     "liveActivity": {
                       "state": "running",
-                      "observedAt": "2026-10-29T17:08:18.539Z"
+                      "observedAt": "2026-10-29T17:18:54.552Z"
                     }
                   },
                   "codex:sample/4~key": {
@@ -550,7 +550,7 @@
                     "timedOutputTokens": 0,
                     "timedDurationMs": 0,
                     "startedAt": "",
-                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "lastUsedAt": "2026-10-29T17:18:54.552Z",
                     "contextTokens": 0,
                     "contextWindow": 0,
                     "projectId": "",
@@ -565,7 +565,7 @@
                     "reasoningEffort": "high",
                     "liveActivity": {
                       "state": "running",
-                      "observedAt": "2026-10-29T17:08:18.539Z"
+                      "observedAt": "2026-10-29T17:18:54.552Z"
                     }
                   },
                   "codex:sample/5~key": {
@@ -582,7 +582,7 @@
                     "timedOutputTokens": 0,
                     "timedDurationMs": 0,
                     "startedAt": "",
-                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "lastUsedAt": "2026-10-29T17:18:54.552Z",
                     "contextTokens": 0,
                     "contextWindow": 0,
                     "projectId": "",
@@ -597,7 +597,7 @@
                     "reasoningEffort": "high",
                     "liveActivity": {
                       "state": "running",
-                      "observedAt": "2026-10-29T17:08:18.539Z"
+                      "observedAt": "2026-10-29T17:18:54.552Z"
                     }
                   },
                   "codex:sample/6~key": {
@@ -614,7 +614,7 @@
                     "timedOutputTokens": 0,
                     "timedDurationMs": 0,
                     "startedAt": "",
-                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "lastUsedAt": "2026-10-29T17:18:54.552Z",
                     "contextTokens": 0,
                     "contextWindow": 0,
                     "projectId": "",
@@ -629,7 +629,7 @@
                     "reasoningEffort": "high",
                     "liveActivity": {
                       "state": "running",
-                      "observedAt": "2026-10-29T17:08:18.539Z"
+                      "observedAt": "2026-10-29T17:18:54.552Z"
                     }
                   },
                   "codex:sample/7~key": {
@@ -646,7 +646,7 @@
                     "timedOutputTokens": 0,
                     "timedDurationMs": 0,
                     "startedAt": "",
-                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "lastUsedAt": "2026-10-29T17:18:54.552Z",
                     "contextTokens": 0,
                     "contextWindow": 0,
                     "projectId": "",
@@ -661,7 +661,7 @@
                     "reasoningEffort": "high",
                     "liveActivity": {
                       "state": "running",
-                      "observedAt": "2026-10-29T17:08:18.539Z"
+                      "observedAt": "2026-10-29T17:18:54.552Z"
                     }
                   }
                 }
@@ -738,7 +738,7 @@
         ],
         "projectsIncomplete": false,
         "limits": {
-          "updatedAt": "2026-10-29T17:08:28.546Z",
+          "updatedAt": "2026-10-29T17:19:04.558Z",
           "providers": []
         },
         "staleAfterMs": 600000,
@@ -765,11 +765,11 @@
           "customPricing": 0
         }
       },
-      "at": "2026-10-29T17:08:28.548Z",
+      "at": "2026-10-29T17:19:04.559Z",
       "revision": 0
     },
     "bytes": 13198,
-    "expectedSha256": "f62d12952d3564f70f9f1cd7ab1d154e9f7f9445acfb0f82e1a4dc7468431398"
+    "expectedSha256": "c1a987a7f8f706464f2ee862702fe921a84bbf6aa6681db57cbe14b0f9b72887"
   },
   {
     "event": "freshness",
@@ -777,51 +777,51 @@
       "type": "freshness",
       "reason": "ingest",
       "stats": {
-        "updatedAt": "2026-10-29T17:08:28.674Z",
+        "updatedAt": "2026-10-29T17:19:04.689Z",
         "staleAfterMs": 600000,
         "sessionActivityObservedAt": {
           "today": {
-            "codex:sample/0~key": "2026-10-29T17:08:18.539Z",
-            "codex:sample/1~key": "2026-10-29T17:08:18.539Z",
-            "codex:sample/2~key": "2026-10-29T17:08:18.539Z",
-            "codex:sample/3~key": "2026-10-29T17:08:18.539Z",
-            "codex:sample/4~key": "2026-10-29T17:08:18.539Z",
-            "codex:sample/5~key": "2026-10-29T17:08:18.539Z",
-            "codex:sample/6~key": "2026-10-29T17:08:18.539Z",
-            "codex:sample/7~key": "2026-10-29T17:08:18.539Z"
+            "codex:sample/0~key": "2026-10-29T17:18:54.552Z",
+            "codex:sample/1~key": "2026-10-29T17:18:54.552Z",
+            "codex:sample/2~key": "2026-10-29T17:18:54.552Z",
+            "codex:sample/3~key": "2026-10-29T17:18:54.552Z",
+            "codex:sample/4~key": "2026-10-29T17:18:54.552Z",
+            "codex:sample/5~key": "2026-10-29T17:18:54.552Z",
+            "codex:sample/6~key": "2026-10-29T17:18:54.552Z",
+            "codex:sample/7~key": "2026-10-29T17:18:54.552Z"
           }
         },
         "limits": {
-          "updatedAt": "2026-10-29T17:08:28.674Z"
+          "updatedAt": "2026-10-29T17:19:04.689Z"
         },
         "devices": [
           {
             "deviceId": "synthetic-v4-desktop",
-            "updatedAt": "2026-10-29T17:08:19.539Z",
-            "receivedAt": "2026-10-29T17:08:28.566Z",
-            "ageMs": 108,
+            "updatedAt": "2026-10-29T17:18:55.552Z",
+            "receivedAt": "2026-10-29T17:19:04.580Z",
+            "ageMs": 109,
             "stale": false,
             "sessionActivityObservedAt": {
               "today": {
-                "codex:sample/0~key": "2026-10-29T17:08:18.539Z",
-                "codex:sample/1~key": "2026-10-29T17:08:18.539Z",
-                "codex:sample/2~key": "2026-10-29T17:08:18.539Z",
-                "codex:sample/3~key": "2026-10-29T17:08:18.539Z",
-                "codex:sample/4~key": "2026-10-29T17:08:18.539Z",
-                "codex:sample/5~key": "2026-10-29T17:08:18.539Z",
-                "codex:sample/6~key": "2026-10-29T17:08:18.539Z",
-                "codex:sample/7~key": "2026-10-29T17:08:18.539Z"
+                "codex:sample/0~key": "2026-10-29T17:18:54.552Z",
+                "codex:sample/1~key": "2026-10-29T17:18:54.552Z",
+                "codex:sample/2~key": "2026-10-29T17:18:54.552Z",
+                "codex:sample/3~key": "2026-10-29T17:18:54.552Z",
+                "codex:sample/4~key": "2026-10-29T17:18:54.552Z",
+                "codex:sample/5~key": "2026-10-29T17:18:54.552Z",
+                "codex:sample/6~key": "2026-10-29T17:18:54.552Z",
+                "codex:sample/7~key": "2026-10-29T17:18:54.552Z"
               }
             }
           }
         ]
       },
-      "at": "2026-10-29T17:08:28.675Z",
+      "at": "2026-10-29T17:19:04.690Z",
       "baseRevision": 0,
       "revision": 1
     },
     "bytes": 1245,
-    "expectedSha256": "d1c78a318d5dcea8223fa7bbda34b916d4139fc1bb2dd064914f2ab7afc4d69b"
+    "expectedSha256": "724dada517ba5a181652d89e9ee1573b28c1522adc2b8db90351f2b2fcae2b09"
   },
   {
     "event": "freshness",
@@ -829,51 +829,51 @@
       "type": "freshness",
       "reason": "ingest",
       "stats": {
-        "updatedAt": "2026-10-29T17:08:28.783Z",
+        "updatedAt": "2026-10-29T17:19:04.800Z",
         "staleAfterMs": 600000,
         "sessionActivityObservedAt": {
           "today": {
-            "codex:sample/0~key": "2026-10-29T17:08:20.539Z",
-            "codex:sample/1~key": "2026-10-29T17:08:20.539Z",
-            "codex:sample/2~key": "2026-10-29T17:08:20.539Z",
-            "codex:sample/3~key": "2026-10-29T17:08:20.539Z",
-            "codex:sample/4~key": "2026-10-29T17:08:20.539Z",
-            "codex:sample/5~key": "2026-10-29T17:08:20.539Z",
-            "codex:sample/6~key": "2026-10-29T17:08:20.539Z",
-            "codex:sample/7~key": "2026-10-29T17:08:20.539Z"
+            "codex:sample/0~key": "2026-10-29T17:18:56.552Z",
+            "codex:sample/1~key": "2026-10-29T17:18:56.552Z",
+            "codex:sample/2~key": "2026-10-29T17:18:56.552Z",
+            "codex:sample/3~key": "2026-10-29T17:18:56.552Z",
+            "codex:sample/4~key": "2026-10-29T17:18:56.552Z",
+            "codex:sample/5~key": "2026-10-29T17:18:56.552Z",
+            "codex:sample/6~key": "2026-10-29T17:18:56.552Z",
+            "codex:sample/7~key": "2026-10-29T17:18:56.552Z"
           }
         },
         "limits": {
-          "updatedAt": "2026-10-29T17:08:28.783Z"
+          "updatedAt": "2026-10-29T17:19:04.800Z"
         },
         "devices": [
           {
             "deviceId": "synthetic-v4-desktop",
-            "updatedAt": "2026-10-29T17:08:20.539Z",
-            "receivedAt": "2026-10-29T17:08:28.676Z",
-            "ageMs": 107,
+            "updatedAt": "2026-10-29T17:18:56.552Z",
+            "receivedAt": "2026-10-29T17:19:04.691Z",
+            "ageMs": 109,
             "stale": false,
             "sessionActivityObservedAt": {
               "today": {
-                "codex:sample/0~key": "2026-10-29T17:08:20.539Z",
-                "codex:sample/1~key": "2026-10-29T17:08:20.539Z",
-                "codex:sample/2~key": "2026-10-29T17:08:20.539Z",
-                "codex:sample/3~key": "2026-10-29T17:08:20.539Z",
-                "codex:sample/4~key": "2026-10-29T17:08:20.539Z",
-                "codex:sample/5~key": "2026-10-29T17:08:20.539Z",
-                "codex:sample/6~key": "2026-10-29T17:08:20.539Z",
-                "codex:sample/7~key": "2026-10-29T17:08:20.539Z"
+                "codex:sample/0~key": "2026-10-29T17:18:56.552Z",
+                "codex:sample/1~key": "2026-10-29T17:18:56.552Z",
+                "codex:sample/2~key": "2026-10-29T17:18:56.552Z",
+                "codex:sample/3~key": "2026-10-29T17:18:56.552Z",
+                "codex:sample/4~key": "2026-10-29T17:18:56.552Z",
+                "codex:sample/5~key": "2026-10-29T17:18:56.552Z",
+                "codex:sample/6~key": "2026-10-29T17:18:56.552Z",
+                "codex:sample/7~key": "2026-10-29T17:18:56.552Z"
               }
             }
           }
         ]
       },
-      "at": "2026-10-29T17:08:28.783Z",
+      "at": "2026-10-29T17:19:04.800Z",
       "baseRevision": 1,
       "revision": 2
     },
     "bytes": 1245,
-    "expectedSha256": "68bede2b2c91283d2181b8ef508485cb7a12150b4dc8331ae6d1abeea262bf43"
+    "expectedSha256": "6313eaccdda758c70d23b21db705f2e747f9d834f118ec1e3c78fbea54d3d803"
   },
   {
     "event": "delta",
@@ -886,7 +886,7 @@
         {
           "op": "replace",
           "path": "/updatedAt",
-          "value": "2026-10-29T17:08:28.892Z"
+          "value": "2026-10-29T17:19:04.908Z"
         },
         {
           "op": "replace",
@@ -905,7 +905,7 @@
             "timedOutputTokens": 0,
             "timedDurationMs": 0,
             "startedAt": "",
-            "lastUsedAt": "2026-10-29T17:08:18.539Z",
+            "lastUsedAt": "2026-10-29T17:18:54.552Z",
             "contextTokens": 0,
             "contextWindow": 0,
             "projectId": "",
@@ -920,24 +920,24 @@
             "reasoningEffort": "xhigh",
             "liveActivity": {
               "state": "running",
-              "observedAt": "2026-10-29T17:08:20.539Z"
+              "observedAt": "2026-10-29T17:18:56.552Z"
             }
           }
         },
         {
           "op": "replace",
           "path": "/devices/0/updatedAt",
-          "value": "2026-10-29T17:08:21.539Z"
+          "value": "2026-10-29T17:18:57.552Z"
         },
         {
           "op": "replace",
           "path": "/devices/0/receivedAt",
-          "value": "2026-10-29T17:08:28.784Z"
+          "value": "2026-10-29T17:19:04.801Z"
         },
         {
           "op": "replace",
           "path": "/devices/0/ageMs",
-          "value": 108
+          "value": 107
         },
         {
           "op": "replace",
@@ -956,7 +956,7 @@
             "timedOutputTokens": 0,
             "timedDurationMs": 0,
             "startedAt": "",
-            "lastUsedAt": "2026-10-29T17:08:18.539Z",
+            "lastUsedAt": "2026-10-29T17:18:54.552Z",
             "contextTokens": 0,
             "contextWindow": 0,
             "projectId": "",
@@ -971,20 +971,20 @@
             "reasoningEffort": "xhigh",
             "liveActivity": {
               "state": "running",
-              "observedAt": "2026-10-29T17:08:20.539Z"
+              "observedAt": "2026-10-29T17:18:56.552Z"
             }
           }
         },
         {
           "op": "replace",
           "path": "/limits/updatedAt",
-          "value": "2026-10-29T17:08:28.892Z"
+          "value": "2026-10-29T17:19:04.908Z"
         }
       ],
-      "at": "2026-10-29T17:08:28.892Z"
+      "at": "2026-10-29T17:19:04.908Z"
     },
     "bytes": 1736,
-    "expectedSha256": "260df8a5323f28611cb982f0623d991c33cce87a7bd119d3e541fc615b89b8f3"
+    "expectedSha256": "a57672241c8acffa8857664fc30e0a21701e9dbd1f9d2cc2be0ee5938b79b27e"
   },
   {
     "event": "delta",
@@ -997,7 +997,7 @@
         {
           "op": "replace",
           "path": "/updatedAt",
-          "value": "2026-10-29T17:08:28.999Z"
+          "value": "2026-10-29T17:19:05.017Z"
         },
         {
           "op": "replace",
@@ -1016,7 +1016,7 @@
             "timedOutputTokens": 0,
             "timedDurationMs": 0,
             "startedAt": "",
-            "lastUsedAt": "2026-10-29T17:08:18.539Z",
+            "lastUsedAt": "2026-10-29T17:18:54.552Z",
             "contextTokens": 0,
             "contextWindow": 0,
             "projectId": "",
@@ -1031,19 +1031,14 @@
             "reasoningEffort": null,
             "liveActivity": {
               "state": "running",
-              "observedAt": "2026-10-29T17:08:20.539Z"
+              "observedAt": "2026-10-29T17:18:56.552Z"
             }
           }
         },
         {
           "op": "replace",
           "path": "/devices/0/receivedAt",
-          "value": "2026-10-29T17:08:28.893Z"
-        },
-        {
-          "op": "replace",
-          "path": "/devices/0/ageMs",
-          "value": 106
+          "value": "2026-10-29T17:19:04.910Z"
         },
         {
           "op": "replace",
@@ -1062,7 +1057,7 @@
             "timedOutputTokens": 0,
             "timedDurationMs": 0,
             "startedAt": "",
-            "lastUsedAt": "2026-10-29T17:08:18.539Z",
+            "lastUsedAt": "2026-10-29T17:18:54.552Z",
             "contextTokens": 0,
             "contextWindow": 0,
             "projectId": "",
@@ -1077,20 +1072,20 @@
             "reasoningEffort": null,
             "liveActivity": {
               "state": "running",
-              "observedAt": "2026-10-29T17:08:20.539Z"
+              "observedAt": "2026-10-29T17:18:56.552Z"
             }
           }
         },
         {
           "op": "replace",
           "path": "/limits/updatedAt",
-          "value": "2026-10-29T17:08:28.999Z"
+          "value": "2026-10-29T17:19:05.017Z"
         }
       ],
-      "at": "2026-10-29T17:08:29.000Z"
+      "at": "2026-10-29T17:19:05.018Z"
     },
-    "bytes": 1648,
-    "expectedSha256": "687ecfbd9778134108bbaeb59e976bfb5515ea02445dc3ab0c34259c316f0829"
+    "bytes": 1593,
+    "expectedSha256": "3157636c837ee0b27fa4ab10c3a6ef2bad31a93f3f879d41e3bc8837a4d73671"
   },
   {
     "event": "delta",
@@ -1103,7 +1098,7 @@
         {
           "op": "replace",
           "path": "/updatedAt",
-          "value": "2026-10-29T17:08:29.106Z"
+          "value": "2026-10-29T17:19:05.126Z"
         },
         {
           "op": "remove",
@@ -1112,12 +1107,7 @@
         {
           "op": "replace",
           "path": "/devices/0/receivedAt",
-          "value": "2026-10-29T17:08:29.001Z"
-        },
-        {
-          "op": "replace",
-          "path": "/devices/0/ageMs",
-          "value": 105
+          "value": "2026-10-29T17:19:05.019Z"
         },
         {
           "op": "remove",
@@ -1126,13 +1116,13 @@
         {
           "op": "replace",
           "path": "/limits/updatedAt",
-          "value": "2026-10-29T17:08:29.106Z"
+          "value": "2026-10-29T17:19:05.126Z"
         }
       ],
-      "at": "2026-10-29T17:08:29.107Z"
+      "at": "2026-10-29T17:19:05.127Z"
     },
-    "bytes": 564,
-    "expectedSha256": "833772042f92c520fb16782b4b3964b7dc51de3b8fabc9651ca3b71aed9963d5"
+    "bytes": 509,
+    "expectedSha256": "2f2fd6beffe3198127d8f4baac39b421e279f685eb21afadb28e4b2b3d66a755"
   },
   {
     "event": "stats",
@@ -1140,7 +1130,7 @@
       "type": "stats",
       "reason": "subscriptions",
       "stats": {
-        "updatedAt": "2026-10-29T17:08:29.107Z",
+        "updatedAt": "2026-10-29T17:19:05.128Z",
         "periods": {
           "today": {
             "capabilities": {
@@ -1190,7 +1180,7 @@
                 "timedOutputTokens": 0,
                 "timedDurationMs": 0,
                 "startedAt": "",
-                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "lastUsedAt": "2026-10-29T17:18:54.552Z",
                 "contextTokens": 0,
                 "contextWindow": 0,
                 "projectId": "",
@@ -1205,7 +1195,7 @@
                 "reasoningEffort": "high",
                 "liveActivity": {
                   "state": "running",
-                  "observedAt": "2026-10-29T17:08:20.539Z"
+                  "observedAt": "2026-10-29T17:18:56.552Z"
                 }
               },
               "codex:sample/2~key": {
@@ -1222,7 +1212,7 @@
                 "timedOutputTokens": 0,
                 "timedDurationMs": 0,
                 "startedAt": "",
-                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "lastUsedAt": "2026-10-29T17:18:54.552Z",
                 "contextTokens": 0,
                 "contextWindow": 0,
                 "projectId": "",
@@ -1237,7 +1227,7 @@
                 "reasoningEffort": "high",
                 "liveActivity": {
                   "state": "running",
-                  "observedAt": "2026-10-29T17:08:20.539Z"
+                  "observedAt": "2026-10-29T17:18:56.552Z"
                 }
               },
               "codex:sample/3~key": {
@@ -1254,7 +1244,7 @@
                 "timedOutputTokens": 0,
                 "timedDurationMs": 0,
                 "startedAt": "",
-                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "lastUsedAt": "2026-10-29T17:18:54.552Z",
                 "contextTokens": 0,
                 "contextWindow": 0,
                 "projectId": "",
@@ -1269,7 +1259,7 @@
                 "reasoningEffort": "high",
                 "liveActivity": {
                   "state": "running",
-                  "observedAt": "2026-10-29T17:08:20.539Z"
+                  "observedAt": "2026-10-29T17:18:56.552Z"
                 }
               },
               "codex:sample/4~key": {
@@ -1286,7 +1276,7 @@
                 "timedOutputTokens": 0,
                 "timedDurationMs": 0,
                 "startedAt": "",
-                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "lastUsedAt": "2026-10-29T17:18:54.552Z",
                 "contextTokens": 0,
                 "contextWindow": 0,
                 "projectId": "",
@@ -1301,7 +1291,7 @@
                 "reasoningEffort": "high",
                 "liveActivity": {
                   "state": "running",
-                  "observedAt": "2026-10-29T17:08:20.539Z"
+                  "observedAt": "2026-10-29T17:18:56.552Z"
                 }
               },
               "codex:sample/5~key": {
@@ -1318,7 +1308,7 @@
                 "timedOutputTokens": 0,
                 "timedDurationMs": 0,
                 "startedAt": "",
-                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "lastUsedAt": "2026-10-29T17:18:54.552Z",
                 "contextTokens": 0,
                 "contextWindow": 0,
                 "projectId": "",
@@ -1333,7 +1323,7 @@
                 "reasoningEffort": "high",
                 "liveActivity": {
                   "state": "running",
-                  "observedAt": "2026-10-29T17:08:20.539Z"
+                  "observedAt": "2026-10-29T17:18:56.552Z"
                 }
               },
               "codex:sample/6~key": {
@@ -1350,7 +1340,7 @@
                 "timedOutputTokens": 0,
                 "timedDurationMs": 0,
                 "startedAt": "",
-                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "lastUsedAt": "2026-10-29T17:18:54.552Z",
                 "contextTokens": 0,
                 "contextWindow": 0,
                 "projectId": "",
@@ -1365,7 +1355,7 @@
                 "reasoningEffort": "high",
                 "liveActivity": {
                   "state": "running",
-                  "observedAt": "2026-10-29T17:08:20.539Z"
+                  "observedAt": "2026-10-29T17:18:56.552Z"
                 }
               },
               "codex:sample/7~key": {
@@ -1382,7 +1372,7 @@
                 "timedOutputTokens": 0,
                 "timedDurationMs": 0,
                 "startedAt": "",
-                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "lastUsedAt": "2026-10-29T17:18:54.552Z",
                 "contextTokens": 0,
                 "contextWindow": 0,
                 "projectId": "",
@@ -1397,7 +1387,7 @@
                 "reasoningEffort": "high",
                 "liveActivity": {
                   "state": "running",
-                  "observedAt": "2026-10-29T17:08:20.539Z"
+                  "observedAt": "2026-10-29T17:18:56.552Z"
                 }
               }
             }
@@ -1472,9 +1462,9 @@
             "platform": "",
             "agentVersion": "0.81.0",
             "agentRuntime": "",
-            "updatedAt": "2026-10-29T17:08:21.539Z",
-            "receivedAt": "2026-10-29T17:08:29.001Z",
-            "ageMs": 106,
+            "updatedAt": "2026-10-29T17:18:57.552Z",
+            "receivedAt": "2026-10-29T17:19:05.019Z",
+            "ageMs": 109,
             "stale": false,
             "periods": {
               "today": {
@@ -1525,7 +1515,7 @@
                     "timedOutputTokens": 0,
                     "timedDurationMs": 0,
                     "startedAt": "",
-                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "lastUsedAt": "2026-10-29T17:18:54.552Z",
                     "contextTokens": 0,
                     "contextWindow": 0,
                     "projectId": "",
@@ -1540,7 +1530,7 @@
                     "reasoningEffort": "high",
                     "liveActivity": {
                       "state": "running",
-                      "observedAt": "2026-10-29T17:08:20.539Z"
+                      "observedAt": "2026-10-29T17:18:56.552Z"
                     }
                   },
                   "codex:sample/2~key": {
@@ -1557,7 +1547,7 @@
                     "timedOutputTokens": 0,
                     "timedDurationMs": 0,
                     "startedAt": "",
-                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "lastUsedAt": "2026-10-29T17:18:54.552Z",
                     "contextTokens": 0,
                     "contextWindow": 0,
                     "projectId": "",
@@ -1572,7 +1562,7 @@
                     "reasoningEffort": "high",
                     "liveActivity": {
                       "state": "running",
-                      "observedAt": "2026-10-29T17:08:20.539Z"
+                      "observedAt": "2026-10-29T17:18:56.552Z"
                     }
                   },
                   "codex:sample/3~key": {
@@ -1589,7 +1579,7 @@
                     "timedOutputTokens": 0,
                     "timedDurationMs": 0,
                     "startedAt": "",
-                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "lastUsedAt": "2026-10-29T17:18:54.552Z",
                     "contextTokens": 0,
                     "contextWindow": 0,
                     "projectId": "",
@@ -1604,7 +1594,7 @@
                     "reasoningEffort": "high",
                     "liveActivity": {
                       "state": "running",
-                      "observedAt": "2026-10-29T17:08:20.539Z"
+                      "observedAt": "2026-10-29T17:18:56.552Z"
                     }
                   },
                   "codex:sample/4~key": {
@@ -1621,7 +1611,7 @@
                     "timedOutputTokens": 0,
                     "timedDurationMs": 0,
                     "startedAt": "",
-                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "lastUsedAt": "2026-10-29T17:18:54.552Z",
                     "contextTokens": 0,
                     "contextWindow": 0,
                     "projectId": "",
@@ -1636,7 +1626,7 @@
                     "reasoningEffort": "high",
                     "liveActivity": {
                       "state": "running",
-                      "observedAt": "2026-10-29T17:08:20.539Z"
+                      "observedAt": "2026-10-29T17:18:56.552Z"
                     }
                   },
                   "codex:sample/5~key": {
@@ -1653,7 +1643,7 @@
                     "timedOutputTokens": 0,
                     "timedDurationMs": 0,
                     "startedAt": "",
-                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "lastUsedAt": "2026-10-29T17:18:54.552Z",
                     "contextTokens": 0,
                     "contextWindow": 0,
                     "projectId": "",
@@ -1668,7 +1658,7 @@
                     "reasoningEffort": "high",
                     "liveActivity": {
                       "state": "running",
-                      "observedAt": "2026-10-29T17:08:20.539Z"
+                      "observedAt": "2026-10-29T17:18:56.552Z"
                     }
                   },
                   "codex:sample/6~key": {
@@ -1685,7 +1675,7 @@
                     "timedOutputTokens": 0,
                     "timedDurationMs": 0,
                     "startedAt": "",
-                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "lastUsedAt": "2026-10-29T17:18:54.552Z",
                     "contextTokens": 0,
                     "contextWindow": 0,
                     "projectId": "",
@@ -1700,7 +1690,7 @@
                     "reasoningEffort": "high",
                     "liveActivity": {
                       "state": "running",
-                      "observedAt": "2026-10-29T17:08:20.539Z"
+                      "observedAt": "2026-10-29T17:18:56.552Z"
                     }
                   },
                   "codex:sample/7~key": {
@@ -1717,7 +1707,7 @@
                     "timedOutputTokens": 0,
                     "timedDurationMs": 0,
                     "startedAt": "",
-                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "lastUsedAt": "2026-10-29T17:18:54.552Z",
                     "contextTokens": 0,
                     "contextWindow": 0,
                     "projectId": "",
@@ -1732,7 +1722,7 @@
                     "reasoningEffort": "high",
                     "liveActivity": {
                       "state": "running",
-                      "observedAt": "2026-10-29T17:08:20.539Z"
+                      "observedAt": "2026-10-29T17:18:56.552Z"
                     }
                   }
                 }
@@ -1809,7 +1799,7 @@
         ],
         "projectsIncomplete": false,
         "limits": {
-          "updatedAt": "2026-10-29T17:08:29.107Z",
+          "updatedAt": "2026-10-29T17:19:05.128Z",
           "providers": []
         },
         "staleAfterMs": 600000,
@@ -1836,10 +1826,10 @@
           "customPricing": 0
         }
       },
-      "at": "2026-10-29T17:08:29.108Z",
+      "at": "2026-10-29T17:19:05.128Z",
       "revision": 6
     },
     "bytes": 12090,
-    "expectedSha256": "1662bcdcbf6c14cf7ba7ea2b0a88d8039f5b20f36ca11ba510ce2723239a51a9"
+    "expectedSha256": "b4b9bf70940bb493539194a304ed5a9a51849b1cbb890c4338e9be77cb0ad04a"
   }
 ]

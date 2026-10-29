@@ -13,6 +13,17 @@ export async function checkV081Limits(require, context) {
     assert.deepEqual(["prolite", "pro", "promax"].map(planType => mapCodexRateLimitsToProvider({ account: { planType },
         rateLimits: { primary: { usedPercent: 10, windowDurationMins: 300 } } }, { updatedAt: context.now }).accountLabel), ["Pro 100", "Pro 200", "Pro 500"]);
     const cases = {}, responses = {};
+    const codexRows = ["prolite", "pro", "promax"].map((planType, index) => mapCodexRateLimitsToProvider({
+        account: { planType, email: `plan-${index}@example.com` },
+        rateLimits: { primary: { usedPercent: 10, windowDurationMins: 300 } },
+    }, { updatedAt: context.now, accountKey: `synthetic-codex-${index}` }));
+    const codexRecord = { ...context.device, deviceId: "v081-codex-desktop", limits: { providers: codexRows, updatedAt: context.now } };
+    const codexHub = context.createHub({ secret: context.secret, dataFile: join(context.source, "synthetic-pro-plans.json") });
+    codexHub.ingest(codexRecord);
+    const codexStats = codexHub.getStats();
+    assert.deepEqual(codexStats.limits.providers.map(row => row.accountLabel), ["Pro 100", "Pro 200", "Pro 500"]);
+    cases["codex-pro-plans"] = { records: [codexRecord], providers: codexStats.limits.providers };
+    responses["codex-pro-plans.json"] = codexStats;
     for (const variant of ["personal", "missing", "unavailable"]) {
         const rows = await fetchArkcliLimits({ env: {}, runArkcli: async args => {
             if (args[0] === "auth") return { logged_in: true, auth_method: "sso", active_profile: { name: "synthetic" } };

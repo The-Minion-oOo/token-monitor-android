@@ -286,7 +286,7 @@ object HubProtocolParser {
         accountEmail = string("accountEmail").ifBlank { string("email") },
         plan = string("plan").ifBlank { string("planLabel") }.ifBlank {
             // These providers keep the legacy billing/plan label here, including Ollama's API-key lane.
-            if (string("provider") in setOf("typesafe", "stepfun", "minimax", "ollama")) string("accountLabel") else ""
+            if (string("provider") in setOf("typesafe", "stepfun", "minimax", "ollama", "codex")) string("accountLabel") else ""
         },
         status = string("status"),
         sourceDeviceId = string("sourceDeviceId"),

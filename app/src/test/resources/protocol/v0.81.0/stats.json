@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-29T17:08:26.929Z",
+  "updatedAt": "2026-10-29T17:19:03.253Z",
   "periods": {
     "today": {
       "capabilities": {
@@ -291,9 +291,9 @@
       "platform": "linux",
       "agentVersion": "0.81.0",
       "agentRuntime": "",
-      "updatedAt": "2026-10-29T17:08:26.847Z",
-      "receivedAt": "2026-10-29T17:08:26.851Z",
-      "ageMs": 78,
+      "updatedAt": "2026-10-29T17:19:03.216Z",
+      "receivedAt": "2026-10-29T17:19:03.217Z",
+      "ageMs": 36,
       "stale": false,
       "trackedClients": [
         "mcode"
@@ -591,7 +591,7 @@
   ],
   "projectsIncomplete": false,
   "limits": {
-    "updatedAt": "2026-10-29T17:08:26.929Z",
+    "updatedAt": "2026-10-29T17:19:03.253Z",
     "providers": []
   },
   "staleAfterMs": 600000,
