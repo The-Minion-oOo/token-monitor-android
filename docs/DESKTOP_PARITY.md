@@ -1,14 +1,19 @@
-# Desktop parity for v0.80.0
+# Desktop parity for v0.81.0
 
 I compare the Android companion with released desktop source, rather than
-unreleased desktop changes. The baseline is tag `v0.80.0`, commit
-`c61cbe998d69725589c03511f2f56d43714f4c0f`. Android remains a read-only
+unreleased desktop changes. The baseline is tag `v0.81.0`, commit
+`ce89af774664f3852aa605350b59732247699650`. Android remains a read-only
 dashboard: the desktop collects usage, signs in to providers and hosts the Hub.
 
-The latest published APK is **v0.80.0 r1**.
+The current candidate is **v0.81.0 r1**; the published APK remains v0.80.0 r1.
 Items marked **r2** below were introduced in v0.79.0 r2 and are retained.
 
-Desktop v0.80.0 adds Muse Code session/weekly quotas, keeps its device observations
+Android adds the released v4 stream with ordered patches and recovery, reported
+Codex/Claude reasoning effort, and personal Volcengine Agent/Coding Plan quotas.
+Codex Pro labels follow the reported price tiers. Plugins and discovery remain
+desktop-only. Phone bandwidth and battery savings are not measured.
+
+The retained v0.80.0 support adds Muse Code session/weekly quotas, keeps its device observations
 separate, and displays Ollama's included/purchased credits and monthly spend in
 their native currency. Claude Web accounts appear alongside automatic Claude
 Code readings. Login renewal, account enable/removal and Ollama credentials

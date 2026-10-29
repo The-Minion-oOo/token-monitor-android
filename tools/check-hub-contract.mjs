@@ -10,6 +10,8 @@ import { fileURLToPath } from "node:url";
 import { checkWorkerContract } from "./check-worker-contract.mjs";
 import { checkV080Limits } from "./check-v080-limits.mjs";
 
+import { checkV081Limits, checkV081Streams } from "./check-v081-contract.mjs";
+
 const script = fileURLToPath(import.meta.url);
 const root = resolve(dirname(script), "..");
 const args = process.argv.slice(2);
@@ -74,7 +76,7 @@ async function isolatedContract(source, output, upstream) {
         assert.equal(responses["devices.json"].devices[0].deviceId, device.deviceId);
         assert.ok(responses["history.json"].daily.some(point => point.tokens === 1234));
         assert.ok(Array.isArray(responses["subscriptions.json"].subscriptions));
-        stream = http.get(`${base}/api/stats/stream`, { headers: { Authorization: `Bearer ${secret}`, "x-token-monitor-stream": "2" } }, response => {
+        stream = http.get(`${base}/api/stats/stream`, { headers: { Authorization: `Bearer ${secret}`, "x-token-monitor-stream": "3" } }, response => {
             assert.equal(response.statusCode, 200);
             let buffered = "";
             response.setEncoding("utf8");
@@ -631,7 +633,10 @@ async function isolatedContract(source, output, upstream) {
             assert.equal(responses["parity-subscriptions.json"].subscriptions[0].topUps[0].amountMinor, 1200);
         } finally { await parityHub.stop(); }
         const limitChecks = await checkV080Limits(require, { createHub, source, secret, device, now });
-        Object.assign(responses, limitChecks.responses);
+        const v081 = await checkV081Limits(require, { createHub, source, secret, device, now });
+        Object.assign(limitChecks.cases, v081.cases);
+        Object.assign(responses, limitChecks.responses, v081.responses);
+        await checkV081Streams(require, source, output, upstream);
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) await writeFile(join(output, name), `${JSON.stringify(value, null, 2)}\n`);
         console.log(`Actual ${upstream.tag} Hub passed authenticated reads, snapshot, freshness and changed-stat checks. Synthetic responses: ${output}`);

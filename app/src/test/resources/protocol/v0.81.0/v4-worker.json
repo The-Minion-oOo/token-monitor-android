@@ -1,0 +1,1845 @@
+[
+  {
+    "event": "snapshot",
+    "data": {
+      "type": "stats",
+      "reason": "snapshot",
+      "stats": {
+        "updatedAt": "2026-10-29T17:08:28.546Z",
+        "periods": {
+          "today": {
+            "capabilities": {
+              "tokenComponents": false,
+              "throughput": false
+            },
+            "totalTokens": 3000,
+            "costUsd": 0,
+            "cacheReadTokens": 0,
+            "cacheWriteTokens": 0,
+            "outputTokens": 0,
+            "unclassifiedTokens": 3000,
+            "timedTokens": 0,
+            "timedOutputTokens": 0,
+            "timedDurationMs": 0,
+            "clients": {
+              "codex": 3000
+            },
+            "clientCosts": {},
+            "clientCacheReads": {},
+            "clientCacheWrites": {},
+            "clientOutputs": {},
+            "clientUnclassifiedTokens": {
+              "codex": 3000
+            },
+            "models": {},
+            "modelCosts": {},
+            "modelCacheReads": {},
+            "modelCacheWrites": {},
+            "modelOutputs": {},
+            "modelUnclassifiedTokens": {},
+            "clientModels": {},
+            "clientModelCosts": {},
+            "projects": {},
+            "sessions": {
+              "codex:sample/0~key": {
+                "client": "codex",
+                "sessionId": "sample/0~key",
+                "totalTokens": 100,
+                "costUsd": 0,
+                "messageCount": 0,
+                "inputTokens": 0,
+                "outputTokens": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "reasoningTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "startedAt": "",
+                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "contextTokens": 0,
+                "contextWindow": 0,
+                "projectId": "",
+                "projectLabel": "",
+                "title": "",
+                "sessionKind": "",
+                "models": {
+                  "gpt-5": 100
+                },
+                "modelCosts": {},
+                "providers": {},
+                "reasoningEffort": "high",
+                "liveActivity": {
+                  "state": "running",
+                  "observedAt": "2026-10-29T17:08:18.539Z"
+                }
+              },
+              "codex:sample/1~key": {
+                "client": "codex",
+                "sessionId": "sample/1~key",
+                "totalTokens": 100,
+                "costUsd": 0,
+                "messageCount": 0,
+                "inputTokens": 0,
+                "outputTokens": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "reasoningTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "startedAt": "",
+                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "contextTokens": 0,
+                "contextWindow": 0,
+                "projectId": "",
+                "projectLabel": "",
+                "title": "",
+                "sessionKind": "",
+                "models": {
+                  "gpt-5": 100
+                },
+                "modelCosts": {},
+                "providers": {},
+                "reasoningEffort": "high",
+                "liveActivity": {
+                  "state": "running",
+                  "observedAt": "2026-10-29T17:08:18.539Z"
+                }
+              },
+              "codex:sample/2~key": {
+                "client": "codex",
+                "sessionId": "sample/2~key",
+                "totalTokens": 100,
+                "costUsd": 0,
+                "messageCount": 0,
+                "inputTokens": 0,
+                "outputTokens": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "reasoningTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "startedAt": "",
+                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "contextTokens": 0,
+                "contextWindow": 0,
+                "projectId": "",
+                "projectLabel": "",
+                "title": "",
+                "sessionKind": "",
+                "models": {
+                  "gpt-5": 100
+                },
+                "modelCosts": {},
+                "providers": {},
+                "reasoningEffort": "high",
+                "liveActivity": {
+                  "state": "running",
+                  "observedAt": "2026-10-29T17:08:18.539Z"
+                }
+              },
+              "codex:sample/3~key": {
+                "client": "codex",
+                "sessionId": "sample/3~key",
+                "totalTokens": 100,
+                "costUsd": 0,
+                "messageCount": 0,
+                "inputTokens": 0,
+                "outputTokens": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "reasoningTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "startedAt": "",
+                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "contextTokens": 0,
+                "contextWindow": 0,
+                "projectId": "",
+                "projectLabel": "",
+                "title": "",
+                "sessionKind": "",
+                "models": {
+                  "gpt-5": 100
+                },
+                "modelCosts": {},
+                "providers": {},
+                "reasoningEffort": "high",
+                "liveActivity": {
+                  "state": "running",
+                  "observedAt": "2026-10-29T17:08:18.539Z"
+                }
+              },
+              "codex:sample/4~key": {
+                "client": "codex",
+                "sessionId": "sample/4~key",
+                "totalTokens": 100,
+                "costUsd": 0,
+                "messageCount": 0,
+                "inputTokens": 0,
+                "outputTokens": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "reasoningTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "startedAt": "",
+                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "contextTokens": 0,
+                "contextWindow": 0,
+                "projectId": "",
+                "projectLabel": "",
+                "title": "",
+                "sessionKind": "",
+                "models": {
+                  "gpt-5": 100
+                },
+                "modelCosts": {},
+                "providers": {},
+                "reasoningEffort": "high",
+                "liveActivity": {
+                  "state": "running",
+                  "observedAt": "2026-10-29T17:08:18.539Z"
+                }
+              },
+              "codex:sample/5~key": {
+                "client": "codex",
+                "sessionId": "sample/5~key",
+                "totalTokens": 100,
+                "costUsd": 0,
+                "messageCount": 0,
+                "inputTokens": 0,
+                "outputTokens": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "reasoningTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "startedAt": "",
+                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "contextTokens": 0,
+                "contextWindow": 0,
+                "projectId": "",
+                "projectLabel": "",
+                "title": "",
+                "sessionKind": "",
+                "models": {
+                  "gpt-5": 100
+                },
+                "modelCosts": {},
+                "providers": {},
+                "reasoningEffort": "high",
+                "liveActivity": {
+                  "state": "running",
+                  "observedAt": "2026-10-29T17:08:18.539Z"
+                }
+              },
+              "codex:sample/6~key": {
+                "client": "codex",
+                "sessionId": "sample/6~key",
+                "totalTokens": 100,
+                "costUsd": 0,
+                "messageCount": 0,
+                "inputTokens": 0,
+                "outputTokens": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "reasoningTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "startedAt": "",
+                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "contextTokens": 0,
+                "contextWindow": 0,
+                "projectId": "",
+                "projectLabel": "",
+                "title": "",
+                "sessionKind": "",
+                "models": {
+                  "gpt-5": 100
+                },
+                "modelCosts": {},
+                "providers": {},
+                "reasoningEffort": "high",
+                "liveActivity": {
+                  "state": "running",
+                  "observedAt": "2026-10-29T17:08:18.539Z"
+                }
+              },
+              "codex:sample/7~key": {
+                "client": "codex",
+                "sessionId": "sample/7~key",
+                "totalTokens": 100,
+                "costUsd": 0,
+                "messageCount": 0,
+                "inputTokens": 0,
+                "outputTokens": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "reasoningTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "startedAt": "",
+                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "contextTokens": 0,
+                "contextWindow": 0,
+                "projectId": "",
+                "projectLabel": "",
+                "title": "",
+                "sessionKind": "",
+                "models": {
+                  "gpt-5": 100
+                },
+                "modelCosts": {},
+                "providers": {},
+                "reasoningEffort": "high",
+                "liveActivity": {
+                  "state": "running",
+                  "observedAt": "2026-10-29T17:08:18.539Z"
+                }
+              }
+            }
+          },
+          "month": {
+            "capabilities": {
+              "tokenComponents": true,
+              "throughput": false
+            },
+            "totalTokens": 0,
+            "costUsd": 0,
+            "cacheReadTokens": 0,
+            "cacheWriteTokens": 0,
+            "outputTokens": 0,
+            "unclassifiedTokens": 0,
+            "timedTokens": 0,
+            "timedOutputTokens": 0,
+            "timedDurationMs": 0,
+            "clients": {},
+            "clientCosts": {},
+            "clientCacheReads": {},
+            "clientCacheWrites": {},
+            "clientOutputs": {},
+            "clientUnclassifiedTokens": {},
+            "models": {},
+            "modelCosts": {},
+            "modelCacheReads": {},
+            "modelCacheWrites": {},
+            "modelOutputs": {},
+            "modelUnclassifiedTokens": {},
+            "clientModels": {},
+            "clientModelCosts": {},
+            "projects": {},
+            "sessions": {}
+          },
+          "allTime": {
+            "capabilities": {
+              "tokenComponents": true,
+              "throughput": false
+            },
+            "totalTokens": 0,
+            "costUsd": 0,
+            "cacheReadTokens": 0,
+            "cacheWriteTokens": 0,
+            "outputTokens": 0,
+            "unclassifiedTokens": 0,
+            "timedTokens": 0,
+            "timedOutputTokens": 0,
+            "timedDurationMs": 0,
+            "clients": {},
+            "clientCosts": {},
+            "clientCacheReads": {},
+            "clientCacheWrites": {},
+            "clientOutputs": {},
+            "clientUnclassifiedTokens": {},
+            "models": {},
+            "modelCosts": {},
+            "modelCacheReads": {},
+            "modelCacheWrites": {},
+            "modelOutputs": {},
+            "modelUnclassifiedTokens": {},
+            "clientModels": {},
+            "clientModelCosts": {},
+            "projects": {},
+            "sessions": {}
+          }
+        },
+        "devices": [
+          {
+            "deviceId": "synthetic-v4-desktop",
+            "hostname": "Synthetic desktop",
+            "platform": "",
+            "agentVersion": "0.81.0",
+            "agentRuntime": "",
+            "updatedAt": "2026-10-29T17:08:18.539Z",
+            "receivedAt": "2026-10-29T17:08:28.541Z",
+            "ageMs": 5,
+            "stale": false,
+            "periods": {
+              "today": {
+                "capabilities": {
+                  "tokenComponents": false,
+                  "throughput": false
+                },
+                "totalTokens": 3000,
+                "costUsd": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "outputTokens": 0,
+                "unclassifiedTokens": 3000,
+                "timedTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "clients": {
+                  "codex": 3000
+                },
+                "clientCosts": {},
+                "clientCacheReads": {},
+                "clientCacheWrites": {},
+                "clientOutputs": {},
+                "clientUnclassifiedTokens": {
+                  "codex": 3000
+                },
+                "models": {},
+                "modelCosts": {},
+                "modelCacheReads": {},
+                "modelCacheWrites": {},
+                "modelOutputs": {},
+                "modelUnclassifiedTokens": {},
+                "clientModels": {},
+                "clientModelCosts": {},
+                "projects": {},
+                "sessions": {
+                  "codex:sample/0~key": {
+                    "client": "codex",
+                    "sessionId": "sample/0~key",
+                    "totalTokens": 100,
+                    "costUsd": 0,
+                    "messageCount": 0,
+                    "inputTokens": 0,
+                    "outputTokens": 0,
+                    "cacheReadTokens": 0,
+                    "cacheWriteTokens": 0,
+                    "reasoningTokens": 0,
+                    "timedOutputTokens": 0,
+                    "timedDurationMs": 0,
+                    "startedAt": "",
+                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "contextTokens": 0,
+                    "contextWindow": 0,
+                    "projectId": "",
+                    "projectLabel": "",
+                    "title": "",
+                    "sessionKind": "",
+                    "models": {
+                      "gpt-5": 100
+                    },
+                    "modelCosts": {},
+                    "providers": {},
+                    "reasoningEffort": "high",
+                    "liveActivity": {
+                      "state": "running",
+                      "observedAt": "2026-10-29T17:08:18.539Z"
+                    }
+                  },
+                  "codex:sample/1~key": {
+                    "client": "codex",
+                    "sessionId": "sample/1~key",
+                    "totalTokens": 100,
+                    "costUsd": 0,
+                    "messageCount": 0,
+                    "inputTokens": 0,
+                    "outputTokens": 0,
+                    "cacheReadTokens": 0,
+                    "cacheWriteTokens": 0,
+                    "reasoningTokens": 0,
+                    "timedOutputTokens": 0,
+                    "timedDurationMs": 0,
+                    "startedAt": "",
+                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "contextTokens": 0,
+                    "contextWindow": 0,
+                    "projectId": "",
+                    "projectLabel": "",
+                    "title": "",
+                    "sessionKind": "",
+                    "models": {
+                      "gpt-5": 100
+                    },
+                    "modelCosts": {},
+                    "providers": {},
+                    "reasoningEffort": "high",
+                    "liveActivity": {
+                      "state": "running",
+                      "observedAt": "2026-10-29T17:08:18.539Z"
+                    }
+                  },
+                  "codex:sample/2~key": {
+                    "client": "codex",
+                    "sessionId": "sample/2~key",
+                    "totalTokens": 100,
+                    "costUsd": 0,
+                    "messageCount": 0,
+                    "inputTokens": 0,
+                    "outputTokens": 0,
+                    "cacheReadTokens": 0,
+                    "cacheWriteTokens": 0,
+                    "reasoningTokens": 0,
+                    "timedOutputTokens": 0,
+                    "timedDurationMs": 0,
+                    "startedAt": "",
+                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "contextTokens": 0,
+                    "contextWindow": 0,
+                    "projectId": "",
+                    "projectLabel": "",
+                    "title": "",
+                    "sessionKind": "",
+                    "models": {
+                      "gpt-5": 100
+                    },
+                    "modelCosts": {},
+                    "providers": {},
+                    "reasoningEffort": "high",
+                    "liveActivity": {
+                      "state": "running",
+                      "observedAt": "2026-10-29T17:08:18.539Z"
+                    }
+                  },
+                  "codex:sample/3~key": {
+                    "client": "codex",
+                    "sessionId": "sample/3~key",
+                    "totalTokens": 100,
+                    "costUsd": 0,
+                    "messageCount": 0,
+                    "inputTokens": 0,
+                    "outputTokens": 0,
+                    "cacheReadTokens": 0,
+                    "cacheWriteTokens": 0,
+                    "reasoningTokens": 0,
+                    "timedOutputTokens": 0,
+                    "timedDurationMs": 0,
+                    "startedAt": "",
+                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "contextTokens": 0,
+                    "contextWindow": 0,
+                    "projectId": "",
+                    "projectLabel": "",
+                    "title": "",
+                    "sessionKind": "",
+                    "models": {
+                      "gpt-5": 100
+                    },
+                    "modelCosts": {},
+                    "providers": {},
+                    "reasoningEffort": "high",
+                    "liveActivity": {
+                      "state": "running",
+                      "observedAt": "2026-10-29T17:08:18.539Z"
+                    }
+                  },
+                  "codex:sample/4~key": {
+                    "client": "codex",
+                    "sessionId": "sample/4~key",
+                    "totalTokens": 100,
+                    "costUsd": 0,
+                    "messageCount": 0,
+                    "inputTokens": 0,
+                    "outputTokens": 0,
+                    "cacheReadTokens": 0,
+                    "cacheWriteTokens": 0,
+                    "reasoningTokens": 0,
+                    "timedOutputTokens": 0,
+                    "timedDurationMs": 0,
+                    "startedAt": "",
+                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "contextTokens": 0,
+                    "contextWindow": 0,
+                    "projectId": "",
+                    "projectLabel": "",
+                    "title": "",
+                    "sessionKind": "",
+                    "models": {
+                      "gpt-5": 100
+                    },
+                    "modelCosts": {},
+                    "providers": {},
+                    "reasoningEffort": "high",
+                    "liveActivity": {
+                      "state": "running",
+                      "observedAt": "2026-10-29T17:08:18.539Z"
+                    }
+                  },
+                  "codex:sample/5~key": {
+                    "client": "codex",
+                    "sessionId": "sample/5~key",
+                    "totalTokens": 100,
+                    "costUsd": 0,
+                    "messageCount": 0,
+                    "inputTokens": 0,
+                    "outputTokens": 0,
+                    "cacheReadTokens": 0,
+                    "cacheWriteTokens": 0,
+                    "reasoningTokens": 0,
+                    "timedOutputTokens": 0,
+                    "timedDurationMs": 0,
+                    "startedAt": "",
+                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "contextTokens": 0,
+                    "contextWindow": 0,
+                    "projectId": "",
+                    "projectLabel": "",
+                    "title": "",
+                    "sessionKind": "",
+                    "models": {
+                      "gpt-5": 100
+                    },
+                    "modelCosts": {},
+                    "providers": {},
+                    "reasoningEffort": "high",
+                    "liveActivity": {
+                      "state": "running",
+                      "observedAt": "2026-10-29T17:08:18.539Z"
+                    }
+                  },
+                  "codex:sample/6~key": {
+                    "client": "codex",
+                    "sessionId": "sample/6~key",
+                    "totalTokens": 100,
+                    "costUsd": 0,
+                    "messageCount": 0,
+                    "inputTokens": 0,
+                    "outputTokens": 0,
+                    "cacheReadTokens": 0,
+                    "cacheWriteTokens": 0,
+                    "reasoningTokens": 0,
+                    "timedOutputTokens": 0,
+                    "timedDurationMs": 0,
+                    "startedAt": "",
+                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "contextTokens": 0,
+                    "contextWindow": 0,
+                    "projectId": "",
+                    "projectLabel": "",
+                    "title": "",
+                    "sessionKind": "",
+                    "models": {
+                      "gpt-5": 100
+                    },
+                    "modelCosts": {},
+                    "providers": {},
+                    "reasoningEffort": "high",
+                    "liveActivity": {
+                      "state": "running",
+                      "observedAt": "2026-10-29T17:08:18.539Z"
+                    }
+                  },
+                  "codex:sample/7~key": {
+                    "client": "codex",
+                    "sessionId": "sample/7~key",
+                    "totalTokens": 100,
+                    "costUsd": 0,
+                    "messageCount": 0,
+                    "inputTokens": 0,
+                    "outputTokens": 0,
+                    "cacheReadTokens": 0,
+                    "cacheWriteTokens": 0,
+                    "reasoningTokens": 0,
+                    "timedOutputTokens": 0,
+                    "timedDurationMs": 0,
+                    "startedAt": "",
+                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "contextTokens": 0,
+                    "contextWindow": 0,
+                    "projectId": "",
+                    "projectLabel": "",
+                    "title": "",
+                    "sessionKind": "",
+                    "models": {
+                      "gpt-5": 100
+                    },
+                    "modelCosts": {},
+                    "providers": {},
+                    "reasoningEffort": "high",
+                    "liveActivity": {
+                      "state": "running",
+                      "observedAt": "2026-10-29T17:08:18.539Z"
+                    }
+                  }
+                }
+              },
+              "month": {
+                "capabilities": {
+                  "tokenComponents": true,
+                  "throughput": false
+                },
+                "totalTokens": 0,
+                "costUsd": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "outputTokens": 0,
+                "unclassifiedTokens": 0,
+                "timedTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "clients": {},
+                "clientCosts": {},
+                "clientCacheReads": {},
+                "clientCacheWrites": {},
+                "clientOutputs": {},
+                "clientUnclassifiedTokens": {},
+                "models": {},
+                "modelCosts": {},
+                "modelCacheReads": {},
+                "modelCacheWrites": {},
+                "modelOutputs": {},
+                "modelUnclassifiedTokens": {},
+                "clientModels": {},
+                "clientModelCosts": {},
+                "projects": {},
+                "sessions": {}
+              },
+              "allTime": {
+                "capabilities": {
+                  "tokenComponents": true,
+                  "throughput": false
+                },
+                "totalTokens": 0,
+                "costUsd": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "outputTokens": 0,
+                "unclassifiedTokens": 0,
+                "timedTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "clients": {},
+                "clientCosts": {},
+                "clientCacheReads": {},
+                "clientCacheWrites": {},
+                "clientOutputs": {},
+                "clientUnclassifiedTokens": {},
+                "models": {},
+                "modelCosts": {},
+                "modelCacheReads": {},
+                "modelCacheWrites": {},
+                "modelOutputs": {},
+                "modelUnclassifiedTokens": {},
+                "clientModels": {},
+                "clientModelCosts": {},
+                "projects": {},
+                "sessions": {}
+              }
+            },
+            "limits": {
+              "updatedAt": null,
+              "refreshMs": 300000,
+              "providers": []
+            }
+          }
+        ],
+        "projectsIncomplete": false,
+        "limits": {
+          "updatedAt": "2026-10-29T17:08:28.546Z",
+          "providers": []
+        },
+        "staleAfterMs": 600000,
+        "historyPreview": {
+          "daily": [],
+          "monthly": [],
+          "summary": {
+            "totalTokens": 0,
+            "totalCost": 0,
+            "activeDays": 0,
+            "currentStreak": 0,
+            "longestStreak": 0,
+            "peakDayTokens": 0,
+            "favoriteModel": "",
+            "messages": 0,
+            "activeTimeMs": 0
+          }
+        },
+        "historyRevision": "6d56fb5d8446c449",
+        "deviceHistoryRevision": "c72caece7b2a7cc2",
+        "subscriptionsUpdatedAt": "",
+        "syncSettingsRevisions": {
+          "modelAliases": 0,
+          "customPricing": 0
+        }
+      },
+      "at": "2026-10-29T17:08:28.548Z",
+      "revision": 0
+    },
+    "bytes": 13198,
+    "expectedSha256": "f62d12952d3564f70f9f1cd7ab1d154e9f7f9445acfb0f82e1a4dc7468431398"
+  },
+  {
+    "event": "freshness",
+    "data": {
+      "type": "freshness",
+      "reason": "ingest",
+      "stats": {
+        "updatedAt": "2026-10-29T17:08:28.674Z",
+        "staleAfterMs": 600000,
+        "sessionActivityObservedAt": {
+          "today": {
+            "codex:sample/0~key": "2026-10-29T17:08:18.539Z",
+            "codex:sample/1~key": "2026-10-29T17:08:18.539Z",
+            "codex:sample/2~key": "2026-10-29T17:08:18.539Z",
+            "codex:sample/3~key": "2026-10-29T17:08:18.539Z",
+            "codex:sample/4~key": "2026-10-29T17:08:18.539Z",
+            "codex:sample/5~key": "2026-10-29T17:08:18.539Z",
+            "codex:sample/6~key": "2026-10-29T17:08:18.539Z",
+            "codex:sample/7~key": "2026-10-29T17:08:18.539Z"
+          }
+        },
+        "limits": {
+          "updatedAt": "2026-10-29T17:08:28.674Z"
+        },
+        "devices": [
+          {
+            "deviceId": "synthetic-v4-desktop",
+            "updatedAt": "2026-10-29T17:08:19.539Z",
+            "receivedAt": "2026-10-29T17:08:28.566Z",
+            "ageMs": 108,
+            "stale": false,
+            "sessionActivityObservedAt": {
+              "today": {
+                "codex:sample/0~key": "2026-10-29T17:08:18.539Z",
+                "codex:sample/1~key": "2026-10-29T17:08:18.539Z",
+                "codex:sample/2~key": "2026-10-29T17:08:18.539Z",
+                "codex:sample/3~key": "2026-10-29T17:08:18.539Z",
+                "codex:sample/4~key": "2026-10-29T17:08:18.539Z",
+                "codex:sample/5~key": "2026-10-29T17:08:18.539Z",
+                "codex:sample/6~key": "2026-10-29T17:08:18.539Z",
+                "codex:sample/7~key": "2026-10-29T17:08:18.539Z"
+              }
+            }
+          }
+        ]
+      },
+      "at": "2026-10-29T17:08:28.675Z",
+      "baseRevision": 0,
+      "revision": 1
+    },
+    "bytes": 1245,
+    "expectedSha256": "d1c78a318d5dcea8223fa7bbda34b916d4139fc1bb2dd064914f2ab7afc4d69b"
+  },
+  {
+    "event": "freshness",
+    "data": {
+      "type": "freshness",
+      "reason": "ingest",
+      "stats": {
+        "updatedAt": "2026-10-29T17:08:28.783Z",
+        "staleAfterMs": 600000,
+        "sessionActivityObservedAt": {
+          "today": {
+            "codex:sample/0~key": "2026-10-29T17:08:20.539Z",
+            "codex:sample/1~key": "2026-10-29T17:08:20.539Z",
+            "codex:sample/2~key": "2026-10-29T17:08:20.539Z",
+            "codex:sample/3~key": "2026-10-29T17:08:20.539Z",
+            "codex:sample/4~key": "2026-10-29T17:08:20.539Z",
+            "codex:sample/5~key": "2026-10-29T17:08:20.539Z",
+            "codex:sample/6~key": "2026-10-29T17:08:20.539Z",
+            "codex:sample/7~key": "2026-10-29T17:08:20.539Z"
+          }
+        },
+        "limits": {
+          "updatedAt": "2026-10-29T17:08:28.783Z"
+        },
+        "devices": [
+          {
+            "deviceId": "synthetic-v4-desktop",
+            "updatedAt": "2026-10-29T17:08:20.539Z",
+            "receivedAt": "2026-10-29T17:08:28.676Z",
+            "ageMs": 107,
+            "stale": false,
+            "sessionActivityObservedAt": {
+              "today": {
+                "codex:sample/0~key": "2026-10-29T17:08:20.539Z",
+                "codex:sample/1~key": "2026-10-29T17:08:20.539Z",
+                "codex:sample/2~key": "2026-10-29T17:08:20.539Z",
+                "codex:sample/3~key": "2026-10-29T17:08:20.539Z",
+                "codex:sample/4~key": "2026-10-29T17:08:20.539Z",
+                "codex:sample/5~key": "2026-10-29T17:08:20.539Z",
+                "codex:sample/6~key": "2026-10-29T17:08:20.539Z",
+                "codex:sample/7~key": "2026-10-29T17:08:20.539Z"
+              }
+            }
+          }
+        ]
+      },
+      "at": "2026-10-29T17:08:28.783Z",
+      "baseRevision": 1,
+      "revision": 2
+    },
+    "bytes": 1245,
+    "expectedSha256": "68bede2b2c91283d2181b8ef508485cb7a12150b4dc8331ae6d1abeea262bf43"
+  },
+  {
+    "event": "delta",
+    "data": {
+      "type": "delta",
+      "reason": "ingest",
+      "baseRevision": 2,
+      "revision": 3,
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/updatedAt",
+          "value": "2026-10-29T17:08:28.892Z"
+        },
+        {
+          "op": "replace",
+          "path": "/periods/today/sessions/codex:sample~10~0key",
+          "value": {
+            "client": "codex",
+            "sessionId": "sample/0~key",
+            "totalTokens": 100,
+            "costUsd": 0,
+            "messageCount": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "cacheReadTokens": 0,
+            "cacheWriteTokens": 0,
+            "reasoningTokens": 0,
+            "timedOutputTokens": 0,
+            "timedDurationMs": 0,
+            "startedAt": "",
+            "lastUsedAt": "2026-10-29T17:08:18.539Z",
+            "contextTokens": 0,
+            "contextWindow": 0,
+            "projectId": "",
+            "projectLabel": "",
+            "title": "",
+            "sessionKind": "",
+            "models": {
+              "gpt-5": 100
+            },
+            "modelCosts": {},
+            "providers": {},
+            "reasoningEffort": "xhigh",
+            "liveActivity": {
+              "state": "running",
+              "observedAt": "2026-10-29T17:08:20.539Z"
+            }
+          }
+        },
+        {
+          "op": "replace",
+          "path": "/devices/0/updatedAt",
+          "value": "2026-10-29T17:08:21.539Z"
+        },
+        {
+          "op": "replace",
+          "path": "/devices/0/receivedAt",
+          "value": "2026-10-29T17:08:28.784Z"
+        },
+        {
+          "op": "replace",
+          "path": "/devices/0/ageMs",
+          "value": 108
+        },
+        {
+          "op": "replace",
+          "path": "/devices/0/periods/today/sessions/codex:sample~10~0key",
+          "value": {
+            "client": "codex",
+            "sessionId": "sample/0~key",
+            "totalTokens": 100,
+            "costUsd": 0,
+            "messageCount": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "cacheReadTokens": 0,
+            "cacheWriteTokens": 0,
+            "reasoningTokens": 0,
+            "timedOutputTokens": 0,
+            "timedDurationMs": 0,
+            "startedAt": "",
+            "lastUsedAt": "2026-10-29T17:08:18.539Z",
+            "contextTokens": 0,
+            "contextWindow": 0,
+            "projectId": "",
+            "projectLabel": "",
+            "title": "",
+            "sessionKind": "",
+            "models": {
+              "gpt-5": 100
+            },
+            "modelCosts": {},
+            "providers": {},
+            "reasoningEffort": "xhigh",
+            "liveActivity": {
+              "state": "running",
+              "observedAt": "2026-10-29T17:08:20.539Z"
+            }
+          }
+        },
+        {
+          "op": "replace",
+          "path": "/limits/updatedAt",
+          "value": "2026-10-29T17:08:28.892Z"
+        }
+      ],
+      "at": "2026-10-29T17:08:28.892Z"
+    },
+    "bytes": 1736,
+    "expectedSha256": "260df8a5323f28611cb982f0623d991c33cce87a7bd119d3e541fc615b89b8f3"
+  },
+  {
+    "event": "delta",
+    "data": {
+      "type": "delta",
+      "reason": "ingest",
+      "baseRevision": 3,
+      "revision": 4,
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/updatedAt",
+          "value": "2026-10-29T17:08:28.999Z"
+        },
+        {
+          "op": "replace",
+          "path": "/periods/today/sessions/codex:sample~10~0key",
+          "value": {
+            "client": "codex",
+            "sessionId": "sample/0~key",
+            "totalTokens": 100,
+            "costUsd": 0,
+            "messageCount": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "cacheReadTokens": 0,
+            "cacheWriteTokens": 0,
+            "reasoningTokens": 0,
+            "timedOutputTokens": 0,
+            "timedDurationMs": 0,
+            "startedAt": "",
+            "lastUsedAt": "2026-10-29T17:08:18.539Z",
+            "contextTokens": 0,
+            "contextWindow": 0,
+            "projectId": "",
+            "projectLabel": "",
+            "title": "",
+            "sessionKind": "",
+            "models": {
+              "gpt-5": 100
+            },
+            "modelCosts": {},
+            "providers": {},
+            "reasoningEffort": null,
+            "liveActivity": {
+              "state": "running",
+              "observedAt": "2026-10-29T17:08:20.539Z"
+            }
+          }
+        },
+        {
+          "op": "replace",
+          "path": "/devices/0/receivedAt",
+          "value": "2026-10-29T17:08:28.893Z"
+        },
+        {
+          "op": "replace",
+          "path": "/devices/0/ageMs",
+          "value": 106
+        },
+        {
+          "op": "replace",
+          "path": "/devices/0/periods/today/sessions/codex:sample~10~0key",
+          "value": {
+            "client": "codex",
+            "sessionId": "sample/0~key",
+            "totalTokens": 100,
+            "costUsd": 0,
+            "messageCount": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "cacheReadTokens": 0,
+            "cacheWriteTokens": 0,
+            "reasoningTokens": 0,
+            "timedOutputTokens": 0,
+            "timedDurationMs": 0,
+            "startedAt": "",
+            "lastUsedAt": "2026-10-29T17:08:18.539Z",
+            "contextTokens": 0,
+            "contextWindow": 0,
+            "projectId": "",
+            "projectLabel": "",
+            "title": "",
+            "sessionKind": "",
+            "models": {
+              "gpt-5": 100
+            },
+            "modelCosts": {},
+            "providers": {},
+            "reasoningEffort": null,
+            "liveActivity": {
+              "state": "running",
+              "observedAt": "2026-10-29T17:08:20.539Z"
+            }
+          }
+        },
+        {
+          "op": "replace",
+          "path": "/limits/updatedAt",
+          "value": "2026-10-29T17:08:28.999Z"
+        }
+      ],
+      "at": "2026-10-29T17:08:29.000Z"
+    },
+    "bytes": 1648,
+    "expectedSha256": "687ecfbd9778134108bbaeb59e976bfb5515ea02445dc3ab0c34259c316f0829"
+  },
+  {
+    "event": "delta",
+    "data": {
+      "type": "delta",
+      "reason": "ingest",
+      "baseRevision": 4,
+      "revision": 5,
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/updatedAt",
+          "value": "2026-10-29T17:08:29.106Z"
+        },
+        {
+          "op": "remove",
+          "path": "/periods/today/sessions/codex:sample~10~0key"
+        },
+        {
+          "op": "replace",
+          "path": "/devices/0/receivedAt",
+          "value": "2026-10-29T17:08:29.001Z"
+        },
+        {
+          "op": "replace",
+          "path": "/devices/0/ageMs",
+          "value": 105
+        },
+        {
+          "op": "remove",
+          "path": "/devices/0/periods/today/sessions/codex:sample~10~0key"
+        },
+        {
+          "op": "replace",
+          "path": "/limits/updatedAt",
+          "value": "2026-10-29T17:08:29.106Z"
+        }
+      ],
+      "at": "2026-10-29T17:08:29.107Z"
+    },
+    "bytes": 564,
+    "expectedSha256": "833772042f92c520fb16782b4b3964b7dc51de3b8fabc9651ca3b71aed9963d5"
+  },
+  {
+    "event": "stats",
+    "data": {
+      "type": "stats",
+      "reason": "subscriptions",
+      "stats": {
+        "updatedAt": "2026-10-29T17:08:29.107Z",
+        "periods": {
+          "today": {
+            "capabilities": {
+              "tokenComponents": false,
+              "throughput": false
+            },
+            "totalTokens": 3000,
+            "costUsd": 0,
+            "cacheReadTokens": 0,
+            "cacheWriteTokens": 0,
+            "outputTokens": 0,
+            "unclassifiedTokens": 3000,
+            "timedTokens": 0,
+            "timedOutputTokens": 0,
+            "timedDurationMs": 0,
+            "clients": {
+              "codex": 3000
+            },
+            "clientCosts": {},
+            "clientCacheReads": {},
+            "clientCacheWrites": {},
+            "clientOutputs": {},
+            "clientUnclassifiedTokens": {
+              "codex": 3000
+            },
+            "models": {},
+            "modelCosts": {},
+            "modelCacheReads": {},
+            "modelCacheWrites": {},
+            "modelOutputs": {},
+            "modelUnclassifiedTokens": {},
+            "clientModels": {},
+            "clientModelCosts": {},
+            "projects": {},
+            "sessions": {
+              "codex:sample/1~key": {
+                "client": "codex",
+                "sessionId": "sample/1~key",
+                "totalTokens": 100,
+                "costUsd": 0,
+                "messageCount": 0,
+                "inputTokens": 0,
+                "outputTokens": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "reasoningTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "startedAt": "",
+                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "contextTokens": 0,
+                "contextWindow": 0,
+                "projectId": "",
+                "projectLabel": "",
+                "title": "",
+                "sessionKind": "",
+                "models": {
+                  "gpt-5": 100
+                },
+                "modelCosts": {},
+                "providers": {},
+                "reasoningEffort": "high",
+                "liveActivity": {
+                  "state": "running",
+                  "observedAt": "2026-10-29T17:08:20.539Z"
+                }
+              },
+              "codex:sample/2~key": {
+                "client": "codex",
+                "sessionId": "sample/2~key",
+                "totalTokens": 100,
+                "costUsd": 0,
+                "messageCount": 0,
+                "inputTokens": 0,
+                "outputTokens": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "reasoningTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "startedAt": "",
+                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "contextTokens": 0,
+                "contextWindow": 0,
+                "projectId": "",
+                "projectLabel": "",
+                "title": "",
+                "sessionKind": "",
+                "models": {
+                  "gpt-5": 100
+                },
+                "modelCosts": {},
+                "providers": {},
+                "reasoningEffort": "high",
+                "liveActivity": {
+                  "state": "running",
+                  "observedAt": "2026-10-29T17:08:20.539Z"
+                }
+              },
+              "codex:sample/3~key": {
+                "client": "codex",
+                "sessionId": "sample/3~key",
+                "totalTokens": 100,
+                "costUsd": 0,
+                "messageCount": 0,
+                "inputTokens": 0,
+                "outputTokens": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "reasoningTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "startedAt": "",
+                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "contextTokens": 0,
+                "contextWindow": 0,
+                "projectId": "",
+                "projectLabel": "",
+                "title": "",
+                "sessionKind": "",
+                "models": {
+                  "gpt-5": 100
+                },
+                "modelCosts": {},
+                "providers": {},
+                "reasoningEffort": "high",
+                "liveActivity": {
+                  "state": "running",
+                  "observedAt": "2026-10-29T17:08:20.539Z"
+                }
+              },
+              "codex:sample/4~key": {
+                "client": "codex",
+                "sessionId": "sample/4~key",
+                "totalTokens": 100,
+                "costUsd": 0,
+                "messageCount": 0,
+                "inputTokens": 0,
+                "outputTokens": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "reasoningTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "startedAt": "",
+                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "contextTokens": 0,
+                "contextWindow": 0,
+                "projectId": "",
+                "projectLabel": "",
+                "title": "",
+                "sessionKind": "",
+                "models": {
+                  "gpt-5": 100
+                },
+                "modelCosts": {},
+                "providers": {},
+                "reasoningEffort": "high",
+                "liveActivity": {
+                  "state": "running",
+                  "observedAt": "2026-10-29T17:08:20.539Z"
+                }
+              },
+              "codex:sample/5~key": {
+                "client": "codex",
+                "sessionId": "sample/5~key",
+                "totalTokens": 100,
+                "costUsd": 0,
+                "messageCount": 0,
+                "inputTokens": 0,
+                "outputTokens": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "reasoningTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "startedAt": "",
+                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "contextTokens": 0,
+                "contextWindow": 0,
+                "projectId": "",
+                "projectLabel": "",
+                "title": "",
+                "sessionKind": "",
+                "models": {
+                  "gpt-5": 100
+                },
+                "modelCosts": {},
+                "providers": {},
+                "reasoningEffort": "high",
+                "liveActivity": {
+                  "state": "running",
+                  "observedAt": "2026-10-29T17:08:20.539Z"
+                }
+              },
+              "codex:sample/6~key": {
+                "client": "codex",
+                "sessionId": "sample/6~key",
+                "totalTokens": 100,
+                "costUsd": 0,
+                "messageCount": 0,
+                "inputTokens": 0,
+                "outputTokens": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "reasoningTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "startedAt": "",
+                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "contextTokens": 0,
+                "contextWindow": 0,
+                "projectId": "",
+                "projectLabel": "",
+                "title": "",
+                "sessionKind": "",
+                "models": {
+                  "gpt-5": 100
+                },
+                "modelCosts": {},
+                "providers": {},
+                "reasoningEffort": "high",
+                "liveActivity": {
+                  "state": "running",
+                  "observedAt": "2026-10-29T17:08:20.539Z"
+                }
+              },
+              "codex:sample/7~key": {
+                "client": "codex",
+                "sessionId": "sample/7~key",
+                "totalTokens": 100,
+                "costUsd": 0,
+                "messageCount": 0,
+                "inputTokens": 0,
+                "outputTokens": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "reasoningTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "startedAt": "",
+                "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                "contextTokens": 0,
+                "contextWindow": 0,
+                "projectId": "",
+                "projectLabel": "",
+                "title": "",
+                "sessionKind": "",
+                "models": {
+                  "gpt-5": 100
+                },
+                "modelCosts": {},
+                "providers": {},
+                "reasoningEffort": "high",
+                "liveActivity": {
+                  "state": "running",
+                  "observedAt": "2026-10-29T17:08:20.539Z"
+                }
+              }
+            }
+          },
+          "month": {
+            "capabilities": {
+              "tokenComponents": true,
+              "throughput": false
+            },
+            "totalTokens": 0,
+            "costUsd": 0,
+            "cacheReadTokens": 0,
+            "cacheWriteTokens": 0,
+            "outputTokens": 0,
+            "unclassifiedTokens": 0,
+            "timedTokens": 0,
+            "timedOutputTokens": 0,
+            "timedDurationMs": 0,
+            "clients": {},
+            "clientCosts": {},
+            "clientCacheReads": {},
+            "clientCacheWrites": {},
+            "clientOutputs": {},
+            "clientUnclassifiedTokens": {},
+            "models": {},
+            "modelCosts": {},
+            "modelCacheReads": {},
+            "modelCacheWrites": {},
+            "modelOutputs": {},
+            "modelUnclassifiedTokens": {},
+            "clientModels": {},
+            "clientModelCosts": {},
+            "projects": {},
+            "sessions": {}
+          },
+          "allTime": {
+            "capabilities": {
+              "tokenComponents": true,
+              "throughput": false
+            },
+            "totalTokens": 0,
+            "costUsd": 0,
+            "cacheReadTokens": 0,
+            "cacheWriteTokens": 0,
+            "outputTokens": 0,
+            "unclassifiedTokens": 0,
+            "timedTokens": 0,
+            "timedOutputTokens": 0,
+            "timedDurationMs": 0,
+            "clients": {},
+            "clientCosts": {},
+            "clientCacheReads": {},
+            "clientCacheWrites": {},
+            "clientOutputs": {},
+            "clientUnclassifiedTokens": {},
+            "models": {},
+            "modelCosts": {},
+            "modelCacheReads": {},
+            "modelCacheWrites": {},
+            "modelOutputs": {},
+            "modelUnclassifiedTokens": {},
+            "clientModels": {},
+            "clientModelCosts": {},
+            "projects": {},
+            "sessions": {}
+          }
+        },
+        "devices": [
+          {
+            "deviceId": "synthetic-v4-desktop",
+            "hostname": "Synthetic desktop",
+            "platform": "",
+            "agentVersion": "0.81.0",
+            "agentRuntime": "",
+            "updatedAt": "2026-10-29T17:08:21.539Z",
+            "receivedAt": "2026-10-29T17:08:29.001Z",
+            "ageMs": 106,
+            "stale": false,
+            "periods": {
+              "today": {
+                "capabilities": {
+                  "tokenComponents": false,
+                  "throughput": false
+                },
+                "totalTokens": 3000,
+                "costUsd": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "outputTokens": 0,
+                "unclassifiedTokens": 3000,
+                "timedTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "clients": {
+                  "codex": 3000
+                },
+                "clientCosts": {},
+                "clientCacheReads": {},
+                "clientCacheWrites": {},
+                "clientOutputs": {},
+                "clientUnclassifiedTokens": {
+                  "codex": 3000
+                },
+                "models": {},
+                "modelCosts": {},
+                "modelCacheReads": {},
+                "modelCacheWrites": {},
+                "modelOutputs": {},
+                "modelUnclassifiedTokens": {},
+                "clientModels": {},
+                "clientModelCosts": {},
+                "projects": {},
+                "sessions": {
+                  "codex:sample/1~key": {
+                    "client": "codex",
+                    "sessionId": "sample/1~key",
+                    "totalTokens": 100,
+                    "costUsd": 0,
+                    "messageCount": 0,
+                    "inputTokens": 0,
+                    "outputTokens": 0,
+                    "cacheReadTokens": 0,
+                    "cacheWriteTokens": 0,
+                    "reasoningTokens": 0,
+                    "timedOutputTokens": 0,
+                    "timedDurationMs": 0,
+                    "startedAt": "",
+                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "contextTokens": 0,
+                    "contextWindow": 0,
+                    "projectId": "",
+                    "projectLabel": "",
+                    "title": "",
+                    "sessionKind": "",
+                    "models": {
+                      "gpt-5": 100
+                    },
+                    "modelCosts": {},
+                    "providers": {},
+                    "reasoningEffort": "high",
+                    "liveActivity": {
+                      "state": "running",
+                      "observedAt": "2026-10-29T17:08:20.539Z"
+                    }
+                  },
+                  "codex:sample/2~key": {
+                    "client": "codex",
+                    "sessionId": "sample/2~key",
+                    "totalTokens": 100,
+                    "costUsd": 0,
+                    "messageCount": 0,
+                    "inputTokens": 0,
+                    "outputTokens": 0,
+                    "cacheReadTokens": 0,
+                    "cacheWriteTokens": 0,
+                    "reasoningTokens": 0,
+                    "timedOutputTokens": 0,
+                    "timedDurationMs": 0,
+                    "startedAt": "",
+                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "contextTokens": 0,
+                    "contextWindow": 0,
+                    "projectId": "",
+                    "projectLabel": "",
+                    "title": "",
+                    "sessionKind": "",
+                    "models": {
+                      "gpt-5": 100
+                    },
+                    "modelCosts": {},
+                    "providers": {},
+                    "reasoningEffort": "high",
+                    "liveActivity": {
+                      "state": "running",
+                      "observedAt": "2026-10-29T17:08:20.539Z"
+                    }
+                  },
+                  "codex:sample/3~key": {
+                    "client": "codex",
+                    "sessionId": "sample/3~key",
+                    "totalTokens": 100,
+                    "costUsd": 0,
+                    "messageCount": 0,
+                    "inputTokens": 0,
+                    "outputTokens": 0,
+                    "cacheReadTokens": 0,
+                    "cacheWriteTokens": 0,
+                    "reasoningTokens": 0,
+                    "timedOutputTokens": 0,
+                    "timedDurationMs": 0,
+                    "startedAt": "",
+                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "contextTokens": 0,
+                    "contextWindow": 0,
+                    "projectId": "",
+                    "projectLabel": "",
+                    "title": "",
+                    "sessionKind": "",
+                    "models": {
+                      "gpt-5": 100
+                    },
+                    "modelCosts": {},
+                    "providers": {},
+                    "reasoningEffort": "high",
+                    "liveActivity": {
+                      "state": "running",
+                      "observedAt": "2026-10-29T17:08:20.539Z"
+                    }
+                  },
+                  "codex:sample/4~key": {
+                    "client": "codex",
+                    "sessionId": "sample/4~key",
+                    "totalTokens": 100,
+                    "costUsd": 0,
+                    "messageCount": 0,
+                    "inputTokens": 0,
+                    "outputTokens": 0,
+                    "cacheReadTokens": 0,
+                    "cacheWriteTokens": 0,
+                    "reasoningTokens": 0,
+                    "timedOutputTokens": 0,
+                    "timedDurationMs": 0,
+                    "startedAt": "",
+                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "contextTokens": 0,
+                    "contextWindow": 0,
+                    "projectId": "",
+                    "projectLabel": "",
+                    "title": "",
+                    "sessionKind": "",
+                    "models": {
+                      "gpt-5": 100
+                    },
+                    "modelCosts": {},
+                    "providers": {},
+                    "reasoningEffort": "high",
+                    "liveActivity": {
+                      "state": "running",
+                      "observedAt": "2026-10-29T17:08:20.539Z"
+                    }
+                  },
+                  "codex:sample/5~key": {
+                    "client": "codex",
+                    "sessionId": "sample/5~key",
+                    "totalTokens": 100,
+                    "costUsd": 0,
+                    "messageCount": 0,
+                    "inputTokens": 0,
+                    "outputTokens": 0,
+                    "cacheReadTokens": 0,
+                    "cacheWriteTokens": 0,
+                    "reasoningTokens": 0,
+                    "timedOutputTokens": 0,
+                    "timedDurationMs": 0,
+                    "startedAt": "",
+                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "contextTokens": 0,
+                    "contextWindow": 0,
+                    "projectId": "",
+                    "projectLabel": "",
+                    "title": "",
+                    "sessionKind": "",
+                    "models": {
+                      "gpt-5": 100
+                    },
+                    "modelCosts": {},
+                    "providers": {},
+                    "reasoningEffort": "high",
+                    "liveActivity": {
+                      "state": "running",
+                      "observedAt": "2026-10-29T17:08:20.539Z"
+                    }
+                  },
+                  "codex:sample/6~key": {
+                    "client": "codex",
+                    "sessionId": "sample/6~key",
+                    "totalTokens": 100,
+                    "costUsd": 0,
+                    "messageCount": 0,
+                    "inputTokens": 0,
+                    "outputTokens": 0,
+                    "cacheReadTokens": 0,
+                    "cacheWriteTokens": 0,
+                    "reasoningTokens": 0,
+                    "timedOutputTokens": 0,
+                    "timedDurationMs": 0,
+                    "startedAt": "",
+                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "contextTokens": 0,
+                    "contextWindow": 0,
+                    "projectId": "",
+                    "projectLabel": "",
+                    "title": "",
+                    "sessionKind": "",
+                    "models": {
+                      "gpt-5": 100
+                    },
+                    "modelCosts": {},
+                    "providers": {},
+                    "reasoningEffort": "high",
+                    "liveActivity": {
+                      "state": "running",
+                      "observedAt": "2026-10-29T17:08:20.539Z"
+                    }
+                  },
+                  "codex:sample/7~key": {
+                    "client": "codex",
+                    "sessionId": "sample/7~key",
+                    "totalTokens": 100,
+                    "costUsd": 0,
+                    "messageCount": 0,
+                    "inputTokens": 0,
+                    "outputTokens": 0,
+                    "cacheReadTokens": 0,
+                    "cacheWriteTokens": 0,
+                    "reasoningTokens": 0,
+                    "timedOutputTokens": 0,
+                    "timedDurationMs": 0,
+                    "startedAt": "",
+                    "lastUsedAt": "2026-10-29T17:08:18.539Z",
+                    "contextTokens": 0,
+                    "contextWindow": 0,
+                    "projectId": "",
+                    "projectLabel": "",
+                    "title": "",
+                    "sessionKind": "",
+                    "models": {
+                      "gpt-5": 100
+                    },
+                    "modelCosts": {},
+                    "providers": {},
+                    "reasoningEffort": "high",
+                    "liveActivity": {
+                      "state": "running",
+                      "observedAt": "2026-10-29T17:08:20.539Z"
+                    }
+                  }
+                }
+              },
+              "month": {
+                "capabilities": {
+                  "tokenComponents": true,
+                  "throughput": false
+                },
+                "totalTokens": 0,
+                "costUsd": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "outputTokens": 0,
+                "unclassifiedTokens": 0,
+                "timedTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "clients": {},
+                "clientCosts": {},
+                "clientCacheReads": {},
+                "clientCacheWrites": {},
+                "clientOutputs": {},
+                "clientUnclassifiedTokens": {},
+                "models": {},
+                "modelCosts": {},
+                "modelCacheReads": {},
+                "modelCacheWrites": {},
+                "modelOutputs": {},
+                "modelUnclassifiedTokens": {},
+                "clientModels": {},
+                "clientModelCosts": {},
+                "projects": {},
+                "sessions": {}
+              },
+              "allTime": {
+                "capabilities": {
+                  "tokenComponents": true,
+                  "throughput": false
+                },
+                "totalTokens": 0,
+                "costUsd": 0,
+                "cacheReadTokens": 0,
+                "cacheWriteTokens": 0,
+                "outputTokens": 0,
+                "unclassifiedTokens": 0,
+                "timedTokens": 0,
+                "timedOutputTokens": 0,
+                "timedDurationMs": 0,
+                "clients": {},
+                "clientCosts": {},
+                "clientCacheReads": {},
+                "clientCacheWrites": {},
+                "clientOutputs": {},
+                "clientUnclassifiedTokens": {},
+                "models": {},
+                "modelCosts": {},
+                "modelCacheReads": {},
+                "modelCacheWrites": {},
+                "modelOutputs": {},
+                "modelUnclassifiedTokens": {},
+                "clientModels": {},
+                "clientModelCosts": {},
+                "projects": {},
+                "sessions": {}
+              }
+            },
+            "limits": {
+              "updatedAt": null,
+              "refreshMs": 300000,
+              "providers": []
+            }
+          }
+        ],
+        "projectsIncomplete": false,
+        "limits": {
+          "updatedAt": "2026-10-29T17:08:29.107Z",
+          "providers": []
+        },
+        "staleAfterMs": 600000,
+        "historyPreview": {
+          "daily": [],
+          "monthly": [],
+          "summary": {
+            "totalTokens": 0,
+            "totalCost": 0,
+            "activeDays": 0,
+            "currentStreak": 0,
+            "longestStreak": 0,
+            "peakDayTokens": 0,
+            "favoriteModel": "",
+            "messages": 0,
+            "activeTimeMs": 0
+          }
+        },
+        "historyRevision": "6d56fb5d8446c449",
+        "deviceHistoryRevision": "c72caece7b2a7cc2",
+        "subscriptionsUpdatedAt": "",
+        "syncSettingsRevisions": {
+          "modelAliases": 0,
+          "customPricing": 0
+        }
+      },
+      "at": "2026-10-29T17:08:29.108Z",
+      "revision": 6
+    },
+    "bytes": 12090,
+    "expectedSha256": "1662bcdcbf6c14cf7ba7ea2b0a88d8039f5b20f36ca11ba510ce2723239a51a9"
+  }
+]

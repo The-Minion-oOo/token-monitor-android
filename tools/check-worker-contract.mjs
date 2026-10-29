@@ -59,7 +59,7 @@ export async function checkWorkerContract(source, output, upstream, limitCases =
         assert.equal(responses["stats.json"].periods.today.totalTokens, 1234);
         assert.ok(!JSON.stringify(responses).includes("NEVER_EXPORT"), "Private conversation content crossed Worker boundary");
         assert.equal((await request("stats/stream", false)).status, 401);
-        const response = await request("stats/stream", true, { signal: abort.signal, headers: { "x-token-monitor-stream": "2" } });
+        const response = await request("stats/stream", true, { signal: abort.signal, headers: { "x-token-monitor-stream": "3" } });
         assert.equal(response.status, 200);
         reader = response.body.getReader();
         pump = (async () => {

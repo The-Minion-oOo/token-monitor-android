@@ -91,6 +91,7 @@ internal data class HubSessionDto(
     val liveActivity: HubLiveActivityDto? = null,
     val waitingForInput: Boolean? = null,
     val grokBotSession: Boolean? = null,
+    val reasoningEffort: String? = null,
 )
 
 internal data class HubPromptCacheDto(val observedAt: String, val ttlSeconds: Long)

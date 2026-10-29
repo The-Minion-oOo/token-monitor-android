@@ -108,6 +108,8 @@ data class SessionUsage(
     val waitingForInput: Boolean? = null,
     /** Explicit Cursor Grok Bot marker; null when absent, so ids and models decide. */
     val grokBotSession: Boolean? = null,
+    /** Reported turn setting; independent of reasoning-token usage or activity expiry. */
+    val reasoningEffort: String? = null,
 )
 
 /** A provider-specific estimate, not a guaranteed server-side expiry. */

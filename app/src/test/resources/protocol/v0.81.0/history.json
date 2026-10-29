@@ -1,0 +1,49 @@
+{
+  "daily": [
+    {
+      "date": "2026-10-29",
+      "tokens": 1234,
+      "cost": 0.42,
+      "messages": 0,
+      "activeTimeMs": 0,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "outputTokens": 0,
+      "unclassifiedTokens": 1234,
+      "tokenComponentsAvailable": false,
+      "perClient": {
+        "mcode": {
+          "tokens": 1234,
+          "cost": 0.42,
+          "messages": 0,
+          "unpricedTokens": 321,
+          "unclassifiedTokens": 1234
+        }
+      },
+      "perModel": {
+        "minimax-m2.5": {
+          "tokens": 1234,
+          "cost": 0.42,
+          "unpricedTokens": 321,
+          "unclassifiedTokens": 1234
+        }
+      },
+      "unpricedTokens": 321,
+      "tokenIntensity": 4,
+      "costIntensity": 4,
+      "intensity": 4
+    }
+  ],
+  "monthly": [],
+  "summary": {
+    "totalTokens": 0,
+    "totalCost": 0,
+    "activeDays": 1,
+    "currentStreak": 1,
+    "longestStreak": 1,
+    "peakDayTokens": 1234,
+    "favoriteModel": "minimax-m2.5",
+    "messages": 0,
+    "activeTimeMs": 0
+  }
+}

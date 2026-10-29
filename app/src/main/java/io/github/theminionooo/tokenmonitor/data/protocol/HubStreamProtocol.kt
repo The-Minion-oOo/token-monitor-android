@@ -33,6 +33,9 @@ internal object HubStreamProtocol {
     fun mergeFreshness(current: JsonObject, freshness: JsonObject): JsonObject {
         val merged = current.toMutableMap()
         listOf("updatedAt", "staleAfterMs").forEach { key -> freshness[key]?.let { merged[key] = it } }
+        current.objectField("periods")?.let { periods ->
+            merged["periods"] = applyActivityClocks(periods, freshness.objectField("sessionActivityObservedAt"))
+        }
 
         freshness.objectField("limits")?.let { incoming ->
             merged["limits"] = JsonObject(current.objectField("limits").orEmpty() + incoming)
@@ -42,13 +45,37 @@ internal object HubStreamProtocol {
             val byId = incoming.associateBy(::deviceId)
             val existing = current.array("devices").mapNotNull { it as? JsonObject }
             val combined = existing.map { device ->
-                byId[deviceId(device)]?.let { JsonObject(device + it) } ?: device
+                byId[deviceId(device)]?.let { clocks ->
+                    val fields = device.toMutableMap()
+                    fields.putAll(clocks.filterKeys { it !in setOf("sessionActivityObservedAt", "clientHealthObservedAt") })
+                    device.objectField("periods")?.let { fields["periods"] = applyActivityClocks(it, clocks.objectField("sessionActivityObservedAt")) }
+                    device.objectField("clientHealth")?.let { health ->
+                        clocks["clientHealthObservedAt"]?.let { fields["clientHealth"] = JsonObject(health + ("observedAt" to it)) }
+                    }
+                    JsonObject(fields)
+                } ?: device
             }.toMutableList()
             val known = existing.map(::deviceId).toSet()
             combined += incoming.filter { deviceId(it) !in known }
             merged["devices"] = JsonArray(combined)
         }
         return JsonObject(merged)
+    }
+
+    private fun applyActivityClocks(periods: JsonObject, clocks: JsonObject?): JsonObject {
+        if (clocks == null) return periods
+        return JsonObject(periods.mapValues { (name, value) ->
+            val period = value as? JsonObject ?: return@mapValues value
+            val times = clocks.objectField(name) ?: return@mapValues value
+            val sessions = period.objectField("sessions") ?: return@mapValues value
+            JsonObject(period + ("sessions" to JsonObject(sessions.mapValues session@{ (key, row) ->
+                val session = row as? JsonObject ?: return@session row
+                val activity = session.objectField("liveActivity") ?: return@session row
+                val at = (times[key] as? kotlinx.serialization.json.JsonPrimitive)?.takeIf { it.isString } ?: return@session row
+                if (runCatching { java.time.Instant.parse(at.content) }.isFailure) return@session row
+                JsonObject(session + ("liveActivity" to JsonObject(activity + ("observedAt" to at))))
+            })))
+        })
     }
 
     /** Unexpected content or a new device takes the complete decoder path instead. */

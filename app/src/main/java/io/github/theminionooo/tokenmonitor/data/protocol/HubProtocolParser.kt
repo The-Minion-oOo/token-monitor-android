@@ -34,7 +34,7 @@ import kotlinx.serialization.json.longOrNull
  * Android client renders and intentionally ignores unknown fields.
  */
 object HubProtocolParser {
-    const val SUPPORTED_UPSTREAM_VERSION = "v0.80.0"
+    const val SUPPORTED_UPSTREAM_VERSION = "v0.81.0"
 
     private val LIVE_ACTIVITY_STATES = setOf("running", "waiting", "idle", "unknown")
 
@@ -240,6 +240,9 @@ object HubProtocolParser {
         },
         waitingForInput = strictBoolean("waitingForInput"),
         grokBotSession = strictBoolean("grokBotSession"),
+        reasoningEffort = text("reasoningEffort").trim().takeIf {
+            string("client") in setOf("codex", "claude") && it.matches(Regex("[a-zA-Z][a-zA-Z0-9_-]{0,31}")) && !it.equals("unknown", true)
+        },
         contextTokens = long("contextTokens") ?: 0,
         contextWindow = long("contextWindow") ?: 0,
         turnEnded = boolean("turnEnded"),
@@ -279,7 +282,7 @@ object HubProtocolParser {
 
     private fun JsonObject.toLimitAccountDto() = HubLimitAccountDto(
         provider = string("provider"),
-        accountName = string("accountName"),
+        accountName = string("accountName").ifBlank { if (string("provider") == "volcengine") string("accountLabel") else "" },
         accountEmail = string("accountEmail").ifBlank { string("email") },
         plan = string("plan").ifBlank { string("planLabel") }.ifBlank {
             // These providers keep the legacy billing/plan label here, including Ollama's API-key lane.
@@ -507,6 +510,7 @@ object HubProtocolParser {
         parentSessionId = parentSessionId,
         parentClient = parentClient,
         liveActivity = liveActivity?.let { LiveActivity(it.state, it.observedAt) },
+        reasoningEffort = reasoningEffort,
         waitingForInput = waitingForInput,
         grokBotSession = grokBotSession,
     )

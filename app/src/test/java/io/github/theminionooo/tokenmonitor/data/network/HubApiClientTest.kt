@@ -15,6 +15,34 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 
 class HubApiClientTest {
+    @Test fun `a broken revision exits the stream and reconnect starts from a new snapshot`() = runBlocking {
+        val reads = AtomicInteger()
+        val server = HttpServer.create(InetSocketAddress(testHost, 0), 0).apply {
+            createContext("/api/stats/stream") { exchange ->
+                assertEquals("4", exchange.requestHeaders.getFirst("x-token-monitor-stream"))
+                val first = reads.incrementAndGet() == 1
+                val revision = if (first) 1 else 20
+                val payload = "event: snapshot\ndata: {\"revision\":$revision,\"stats\":{\"periods\":{\"today\":{\"totalTokens\":$revision}}}}\n\n" +
+                    if (first) "event: delta\ndata: {\"baseRevision\":9,\"revision\":10,\"patch\":[]}\n\n" else ""
+                val body = payload.toByteArray()
+                exchange.sendResponseHeaders(200, body.size.toLong())
+                exchange.responseBody.use { it.write(body) }
+            }
+            start()
+        }
+        try {
+            val connection = HubConnection("http://$testHost:${server.address.port}", "synthetic-secret", true)
+            val totals = mutableListOf<Long>()
+            HubApiClient().use { client ->
+                val collect: suspend (HubStreamEvent) -> Unit = { totals += HubProtocolParser.decodeStats(it.completeStats!!.toString()).periods.getValue("today").totalTokens }
+                try { client.streamStats(connection, {}, collect); fail("Expected reconnect") }
+                catch (_: io.github.theminionooo.tokenmonitor.data.protocol.HubProtocolException) { }
+                client.streamStats(connection, {}, collect)
+            }
+            assertEquals(listOf(1L, 20L), totals)
+        } finally { server.stop(0) }
+    }
+
     @Test fun `widget fetch authenticates after health reads three endpoints and counts payload bytes`() {
         val reads = mutableListOf<String>()
         val bodies = mapOf("/api/health" to """{"ok":true,"role":"hub"}""", "/api/stats" to "{}", "/api/history" to "{}")
@@ -93,7 +121,7 @@ class HubApiClientTest {
             }
             assertEquals(1, events.size)
             assertEquals("snapshot", events.single().type)
-            val decoded = HubProtocolParser.decodeStats(events.single().data)
+            val decoded = HubProtocolParser.decodeStats(events.single().completeStats!!.toString())
             assertEquals(2400, decoded.periods.getValue("month").sessions.size)
             assertEquals(2_400_000, decoded.periods.getValue("month").totalTokens)
         } finally {

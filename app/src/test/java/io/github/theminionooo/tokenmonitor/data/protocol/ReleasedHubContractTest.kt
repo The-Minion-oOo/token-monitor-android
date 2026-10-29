@@ -8,6 +8,12 @@ import org.junit.Test
 
 /** Responses produced by tools/check-hub-contract.mjs from the exact released desktop source. */
 class ReleasedHubContractTest {
+    @Test fun `released v081 streams reconstruct every ordered revision on Android`() {
+        val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
+        assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())
+        for (kind in listOf("node", "worker")) DesktopV081Test().verifyChain(File(directory!!, "v4-$kind.json").readText())
+    }
+
     @Test fun `released v080 providers retain Muse devices Ollama spend and Claude accounts`() {
         val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
         assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())
