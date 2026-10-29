@@ -22,8 +22,11 @@ No report is sent automatically.
 ## Requirements
 
 - Android 8.0 or newer.
-- Token Monitor desktop with Hub hosting enabled and a shared secret. Android v0.81.0 r1 is verified against desktop v0.81.0.
+- Token Monitor desktop and a Hub with a shared secret. Desktops connect to a Cloudflare Worker, or one desktop hosts the Hub. Android v0.81.0 r1 is verified against desktop v0.81.0.
 - A route to the Hub: Tailscale is recommended; home Wi-Fi and an existing internet HTTPS Hub are optional.
+
+Without Tailscale, follow [Cloudflare Hub: desktop to Android](CLOUDFLARE_HUB.md)
+to deploy the free-plan Worker Hub, connect your desktops and pair Android over HTTPS.
 
 ## Install
 
