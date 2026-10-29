@@ -23,15 +23,21 @@ features are retained.
 
 ## Updating
 
-This is a release candidate. When published, install the signed APK over the
-existing app without uninstalling, or use **Settings → App updates**. The package
+Install the signed APK over the existing app without uninstalling, or use
+**Settings → App updates**. The package
 and signing certificate are unchanged; the version code increases to `810002`.
 Android 8 or newer is required.
 [Install and update](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md).
 
-The hardening code passed phone dashboard, Widget Live and forced periodic
-refresh checks over Tailscale and home Wi-Fi in a private signed build. The
-final r2 APK has not yet been installed on my phone; that check remains before
-publication. Forced jobs do not establish overnight scheduling or battery
-savings.
+I installed the exact signed r2 APK over the private hardening build on my phone.
+Pairing and visible settings survived, and the Pages widget redrew before opening
+the app. The dashboard, Widget Live/Stop and forced periodic refreshes passed
+over Tailscale and home Wi-Fi. Saved data remained available offline, and the
+dashboard reconnected when Wi-Fi returned. I restored the settings, removed the
+test helper and turned debugging off.
+
+This was a functional check of the existing widget size, without a new in-app
+installer test, a one-hour expiry wait, overnight scheduling or comparable
+battery measurements. The broader language, payment and currency phone follow-up
+remains open in [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94).
 [Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md).

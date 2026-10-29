@@ -1,16 +1,12 @@
 # Install and update
 
-**Current release:** v0.81.0 r1 (`810001`) adds smaller live updates, session
-reasoning effort and personal Volcengine quotas. It retains the features and languages
-described in [Desktop parity](DESKTOP_PARITY.md). This release has not been
-tested on a physical phone; [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94)
-tracks that follow-up separately.
-
-**Next candidate:** v0.81.0 r2 (`810002`) hardens Hub routes, live streams
-and periodic widget refreshes. It uses the same package and signing certificate.
-It is not published yet; the public download above remains r1. The hardening
-code was phone-checked in a private signed build; the final r2 APK has not yet
-been installed on my phone. See [candidate notes](releases/android-v0.81.0-r2.md).
+**Current release:** v0.81.0 r2 (`810002`) hardens Hub routes, live streams
+and periodic widget refreshes. It retains the features and languages described
+in [Desktop parity](DESKTOP_PARITY.md), with the same package and signing
+certificate. I checked the exact signed APK on my phone over Tailscale and home
+Wi-Fi; see [release notes](releases/android-v0.81.0-r2.md) and
+[Validation](VALIDATION.md) for the scope. The broader language, payment and
+currency follow-up remains in [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94).
 
 Open **Settings → App language**, **Display currency**, **Tools and quotas**
 or **Live throughput** for the local choices. Language starts with the phone
@@ -22,7 +18,7 @@ No report is sent automatically.
 ## Requirements
 
 - Android 8.0 or newer.
-- Token Monitor desktop and a Hub with a shared secret. Desktops connect to a Cloudflare Worker, or one desktop hosts the Hub. Android v0.81.0 r1 is verified against desktop v0.81.0.
+- Token Monitor desktop and a Hub with a shared secret. Desktops connect to a Cloudflare Worker, or one desktop hosts the Hub. Android v0.81.0 r2 is verified against desktop v0.81.0.
 - A route to the Hub: Tailscale is recommended; home Wi-Fi and an existing internet HTTPS Hub are optional.
 
 Without Tailscale, follow [Cloudflare Hub: desktop to Android](CLOUDFLARE_HUB.md)
@@ -30,8 +26,8 @@ to deploy the free-plan Worker Hub, connect your desktops and pair Android over 
 
 ## Install
 
-Download the signed v0.81.0 r1 APK from the public
-[release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.81.0-r1),
+Download the signed v0.81.0 r2 APK from the public
+[release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.81.0-r2),
 or use **Settings → App updates** in v0.62.0 r1 or newer. It uses the same package
 and release certificate as earlier releases, with a higher version code. An
 in-app upgrade on my phone from v0.65.0 to v0.66.0 r1 preserved pairing and the
@@ -43,7 +39,10 @@ no in-app updater, so install a newer release manually once. I installed the
 signed v0.78.0 r2 APK over r1 on my phone and confirmed pairing, Tailscale and
 home Wi-Fi still worked. Earlier widget checks apply only to their named builds.
 The r3 confirmation dialog fix was checked on emulators and was not phone-tested.
-I haven't phone-tested v0.79.0 r2, v0.80.0 r1 or v0.81.0 r1.
+I haven't phone-tested v0.79.0 r2, v0.80.0 r1 or v0.81.0 r1. For v0.81.0 r2,
+I installed the exact release APK over the private hardening build: pairing and
+visible settings survived, and the Pages widget redrew before opening the app.
+This r2 check used a USB install, not a new in-app updater test.
 
 To build the current source, install JDK 17 and Android SDK 37, then run:
 
@@ -70,14 +69,14 @@ There is no Play Store or F-Droid listing.
 Each signed release includes an APK and a `.sha256` file. Compare the hash:
 
 ```powershell
-Get-FileHash .\token-monitor-android-v0.78.0-r1.apk -Algorithm SHA256
+Get-FileHash .\token-monitor-android-v0.81.0-r2.apk -Algorithm SHA256
 ```
 
 On macOS or Linux, use `shasum -a 256` or `sha256sum` instead:
 
 ```sh
-shasum -a 256 token-monitor-android-v0.78.0-r1.apk
-sha256sum token-monitor-android-v0.78.0-r1.apk
+shasum -a 256 token-monitor-android-v0.81.0-r2.apk
+sha256sum token-monitor-android-v0.81.0-r2.apk
 ```
 
 A matching checksum detects download corruption; download both files from the
@@ -91,7 +90,7 @@ Optionally, check the signature as well with `apksigner` from the Android SDK
 build tools:
 
 ```sh
-apksigner verify --print-certs token-monitor-android-v0.78.0-r1.apk
+apksigner verify --print-certs token-monitor-android-v0.81.0-r2.apk
 ```
 
 The printed SHA-256 certificate digest must equal the value above, which is also

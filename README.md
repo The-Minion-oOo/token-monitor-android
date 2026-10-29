@@ -28,11 +28,11 @@
 
 ## The desktop dashboard, made mobile
 
-**Preparing v0.81.0 r2:** stronger private Hub route checks, bounded stream JSON
-and reconnects, and earlier skip checks for periodic widget work. The latest
-public download remains r1 until r2 is published. [Candidate notes](docs/releases/android-v0.81.0-r2.md).
+**New in v0.81.0 r2:** stronger private Hub route checks, bounded stream JSON
+and reconnects, and earlier skip checks for periodic widget work.
+[Release notes](docs/releases/android-v0.81.0-r2.md).
 
-**New in v0.81.0 r1:** smaller live updates through the released v4 Hub stream,
+**Also included:** smaller live updates through the released v4 Hub stream,
 session reasoning effort and personal Volcengine quotas. Muse and Ollama
 accounts, the twelve languages, payments, currencies, display controls and
 diagnostics remain available. [Feature coverage](docs/DESKTOP_PARITY.md).
@@ -71,7 +71,7 @@ supplied by the Hub.
 - **Share less when troubleshooting:** preview an allowlisted diagnostic report
   before copying or sharing it. Addresses, secrets and conversation text stay out.
 
-These features are available in v0.81.0 r1. Pairing still uses the same read-only
+These features are available in v0.81.0 r2. Pairing still uses the same read-only
 Hub API; the dashboard update frequency and widget layout stay unchanged.
 
 <table>
@@ -226,17 +226,18 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 | | |
 | --- | --- |
-| Candidate | v0.81.0 r2 (`810002`), not yet published |
-| Current release | [Android v0.81.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.81.0-r1) |
+| Current release | [Android v0.81.0 r2](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.81.0-r2) (`810002`) |
 | Desktop baseline | [Token Monitor v0.81.0](https://github.com/Javis603/token-monitor/releases/tag/v0.81.0) |
 | Minimum Android version | Android 8.0 |
 
 I checked ordered v4 streams, session reasoning effort and personal Volcengine
 quotas against the released desktop v0.81.0 Node Hub and Worker.
 Optional HTTPS, background widget refresh and the Tailscale
-Wi-Fi-only fix are retained. I haven't phone-tested this
-release; earlier phone and battery observations apply only to the builds named
-in [Validation](docs/VALIDATION.md).
+Wi-Fi-only fix are retained. I checked the exact signed r2 APK on my phone:
+pairing and settings survived the upgrade, the Pages widget redrew, and the
+dashboard, Widget Live/Stop and forced periodic refresh passed over both routes.
+Offline recovery passed; comparable battery savings remain unmeasured.
+[Validation](docs/VALIDATION.md) records the scope and remaining follow-up.
 
 Android-only updates increment the release revision while keeping the verified
 desktop version. [Upstream pin](upstream.json) · [Release notes](CHANGELOG.md)

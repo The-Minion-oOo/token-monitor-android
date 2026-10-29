@@ -5,58 +5,51 @@ do not cover. I report emulator and CI results as exactly that, and I never
 describe them as results from a physical phone. Phone evidence applies only to
 the build it names.
 
-## Current release: v0.81.0 r1
+## Current release: v0.81.0 r2
 
-I published source `a8929c741d30613b0018a177641fbdc958b616c9` from
-[PR #104](https://github.com/The-Minion-oOo/token-monitor-android/pull/104),
-targeting desktop v0.81.0 at `ce89af774664f3852aa605350b59732247699650`.
-All required checks passed on that exact main commit:
-[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40921750990),
-[API 36/37 and optimized API 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40921750616),
-and [released Node/Worker contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40921750906).
-The reports confirm **353 JVM tests** and **100 interaction tests on each of
-API 36 and API 37**, without failures or skips. Local lint, debug/test and signed
-R8 builds, 14 tooling tests, the full API 36 suite and optimized API 26 smoke
-passed. I inspected the new native rows and reviewed the full diff. Ordered
-v4 updates, freshness clocks, nulls, removals, recovery and personal quotas were
-checked against both released Hub implementations using synthetic inputs.
+I published tagged source `2a2feb52679d592f12a5d15bb1dcb21580ce1bec` from
+[PR #108](https://github.com/The-Minion-oOo/token-monitor-android/pull/108),
+including the Hub hardening in [#106](https://github.com/The-Minion-oOo/token-monitor-android/issues/106).
+The desktop pin remains v0.81.0 at `ce89af774664f3852aa605350b59732247699650`.
+All five required jobs passed on that exact main commit:
+[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40944012402),
+[API 36/37 and optimized API 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40944012209),
+and [released Node/Worker contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/40944011953).
+Local checks passed **370 JVM tests** with the contract supplied, **103 interaction
+tests on each of API 36 and API 37**, debug/release lint, debug/test and signed R8
+builds, 14 tooling tests, translated resources, documentation and release metadata.
+No tests failed or were skipped. Deeply nested events and streams dropping after
+their opening snapshot were checked with a synthetic Hub. The exact final signed
+APK also installed, launched and resumed on API 26. I reviewed the full diff.
 
-The published APK is `token-monitor-android-v0.81.0-r1.apk`, **3,362,973 bytes**,
-package `io.github.theminionooo.tokenmonitor`, version code **810001**.
-SHA-256: `cc8bf0e5bd8c303f12f76d37a16c45bcc57d15f37d5936b874d9d4d87fb43a08`. The release certificate remains
+The published APK is `token-monitor-android-v0.81.0-r2.apk`, **3,379,361 bytes**,
+package `io.github.theminionooo.tokenmonitor`, version code **810002**.
+SHA-256: `0c1c716f621dd04aaa5a00238b06efea784c65e95eb0a56fe2f70816d31bc55c`.
+The release certificate remains
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
 Draft and anonymous public downloads matched the staged APK, checksum and update
-manifest. [Android v0.81.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.81.0-r1) is Latest.
+manifest. The public APK is byte-identical to the one installed on my phone.
+[Android v0.81.0 r2](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.81.0-r2) is Latest.
 
-I haven't phone-tested this release. Phone upgrade retention, route transitions
-and comparable bandwidth/battery measurements remain unverified;
-[#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94) remains
-a nonblocking follow-up. Synthetic frame sizes do not establish phone savings.
+I installed that exact APK over the private hardening build (`810001`), without
+clearing data. Pairing and visible preferences survived. The placed Pages widget
+redrew before opening the app. The dashboard and Widget Live/Stop passed over
+Tailscale and home Wi-Fi. Forced periodic JobScheduler runs completed on both
+routes with Wi-Fi only enabled, positive response bytes, fresh snapshots and no
+rejected secret. With Tailscale and Wi-Fi off, the app retained its saved snapshot
+and showed the expected route warning; the dashboard reconnected when Wi-Fi returned.
 
-## Candidate: v0.81.0 r2
+I restored Wi-Fi, disconnected Tailscale and returned background refresh and
+Widget Live to Off. The temporary helper was removed, the installed-package list
+matched its baseline, and no app service, periodic job or debugging port forward
+remained. Wireless debugging stayed off; USB debugging was turned off and the
+phone disconnected from ADB.
 
-For [#106](https://github.com/The-Minion-oOo/token-monitor-android/issues/106),
-I checked app source `8a9f23ef4cb5ade1ed9f52c9606b0aac8ee46e37` on my phone using
-a private signed build with version code `810001`, SHA-256
-`b22197b09bcf2cc2929775052b42e8df1a11bd145c28d7972643495e96e1c92a`.
-The dashboard, Widget Live and forced periodic JobScheduler runs passed over
-Tailscale and home Wi-Fi, with Wi-Fi only enabled. The two periodic jobs finished
-successfully; snapshots remained fresh and the secret was not rejected.
-Pairing survived the in-place update. I restored the original settings, removed
-the test helper and turned debugging off. This was a functional check, without
-overnight scheduling or comparable battery measurements. It does not change
-the published r1 evidence above or close the broader follow-up in #94.
-
-Local checks passed: 370 JVM tests with the released Node/Worker Hub contract,
-all 103 interaction tests on each of API 36 and API 37, debug/release lint,
-debug/test and signed R8 builds, optimized API 26 install/launch/resume,
-14 tooling tests, translated resources, documentation links and release metadata.
-
-The r2 candidate uses version code **810002** and tag
-`android-v0.81.0-r2`, retaining the same desktop pin, package and signing
-certificate. Its final APK still needs an exact-artifact phone check before
-publication. The private-build evidence above does not establish that check;
-r1 remains the latest published release.
+This was a functional check of the existing widget size, without a new in-app
+installer test, a one-hour expiry wait, overnight scheduling or comparable
+battery measurements. The broader language, payment and currency checks in
+[#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94) remain
+open. Earlier phone evidence applies only to its named builds.
 
 ## How each release is checked
 
@@ -214,6 +207,7 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 
 | Release | Date | Desktop baseline | Main checks | Phone check |
 | --- | --- | --- | --- | --- |
+| v0.81.0 r2 | 2026-10-29 | v0.81.0 | Hub route/stream/job hardening; 370 JVM / 103 tests per API 36/37; optimized API 26 | Yes: exact signed APK upgrade, Pages redraw, dashboard/Live/forced periodic on both routes and offline recovery; battery unmeasured |
 | v0.81.0 r1 | 2026-10-29 | v0.81.0 | Ordered v4 streams, effort and personal quotas; 353 JVM / 100 tests per API 36/37; optimized API 26 | Not phone-tested; phone bandwidth/battery unmeasured |
 | v0.80.0 r1 | 2026-10-26 | v0.80.0 | Muse device quotas, Ollama credits/spend, Claude accounts; 339 JVM / 98 tests per API 36/37; optimized API 26 | Not phone-tested; #94 remains open |
 | v0.79.0 r2 | 2026-10-26 | v0.79.0 | Payments, provider details, local display controls, currency, diagnostics, live rates and 12 languages; 330 JVM / 95 tests per API 36/37; optimized API 26 | Not phone-tested; nonblocking #94 |
@@ -249,6 +243,7 @@ them use package `io.github.theminionooo.tokenmonitor` and the same signing
 certificate, SHA-256
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
 
+- v0.81.0 r1 (`810001`): `cc8bf0e5bd8c303f12f76d37a16c45bcc57d15f37d5936b874d9d4d87fb43a08`
 - v0.80.0 r1 (`800001`): `d1005df329c257b66448518d58568ed881e77a5ebd8edd2423fe3139a75c5c6b`
 - v0.79.0 r2 (`790002`): `e67e63167f622f49c38ace5c821df655279431671b64b2a078e417d2540170be`
 - v0.78.0 r5 (`780005`): `6acb35da901df68991e80c4db40118672a22d82613b11c435658bfb32e18402c`
@@ -275,7 +270,7 @@ certificate, SHA-256
 
 ## Phone coverage
 
-I test on one physical phone, a Samsung device running One UI on Android 16.
+I test on one physical phone; this does not establish coverage of other devices.
 I only re-test on the phone when a release makes significant app changes, such
 as Pages widget work or anything touching networking, lifecycle or Live
 sessions. Compatibility releases that add fixtures and presentation rules rely
