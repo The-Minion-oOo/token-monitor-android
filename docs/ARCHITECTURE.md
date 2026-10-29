@@ -111,23 +111,21 @@ When a dashboard becomes visible the repository:
    `/api/stats`, `/api/devices`, `/api/history`, `/api/subscriptions` with the
    bearer secret. A 404 on an optional endpoint is tolerated; a redirect is
    refused so the secret cannot be sent elsewhere.
-2. Opens `/api/stats/stream` with `x-token-monitor-stream: 2`. Complete
-   `snapshot` and `stats` events replace the wire snapshot. Small `freshness`
-   events are merged by `HubStreamProtocol`, which updates only timestamp and
-   stale metadata while retaining periods, sessions, providers, and device history.
-   These events reuse the decoded usage data. Bounded metadata patches are kept
-   alongside the last complete wire body and materialized on IO for cache writes.
-   New devices or expanded device/limit fields use the complete decoder instead.
-   Complete events are decoded directly from their original body or SSE envelope;
-   normalization is deferred to cache persistence. JSON serialization uses a
-   streaming writer rather than rebuilding text separately for every nested node.
-   While usage is changing the Hub sends a complete `stats` event every few
-   seconds, so `StreamUpdateCoalescer` applies at most one complete event per
-   five seconds. The first after a quiet period applies at once; the newest
-   later one waits for the interval and replaces any older one still waiting.
-   Freshness events received while one waits apply after it, in order. A
-   `snapshot` event, a closed stream or a paused dashboard discards the held
-   event. This reduces decoding and UI work, not the bytes received.
+2. Opens `/api/stats/stream` with `x-token-monitor-stream: 4`. Each connection
+   owns a `StatsStreamReceiver` baseline and revision independent of REST reads,
+   caches and display state. Complete snapshots replace it. Deltas apply RFC 6902
+   add/remove/replace with RFC 6901 paths atomically; deltas and freshness frames
+   must match the baseline revision and advance by exactly one. Invalid patches
+   or revisions throw back to the reconnect loop. A new connection starts empty.
+   Older Hubs may send unrevisioned complete snapshots. Freshness renews only
+   existing session activity observations and device health clocks.
+   Every revision is applied on IO before the five-second display coalescer.
+   Immutable trees wait without serialization; only the newest retained tree
+   is serialized and decoded for presentation/cache. Patch count, pointer depth
+   and reconstructed size are bounded. Complete recovery frames supersede any
+   waiting update. Closing or pausing discards pending work. This reduces bytes
+   for changing usage without dropping intermediate revisions. Synthetic frame
+   comparisons are not phone bandwidth or battery measurements.
 3. On stream failure, reports "Live updates paused", waits according to
    `BackoffPolicy` (bounded exponential with jitter), and reconnects while the
    dashboard is still visible.

@@ -1,0 +1,78 @@
+{
+  "limits": {
+    "updatedAt": "2026-10-29T17:19:05.417Z",
+    "providers": [
+      {
+        "provider": "volcengine",
+        "accountKey": "sha256:8ff34f04c34e62fb6b0149dd50bb24fd3a9c257dfb3919feec8866f9d72a1252",
+        "accountLabel": "Agent Plan",
+        "planLabel": "Synthetic personal",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "cli",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-29T17:19:03.216Z",
+        "windows": [
+          {
+            "kind": "session",
+            "label": "5-hour",
+            "used": 0,
+            "limit": 100,
+            "remaining": 100,
+            "usedPercent": 0,
+            "remainingPercent": 100,
+            "resetsAt": null,
+            "windowMinutes": 300,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          },
+          {
+            "kind": "weekly",
+            "label": "Weekly",
+            "used": 25,
+            "limit": 100,
+            "remaining": 75,
+            "usedPercent": 25,
+            "remainingPercent": 75,
+            "resetsAt": null,
+            "windowMinutes": 10080,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "cn-beijing",
+        "sourceDeviceId": "v081-synthetic-desktop",
+        "stale": false
+      },
+      {
+        "provider": "volcengine",
+        "accountKey": "sha256:1747fd2595de2418fd8e2f510dfa4e0ac477029eb08b09c4fe127996a52d550b",
+        "accountLabel": "Coding Plan",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "unavailable",
+        "source": "cli",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-29T17:19:03.216Z",
+        "windows": [],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "cn-beijing",
+        "sourceDeviceId": "v081-synthetic-desktop",
+        "stale": false
+      }
+    ]
+  }
+}

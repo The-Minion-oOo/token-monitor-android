@@ -578,7 +578,10 @@ internal class HubRepository(context: Context, loadCache: (SnapshotCache) -> Wir
     /** The held update and a newly arrived one never decode at the same time. */
     private suspend fun applyStreamEvents(events: List<HubStreamEvent>, token: Long): Boolean = streamApplyLock.withLock {
         var applied = false
-        events.forEach { if (applyStatsUpdate(it.data, token, streamEventType = it.type)) applied = true }
+        events.forEach { event ->
+            val raw = withContext(Dispatchers.IO) { event.completeStats?.toString() ?: event.data }
+            if (applyStatsUpdate(raw, token, streamEventType = event.type)) applied = true
+        }
         applied
     }
 

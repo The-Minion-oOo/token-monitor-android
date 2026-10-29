@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.81.0 r1 (candidate)
+
+- Updated desktop compatibility to v0.81.0.
+- Added ordered v4 live updates with revision checks, freshness clocks and complete-snapshot recovery.
+- Displayed Codex/Claude reasoning effort and personal Volcengine quota labels.
+- Verified Codex price-tier labels and retained earlier Android features and languages.
+- Included the merged Gradle, serialization and contract-tool dependency updates.
+
 ## v0.80.0 r1 — 2026-10-26
 
 - I updated compatibility to desktop v0.80.0, including Muse Code quotas,

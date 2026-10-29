@@ -117,7 +117,7 @@ production Home screen and all four Pages widget renders for every language,
 using synthetic showcase data. Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite now contains **98 tests** per emulator. The report checker
+The interaction suite now contains **100 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
 
@@ -398,3 +398,13 @@ hostname mismatch against disposable endpoints. Recheck Tailscale and the existi
 home fallback separately. Record the exact APK and outcome without publishing real
 addresses, credentials or phone identifiers. A self-signed or user-CA certificate
 must fail; do not weaken app trust for the test.
+
+## Desktop v0.81.0 checks
+
+I exercise the released Node Hub and Worker with v4 streams, including revisioned
+freshness clocks, content patches, explicit nulls, removals and forced complete
+recovery. Android reconstructs every captured revision and checks malformed
+patches, revision gaps, older-Hub snapshots and the five-second publication limit.
+The Volcengine collector runs with a fake CLI response; no provider login or
+external request is used. Synthetic frame sizes describe the fixture workload,
+not measured phone bandwidth or battery savings.

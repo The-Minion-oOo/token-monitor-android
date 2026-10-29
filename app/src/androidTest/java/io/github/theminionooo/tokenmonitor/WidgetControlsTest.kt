@@ -136,7 +136,7 @@ class WidgetControlsTest {
         val streams = AtomicInteger()
         val opened = AtomicInteger()
         val statsReads = AtomicInteger()
-        val requestedStreamV2 = AtomicBoolean()
+        val requestedStreamV4 = AtomicBoolean()
         val server = ServerSocket(0)
         val serverThread = thread(isDaemon = true) {
             while (!server.isClosed) {
@@ -149,7 +149,7 @@ class WidgetControlsTest {
                             while (true) {
                                 val header = reader.readLine() ?: break
                                 if (header.isEmpty()) break
-                                if (header.equals("x-token-monitor-stream: 2", ignoreCase = true)) requestedStreamV2.set(true)
+                                if (header.equals("x-token-monitor-stream: 4", ignoreCase = true)) requestedStreamV4.set(true)
                             }
                             val output = socket.getOutputStream()
                             if (path == "/api/stats/stream") {
@@ -190,7 +190,7 @@ class WidgetControlsTest {
                 hub.setDashboardVisible(dashboardOwner, true)
             }
             await { opened.get() == 1 && streams.get() == 1 }
-            assertTrue("Dashboard streams must negotiate protocol v2", requestedStreamV2.get())
+            assertTrue("Dashboard streams must negotiate protocol v4", requestedStreamV4.get())
             instrumentation.runOnMainSync {
                 hub.setDashboardVisible(dashboardOwner, false)
                 HubRepositoryPool.release(hub)

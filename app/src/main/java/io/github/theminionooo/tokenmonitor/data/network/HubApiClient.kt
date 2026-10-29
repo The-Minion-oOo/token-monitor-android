@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.json.JsonObject
 import io.github.theminionooo.tokenmonitor.data.protocol.HubStreamProtocol
+import io.github.theminionooo.tokenmonitor.data.protocol.StatsStreamReceiver
 
 internal data class WireHubSnapshot(
     val health: String,
@@ -34,6 +35,7 @@ internal data class WireHubSnapshot(
 internal data class HubStreamEvent(
     val type: String,
     val data: String,
+    val completeStats: JsonObject? = null,
 )
 
 internal open class HubApiException(
@@ -125,7 +127,7 @@ internal class HubApiClient(
             path = "/api/stats/stream",
             authenticated = true,
             accept = "text/event-stream",
-            headers = mapOf("x-token-monitor-stream" to "2"),
+            headers = mapOf("x-token-monitor-stream" to "4"),
         )
         try {
             if (http.responseCode !in 200..299) throw responseException(http)
@@ -195,13 +197,14 @@ internal class HubApiClient(
     }
 
     private suspend fun readEvents(reader: BufferedReader, session: SseSession, onEvent: suspend (HubStreamEvent) -> Unit) {
+        val receiver = StatsStreamReceiver()
         val data = StringBuilder()
         var eventType = "message"
         while (!session.closed.get()) {
             val line = readSseLine(reader) ?: break
             if (line.isEmpty()) {
                 if (data.isNotEmpty()) {
-                    onEvent(HubStreamEvent(eventType, data.toString()))
+                    receiver.receive(HubStreamEvent(eventType, data.toString()))?.let { onEvent(it) }
                     data.clear()
                 }
                 eventType = "message"

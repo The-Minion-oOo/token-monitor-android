@@ -2,13 +2,13 @@
 
 ## Version rule
 
-Android v0.80.0 r1 targets desktop tag `v0.80.0`, peeled commit
-`c61cbe998d69725589c03511f2f56d43714f4c0f`, in Gradle and `upstream.json`.
-I reviewed the Muse Code quota collector, Ollama API/Cookie credits and Claude
-managed accounts against the released Node and Worker Hubs. Muse readings stay
-separate by device. Credit amounts and monthly spend retain their currency, and
-absent quotas stay unknown. Credential storage, login renewal and account
-management remain on desktop, along with Notch Panel changes.
+The Android v0.81.0 r1 candidate targets desktop tag `v0.81.0`, peeled commit
+`ce89af774664f3852aa605350b59732247699650`, in Gradle and `upstream.json`.
+I reviewed v4 stream revisions, session reasoning effort, personal Volcengine
+quotas and Codex plan labels against the released Node and Worker Hubs. Every
+wire revision is applied before coalescing presentation. Older Hubs keep their
+complete-snapshot fallback. Desktop plugins stay on desktop. Earlier Muse,
+Ollama and Claude support is retained.
 
 The twelve languages, payment/provider details and display controls from
 v0.79.0 r2 are retained. Android still uses the five-second complete-update limit.

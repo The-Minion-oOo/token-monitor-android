@@ -18,6 +18,10 @@ internal data class SessionContext(
 
 internal data class SessionRowLabels(val title: String, val meta: String)
 
+internal fun sessionModelMetadata(session: SessionUsage): String = listOfNotNull(
+    session.modelNames.firstOrNull(), session.reasoningEffort,
+).joinToString(" · ")
+
 private val ompTitleCode = Regex("^[A-Z0-9]{1,6}: \\S")
 
 /** OMP title cards may start with a private-use font icon; keep the code, title and stored record. */
@@ -36,10 +40,11 @@ internal fun sessionRowLabels(session: SessionUsage, showTitles: Boolean = true)
     val client = session.client.displayName()
     val reportedTitle = if (showTitles) sessionTitleForDisplay(session) else ""
     val title = reportedTitle.ifBlank {
-        listOf(client, session.modelNames.firstOrNull()).filter { !it.isNullOrBlank() }.joinToString(" · ")
+        listOf(client, sessionModelMetadata(session)).filter { it.isNotBlank() }.joinToString(" · ")
     }.ifBlank { appText(R.string.ui_session_f7f19, "Session") }
     val meta = listOf(
         client.takeIf { reportedTitle.isNotBlank() }.orEmpty(),
+        sessionModelMetadata(session).takeIf { reportedTitle.isNotBlank() && session.reasoningEffort != null }.orEmpty(),
         session.lastUsedAt.shortClockTime(),
         session.projectLabel,
         session.messageCount.takeIf { it > 0 }?.let { appText(R.string.ui_1_s_messages_d4b92, "%1\$s messages", it) }.orEmpty(),
