@@ -10,21 +10,27 @@ import java.net.URI
 
 /**
  * Which kinds of network the phone is on right now. Read from Android on demand, never polled.
- * When Android cannot say, every route stays allowed so a missing answer never strands the dashboard.
+ * Missing Android network information cannot authorize a private route.
  */
-internal data class PhoneNetworks(val lan: Boolean, val vpn: Boolean) {
+internal data class PhoneNetworks(val lan: Boolean, val tailscaleVpn: Boolean) {
     companion object {
-        private val unknown = PhoneNetworks(lan = true, vpn = true)
+        private val unknown = PhoneNetworks(lan = false, tailscaleVpn = false)
+
+        internal fun from(facts: List<PhoneNetworkFacts>?): PhoneNetworks = PhoneNetworks(
+            lan = facts.orEmpty().any { it.lan && !it.vpn },
+            tailscaleVpn = facts.orEmpty().any { it.vpn && it.addresses.any(HubRouteGuard::isTailscale) },
+        )
 
         fun read(context: Context): PhoneNetworks {
             val manager = context.getSystemService(ConnectivityManager::class.java) ?: return unknown
-            val capabilities = runCatching {
-                @Suppress("DEPRECATION") manager.allNetworks.mapNotNull(manager::getNetworkCapabilities)
-            }.getOrNull() ?: return unknown
-            return PhoneNetworks(
-                lan = capabilities.any { it.isLan() },
-                vpn = capabilities.any { it.hasTransport(NetworkCapabilities.TRANSPORT_VPN) },
-            )
+            return from(runCatching {
+                @Suppress("DEPRECATION") manager.allNetworks.mapNotNull { network ->
+                    manager.getNetworkCapabilities(network)?.let { caps ->
+                        PhoneNetworkFacts(caps.isLan(), caps.hasTransport(NetworkCapabilities.TRANSPORT_VPN),
+                            manager.getLinkProperties(network)?.linkAddresses.orEmpty().map { it.address })
+                    }
+                }
+            }.getOrNull())
         }
 
         /** Private IPv4 addresses the phone holds on Wi-Fi or Ethernet, for Find. Mobile data and VPN tunnels are never searched. */
@@ -45,25 +51,27 @@ internal data class PhoneNetworks(val lan: Boolean, val vpn: Boolean) {
     }
 }
 
+internal data class PhoneNetworkFacts(val lan: Boolean, val vpn: Boolean, val addresses: List<InetAddress>)
+
 /**
  * Keeps the Hub secret on the network a saved route belongs to. A Tailscale address is tried only while a
- * VPN is up, because without Tailscale the 100.64/10 range is carrier-grade NAT. A home address is tried on
- * Wi-Fi or Ethernet, or through a VPN such as a Tailscale subnet router, but never directly over mobile data.
+ * Tailscale VPN holds a Tailscale address; an unrelated VPN cannot authorize carrier-grade NAT routes.
+ * A home address is tried on physical Wi-Fi/Ethernet or through Tailscale, including a subnet router.
  * Names are resolved first so a hostile DNS answer cannot point a private name at a public host.
  */
 internal object HubRouteGuard {
     private const val privateNameMessage = "The Hub name did not resolve to a private address, so the secret was not sent."
 
     fun usable(url: String, networks: PhoneNetworks): Boolean = when {
-        HubAddressValidator.isTailscaleRoute(url) -> networks.vpn
-        HubAddressValidator.isLocalAddress(url) -> networks.lan || networks.vpn
+        HubAddressValidator.isTailscaleRoute(url) -> networks.tailscaleVpn
+        HubAddressValidator.isLocalAddress(url) -> networks.lan || networks.tailscaleVpn
         else -> true
     }
 
     /** Why none of [routes] can be tried on [networks]. */
     fun unavailableMessage(routes: List<String>, networks: PhoneNetworks): String {
-        val tailscaleOff = routes.any(HubAddressValidator::isTailscaleRoute) && !networks.vpn
-        val offLan = routes.any(HubAddressValidator::isLocalAddress) && !networks.lan && !networks.vpn
+        val tailscaleOff = routes.any(HubAddressValidator::isTailscaleRoute) && !networks.tailscaleVpn
+        val offLan = routes.any(HubAddressValidator::isLocalAddress) && !networks.lan && !networks.tailscaleVpn
         return when {
             tailscaleOff && offLan -> "Tailscale is off and this phone is not on Wi-Fi, so neither Hub address can be reached."
             tailscaleOff -> "Tailscale is not connected on this phone. Turn it on to reach the Hub."
@@ -76,13 +84,15 @@ internal object HubRouteGuard {
         val validation = HubAddressValidator.validate(url, "route-check", true, allowPublicHttps)
         if (validation is HubAddressValidation.Rejected) throw HubApiException(0, validation.reason)
         if (!usable(url, networks)) throw HubApiException(0, unavailableMessage(listOf(url), networks))
-        val host = runCatching { URI(url).host }.getOrNull()?.trim('[', ']')?.lowercase() ?: return
+        val host = runCatching { URI(url).host }.getOrNull()?.trim('[', ']')?.lowercase()
+            ?: throw HubApiException(0, privateNameMessage)
         if (isLiteral(host)) return
         val tailscale = HubAddressValidator.isTailscaleRoute(url)
         if (!tailscale && !HubAddressValidator.isLocalAddress(url)) return
-        // An unresolvable name fails in the HTTP client with its own message.
         val addresses = runCatching { resolve(host) }.getOrNull().orEmpty()
-        if (addresses.any { if (tailscale) !isTailscale(it) else !isPrivate(it) }) throw HubApiException(0, privateNameMessage)
+        if (addresses.isEmpty() || addresses.any { if (tailscale) !isTailscale(it) else !isPrivate(it) }) {
+            throw HubApiException(0, privateNameMessage)
+        }
     }
 
     private fun resolveAll(host: String): List<InetAddress> = InetAddress.getAllByName(host).toList()
@@ -98,6 +108,10 @@ internal object HubRouteGuard {
         }
     }
 
-    /** mDNS hosts on IPv6 home networks also publish global addresses, so only IPv4 answers must be private. */
-    internal fun isPrivate(address: InetAddress): Boolean = address !is Inet4Address || address.isSiteLocalAddress || address.isLinkLocalAddress
+    internal fun isPrivate(address: InetAddress): Boolean = when (address) {
+        is Inet4Address -> address.isSiteLocalAddress || address.isLinkLocalAddress
+        is Inet6Address -> (address.address[0].toInt() and 0xfe) == 0xfc ||
+            address.isSiteLocalAddress || address.isLinkLocalAddress
+        else -> false
+    }
 }

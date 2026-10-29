@@ -39,7 +39,7 @@ class InternetHubTest {
             for (enabled in listOf(false, true)) {
                 assertTrue(validate(url, enabled, local = true) is HubAddressValidation.Rejected)
                 assertThrows(HubApiException::class.java) {
-                    HubRouteGuard.require(url, PhoneNetworks(lan = true, vpn = true), enabled) { error("DNS must not run") }
+                    HubRouteGuard.require(url, PhoneNetworks(lan = true, tailscaleVpn = true), enabled) { error("DNS must not run") }
                 }
                 HubApiClient { error("Refusal must happen before the request callback or socket") }.use { client ->
                     assertThrows(HubApiException::class.java) { client.getStats(HubConnection(url, secret, true, allowPublicHttps = enabled)) }
