@@ -165,6 +165,9 @@ private network; use Tailscale or an HTTPS Hub when away.
 
 ### Internet HTTPS setup
 
+For a setup without Tailscale, follow [Cloudflare Hub: desktop to Android](docs/CLOUDFLARE_HUB.md)
+to deploy the free-plan Hub, connect each Windows or Mac desktop, then pair Android.
+
 1. Set up a Hub separately: the desktop project's Cloudflare Worker Hub, or a Node
    Hub behind an HTTPS reverse proxy with a valid certificate.
 2. In Android connection settings, enable **Allow an internet Hub over HTTPS**.

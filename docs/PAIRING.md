@@ -56,6 +56,10 @@ The optional internet route below uses the main Hub field and its own consent.
 
 Available in Android v0.78.0 r2. Tailscale remains the recommended setup.
 
+For the cloud-sync path without Tailscale, start with
+[Cloudflare Hub: desktop to Android](CLOUDFLARE_HUB.md). It covers Worker deployment,
+each desktop's connection, Android pairing and Worker updates in one guide.
+
 1. Set up a Hub separately: the desktop project's official Cloudflare Worker
    Hub, or a Node Hub behind an HTTPS reverse proxy with a valid certificate.
 2. In Android connection settings, turn on **Allow an internet Hub over HTTPS**.
