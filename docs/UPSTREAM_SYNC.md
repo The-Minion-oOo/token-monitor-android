@@ -13,6 +13,8 @@ Ollama and Claude support is retained.
 The twelve languages, payment/provider details and display controls from
 v0.79.0 r2 are retained. Android still uses the five-second complete-update limit.
 Published release identity stays separate from candidate metadata in `release.json`.
+The v0.81.0 r2 candidate keeps this upstream pin and feature coverage, adding
+Android-only route, stream and background-refresh hardening from #106.
 
 The latest published release is
 [`android-v0.81.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.81.0-r1),

@@ -28,6 +28,10 @@
 
 ## The desktop dashboard, made mobile
 
+**Preparing v0.81.0 r2:** stronger private Hub route checks, bounded stream JSON
+and reconnects, and earlier skip checks for periodic widget work. The latest
+public download remains r1 until r2 is published. [Candidate notes](docs/releases/android-v0.81.0-r2.md).
+
 **New in v0.81.0 r1:** smaller live updates through the released v4 Hub stream,
 session reasoning effort and personal Volcengine quotas. Muse and Ollama
 accounts, the twelve languages, payments, currencies, display controls and
@@ -219,6 +223,7 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 | | |
 | --- | --- |
+| Candidate | v0.81.0 r2 (`810002`), not yet published |
 | Current release | [Android v0.81.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.81.0-r1) |
 | Desktop baseline | [Token Monitor v0.81.0](https://github.com/Javis603/token-monitor/releases/tag/v0.81.0) |
 | Minimum Android version | Android 8.0 |

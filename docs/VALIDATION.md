@@ -33,11 +33,11 @@ and comparable bandwidth/battery measurements remain unverified;
 [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94) remains
 a nonblocking follow-up. Synthetic frame sizes do not establish phone savings.
 
-## Hub hardening candidate
+## Candidate: v0.81.0 r2
 
 For [#106](https://github.com/The-Minion-oOo/token-monitor-android/issues/106),
 I checked app source `8a9f23ef4cb5ade1ed9f52c9606b0aac8ee46e37` on my phone using
-a private signed build, SHA-256
+a private signed build with version code `810001`, SHA-256
 `b22197b09bcf2cc2929775052b42e8df1a11bd145c28d7972643495e96e1c92a`.
 The dashboard, Widget Live and forced periodic JobScheduler runs passed over
 Tailscale and home Wi-Fi, with Wi-Fi only enabled. The two periodic jobs finished
@@ -51,6 +51,12 @@ Local checks passed: 370 JVM tests with the released Node/Worker Hub contract,
 all 103 interaction tests on each of API 36 and API 37, debug/release lint,
 debug/test and signed R8 builds, optimized API 26 install/launch/resume,
 14 tooling tests, translated resources, documentation links and release metadata.
+
+The r2 candidate uses version code **810002** and tag
+`android-v0.81.0-r2`, retaining the same desktop pin, package and signing
+certificate. Its final APK still needs an exact-artifact phone check before
+publication. The private-build evidence above does not establish that check;
+r1 remains the latest published release.
 
 ## How each release is checked
 

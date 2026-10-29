@@ -6,6 +6,12 @@ described in [Desktop parity](DESKTOP_PARITY.md). This release has not been
 tested on a physical phone; [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94)
 tracks that follow-up separately.
 
+**Next candidate:** v0.81.0 r2 (`810002`) hardens Hub routes, live streams
+and periodic widget refreshes. It uses the same package and signing certificate.
+It is not published yet; the public download above remains r1. The hardening
+code was phone-checked in a private signed build; the final r2 APK has not yet
+been installed on my phone. See [candidate notes](releases/android-v0.81.0-r2.md).
+
 Open **Settings → App language**, **Display currency**, **Tools and quotas**
 or **Live throughput** for the local choices. Language starts with the phone
 setting, currency starts in USD and live rates start Off. Automatic rates use
