@@ -5,8 +5,8 @@ unreleased desktop changes. The baseline is tag `v0.81.0`, commit
 `ce89af774664f3852aa605350b59732247699650`. Android remains a read-only
 dashboard: the desktop collects usage, signs in to providers and hosts the Hub.
 
-The latest published APK is **v0.81.0 r1**. The **v0.81.0 r2 candidate**
-hardens Android transport and background work without changing this feature matrix.
+The latest published APK is **v0.81.0 r2**, which hardens Android transport
+and background work without changing this feature matrix.
 Items marked **r2** below were introduced in v0.79.0 r2 and are retained.
 
 Android adds the released v4 stream with ordered patches and recovery, reported
@@ -66,7 +66,7 @@ equivalent. The phone uses native screens and launcher widgets.
 Versioned fixtures and the pinned Node/Worker Hub contract cover the external
 protocol. Emulator checks cover UI behaviour and local settings. Physical-phone
 results apply only to the build named in [Validation](VALIDATION.md).
-The r2 phone follow-up is [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94).
+The broader v0.79.0 r2 feature follow-up remains [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94).
 
 See [Architecture](ARCHITECTURE.md), [Protocol](PROTOCOL.md),
 [Languages](LANGUAGES.md) and [Upstream sync](UPSTREAM_SYNC.md).

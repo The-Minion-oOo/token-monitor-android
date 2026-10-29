@@ -1,13 +1,13 @@
 # Changelog
 
-## v0.81.0 r2 (candidate)
+## v0.81.0 r2 — 2026-10-29
 
 - I hardened private Hub routing: HTTP requests and discovery bypass system proxies; Tailscale admission uses VPN link addresses, and private DNS/IPv6 checks fail closed.
 - Bounded stream JSON nesting and retained reconnect backoff when a stream drops after its opening snapshot.
 - Counted complete stream frames by received size, with incremental delta/freshness accounting.
 - Skipped ineligible periodic widget jobs before pairing/cache work, recorded deadline failures, and completed successful reads before delayed cache persistence.
 - Sent the app User-Agent on currency requests. Layouts, animations, update frequency and desktop compatibility stay unchanged.
-- Checked the hardening code on my phone in a private signed build; the final r2 APK still needs its exact-artifact phone check before publication.
+- Checked the exact signed r2 APK on my phone: in-place upgrade retention, Pages redraw before opening, dashboard and Widget Live/Stop over Tailscale and home Wi-Fi, forced periodic refresh and offline recovery. Restored settings, removed the helper and turned debugging off. Comparable battery savings remain unmeasured; #94 stays open for broader feature checks.
 
 ## v0.81.0 r1 — 2026-10-29
 
