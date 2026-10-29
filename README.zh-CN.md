@@ -9,6 +9,10 @@
 
 ## 近期更新
 
+正在准备 **v0.81.0 r2**：加强私有 Hub 路由检查、限制实时流 JSON 嵌套深度，
+并减少不符合条件的后台刷新任务的工作量。r2 发布前，公开下载仍为 r1。
+[候选版本说明](docs/releases/android-v0.81.0-r2.md)。
+
 当前版本为 **v0.81.0 r1**，新增 v4 增量实时更新、会话推理强度和火山引擎个人套餐额度。
 以下语言、付款和显示功能继续保留。
 
@@ -47,6 +51,6 @@ Refresh 进行一次更新；Live 最多运行一小时，可随时停止。可�
 [桌面功能对照](docs/DESKTOP_PARITY.md) · [安装与更新](docs/INSTALL.md) ·
 [小组件](docs/WIDGETS.md) · [验证记录](docs/VALIDATION.md) · [安全与隐私](docs/SECURITY.md)
 
-r2 尚未在实体手机上测试；该项记录在
-[#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94)，
-与自动化和模拟器发布检查分开跟踪。
+已发布的 v0.81.0 r1 尚未在实体手机上测试。r2 的加固代码已通过私有签名构建
+在手机上检查；最终 r2 APK 仍需在发布前检查。
+[验证记录](docs/VALIDATION.md) 区分手机、模拟器和自动化检查。

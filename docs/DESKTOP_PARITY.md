@@ -5,7 +5,8 @@ unreleased desktop changes. The baseline is tag `v0.81.0`, commit
 `ce89af774664f3852aa605350b59732247699650`. Android remains a read-only
 dashboard: the desktop collects usage, signs in to providers and hosts the Hub.
 
-The latest published APK is **v0.81.0 r1**.
+The latest published APK is **v0.81.0 r1**. The **v0.81.0 r2 candidate**
+hardens Android transport and background work without changing this feature matrix.
 Items marked **r2** below were introduced in v0.79.0 r2 and are retained.
 
 Android adds the released v4 stream with ordered patches and recovery, reported
