@@ -72,7 +72,26 @@ class WidgetBackgroundRunTest {
         } finally { WidgetRuntime.session = before }
     }
 
-    private class Mode { @Volatile var reject = false; @Volatile var block = false }
+    @Test fun appliedSnapshotCompletesWithoutWaitingForTheDiskQueue() = fixture { hub, prefs, _, mode ->
+        mode.blockCache = true
+        val started = android.os.SystemClock.elapsedRealtime()
+        runBlocking { withTimeout(5000) { withContext(Dispatchers.Main) { hub.refreshWidgetInBackground() } } }
+        assertTrue(android.os.SystemClock.elapsedRealtime() - started < 5000)
+        assertEquals(42L, hub.state.value.snapshot?.today?.totalTokens)
+        assertTrue(prefs.record.successAt > 0)
+        assertEquals(0L, prefs.record.failureAt)
+        assertTrue(prefs.record.completed)
+        mode.cacheRelease.countDown()
+        assertTrue(mode.cacheSaved.await(5, TimeUnit.SECONDS))
+    }
+
+    private class Mode {
+        @Volatile var reject = false
+        @Volatile var block = false
+        @Volatile var blockCache = false
+        val cacheRelease = CountDownLatch(1)
+        val cacheSaved = CountDownLatch(1)
+    }
 
     private fun fixture(checks: (HubRepository, WidgetRefreshPreferences, MutableList<String>, Mode) -> Unit) {
         check(context.packageName.endsWith(".preview"))
@@ -123,10 +142,17 @@ class WidgetBackgroundRunTest {
                 shell("appwidget grantbind --package ${context.packageName} --user $user")
                 val id = host.allocateAppWidgetId()
                 assertTrue(AppWidgetManager.getInstance(context).bindAppWidgetIdIfAllowed(id, ComponentName(context, SwipeWidgetProvider::class.java)))
-                instrumentation.runOnMainSync { repository = HubRepository(context) }
+                instrumentation.runOnMainSync {
+                    repository = HubRepository(context, saveCache = { cache, wire ->
+                        if (mode.blockCache) check(mode.cacheRelease.await(10, TimeUnit.SECONDS))
+                        cache.save(wire)
+                        mode.cacheSaved.countDown()
+                    })
+                }
                 checks(repository, prefs, reads, mode)
             } finally {
                 release.countDown()
+                mode.cacheRelease.countDown()
                 instrumentation.runOnMainSync { repository.close() }
                 prefs.save(WidgetRefreshSettings())
                 WidgetRuntime.session = originalSession
