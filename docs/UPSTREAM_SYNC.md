@@ -2,7 +2,7 @@
 
 ## Version rule
 
-The Android v0.81.0 r1 candidate targets desktop tag `v0.81.0`, peeled commit
+Android v0.81.0 r1 targets desktop tag `v0.81.0`, peeled commit
 `ce89af774664f3852aa605350b59732247699650`, in Gradle and `upstream.json`.
 I reviewed v4 stream revisions, session reasoning effort, personal Volcengine
 quotas and Codex plan labels against the released Node and Worker Hubs. Every
@@ -15,7 +15,7 @@ v0.79.0 r2 are retained. Android still uses the five-second complete-update limi
 Published release identity stays separate from candidate metadata in `release.json`.
 
 The latest published release is
-[`android-v0.80.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.80.0-r1),
+[`android-v0.81.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.81.0-r1),
 recorded with its source commit in `release.json`.
 It retains opt-in HTTPS, optional background widget refresh and the
 r5 physical-network check underneath Tailscale. Earlier phone evidence applies

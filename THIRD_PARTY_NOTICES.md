@@ -1,6 +1,6 @@
 # Third-party notices
 
-## Token Monitor desktop assets
+## Token Monitor desktop assets and helpers
 
 Tool-logo vector paths are imported from [Token Monitor v0.61.0](https://github.com/Javis603/token-monitor/tree/v0.61.0/assets/icons).
 The original source is identified in the drawable comments. The Token Monitor
@@ -13,6 +13,8 @@ Shared interface translations are adapted from the
 [v0.79.0 language catalog](https://github.com/Javis603/token-monitor/blob/v0.79.0/src/electron/renderer/i18n.js).
 Android-specific labels and the additional Spanish and Indian language packs
 are maintained in this repository.
+
+The v4 stream adapter follows the released desktop's [receiver and patch contract](https://github.com/Javis603/token-monitor/blob/ce89af774664f3852aa605350b59732247699650/src/shared/hubDelta.js), with native Kotlin state and size limits.
 
 Upstream's MIT notice is reproduced below. Service names and logos remain the
 marks of their respective owners; their display identifies data sources and
