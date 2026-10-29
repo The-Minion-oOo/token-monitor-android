@@ -117,9 +117,16 @@ production Home screen and all four Pages widget renders for every language,
 using synthetic showcase data. Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite now contains **100 tests** per emulator. The report checker
+The interaction suite now contains **103 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
+
+The security regressions include a 10,000-level nested stream followed by a
+valid reconnect, repeated snapshot-then-disconnect streams with increasing
+backoff, and a successful periodic refresh while its cache write is blocked.
+Unit tests cover proxy routing, Tailscale link detection, failed private DNS,
+IPv6 scope, received-size/depth limits, early job admission, deadlines and the
+exchange-rate User-Agent. The private fixture data contains no real accounts.
 
 JVM tests cover protocol parsing, private-address rules, endpoint failover,
 stream recovery, ordered cache writes, history aggregation, presentation rules,

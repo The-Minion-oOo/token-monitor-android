@@ -37,10 +37,10 @@ a nonblocking follow-up. Synthetic frame sizes do not establish phone savings.
 
 Every release goes through the same automated gate before I publish it:
 
-- **Unit tests and builds:** 353 JVM tests, run with the generated Hub contract
+- **Unit tests and builds:** 370 JVM tests, run with the generated Hub contract
   supplied and nothing skipped, plus Android lint, the preview debug build and
   the instrumentation APK.
-- **Instrumentation suite:** 100 tests on API 36 and API 37 emulators. A report
+- **Instrumentation suite:** 103 tests on API 36 and API 37 emulators. A report
   check requires every test to be present with no failures, errors or skips.
 - **API 26 smoke check:** the optimized R8 release APK installs, launches and
   resumes on the oldest supported version. This is not full Android 8
