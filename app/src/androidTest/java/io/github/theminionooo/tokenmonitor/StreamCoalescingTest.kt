@@ -21,6 +21,40 @@ class StreamCoalescingTest {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val context = instrumentation.targetContext
 
+    @Test fun deeplyNestedStreamEndsNormallyAndTheDashboardRecovers() = withHub(FixtureMode.DeepOnce) { server ->
+        val owner = Any()
+        lateinit var hub: HubRepository
+        instrumentation.runOnMainSync { hub = HubRepositoryPool.acquire(context) }
+        try {
+            instrumentation.runOnMainSync { hub.setDashboardVisible(owner, true) }
+            await(20_000) { server.openedAt.size >= 2 && hub.state.value.streamActive && hub.state.value.snapshot?.today?.totalTokens == SNAPSHOT_TOKENS }
+            Thread.sleep(1500)
+            assertEquals("The valid replacement stream should remain open", 2, server.openedAt.size)
+            assertTrue(hub.state.value.streamActive)
+        } finally {
+            instrumentation.runOnMainSync { hub.setDashboardVisible(owner, false); HubRepositoryPool.release(hub) }
+        }
+    }
+
+    @Test fun repeatedSnapshotDisconnectsBackOffAndPausingStopsRetries() = withHub(FixtureMode.DropAfterSnapshot) { server ->
+        val owner = Any()
+        lateinit var hub: HubRepository
+        instrumentation.runOnMainSync { hub = HubRepositoryPool.acquire(context) }
+        try {
+            instrumentation.runOnMainSync { hub.setDashboardVisible(owner, true) }
+            await(30_000) { server.openedAt.size >= 4 }
+            val times = synchronized(server.openedAt) { server.openedAt.toList() }
+            assertTrue("The third retry must retain exponential backoff: $times", times[3] - times[2] >= 2800)
+            assertEquals(SNAPSHOT_TOKENS, hub.state.value.snapshot?.today?.totalTokens)
+            instrumentation.runOnMainSync { hub.setDashboardVisible(owner, false) }
+            val count = server.openedAt.size
+            Thread.sleep(2000)
+            assertEquals(count, server.openedAt.size)
+        } finally {
+            instrumentation.runOnMainSync { hub.setDashboardVisible(owner, false); HubRepositoryPool.release(hub) }
+        }
+    }
+
     @Test fun rapidCompleteUpdatesApplyAtMostOneEveryFiveSecondsAndTheLatestArrives() = withHub { server ->
         val owner = Any()
         lateinit var hub: HubRepository
@@ -71,10 +105,10 @@ class StreamCoalescingTest {
         }
     }
 
-    private fun withHub(test: (FixtureHub) -> Unit) {
+    private fun withHub(mode: FixtureMode = FixtureMode.Burst, test: (FixtureHub) -> Unit) {
         check(context.packageName.endsWith(".preview"))
         grantFixtureNetworkAccess()
-        FixtureHub().use { server ->
+        FixtureHub(mode).use { server ->
             val address = NetworkInterface.getNetworkInterfaces().toList().flatMap { it.inetAddresses.toList() }
                 .filterIsInstance<Inet4Address>().first { it.isSiteLocalAddress }.hostAddress
             SnapshotCache(context).clear()
@@ -93,10 +127,13 @@ class StreamCoalescingTest {
     }
 
     /** Sends one snapshot, then a burst of complete stats events 200 ms apart, then keeps the stream open. */
-    private class FixtureHub : AutoCloseable {
+    private enum class FixtureMode { Burst, DeepOnce, DropAfterSnapshot }
+
+    private class FixtureHub(private val mode: FixtureMode) : AutoCloseable {
         private val server = ServerSocket(0)
         val port get() = server.localPort
         val streams = AtomicInteger()
+        val openedAt = java.util.Collections.synchronizedList(mutableListOf<Long>())
         val lastSent = AtomicInteger(SNAPSHOT_TOKENS.toInt())
         val finished = AtomicInteger()
         private val sockets = ConcurrentHashMap.newKeySet<Socket>()
@@ -122,12 +159,19 @@ class StreamCoalescingTest {
             val output = socket.getOutputStream()
             if (path == "/api/stats/stream") {
                 streams.incrementAndGet()
+                openedAt.add(android.os.SystemClock.elapsedRealtime())
                 try {
                     output.write("HTTP/1.1 200 OK\r\nContent-Type: text/event-stream\r\n\r\n".toByteArray())
+                    if (mode == FixtureMode.DeepOnce && openedAt.size == 1) {
+                        output.write(("event: snapshot\ndata: {\"stats\":{\"unknown\":" + "[".repeat(10_000) + "0" + "]".repeat(10_000) + "}}\n\n").toByteArray())
+                        output.flush()
+                        return
+                    }
                     output.write("event: snapshot\ndata: {\"stats\":${stats(SNAPSHOT_TOKENS)}}\n\n".toByteArray())
                     output.flush()
+                    if (mode == FixtureMode.DropAfterSnapshot) return
                     Thread.sleep(500)
-                    for (index in 1..STATS_EVENTS) {
+                    for (index in 1..(if (mode == FixtureMode.Burst) STATS_EVENTS else 0)) {
                         val tokens = SNAPSHOT_TOKENS + index
                         output.write("event: stats\ndata: {\"stats\":${stats(tokens)}}\n\n".toByteArray())
                         output.flush()

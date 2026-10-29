@@ -1,6 +1,7 @@
 package io.github.theminionooo.tokenmonitor.data.network
 
 import io.github.theminionooo.tokenmonitor.data.storage.usageCurrencies
+import io.github.theminionooo.tokenmonitor.BuildConfig
 import java.io.ByteArrayOutputStream
 import java.net.HttpURLConnection
 import java.net.URI
@@ -11,14 +12,16 @@ import kotlinx.serialization.json.*
 internal data class ExchangeRates(val rates: Map<String, Double>, val date: String)
 
 /** Same public rate sources as desktop. No Hub URL, secret or usage enters this client. */
-internal class ExchangeRateClient : AutoCloseable {
+internal class ExchangeRateClient(
+    private val openConnection: (String) -> HttpURLConnection = { URI(it).toURL().openConnection() as HttpURLConnection },
+) : AutoCloseable {
     private val active = AtomicReference<HttpURLConnection?>()
     private val generation = java.util.concurrent.atomic.AtomicInteger()
     fun fetch(): ExchangeRates {
         val expectedGeneration = generation.get()
         var failure: Exception? = null
         for (source in listOf("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json", "https://latest.currency-api.pages.dev/v1/currencies/usd.json")) {
-            val connection = URI(source).toURL().openConnection() as HttpURLConnection
+            val connection = openConnection(source)
             active.set(connection)
             try {
                 if (generation.get() != expectedGeneration) throw kotlinx.coroutines.CancellationException()
@@ -26,6 +29,7 @@ internal class ExchangeRateClient : AutoCloseable {
                 connection.readTimeout = 5000
                 connection.instanceFollowRedirects = false
                 connection.setRequestProperty("Accept", "application/json")
+                connection.setRequestProperty("User-Agent", "Token-Monitor-Android/${BuildConfig.VERSION_NAME}")
                 check(connection.responseCode == 200)
                 val bytes = ByteArrayOutputStream()
                 connection.inputStream.use { input ->

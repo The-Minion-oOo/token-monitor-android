@@ -33,14 +33,33 @@ and comparable bandwidth/battery measurements remain unverified;
 [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94) remains
 a nonblocking follow-up. Synthetic frame sizes do not establish phone savings.
 
+## Hub hardening candidate
+
+For [#106](https://github.com/The-Minion-oOo/token-monitor-android/issues/106),
+I checked app source `8a9f23ef4cb5ade1ed9f52c9606b0aac8ee46e37` on my phone using
+a private signed build, SHA-256
+`b22197b09bcf2cc2929775052b42e8df1a11bd145c28d7972643495e96e1c92a`.
+The dashboard, Widget Live and forced periodic JobScheduler runs passed over
+Tailscale and home Wi-Fi, with Wi-Fi only enabled. The two periodic jobs finished
+successfully; snapshots remained fresh and the secret was not rejected.
+Pairing survived the in-place update. I restored the original settings, removed
+the test helper and turned debugging off. This was a functional check, without
+overnight scheduling or comparable battery measurements. It does not change
+the published r1 evidence above or close the broader follow-up in #94.
+
+Local checks passed: 370 JVM tests with the released Node/Worker Hub contract,
+all 103 interaction tests on each of API 36 and API 37, debug/release lint,
+debug/test and signed R8 builds, optimized API 26 install/launch/resume,
+14 tooling tests, translated resources, documentation links and release metadata.
+
 ## How each release is checked
 
 Every release goes through the same automated gate before I publish it:
 
-- **Unit tests and builds:** 353 JVM tests, run with the generated Hub contract
+- **Unit tests and builds:** 370 JVM tests, run with the generated Hub contract
   supplied and nothing skipped, plus Android lint, the preview debug build and
   the instrumentation APK.
-- **Instrumentation suite:** 100 tests on API 36 and API 37 emulators. A report
+- **Instrumentation suite:** 103 tests on API 36 and API 37 emulators. A report
   check requires every test to be present with no failures, errors or skips.
 - **API 26 smoke check:** the optimized R8 release APK installs, launches and
   resumes on the oldest supported version. This is not full Android 8

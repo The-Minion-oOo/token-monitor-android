@@ -126,9 +126,15 @@ When a dashboard becomes visible the repository:
    waiting update. Closing or pausing discards pending work. This reduces bytes
    for changing usage without dropping intermediate revisions. Synthetic frame
    comparisons are not phone bandwidth or battery measurements.
+   Received JSON is checked for a maximum container depth of 64 before parsing;
+   patch insertion depth and deferred serialization enforce the same limit.
+   Complete frames use their received text length for the size budget. Deltas
+   and freshness retain incremental size accounting.
 3. On stream failure, reports "Live updates paused", waits according to
    `BackoffPolicy` (bounded exponential with jitter), and reconnects while the
    dashboard is still visible.
+   An initial snapshot does not reset the retry count. A later stats/delta event
+   or a connection lasting at least 30 seconds establishes a healthy stream.
 
 When neither dashboard nor widget session needs updates, foreground network work
 stops immediately and the pending cache write is flushed. The separate optional
@@ -165,9 +171,12 @@ first, tries the next when one is silent, and stops immediately on a rejected
 secret because another address cannot fix that. Snapshot reads use the
 ordered list. When a live stream drops, the address that was answering is tried
 first again; only a failed connection moves the other address to the front.
-`HubRouteGuard` drops routes the phone cannot use right now (Tailscale without a
-VPN, a home address on mobile data without a VPN) and checks that private names
-resolve inside their range before any request.
+`HubRouteGuard` admits Tailscale routes only when a VPN's link addresses include
+`100.64.0.0/10` or `fd7a:115c:a1e0::/48`. Home routes require physical Wi-Fi or
+Ethernet, or that Tailscale VPN. Missing network information fails closed.
+Private names must resolve inside their range; failed/empty resolution and
+public IPv6 answers are rejected. HTTP Hub reads and discovery probes bypass
+the system proxy; HTTPS retains normal system proxy support.
 The active address is surfaced to the UI so the header and Hub status can say
 when the home route is in use.
 

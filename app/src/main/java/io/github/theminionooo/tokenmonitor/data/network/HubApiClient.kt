@@ -9,6 +9,7 @@ import java.io.Closeable
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
+import java.net.Proxy
 import java.net.URL
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.atomic.AtomicBoolean
@@ -36,6 +37,7 @@ internal data class HubStreamEvent(
     val type: String,
     val data: String,
     val completeStats: JsonObject? = null,
+    val sourceType: String = type,
 )
 
 internal open class HubApiException(
@@ -100,7 +102,7 @@ internal class HubApiClient(
 
     /** A quick unauthenticated identity check used while looking for a Hub on the home network. */
     fun probeHub(baseUrl: String, timeoutMs: Int): Boolean = runCatching {
-        val http = (URL("$baseUrl/api/health").openConnection() as HttpURLConnection).apply {
+        val http = openHubConnection(URL("$baseUrl/api/health")).apply {
             requestMethod = "GET"
             connectTimeout = timeoutMs
             readTimeout = timeoutMs * 2
@@ -169,7 +171,7 @@ internal class HubApiClient(
     ): HttpURLConnection {
         HubAddressValidator.requireAllowed(connection)
         beforeRequest(connection)
-        val http = (URL(connection.baseUrl + path).openConnection() as HttpURLConnection).apply {
+        val http = openHubConnection(URL(connection.baseUrl + path)).apply {
             requestMethod = "GET"
             connectTimeout = 10_000
             readTimeout = 35_000
@@ -212,7 +214,7 @@ internal class HubApiClient(
                 eventType = line.removePrefix("event:").trim().ifBlank { "message" }
             } else if (line.startsWith("data:")) {
                 val payload = line.removePrefix("data:").trimStart()
-                if (data.length + payload.length > maxSseEventChars) {
+                if (data.length + payload.length + (if (data.isEmpty()) 0 else 1) > maxSseEventChars) {
                     throw HubApiException(200, "The Hub stream event is too large for this phone dashboard.")
                 }
                 if (data.isNotEmpty()) data.append('\n')
@@ -266,7 +268,12 @@ internal class HubApiClient(
     private companion object {
         const val maxResponseBytes = 2 * 1024 * 1024
         // A stats response accepted by GET must also fit inside the stream's JSON envelope.
-        const val maxSseEventChars = maxResponseBytes + 16 * 1024
+        const val maxSseEventChars = io.github.theminionooo.tokenmonitor.data.protocol.MAX_STREAM_EVENT_CHARS
         const val maxSseLineChars = maxSseEventChars + 6
     }
 }
+
+/** Cleartext private routes must never disclose their bearer secret to the system HTTP proxy. */
+internal fun openHubConnection(url: URL): HttpURLConnection =
+    (if (url.protocol.equals("http", ignoreCase = true)) url.openConnection(Proxy.NO_PROXY)
+    else url.openConnection()) as HttpURLConnection

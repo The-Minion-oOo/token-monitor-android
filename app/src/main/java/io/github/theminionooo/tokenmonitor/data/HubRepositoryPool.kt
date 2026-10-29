@@ -7,6 +7,8 @@ internal object HubRepositoryPool {
     private var repository: HubRepository? = null
     private var owners = 0
 
+    val backgroundRefreshBusy: Boolean get() = repository?.backgroundRefreshBusy == true
+
     fun acquire(context: Context): HubRepository {
         val current = repository ?: HubRepository(context).also { repository = it }
         owners++

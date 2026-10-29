@@ -10,6 +10,9 @@ redirects are rejected, reads are bounded, and requests stop when the app leaves
 the foreground. Widgets use saved rates. USD and manual-rate display need no
 currency request.
 
+Currency requests send `Token-Monitor-Android/<version>` as their User-Agent,
+instead of Android's device-model-containing default.
+
 The diagnostic report is an allowlist of versions, route category and state
 flags/counters. It excludes addresses, secrets, account identities, raw errors,
 conversation text and cached responses. Preview precedes copy/share; neither
@@ -60,12 +63,17 @@ usage data. Use the LAN route only on a network you trust, and prefer Tailscale.
 
 Before any request, including the identity check, the app confirms the route
 fits the phone's current networks. A Tailscale address or MagicDNS name is
-tried only while a VPN is connected, because without Tailscale the 100.64/10
-range belongs to carrier-grade NAT. A home address is tried on Wi-Fi or
-Ethernet, or through a VPN such as a Tailscale subnet router, and never directly
-over mobile data. `.ts.net` names must resolve to Tailscale addresses and
-`.local` names to private IPv4 addresses, so a hostile DNS answer cannot move
-the secret to a public host.
+tried only when a VPN's link addresses include `100.64.0.0/10` or
+`fd7a:115c:a1e0::/48`. A different VPN cannot authorize that route or unlock a
+home address on mobile data. Home routes require physical Wi-Fi/Ethernet or
+the Tailscale VPN, including a subnet router. Missing network information fails
+closed. `.ts.net` names must resolve to Tailscale addresses; `.local` names must
+resolve only to private IPv4 or ULA, link-local or site-local IPv6 addresses.
+Unresolved names, empty answers and mixed private/public answers are rejected.
+
+HTTP Hub reads, streams and unauthenticated discovery probes explicitly bypass
+the system proxy, keeping the bearer secret out of a configured HTTP proxy.
+HTTPS Hubs retain normal proxy support and system-CA certificate verification.
 
 The desktop Hub secret is sent as a bearer credential only to the validated Hub address. It is never logged or included in diagnostics.
 
@@ -121,10 +129,9 @@ and pinned release signing certificate. Android controls installation approval.
 
 ## Lifecycle and resource use
 
-### Background widget refresh (in development)
+### Background widget refresh
 
-I am developing background refresh on `feature/widget-background-refresh`;
-it is not included in the published r3 release. Its security boundary permits one
+The optional background refresh permits one
 periodic JobScheduler job only after choosing 30 or 60 minutes. The default is
 Off, with Wi-Fi only enabled. A placed widget, saved pairing and a secret that
 has not been rejected are required; losing any requirement cancels the job.
@@ -141,7 +148,12 @@ network type, so a VPN that reports itself as metered cannot block or permit it.
 The persisted job requires `RECEIVE_BOOT_COMPLETED` solely because
 Android requires that permission for JobScheduler to restore a persisted job
 after reboot. Android restores the job; the app will register no boot receiver.
-The job must recheck eligibility and accessible pairing before any request.
+The job checks Off, placed widgets, secret rejection, active dashboard/widget
+work and Wi-Fi eligibility before constructing a repository or decoding its
+cache. It rechecks admission after any previous job completes, and rechecks
+ownership, the deadline and Wi-Fi before each request. Deadline or network
+failure marks the retained data stale. Once a new snapshot is applied, delayed
+cache persistence cannot turn that successful refresh into a failure.
 An overnight preview phone run used synthetic data and completed eight bounded
 refreshes. The persisted job returned after reboot without opening the app and
 completed a post-reboot read. Android's per-app power attribution is an estimate,
