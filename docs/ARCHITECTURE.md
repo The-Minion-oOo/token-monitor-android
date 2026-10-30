@@ -109,8 +109,12 @@ When a dashboard becomes visible the repository:
 
 1. Reads a full snapshot: `/api/health` (unauthenticated identity check), then
    `/api/stats`, `/api/devices`, `/api/history`, `/api/subscriptions` with the
-   bearer secret. A 404 on an optional endpoint is tolerated; a redirect is
-   refused so the secret cannot be sent elsewhere.
+   bearer secret. After identity succeeds, those four independent responses use
+   at most two concurrent GETs. They all finish before one complete snapshot is
+   decoded and published. Every GET retains its own route/ownership checks;
+   cancellation or a rejected secret closes the batch's pending sockets. A 404
+   on an optional endpoint is tolerated; a redirect is refused so the secret
+   cannot be sent elsewhere.
 2. Opens `/api/stats/stream` with `x-token-monitor-stream: 4`. Each connection
    owns a `StatsStreamReceiver` baseline and revision independent of REST reads,
    caches and display state. Complete snapshots replace it. Deltas apply RFC 6902

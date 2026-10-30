@@ -67,23 +67,44 @@ internal class HubTimingRecorder(
             outcome = HubTimingOutcome.OK
             return result
         } catch (error: Exception) {
-            outcome = when (error) {
-                is CancellationException -> HubTimingOutcome.CANCELLED
-                is HubResponseTooLargeException -> HubTimingOutcome.TOO_LARGE
-                is HubApiException -> if (error.statusCode == 0) HubTimingOutcome.REJECTED else HubTimingOutcome.HTTP_ERROR
-                else -> HubTimingOutcome.FAILED
-            }
+            outcome = outcomeFor(error)
             throw error
         } finally {
-            val end = clock()
-            if (events.getAndIncrement() < maxEvents) {
-                val sample = HubTimingSample(stage, endpoint, request, (end - origin).coerceAtLeast(0) / 1000,
-                    (end - start).coerceAtLeast(0) / 1000, status().takeIf { it in 100..599 } ?: 0,
-                    bytes().coerceAtLeast(0), outcome)
-                // Diagnostics must never change the result of a Hub read.
-                runCatching { sink(sample) }
-            }
+            record(stage, endpoint, request, start, status(), bytes(), outcome)
         }
+    }
+
+    suspend fun <T> measureSuspending(stage: HubTimingStage, block: suspend () -> T): T {
+        if (!enabled || events.get() >= maxEvents) return block()
+        val start = clock()
+        var outcome = HubTimingOutcome.FAILED
+        try {
+            val result = block()
+            outcome = HubTimingOutcome.OK
+            return result
+        } catch (error: Exception) {
+            outcome = outcomeFor(error)
+            throw error
+        } finally {
+            record(stage, HubTimingEndpoint.NONE, 0, start, 0, 0, outcome)
+        }
+    }
+
+    private fun outcomeFor(error: Exception): HubTimingOutcome = when (error) {
+        is CancellationException -> HubTimingOutcome.CANCELLED
+        is HubResponseTooLargeException -> HubTimingOutcome.TOO_LARGE
+        is HubApiException -> if (error.statusCode == 0) HubTimingOutcome.REJECTED else HubTimingOutcome.HTTP_ERROR
+        else -> HubTimingOutcome.FAILED
+    }
+
+    private fun record(stage: HubTimingStage, endpoint: HubTimingEndpoint, request: Int, start: Long,
+                       status: Int, bytes: Long, outcome: HubTimingOutcome) {
+        val end = clock()
+        if (events.getAndIncrement() >= maxEvents) return
+        val sample = HubTimingSample(stage, endpoint, request, (end - origin).coerceAtLeast(0) / 1000,
+            (end - start).coerceAtLeast(0) / 1000, status.takeIf { it in 100..599 } ?: 0, bytes.coerceAtLeast(0), outcome)
+        // Diagnostics must never change the result of a Hub read.
+        runCatching { sink(sample) }
     }
 }
 

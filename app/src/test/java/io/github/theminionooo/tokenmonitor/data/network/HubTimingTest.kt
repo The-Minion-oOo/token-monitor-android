@@ -2,6 +2,8 @@ package io.github.theminionooo.tokenmonitor.data.network
 
 import java.util.concurrent.atomic.AtomicLong
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.yield
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -76,5 +78,28 @@ class HubTimingTest {
         val recorder = HubTimingRecorder(true, sink = samples::add, maxEvents = 2)
         repeat(100) { assertEquals(it, recorder.measure(HubTimingStage.REQUEST) { it }) }
         assertEquals(2, samples.size)
+    }
+
+    @Test fun `suspended spans preserve results and record time across resumption`() = runBlocking {
+        val samples = mutableListOf<HubTimingSample>()
+        val now = AtomicLong(10_000)
+        val recorder = HubTimingRecorder(true, { now.get() }, samples::add)
+        assertEquals(42, recorder.measureSuspending(HubTimingStage.SNAPSHOT) {
+            yield()
+            now.set(80_000)
+            42
+        })
+        assertEquals(70, samples.single().durationUs)
+        assertEquals(HubTimingOutcome.OK, samples.single().outcome)
+        val failure = CancellationException("private")
+        try { recorder.measureSuspending(HubTimingStage.SNAPSHOT) { yield(); throw failure } }
+        catch (error: CancellationException) { assertSame(failure, error) }
+        assertEquals(HubTimingOutcome.CANCELLED, samples.last().outcome)
+        assertFalse(samples.joinToString { it.line() }.contains("private"))
+    }
+
+    @Test fun `disabled suspended spans never read the clock or log`() = runBlocking {
+        val recorder = HubTimingRecorder(false, clock = { error("Clock must not be read") }, sink = { error("No events") })
+        assertEquals(42, recorder.measureSuspending(HubTimingStage.SNAPSHOT) { yield(); 42 })
     }
 }

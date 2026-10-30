@@ -448,7 +448,7 @@ internal class HubRepository(
                     try {
                         _state.update { it.copy(refreshing = true, message = null, secretRejected = false) }
                         val (url, wire) = withContext(Dispatchers.IO) {
-                            timing.measure(HubTimingStage.SNAPSHOT) {
+                            timing.measureSuspending(HubTimingStage.SNAPSHOT) {
                                 val routes = timing.measure(HubTimingStage.CANDIDATES) { permittedRoutes(saved, activeUrl) }
                                 EndpointFailover.run(routes) { api.loadSnapshot(saved.copy(baseUrl = it)) }
                             }

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Added an off-by-default diagnostic build option for private Hub request timings.
+- Overlapped the initial dashboard's independent reads, with at most two requests after verifying the Hub identity. All responses still finish before publishing fresh data.
+- Kept the existing route protections, layouts, animations, update frequency and widget polling.
+
 ## v0.82.0 r1 — 2026-10-30
 
 - Updated desktop compatibility to v0.82.0.

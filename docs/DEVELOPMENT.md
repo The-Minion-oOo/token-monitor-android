@@ -117,7 +117,7 @@ production Home screen and all four Pages widget renders for every language,
 using synthetic showcase data. Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite now contains **108 tests** per emulator. The report checker
+The interaction suite now contains **110 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
 
@@ -283,7 +283,11 @@ Nested request/snapshot timings include the diagnostic logging overhead.
 
 `HubStartupTimingTest` uses a synthetic Hub with a delayed history response to
 check attribution and the point at which fresh data is published. It also checks
-pause/cancellation and a rejected health request. Synthetic timing logs are
+pause/cancellation, rejected health/detail requests and two concurrent reads
+after identity verification. Its equal-latency test adds 200 ms per REST read
+and records a comparable full-snapshot span. Run that test against both APKs
+with the same test APK; `expect_parallel=false` allows the serial baseline.
+Keep before/after results separate from phone observations. Synthetic timing logs are
 written under the preview app's `files/performance/` directory. Run the API 36/37
 emulator checks before using a diagnostic APK on a phone. Restore the regular
 signed APK, remove helpers and device traces, and turn debugging off afterward.
