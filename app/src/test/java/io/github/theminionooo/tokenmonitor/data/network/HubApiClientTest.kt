@@ -72,7 +72,7 @@ class HubApiClientTest {
         .flatMap { it.inetAddresses.toList() }.first { it is java.net.Inet4Address && it.isSiteLocalAddress }.hostAddress
 
     @Test
-    fun `expired ownership prevents the next endpoint in a snapshot read`() {
+    fun `expired ownership prevents the next endpoint in a snapshot read`() = runBlocking {
         val checks = AtomicInteger()
         val reads = java.util.Collections.synchronizedList(mutableListOf<String>())
         val server = HttpServer.create(InetSocketAddress(testHost, 0), 0).apply {
@@ -88,14 +88,14 @@ class HubApiClientTest {
         try {
             val connection = HubConnection("http://$testHost:${server.address.port}", "synthetic-secret", true)
             HubApiClient(beforeRequest = {
-                if (checks.incrementAndGet() == 3) throw CancellationException("Widget session expired")
+                if (checks.incrementAndGet() >= 2) throw CancellationException("Widget session expired")
             }).use { client ->
                 try {
                     client.loadSnapshot(connection)
-                    fail("Expected the expired widget lease to cancel before the devices request")
+                    fail("Expected the expired lease to cancel before authenticated reads")
                 } catch (_: CancellationException) {
-                    assertEquals(listOf("/api/health", "/api/stats"), reads.toList())
-                    assertEquals(3, checks.get())
+                    assertEquals(listOf("/api/health"), reads.toList())
+                    assertTrue(checks.get() >= 2)
                 }
             }
         } finally {
@@ -149,7 +149,7 @@ class HubApiClientTest {
     }
 
     @Test
-    fun `an oversized optional endpoint is treated as omitted`() {
+    fun `an oversized optional endpoint is treated as omitted`() = runBlocking {
         val oversized = """{"padding":"${"x".repeat(3 * 1024 * 1024)}"}"""
         // Announced length and chunked streaming take different guards in the client.
         listOf(oversized.length.toLong(), 0L).forEach { announced ->
@@ -162,7 +162,8 @@ class HubApiClientTest {
                 assertNull(snapshot.subscriptions)
                 assertEquals("""{"daily":[]}""", snapshot.history)
                 assertEquals("""{"updatedAt":"now"}""", snapshot.stats)
-                assertEquals(listOf("/api/health", "/api/stats", "/api/devices", "/api/history", "/api/subscriptions"), reads.toList())
+                assertEquals("/api/health", reads.first())
+                assertEquals(setOf("/api/health", "/api/stats", "/api/devices", "/api/history", "/api/subscriptions"), reads.toSet())
             } finally {
                 server.stop(0)
             }
@@ -170,7 +171,7 @@ class HubApiClientTest {
     }
 
     @Test
-    fun `an oversized stats response still fails the snapshot`() {
+    fun `an oversized stats response still fails the snapshot`() = runBlocking {
         val server = detailServer(java.util.Collections.synchronizedList(mutableListOf()), oversized = setOf("/api/stats"), announced = 0L)
         try {
             val connection = HubConnection("http://$testHost:${server.address.port}", "synthetic-secret", true)
@@ -258,7 +259,7 @@ class HubApiClientTest {
     }
 
     @Test
-    fun `authenticated reads do not follow redirects`() {
+    fun `authenticated reads do not follow redirects`() = runBlocking {
         val receivedAuthorization = AtomicReference<String?>()
         val redirectTarget = HttpServer.create(InetSocketAddress(testHost, 0), 0).apply {
             createContext("/capture") { exchange ->
@@ -297,7 +298,7 @@ class HubApiClientTest {
     }
 
     @Test
-    fun `hub identity is checked before sending the secret`() {
+    fun `hub identity is checked before sending the secret`() = runBlocking {
         val receivedAuthorization = AtomicReference<String?>()
         val server = HttpServer.create(InetSocketAddress(testHost, 0), 0).apply {
             createContext("/api/health") { exchange ->

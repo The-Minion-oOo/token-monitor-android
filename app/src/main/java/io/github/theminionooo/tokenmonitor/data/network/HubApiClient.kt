@@ -13,7 +13,14 @@ import java.net.Proxy
 import java.net.URL
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicLong
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.serialization.json.JsonObject
 import io.github.theminionooo.tokenmonitor.data.protocol.HubStreamProtocol
 import io.github.theminionooo.tokenmonitor.data.protocol.StatsStreamReceiver
@@ -55,8 +62,8 @@ internal class HubApiClient(
 ) : Closeable {
     private val requests = mutableSetOf<HttpURLConnection>()
     private var closed = false
-    var receivedBytes: Long = 0
-        private set
+    private val received = AtomicLong()
+    val receivedBytes: Long get() = received.get()
 
     override fun close() {
         val pending = synchronized(requests) {
@@ -66,23 +73,44 @@ internal class HubApiClient(
         pending.forEach { it.disconnect() }
     }
 
-    private fun release(http: HttpURLConnection) {
+    private fun release(http: HttpURLConnection, group: RequestGroup? = null) {
+        group?.remove(http)
         synchronized(requests) { requests.remove(http) }
         http.disconnect()
     }
-    fun loadSnapshot(connection: HubConnection): WireHubSnapshot {
+    suspend fun loadSnapshot(connection: HubConnection): WireHubSnapshot {
         val health = get(connection, "/api/health", authenticated = false)
         val identity = runCatching { HubProtocolParser.decodeHealth(health) }.getOrNull()
         if (identity?.ok != true || identity.role != "hub") {
             throw HubApiException(200, "The address is not a Token Monitor Hub.")
         }
-        val stats = get(connection, "/api/stats")
+        // Identity must be verified first. The four independent reads then share
+        // a two-request budget and are all complete before publishing a snapshot.
+        val bodies = coroutineScope {
+            val permits = Semaphore(2)
+            val group = RequestGroup()
+            val paths = listOf("/api/stats", "/api/devices", "/api/history", "/api/subscriptions")
+            try {
+                paths.mapIndexed { index, path ->
+                    async(Dispatchers.IO) {
+                        permits.withPermit {
+                            if (index == 0) get(connection, path, group = group)
+                            else getOptional(connection, path, group)
+                        }
+                    }
+                }.awaitAll()
+            } finally {
+                // Coroutine cancellation alone cannot interrupt a blocking socket.
+                // Close this batch before coroutineScope waits for its children.
+                group.close()
+            }
+        }
         return WireHubSnapshot(
             health = health,
-            stats = stats,
-            devices = getOptional(connection, "/api/devices"),
-            history = getOptional(connection, "/api/history"),
-            subscriptions = getOptional(connection, "/api/subscriptions"),
+            stats = requireNotNull(bodies[0]),
+            devices = bodies[1],
+            history = bodies[2],
+            subscriptions = bodies[3],
             capturedAt = System.currentTimeMillis(),
         )
     }
@@ -157,29 +185,29 @@ internal class HubApiClient(
         }
     }
 
-    private fun get(connection: HubConnection, path: String, authenticated: Boolean = true): String {
+    private fun get(connection: HubConnection, path: String, authenticated: Boolean = true, group: RequestGroup? = null): String {
         val endpoint = HubTimingEndpoint.fromPath(path)
         val request = timing.nextRequest()
-        val beforeBytes = receivedBytes
+        val bodyBytes = BodyBytes()
         var status = 0
-        return timing.measure(HubTimingStage.REQUEST, endpoint, request, { status }, { receivedBytes - beforeBytes }) {
-            val http = open(connection, path, authenticated, request = request)
+        return timing.measure(HubTimingStage.REQUEST, endpoint, request, { status }, { bodyBytes.value }) {
+            val http = open(connection, path, authenticated, request = request, group = group)
             try {
                 timing.measure(HubTimingStage.HEADERS, endpoint, request, status = { status }) { status = http.responseCode }
                 if (status !in 200..299) throw responseException(http)
                 // Refuse an announced oversized body before downloading it.
                 if (http.contentLengthLong > maxResponseBytes) throw HubResponseTooLargeException()
-                timing.measure(HubTimingStage.BODY, endpoint, request, { status }, { receivedBytes - beforeBytes }) {
-                    readBounded(http.inputStream)
+                timing.measure(HubTimingStage.BODY, endpoint, request, { status }, { bodyBytes.value }) {
+                    readBounded(http.inputStream, bodyBytes)
                 }
             } finally {
-                release(http)
+                release(http, group)
             }
         }
     }
 
-    private fun getOptional(connection: HubConnection, path: String): String? = try {
-        get(connection, path)
+    private fun getOptional(connection: HubConnection, path: String, group: RequestGroup? = null): String? = try {
+        get(connection, path, group = group)
     } catch (error: HubApiException) {
         // Optional details beyond the size cap must not stop the dashboard from connecting.
         if (error.statusCode == 404 || error is HubResponseTooLargeException) null else throw error
@@ -192,6 +220,7 @@ internal class HubApiClient(
         accept: String = "application/json",
         headers: Map<String, String> = emptyMap(),
         request: Int = 0,
+        group: RequestGroup? = null,
     ): HttpURLConnection {
         timing.measure(HubTimingStage.ROUTE, HubTimingEndpoint.fromPath(path), request) {
             HubAddressValidator.requireAllowed(connection)
@@ -214,6 +243,12 @@ internal class HubApiClient(
                 throw CancellationException("Hub request cancelled")
             }
             requests.add(http)
+        }
+        try {
+            group?.add(http)
+        } catch (cancelled: CancellationException) {
+            release(http)
+            throw cancelled
         }
         return http
     }
@@ -266,14 +301,15 @@ internal class HubApiClient(
         }
     }
 
-    private fun readBounded(stream: InputStream): String {
+    private fun readBounded(stream: InputStream, bodyBytes: BodyBytes? = null): String {
         val output = ByteArrayOutputStream()
         val buffer = ByteArray(8 * 1024)
         var totalBytes = 0
         while (true) {
             val read = stream.read(buffer)
             if (read == -1) break
-            receivedBytes += read
+            received.addAndGet(read.toLong())
+            bodyBytes?.let { it.value += read }
             totalBytes += read
             if (totalBytes > maxResponseBytes) {
                 throw HubResponseTooLargeException()
@@ -288,6 +324,29 @@ internal class HubApiClient(
 
         override fun close() {
             if (closed.compareAndSet(false, true)) connection.disconnect()
+        }
+    }
+
+    private class BodyBytes(var value: Long = 0)
+
+    /** Owns only this snapshot's reads, so a failed batch cannot close another request. */
+    private class RequestGroup : Closeable {
+        private val active = mutableSetOf<HttpURLConnection>()
+        private var closed = false
+
+        fun add(http: HttpURLConnection) = synchronized(active) {
+            if (closed) throw CancellationException("Hub snapshot ended")
+            active.add(http)
+        }
+
+        fun remove(http: HttpURLConnection) = synchronized(active) { active.remove(http) }
+
+        override fun close() {
+            val pending = synchronized(active) {
+                closed = true
+                active.toList().also { active.clear() }
+            }
+            pending.forEach { it.disconnect() }
         }
     }
 
