@@ -50,6 +50,7 @@ internal class HubResponseTooLargeException : HubApiException(200, "The Hub resp
 
 /** A deliberately small GET-only client for the Token Monitor Hub. */
 internal class HubApiClient(
+    private val timing: HubTimingRecorder = HubTimings.recorder,
     private val beforeRequest: (HubConnection) -> Unit = {},
 ) : Closeable {
     private val requests = mutableSetOf<HttpURLConnection>()
@@ -124,15 +125,28 @@ internal class HubApiClient(
         onOpen: suspend (SseSession) -> Unit,
         onEvent: suspend (HubStreamEvent) -> Unit,
     ) {
-        val http = open(
-            connection = connection,
-            path = "/api/stats/stream",
-            authenticated = true,
-            accept = "text/event-stream",
-            headers = mapOf("x-token-monitor-stream" to "4"),
-        )
+        val request = timing.nextRequest()
+        val http = timing.measure(HubTimingStage.STREAM_OPEN, HubTimingEndpoint.STREAM, request) {
+            val opened = open(
+                connection = connection,
+                path = "/api/stats/stream",
+                authenticated = true,
+                accept = "text/event-stream",
+                headers = mapOf("x-token-monitor-stream" to "4"),
+                request = request,
+            )
+            var accepted = false
+            try {
+                var status = 0
+                timing.measure(HubTimingStage.HEADERS, HubTimingEndpoint.STREAM, request, status = { status }) { status = opened.responseCode }
+                if (status !in 200..299) throw responseException(opened)
+                accepted = true
+                opened
+            } finally {
+                if (!accepted) release(opened)
+            }
+        }
         try {
-            if (http.responseCode !in 200..299) throw responseException(http)
             val session = SseSession(http)
             onOpen(session)
             http.inputStream.bufferedReader(StandardCharsets.UTF_8).use { reader ->
@@ -144,14 +158,23 @@ internal class HubApiClient(
     }
 
     private fun get(connection: HubConnection, path: String, authenticated: Boolean = true): String {
-        val http = open(connection, path, authenticated)
-        try {
-            if (http.responseCode !in 200..299) throw responseException(http)
-            // Refuse an announced oversized body before downloading it.
-            if (http.contentLengthLong > maxResponseBytes) throw HubResponseTooLargeException()
-            return readBounded(http.inputStream)
-        } finally {
-            release(http)
+        val endpoint = HubTimingEndpoint.fromPath(path)
+        val request = timing.nextRequest()
+        val beforeBytes = receivedBytes
+        var status = 0
+        return timing.measure(HubTimingStage.REQUEST, endpoint, request, { status }, { receivedBytes - beforeBytes }) {
+            val http = open(connection, path, authenticated, request = request)
+            try {
+                timing.measure(HubTimingStage.HEADERS, endpoint, request, status = { status }) { status = http.responseCode }
+                if (status !in 200..299) throw responseException(http)
+                // Refuse an announced oversized body before downloading it.
+                if (http.contentLengthLong > maxResponseBytes) throw HubResponseTooLargeException()
+                timing.measure(HubTimingStage.BODY, endpoint, request, { status }, { receivedBytes - beforeBytes }) {
+                    readBounded(http.inputStream)
+                }
+            } finally {
+                release(http)
+            }
         }
     }
 
@@ -168,9 +191,12 @@ internal class HubApiClient(
         authenticated: Boolean,
         accept: String = "application/json",
         headers: Map<String, String> = emptyMap(),
+        request: Int = 0,
     ): HttpURLConnection {
-        HubAddressValidator.requireAllowed(connection)
-        beforeRequest(connection)
+        timing.measure(HubTimingStage.ROUTE, HubTimingEndpoint.fromPath(path), request) {
+            HubAddressValidator.requireAllowed(connection)
+            beforeRequest(connection)
+        }
         val http = openHubConnection(URL(connection.baseUrl + path)).apply {
             requestMethod = "GET"
             connectTimeout = 10_000
