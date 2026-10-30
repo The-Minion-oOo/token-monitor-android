@@ -8,6 +8,19 @@ import org.junit.Test
 
 /** Responses produced by tools/check-hub-contract.mjs from the exact released desktop source. */
 class ReleasedHubContractTest {
+    @Test fun `released v082 archive corrections and observed model breakdowns survive Android parsing`() {
+        val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
+        assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())
+        for (prefix in listOf("", "worker/")) {
+            fun period(name: String) = HubProtocolParser.decodeStats(File(directory!!, "$prefix$name.json").readText()).periods.getValue("month")
+            assertEquals(mapOf("alpha" to 20L, "beta" to 20L), period("archive-session-observed").modelCacheReads)
+            assertEquals(mapOf("alpha" to 20L, "beta" to 40L), period("archive-client-partial").modelUnclassifiedTokens)
+            assertEquals(0L, period("archive-correction-0").totalTokens)
+            assertEquals(40L, period("archive-correction-40").totalTokens)
+            assertEquals(120L, period("archive-unrelated").totalTokens)
+        }
+    }
+
     @Test fun `released v081 streams reconstruct every ordered revision on Android`() {
         val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
         assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())

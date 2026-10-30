@@ -1,0 +1,119 @@
+{
+  "periods": {
+    "month": {
+      "totalTokens": 120,
+      "costUsd": 1,
+      "cacheReadTokens": 40,
+      "cacheWriteTokens": 10,
+      "outputTokens": 20,
+      "unclassifiedTokens": 20,
+      "clients": {
+        "opencode": 120
+      },
+      "models": {
+        "alpha": 80,
+        "beta": 40
+      },
+      "clientCacheReads": {
+        "opencode": 40
+      },
+      "clientCacheWrites": {
+        "opencode": 10
+      },
+      "clientOutputs": {
+        "opencode": 20
+      },
+      "clientUnclassifiedTokens": {
+        "opencode": 20
+      },
+      "modelCacheReads": {
+        "alpha": 20,
+        "beta": 20
+      },
+      "modelCacheWrites": {
+        "alpha": 5,
+        "beta": 5
+      },
+      "modelOutputs": {
+        "alpha": 15,
+        "beta": 5
+      },
+      "modelUnclassifiedTokens": {
+        "alpha": 20
+      },
+      "sessions": {
+        "opencode:another-session": {
+          "client": "opencode",
+          "sessionId": "another-session",
+          "totalTokens": 20,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 20,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-30T17:16:36.105Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "alpha": 20
+          },
+          "modelCosts": {},
+          "providers": {}
+        },
+        "opencode:archive-sample": {
+          "client": "opencode",
+          "sessionId": "archive-sample",
+          "totalTokens": 100,
+          "costUsd": 1,
+          "messageCount": 0,
+          "inputTokens": 30,
+          "outputTokens": 20,
+          "cacheReadTokens": 40,
+          "cacheWriteTokens": 10,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-30T17:16:36.105Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "alpha": 60,
+            "beta": 40
+          },
+          "modelCosts": {},
+          "providers": {},
+          "modelTokenComponents": {
+            "alpha": {
+              "totalTokens": 60,
+              "inputTokens": 20,
+              "cacheReadTokens": 20,
+              "cacheWriteTokens": 5,
+              "outputTokens": 15
+            },
+            "beta": {
+              "totalTokens": 40,
+              "inputTokens": 10,
+              "cacheReadTokens": 20,
+              "cacheWriteTokens": 5,
+              "outputTokens": 5
+            }
+          }
+        }
+      }
+    }
+  }
+}
