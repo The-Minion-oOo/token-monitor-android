@@ -3,6 +3,8 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
+import { usageProjection } from "./check-v082-usage.mjs";
+
 /** Called only inside the disposable, pinned-source contract process. No sockets or deployment. */
 export async function checkWorkerContract(source, output, upstream, limitCases = {}) {
     const { HubDO } = await import(pathToFileURL(join(source, "worker/src/index.js")));
@@ -120,6 +122,7 @@ export async function checkWorkerContract(source, output, upstream, limitCases =
                 const comparable = providers => providers.map(({ provider, accountKey, sourceDeviceId, planLabel, windows, status }) =>
                     ({ provider, accountKey, sourceDeviceId, planLabel, windows, status }));
                 assert.deepEqual(comparable(stats.limits.providers), comparable(fixture.providers));
+                if (fixture.usage) assert.deepEqual(usageProjection(stats.periods), fixture.usage);
                 responses[`${name}.json`] = stats;
             } finally {
                 if (caseHub.broadcastTimer) clearTimeout(caseHub.broadcastTimer);

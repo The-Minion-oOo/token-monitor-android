@@ -1,0 +1,86 @@
+{
+  "periods": {
+    "today": {
+      "totalTokens": 200,
+      "costUsd": 0,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "outputTokens": 0,
+      "unclassifiedTokens": 200,
+      "clients": {},
+      "models": {},
+      "clientCacheReads": {},
+      "clientCacheWrites": {},
+      "clientOutputs": {},
+      "clientUnclassifiedTokens": {},
+      "modelCacheReads": {},
+      "modelCacheWrites": {},
+      "modelOutputs": {},
+      "modelUnclassifiedTokens": {},
+      "sessions": {
+        "codex:legacy-codex": {
+          "client": "codex",
+          "sessionId": "legacy-codex",
+          "totalTokens": 100,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 20,
+          "outputTokens": 0,
+          "cacheReadTokens": 60,
+          "cacheWriteTokens": 20,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-30T17:16:36.105Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "synthetic": 100
+          },
+          "modelCosts": {},
+          "providers": {},
+          "promptCache": {
+            "observedAt": "2026-10-30T17:15:36.105Z",
+            "ttlSeconds": 300
+          }
+        },
+        "claude:legacy-claude": {
+          "client": "claude",
+          "sessionId": "legacy-claude",
+          "totalTokens": 100,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 20,
+          "outputTokens": 0,
+          "cacheReadTokens": 60,
+          "cacheWriteTokens": 20,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-30T17:16:36.105Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "synthetic": 100
+          },
+          "modelCosts": {},
+          "providers": {},
+          "promptCache": {
+            "observedAt": "2026-10-30T17:15:36.105Z",
+            "ttlSeconds": 300
+          }
+        }
+      }
+    }
+  }
+}

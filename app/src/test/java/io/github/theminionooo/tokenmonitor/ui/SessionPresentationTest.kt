@@ -82,12 +82,13 @@ class SessionPresentationTest {
     }
 
     @Test fun `cache estimates expire and suppress archived future invalid or unsupported rows`() {
-        val base = session("").copy(promptCache = PromptCache("2026-09-21T11:59:00Z", 300))
+        val base = session("").copy(client = "claude", promptCache = PromptCache("2026-09-21T11:59:00Z", 300))
         assertEquals(4, sessionPromptCacheMinutes(base, now))
         assertEquals(1, sessionPromptCacheMinutes(base, now + 239_999))
         assertNull(sessionPromptCacheMinutes(base, now + 240_000))
         assertNull(sessionPromptCacheMinutes(base.copy(archived = true), now))
         assertNull(sessionPromptCacheMinutes(base.copy(client = "fx"), now))
+        assertNull(sessionPromptCacheMinutes(base.copy(client = "codex"), now))
         assertNull(sessionPromptCacheMinutes(base.copy(promptCache = PromptCache("2026-09-21T12:00:01Z", 300)), now))
         assertNull(sessionPromptCacheMinutes(base.copy(promptCache = PromptCache("bad", 300)), now))
         assertNull(sessionPromptCacheMinutes(base.copy(promptCache = PromptCache("2026-09-21T11:59:00Z", 600)), now))

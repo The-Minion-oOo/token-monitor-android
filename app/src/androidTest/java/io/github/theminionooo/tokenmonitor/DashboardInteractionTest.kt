@@ -54,7 +54,7 @@ class DashboardInteractionTest {
         inputTokens = 20, outputTokens = 100, cacheReadTokens = 60, cacheWriteTokens = 20,
         timedOutputTokens = 80, timedDurationMs = 1000, promptCache = PromptCache("2026-10-02T11:59:00Z", 300))
 
-    @Test fun homeSessionsCanHideTitlesAndShowEstimatedCacheAndSpeed() {
+    @Test fun homeSessionsCanHideTitlesAndKeepCacheUsageAndSpeed() {
         val now = java.time.Instant.parse("2026-10-02T12:00:00Z").toEpochMilli()
         val snapshot = HubSnapshot(stats = HubStats(periods = mapOf("month" to UsagePeriod(sessions = listOf(metricSession())))))
         var showTitles by mutableStateOf(true)
@@ -63,7 +63,8 @@ class DashboardInteractionTest {
         } } }
         compose.waitUntil(5_000) { compose.onAllNodesWithText("Private planning title").fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithText("Private planning title").assertIsDisplayed()
-        compose.onNodeWithText("Cache hit 60% · 80 tok/s · Cache estimate ~4 min left").assertIsDisplayed()
+        compose.onNodeWithText("Cache hit 60% · 80 tok/s").assertIsDisplayed()
+        compose.onNodeWithText("Cache estimate", substring = true).assertDoesNotExist()
         compose.runOnIdle { showTitles = false }
         compose.onNodeWithText("Private planning title").assertDoesNotExist()
         compose.onNodeWithText("Codex · gpt-6-sol").assertIsDisplayed()
@@ -76,7 +77,8 @@ class DashboardInteractionTest {
         } } }
         compose.onNodeWithText("Private planning title").assertDoesNotExist()
         compose.onNodeWithText("Codex · gpt-6-sol").assertIsDisplayed()
-        compose.onNodeWithText("Cache hit 60% · 80 tok/s · Cache estimate ~4 min left").assertIsDisplayed()
+        compose.onNodeWithText("Cache hit 60% · 80 tok/s").assertIsDisplayed()
+        compose.onNodeWithText("Cache estimate", substring = true).assertDoesNotExist()
     }
 
     @Test fun sessionTitlePreferenceDefaultsVisibleAndSurvivesReload() {

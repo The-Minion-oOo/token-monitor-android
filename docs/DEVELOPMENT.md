@@ -117,7 +117,7 @@ production Home screen and all four Pages widget renders for every language,
 using synthetic showcase data. Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite now contains **103 tests** per emulator. The report checker
+The interaction suite now contains **105 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
 
@@ -415,3 +415,11 @@ patches, revision gaps, older-Hub snapshots and the five-second publication limi
 The Volcengine collector runs with a fake CLI response; no provider login or
 external request is used. Synthetic frame sizes describe the fixture workload,
 not measured phone bandwidth or battery savings.
+
+## Desktop v0.82.0 checks
+
+I exercise both released archive implementations, then send their synthetic
+results through the Node Hub and Worker. Android checks observed, partial,
+legacy and rejected model evidence, missing saved input, lower/zero corrections
+and unrelated sessions. Legacy Codex cache estimates stay in the wire cache but
+are suppressed in Home and Sessions; Claude estimates and cache-hit usage remain.

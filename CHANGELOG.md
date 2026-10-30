@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.82.0 r1 (candidate)
+
+- Updated desktop compatibility to v0.82.0.
+- Removed unsupported Codex cache-expiry estimates, including older cached readings.
+- Retained cache-hit usage, speed and Claude tier estimates.
+- Verified corrected archive totals and observed model breakdowns, including lower/zero corrections and missing evidence.
+- Preserved the v0.81.0 r2 security fixes and existing display features.
+
 ## v0.81.0 r2 — 2026-10-29
 
 - I hardened private Hub routing: HTTP requests and discovery bypass system proxies; Tailscale admission uses VPN link addresses, and private DNS/IPv6 checks fail closed.

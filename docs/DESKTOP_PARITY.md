@@ -1,15 +1,20 @@
-# Desktop parity for v0.81.0
+# Desktop parity for v0.82.0
 
 I compare the Android companion with released desktop source, rather than
-unreleased desktop changes. The baseline is tag `v0.81.0`, commit
-`ce89af774664f3852aa605350b59732247699650`. Android remains a read-only
+unreleased desktop changes. The baseline is tag `v0.82.0`, commit
+`7ccb0d5b28ccc4059cc6224dfd972a61ae2c1575`. Android remains a read-only
 dashboard: the desktop collects usage, signs in to providers and hosts the Hub.
 
-The latest published APK is **v0.81.0 r2**, which hardens Android transport
-and background work without changing this feature matrix.
+The current candidate is **v0.82.0 r1**. The published APK remains v0.81.0 r2.
+Its route, stream and background-refresh protections are retained.
 Items marked **r2** below were introduced in v0.79.0 r2 and are retained.
 
-Android adds the released v4 stream with ordered patches and recovery, reported
+The v0.82.0 candidate removes Codex cache-expiry estimates while retaining cache
+usage and Claude estimates. Corrected archived totals and observed model
+breakdowns arrive from the desktop; missing evidence remains Unclassified.
+Quota-alert plugins and plugin installation remain desktop-only.
+
+Android retains the released v4 stream with ordered patches and recovery, reported
 Codex/Claude reasoning effort, and personal Volcengine Agent/Coding Plan quotas.
 Codex Pro labels follow the reported price tiers. Plugins and discovery remain
 desktop-only. Phone bandwidth and battery savings are not measured.

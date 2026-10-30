@@ -1,0 +1,89 @@
+{
+  "periods": {
+    "month": {
+      "totalTokens": 100,
+      "costUsd": 1,
+      "cacheReadTokens": 40,
+      "cacheWriteTokens": 10,
+      "outputTokens": 20,
+      "unclassifiedTokens": 0,
+      "clients": {
+        "opencode": 100
+      },
+      "models": {
+        "alpha": 60,
+        "beta": 40
+      },
+      "clientCacheReads": {
+        "opencode": 40
+      },
+      "clientCacheWrites": {
+        "opencode": 10
+      },
+      "clientOutputs": {
+        "opencode": 20
+      },
+      "clientUnclassifiedTokens": {},
+      "modelCacheReads": {
+        "alpha": 20,
+        "beta": 20
+      },
+      "modelCacheWrites": {
+        "alpha": 5,
+        "beta": 5
+      },
+      "modelOutputs": {
+        "alpha": 15,
+        "beta": 5
+      },
+      "modelUnclassifiedTokens": {},
+      "sessions": {
+        "opencode:archive-sample": {
+          "client": "opencode",
+          "sessionId": "archive-sample",
+          "totalTokens": 100,
+          "costUsd": 1,
+          "messageCount": 0,
+          "inputTokens": 30,
+          "outputTokens": 20,
+          "cacheReadTokens": 40,
+          "cacheWriteTokens": 10,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-30T17:16:36.105Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "alpha": 60,
+            "beta": 40
+          },
+          "modelCosts": {},
+          "providers": {},
+          "modelTokenComponents": {
+            "alpha": {
+              "totalTokens": 60,
+              "inputTokens": 20,
+              "cacheReadTokens": 20,
+              "cacheWriteTokens": 5,
+              "outputTokens": 15
+            },
+            "beta": {
+              "totalTokens": 40,
+              "inputTokens": 10,
+              "cacheReadTokens": 20,
+              "cacheWriteTokens": 5,
+              "outputTokens": 5
+            }
+          },
+          "archived": true
+        }
+      }
+    }
+  }
+}

@@ -67,7 +67,8 @@ internal fun sessionCacheHitPercent(session: SessionUsage): Double? {
 }
 
 internal fun sessionPromptCacheMinutes(session: SessionUsage, now: Long): Int? {
-    if (session.archived || session.client !in setOf("claude", "codex")) return null
+    // Older Hubs and saved snapshots can still contain Codex's unsupported expiry estimate.
+    if (session.archived || session.client != "claude") return null
     val cache = session.promptCache ?: return null
     if (cache.ttlSeconds !in setOf(300L, 1800L, 3600L)) return null
     val observed = runCatching { Instant.parse(cache.observedAt).toEpochMilli() }.getOrNull() ?: return null

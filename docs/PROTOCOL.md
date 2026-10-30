@@ -211,13 +211,14 @@ of input served from cache: reads / (input + reads + writes). No cache traffic
 means no reading; cache writes without reads can legitimately show 0%.
 
 Optional `promptCache` contains `observedAt` and a `ttlSeconds` of 300, 1800,
-or 3600. Missing, null or invalid estimates are ignored. Codex and Claude rows
-show a rounded-up minute estimate only until expiry; archived and future-dated
+or 3600. Missing, null or invalid estimates are ignored. As of v0.82.0, only Claude
+rows show a rounded-up minute estimate until expiry; legacy Codex estimates are
+ignored even in saved snapshots. Archived and future-dated
 observations are suppressed. This is not a guarantee of provider-side retention.
 The existing slow UI clock updates the label without another timer or request.
 
-The optional period `modelThroughput` map is tolerated and retained in the raw
-cached snapshot, but Android does not display per-model throughput. Desktop
+The optional period `modelThroughput` map is retained in the raw cached snapshot
+and supports the opt-in recent per-model rate panel when readings are available. Desktop
 provider usage-row visibility is a desktop setting, not a new Hub write API.
 
 ## v0.66.0 MiniMax Code and reported costs
@@ -493,3 +494,13 @@ with synthetic probe results; it never reads an account or starts a collector.
 
 Home list counts are local presentation preferences, not Hub settings. Desktop
 notch/dock behavior, collection priority and quota-probe fixes remain on desktop.
+
+## v0.82.0 archive evidence
+
+The Hub retains optional session `modelTokenComponents` in complete and v4
+stream bodies. Android preserves that wire data in its cache and reads the
+Hub's already classified period/model breakdown maps. It does not reimplement
+archive reconciliation or divide legacy multi-model session counts by ratios.
+Missing or rejected evidence remains Unclassified; explicit lower and zero
+corrections replace the reported total. The released-Hub checks cover both
+session and client archives, partial coverage and unrelated live sessions.

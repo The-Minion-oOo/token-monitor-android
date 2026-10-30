@@ -1,0 +1,55 @@
+{
+  "periods": {
+    "month": {
+      "totalTokens": 0,
+      "costUsd": 0,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "outputTokens": 0,
+      "unclassifiedTokens": 0,
+      "clients": {
+        "opencode": 0
+      },
+      "models": {
+        "alpha": 0
+      },
+      "clientCacheReads": {},
+      "clientCacheWrites": {},
+      "clientOutputs": {},
+      "clientUnclassifiedTokens": {},
+      "modelCacheReads": {},
+      "modelCacheWrites": {},
+      "modelOutputs": {},
+      "modelUnclassifiedTokens": {},
+      "sessions": {
+        "opencode:archive-sample": {
+          "client": "opencode",
+          "sessionId": "archive-sample",
+          "totalTokens": 0,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-10-30T17:16:36.105Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "alpha": 0
+          },
+          "modelCosts": {},
+          "providers": {}
+        }
+      }
+    }
+  }
+}
