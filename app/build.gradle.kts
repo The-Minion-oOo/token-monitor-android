@@ -16,6 +16,7 @@ val hasReleaseSigning = listOf(releaseStoreFile, releaseStorePassword, releaseKe
 // `-PtokenMonitorPreview=true` installs a side-by-side debug copy for fixture screenshots
 // without touching the real pairing stored by the normally installed app.
 val previewInstall = providers.gradleProperty("tokenMonitorPreview").orNull == "true"
+val hubTiming = providers.gradleProperty("tokenMonitorHubTiming").orNull == "true"
 
 android {
     namespace = "io.github.theminionooo.tokenmonitor"
@@ -31,6 +32,7 @@ android {
         buildConfigField("String", "UPSTREAM_VERSION", "\"$upstreamVersion\"")
         buildConfigField("String", "UPSTREAM_TAG", "\"$upstreamTag\"")
         buildConfigField("String", "UPSTREAM_COMMIT", "\"$upstreamCommit\"")
+        buildConfigField("boolean", "HUB_TIMING_ENABLED", hubTiming.toString())
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true

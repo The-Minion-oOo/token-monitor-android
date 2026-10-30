@@ -7,6 +7,9 @@ import io.github.theminionooo.tokenmonitor.data.network.EndpointFailover
 import io.github.theminionooo.tokenmonitor.data.network.HubAddressValidation
 import io.github.theminionooo.tokenmonitor.data.network.HubAddressValidator
 import io.github.theminionooo.tokenmonitor.data.network.HubApiClient
+import io.github.theminionooo.tokenmonitor.data.network.HubTimingRecorder
+import io.github.theminionooo.tokenmonitor.data.network.HubTimingStage
+import io.github.theminionooo.tokenmonitor.data.network.HubTimings
 import io.github.theminionooo.tokenmonitor.data.network.HubApiException
 import io.github.theminionooo.tokenmonitor.data.network.hubTlsMessage
 import io.github.theminionooo.tokenmonitor.data.network.HubRouteGuard
@@ -154,6 +157,7 @@ internal fun selectHubWorkMode(
 /** Owns state on the main dispatcher; socket and disk work run on IO dispatchers. */
 internal class HubRepository(
     context: Context,
+    private val timing: HubTimingRecorder = HubTimings.recorder,
     private val saveCache: (SnapshotCache, WireHubSnapshot) -> Unit = { cache, wire -> cache.save(wire) },
     loadCache: (SnapshotCache) -> WireHubSnapshot? = { it.read() },
 ) {
@@ -210,7 +214,7 @@ internal class HubRepository(
         val token = generation
         val deadline = SystemClock.elapsedRealtime() + 45_000L
         val run = WidgetRefreshRun(deadline)
-        val api = HubApiClient { route ->
+        val api = HubApiClient(timing) { route ->
             if (token != generation || dashboardVisible || widgetActive ||
                 widgetRefresh.settings != settings || widgetRefresh.record.secretRejected || !WidgetUpdateCoordinator.hasWidgets(appContext)) {
                 throw CancellationException("Scheduled widget refresh ended")
@@ -277,7 +281,9 @@ internal class HubRepository(
     internal val cacheLoadJob: Job? = connection?.let { saved ->
         scope.launch {
             val cached = withContext(Dispatchers.IO) {
-                runCatching { loadCache(cache)?.let { it to parse(it, cached = true) } }.getOrNull()
+                runCatching {
+                    timing.measure(HubTimingStage.CACHE_DECODE) { loadCache(cache)?.let { it to parse(it, cached = true) } }
+                }.getOrNull()
             } ?: return@launch
             // A network response or a pairing change always wins over a delayed disk read.
             if (connection === saved && lastWireSnapshot == null && _state.value.snapshot == null) {
@@ -357,7 +363,7 @@ internal class HubRepository(
     private suspend fun verifyAndSave(candidate: HubConnection, testAddress: String? = null): String? {
         stopForegroundWork()
         val token = generation
-        val api = HubApiClient { route ->
+        val api = HubApiClient(timing) { route ->
             if (generation != token) throw CancellationException("Connection check cancelled")
             requireRouteAllowed(route)
         }.also { activeApi = it }
@@ -428,7 +434,7 @@ internal class HubRepository(
         val saved = connection ?: return
         if (mode == HubWorkMode.Idle || mode != desiredWorkMode || foregroundJob?.isActive == true) return
         val token = generation
-        val api = HubApiClient { route ->
+        val api = HubApiClient(timing) { route ->
             if (generation != token || desiredWorkMode != mode) throw CancellationException("Hub work ended")
             requireRouteAllowed(route)
         }.also { activeApi = it }
@@ -442,14 +448,17 @@ internal class HubRepository(
                     try {
                         _state.update { it.copy(refreshing = true, message = null, secretRejected = false) }
                         val (url, wire) = withContext(Dispatchers.IO) {
-                            EndpointFailover.run(permittedRoutes(saved, activeUrl)) { api.loadSnapshot(saved.copy(baseUrl = it)) }
+                            timing.measure(HubTimingStage.SNAPSHOT) {
+                                val routes = timing.measure(HubTimingStage.CANDIDATES) { permittedRoutes(saved, activeUrl) }
+                                EndpointFailover.run(routes) { api.loadSnapshot(saved.copy(baseUrl = it)) }
+                            }
                         }
                         ensureActive()
                         if (generation != token) break
-                        val snapshot = withContext(Dispatchers.IO) { parse(wire) }
+                        val snapshot = withContext(Dispatchers.IO) { timing.measure(HubTimingStage.DECODE) { parse(wire) } }
                         if (generation != token) break
                         activeUrl = url
-                        applySuccess(wire, snapshot)
+                        timing.measure(HubTimingStage.PUBLISH) { applySuccess(wire, snapshot) }
                         connected = true
                         when (mode) {
                             HubWorkMode.DashboardStreaming -> try {

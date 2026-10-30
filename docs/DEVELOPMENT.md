@@ -117,7 +117,7 @@ production Home screen and all four Pages widget renders for every language,
 using synthetic showcase data. Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite now contains **105 tests** per emulator. The report checker
+The interaction suite now contains **108 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
 
@@ -256,6 +256,38 @@ and its source/data directory removed afterwards.
 stream reducer. Gradle tracks the supplied directory as a test input. Without
 `TOKEN_MONITOR_CONTRACT_DIR`, those tests are skipped; the versioned fixture
 tests still run normally. The contract workflow supplies it explicitly.
+
+### First dashboard refresh timings
+
+Build a local diagnostic copy with timing enabled explicitly:
+
+```powershell
+.\gradlew.bat :app:assembleDebug :app:assembleDebugAndroidTest -PtokenMonitorPreview=true -PtokenMonitorHubTiming=true
+```
+
+The option is off by default in both debug and release builds. It does not add
+requests, change update frequency or relax route checks. `HubTiming` log entries
+contain only fixed stage/endpoint labels, a process-local request counter,
+monotonic durations, status codes, response-byte counts and outcome categories.
+They cannot contain an address, secret, account, response body or raw error
+message. Logging stops after 512 entries per process. Do not upload phone traces
+or raw application logs to a public issue.
+
+The stages distinguish candidate/route admission, waiting for response headers,
+reading each body, the whole initial snapshot, cache/snapshot decode, state
+publication and stream opening. Header timing includes the
+client's connection setup and server wait; it is not a separate DNS/TCP/TLS
+breakdown. State publication is not a measurement of when a frame reached the
+physical display.
+Nested request/snapshot timings include the diagnostic logging overhead.
+
+`HubStartupTimingTest` uses a synthetic Hub with a delayed history response to
+check attribution and the point at which fresh data is published. It also checks
+pause/cancellation and a rejected health request. Synthetic timing logs are
+written under the preview app's `files/performance/` directory. Run the API 36/37
+emulator checks before using a diagnostic APK on a phone. Restore the regular
+signed APK, remove helpers and device traces, and turn debugging off afterward.
+Timing a startup does not establish battery savings.
 
 ### Synthetic performance baseline
 
