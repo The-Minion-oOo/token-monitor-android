@@ -5,11 +5,11 @@ unreleased desktop changes. The baseline is tag `v0.82.0`, commit
 `7ccb0d5b28ccc4059cc6224dfd972a61ae2c1575`. Android remains a read-only
 dashboard: the desktop collects usage, signs in to providers and hosts the Hub.
 
-The current candidate is **v0.82.0 r1**. The published APK remains v0.81.0 r2.
-Its route, stream and background-refresh protections are retained.
+The latest published APK is **v0.82.0 r1**. The v0.81.0 r2 route, stream and
+background-refresh protections are retained.
 Items marked **r2** below were introduced in v0.79.0 r2 and are retained.
 
-The v0.82.0 candidate removes Codex cache-expiry estimates while retaining cache
+The v0.82.0 release removes Codex cache-expiry estimates while retaining cache
 usage and Claude estimates. Corrected archived totals and observed model
 breakdowns arrive from the desktop; missing evidence remains Unclassified.
 Quota-alert plugins and plugin installation remain desktop-only.

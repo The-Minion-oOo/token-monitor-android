@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.82.0 r1 (candidate)
+## v0.82.0 r1 — 2026-10-30
 
 - Updated desktop compatibility to v0.82.0.
 - Removed unsupported Codex cache-expiry estimates, including older cached readings.
