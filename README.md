@@ -16,7 +16,7 @@
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/github/actions/workflow/status/The-Minion-oOo/token-monitor-android/android.yml?branch=main&style=flat-square&logo=githubactions&logoColor=10221c&label=Android%20checks"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.81.0" src="https://img.shields.io/badge/Desktop-v0.81.0-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.82.0" src="https://img.shields.io/badge/Desktop-v0.82.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/releases"><img alt="Total GitHub release asset downloads" src="https://img.shields.io/github/downloads/The-Minion-oOo/token-monitor-android/total?label=Downloads&style=flat-square&color=73bdf5"></a>
@@ -28,9 +28,10 @@
 
 ## The desktop dashboard, made mobile
 
-**New in v0.81.0 r2:** stronger private Hub route checks, bounded stream JSON
-and reconnects, and earlier skip checks for periodic widget work.
-[Release notes](docs/releases/android-v0.81.0-r2.md).
+**New in v0.82.0 r1:** Codex cache-hit usage and speed stay visible without an
+unsupported expiry countdown. Corrected desktop archives retain observed model
+breakdowns; missing evidence stays Unclassified.
+[Release notes](docs/releases/android-v0.82.0-r1.md).
 
 **Also included:** smaller live updates through the released v4 Hub stream,
 session reasoning effort and personal Volcengine quotas. Muse and Ollama
@@ -71,7 +72,7 @@ supplied by the Hub.
 - **Share less when troubleshooting:** preview an allowlisted diagnostic report
   before copying or sharing it. Addresses, secrets and conversation text stay out.
 
-These features are available in v0.81.0 r2. Pairing still uses the same read-only
+These features are available in v0.82.0 r1. Pairing still uses the same read-only
 Hub API; the dashboard update frequency and widget layout stay unchanged.
 
 <table>
@@ -226,17 +227,16 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 | | |
 | --- | --- |
-| Current release | [Android v0.81.0 r2](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.81.0-r2) (`810002`) |
-| Desktop baseline | [Token Monitor v0.81.0](https://github.com/Javis603/token-monitor/releases/tag/v0.81.0) |
+| Current release | [Android v0.82.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.82.0-r1) (`820001`) |
+| Desktop baseline | [Token Monitor v0.82.0](https://github.com/Javis603/token-monitor/releases/tag/v0.82.0) |
 | Minimum Android version | Android 8.0 |
 
-I checked ordered v4 streams, session reasoning effort and personal Volcengine
-quotas against the released desktop v0.81.0 Node Hub and Worker.
-Optional HTTPS, background widget refresh and the Tailscale
-Wi-Fi-only fix are retained. I checked the exact signed r2 APK on my phone:
-pairing and settings survived the upgrade, the Pages widget redrew, and the
-dashboard, Widget Live/Stop and forced periodic refresh passed over both routes.
-Offline recovery passed; comparable battery savings remain unmeasured.
+I checked archive corrections and model evidence against the released desktop
+v0.82.0 Node Hub and Worker, including lower and zero corrections. The earlier
+v4 stream, HTTPS and background-refresh checks remain covered.
+I haven't phone-tested v0.82.0 r1. The v0.81.0 r2 phone checks covered pairing,
+Pages redraw, dashboard, Live/Stop, forced periodic refresh and offline recovery.
+Those results apply to r2; battery savings remain unmeasured.
 [Validation](docs/VALIDATION.md) records the scope and remaining follow-up.
 
 Android-only updates increment the release revision while keeping the verified
