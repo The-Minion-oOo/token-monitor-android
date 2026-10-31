@@ -117,7 +117,7 @@ production Home screen and all four Pages widget renders for every language,
 using synthetic showcase data. Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite now contains **110 tests** per emulator. The report checker
+The interaction suite now contains **112 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
 
@@ -394,7 +394,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 78 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 112 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.
@@ -480,3 +480,12 @@ results through the Node Hub and Worker. Android checks observed, partial,
 legacy and rejected model evidence, missing saved input, lower/zero corrections
 and unrelated sessions. Legacy Codex cache estimates stay in the wire cache but
 are suppressed in Home and Sessions; Claude estimates and cache-hit usage remain.
+
+## Desktop v0.83.0 checks
+
+I inject synthetic OAuth, CLI and Trae web responses into the released collectors,
+then read their results through Node and Worker. Tests cover Max/Ultra and Team,
+weekly-only quotas, explicit zero, missing data, credit summaries and expired
+sessions. No real account, CLI process or deployed Hub is used. The native tests
+check plan labels and partial quotas on Home and Limits. Earlier archive and v4
+stream contracts remain in the same gate.

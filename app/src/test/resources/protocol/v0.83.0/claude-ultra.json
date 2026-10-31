@@ -1,0 +1,43 @@
+{
+  "limits": {
+    "updatedAt": "2026-10-31T15:51:18.271Z",
+    "providers": [
+      {
+        "provider": "claude",
+        "accountKey": "sha256:805b6a3f66d2b105b964ab493d6734c82bbb5016c5db884778505bf8329817b1",
+        "accountLabel": "Ultra",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "ultra@example.com",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "oauth",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-31T15:51:17.850Z",
+        "windows": [
+          {
+            "kind": "session",
+            "label": "",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 25,
+            "remainingPercent": 75,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-claude-ultra",
+        "stale": false
+      }
+    ]
+  }
+}

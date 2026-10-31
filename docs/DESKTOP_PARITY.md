@@ -1,12 +1,16 @@
-# Desktop parity for v0.82.0
+# Desktop parity for v0.83.0
 
 I compare the Android companion with released desktop source, rather than
-unreleased desktop changes. The baseline is tag `v0.82.0`, commit
-`7ccb0d5b28ccc4059cc6224dfd972a61ae2c1575`. Android remains a read-only
+unreleased desktop changes. The baseline is tag `v0.83.0`, commit
+`7dc01989ccd62fd52bc027b28c64f7d225fbc5c8`. Android remains a read-only
 dashboard: the desktop collects usage, signs in to providers and hosts the Hub.
 
-The latest published APK is **v0.82.0 r1**. The v0.81.0 r2 route, stream and
+The candidate is **v0.83.0 r1**; the published APK remains v0.82.0 r1. The v0.81.0 r2 route, stream and
 background-refresh protections are retained.
+Claude plan labels now include Max/Ultra, and weekly-only quotas stay partial.
+Trae CN credit readings use the existing credits shape. Desktop proxy settings
+and browser-session credentials remain on desktop.
+
 Items marked **r2** below were introduced in v0.79.0 r2 and are retained.
 
 The v0.82.0 release removes Codex cache-expiry estimates while retaining cache

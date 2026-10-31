@@ -1,0 +1,27 @@
+{
+  "limits": {
+    "updatedAt": "2026-10-31T15:51:18.278Z",
+    "providers": [
+      {
+        "provider": "claude",
+        "accountKey": "",
+        "accountLabel": "",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "notConfigured",
+        "source": "",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-31T15:51:17.850Z",
+        "windows": [],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-claude-missing",
+        "stale": false
+      }
+    ]
+  }
+}

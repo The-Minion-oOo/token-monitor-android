@@ -1,0 +1,43 @@
+{
+  "limits": {
+    "updatedAt": "2026-10-31T15:51:19.452Z",
+    "providers": [
+      {
+        "provider": "claude",
+        "accountKey": "sha256:723f612ba25727b5dcaa0580ca15503cc696c9716dd5895f7d08b76385c2a4b0",
+        "accountLabel": "Team",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "team@example.com",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "oauth",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-31T15:51:17.850Z",
+        "windows": [
+          {
+            "kind": "session",
+            "label": "",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 25,
+            "remainingPercent": 75,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-claude-team",
+        "stale": false
+      }
+    ]
+  }
+}

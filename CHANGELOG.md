@@ -1,6 +1,10 @@
 # Changelog
 
-## Unreleased
+## v0.83.0 r1 (candidate)
+
+- Updated desktop compatibility to v0.83.0.
+- Displayed Claude's reported Max/Ultra plan labels and verified weekly-only quotas, including zero and missing values.
+- Verified Trae CN credit summaries, expired sessions and credential stripping through the released Node Hub and Worker.
 
 - Added an off-by-default diagnostic build option for private Hub request timings.
 - Overlapped the initial dashboard's independent reads, with at most two requests after verifying the Hub identity. All responses still finish before publishing fresh data.
