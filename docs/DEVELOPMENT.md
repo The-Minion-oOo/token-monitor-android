@@ -293,6 +293,27 @@ emulator checks before using a diagnostic APK on a phone. Restore the regular
 signed APK, remove helpers and device traces, and turn debugging off afterward.
 Timing a startup does not establish battery savings.
 
+#### Phone comparison, 2026-10-30
+
+I compared the serial and bounded-parallel signed diagnostic builds on my phone,
+keeping pairing and Wi-Fi unchanged within each route's comparison. Each route
+used four blocks in serial/parallel/parallel/serial order. Each block excluded
+one post-install warmup, then measured one process restart and two returns from
+Home after five seconds, giving six measured openings per build and route.
+
+| Route | Serial initial fetch, median | Bounded parallel, median |
+| --- | ---: | ---: |
+| Home Wi-Fi | 106 ms | 81 ms |
+| Tailscale over Wi-Fi | 125 ms | 84 ms |
+
+All 24 measured openings published fresh data and opened the stream without
+request failures. These are initial-fetch timings from a small sample, before
+decoding and display; mobile-data and battery comparisons remain unmeasured.
+The original intermittent multi-second wait did not recur and remains open in
+[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
+The exact public APK was restored without clearing data, the helper was removed,
+and debugging was turned off. Wi-Fi and Tailscale were left as selected.
+
 ### Synthetic performance baseline
 
 `PerformanceBaselineTest` generates statistics around 512 KiB, 1 MiB, and just
