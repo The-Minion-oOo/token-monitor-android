@@ -8,6 +8,8 @@ import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
 import io.github.theminionooo.tokenmonitor.ui.DashboardViewModel
 import io.github.theminionooo.tokenmonitor.ui.TokenMonitorApp
+import io.github.theminionooo.tokenmonitor.data.network.HubTimings
+import io.github.theminionooo.tokenmonitor.data.network.HubTimingStage
 
 class MainActivity : ComponentActivity() {
     override fun attachBaseContext(newBase: android.content.Context) {
@@ -18,6 +20,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        HubTimings.recorder.mark(HubTimingStage.ACTIVITY_CREATE)
         io.github.theminionooo.tokenmonitor.ui.AppLanguage.bind(this)
         enableEdgeToEdge()
         WindowCompat.getInsetsController(window, window.decorView).apply {
@@ -29,10 +32,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+        HubTimings.recorder.mark(HubTimingStage.ACTIVITY_RESUME)
         viewModel.onResume()
     }
 
     override fun onPause() {
+        HubTimings.recorder.mark(HubTimingStage.ACTIVITY_PAUSE)
         viewModel.onPause()
         super.onPause()
     }

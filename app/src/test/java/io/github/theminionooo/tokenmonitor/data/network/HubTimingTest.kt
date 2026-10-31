@@ -4,6 +4,10 @@ import java.util.concurrent.atomic.AtomicLong
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.yield
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.cancelAndJoin
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -101,5 +105,66 @@ class HubTimingTest {
     @Test fun `disabled suspended spans never read the clock or log`() = runBlocking {
         val recorder = HubTimingRecorder(false, clock = { error("Clock must not be read") }, sink = { error("No events") })
         assertEquals(42, recorder.measureSuspending(HubTimingStage.SNAPSHOT) { yield(); 42 })
+    }
+
+    @Test fun `disabled markers skip route classification clocks counters and sinks`() {
+        val recorder = HubTimingRecorder(false, clock = { error("No clock") }, sink = { error("No sink") })
+        recorder.mark(HubTimingStage.ROUTE_SELECTED, route = { error("No classification") })
+        recorder.failure(IllegalStateException("private"), 1, 2)
+        assertEquals(0, recorder.nextRun())
+    }
+
+    @Test fun `markers retain fixed route and reason labels without private failure data`() {
+        val samples = mutableListOf<HubTimingSample>()
+        val recorder = HubTimingRecorder(true, sink = samples::add)
+        val run = recorder.nextRun()
+        recorder.mark(HubTimingStage.ROUTE_SELECTED, run, HubTimingReason.NETWORK_AVAILABLE,
+            route = { HubTimingRoute.fromUrl("https://hub.example.com/private-secret") })
+        recorder.failure(HubApiException(503, "private-secret https://private-address"), run, 2)
+        assertEquals(run + 1, recorder.nextRun())
+        assertEquals(HubTimingRoute.INTERNET_HTTPS, samples.first().route)
+        assertEquals(HubTimingReason.NETWORK_AVAILABLE, samples.first().reason)
+        assertEquals(0, samples.first().durationUs)
+        assertEquals(503, samples.last().status)
+        assertEquals(2, samples.last().attempt)
+        assertEquals(HubTimingOutcome.HTTP_ERROR, samples.last().outcome)
+        assertTrue(samples.all { it.run == run })
+        assertFalse(samples.joinToString { it.line() }.contains("private"))
+        assertFalse(samples.joinToString { it.line() }.contains("hub.example.com"))
+        assertEquals(HubTimingRoute.TAILSCALE, HubTimingRoute.fromUrl("http://100.64.0.1:17321"))
+        assertEquals(HubTimingRoute.HOME, HubTimingRoute.fromUrl("http://192.168.1.2:17321"))
+    }
+
+    @Test fun `cancelled retry timing preserves planned delay and the same run`() = runBlocking {
+        val samples = mutableListOf<HubTimingSample>()
+        val clock = AtomicLong(0)
+        val recorder = HubTimingRecorder(true, clock::get, samples::add)
+        val entered = CompletableDeferred<Unit>()
+        val job = launch {
+            recorder.measureSuspending(HubTimingStage.RETRY_WAIT, run = 7, attempt = 3, plannedMs = 8000) {
+                entered.complete(Unit)
+                awaitCancellation()
+            }
+        }
+        entered.await()
+        clock.set(50_000_000)
+        job.cancelAndJoin()
+        val sample = samples.single()
+        assertEquals(7, sample.run)
+        assertEquals(3, sample.attempt)
+        assertEquals(8000, sample.plannedMs)
+        assertEquals(50_000, sample.durationUs)
+        assertEquals(HubTimingOutcome.CANCELLED, sample.outcome)
+    }
+
+    @Test fun `markers and spans share a budget and diagnostic failures remain harmless`() {
+        val samples = mutableListOf<HubTimingSample>()
+        val recorder = HubTimingRecorder(true, sink = samples::add, maxEvents = 2)
+        recorder.mark(HubTimingStage.ROUTE_SELECTED, route = { error("private failure") })
+        assertEquals(42, recorder.measure(HubTimingStage.REQUEST) { 42 })
+        recorder.mark(HubTimingStage.ACTIVITY_RESUME, route = { error("Budget must skip this") })
+        assertEquals(2, samples.size)
+        assertEquals(HubTimingRoute.NONE, samples.first().route)
+        HubTimingRecorder(true, sink = { error("private") }).mark(HubTimingStage.ACTIVITY_RESUME)
     }
 }

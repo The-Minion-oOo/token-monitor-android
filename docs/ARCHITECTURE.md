@@ -150,6 +150,11 @@ State changes are serialized on the main dispatcher; sockets, snapshot parsing,
 and queued cache writes use IO dispatchers. Each shared repository run owns a closable
 HTTP client and a generation token so cancelled work cannot replace newer state.
 A callback active only while a dashboard or explicit widget session needs it restarts the connection when routes change.
+The off-by-default Hub timing option labels Activity lifecycle, ownership,
+network callbacks, connection-run boundaries, route kinds and retry waits using
+fixed enums and numbers. These observations do not change restart eligibility,
+backoff, request count or publication timing. Request timings share a diagnostic
+run ID so a cancelled run can be distinguished from its replacement.
 Reconnections fetch a full snapshot to recover missed history. Subscription
 refreshes are single-flight and throttle retries of a failed version.
 

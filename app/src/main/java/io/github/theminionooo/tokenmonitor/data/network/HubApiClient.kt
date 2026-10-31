@@ -58,6 +58,7 @@ internal class HubResponseTooLargeException : HubApiException(200, "The Hub resp
 /** A deliberately small GET-only client for the Token Monitor Hub. */
 internal class HubApiClient(
     private val timing: HubTimingRecorder = HubTimings.recorder,
+    private val timingRun: Int = 0,
     private val beforeRequest: (HubConnection) -> Unit = {},
 ) : Closeable {
     private val requests = mutableSetOf<HttpURLConnection>()
@@ -154,7 +155,7 @@ internal class HubApiClient(
         onEvent: suspend (HubStreamEvent) -> Unit,
     ) {
         val request = timing.nextRequest()
-        val http = timing.measure(HubTimingStage.STREAM_OPEN, HubTimingEndpoint.STREAM, request) {
+        val http = timing.measure(HubTimingStage.STREAM_OPEN, HubTimingEndpoint.STREAM, request, run = timingRun) {
             val opened = open(
                 connection = connection,
                 path = "/api/stats/stream",
@@ -166,7 +167,7 @@ internal class HubApiClient(
             var accepted = false
             try {
                 var status = 0
-                timing.measure(HubTimingStage.HEADERS, HubTimingEndpoint.STREAM, request, status = { status }) { status = opened.responseCode }
+                timing.measure(HubTimingStage.HEADERS, HubTimingEndpoint.STREAM, request, status = { status }, run = timingRun) { status = opened.responseCode }
                 if (status !in 200..299) throw responseException(opened)
                 accepted = true
                 opened
@@ -190,14 +191,14 @@ internal class HubApiClient(
         val request = timing.nextRequest()
         val bodyBytes = BodyBytes()
         var status = 0
-        return timing.measure(HubTimingStage.REQUEST, endpoint, request, { status }, { bodyBytes.value }) {
+        return timing.measure(HubTimingStage.REQUEST, endpoint, request, { status }, { bodyBytes.value }, run = timingRun) {
             val http = open(connection, path, authenticated, request = request, group = group)
             try {
-                timing.measure(HubTimingStage.HEADERS, endpoint, request, status = { status }) { status = http.responseCode }
+                timing.measure(HubTimingStage.HEADERS, endpoint, request, status = { status }, run = timingRun) { status = http.responseCode }
                 if (status !in 200..299) throw responseException(http)
                 // Refuse an announced oversized body before downloading it.
                 if (http.contentLengthLong > maxResponseBytes) throw HubResponseTooLargeException()
-                timing.measure(HubTimingStage.BODY, endpoint, request, { status }, { bodyBytes.value }) {
+                timing.measure(HubTimingStage.BODY, endpoint, request, { status }, { bodyBytes.value }, run = timingRun) {
                     readBounded(http.inputStream, bodyBytes)
                 }
             } finally {
@@ -222,7 +223,7 @@ internal class HubApiClient(
         request: Int = 0,
         group: RequestGroup? = null,
     ): HttpURLConnection {
-        timing.measure(HubTimingStage.ROUTE, HubTimingEndpoint.fromPath(path), request) {
+        timing.measure(HubTimingStage.ROUTE, HubTimingEndpoint.fromPath(path), request, run = timingRun) {
             HubAddressValidator.requireAllowed(connection)
             beforeRequest(connection)
         }

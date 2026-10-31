@@ -92,12 +92,90 @@ class HubStartupTimingTest {
         writeSamples("latency-benchmark", samples)
     }
 
+    @Test fun slowIdentityHeadersAreSeparatedFromBodyAndPublication() = withHub(faults = Faults(healthHeaderDelayMs = 700)) { server, hub, samples ->
+        instrumentation.runOnMainSync { hub.setDashboardVisible(Any(), true) }
+        await { hub.state.value.streamActive }
+        val run = samples.single { it.stage == HubTimingStage.WORK_START }.run
+        val headers = samples.single { it.stage == HubTimingStage.HEADERS && it.endpoint == HubTimingEndpoint.HEALTH }
+        assertTrue(headers.durationUs >= 650_000)
+        assertTrue(samples.filter { it.stage == HubTimingStage.REQUEST }.all { it.run == run })
+        assertTrue(samples.single { it.stage == HubTimingStage.PUBLISH }.elapsedUs > headers.elapsedUs)
+        assertEquals(HubTimingRoute.HOME, samples.single { it.stage == HubTimingStage.ROUTE_SELECTED }.route)
+        assertNoPrivateData(samples, server)
+        writeSamples("slow-health-headers", samples)
+    }
+
+    @Test fun slowStatsBodyIsAttributedAfterItsHeaders() = withHub(faults = Faults(statsBodyDelayMs = 700)) { server, hub, samples ->
+        instrumentation.runOnMainSync { hub.setDashboardVisible(Any(), true) }
+        await { hub.state.value.streamActive }
+        val body = samples.single { it.stage == HubTimingStage.BODY && it.endpoint == HubTimingEndpoint.STATS }
+        val headers = samples.single { it.stage == HubTimingStage.HEADERS && it.endpoint == HubTimingEndpoint.STATS }
+        assertTrue(body.durationUs >= 650_000)
+        assertTrue(body.elapsedUs > headers.elapsedUs)
+        assertEquals(body.run, samples.single { it.stage == HubTimingStage.PUBLISH }.run)
+        assertNoPrivateData(samples, server)
+        writeSamples("slow-stats-body", samples)
+    }
+
+    @Test fun failedIdentityRecordsTheRetryWaitBeforeRecovery() = withHub(faults = Faults(healthFailures = 1)) { server, hub, samples ->
+        instrumentation.runOnMainSync { hub.setDashboardVisible(Any(), true) }
+        await { hub.state.value.streamActive && samples.any { it.stage == HubTimingStage.RETRY_WAIT } }
+        val failed = samples.single { it.stage == HubTimingStage.ATTEMPT_FAILED }
+        val scheduled = samples.single { it.stage == HubTimingStage.RETRY_SCHEDULED }
+        val waited = samples.single { it.stage == HubTimingStage.RETRY_WAIT }
+        assertEquals(503, failed.status)
+        assertEquals(HubTimingOutcome.HTTP_ERROR, failed.outcome)
+        assertEquals(HubTimingOutcome.OK, waited.outcome)
+        assertEquals(scheduled.plannedMs, waited.plannedMs)
+        assertTrue(waited.durationUs >= scheduled.plannedMs * 1000 - 20_000)
+        assertEquals(failed.run, samples.single { it.stage == HubTimingStage.PUBLISH }.run)
+        assertEquals(listOf(0, 1), samples.filter { it.stage == HubTimingStage.ROUTE_SELECTED }.map { it.attempt })
+        assertEquals(2, server.started.count { it == "/api/health" })
+        assertNoPrivateData(samples, server)
+        writeSamples("retry-recovery", samples)
+    }
+
+    @Test fun pausingDuringBackoffRecordsCancellationAndStopsRetries() = withHub(healthStatus = 503) { server, hub, samples ->
+        val owner = Any()
+        instrumentation.runOnMainSync { hub.setDashboardVisible(owner, true) }
+        await { samples.any { it.stage == HubTimingStage.RETRY_SCHEDULED } }
+        instrumentation.runOnMainSync { hub.setDashboardVisible(owner, false) }
+        await { samples.any { it.stage == HubTimingStage.RETRY_WAIT && it.outcome == HubTimingOutcome.CANCELLED } }
+        Thread.sleep(1300)
+        assertEquals(listOf("/api/health"), server.started.toList())
+        assertFalse(samples.any { it.stage == HubTimingStage.PUBLISH })
+        assertTrue(samples.any { it.stage == HubTimingStage.WORK_STOP && it.reason == HubTimingReason.OWNER_HIDDEN })
+        assertNoPrivateData(samples, server)
+        writeSamples("cancelled-retry", samples)
+    }
+
+    @Test fun networkCallbacksCancelOldRunsAndOnlyTheReplacementPublishes() = withHub(statsDelayMs = 1200) { server, hub, samples ->
+        instrumentation.runOnMainSync { hub.setDashboardVisible(Any(), true) }
+        await { server.started.contains("/api/stats") }
+        instrumentation.runOnMainSync {
+            hub.networkChanged(HubNetworkChange.LOST)
+            hub.networkChanged(HubNetworkChange.AVAILABLE)
+        }
+        await { hub.state.value.streamActive }
+        val runs = samples.filter { it.stage == HubTimingStage.WORK_START }.map { it.run }
+        assertEquals(3, runs.size)
+        assertEquals(3, runs.toSet().size)
+        assertEquals(runs.last(), samples.single { it.stage == HubTimingStage.PUBLISH }.run)
+        assertEquals(listOf(HubTimingReason.NETWORK_LOST, HubTimingReason.NETWORK_AVAILABLE),
+            samples.filter { it.stage == HubTimingStage.NETWORK_CHANGE }.map { it.reason })
+        assertFalse(samples.any { it.stage == HubTimingStage.ATTEMPT_FAILED && it.run != runs.last() })
+        await { samples.count { it.stage == HubTimingStage.WORK_END && it.outcome == HubTimingOutcome.CANCELLED } >= 2 }
+        assertNoPrivateData(samples, server)
+        writeSamples("network-restart", samples)
+    }
+
     private fun withHub(historyDelayMs: Long = 0, statsDelayMs: Long = 0, healthStatus: Int = 200,
                         latencyMs: Long = 0, rejectDevices: Boolean = false,
+                        faults: Faults = Faults(),
                         test: (FixtureHub, HubRepository, CopyOnWriteArrayList<HubTimingSample>) -> Unit) {
         check(context.packageName.endsWith(".preview"))
         grantFixtureNetworkAccess()
-        FixtureHub(historyDelayMs, statsDelayMs, healthStatus, latencyMs, rejectDevices).use { server ->
+        FixtureHub(historyDelayMs, statsDelayMs, healthStatus, latencyMs, rejectDevices, faults).use { server ->
             val address = NetworkInterface.getNetworkInterfaces().toList().flatMap { it.inetAddresses.toList() }
                 .filterIsInstance<Inet4Address>().first { it.isSiteLocalAddress }.hostAddress
             server.baseUrl = "http://$address:${server.port}"
@@ -134,8 +212,10 @@ class HubStartupTimingTest {
         assertTrue("Fixture did not reach its expected state", condition())
     }
 
+    private data class Faults(val healthHeaderDelayMs: Long = 0, val statsBodyDelayMs: Long = 0, val healthFailures: Int = 0)
+
     private class FixtureHub(private val historyDelayMs: Long, private val statsDelayMs: Long, private val healthStatus: Int,
-                             private val latencyMs: Long, private val rejectDevices: Boolean) : AutoCloseable {
+                             private val latencyMs: Long, private val rejectDevices: Boolean, private val faults: Faults) : AutoCloseable {
         private val server = ServerSocket(0)
         val port get() = server.localPort
         lateinit var baseUrl: String
@@ -143,6 +223,7 @@ class HubStartupTimingTest {
         @Volatile var healthWasAnonymous = false
         private val activeWork = AtomicInteger()
         val peakWork = AtomicInteger()
+        private val healthReads = AtomicInteger()
         private val sockets = ConcurrentHashMap.newKeySet<Socket>()
         private val acceptor = thread(isDaemon = true) {
             while (!server.isClosed) {
@@ -177,7 +258,12 @@ class HubStartupTimingTest {
             val active = activeWork.incrementAndGet()
             peakWork.updateAndGet { maxOf(it, active) }
             try {
-                Thread.sleep(latencyMs + when (path) { "/api/history" -> historyDelayMs; "/api/stats" -> statsDelayMs; else -> 0 })
+                Thread.sleep(latencyMs + when (path) {
+                    "/api/health" -> faults.healthHeaderDelayMs
+                    "/api/history" -> historyDelayMs
+                    "/api/stats" -> statsDelayMs
+                    else -> 0
+                })
             } finally { activeWork.decrementAndGet() }
             val body = when (path) {
                 "/api/health" -> """{"ok":true,"role":"hub"}"""
@@ -185,11 +271,13 @@ class HubStartupTimingTest {
                 else -> "{}"
             }.toByteArray()
             val status = when {
-                path == "/api/health" -> healthStatus
+                path == "/api/health" -> if (healthReads.getAndIncrement() < faults.healthFailures) 503 else healthStatus
                 rejectDevices && path == "/api/devices" -> 401
                 else -> 200
             }
             output.write("HTTP/1.1 $status Fixture\r\nContent-Type: application/json\r\nContent-Length: ${body.size}\r\nConnection: close\r\n\r\n".toByteArray())
+            output.flush()
+            if (path == "/api/stats") Thread.sleep(faults.statsBodyDelayMs)
             output.write(body)
             output.flush()
         }

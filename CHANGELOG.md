@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Extended the opt-in startup diagnostics to lifecycle, connection runs and retry waits.
+
 ## v0.83.0 r1 — 2026-10-31
 
 - Updated desktop compatibility to v0.83.0.
