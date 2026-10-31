@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+## v0.83.0 r2 — 2026-10-31
+
+- Extended the opt-in startup diagnostics to lifecycle, connection runs and retry waits.
+- Reduced the first plain-HTTP Tailscale health connection timeout to two seconds when a permitted plain-HTTP Home fallback and physical Wi-Fi/Ethernet are available. Mobile-only, HTTPS, later retry and body-read budgets retain their existing values.
+- Checked matched diagnostic builds on my phone after unplugged idle waits: both refreshed over Tailscale in about 1.1 seconds. The original stalled connection did not recur; #115 remains open.
+
 ## v0.83.0 r1 — 2026-10-31
 
 - Updated desktop compatibility to v0.83.0.

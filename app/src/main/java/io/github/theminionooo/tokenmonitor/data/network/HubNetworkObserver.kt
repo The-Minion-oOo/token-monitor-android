@@ -4,8 +4,10 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 
+internal enum class HubNetworkChange { AVAILABLE, LOST }
+
 /** Observes route changes only while a dashboard or explicit widget session needs updates. Does not poll. */
-internal class HubNetworkObserver(context: Context, private val onChanged: () -> Unit) {
+internal class HubNetworkObserver(context: Context, private val onChanged: (HubNetworkChange) -> Unit) {
     private val manager = context.getSystemService(ConnectivityManager::class.java)
     private var callback: ConnectivityManager.NetworkCallback? = null
 
@@ -17,10 +19,10 @@ internal class HubNetworkObserver(context: Context, private val onChanged: () ->
                 // Registration itself reports the current network; startup already refreshes.
                 val changed = previous != network
                 previous = network
-                if (changed) onChanged()
+                if (changed) onChanged(HubNetworkChange.AVAILABLE)
             }
             override fun onLost(network: Network) {
-                if (previous == network) { previous = null; onChanged() }
+                if (previous == network) { previous = null; onChanged(HubNetworkChange.LOST) }
             }
         }
         runCatching { manager.registerDefaultNetworkCallback(listener) }.onSuccess { callback = listener }

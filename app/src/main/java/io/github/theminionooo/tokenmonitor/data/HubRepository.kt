@@ -9,6 +9,11 @@ import io.github.theminionooo.tokenmonitor.data.network.HubAddressValidator
 import io.github.theminionooo.tokenmonitor.data.network.HubApiClient
 import io.github.theminionooo.tokenmonitor.data.network.HubTimingRecorder
 import io.github.theminionooo.tokenmonitor.data.network.HubTimingStage
+import io.github.theminionooo.tokenmonitor.data.network.HubTimingReason
+import io.github.theminionooo.tokenmonitor.data.network.HubTimingOutcome
+import io.github.theminionooo.tokenmonitor.data.network.HubTimingRoute
+import io.github.theminionooo.tokenmonitor.data.network.HubStartupTimeouts
+import io.github.theminionooo.tokenmonitor.data.network.HubNetworkChange
 import io.github.theminionooo.tokenmonitor.data.network.HubTimings
 import io.github.theminionooo.tokenmonitor.data.network.HubApiException
 import io.github.theminionooo.tokenmonitor.data.network.hubTlsMessage
@@ -169,7 +174,7 @@ internal class HubRepository(
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val diskScope = CoroutineScope(SupervisorJob() + Dispatchers.IO.limitedParallelism(1))
     private val diskQueue = SerialDiskQueue(diskScope)
-    private val network = HubNetworkObserver(appContext) { scope.launch { if (workAllowed) refreshNow() } }
+    private val network = HubNetworkObserver(appContext) { change -> scope.launch { networkChanged(change) } }
     private var connection: HubConnection? = connectionStore.read()
     private var activeUrl: String? = connection?.baseUrl
     private var lastWireSnapshot: WireHubSnapshot? = null
@@ -179,6 +184,7 @@ internal class HubRepository(
     private var lastCacheWriteAt = 0L
     private var foregroundJob: Job? = null
     private var activeWorkMode = HubWorkMode.Idle
+    private var activeTimingRun = 0
     private var subscriptionJob: Job? = null
     private val streamUpdates = StreamUpdateCoalescer()
     private val streamApplyLock = Mutex()
@@ -295,13 +301,15 @@ internal class HubRepository(
 
     fun setDashboardVisible(owner: Any, visible: Boolean) {
         updateDashboardOwner(owner, visible)
-        reconcileWork()
+        val reason = if (visible) HubTimingReason.OWNER_VISIBLE else HubTimingReason.OWNER_HIDDEN
+        timing.mark(HubTimingStage.DASHBOARD_OWNER, activeTimingRun, reason)
+        reconcileWork(reason = reason)
     }
 
     /** Reassert this screen's lifecycle state and restart once, even if its lease was lost. */
     fun refreshDashboard(owner: Any) {
         updateDashboardOwner(owner, true)
-        reconcileWork(forceRefresh = true)
+        reconcileWork(forceRefresh = true, reason = HubTimingReason.MANUAL_REFRESH)
     }
 
     private fun updateDashboardOwner(owner: Any, visible: Boolean) {
@@ -315,24 +323,31 @@ internal class HubRepository(
         reconcileWork()
     }
 
-    private fun reconcileWork(forceRefresh: Boolean = false) {
+    private fun reconcileWork(forceRefresh: Boolean = false, reason: HubTimingReason = HubTimingReason.MODE_CHANGE) {
         _state.update { it.copy(localNetworkPermissionRequired = needsLocalPermission()) }
         val desired = desiredWorkMode
         if (desired == HubWorkMode.Idle) {
             network.stop()
-            stopForegroundWork()
+            stopForegroundWork(reason)
             return
         }
         network.start()
         if (forceRefresh || foregroundJob?.isActive != true || activeWorkMode != desired) {
-            stopForegroundWork()
-            startForegroundWork(desired)
+            stopForegroundWork(reason)
+            startForegroundWork(desired, reason)
         }
     }
 
     fun refreshNow() {
         if (connection == null || !workAllowed) return
-        reconcileWork(forceRefresh = true)
+        reconcileWork(forceRefresh = true, reason = HubTimingReason.MANUAL_REFRESH)
+    }
+
+    /** Same main-thread path used by the Android callback and deterministic restart fixtures. */
+    internal fun networkChanged(change: HubNetworkChange) {
+        val reason = if (change == HubNetworkChange.AVAILABLE) HubTimingReason.NETWORK_AVAILABLE else HubTimingReason.NETWORK_LOST
+        timing.mark(HubTimingStage.NETWORK_CHANGE, activeTimingRun, reason)
+        if (connection != null && workAllowed) reconcileWork(forceRefresh = true, reason = reason)
     }
 
     suspend fun validateAndSave(rawUrl: String, rawFallbackUrl: String, secret: String, allowLocalNetwork: Boolean, allowPublicHttps: Boolean = false): String? {
@@ -361,9 +376,9 @@ internal class HubRepository(
     }
 
     private suspend fun verifyAndSave(candidate: HubConnection, testAddress: String? = null): String? {
-        stopForegroundWork()
+        stopForegroundWork(HubTimingReason.VERIFY)
         val token = generation
-        val api = HubApiClient(timing) { route ->
+        val api = HubApiClient(timing, timing.nextRun()) { route ->
             if (generation != token) throw CancellationException("Connection check cancelled")
             requireRouteAllowed(route)
         }.also { activeApi = it }
@@ -400,7 +415,7 @@ internal class HubRepository(
 
     fun disconnect() {
         cacheLoadJob?.cancel()
-        stopForegroundWork()
+        stopForegroundWork(HubTimingReason.DISCONNECT)
         connection = null
         activeUrl = null
         lastWireSnapshot = null
@@ -415,7 +430,7 @@ internal class HubRepository(
 
     fun close() {
         network.stop()
-        stopForegroundWork()
+        stopForegroundWork(HubTimingReason.CLOSE)
         scope.cancel()
         diskQueue.closeWhenIdle()
     }
@@ -430,35 +445,46 @@ internal class HubRepository(
         localNetworkPermissionRequired = needsLocalPermission(),
     )
 
-    private fun startForegroundWork(mode: HubWorkMode = desiredWorkMode) {
+    private fun startForegroundWork(mode: HubWorkMode = desiredWorkMode, reason: HubTimingReason = HubTimingReason.MODE_CHANGE) {
         val saved = connection ?: return
         if (mode == HubWorkMode.Idle || mode != desiredWorkMode || foregroundJob?.isActive == true) return
         val token = generation
-        val api = HubApiClient(timing) { route ->
+        val run = timing.nextRun()
+        val api = HubApiClient(timing, run) { route ->
             if (generation != token || desiredWorkMode != mode) throw CancellationException("Hub work ended")
             requireRouteAllowed(route)
         }.also { activeApi = it }
         activeWorkMode = mode
+        activeTimingRun = run
+        timing.mark(HubTimingStage.WORK_START, run, reason)
         foregroundJob = scope.launch {
             var attempt = 0
+            var initialSnapshot = true
             try {
                 while (desiredWorkMode == mode && generation == token) {
                     var connected = false
                     var streamHealth: StreamConnectionHealth? = null
                     try {
                         _state.update { it.copy(refreshing = true, message = null, secretRejected = false) }
+                        val firstDashboardAttempt = mode == HubWorkMode.DashboardStreaming && initialSnapshot
+                        initialSnapshot = false
                         val (url, wire) = withContext(Dispatchers.IO) {
-                            timing.measureSuspending(HubTimingStage.SNAPSHOT) {
-                                val routes = timing.measure(HubTimingStage.CANDIDATES) { permittedRoutes(saved, activeUrl) }
-                                EndpointFailover.run(routes) { api.loadSnapshot(saved.copy(baseUrl = it)) }
+                            timing.measureSuspending(HubTimingStage.SNAPSHOT, run = run) {
+                                val routes = timing.measure(HubTimingStage.CANDIDATES, run = run) { availableRoutes(saved, activeUrl) }
+                                EndpointFailover.run(routes.urls) {
+                                    timing.mark(HubTimingStage.ROUTE_SELECTED, run, route = { HubTimingRoute.fromUrl(it) }, attempt = attempt)
+                                    val budget = HubStartupTimeouts.healthBudget(it, routes.urls, routes.networks,
+                                        firstDashboardAttempt = firstDashboardAttempt)
+                                    api.loadSnapshot(saved.copy(baseUrl = it), budget)
+                                }
                             }
                         }
                         ensureActive()
                         if (generation != token) break
-                        val snapshot = withContext(Dispatchers.IO) { timing.measure(HubTimingStage.DECODE) { parse(wire) } }
+                        val snapshot = withContext(Dispatchers.IO) { timing.measure(HubTimingStage.DECODE, run = run) { parse(wire) } }
                         if (generation != token) break
                         activeUrl = url
-                        timing.measure(HubTimingStage.PUBLISH) { applySuccess(wire, snapshot) }
+                        timing.measure(HubTimingStage.PUBLISH, run = run) { applySuccess(wire, snapshot) }
                         connected = true
                         when (mode) {
                             HubWorkMode.DashboardStreaming -> try {
@@ -504,6 +530,7 @@ internal class HubRepository(
                     } catch (cancelled: CancellationException) { throw cancelled }
                     catch (error: Exception) {
                         if (generation != token) break
+                        timing.failure(error, run, attempt)
                         val rejected = error is HubApiException && error.statusCode == 401
                         if (rejected) {
                             widgetRefresh.failure(System.currentTimeMillis(), true)
@@ -516,19 +543,26 @@ internal class HubRepository(
                         // connection moves the other saved address to the front.
                         if (!connected) activeUrl = EndpointFailover.candidates(saved, activeUrl).getOrNull(1) ?: activeUrl
                     }
-                    delay(backoff.delayForAttempt(attempt++))
+                    val retryAttempt = attempt++
+                    val wait = backoff.delayForAttempt(retryAttempt)
+                    timing.mark(HubTimingStage.RETRY_SCHEDULED, run, attempt = retryAttempt, plannedMs = wait)
+                    timing.measureSuspending(HubTimingStage.RETRY_WAIT, run, retryAttempt, wait) { delay(wait) }
                 }
             } finally {
                 api.close()
+                timing.mark(HubTimingStage.WORK_END, run,
+                    outcome = if (coroutineContext[Job]?.isCancelled == true) HubTimingOutcome.CANCELLED else HubTimingOutcome.OK)
                 if (generation == token) {
                     activeWorkMode = HubWorkMode.Idle
+                    activeTimingRun = 0
                     _state.update { it.copy(refreshing = false, streamActive = false, widgetLiveActive = false) }
                 }
             }
         }
     }
 
-    private fun stopForegroundWork() {
+    private fun stopForegroundWork(reason: HubTimingReason = HubTimingReason.MODE_CHANGE) {
+        if (activeApi != null || foregroundJob != null) timing.mark(HubTimingStage.WORK_STOP, activeTimingRun, reason)
         cancelWidgetBackgroundRefresh()
         generation++
         activeApi?.close()
@@ -536,6 +570,7 @@ internal class HubRepository(
         foregroundJob?.cancel()
         foregroundJob = null
         activeWorkMode = HubWorkMode.Idle
+        activeTimingRun = 0
         subscriptionJob?.cancel()
         subscriptionJob = null
         cancelStreamFlush()
@@ -571,14 +606,19 @@ internal class HubRepository(
         HubRouteGuard.require(route.baseUrl, PhoneNetworks.read(appContext), route.allowPublicHttps)
     }
 
-    private fun permittedRoutes(saved: HubConnection, preferred: String?): List<String> {
+    private data class AvailableRoutes(val urls: List<String>, val networks: PhoneNetworks)
+
+    private fun permittedRoutes(saved: HubConnection, preferred: String?): List<String> = availableRoutes(saved, preferred).urls
+
+    private fun availableRoutes(saved: HubConnection, preferred: String?): AvailableRoutes {
         val allowed = LocalNetworkAccess.allowedRoutes(saved, preferred, LocalNetworkAccess.granted(appContext)).ifEmpty {
             throw HubApiException(0, LocalNetworkAccess.deniedMessage)
         }
         val networks = PhoneNetworks.read(appContext)
-        return allowed.filter { HubRouteGuard.usable(it, networks) }.ifEmpty {
+        val urls = allowed.filter { HubRouteGuard.usable(it, networks) }.ifEmpty {
             throw HubApiException(0, HubRouteGuard.unavailableMessage(allowed, networks))
         }
+        return AvailableRoutes(urls, networks)
     }
 
     private fun applySuccess(wire: WireHubSnapshot, snapshot: HubSnapshot) {

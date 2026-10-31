@@ -117,7 +117,7 @@ production Home screen and all four Pages widget renders for every language,
 using synthetic showcase data. Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite now contains **112 tests** per emulator. The report checker
+The interaction suite now contains **121 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
 
@@ -281,6 +281,23 @@ breakdown. State publication is not a measurement of when a frame reached the
 physical display.
 Nested request/snapshot timings include the diagnostic logging overhead.
 
+The same option also records Activity create/resume/pause, dashboard ownership,
+work start/stop/end, selected route kind, Android network-change callbacks,
+failed attempts and retry waits. `run` is a process-local connection-run counter,
+shared by its request, snapshot, decode, publication and stream-open entries;
+Activity and cache entries can use zero. Route kinds are fixed labels such as
+`tailscale`, `home` and `internet_https`, never an address. Reasons are fixed
+labels too. The run counter is diagnostic only and does not control ownership.
+
+For route selection, failed attempts and retry entries, `attempt` is zero-based.
+`retry_scheduled` records the planned backoff in `planned_ms`; `retry_wait`
+records the elapsed wait, including a `cancelled` outcome when ownership ends.
+The random backoff is sampled once, as in normal builds. A network-change marker
+followed by an old run's stop and a new start identifies a connection restart.
+`work_stop` marks the cancellation request; `work_end` follows socket cleanup.
+These markers share the existing 512-entry budget and do not add background
+polling, requests, UI elements or physical-display timing.
+
 `HubStartupTimingTest` uses a synthetic Hub with a delayed history response to
 check attribution and the point at which fresh data is published. It also checks
 pause/cancellation, rejected health/detail requests and two concurrent reads
@@ -292,6 +309,15 @@ written under the preview app's `files/performance/` directory. Run the API 36/3
 emulator checks before using a diagnostic APK on a phone. Restore the regular
 signed APK, remove helpers and device traces, and turn debugging off afterward.
 Timing a startup does not establish battery savings.
+
+Additional fixture cases delay identity headers and the stats body separately,
+return one HTTP 503 before recovery, cancel during retry backoff, and replay
+lost/available callbacks through the repository's production restart handler.
+That last case tests run cancellation and replacement deterministically; it
+does not establish real Tailscale handover behavior. The phone follow-up uses
+manual reopens after screen-locked idle, stable Wi-Fi and mobile data as separate
+conditions, and network switching as its own case. Retain the first reopening
+after idle. Pairing, security checks, update frequency and animations stay intact.
 
 #### Phone comparison, 2026-10-30
 
@@ -309,10 +335,47 @@ Home after five seconds, giving six measured openings per build and route.
 All 24 measured openings published fresh data and opened the stream without
 request failures. These are initial-fetch timings from a small sample, before
 decoding and display; mobile-data and battery comparisons remain unmeasured.
-The original intermittent multi-second wait did not recur and remains open in
+The original intermittent multi-second wait did not recur in that connected
+comparison. A later unplugged test captured it (below); it remains open in
 [#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
 The exact public APK was restored without clearing data, the helper was removed,
 and debugging was turned off. Wi-Fi and Tailscale were left as selected.
+
+#### Preferred-route startup timeout
+
+An unplugged, screen-locked reopening captured the remaining wait: the first
+Tailscale health connection failed after ten seconds, then Home Wi-Fi completed
+the fetch in about 0.22 seconds. Lifecycle dispatch and decoding were quick.
+The underlying tunnel/stale-connection cause remains unconfirmed in
+[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
+
+`HubStartupTimeouts` selects a two-second TCP connection budget only for the
+first dashboard snapshot's first plain-HTTP Tailscale route, with physical LAN
+access and an already permitted plain-HTTP Home fallback remaining. Candidate
+filtering and network facts come from the same admission read. Every socket
+still rechecks the current route and ownership. HTTPS, mobile-only, a lone
+route, pairing, widget work and subsequent snapshots/retries keep ten seconds.
+The 35-second response/body read timeout is unchanged; two seconds is not an
+overall fetch or DNS deadline. No additional health probe or polling is added.
+The fallback is not probed in advance; if it cannot answer, the existing retry
+path remains necessary.
+
+`HubFailoverDeadlineTest` fills an emulator-local server's accept queue until
+new TCP connects stall, then exercises the normal and short connection budgets
+with a healthy synthetic fallback. It requires no root or firewall change and
+sends no probe outside the emulator. Separate slow-header and slow-stats-body
+cases verify that established reads are not cut off at two seconds. Policy unit
+tests cover mobile-only, HTTPS, filtered/missing fallback, preferred-route order
+and noninitial dashboard work.
+
+I compared matched v0.83 diagnostic builds on my phone after unplugged,
+screen-locked idle waits of at least five minutes. Both opened fresh data over
+Tailscale: the complete snapshot took 1.12 seconds before the change and
+1.14 seconds with it. Each health request succeeded in about 1.07 seconds;
+neither run needed Home fallback. These samples check normal operation and do
+not verify recovery from the original stalled connection. Mobile-only idle and
+battery savings remain unmeasured. I restored the public APK without clearing
+pairing, removed helpers and turned debugging off after the comparison.
 
 ### Synthetic performance baseline
 
@@ -394,7 +457,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 112 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 121 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.
