@@ -35,7 +35,7 @@ I haven't phone-tested the final v0.83 APK or measured its battery use. Earlier
 comparisons covered bounded parallel startup reads on Home Wi-Fi and Tailscale
 over Wi-Fi. The separate, unpushed failover fix and further phone checks stay in
 [#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
-Earlier r2 phone evidence applies to r2 only; the broader follow-up remains
+Earlier v0.81.0 r2 phone evidence applies to that build only; the broader follow-up remains
 in [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94).
 
 ## How each release is checked
