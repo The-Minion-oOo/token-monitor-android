@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.83.0 r1 (candidate)
+## v0.83.0 r1 — 2026-10-31
 
 - Updated desktop compatibility to v0.83.0.
 - Displayed Claude's reported Max/Ultra plan labels and verified weekly-only quotas, including zero and missing values.

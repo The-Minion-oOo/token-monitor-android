@@ -16,7 +16,7 @@
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/github/actions/workflow/status/The-Minion-oOo/token-monitor-android/android.yml?branch=main&style=flat-square&logo=githubactions&logoColor=10221c&label=Android%20checks"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.82.0" src="https://img.shields.io/badge/Desktop-v0.82.0-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.83.0" src="https://img.shields.io/badge/Desktop-v0.83.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/releases"><img alt="Total GitHub release asset downloads" src="https://img.shields.io/github/downloads/The-Minion-oOo/token-monitor-android/total?label=Downloads&style=flat-square&color=73bdf5"></a>
@@ -28,10 +28,10 @@
 
 ## The desktop dashboard, made mobile
 
-**New in v0.82.0 r1:** Codex cache-hit usage and speed stay visible without an
-unsupported expiry countdown. Corrected desktop archives retain observed model
-breakdowns; missing evidence stays Unclassified.
-[Release notes](docs/releases/android-v0.82.0-r1.md).
+**New in v0.83.0 r1:** Claude Max and Ultra plan labels, weekly-only quotas and
+Trae CN credits from the updated desktop collector. Initial dashboard reads
+overlap with a limit of two requests after verifying the Hub.
+[Release notes](docs/releases/android-v0.83.0-r1.md).
 
 **Also included:** smaller live updates through the released v4 Hub stream,
 session reasoning effort and personal Volcengine quotas. Muse and Ollama
@@ -72,7 +72,7 @@ supplied by the Hub.
 - **Share less when troubleshooting:** preview an allowlisted diagnostic report
   before copying or sharing it. Addresses, secrets and conversation text stay out.
 
-These features are available in v0.82.0 r1. Pairing still uses the same read-only
+These features are available in v0.83.0 r1. Pairing still uses the same read-only
 Hub API; the dashboard update frequency and widget layout stay unchanged.
 
 <table>
@@ -227,16 +227,16 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 | | |
 | --- | --- |
-| Current release | [Android v0.82.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.82.0-r1) (`820001`) |
-| Desktop baseline | [Token Monitor v0.82.0](https://github.com/Javis603/token-monitor/releases/tag/v0.82.0) |
+| Current release | [Android v0.83.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.83.0-r1) (`830001`) |
+| Desktop baseline | [Token Monitor v0.83.0](https://github.com/Javis603/token-monitor/releases/tag/v0.83.0) |
 | Minimum Android version | Android 8.0 |
 
-I checked archive corrections and model evidence against the released desktop
-v0.82.0 Node Hub and Worker, including lower and zero corrections. The earlier
-v4 stream, HTTPS and background-refresh checks remain covered.
-I haven't phone-tested v0.82.0 r1. The v0.81.0 r2 phone checks covered pairing,
-Pages redraw, dashboard, Live/Stop, forced periodic refresh and offline recovery.
-Those results apply to r2; battery savings remain unmeasured.
+I checked Claude plan names, weekly-only quotas and Trae credits against the
+released desktop v0.83.0 Node Hub and Worker. Earlier archive and v4 stream
+contracts remain covered. I haven't phone-tested the final v0.83 APK.
+[PR #116](https://github.com/The-Minion-oOo/token-monitor-android/pull/116) records
+the earlier phone comparison. Further checks and the remaining stall stay open in
+[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
 [Validation](docs/VALIDATION.md) records the scope and remaining follow-up.
 
 Android-only updates increment the release revision while keeping the verified
