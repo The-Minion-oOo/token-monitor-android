@@ -1,12 +1,12 @@
 # Install and update
 
-**Current release:** v0.82.0 r1 (`820001`) supports desktop v0.82.0. It removes
-unsupported Codex cache-expiry estimates while retaining cache-hit usage, Claude
-estimates and the v0.81.0 r2 security protections. It uses the same package and
-signing certificate, so it installs over the existing app. I haven't phone-tested
-this release; see [release notes](releases/android-v0.82.0-r1.md) and
-[Validation](VALIDATION.md). The broader phone follow-up remains in
-[#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94).
+**Current release:** v0.83.0 r1 (`830001`) supports desktop v0.83.0, displays
+Claude Max/Ultra plans and retains partial weekly quotas and Trae credit readings.
+It includes the merged startup improvements from PR #116 and uses the same
+package and signing certificate for an in-place update. I haven't phone-tested
+the final APK; see [release notes](releases/android-v0.83.0-r1.md) and
+[Validation](VALIDATION.md). The remaining startup stall is tracked in
+[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
 
 Open **Settings → App language**, **Display currency**, **Tools and quotas**
 or **Live throughput** for the local choices. Language starts with the phone
@@ -18,7 +18,7 @@ No report is sent automatically.
 ## Requirements
 
 - Android 8.0 or newer.
-- Token Monitor desktop and a Hub with a shared secret. Desktops connect to a Cloudflare Worker, or one desktop hosts the Hub. Android v0.82.0 r1 is verified against desktop v0.82.0.
+- Token Monitor desktop and a Hub with a shared secret. Desktops connect to a Cloudflare Worker, or one desktop hosts the Hub. Android v0.83.0 r1 is verified against desktop v0.83.0.
 - A route to the Hub: Tailscale is recommended; home Wi-Fi and an existing internet HTTPS Hub are optional.
 
 Without Tailscale, follow [Cloudflare Hub: desktop to Android](CLOUDFLARE_HUB.md)
@@ -26,8 +26,8 @@ to deploy the free-plan Worker Hub, connect your desktops and pair Android over 
 
 ## Install
 
-Download the signed v0.82.0 r1 APK from the public
-[release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.82.0-r1),
+Download the signed v0.83.0 r1 APK from the public
+[release](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.83.0-r1),
 or use **Settings → App updates** in v0.62.0 r1 or newer. It uses the same package
 and release certificate as earlier releases, with a higher version code. An
 in-app upgrade on my phone from v0.65.0 to v0.66.0 r1 preserved pairing and the
@@ -69,14 +69,14 @@ There is no Play Store or F-Droid listing.
 Each signed release includes an APK and a `.sha256` file. Compare the hash:
 
 ```powershell
-Get-FileHash .\token-monitor-android-v0.82.0-r1.apk -Algorithm SHA256
+Get-FileHash .\token-monitor-android-v0.83.0-r1.apk -Algorithm SHA256
 ```
 
 On macOS or Linux, use `shasum -a 256` or `sha256sum` instead:
 
 ```sh
-shasum -a 256 token-monitor-android-v0.82.0-r1.apk
-sha256sum token-monitor-android-v0.82.0-r1.apk
+shasum -a 256 token-monitor-android-v0.83.0-r1.apk
+sha256sum token-monitor-android-v0.83.0-r1.apk
 ```
 
 A matching checksum detects download corruption; download both files from the
@@ -90,7 +90,7 @@ Optionally, check the signature as well with `apksigner` from the Android SDK
 build tools:
 
 ```sh
-apksigner verify --print-certs token-monitor-android-v0.82.0-r1.apk
+apksigner verify --print-certs token-monitor-android-v0.83.0-r1.apk
 ```
 
 The printed SHA-256 certificate digest must equal the value above, which is also

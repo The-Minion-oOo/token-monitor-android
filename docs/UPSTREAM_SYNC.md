@@ -2,11 +2,11 @@
 
 ## Version rule
 
-The v0.83.0 r1 candidate targets desktop tag `v0.83.0`, peeled commit
+Android v0.83.0 r1 targets desktop tag `v0.83.0`, peeled commit
 `7dc01989ccd62fd52bc027b28c64f7d225fbc5c8`, in Gradle and `upstream.json`.
 I checked Claude plan labels, weekly-only quotas and Trae credit summaries against
 the released Node and Worker Hubs. Proxy settings and browser credentials stay
-on desktop. The local failover change remains separate in #115.
+on desktop. Further failover work remains open in #115.
 Earlier checks cover archive reconciliation, observed model components and the removal of
 Codex cache-expiry estimates against the released source. Android reads the
 reported breakdown maps and keeps unknown evidence unclassified.
@@ -23,7 +23,7 @@ The v0.81.0 r2 release introduced Android-only route, stream and
 background-refresh hardening from #106. Those protections are retained.
 
 The latest published release is
-[`android-v0.82.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.82.0-r1),
+[`android-v0.83.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.83.0-r1),
 recorded with its source commit in `release.json`.
 It retains opt-in HTTPS, optional background widget refresh and the
 r5 physical-network check underneath Tailscale. Earlier phone evidence applies
