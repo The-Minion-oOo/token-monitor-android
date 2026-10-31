@@ -34,7 +34,8 @@ import kotlinx.serialization.json.longOrNull
  * Android client renders and intentionally ignores unknown fields.
  */
 object HubProtocolParser {
-    const val SUPPORTED_UPSTREAM_VERSION = "v0.82.0"
+    const val SUPPORTED_UPSTREAM_VERSION = "v0.83.0"
+    private val CLAUDE_PLAN_LABELS = setOf("Free", "Pro", "Max", "Ultra", "Team", "Enterprise", "Max 5x", "Max 20x")
 
     private val LIVE_ACTIVITY_STATES = setOf("running", "waiting", "idle", "unknown")
 
@@ -286,7 +287,12 @@ object HubProtocolParser {
         accountEmail = string("accountEmail").ifBlank { string("email") },
         plan = string("plan").ifBlank { string("planLabel") }.ifBlank {
             // These providers keep the legacy billing/plan label here, including Ollama's API-key lane.
-            if (string("provider") in setOf("typesafe", "stepfun", "minimax", "ollama", "codex")) string("accountLabel") else ""
+            when (string("provider")) {
+                // Older labels can identify an account; only recognized Claude plan names belong here.
+                "claude" -> string("accountLabel").takeIf { it in CLAUDE_PLAN_LABELS }.orEmpty()
+                "typesafe", "stepfun", "minimax", "ollama", "codex" -> string("accountLabel")
+                else -> ""
+            }
         },
         status = string("status"),
         sourceDeviceId = string("sourceDeviceId"),

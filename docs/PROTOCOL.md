@@ -504,3 +504,18 @@ archive reconciliation or divide legacy multi-model session counts by ratios.
 Missing or rejected evidence remains Unclassified; explicit lower and zero
 corrections replace the reported total. The released-Hub checks cover both
 session and client archives, partial coverage and unrelated live sessions.
+
+## v0.83.0 Claude plans and Trae credits
+
+Recognized Claude plan names in `accountLabel` supply the plan when explicit
+`plan` or `planLabel` is absent. Other legacy account labels are not treated as
+plans. Android displays the reported Max/Ultra names without renaming Team or
+rewriting account identities. Weekly-only CLI readings contain just a weekly
+window; absent session quota stays absent, and an explicit zero remains zero.
+
+Trae CN's browser-session collector exports the existing credits window and
+balance shape. Android reads the reported percentages, `used`, `remaining`,
+currency and meter choice while retaining the full wire snapshot in its cache.
+Zero total has no inferred percentage, overdrawn credits
+remain exhausted, and the collector does not invent a reset date. Cookie exchange
+and desktop proxy settings do not add phone credentials, requests or permissions.

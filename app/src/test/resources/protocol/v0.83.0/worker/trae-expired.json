@@ -1,0 +1,27 @@
+{
+  "limits": {
+    "updatedAt": "2026-10-31T15:51:19.459Z",
+    "providers": [
+      {
+        "provider": "trae",
+        "accountKey": "",
+        "accountLabel": "",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "unauthorized",
+        "source": "api",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-31T15:51:17.850Z",
+        "windows": [],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "cn",
+        "sourceDeviceId": "synthetic-trae-expired",
+        "stale": false
+      }
+    ]
+  }
+}

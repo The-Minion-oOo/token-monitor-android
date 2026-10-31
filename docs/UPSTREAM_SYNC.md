@@ -2,9 +2,12 @@
 
 ## Version rule
 
-Android v0.82.0 r1 targets desktop tag `v0.82.0`, peeled commit
-`7ccb0d5b28ccc4059cc6224dfd972a61ae2c1575`, in Gradle and `upstream.json`.
-I reviewed archive reconciliation, observed model components and the removal of
+The v0.83.0 r1 candidate targets desktop tag `v0.83.0`, peeled commit
+`7dc01989ccd62fd52bc027b28c64f7d225fbc5c8`, in Gradle and `upstream.json`.
+I checked Claude plan labels, weekly-only quotas and Trae credit summaries against
+the released Node and Worker Hubs. Proxy settings and browser credentials stay
+on desktop. The local failover change remains separate in #115.
+Earlier checks cover archive reconciliation, observed model components and the removal of
 Codex cache-expiry estimates against the released source. Android reads the
 reported breakdown maps and keeps unknown evidence unclassified.
 Earlier checks cover v4 stream revisions, session reasoning effort, personal Volcengine

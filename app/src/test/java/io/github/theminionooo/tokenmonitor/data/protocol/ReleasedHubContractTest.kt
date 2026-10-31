@@ -8,6 +8,20 @@ import org.junit.Test
 
 /** Responses produced by tools/check-hub-contract.mjs from the exact released desktop source. */
 class ReleasedHubContractTest {
+    @Test fun `released v083 labels weekly quotas and credit summaries survive Android parsing`() {
+        val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
+        assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())
+        for (prefix in listOf("", "worker/")) {
+            fun account(name: String) = HubProtocolParser.decodeStats(File(directory!!, "$prefix$name.json").readText()).limits.providers.single()
+            assertEquals("Ultra", account("claude-ultra").plan)
+            assertEquals("Max", account("claude-max").plan)
+            assertEquals(listOf("weekly"), account("claude-weekly").windows.map { it.kind })
+            assertEquals(0.0, account("claude-weekly-zero").windows.single().remainingPercent!!, 0.0)
+            assertEquals(75.0, account("trae-credits").windows.single().remaining!!, 0.0)
+            assertTrue(account("trae-expired").windows.isEmpty())
+        }
+    }
+
     @Test fun `released v082 archive corrections and observed model breakdowns survive Android parsing`() {
         val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
         assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())

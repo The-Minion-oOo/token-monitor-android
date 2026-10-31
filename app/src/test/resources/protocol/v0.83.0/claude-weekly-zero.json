@@ -1,0 +1,43 @@
+{
+  "limits": {
+    "updatedAt": "2026-10-31T15:51:18.277Z",
+    "providers": [
+      {
+        "provider": "claude",
+        "accountKey": "sha256:09367c2f144ddb36c5b877f5fb5bb1267ce8676be252618cd642aa9dc8d1d78f",
+        "accountLabel": "Max",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "cli",
+        "sourceDetail": "",
+        "updatedAt": "2026-10-31T15:51:17.850Z",
+        "windows": [
+          {
+            "kind": "weekly",
+            "label": "",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 100,
+            "remainingPercent": 0,
+            "resetsAt": null,
+            "windowMinutes": 10080,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-claude-weekly-zero",
+        "stale": false
+      }
+    ]
+  }
+}
