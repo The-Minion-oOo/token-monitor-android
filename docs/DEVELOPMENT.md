@@ -366,7 +366,16 @@ with a healthy synthetic fallback. It requires no root or firewall change and
 sends no probe outside the emulator. Separate slow-header and slow-stats-body
 cases verify that established reads are not cut off at two seconds. Policy unit
 tests cover mobile-only, HTTPS, filtered/missing fallback, preferred-route order
-and noninitial dashboard work. Physical VPN/idle validation is a later phone gate.
+and noninitial dashboard work.
+
+I compared matched v0.83 diagnostic builds on my phone after unplugged,
+screen-locked idle waits of at least five minutes. Both opened fresh data over
+Tailscale: the complete snapshot took 1.12 seconds before the change and
+1.14 seconds with it. Each health request succeeded in about 1.07 seconds;
+neither run needed Home fallback. These samples check normal operation and do
+not verify recovery from the original stalled connection. Mobile-only idle and
+battery savings remain unmeasured. I restored the public APK without clearing
+pairing, removed helpers and turned debugging off after the comparison.
 
 ### Synthetic performance baseline
 
