@@ -117,7 +117,7 @@ production Home screen and all four Pages widget renders for every language,
 using synthetic showcase data. Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite now contains **117 tests** per emulator. The report checker
+The interaction suite now contains **121 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
 
@@ -335,10 +335,38 @@ Home after five seconds, giving six measured openings per build and route.
 All 24 measured openings published fresh data and opened the stream without
 request failures. These are initial-fetch timings from a small sample, before
 decoding and display; mobile-data and battery comparisons remain unmeasured.
-The original intermittent multi-second wait did not recur and remains open in
+The original intermittent multi-second wait did not recur in that connected
+comparison. A later unplugged test captured it (below); it remains open in
 [#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
 The exact public APK was restored without clearing data, the helper was removed,
 and debugging was turned off. Wi-Fi and Tailscale were left as selected.
+
+#### Preferred-route startup timeout
+
+An unplugged, screen-locked reopening captured the remaining wait: the first
+Tailscale health connection failed after ten seconds, then Home Wi-Fi completed
+the fetch in about 0.22 seconds. Lifecycle dispatch and decoding were quick.
+The underlying tunnel/stale-connection cause remains unconfirmed in
+[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
+
+`HubStartupTimeouts` selects a two-second TCP connection budget only for the
+first dashboard snapshot's first plain-HTTP Tailscale route, with physical LAN
+access and an already permitted plain-HTTP Home fallback remaining. Candidate
+filtering and network facts come from the same admission read. Every socket
+still rechecks the current route and ownership. HTTPS, mobile-only, a lone
+route, pairing, widget work and subsequent snapshots/retries keep ten seconds.
+The 35-second response/body read timeout is unchanged; two seconds is not an
+overall fetch or DNS deadline. No additional health probe or polling is added.
+The fallback is not probed in advance; if it cannot answer, the existing retry
+path remains necessary.
+
+`HubFailoverDeadlineTest` fills an emulator-local server's accept queue until
+new TCP connects stall, then exercises the normal and short connection budgets
+with a healthy synthetic fallback. It requires no root or firewall change and
+sends no probe outside the emulator. Separate slow-header and slow-stats-body
+cases verify that established reads are not cut off at two seconds. Policy unit
+tests cover mobile-only, HTTPS, filtered/missing fallback, preferred-route order
+and noninitial dashboard work. Physical VPN/idle validation is a later phone gate.
 
 ### Synthetic performance baseline
 
@@ -420,7 +448,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 117 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 121 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.

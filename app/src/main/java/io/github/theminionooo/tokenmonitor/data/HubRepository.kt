@@ -12,6 +12,7 @@ import io.github.theminionooo.tokenmonitor.data.network.HubTimingStage
 import io.github.theminionooo.tokenmonitor.data.network.HubTimingReason
 import io.github.theminionooo.tokenmonitor.data.network.HubTimingOutcome
 import io.github.theminionooo.tokenmonitor.data.network.HubTimingRoute
+import io.github.theminionooo.tokenmonitor.data.network.HubStartupTimeouts
 import io.github.theminionooo.tokenmonitor.data.network.HubNetworkChange
 import io.github.theminionooo.tokenmonitor.data.network.HubTimings
 import io.github.theminionooo.tokenmonitor.data.network.HubApiException
@@ -458,18 +459,23 @@ internal class HubRepository(
         timing.mark(HubTimingStage.WORK_START, run, reason)
         foregroundJob = scope.launch {
             var attempt = 0
+            var initialSnapshot = true
             try {
                 while (desiredWorkMode == mode && generation == token) {
                     var connected = false
                     var streamHealth: StreamConnectionHealth? = null
                     try {
                         _state.update { it.copy(refreshing = true, message = null, secretRejected = false) }
+                        val firstDashboardAttempt = mode == HubWorkMode.DashboardStreaming && initialSnapshot
+                        initialSnapshot = false
                         val (url, wire) = withContext(Dispatchers.IO) {
                             timing.measureSuspending(HubTimingStage.SNAPSHOT, run = run) {
-                                val routes = timing.measure(HubTimingStage.CANDIDATES, run = run) { permittedRoutes(saved, activeUrl) }
-                                EndpointFailover.run(routes) {
+                                val routes = timing.measure(HubTimingStage.CANDIDATES, run = run) { availableRoutes(saved, activeUrl) }
+                                EndpointFailover.run(routes.urls) {
                                     timing.mark(HubTimingStage.ROUTE_SELECTED, run, route = { HubTimingRoute.fromUrl(it) }, attempt = attempt)
-                                    api.loadSnapshot(saved.copy(baseUrl = it))
+                                    val budget = HubStartupTimeouts.healthBudget(it, routes.urls, routes.networks,
+                                        firstDashboardAttempt = firstDashboardAttempt)
+                                    api.loadSnapshot(saved.copy(baseUrl = it), budget)
                                 }
                             }
                         }
@@ -600,14 +606,19 @@ internal class HubRepository(
         HubRouteGuard.require(route.baseUrl, PhoneNetworks.read(appContext), route.allowPublicHttps)
     }
 
-    private fun permittedRoutes(saved: HubConnection, preferred: String?): List<String> {
+    private data class AvailableRoutes(val urls: List<String>, val networks: PhoneNetworks)
+
+    private fun permittedRoutes(saved: HubConnection, preferred: String?): List<String> = availableRoutes(saved, preferred).urls
+
+    private fun availableRoutes(saved: HubConnection, preferred: String?): AvailableRoutes {
         val allowed = LocalNetworkAccess.allowedRoutes(saved, preferred, LocalNetworkAccess.granted(appContext)).ifEmpty {
             throw HubApiException(0, LocalNetworkAccess.deniedMessage)
         }
         val networks = PhoneNetworks.read(appContext)
-        return allowed.filter { HubRouteGuard.usable(it, networks) }.ifEmpty {
+        val urls = allowed.filter { HubRouteGuard.usable(it, networks) }.ifEmpty {
             throw HubApiException(0, HubRouteGuard.unavailableMessage(allowed, networks))
         }
+        return AvailableRoutes(urls, networks)
     }
 
     private fun applySuccess(wire: WireHubSnapshot, snapshot: HubSnapshot) {

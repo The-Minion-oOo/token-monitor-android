@@ -180,6 +180,14 @@ first, tries the next when one is silent, and stops immediately on a rejected
 secret because another address cannot fix that. Snapshot reads use the
 ordered list. When a live stream drops, the address that was answering is tried
 first again; only a failed connection moves the other address to the front.
+The first dashboard snapshot uses a two-second TCP connection timeout for its
+first plain-HTTP Tailscale health read when a permitted plain-HTTP Home fallback
+remains and physical Wi-Fi/Ethernet is available. Other snapshot connections retain
+the normal ten-second TCP timeout; response/body reads retain 35 seconds. This does
+not race routes, send additional requests, skip identity or alter retry backoff.
+Single-route, mobile-only, HTTPS, pairing and widget reads retain their budgets.
+Later snapshots/reconnects in the same foreground run use the normal budget,
+independently of whether the backoff attempt counter was reset by a healthy stream.
 `HubRouteGuard` admits Tailscale routes only when a VPN's link addresses include
 `100.64.0.0/10` or `fd7a:115c:a1e0::/48`. Home routes require physical Wi-Fi or
 Ethernet, or that Tailscale VPN. Missing network information fails closed.

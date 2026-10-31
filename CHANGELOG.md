@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Extended the opt-in startup diagnostics to lifecycle, connection runs and retry waits.
+- Reduced the first plain-HTTP Tailscale health connection timeout to two seconds when a permitted plain-HTTP Home fallback and physical Wi-Fi/Ethernet are available. Mobile-only, HTTPS, later retry and body-read budgets retain their existing values.
 
 ## v0.83.0 r1 — 2026-10-31
 
