@@ -29,10 +29,12 @@ Draft and anonymous public downloads matched the APK, checksum and update
 manifest; anonymous Latest discovery identified r2.
 [Android v0.83.0 r2](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.83.0-r2) is Latest.
 
-I have not phone-tested the final signed r2 APK. The completed phone comparison
-used matched signed diagnostic builds of the same networking change; pairing
-survived each in-place installation. I restored the public APK, removed the
-helper and turned debugging off after that comparison.
+After updating to r2, I checked the dashboard on my phone over Home Wi-Fi.
+My saved pairing still worked, fresh data loaded, and switching away from the
+app and back worked normally. I also verified the installed APK against the
+release checksum. Tailscale was off, so I still need to check idle and failover
+on this release. I removed the temporary test helper and turned debugging off
+when I finished.
 
 Matched diagnostic builds refreshed after unplugged idle in **1.12 seconds**
 before the change and **1.14 seconds** with it, both over Tailscale. Neither
@@ -64,7 +66,7 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 
 | Release | Date | Desktop baseline | Main checks | Phone check |
 | --- | --- | --- | --- | --- |
-| v0.83.0 r2 | 2026-10-31 | v0.83.0 | Initial home fallback timeout; 409 JVM / 121 tests per API 36/37; optimized API 26 | Matched diagnostic builds only; final APK phone install skipped |
+| v0.83.0 r2 | 2026-10-31 | v0.83.0 | Initial home fallback timeout; 409 JVM / 121 tests per API 36/37; optimized API 26 | Yes: Home Wi-Fi refresh/resume after updating, saved pairing and matching APK; Tailscale idle/failover pending |
 | v0.83.0 r1 | 2026-10-31 | v0.83.0 | Claude plans/weekly-only quotas, Trae credits and bounded startup reads; 397 JVM / 112 tests per API 36/37; optimized API 26 | Final APK not phone-tested; further #115 checks deferred |
 | v0.82.0 r1 | 2026-10-30 | v0.82.0 | Archive corrections/model evidence and Claude-only expiry estimates; 377 JVM / 105 tests per API 36/37; optimized API 26 | Not phone-tested; battery unmeasured |
 | v0.81.0 r2 | 2026-10-29 | v0.81.0 | Hub route/stream/job hardening; 370 JVM / 103 tests per API 36/37; optimized API 26 | Yes: exact signed APK upgrade, Pages redraw, dashboard/Live/forced periodic on both routes and offline recovery; battery unmeasured |

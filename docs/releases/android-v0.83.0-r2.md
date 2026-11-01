@@ -36,6 +36,8 @@ Further investigation remains in
 Battery savings have not been measured.
 [Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md).
 
-I haven't phone-tested the final signed r2 APK. The comparison above used signed
-diagnostic builds. The exact final APK passed the optimized Android 8 install,
-launch and resume check.
+After updating to r2, I checked the dashboard on my phone over Home Wi-Fi.
+My saved pairing still worked, fresh data loaded, and switching away from the
+app and back worked normally. The installed APK matched the release checksum.
+I haven't retested Tailscale idle or failover on this release yet. The signed
+APK also passed the optimized Android 8 install, launch and resume check.
