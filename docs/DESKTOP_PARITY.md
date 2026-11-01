@@ -5,7 +5,9 @@ unreleased desktop changes. The baseline is tag `v0.83.0`, commit
 `7dc01989ccd62fd52bc027b28c64f7d225fbc5c8`. Android remains a read-only
 dashboard: the desktop collects usage, signs in to providers and hosts the Hub.
 
-The latest published APK is **v0.83.0 r1**. The v0.81.0 r2 route, stream and
+The latest published APK is **v0.83.0 r2**. Its initial Tailscale health
+connection can yield to a permitted home fallback after two seconds when
+physical Wi-Fi/Ethernet is present. The v0.81.0 r2 route, stream and
 background-refresh protections are retained.
 Claude plan labels now include Max/Ultra, and weekly-only quotas stay partial.
 Trae CN credit readings use the existing credits shape. Desktop proxy settings

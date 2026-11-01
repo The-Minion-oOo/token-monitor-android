@@ -35,3 +35,7 @@ Further investigation remains in
 [#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
 Battery savings have not been measured.
 [Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md).
+
+I haven't phone-tested the final signed r2 APK. The comparison above used signed
+diagnostic builds. The exact final APK passed the optimized Android 8 install,
+launch and resume check.
