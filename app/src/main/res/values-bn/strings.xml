@@ -599,4 +599,5 @@
     <string name="label_left">বাকি</string>
     <string name="label_next_renewal">পরবর্তী নবায়ন</string>
     <string name="label_coverage_ends">মেয়াদ শেষ</string>
+    <string name="ui_additional_tokens">অতিরিক্ত টোকেন</string>
 </resources>

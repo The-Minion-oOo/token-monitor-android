@@ -1,0 +1,27 @@
+{
+  "limits": {
+    "updatedAt": "2026-11-01T16:01:31.804Z",
+    "providers": [
+      {
+        "provider": "muse",
+        "accountKey": "",
+        "accountLabel": "Muse Meta",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "unavailable",
+        "source": "web",
+        "sourceDetail": "",
+        "updatedAt": "2026-11-01T16:01:29.899Z",
+        "windows": [],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-muse-web-missing-0",
+        "stale": false
+      }
+    ]
+  }
+}

@@ -169,6 +169,7 @@ private val toolLabels = mapOf(
     "deepseek" to "DeepSeek", "ollama" to "Ollama", "thirdparty" to "Third-party",
     "factory" to "Factory", "nvidia" to "NVIDIA", "stepfun" to "StepFun", "muse" to "Muse Code", "fx" to "fx",
     "mcode" to "MiniMax Code", "goose" to "Goose",
+    "manus" to "Manus",
 )
 
 /**
@@ -226,12 +227,19 @@ private val providerLabels = mapOf(
     "alibaba" to "Alibaba Cloud",
     "thirdparty" to "Third-party APIs",
     "notion" to "Notion AI",
+    "muse" to "Muse", "muse-code" to "Muse Code", "muse-web" to "Muse",
 )
 
 internal fun String.providerLabel(): String {
     val key = trim().lowercase(Locale.US)
     return providerLabels[key] ?: displayName()
 }
+
+/** Display products separately while saved visibility choices retain the Hub's provider id. */
+internal fun limitDisplayProvider(account: io.github.theminionooo.tokenmonitor.domain.LimitAccount): String =
+    if (account.provider == "muse") {
+        if (account.source == "web") "muse-web" else "muse-code"
+    } else account.provider
 
 /**
  * Lazy list keys must be unique, but Hub ids can repeat (two devices each reporting the same signed-out provider).
@@ -252,8 +260,10 @@ internal fun <T> uniqueKeys(items: List<T>, key: (T) -> String): List<String> {
     }
 }
 
-/** MiMo products and device-local Muse observations keep distinct row state. */
+/** Muse web state follows its product across devices; CLI observations stay device-local. */
 internal fun limitAccountIdentity(account: io.github.theminionooo.tokenmonitor.domain.LimitAccount): String =
     account.provider + ":" + account.productLabel + ":" + account.accountKey.ifBlank {
         listOf(account.accountName, account.accountEmail, account.productLabel).joinToString(":")
-    } + if (account.provider == "muse") ":device:${account.sourceDeviceId}" else ""
+    } + if (account.provider == "muse") {
+        if (account.source == "web") ":source:web" else ":device:${account.sourceDeviceId}"
+    } else ""

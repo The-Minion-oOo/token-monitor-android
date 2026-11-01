@@ -600,4 +600,5 @@
     <string name="label_left">남음</string>
     <string name="label_next_renewal">다음 갱신</string>
     <string name="label_coverage_ends">이용 종료</string>
+    <string name="ui_additional_tokens">추가 토큰</string>
 </resources>

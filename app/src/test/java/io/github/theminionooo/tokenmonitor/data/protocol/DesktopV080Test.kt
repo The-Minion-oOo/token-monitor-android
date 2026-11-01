@@ -1,5 +1,7 @@
 package io.github.theminionooo.tokenmonitor.data.protocol
 
+import io.github.theminionooo.tokenmonitor.ui.limitDisplayProvider
+
 import io.github.theminionooo.tokenmonitor.ui.limitAccountIdentity
 import io.github.theminionooo.tokenmonitor.ui.limitReportedAmount
 import io.github.theminionooo.tokenmonitor.ui.providerLabel
@@ -32,7 +34,7 @@ class DesktopV080Test {
             assertEquals(2, rows.map { it.sourceDeviceId }.distinct().size)
             assertEquals(2, rows.map(::limitAccountIdentity).distinct().size)
             assertTrue(rows.all { it.provider == "muse" && it.accountKey.isBlank() })
-            assertEquals("Muse Code", rows.first().provider.providerLabel())
+            assertEquals("Muse Code", limitDisplayProvider(rows.first()).providerLabel())
             assertEquals("Muse Code High Usage", rows.first().plan)
             assertEquals(listOf(75.0, 20.0), rows.first().windows.map { it.remainingPercent })
             assertEquals("", rows.first().windows.first().resetsAt)

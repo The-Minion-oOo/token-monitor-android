@@ -600,4 +600,5 @@
     <string name="label_left">可用</string>
     <string name="label_next_renewal">下次续订</string>
     <string name="label_coverage_ends">保障期结束</string>
+    <string name="ui_additional_tokens">额外 Token</string>
 </resources>

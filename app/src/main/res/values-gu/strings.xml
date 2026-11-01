@@ -599,4 +599,5 @@
     <string name="label_left">બાકી</string>
     <string name="label_next_renewal">આગળનું નવીનીકરણ</string>
     <string name="label_coverage_ends">અવધિ પૂર્ણ</string>
+    <string name="ui_additional_tokens">વધારાના ટોકન</string>
 </resources>

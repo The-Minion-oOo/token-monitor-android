@@ -1,0 +1,27 @@
+{
+  "limits": {
+    "updatedAt": "2026-11-01T16:01:31.789Z",
+    "providers": [
+      {
+        "provider": "manus",
+        "accountKey": "sha256:c5e49a2bae8a74d7a1329c18eca74fa257e77867af5c918a099092639c92c4cb",
+        "accountLabel": "",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "sample@example.com",
+        "workspaceKind": "",
+        "status": "unavailable",
+        "source": "web",
+        "sourceDetail": "managed",
+        "updatedAt": "2026-11-01T16:01:29.899Z",
+        "windows": [],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-manus-missing-0",
+        "stale": false
+      }
+    ]
+  }
+}

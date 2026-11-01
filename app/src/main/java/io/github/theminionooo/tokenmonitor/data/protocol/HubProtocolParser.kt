@@ -283,6 +283,7 @@ object HubProtocolParser {
 
     private fun JsonObject.toLimitAccountDto() = HubLimitAccountDto(
         provider = string("provider"),
+        source = string("source"),
         accountName = string("accountName").ifBlank { if (string("provider") == "volcengine") string("accountLabel") else "" },
         accountEmail = string("accountEmail").ifBlank { string("email") },
         plan = string("plan").ifBlank { string("planLabel") }.ifBlank {
@@ -346,6 +347,7 @@ object HubProtocolParser {
         detail = string("detail"),
         showMeter = boolean("showMeter"),
         boundaryKind = string("boundaryKind"),
+        resetDescription = string("resetDescription"),
     )
 
     private fun JsonObject.toHistoryDto() = HubHistoryDto(
@@ -540,6 +542,7 @@ object HubProtocolParser {
 
     private fun HubLimitAccountDto.toDomain() = LimitAccount(
         provider = provider,
+        source = source,
         accountName = accountName,
         accountEmail = accountEmail,
         plan = plan,
@@ -565,6 +568,7 @@ object HubProtocolParser {
 
     private fun HubLimitWindowDto.toDomain() = LimitWindow(
         used = used,
+        resetDescription = resetDescription,
         kind = kind,
         label = label,
         usedPercent = usedPercent,

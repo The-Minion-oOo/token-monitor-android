@@ -37,6 +37,17 @@ internal fun limitReportedAmount(provider: String, window: LimitWindow): Double?
     else -> null
 }
 
+/** This rounded website label is presentation text, never a measured token counter. */
+internal fun museAdditionalTokens(account: LimitAccount, window: LimitWindow): String? =
+    window.resetDescription.takeIf {
+        account.provider == "muse" && account.source == "web" && window.metric == "credits" &&
+            it.endsWith(" tokens left") && it.removeSuffix(" tokens left").isNotBlank()
+    }?.removeSuffix(" tokens left")
+
+internal fun limitWindowTitle(account: LimitAccount, window: LimitWindow): String =
+    if (museAdditionalTokens(account, window) != null) appText(R.string.ui_additional_tokens, "Additional tokens")
+    else windowTitle(window, account.windows)
+
 internal fun prioritizeAvailableLimits(providers: List<LimitAccount>): List<LimitAccount> = providers.withIndex()
     .sortedWith(compareBy<IndexedValue<LimitAccount>> { it.value.windows.isEmpty() }
         .thenBy { account -> account.value.windows.mapNotNull(::quotaRemainingPercent).minOrNull() ?: 101.0 }
@@ -48,7 +59,7 @@ private data class QuotaNote(val text: String, val priority: Int, val remaining:
 internal fun limitAttention(snapshot: HubSnapshot, now: Long): List<String> = snapshot.stats.limits.providers.flatMap { account ->
     val updated = runCatching { Instant.parse(account.updatedAt.ifBlank { snapshot.stats.limits.updatedAt }).toEpochMilli() }.getOrNull()
     val staleAfter = snapshot.stats.staleAfterMs?.takeIf { it > 0 } ?: 600_000L
-    val provider = account.provider.providerLabel()
+    val provider = limitDisplayProvider(account).providerLabel()
     if (updated == null || snapshot.fromCache || snapshot.stale || updated > now + 60_000L || now - updated > staleAfter) {
         listOf(QuotaNote("$provider: ${if (updated == null) "freshness unavailable" else "saved quota; refresh to confirm"}", 3))
     } else account.windows.mapNotNull { window ->

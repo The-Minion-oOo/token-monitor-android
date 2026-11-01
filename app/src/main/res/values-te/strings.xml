@@ -599,4 +599,5 @@
     <string name="label_left">మిగులు</string>
     <string name="label_next_renewal">తదుపరి పునరుద్ధరణ</string>
     <string name="label_coverage_ends">వ్యవధి ముగింపు</string>
+    <string name="ui_additional_tokens">అదనపు టోకెన్లు</string>
 </resources>

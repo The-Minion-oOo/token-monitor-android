@@ -2,8 +2,11 @@
 
 ## Version rule
 
-Android v0.83.0 r2 targets desktop tag `v0.83.0`, peeled commit
-`7dc01989ccd62fd52bc027b28c64f7d225fbc5c8`, in Gradle and `upstream.json`.
+The v0.84.0 r1 candidate targets desktop tag `v0.84.0`, peeled commit
+`caab9f9bc3d921438620ef627eb7c6a1f471419f`, in Gradle and `upstream.json`.
+I checked Manus credits, separate Muse web/CLI products and corrected throughput
+counters through the released Node Hub and Worker. The earlier v0.83.0 r2
+startup safeguards are retained. Dock and plugin changes stay on desktop.
 I checked Claude plan labels, weekly-only quotas and Trae credit summaries against
 the released Node and Worker Hubs. Proxy settings and browser credentials stay
 on desktop. The r2 revision adds the initial Home fallback timeout; the intermittent

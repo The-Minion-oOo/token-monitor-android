@@ -17,7 +17,8 @@ export async function checkV080Limits(require, { createHub, source, secret, devi
         responses[`${name}.json`] = stats;
         return stats.limits.providers;
     };
-    const { fetchMuseLimits } = require("./src/shared/providers/muse/limits.js");
+    const museCollector = require("./src/shared/providers/muse/limits.js");
+    const fetchMuseLimits = museCollector.fetchMuseCodeLimits || museCollector.fetchMuseLimits;
     const muse = async allowance => fetchMuseLimits({}, {
         now: () => Date.parse(now), platform: "linux", env: { PATH: "/synthetic/bin" },
         existsSync: path => path === "/synthetic/bin/muse",

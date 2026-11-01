@@ -601,4 +601,5 @@
     <string name="label_left">மீதி</string>
     <string name="label_next_renewal">அடுத்த புதுப்பிப்பு</string>
     <string name="label_coverage_ends">காலம் முடியும் நாள்</string>
+    <string name="ui_additional_tokens">கூடுதல் டோக்கன்கள்</string>
 </resources>

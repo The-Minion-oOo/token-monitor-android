@@ -599,4 +599,5 @@
     <string name="label_left">शेष</string>
     <string name="label_next_renewal">अगला नवीनीकरण</string>
     <string name="label_coverage_ends">अवधि समाप्त</string>
+    <string name="ui_additional_tokens">अतिरिक्त टोकन</string>
 </resources>
