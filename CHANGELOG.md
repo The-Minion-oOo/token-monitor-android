@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## v0.84.0 r1 (candidate)
+## v0.84.0 r1 — 2026-11-01
 
 - Updated desktop compatibility to v0.84.0.
 - Added the Manus mark and verified daily/monthly allowances and spendable credits, including zero, negative, missing and expired readings.

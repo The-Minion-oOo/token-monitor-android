@@ -16,7 +16,7 @@
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/github/actions/workflow/status/The-Minion-oOo/token-monitor-android/android.yml?branch=main&style=flat-square&logo=githubactions&logoColor=10221c&label=Android%20checks"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.83.0" src="https://img.shields.io/badge/Desktop-v0.83.0-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.84.0" src="https://img.shields.io/badge/Desktop-v0.84.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/releases"><img alt="Total GitHub release asset downloads" src="https://img.shields.io/github/downloads/The-Minion-oOo/token-monitor-android/total?label=Downloads&style=flat-square&color=73bdf5"></a>
@@ -28,11 +28,10 @@
 
 ## The desktop dashboard, made mobile
 
-**New in v0.83.0 r2:** a stalled initial Tailscale connection can yield to a
-permitted home address after a two-second TCP wait when Wi-Fi or Ethernet is
-available. Claude Max/Ultra plans, weekly-only quotas and Trae credits from
-v0.83.0 r1 are included.
-[Release notes](docs/releases/android-v0.83.0-r2.md).
+**New in v0.84.0 r1:** Manus allowances and credit balances, plus Muse web
+quotas separate from Muse Code. Additional tokens keep the website's reported
+text, and Android reads the corrected throughput counters from desktop.
+[Release notes](docs/releases/android-v0.84.0-r1.md).
 
 **Also included:** smaller live updates through the released v4 Hub stream,
 session reasoning effort and personal Volcengine quotas. Muse and Ollama
@@ -73,7 +72,7 @@ supplied by the Hub.
 - **Share less when troubleshooting:** preview an allowlisted diagnostic report
   before copying or sharing it. Addresses, secrets and conversation text stay out.
 
-These features are available in v0.83.0 r2. Pairing still uses the same read-only
+These features are available in v0.84.0 r1. Pairing still uses the same read-only
 Hub API; the dashboard update frequency and widget layout stay unchanged.
 
 <table>
@@ -228,16 +227,16 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 | | |
 | --- | --- |
-| Current release | [Android v0.83.0 r2](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.83.0-r2) (`830002`) |
-| Desktop baseline | [Token Monitor v0.83.0](https://github.com/Javis603/token-monitor/releases/tag/v0.83.0) |
+| Current release | [Android v0.84.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.84.0-r1) (`840001`) |
+| Desktop baseline | [Token Monitor v0.84.0](https://github.com/Javis603/token-monitor/releases/tag/v0.84.0) |
 | Minimum Android version | Android 8.0 |
 
-I checked the released desktop v0.83.0 Node Hub and Worker, the Android tests
-and the stalled-connect emulator fixture. Matched diagnostic builds on my
-phone refreshed after unplugged idle in 1.12 and 1.14 seconds, both over
-Tailscale. The original stall did not recur; further investigation remains in
-[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
-[Validation](docs/VALIDATION.md) records the final APK checks and their limits.
+I checked Manus, Muse and throughput readings against the released desktop
+v0.84.0 Node Hub and Worker, and inspected Home and Limits on emulators.
+I haven't phone-tested this release; the earlier r2 phone check applies to
+that build. [Validation](docs/VALIDATION.md) records the checks and remaining
+follow-up in [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94)
+and [#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
 
 Android-only updates increment the release revision while keeping the verified
 desktop version. [Upstream pin](upstream.json) · [Release notes](CHANGELOG.md)

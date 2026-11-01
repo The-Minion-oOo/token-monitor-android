@@ -2,7 +2,7 @@
 
 ## Version rule
 
-The v0.84.0 r1 candidate targets desktop tag `v0.84.0`, peeled commit
+Android v0.84.0 r1 targets desktop tag `v0.84.0`, peeled commit
 `caab9f9bc3d921438620ef627eb7c6a1f471419f`, in Gradle and `upstream.json`.
 I checked Manus credits, separate Muse web/CLI products and corrected throughput
 counters through the released Node Hub and Worker. The earlier v0.83.0 r2
@@ -27,7 +27,7 @@ The v0.81.0 r2 release introduced Android-only route, stream and
 background-refresh hardening from #106. Those protections are retained.
 
 The latest published release is
-[`android-v0.83.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.83.0-r2),
+[`android-v0.84.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.84.0-r1),
 recorded with its source commit in `release.json`.
 It retains opt-in HTTPS, optional background widget refresh and the
 r5 physical-network check underneath Tailscale. Earlier phone evidence applies

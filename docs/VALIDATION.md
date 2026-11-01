@@ -3,46 +3,38 @@
 I keep one record for each release. Emulator results and phone checks describe
 the builds and scenarios they name; neither establishes battery savings.
 
-## Current release: v0.83.0 r2
+## Current release: v0.84.0 r1
 
-I published source `7ee63369917c65819cd02bfc3e3998797b294006` from
-[PR #120](https://github.com/The-Minion-oOo/token-monitor-android/pull/120),
-with desktop v0.83.0 pinned at `7dc01989ccd62fd52bc027b28c64f7d225fbc5c8`.
+I published source `641c27c394097492e04345b78fce89b95da306d3` from
+[PR #124](https://github.com/The-Minion-oOo/token-monitor-android/pull/124),
+with desktop v0.84.0 pinned at `caab9f9bc3d921438620ef627eb7c6a1f471419f`.
 All five required jobs passed on that exact main commit:
-[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/41251682881),
-[API 36/37 and optimized API 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/41251682962)
-and [released Hub/Worker contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/41251682894).
+[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/41326407454),
+[API 36/37 and optimized API 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/41326407482)
+and [released Hub/Worker contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/41326407442).
 
-Checks passed **409 JVM tests**, **121 native tests on each of API 36 and API 37**,
+Checks passed **421 JVM tests**, **124 native tests on each of API 36 and API 37**,
 debug/release lint, debug/test and signed R8 builds, 14 tooling tests, language
-resources, docs and release metadata. Reports have no failures or skips. I
-reviewed the full diff and checked the exact final signed APK on API 26.
-The stalled-connect fixture checks the shorter TCP timeout, successful fallback
-and longer established response/body reads.
+resources, documentation and release metadata. Reports have no failures or
+skips. I reviewed the full diff and inspected Manus and Muse Home/Limits captures.
+The exact final signed APK passed the API 26 install/launch/resume check.
 
-The APK is `token-monitor-android-v0.83.0-r2.apk`, **3,379,362 bytes**,
-package `io.github.theminionooo.tokenmonitor`, version code **830002**.
-SHA-256: `cc6ee056f39dac16d51e7a98c401c751d8033481f346059634f78480b50484c0`.
+The APK is `token-monitor-android-v0.84.0-r1.apk`, **3,382,397 bytes**,
+package `io.github.theminionooo.tokenmonitor`, version code **840001**.
+SHA-256: `b57f9f06768b81222bcd3e79ed687f88a83b9da755dcf6499b78628f12ce8560`.
 The signing certificate is
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
 Draft and anonymous public downloads matched the APK, checksum and update
-manifest; anonymous Latest discovery identified r2.
-[Android v0.83.0 r2](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.83.0-r2) is Latest.
+manifest; anonymous Latest discovery identified r1.
+[Android v0.84.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.84.0-r1) is Latest.
 
-After updating to r2, I checked the dashboard on my phone over Home Wi-Fi.
-My saved pairing still worked, fresh data loaded, and switching away from the
-app and back worked normally. I also verified the installed APK against the
-release checksum. Tailscale was off, so I still need to check idle and failover
-on this release. I removed the temporary test helper and turned debugging off
-when I finished.
-
-Matched diagnostic builds refreshed after unplugged idle in **1.12 seconds**
-before the change and **1.14 seconds** with it, both over Tailscale. Neither
-needed Home fallback, so the original stalled condition was not reproduced.
-I keep [#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115)
-open for that investigation. Mobile-only idle and comparable battery savings
-remain unmeasured. Broader feature checks remain in
-[#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94).
+The released-collector checks cover Manus allowances and credit balances, Muse
+web/CLI separation, credential stripping and corrected throughput counters.
+Rounded additional-token labels stay text and never enter numeric usage or rates.
+I haven't phone-tested this release or measured battery use. The earlier r2
+phone check applies to v0.83.0 r2 only. The broader follow-ups remain in
+[#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94) and
+[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
 
 ## Release checks and limits
 
@@ -66,6 +58,7 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 
 | Release | Date | Desktop baseline | Main checks | Phone check |
 | --- | --- | --- | --- | --- |
+| v0.84.0 r1 | 2026-11-01 | v0.84.0 | Manus credits, Muse web/CLI products, throughput compatibility; 421 JVM / 124 per API 36/37; optimized API 26 | Not phone-tested; prior r2 phone results apply only to that build |
 | v0.83.0 r2 | 2026-10-31 | v0.83.0 | Initial home fallback timeout; 409 JVM / 121 tests per API 36/37; optimized API 26 | Yes: Home Wi-Fi refresh/resume after updating, saved pairing and matching APK; Tailscale idle/failover pending |
 | v0.83.0 r1 | 2026-10-31 | v0.83.0 | Claude plans/weekly-only quotas, Trae credits and bounded startup reads; 397 JVM / 112 tests per API 36/37; optimized API 26 | Final APK not phone-tested; further #115 checks deferred |
 | v0.82.0 r1 | 2026-10-30 | v0.82.0 | Archive corrections/model evidence and Claude-only expiry estimates; 377 JVM / 105 tests per API 36/37; optimized API 26 | Not phone-tested; battery unmeasured |
