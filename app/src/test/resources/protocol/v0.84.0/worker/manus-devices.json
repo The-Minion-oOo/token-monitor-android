@@ -1,0 +1,97 @@
+{
+  "limits": {
+    "updatedAt": "2026-11-01T16:01:31.779Z",
+    "providers": [
+      {
+        "provider": "manus",
+        "accountKey": "sha256:c5e49a2bae8a74d7a1329c18eca74fa257e77867af5c918a099092639c92c4cb",
+        "accountLabel": "",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "sample@example.com",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "web",
+        "sourceDetail": "managed",
+        "updatedAt": "2026-11-01T16:01:29.899Z",
+        "windows": [
+          {
+            "kind": "daily",
+            "label": "Daily",
+            "used": 120,
+            "limit": 300,
+            "remaining": 180,
+            "usedPercent": 40,
+            "remainingPercent": 60,
+            "resetsAt": "2026-12-01T00:00:00.000Z",
+            "windowMinutes": 1440,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          },
+          {
+            "kind": "billing",
+            "label": "Monthly",
+            "used": 300,
+            "limit": 1200,
+            "remaining": 900,
+            "usedPercent": 25,
+            "remainingPercent": 75,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          },
+          {
+            "kind": "billing",
+            "metric": "credits",
+            "label": "Credits",
+            "used": null,
+            "limit": null,
+            "remaining": 1180,
+            "usedPercent": null,
+            "remainingPercent": null,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": "CREDITS",
+            "showMeter": false
+          }
+        ],
+        "balanceUsd": null,
+        "balance": {
+          "amount": 1180,
+          "currency": "CREDITS",
+          "todaySpend": null,
+          "weekSpend": null,
+          "monthSpend": null,
+          "allTimeSpend": null,
+          "requestCount": null,
+          "quotaGroup": "",
+          "expiresAt": null,
+          "trackingSince": null,
+          "monthSinceTracking": false,
+          "giftBalance": null,
+          "cashBalance": null,
+          "planUsed": null,
+          "planLimit": null,
+          "planPercent": null,
+          "planStatus": null,
+          "todayTokenTotal": null,
+          "todayUsageDate": "",
+          "latestModelUsageDate": "",
+          "todayUsageBasis": "",
+          "snapshotDate": ""
+        },
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-manus-devices-1",
+        "stale": false
+      }
+    ]
+  }
+}

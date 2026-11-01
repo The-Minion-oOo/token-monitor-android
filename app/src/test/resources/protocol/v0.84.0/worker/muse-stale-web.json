@@ -1,0 +1,110 @@
+{
+  "limits": {
+    "updatedAt": "2026-11-01T16:01:31.817Z",
+    "providers": [
+      {
+        "provider": "muse",
+        "accountKey": "",
+        "accountLabel": "",
+        "planLabel": "Muse Code High Usage",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "cli",
+        "sourceDetail": "",
+        "updatedAt": "2026-11-01T16:01:29.899Z",
+        "windows": [
+          {
+            "kind": "session",
+            "label": "Session",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 25,
+            "remainingPercent": 75,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          },
+          {
+            "kind": "weekly",
+            "label": "Weekly",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 80,
+            "remainingPercent": 20,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-muse-stale-web-1",
+        "stale": false
+      },
+      {
+        "provider": "muse",
+        "accountKey": "",
+        "accountLabel": "Muse Meta",
+        "planLabel": "Maximum",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "web",
+        "sourceDetail": "",
+        "updatedAt": "2026-11-01T15:31:29.899Z",
+        "windows": [
+          {
+            "kind": "weekly",
+            "label": "Weekly",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 3,
+            "remainingPercent": 97,
+            "resetsAt": "2026-12-01T00:00:00.000Z",
+            "windowMinutes": 10080,
+            "resetDescription": "2.8B tokens left",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          },
+          {
+            "kind": "billing",
+            "metric": "credits",
+            "label": "Additional balance",
+            "used": null,
+            "limit": null,
+            "remaining": 60,
+            "usedPercent": null,
+            "remainingPercent": null,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "1.5B tokens left",
+            "detail": "",
+            "currency": "USD",
+            "showMeter": false
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-muse-stale-web-0",
+        "stale": true
+      }
+    ]
+  }
+}

@@ -1,11 +1,16 @@
-# Desktop parity for v0.83.0
+# Desktop parity for v0.84.0
 
 I compare the Android companion with released desktop source, rather than
-unreleased desktop changes. The baseline is tag `v0.83.0`, commit
-`7dc01989ccd62fd52bc027b28c64f7d225fbc5c8`. Android remains a read-only
+unreleased desktop changes. The baseline is tag `v0.84.0`, commit
+`caab9f9bc3d921438620ef627eb7c6a1f471419f`. Android remains a read-only
 dashboard: the desktop collects usage, signs in to providers and hosts the Hub.
 
-The latest published APK is **v0.83.0 r2**. Its initial Tailscale health
+The candidate is **v0.84.0 r1**; the published APK remains v0.83.0 r2.
+The candidate adds Manus allowances/credits and separates Muse web quotas from
+Muse Code device observations. Additional-token labels stay website text and
+retain the underlying dollar balance. Corrected throughput counters come from
+desktop; floating dock and plugin resource changes stay there.
+The initial Tailscale health
 connection can yield to a permitted home fallback after two seconds when
 physical Wi-Fi/Ethernet is present. The v0.81.0 r2 route, stream and
 background-refresh protections are retained.

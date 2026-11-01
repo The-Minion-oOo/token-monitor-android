@@ -113,10 +113,10 @@ internal fun prepareWidgetDeck(
         }
     }
     val limitsByProvider = io.github.theminionooo.tokenmonitor.data.storage.visibleLimitAccounts(snapshot?.stats?.limits?.providers.orEmpty(), displayOptions).map { account ->
-        account.provider to account.windows.mapNotNull { window ->
+        io.github.theminionooo.tokenmonitor.ui.limitDisplayProvider(account) to account.windows.mapNotNull { window ->
             remainingPercent(window)?.let { remaining ->
                 WidgetDeckLimitRow(
-                    provider = account.provider,
+                    provider = io.github.theminionooo.tokenmonitor.ui.limitDisplayProvider(account),
                     title = io.github.theminionooo.tokenmonitor.ui.windowTitle(window, account.windows),
                     remainingPercent = remaining,
                     reset = io.github.theminionooo.tokenmonitor.ui.formatBoundary(window.resetsAt, window.boundaryKind, now),

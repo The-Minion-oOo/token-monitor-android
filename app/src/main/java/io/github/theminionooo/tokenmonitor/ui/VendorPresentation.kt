@@ -43,8 +43,9 @@ internal fun vendorOf(name: String): String? {
     if (key == "cursor") return "cursor"
     if (key == "fx") return "fx"
     if (key == "goose" || key == "notion") return key
+    if (key == "manus") return "manus"
     if (key == "mcode") return "minimax"
-    if (key == "muse" || key == "muse code") return "meta"
+    if (key in setOf("muse", "muse code", "muse-code", "muse-web")) return "meta"
     if (key == "openrouter" || key.startsWith("openrouter/")) return "openrouter"
     if (key == "zed" || key.startsWith("zed-")) return "zed"
     if (key == "opencode") return "opencode"
@@ -58,7 +59,7 @@ internal fun originalToolColor(name: String, fallback: Color): Color = when (ven
     "gemini" -> Color(0xFF4285F4)
     "xai" -> fallback
     "deepseek" -> Color(0xFF4D6BFE)
-    "meta" -> if (name.trim().lowercase(Locale.US) in setOf("muse", "muse code")) Color(0xFF0866FF) else Color(0xFF1D65C1)
+    "meta" -> if (name.trim().lowercase(Locale.US) in setOf("muse", "muse code", "muse-code", "muse-web")) Color(0xFF0866FF) else Color(0xFF1D65C1)
     "mistral" -> Color(0xFFFA520F)
     "qwen" -> Color(0xFF615CED)
     "kimi", "zai", "opencode" -> fallback
@@ -104,6 +105,7 @@ internal fun upstreamToolAsset(name: String): Int? = when (vendorOf(name)) {
     "fx" -> R.drawable.upstream_logo_fx
     "goose" -> R.drawable.upstream_logo_goose
     "notion" -> R.drawable.upstream_logo_notion
+    "manus" -> R.drawable.upstream_logo_manus
     else -> null
 }
 

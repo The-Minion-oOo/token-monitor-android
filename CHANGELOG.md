@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v0.84.0 r1 (candidate)
+
+- Updated desktop compatibility to v0.84.0.
+- Added the Manus mark and verified daily/monthly allowances and spendable credits, including zero, negative, missing and expired readings.
+- Separated Muse web quotas from Muse Code device observations on Home, Limits and widgets, with stable web row state across reporting devices.
+- Preserved Muse's reported additional-token text alongside the underlying USD balance, without treating rounded website labels as measured usage.
+- Verified the corrected throughput counters through the released Node Hub and Worker. The collector correction remains on desktop.
+- Retained the v0.83.0 r2 startup safeguards and existing widget geometry, languages and animations.
+
 ## v0.83.0 r2 — 2026-10-31
 
 - Extended the opt-in startup diagnostics to lifecycle, connection runs and retry waits.

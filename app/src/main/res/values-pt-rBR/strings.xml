@@ -599,4 +599,5 @@
     <string name="label_left">livre</string>
     <string name="label_next_renewal">Próxima renovação</string>
     <string name="label_coverage_ends">Fim da cobertura</string>
+    <string name="ui_additional_tokens">Tokens adicionais</string>
 </resources>

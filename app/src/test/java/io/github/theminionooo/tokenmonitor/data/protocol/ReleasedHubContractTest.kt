@@ -8,6 +8,19 @@ import org.junit.Test
 
 /** Responses produced by tools/check-hub-contract.mjs from the exact released desktop source. */
 class ReleasedHubContractTest {
+    @Test fun `released v084 products credits and throughput survive Android parsing`() {
+        val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
+        assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())
+        for (prefix in listOf("", "worker/")) {
+            fun stats(name: String) = HubProtocolParser.decodeStats(File(directory!!, "$prefix$name.json").readText())
+            assertEquals(3, stats("muse-products").limits.providers.size)
+            val web = stats("muse-products").limits.providers.single { it.source == "web" }
+            assertEquals("1.5B tokens left", web.windows.single { it.metric == "credits" }.resetDescription)
+            assertEquals(1180.0, stats("manus-credits").limits.providers.single().windows.single { it.metric == "credits" }.remaining!!, 0.0)
+            assertTrue(stats("manus-missing").limits.providers.single().windows.isEmpty())
+            assertEquals(1200L, stats("corrected-throughput").periods.getValue("today").timedDurationMs)
+        }
+    }
     @Test fun `released v083 labels weekly quotas and credit summaries survive Android parsing`() {
         val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
         assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())

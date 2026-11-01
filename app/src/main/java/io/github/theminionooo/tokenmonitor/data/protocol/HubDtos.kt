@@ -128,6 +128,7 @@ internal data class HubLimitWindowDto(
     val showMeter: Boolean? = null,
     val boundaryKind: String = "",
     val used: Double? = null,
+    val resetDescription: String = "",
 )
 
 internal data class HubLimitAccountDto(
@@ -144,6 +145,7 @@ internal data class HubLimitAccountDto(
     val spend: HubLimitSpendDto? = null,
     val resetCredits: HubResetCreditsDto? = null,
     val usageSummary: HubLimitUsageSummaryDto? = null,
+    val source: String = "",
 )
 
 internal data class HubResetCreditsDto(val availableCount: Long?, val nextExpiresAt: String, val expirations: List<String>, val grants: List<HubResetGrantDto>)

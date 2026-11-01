@@ -148,6 +148,7 @@ data class LimitWindow(
     val showMeter: Boolean?,
     val boundaryKind: String = "",
     val used: Double? = null,
+    val resetDescription: String = "",
 )
 
 data class LimitAccount(
@@ -164,6 +165,7 @@ data class LimitAccount(
     val spend: LimitSpend? = null,
     val resetCredits: ResetCredits? = null,
     val usageSummary: LimitUsageSummary? = null,
+    val source: String = "",
 )
 
 data class ResetCredits(val availableCount: Long?, val nextExpiresAt: String, val expirations: List<String>, val grants: List<ResetGrant>)

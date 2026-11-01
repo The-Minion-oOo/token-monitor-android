@@ -102,7 +102,7 @@ internal fun remainingPercent(window: LimitWindow): Double? =
     io.github.theminionooo.tokenmonitor.ui.quotaPercentLeft(window)?.toDouble()
 
 internal fun quotaRows(snapshot: HubSnapshot, options: io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions = io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions()): List<QuotaRow> = io.github.theminionooo.tokenmonitor.data.storage.visibleLimitAccounts(snapshot.stats.limits.providers, options).mapNotNull { account ->
-    account.windows.mapNotNull { window -> remainingPercent(window)?.let { QuotaRow(account.provider, window, it, account.windows) } }
+    account.windows.mapNotNull { window -> remainingPercent(window)?.let { QuotaRow(io.github.theminionooo.tokenmonitor.ui.limitDisplayProvider(account), window, it, account.windows) } }
         .minByOrNull { it.remainingPercent }
 }.distinctBy { it.provider }.take(2)
 
@@ -364,7 +364,7 @@ class UsageWidgetProvider : AppWidgetProvider() {
                     views.setViewVisibility(ids.block, if (block == null) View.GONE else View.VISIBLE)
                     if (block == null) return@forEachIndexed
                     val (account, windows) = block
-                    val label = account.provider.ifBlank { appText(R.string.ui_provider_7ceee, "Provider") }.providerLabel()
+                    val label = io.github.theminionooo.tokenmonitor.ui.limitDisplayProvider(account).ifBlank { appText(R.string.ui_provider_7ceee, "Provider") }.providerLabel()
                     views.setTextViewText(ids.provider, label)
                     views.setTextColor(ids.provider, ink)
                     mark(views, ids.logo, account.provider, palette)

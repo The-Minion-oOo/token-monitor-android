@@ -143,7 +143,7 @@ internal fun LimitAccountRow(account: LimitAccount, displayOptions: DisplayOptio
             UpstreamToolMark(account.provider, Blue, size = 10.dp)
             Spacer(Modifier.width(8.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text(account.provider.ifBlank { appText(R.string.ui_provider_7ceee, "Provider") }.providerLabel(), color = Ink, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(limitDisplayProvider(account).ifBlank { appText(R.string.ui_provider_7ceee, "Provider") }.providerLabel(), color = Ink, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 val email = account.accountEmail.takeIf { displayOptions.showAccountEmails }.orEmpty()
                 val source = account.sourceDeviceId.takeIf { displayOptions.showLimitSource && it.isNotBlank() }?.let { appText(R.string.ui_source_1_s_ab512, "Source %1\$s", it.displayName()) }
                 val updated = account.updatedAt.relativeAge(LocalNow.current).takeIf { it.isNotBlank() }?.let { appText(R.string.ui_updated_1_s_62d23, "Updated %1\$s", it) }
@@ -163,9 +163,10 @@ internal fun LimitAccountRow(account: LimitAccount, displayOptions: DisplayOptio
                             val remaining = window.remainingPercent ?: window.usedPercent?.let { 100.0 - it }
                             val usedPercent = window.usedPercent ?: window.remainingPercent?.let { 100.0 - it }
                             Row {
-                                Text(windowTitle(window, account.windows), color = Muted, style = MaterialTheme.typography.labelSmall, modifier = Modifier.weight(1f), maxLines = 1)
+                                val additionalTokens = museAdditionalTokens(account, window)
+                                Text(limitWindowTitle(account, window), color = Muted, style = MaterialTheme.typography.labelSmall, modifier = Modifier.weight(1f), maxLines = 1)
                                 val amount = limitReportedAmount(account.provider, window)
-                                val display = amount?.let { formatWindowAmount(it, window.currency) } ?: (if (displayOptions.limitBarMetric == LimitBarMetric.Remaining) {
+                                val display = additionalTokens ?: amount?.let { formatWindowAmount(it, window.currency) } ?: (if (displayOptions.limitBarMetric == LimitBarMetric.Remaining) {
                                     quotaPercentLeft(window)?.let { appText(R.string.ui_1_s_left_e96f9, "%1\$s%% left", it) }
                                 } else {
                                     usedPercent?.let { appText(R.string.ui_1_s_used_f116e, "%1\$s used", formatPercent(it)) }

@@ -55,6 +55,13 @@ New API account billing periods map to the existing Limits spend rows. They keep
 their native currency and are distinguished from MiMo's locally tracked daily
 and weekly deltas. Missing or invalid values stay absent; reported zero is retained.
 
+Limit accounts retain their provider source so Muse web quotas and Muse Code
+device observations have separate labels and row state. The web key remains
+stable when its reporting device changes. Reported additional-token descriptions
+stay text; they never become measured usage or throughput. Manus allowances and
+spendable credits use the existing quota and balance presentation. These fields
+add no collector, request or connection owner.
+
 ## Local presentation in the r2 release
 
 The parser retains subscription kind, payment ledgers, bindings, renewal/end

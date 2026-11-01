@@ -1,0 +1,59 @@
+{
+  "limits": {
+    "updatedAt": "2026-11-01T16:01:30.433Z",
+    "providers": [
+      {
+        "provider": "muse",
+        "accountKey": "",
+        "accountLabel": "Muse Meta",
+        "planLabel": "Maximum",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "web",
+        "sourceDetail": "",
+        "updatedAt": "2026-11-01T16:01:29.899Z",
+        "windows": [
+          {
+            "kind": "weekly",
+            "label": "Weekly",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 100,
+            "remainingPercent": 0,
+            "resetsAt": "2026-12-01T00:00:00.000Z",
+            "windowMinutes": 10080,
+            "resetDescription": "2.8B tokens left",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          },
+          {
+            "kind": "billing",
+            "metric": "credits",
+            "label": "Additional balance",
+            "used": null,
+            "limit": null,
+            "remaining": 0,
+            "usedPercent": null,
+            "remainingPercent": null,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "0 tokens left",
+            "detail": "",
+            "currency": "USD",
+            "showMeter": false
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-muse-web-zero-0",
+        "stale": false
+      }
+    ]
+  }
+}

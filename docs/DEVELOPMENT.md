@@ -117,7 +117,7 @@ production Home screen and all four Pages widget renders for every language,
 using synthetic showcase data. Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite now contains **121 tests** per emulator. The report checker
+The interaction suite now contains **124 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
 
@@ -457,7 +457,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 121 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 124 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.
@@ -552,3 +552,20 @@ weekly-only quotas, explicit zero, missing data, credit summaries and expired
 sessions. No real account, CLI process or deployed Hub is used. The native tests
 check plan labels and partial quotas on Home and Limits. Earlier archive and v4
 stream contracts remain in the same gate.
+
+## Desktop v0.84.0 checks
+
+I run the released Manus and Muse collectors with injected sessions, CLI results
+and web responses, then pass the synthetic records through the actual Node Hub
+and Worker. Cases cover Manus daily/monthly allowances, spendable credits,
+zero/negative balances, missing data and expired sessions. Muse cases retain
+separate CLI devices, one web product, stale web readings, zero quotas and the
+additional-token label beside its original USD balance. No provider network,
+credentials or desktop sign-in is used.
+
+Android retains the provider source and reset description. The same display
+helpers identify Muse products on Home, Limits and widgets; row state follows
+the web product across devices while CLI rows remain device-local. A rounded
+website token label stays text and does not enter usage or rate calculations.
+The corrected-throughput fixture checks positive and empty counters through
+both Hubs. The collector correction itself remains on desktop.

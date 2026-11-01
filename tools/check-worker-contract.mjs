@@ -119,10 +119,13 @@ export async function checkWorkerContract(source, output, upstream, limitCases =
                 }));
                 assert.equal(result.status, 200);
                 const stats = await result.json();
-                const comparable = providers => providers.map(({ provider, accountKey, sourceDeviceId, accountLabel, planLabel, windows, balance, status }) =>
-                    ({ provider, accountKey, sourceDeviceId, accountLabel, planLabel, windows, balance, status }));
+                const comparable = providers => providers.map(({ provider, source, accountKey, sourceDeviceId, accountLabel, planLabel, windows, balance, status }) =>
+                    ({ provider, source, accountKey, sourceDeviceId, accountLabel, planLabel, windows, balance, status }));
                 assert.deepEqual(comparable(stats.limits.providers), comparable(fixture.providers));
                 if (fixture.usage) assert.deepEqual(usageProjection(stats.periods), fixture.usage);
+                if (fixture.throughput) {
+                    for (const [key, value] of Object.entries(fixture.throughput)) assert.equal(stats.periods.today[key], value);
+                }
                 responses[`${name}.json`] = stats;
             } finally {
                 if (caseHub.broadcastTimer) clearTimeout(caseHub.broadcastTimer);
