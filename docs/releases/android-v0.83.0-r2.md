@@ -36,6 +36,8 @@ Further investigation remains in
 Battery savings have not been measured.
 [Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md).
 
-I haven't phone-tested the final signed r2 APK. The comparison above used signed
-diagnostic builds. The exact final APK passed the optimized Android 8 install,
-launch and resume check.
+After publication, I checked the exact released APK already installed on my
+phone. Its SHA-256 matched the release, and the dashboard opened and resumed
+over Home Wi-Fi with saved pairing and current data. I did not observe the
+installation flow or test Tailscale idle and failover on this APK. The exact APK also
+passed the optimized Android 8 install, launch and resume check.
