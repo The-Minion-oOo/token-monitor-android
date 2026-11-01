@@ -1,6 +1,6 @@
 # Reporting security concerns
 
-Supported compatibility baseline: desktop Token Monitor v0.83.0. Fixes are prepared
+Supported compatibility baseline: desktop Token Monitor v0.84.0. Fixes are prepared
 for the newest Android revision; older APKs are not separately maintained.
 
 Do not post Hub secrets, private addresses, account details, raw Hub responses or
