@@ -28,10 +28,11 @@
 
 ## The desktop dashboard, made mobile
 
-**New in v0.83.0 r1:** Claude Max and Ultra plan labels, weekly-only quotas and
-Trae CN credits from the updated desktop collector. Initial dashboard reads
-overlap with a limit of two requests after verifying the Hub.
-[Release notes](docs/releases/android-v0.83.0-r1.md).
+**New in v0.83.0 r2:** a stalled initial Tailscale connection can yield to a
+permitted home address after a two-second TCP wait when Wi-Fi or Ethernet is
+available. Claude Max/Ultra plans, weekly-only quotas and Trae credits from
+v0.83.0 r1 are included.
+[Release notes](docs/releases/android-v0.83.0-r2.md).
 
 **Also included:** smaller live updates through the released v4 Hub stream,
 session reasoning effort and personal Volcengine quotas. Muse and Ollama
@@ -72,7 +73,7 @@ supplied by the Hub.
 - **Share less when troubleshooting:** preview an allowlisted diagnostic report
   before copying or sharing it. Addresses, secrets and conversation text stay out.
 
-These features are available in v0.83.0 r1. Pairing still uses the same read-only
+These features are available in v0.83.0 r2. Pairing still uses the same read-only
 Hub API; the dashboard update frequency and widget layout stay unchanged.
 
 <table>
@@ -227,17 +228,16 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 | | |
 | --- | --- |
-| Current release | [Android v0.83.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.83.0-r1) (`830001`) |
+| Current release | [Android v0.83.0 r2](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.83.0-r2) (`830002`) |
 | Desktop baseline | [Token Monitor v0.83.0](https://github.com/Javis603/token-monitor/releases/tag/v0.83.0) |
 | Minimum Android version | Android 8.0 |
 
-I checked Claude plan names, weekly-only quotas and Trae credits against the
-released desktop v0.83.0 Node Hub and Worker. Earlier archive and v4 stream
-contracts remain covered. I haven't phone-tested the final v0.83 APK.
-[PR #116](https://github.com/The-Minion-oOo/token-monitor-android/pull/116) records
-the earlier phone comparison. Further checks and the remaining stall stay open in
+I checked the released desktop v0.83.0 Node Hub and Worker, the Android tests
+and the stalled-connect emulator fixture. Matched diagnostic builds on my
+phone refreshed after unplugged idle in 1.12 and 1.14 seconds, both over
+Tailscale. The original stall did not recur; further investigation remains in
 [#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
-[Validation](docs/VALIDATION.md) records the scope and remaining follow-up.
+[Validation](docs/VALIDATION.md) records the final APK checks and their limits.
 
 Android-only updates increment the release revision while keeping the verified
 desktop version. [Upstream pin](upstream.json) · [Release notes](CHANGELOG.md)
