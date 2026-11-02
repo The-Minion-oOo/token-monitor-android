@@ -1,9 +1,13 @@
-# Desktop parity for v0.84.0
+# Desktop parity for v0.84.1
 
 I compare the Android companion with released desktop source, rather than
-unreleased desktop changes. The baseline is tag `v0.84.0`, commit
-`caab9f9bc3d921438620ef627eb7c6a1f471419f`. Android remains a read-only
+unreleased desktop changes. The baseline is tag `v0.84.1`, commit
+`96263fd3947a28f661e6d5fad3025ec65926edd8`. Android remains a read-only
 dashboard: the desktop collects usage, signs in to providers and hosts the Hub.
+
+The candidate is **v0.84.1 r1**. I checked restored Kiro readings and Copilot
+reset details against the released collectors, Node Hub and Worker. Android
+already omits absent reset lines; there is no new Hub schema or widget layout.
 
 The latest published APK is **v0.84.0 r1**. It adds Manus allowances/credits and
 separates Muse web quotas from Muse Code device observations. Additional-token

@@ -117,7 +117,7 @@ production Home screen and all four Pages widget renders for every language,
 using synthetic showcase data. Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite now contains **124 tests** per emulator. The report checker
+The interaction suite now contains **126 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
 
@@ -457,7 +457,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 124 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 126 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.
@@ -569,3 +569,12 @@ the web product across devices while CLI rows remain device-local. A rounded
 website token label stays text and does not enter usage or rate calculations.
 The corrected-throughput fixture checks positive and empty counters through
 both Hubs. The collector correction itself remains on desktop.
+
+## Desktop v0.84.1 checks
+
+The released-collector contract pins the Kiro usage probe to v2 and checks its
+unsupported-flag and legacy-summary fallbacks with synthetic child processes.
+No real CLI is started. Zero, sign-out and unreadable reports pass through both
+Node and Worker responses. Copilot cases cover unlimited Chat without a reset
+and finite Premium with a reset; native Home/Limits checks retain this existing
+Android presentation. Older Manus/Muse fixtures and all earlier cases remain.

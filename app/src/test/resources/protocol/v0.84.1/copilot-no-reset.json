@@ -1,0 +1,44 @@
+{
+  "limits": {
+    "updatedAt": "2026-11-02T15:46:18.039Z",
+    "providers": [
+      {
+        "provider": "copilot",
+        "accountKey": "sha256:a5c77ffbf1db4998416927ce16b1f450de2e3624917866d1f29c3bf8e966f4c4",
+        "accountLabel": "Individual",
+        "planLabel": "",
+        "accountName": "synthetic-copilot",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "api",
+        "sourceDetail": "",
+        "updatedAt": "2026-11-02T15:46:17.546Z",
+        "windows": [
+          {
+            "kind": "billing",
+            "label": "Chat",
+            "used": null,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": 0,
+            "remainingPercent": 100,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-copilot-no-reset",
+        "stale": false
+      }
+    ]
+  },
+  "staleAfterMs": 600000
+}
