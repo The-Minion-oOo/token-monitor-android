@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## v0.84.1 r1 (candidate)
+## v0.84.1 r1 — 2026-11-02
 
 - Updated desktop compatibility to v0.84.1.
 - Checked restored Kiro quota readings, narrow CLI fallbacks and unavailable/zero values through the released Node Hub and Worker.
