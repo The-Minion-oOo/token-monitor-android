@@ -2,11 +2,12 @@
 
 ## Version rule
 
-Android v0.84.0 r1 targets desktop tag `v0.84.0`, peeled commit
-`caab9f9bc3d921438620ef627eb7c6a1f471419f`, in Gradle and `upstream.json`.
-I checked Manus credits, separate Muse web/CLI products and corrected throughput
-counters through the released Node Hub and Worker. The earlier v0.83.0 r2
-startup safeguards are retained. Dock and plugin changes stay on desktop.
+The v0.84.1 r1 candidate targets desktop tag `v0.84.1`, peeled commit
+`96263fd3947a28f661e6d5fad3025ec65926edd8`, in Gradle and `upstream.json`.
+I checked restored Kiro credit readings and Copilot reset details through the
+released collectors, Node Hub and Worker. Android's existing presentation
+handles these readings without a protocol or layout change. Manus/Muse support
+and the earlier startup safeguards are retained.
 I checked Claude plan labels, weekly-only quotas and Trae credit summaries against
 the released Node and Worker Hubs. Proxy settings and browser credentials stay
 on desktop. The r2 revision adds the initial Home fallback timeout; the intermittent

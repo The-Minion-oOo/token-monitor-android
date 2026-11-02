@@ -1,0 +1,28 @@
+{
+  "limits": {
+    "updatedAt": "2026-11-02T15:46:19.247Z",
+    "providers": [
+      {
+        "provider": "kiro",
+        "accountKey": "",
+        "accountLabel": "",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "notConfigured",
+        "source": "cli",
+        "sourceDetail": "",
+        "updatedAt": "2026-11-02T15:46:17.546Z",
+        "windows": [],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-kiro-signed-out",
+        "stale": false
+      }
+    ]
+  },
+  "staleAfterMs": 600000
+}

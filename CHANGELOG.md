@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## v0.84.1 r1 (candidate)
+
+- Updated desktop compatibility to v0.84.1.
+- Checked restored Kiro quota readings, narrow CLI fallbacks and unavailable/zero values through the released Node Hub and Worker.
+- Added Copilot Home/Limits checks for absent reset dates and finite Premium resets.
+- Retained Manus/Muse support, existing widgets, languages and startup safeguards.
+
 ## v0.84.0 r1 — 2026-11-01
 
 - Updated desktop compatibility to v0.84.0.

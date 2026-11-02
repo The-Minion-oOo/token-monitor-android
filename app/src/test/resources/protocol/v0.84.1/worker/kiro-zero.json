@@ -1,0 +1,45 @@
+{
+  "limits": {
+    "updatedAt": "2026-11-02T15:46:19.245Z",
+    "providers": [
+      {
+        "provider": "kiro",
+        "accountKey": "sha256:5e1938572b9ad2fa93941713162414133f164b7941ebc96109eacc01cdc6367d",
+        "accountLabel": "Student",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "cli",
+        "sourceDetail": "",
+        "updatedAt": "2026-11-02T15:46:17.546Z",
+        "windows": [
+          {
+            "kind": "billing",
+            "boundaryKind": "reset",
+            "label": "Credits",
+            "used": 1000,
+            "limit": 1000,
+            "remaining": null,
+            "usedPercent": 100,
+            "remainingPercent": 0,
+            "resetsAt": "2026-12-01T00:00:00.000Z",
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-kiro-zero",
+        "stale": false
+      }
+    ]
+  },
+  "staleAfterMs": 600000
+}
