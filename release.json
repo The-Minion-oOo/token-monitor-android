@@ -4,16 +4,16 @@
   "packageName": "io.github.theminionooo.tokenmonitor",
   "signingCertificateSha256": "eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c",
   "candidate": {
-    "status": "candidate",
+    "status": "published",
     "tag": "android-v0.84.1-r1",
     "versionName": "v0.84.1",
     "versionCode": 841001
   },
   "published": {
-    "tag": "android-v0.84.0-r1",
-    "versionName": "v0.84.0",
-    "versionCode": 840001,
-    "sourceCommit": "641c27c394097492e04345b78fce89b95da306d3"
+    "tag": "android-v0.84.1-r1",
+    "versionName": "v0.84.1",
+    "versionCode": 841001,
+    "sourceCommit": "076525eaf89c5b2fa24398bb987f23a660525492"
   },
   "requiredChecks": [
     {

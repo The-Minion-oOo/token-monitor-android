@@ -5,15 +5,13 @@ unreleased desktop changes. The baseline is tag `v0.84.1`, commit
 `96263fd3947a28f661e6d5fad3025ec65926edd8`. Android remains a read-only
 dashboard: the desktop collects usage, signs in to providers and hosts the Hub.
 
-The candidate is **v0.84.1 r1**. I checked restored Kiro readings and Copilot
-reset details against the released collectors, Node Hub and Worker. Android
+The latest published APK is **v0.84.1 r1**. I checked restored Kiro readings
+and Copilot reset details against the released collectors, Node Hub and Worker. Android
 already omits absent reset lines; there is no new Hub schema or widget layout.
 
-The latest published APK is **v0.84.0 r1**. It adds Manus allowances/credits and
-separates Muse web quotas from Muse Code device observations. Additional-token
+It retains Manus allowances/credits and separates Muse web quotas from Muse Code device observations. Additional-token
 labels stay website text and retain the underlying dollar balance. Corrected
-throughput counters come from
-desktop; floating dock and plugin resource changes stay there.
+throughput counters come from desktop; floating dock and plugin resource changes stay there.
 The initial Tailscale health
 connection can yield to a permitted home fallback after two seconds when
 physical Wi-Fi/Ethernet is present. The v0.81.0 r2 route, stream and
