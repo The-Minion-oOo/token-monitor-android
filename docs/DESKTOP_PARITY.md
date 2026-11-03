@@ -5,16 +5,15 @@ unreleased desktop changes. The baseline is tag `v0.85.0`, commit
 `d7fd7db7eb13c912acf0a94b07f5b2baa64149ba`. Android remains a read-only
 dashboard: the desktop collects usage, signs in to providers and hosts the Hub.
 
-The candidate is **v0.85.0 r1**: local session tool filtering, reported hardware
-icons and restored-title consent checks. Desktop icon overrides and session
+The latest published APK is **v0.85.0 r1**, with a local Sessions tool filter,
+reported hardware icons and restored-title consent checks. Desktop icon overrides and session
 origin badges are not synchronized preferences or new session fields.
 
-The latest published APK is **v0.84.1 r1**. I checked restored Kiro readings
-and Copilot reset details against the released collectors, Node Hub and Worker. Android
-already omits absent reset lines; there is no new Hub schema or widget layout.
+I also checked restored Kiro readings and Copilot reset details against the
+released collectors, Node Hub and Worker. Android continues to omit absent reset lines.
 
-It retains Manus allowances/credits and separates Muse web quotas from Muse Code device observations. Additional-token
-labels stay website text and retain the underlying dollar balance. Corrected
+It retains Manus allowances/credits and separates Muse web quotas from Muse Code
+device observations. Additional-token labels stay website text and retain the underlying dollar balance. Corrected
 throughput counters come from desktop; floating dock and plugin resource changes stay there.
 The initial Tailscale health
 connection can yield to a permitted home fallback after two seconds when

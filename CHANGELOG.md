@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## v0.85.0 r1 (candidate)
+## v0.85.0 r1 — 2026-11-03
 
 - Updated desktop compatibility to v0.85.0.
 - Added a Sessions tool filter that preserves grouped conversations, search and period totals.
