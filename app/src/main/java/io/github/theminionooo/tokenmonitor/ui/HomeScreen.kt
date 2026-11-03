@@ -262,6 +262,8 @@ internal fun HomeDevices(devices: List<DeviceUsage>, period: DashboardPeriod, ag
                 primary = if (device.stale) appText(R.string.ui_stale_189cc, "Stale") else formatCompactTokens(deviceTokens),
                 secondary = listOf(device.osName, if (device.stale) appText(R.string.ui_stale_189cc, "Stale") else appText(R.string.ui_synced_b2ef6, "Synced")).filter { it.isNotBlank() }.joinToString(" · "),
                 color = if (device.stale) Muted else Blue,
+                deviceKind = device.deviceKind,
+                literalName = true,
             )
         }
     }
@@ -276,9 +278,11 @@ internal fun HomeListRow(
     upstreamName: String? = null,
     modelRow: Boolean = false,
     literalName: Boolean = false,
+    deviceKind: String? = null,
 ) {
     Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         when {
+            deviceKind != null -> DeviceHardwareMark(deviceKind, color, size = 12.dp)
             upstreamName == null -> StatusDot(color, size = 8.dp)
             modelRow -> ModelMark(upstreamName, color, size = 8.dp)
             else -> UpstreamToolMark(upstreamName, color, size = 8.dp)

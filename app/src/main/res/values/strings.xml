@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name" translatable="false">Token Monitor</string>
     <string name="ui_additional_tokens">Additional tokens</string>
+    <string name="ui_all_tools">All tools</string>
 </resources>

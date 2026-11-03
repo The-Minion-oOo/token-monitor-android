@@ -601,4 +601,5 @@
     <string name="label_next_renewal">下次续订</string>
     <string name="label_coverage_ends">保障期结束</string>
     <string name="ui_additional_tokens">额外 Token</string>
+    <string name="ui_all_tools">所有工具</string>
 </resources>

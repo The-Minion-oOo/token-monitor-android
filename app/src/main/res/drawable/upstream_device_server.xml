@@ -1,0 +1,6 @@
+<!-- Adapted from Token Monitor v0.85.0: src/electron/renderer/icons/devices/server.svg; see THIRD_PARTY_NOTICES.md. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="2" android:strokeLineCap="round" android:strokeLineJoin="round" android:pathData="M4.0,2.0H20.0A2.0,2.0 0 0 1 22.0,4.0V8.0A2.0,2.0 0 0 1 20.0,10.0H4.0A2.0,2.0 0 0 1 2.0,8.0V4.0A2.0,2.0 0 0 1 4.0,2.0Z" />
+    <path android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="2" android:strokeLineCap="round" android:strokeLineJoin="round" android:pathData="M4.0,14.0H20.0A2.0,2.0 0 0 1 22.0,16.0V20.0A2.0,2.0 0 0 1 20.0,22.0H4.0A2.0,2.0 0 0 1 2.0,20.0V16.0A2.0,2.0 0 0 1 4.0,14.0Z" />
+    <path android:fillColor="#00000000" android:strokeColor="#FFFFFFFF" android:strokeWidth="2" android:strokeLineCap="round" android:strokeLineJoin="round" android:pathData="M6 6h.01M6 18h.01" />
+</vector>

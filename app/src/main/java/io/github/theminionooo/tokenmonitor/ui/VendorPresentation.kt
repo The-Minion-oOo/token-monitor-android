@@ -156,6 +156,21 @@ internal fun DevicePlatformMark(platform: String, color: Color, size: Dp) {
     Icon(painterResource(icon), contentDescription = null, tint = color, modifier = Modifier.size(size))
 }
 
+internal fun deviceHardwareIcon(kind: String): Int = when (kind) {
+    "laptop" -> R.drawable.upstream_device_laptop
+    "mini" -> R.drawable.upstream_device_mini
+    "workstation" -> R.drawable.upstream_device_workstation
+    "server" -> R.drawable.upstream_device_server
+    "cloud" -> R.drawable.upstream_device_cloud
+    "linux" -> R.drawable.upstream_device_linux
+    else -> R.drawable.view_device
+}
+
+@Composable
+internal fun DeviceHardwareMark(kind: String, color: Color, size: Dp) {
+    Icon(painterResource(deviceHardwareIcon(kind)), contentDescription = null, tint = color, modifier = Modifier.size(size))
+}
+
 internal fun DashboardDestination.iconRes(): Int = when (this) {
     DashboardDestination.Home -> R.drawable.view_home
     DashboardDestination.Tools -> R.drawable.view_tool

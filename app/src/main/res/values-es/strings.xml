@@ -600,4 +600,5 @@
     <string name="label_next_renewal">Próxima renovación</string>
     <string name="label_coverage_ends">Fin de cobertura</string>
     <string name="ui_additional_tokens">Tokens adicionales</string>
+    <string name="ui_all_tools">Todas las herramientas</string>
 </resources>

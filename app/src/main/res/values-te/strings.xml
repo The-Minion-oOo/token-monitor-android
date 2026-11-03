@@ -600,4 +600,5 @@
     <string name="label_next_renewal">తదుపరి పునరుద్ధరణ</string>
     <string name="label_coverage_ends">వ్యవధి ముగింపు</string>
     <string name="ui_additional_tokens">అదనపు టోకెన్లు</string>
+    <string name="ui_all_tools">అన్ని సాధనాలు</string>
 </resources>

@@ -602,4 +602,5 @@
     <string name="label_next_renewal">次回更新</string>
     <string name="label_coverage_ends">利用期間終了</string>
     <string name="ui_additional_tokens">追加トークン</string>
+    <string name="ui_all_tools">すべてのツール</string>
 </resources>

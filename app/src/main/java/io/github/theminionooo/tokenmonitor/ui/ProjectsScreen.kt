@@ -190,8 +190,10 @@ internal fun LazyListScope.sessionItems(
     evidence: List<SessionUsage> = emptyList(),
     matches: (SessionUsage) -> Boolean = { true },
     query: String = "",
+    toolFilter: String = "",
+    showTitles: Boolean = true,
 ) {
-    val ranked = searchSessionRows(groupSessions(sessions, evidence), searching, matches, query)
+    val ranked = searchSessionRows(filterSessionRows(groupSessions(sessions, evidence), toolFilter), searching, matches, query, showTitles)
         .sortedByDescending { it.totalTokens }
     if (ranked.isEmpty()) item { MutedCopy(usageListEmptyMessage(true, period, searching), modifier = Modifier.padding(vertical = 12.dp)) }
     else {

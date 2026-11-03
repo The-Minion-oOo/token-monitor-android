@@ -104,16 +104,23 @@ export async function checkWorkerContract(source, output, upstream, limitCases =
                 async put(key, value) { caseRecords.set(key, structuredClone(value)); },
                 async delete(key) { caseRecords.delete(key); },
                 async list({ prefix } = {}) { return new Map([...caseRecords].filter(([key]) => !prefix || key.startsWith(prefix))); },
-            } }, { TOKEN_MONITOR_SECRET: secret, STALE_AFTER_MS: "600000" });
+            } }, { TOKEN_MONITOR_SECRET: secret, STALE_AFTER_MS: "600000", ...(fixture.titleSharing ? { TOKEN_MONITOR_SYNC_SESSION_TITLES: "true" } : {}) });
             try {
+                const policies = new Map();
+                if (fixture.titleSharing === "on" || fixture.titleSharing === "revoked") {
+                    for (const record of fixture.records) if (!policies.has(record.deviceId)) {
+                        policies.set(record.deviceId, await caseHub.setSyncTitlePolicy(record.deviceId, true));
+                    }
+                }
                 for (const record of fixture.records) {
                     const result = await caseHub.fetch(new Request("https://hub.example.com/api/ingest", {
                         method: "POST", headers: { Authorization: `Bearer ${secret}`, "content-type": "application/json" },
-                        body: JSON.stringify(record),
+                        body: JSON.stringify({ ...record, ...(policies.has(record.deviceId) ? { sessionTitleSyncGeneration: policies.get(record.deviceId).generation } : {}) }),
                     }));
                     assert.equal(result.status, 200);
                     await result.text();
                 }
+                if (fixture.titleSharing === "revoked") for (const id of policies.keys()) await caseHub.setSyncTitlePolicy(id, false);
                 const result = await caseHub.fetch(new Request("https://hub.example.com/api/stats", {
                     headers: { Authorization: `Bearer ${secret}` },
                 }));
@@ -122,6 +129,11 @@ export async function checkWorkerContract(source, output, upstream, limitCases =
                 const comparable = providers => providers.map(({ provider, source, accountKey, sourceDeviceId, accountLabel, planLabel, windows, balance, status }) =>
                     ({ provider, source, accountKey, sourceDeviceId, accountLabel, planLabel, windows, balance, status }));
                 assert.deepEqual(comparable(stats.limits.providers), comparable(fixture.providers));
+                if (fixture.deviceKinds) assert.deepEqual(Object.fromEntries(stats.devices.map(row => [row.deviceId, row.deviceKind ?? null])), fixture.deviceKinds);
+                if (fixture.sessionTitles) {
+                    assert.deepEqual(Object.fromEntries(Object.entries(stats.periods.today.sessions || {}).map(([key, row]) => [key, row.title || ""])), fixture.sessionTitles);
+                    assert.ok(!JSON.stringify(stats).includes("NEVER_EXPORT"), `${name} leaked conversation content`);
+                }
                 if (fixture.usage) assert.deepEqual(usageProjection(stats.periods), fixture.usage);
                 if (fixture.throughput) {
                     for (const [key, value] of Object.entries(fixture.throughput)) assert.equal(stats.periods.today[key], value);

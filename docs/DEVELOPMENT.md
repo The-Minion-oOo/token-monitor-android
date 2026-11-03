@@ -117,7 +117,7 @@ production Home screen and all four Pages widget renders for every language,
 using synthetic showcase data. Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite now contains **126 tests** per emulator. The report checker
+The interaction suite now contains **130 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
 
@@ -457,7 +457,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 126 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 130 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.
@@ -578,3 +578,14 @@ No real CLI is started. Zero, sign-out and unreadable reports pass through both
 Node and Worker responses. Copilot cases cover unlimited Chat without a reset
 and finite Premium with a reset; native Home/Limits checks retain this existing
 Android presentation. Older Manus/Muse fixtures and all earlier cases remain.
+
+## Desktop v0.85.0 checks
+
+The released-source contract checks optional hardware hints through Node and
+Worker: all supported kinds, retention on older updates, an explicit generic
+reset and unknown/missing values. Claude Desktop title fallback, native-title
+priority, rename/removal and off/on/revoked consent use only a synthetic home.
+Android tests cover Sessions-only filtering, whole mixed-tool groups, combined
+search, missing selections, hidden-title search and Devices/Home hardware icons.
+Remote-session badges and icon overrides are desktop presentation, not Hub
+fields to infer. No networking, lifecycle or widget geometry changes.

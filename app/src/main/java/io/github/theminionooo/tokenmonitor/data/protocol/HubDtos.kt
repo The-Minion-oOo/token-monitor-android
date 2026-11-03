@@ -113,6 +113,7 @@ internal data class HubDeviceDto(
     val history: HubHistoryDto = HubHistoryDto(),
     val trackedClients: List<String> = emptyList(),
     val periods: Map<String, HubPeriodDto> = emptyMap(),
+    val deviceKind: String = "computer",
 )
 
 internal data class HubLimitWindowDto(

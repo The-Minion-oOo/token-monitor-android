@@ -145,7 +145,7 @@ internal fun DeviceUsageRow(
         verticalArrangement = Arrangement.spacedBy(5.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            DevicePlatformMark(device.platform, if (device.stale) Muted else Ink, size = 12.dp)
+            DeviceHardwareMark(device.deviceKind, if (device.stale) Muted else Ink, size = 12.dp)
             Spacer(Modifier.width(8.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(device.hostname.ifBlank { device.id }, color = Ink, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)

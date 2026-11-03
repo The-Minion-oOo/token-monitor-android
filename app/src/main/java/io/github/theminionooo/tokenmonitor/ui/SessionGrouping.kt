@@ -194,9 +194,9 @@ private fun combinedModels(sessions: List<SessionUsage>): Map<String, Long> =
     sessions.flatMap { it.modelTokens.entries }.groupBy({ it.key }, { it.value }).mapValues { (_, tokens) -> tokens.sum() }
 
 /** Keeps rows with any matching member, or a group whose own label matches, so a match keeps its whole group. */
-internal fun searchSessionRows(rows: List<SessionRow>, searching: Boolean, matches: (SessionUsage) -> Boolean, query: String): List<SessionRow> =
+internal fun searchSessionRows(rows: List<SessionRow>, searching: Boolean, matches: (SessionUsage) -> Boolean, query: String, showTitles: Boolean = true): List<SessionRow> =
     if (!searching) rows else rows.filter { row ->
-        row.sessions.any(matches) || (row.grouped && query.isNotBlank() && sessionRowPresentation(row).title.contains(query.trim(), ignoreCase = true))
+        row.sessions.any(matches) || (row.grouped && query.isNotBlank() && sessionRowPresentation(row, showTitles).title.contains(query.trim(), ignoreCase = true))
     }
 
 /** Running beats waiting, which beats the first member's own state: a group is as busy as its busiest member. */
