@@ -1,0 +1,1121 @@
+{
+  "periods": {
+    "today": {
+      "totalTokens": 9872,
+      "costUsd": 3.36,
+      "clients": {
+        "mcode": 9872
+      },
+      "models": {
+        "minimax-m2.5": 9872
+      },
+      "sessions": {
+        "mcode:contract-session": {
+          "client": "mcode",
+          "sessionId": "contract-session",
+          "totalTokens": 9872,
+          "costUsd": 3.36,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "",
+          "sessionKind": "",
+          "models": {},
+          "modelCosts": {},
+          "providers": {},
+          "unpricedTokens": 2568
+        }
+      }
+    },
+    "month": {
+      "totalTokens": 9872,
+      "costUsd": 3.36,
+      "clients": {
+        "mcode": 9872
+      },
+      "models": {
+        "minimax-m2.5": 9872
+      },
+      "sessions": {
+        "mcode:contract-session": {
+          "client": "mcode",
+          "sessionId": "contract-session",
+          "totalTokens": 9872,
+          "costUsd": 3.36,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "",
+          "sessionKind": "",
+          "models": {},
+          "modelCosts": {},
+          "providers": {},
+          "unpricedTokens": 2568
+        }
+      }
+    },
+    "allTime": {
+      "totalTokens": 9872,
+      "costUsd": 3.36,
+      "clients": {
+        "mcode": 9872
+      },
+      "models": {
+        "minimax-m2.5": 9872
+      },
+      "sessions": {
+        "mcode:contract-session": {
+          "client": "mcode",
+          "sessionId": "contract-session",
+          "totalTokens": 9872,
+          "costUsd": 3.36,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "",
+          "sessionKind": "",
+          "models": {},
+          "modelCosts": {},
+          "providers": {},
+          "unpricedTokens": 2568
+        }
+      }
+    }
+  },
+  "devices": [
+    {
+      "deviceId": "synthetic-hardware-0",
+      "hostname": "Sample computer",
+      "deviceKind": "computer",
+      "platform": "linux",
+      "updatedAt": "2026-11-03T15:45:16.557Z",
+      "receivedAt": "2026-11-03T15:45:18.348Z",
+      "stale": false,
+      "periods": {
+        "today": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        },
+        "month": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        },
+        "allTime": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        }
+      }
+    },
+    {
+      "deviceId": "synthetic-hardware-1",
+      "hostname": "Sample server",
+      "deviceKind": "server",
+      "platform": "linux",
+      "updatedAt": "2026-11-03T15:45:16.557Z",
+      "receivedAt": "2026-11-03T15:45:18.348Z",
+      "stale": false,
+      "periods": {
+        "today": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        },
+        "month": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        },
+        "allTime": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        }
+      }
+    },
+    {
+      "deviceId": "synthetic-hardware-2",
+      "hostname": "Sample cloud",
+      "deviceKind": "cloud",
+      "platform": "linux",
+      "updatedAt": "2026-11-03T15:45:16.557Z",
+      "receivedAt": "2026-11-03T15:45:18.349Z",
+      "stale": false,
+      "periods": {
+        "today": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        },
+        "month": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        },
+        "allTime": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        }
+      }
+    },
+    {
+      "deviceId": "synthetic-hardware-3",
+      "hostname": "Sample linux",
+      "deviceKind": "linux",
+      "platform": "linux",
+      "updatedAt": "2026-11-03T15:45:16.557Z",
+      "receivedAt": "2026-11-03T15:45:18.350Z",
+      "stale": false,
+      "periods": {
+        "today": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        },
+        "month": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        },
+        "allTime": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        }
+      }
+    },
+    {
+      "deviceId": "synthetic-hardware-4",
+      "hostname": "Sample desktop",
+      "deviceKind": "desktop",
+      "platform": "linux",
+      "updatedAt": "2026-11-03T15:45:16.557Z",
+      "receivedAt": "2026-11-03T15:45:18.351Z",
+      "stale": false,
+      "periods": {
+        "today": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        },
+        "month": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        },
+        "allTime": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        }
+      }
+    },
+    {
+      "deviceId": "synthetic-hardware-5",
+      "hostname": "Sample laptop",
+      "deviceKind": "laptop",
+      "platform": "linux",
+      "updatedAt": "2026-11-03T15:45:16.557Z",
+      "receivedAt": "2026-11-03T15:45:18.352Z",
+      "stale": false,
+      "periods": {
+        "today": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        },
+        "month": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        },
+        "allTime": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        }
+      }
+    },
+    {
+      "deviceId": "synthetic-hardware-6",
+      "hostname": "Sample mini",
+      "deviceKind": "mini",
+      "platform": "linux",
+      "updatedAt": "2026-11-03T15:45:16.557Z",
+      "receivedAt": "2026-11-03T15:45:18.353Z",
+      "stale": false,
+      "periods": {
+        "today": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        },
+        "month": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        },
+        "allTime": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        }
+      }
+    },
+    {
+      "deviceId": "synthetic-hardware-7",
+      "hostname": "Sample workstation",
+      "deviceKind": "workstation",
+      "platform": "linux",
+      "updatedAt": "2026-11-03T15:45:16.557Z",
+      "receivedAt": "2026-11-03T15:45:18.354Z",
+      "stale": false,
+      "periods": {
+        "today": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        },
+        "month": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        },
+        "allTime": {
+          "totalTokens": 1234,
+          "costUsd": 0.42,
+          "clients": {
+            "mcode": 1234
+          },
+          "models": {
+            "minimax-m2.5": 1234
+          },
+          "sessions": {
+            "mcode:contract-session": {
+              "client": "mcode",
+              "sessionId": "contract-session",
+              "totalTokens": 1234,
+              "costUsd": 0.42,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "unpricedTokens": 321
+            }
+          }
+        }
+      }
+    }
+  ],
+  "staleAfterMs": 600000
+}

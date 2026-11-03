@@ -1,0 +1,414 @@
+{
+  "periods": {
+    "today": {
+      "totalTokens": 200,
+      "costUsd": 0.02,
+      "clients": {
+        "claude": 200
+      },
+      "models": {
+        "claude-opus-5": 200
+      },
+      "sessions": {
+        "claude:local": {
+          "client": "claude",
+          "sessionId": "local",
+          "totalTokens": 100,
+          "costUsd": 0.01,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-11-03T15:45:16.557Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "Transcript title",
+          "sessionKind": "",
+          "models": {
+            "claude-opus-5": 100
+          },
+          "modelCosts": {},
+          "providers": {}
+        },
+        "claude:remote": {
+          "client": "claude",
+          "sessionId": "remote",
+          "totalTokens": 100,
+          "costUsd": 0.01,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-11-03T15:45:16.557Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "Desktop title",
+          "sessionKind": "",
+          "models": {
+            "claude-opus-5": 100
+          },
+          "modelCosts": {},
+          "providers": {}
+        }
+      }
+    },
+    "month": {
+      "totalTokens": 200,
+      "costUsd": 0.02,
+      "clients": {
+        "claude": 200
+      },
+      "models": {
+        "claude-opus-5": 200
+      },
+      "sessions": {
+        "claude:local": {
+          "client": "claude",
+          "sessionId": "local",
+          "totalTokens": 100,
+          "costUsd": 0.01,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-11-03T15:45:16.557Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "Transcript title",
+          "sessionKind": "",
+          "models": {
+            "claude-opus-5": 100
+          },
+          "modelCosts": {},
+          "providers": {}
+        },
+        "claude:remote": {
+          "client": "claude",
+          "sessionId": "remote",
+          "totalTokens": 100,
+          "costUsd": 0.01,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-11-03T15:45:16.557Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "Desktop title",
+          "sessionKind": "",
+          "models": {
+            "claude-opus-5": 100
+          },
+          "modelCosts": {},
+          "providers": {}
+        }
+      }
+    },
+    "allTime": {
+      "totalTokens": 200,
+      "costUsd": 0.02,
+      "clients": {
+        "claude": 200
+      },
+      "models": {
+        "claude-opus-5": 200
+      },
+      "sessions": {
+        "claude:local": {
+          "client": "claude",
+          "sessionId": "local",
+          "totalTokens": 100,
+          "costUsd": 0.01,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-11-03T15:45:16.557Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "Transcript title",
+          "sessionKind": "",
+          "models": {
+            "claude-opus-5": 100
+          },
+          "modelCosts": {},
+          "providers": {}
+        },
+        "claude:remote": {
+          "client": "claude",
+          "sessionId": "remote",
+          "totalTokens": 100,
+          "costUsd": 0.01,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-11-03T15:45:16.557Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "Desktop title",
+          "sessionKind": "",
+          "models": {
+            "claude-opus-5": 100
+          },
+          "modelCosts": {},
+          "providers": {}
+        }
+      }
+    }
+  },
+  "devices": [
+    {
+      "deviceId": "contract-desktop",
+      "hostname": "Synthetic desktop",
+      "deviceKind": "laptop",
+      "platform": "linux",
+      "updatedAt": "2026-11-03T15:45:16.557Z",
+      "receivedAt": "2026-11-03T15:45:18.364Z",
+      "stale": false,
+      "periods": {
+        "today": {
+          "totalTokens": 200,
+          "costUsd": 0.02,
+          "clients": {
+            "claude": 200
+          },
+          "models": {
+            "claude-opus-5": 200
+          },
+          "sessions": {
+            "claude:local": {
+              "client": "claude",
+              "sessionId": "local",
+              "totalTokens": 100,
+              "costUsd": 0.01,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-11-03T15:45:16.557Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "Transcript title",
+              "sessionKind": "",
+              "models": {
+                "claude-opus-5": 100
+              },
+              "modelCosts": {},
+              "providers": {}
+            },
+            "claude:remote": {
+              "client": "claude",
+              "sessionId": "remote",
+              "totalTokens": 100,
+              "costUsd": 0.01,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-11-03T15:45:16.557Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "Desktop title",
+              "sessionKind": "",
+              "models": {
+                "claude-opus-5": 100
+              },
+              "modelCosts": {},
+              "providers": {}
+            }
+          }
+        },
+        "month": {
+          "totalTokens": 200,
+          "costUsd": 0.02,
+          "clients": {
+            "claude": 200
+          },
+          "models": {
+            "claude-opus-5": 200
+          },
+          "sessions": {
+            "claude:local": {
+              "client": "claude",
+              "sessionId": "local",
+              "totalTokens": 100,
+              "costUsd": 0.01,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-11-03T15:45:16.557Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "Transcript title",
+              "sessionKind": "",
+              "models": {
+                "claude-opus-5": 100
+              },
+              "modelCosts": {},
+              "providers": {}
+            },
+            "claude:remote": {
+              "client": "claude",
+              "sessionId": "remote",
+              "totalTokens": 100,
+              "costUsd": 0.01,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-11-03T15:45:16.557Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "Desktop title",
+              "sessionKind": "",
+              "models": {
+                "claude-opus-5": 100
+              },
+              "modelCosts": {},
+              "providers": {}
+            }
+          }
+        },
+        "allTime": {
+          "totalTokens": 200,
+          "costUsd": 0.02,
+          "clients": {
+            "claude": 200
+          },
+          "models": {
+            "claude-opus-5": 200
+          },
+          "sessions": {
+            "claude:local": {
+              "client": "claude",
+              "sessionId": "local",
+              "totalTokens": 100,
+              "costUsd": 0.01,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-11-03T15:45:16.557Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "Transcript title",
+              "sessionKind": "",
+              "models": {
+                "claude-opus-5": 100
+              },
+              "modelCosts": {},
+              "providers": {}
+            },
+            "claude:remote": {
+              "client": "claude",
+              "sessionId": "remote",
+              "totalTokens": 100,
+              "costUsd": 0.01,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-11-03T15:45:16.557Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "Desktop title",
+              "sessionKind": "",
+              "models": {
+                "claude-opus-5": 100
+              },
+              "modelCosts": {},
+              "providers": {}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "staleAfterMs": 600000
+}

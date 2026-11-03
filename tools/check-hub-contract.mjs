@@ -16,6 +16,7 @@ import { checkV082Usage } from "./check-v082-usage.mjs";
 import { checkV083Limits } from "./check-v083-limits.mjs";
 import { checkV084Limits } from "./check-v084-limits.mjs";
 import { checkV0841Limits } from "./check-v0841-limits.mjs";
+import { checkV085Data } from "./check-v085-data.mjs";
 
 const script = fileURLToPath(import.meta.url);
 const root = resolve(dirname(script), "..");
@@ -643,8 +644,9 @@ async function isolatedContract(source, output, upstream) {
         const v083 = await checkV083Limits(require, { createHub, source, secret, device, now });
         const v084 = await checkV084Limits(require, { createHub, source, secret, device, now });
         const v0841 = await checkV0841Limits(require, { createHub, source, secret, device, now });
-        Object.assign(limitChecks.cases, v081.cases, v082.cases, v083.cases, v084.cases, v0841.cases);
-        Object.assign(responses, limitChecks.responses, v081.responses, v082.responses, v083.responses, v084.responses, v0841.responses);
+        const v085 = await checkV085Data(require, { createHub, source, secret, device, now });
+        Object.assign(limitChecks.cases, v081.cases, v082.cases, v083.cases, v084.cases, v0841.cases, v085.cases);
+        Object.assign(responses, limitChecks.responses, v081.responses, v082.responses, v083.responses, v084.responses, v0841.responses, v085.responses);
         await checkV081Streams(require, source, output, upstream);
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) await writeFile(join(output, name), `${JSON.stringify(value, null, 2)}\n`);

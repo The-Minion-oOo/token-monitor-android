@@ -2,12 +2,13 @@
 
 ## Version rule
 
-Android v0.84.1 r1 targets desktop tag `v0.84.1`, peeled commit
-`96263fd3947a28f661e6d5fad3025ec65926edd8`, in Gradle and `upstream.json`.
-I checked restored Kiro credit readings and Copilot reset details through the
-released collectors, Node Hub and Worker. Android's existing presentation
-handles these readings without a protocol or layout change. Manus/Muse support
-and the earlier startup safeguards are retained.
+The v0.85.0 r1 candidate targets desktop tag `v0.85.0`, peeled commit
+`d7fd7db7eb13c912acf0a94b07f5b2baa64149ba`, in Gradle and `upstream.json`.
+I checked hardware hints, older-record retention and restored Claude title
+consent through the released Node Hub and Worker. Sessions tool filtering is
+local presentation and keeps whole conversation groups. Hardware detection,
+icon overrides and session-origin badges remain desktop responsibilities.
+Earlier Kiro/Copilot and Manus/Muse checks and startup safeguards are retained.
 I checked Claude plan labels, weekly-only quotas and Trae credit summaries against
 the released Node and Worker Hubs. Proxy settings and browser credentials stay
 on desktop. The r2 revision adds the initial Home fallback timeout; the intermittent

@@ -8,6 +8,19 @@ import org.junit.Test
 
 /** Responses produced by tools/check-hub-contract.mjs from the exact released desktop source. */
 class ReleasedHubContractTest {
+    @Test fun `released v085 hardware hints and Claude title consent reach Android`() {
+        val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
+        assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())
+        for (prefix in listOf("", "worker/")) {
+            fun stats(name: String) = HubProtocolParser.decodeStats(File(directory!!, "$prefix$name.json").readText())
+            assertEquals("laptop", stats("hardware-retained").devices.single().deviceKind)
+            assertEquals("computer", stats("hardware-reset").devices.single().deviceKind)
+            assertTrue(stats("claude-titles-private").periods.getValue("today").sessions.all { it.title.isEmpty() })
+            assertTrue(stats("claude-titles-revoked").periods.getValue("today").sessions.all { it.title.isEmpty() })
+            assertEquals("Desktop title", stats("claude-titles-shared").periods.getValue("today").sessions.single { it.id == "remote" }.title)
+        }
+    }
+
     @Test fun `released v0841 Kiro readings and Copilot empty resets reach Android`() {
         val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
         assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())

@@ -133,6 +133,7 @@ data class DeviceUsage(
     val history: HubHistory,
     val trackedClients: List<String>,
     val periods: Map<String, UsagePeriod>,
+    val deviceKind: String = "computer",
 )
 
 data class LimitWindow(

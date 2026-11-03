@@ -62,6 +62,15 @@ stay text; they never become measured usage or throughput. Manus allowances and
 spendable credits use the existing quota and balance presentation. These fields
 add no collector, request or connection owner.
 
+Optional `deviceKind` hints pass through the device adapter with a generic
+default for old or unknown values. Devices and Home use the reported hint,
+without detecting hardware or storing desktop icon overrides. The Sessions
+tool filter runs after grouping and before text search, keeping every matching
+conversation whole. It does not change Home, aggregate totals or requests.
+Grouped-name search receives the same local title-visibility choice as member
+search and rendering.
+
+
 ## Local presentation in the r2 release
 
 The parser retains subscription kind, payment ledgers, bindings, renewal/end

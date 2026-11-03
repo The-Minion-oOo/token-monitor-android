@@ -1,9 +1,13 @@
-# Desktop parity for v0.84.1
+# Desktop parity for v0.85.0
 
 I compare the Android companion with released desktop source, rather than
-unreleased desktop changes. The baseline is tag `v0.84.1`, commit
-`96263fd3947a28f661e6d5fad3025ec65926edd8`. Android remains a read-only
+unreleased desktop changes. The baseline is tag `v0.85.0`, commit
+`d7fd7db7eb13c912acf0a94b07f5b2baa64149ba`. Android remains a read-only
 dashboard: the desktop collects usage, signs in to providers and hosts the Hub.
+
+The candidate is **v0.85.0 r1**: local session tool filtering, reported hardware
+icons and restored-title consent checks. Desktop icon overrides and session
+origin badges are not synchronized preferences or new session fields.
 
 The latest published APK is **v0.84.1 r1**. I checked restored Kiro readings
 and Copilot reset details against the released collectors, Node Hub and Worker. Android

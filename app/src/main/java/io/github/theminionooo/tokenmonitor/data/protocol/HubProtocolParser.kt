@@ -1,5 +1,6 @@
 package io.github.theminionooo.tokenmonitor.data.protocol
 
+import io.github.theminionooo.tokenmonitor.BuildConfig
 import io.github.theminionooo.tokenmonitor.domain.DeviceUsage
 import io.github.theminionooo.tokenmonitor.domain.HubHealth
 import io.github.theminionooo.tokenmonitor.domain.HubHistory
@@ -34,7 +35,8 @@ import kotlinx.serialization.json.longOrNull
  * Android client renders and intentionally ignores unknown fields.
  */
 object HubProtocolParser {
-    const val SUPPORTED_UPSTREAM_VERSION = "v0.83.0"
+    private val deviceKinds = setOf("computer", "desktop", "laptop", "mini", "workstation", "server", "cloud", "linux")
+    const val SUPPORTED_UPSTREAM_VERSION = BuildConfig.UPSTREAM_TAG
     private val CLAUDE_PLAN_LABELS = setOf("Free", "Pro", "Max", "Ultra", "Team", "Enterprise", "Max 5x", "Max 20x")
 
     private val LIVE_ACTIVITY_STATES = setOf("running", "waiting", "idle", "unknown")
@@ -265,6 +267,7 @@ object HubProtocolParser {
     private fun JsonObject.toDeviceDto() = HubDeviceDto(
         id = string("deviceId").ifBlank { string("id") },
         hostname = string("hostname"),
+        deviceKind = string("deviceKind").takeIf { it in deviceKinds } ?: "computer",
         platform = string("platform"),
         osName = string("osName"),
         osVersion = string("osVersion"),
@@ -526,6 +529,7 @@ object HubProtocolParser {
     private fun HubDeviceDto.toDomain() = DeviceUsage(
         id = id,
         hostname = hostname,
+        deviceKind = deviceKind,
         platform = platform,
         osName = osName,
         osVersion = osVersion,

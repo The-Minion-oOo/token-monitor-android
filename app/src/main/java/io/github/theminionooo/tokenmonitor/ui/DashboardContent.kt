@@ -138,6 +138,12 @@ internal fun DashboardContent(
     val modelUsage = filteredTool?.let { usage.modelsForTool(it) } ?: usage
     val listState = rememberSaveable(destination, modelFilter, saver = LazyListState.Saver) { LazyListState() }
     var search by rememberSaveable(destination) { mutableStateOf("") }
+    var sessionTool by rememberSaveable(destination) { mutableStateOf("") }
+    val sessionTools = if (destination == DashboardDestination.Sessions) {
+        remember(SessionToolInputs(usage.sessions)) { sessionToolIds(usage.sessions) }
+    } else emptyList()
+    val selectedSessionTool = sessionToolSelection(sessionTool, sessionTools)
+    LaunchedEffect(selectedSessionTool) { if (sessionTool != selectedSessionTool) sessionTool = selectedSessionTool }
     val pullState = rememberPullToRefreshState()
     PullToRefreshBox(
         isRefreshing = state.refreshing,
@@ -181,6 +187,9 @@ internal fun DashboardContent(
                 if (showSessionTitles) appText(R.string.ui_search_title_id_tool_model_or_project_63387, "Search title, ID, tool, model, or project") else appText(R.string.ui_search_id_tool_model_or_project_b45a9, "Search ID, tool, model, or project")
             } else appText(R.string.ui_search_project_id_or_tool_0bdf0, "Search project, ID, or tool")) }
         }
+        if (destination == DashboardDestination.Sessions && sessionTools.size > 1) {
+            item { SessionToolFilter(sessionTools, selectedSessionTool) { sessionTool = it } }
+        }
         when (destination) {
             DashboardDestination.Home -> homeItems(snapshot, usage, period, displayOptions, onChoose)
             DashboardDestination.Tools -> breakdownItems(
@@ -210,10 +219,12 @@ internal fun DashboardContent(
             )
             DashboardDestination.Projects -> projectItems(usage.projects.filter { it.matchesSearch(search) }, period, search.isNotBlank())
             DashboardDestination.Sessions -> sessionItems(
-                usage.sessions, period, search.isNotBlank(),
+                usage.sessions, period, search.isNotBlank() || selectedSessionTool.isNotEmpty(),
                 evidence = snapshot.today.sessions + snapshot.month.sessions,
                 matches = { it.matchesSearch(search, showSessionTitles) },
                 query = search,
+                toolFilter = selectedSessionTool,
+                showTitles = showSessionTitles,
             )
             DashboardDestination.Limits -> limitItems(snapshot, displayOptions)
             DashboardDestination.Trends -> if (trendHistory == null) item { MutedCopy(appText(R.string.ui_loading_activity_4c959, "Loading activity…")) }

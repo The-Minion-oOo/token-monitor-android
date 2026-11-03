@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## v0.85.0 r1 (candidate)
+
+- Updated desktop compatibility to v0.85.0.
+- Added a Sessions tool filter that preserves grouped conversations, search and period totals.
+- Displayed reported device hardware hints on Devices and Home, with safe defaults for older Hubs.
+- Corrected grouped-session search to exclude locally hidden titles; verified restored Claude titles and sharing consent.
+- Retained existing widgets, networking, languages and startup safeguards.
+
 ## v0.84.1 r1 — 2026-11-02
 
 - Updated desktop compatibility to v0.84.1.
