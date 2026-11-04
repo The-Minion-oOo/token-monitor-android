@@ -26,17 +26,19 @@ internal data class ServiceStatusProvider(
     val label: String,
     val pageUrl: String,
     val summaryUrl: String,
+    val atomFeed: Boolean = false,
 )
 
-/** Reads the same public Statuspage summaries as the desktop Status view. */
+/** Reads public status summaries and DeepSeek's official incident feed. */
 internal class ServiceStatusClient {
     suspend fun load(): ServiceStatusSnapshot = coroutineScope {
         val checkedAt = System.currentTimeMillis()
         val results = providers.map { provider ->
             async {
                 try {
-                    val payload = runInterruptible(Dispatchers.IO) { fetch(provider.summaryUrl) }
-                    summarizeStatuspageProvider(provider, payload, checkedAt)
+                    runInterruptible(Dispatchers.IO) {
+                        summarizeServiceProvider(provider, fetch(provider), checkedAt)
+                    }
                 } catch (cancelled: CancellationException) {
                     throw cancelled
                 } catch (_: Exception) {
@@ -47,17 +49,18 @@ internal class ServiceStatusClient {
         ServiceStatusSnapshot(results, checkedAt)
     }
 
-    private fun fetch(url: String): JsonObject {
-        val connection = URL(url).openConnection() as HttpURLConnection
+    private fun fetch(provider: ServiceStatusProvider): String {
+        val connection = URL(provider.summaryUrl).openConnection() as HttpURLConnection
         return try {
             connection.requestMethod = "GET"
             connection.connectTimeout = timeoutMs
             connection.readTimeout = timeoutMs
             connection.useCaches = true
-            connection.setRequestProperty("Accept", "application/json")
+            connection.instanceFollowRedirects = !provider.atomFeed
+            connection.setRequestProperty("Accept", if (provider.atomFeed) "application/atom+xml" else "application/json")
             connection.setRequestProperty("User-Agent", "Token-Monitor-Android/${BuildConfig.VERSION_NAME}")
             if (connection.responseCode !in 200..299) error("Status endpoint returned HTTP ${connection.responseCode}")
-            json.parseToJsonElement(readBounded(connection.inputStream)).jsonObject
+            readBounded(connection.inputStream)
         } finally {
             connection.disconnect()
         }
@@ -82,15 +85,26 @@ internal class ServiceStatusClient {
     private companion object {
         const val timeoutMs = 5_000
         const val maxResponseBytes = 1 * 1024 * 1024
-        val json = Json { ignoreUnknownKeys = true; isLenient = false }
         val providers = listOf(
             ServiceStatusProvider("claude", "Claude", "https://status.claude.com", "https://status.claude.com/api/v2/summary.json"),
             ServiceStatusProvider("openai", "OpenAI", "https://status.openai.com", "https://status.openai.com/api/v2/summary.json"),
             ServiceStatusProvider("cursor", "Cursor", "https://status.cursor.com", "https://status.cursor.com/api/v2/summary.json"),
-            ServiceStatusProvider("deepseek", "DeepSeek", "https://status.deepseek.com", "https://deepseek.statuspage.io/api/v2/summary.json"),
+            deepseekStatusProvider,
         )
     }
 }
+
+internal val deepseekStatusProvider = ServiceStatusProvider(
+    "deepseek", "DeepSeek", "https://status.deepseek.com", "https://status.deepseek.com/feed.atom", atomFeed = true,
+)
+
+internal fun summarizeServiceProvider(provider: ServiceStatusProvider, body: String, checkedAt: Long): ServiceProviderStatus =
+    try {
+        if (provider.atomFeed) summarizeAtomFeedProvider(provider, body, checkedAt)
+        else summarizeStatuspageProvider(provider, Json.parseToJsonElement(body).jsonObject, checkedAt)
+    } catch (_: Exception) {
+        unknownProvider(provider, checkedAt)
+    }
 
 internal fun summarizeStatuspageProvider(
     provider: ServiceStatusProvider,
@@ -123,7 +137,7 @@ internal fun summarizeStatuspageProvider(
     )
 }
 
-private fun unknownProvider(provider: ServiceStatusProvider, checkedAt: Long) = ServiceProviderStatus(
+internal fun unknownProvider(provider: ServiceStatusProvider, checkedAt: Long) = ServiceProviderStatus(
     id = provider.id,
     label = provider.label,
     pageUrl = provider.pageUrl,

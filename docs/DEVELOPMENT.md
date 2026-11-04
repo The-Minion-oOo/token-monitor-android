@@ -117,7 +117,7 @@ production Home screen and all four Pages widget renders for every language,
 using synthetic showcase data. Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite now contains **130 tests** per emulator. The report checker
+The interaction suite now contains **132 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
 
@@ -457,7 +457,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 130 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 132 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.
@@ -589,3 +589,12 @@ Android tests cover Sessions-only filtering, whole mixed-tool groups, combined
 search, missing selections, hidden-title search and Devices/Home hardware icons.
 Remote-session badges and icon overrides are desktop presentation, not Hub
 fields to infer. No networking, lifecycle or widget geometry changes.
+
+### Desktop v0.86.0 checks
+
+The pinned-source contract also executes the desktop DeepSeek feed summarizer
+with synthetic incidents, without contacting a status site. The collector checks
+exercise Command Code billing periods with synthetic HTTP responses through Node
+and Worker. Versioned fixtures retain reported balances and resets alongside
+optional cycle durations. JVM and native tests exercise the bounded Android XML
+reader, unknown statuses, malformed feeds and external-entity rejection.

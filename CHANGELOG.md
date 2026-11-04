@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## v0.86.0 r1 (candidate)
+
+- Updated desktop compatibility to v0.86.0.
+- Switched DeepSeek status to the official incident feed; invalid feeds show Unknown rather than healthy.
+- Checked Command Code billing periods through the released Node Hub and Worker.
+- Kept desktop quota history on desktop and retained Sessions filtering, hardware hints, languages and widgets.
+
 ## v0.85.0 r1 — 2026-11-03
 
 - Updated desktop compatibility to v0.85.0.

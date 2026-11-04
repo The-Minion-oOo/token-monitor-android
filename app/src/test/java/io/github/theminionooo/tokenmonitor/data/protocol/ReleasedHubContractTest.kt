@@ -2,12 +2,33 @@ package io.github.theminionooo.tokenmonitor.data.protocol
 
 import java.io.File
 import java.time.Instant
+import kotlinx.serialization.json.*
 import org.junit.Assert.*
 import org.junit.Assume.assumeTrue
 import org.junit.Test
 
 /** Responses produced by tools/check-hub-contract.mjs from the exact released desktop source. */
 class ReleasedHubContractTest {
+    @Test fun `released v086 billing duration and DeepSeek feed remain compatible`() {
+        val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
+        assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())
+        for (prefix in listOf("", "worker/")) for (name in listOf("billing-28", "billing-29", "billing-30", "billing-31", "billing-missing", "billing-invalid", "billing-reversed")) {
+            val value = HubProtocolParser.decodeStats(File(directory!!, "$prefix$name.json").readText())
+                .limits.providers.single().windows.single { it.label == "Monthly" }
+            assertEquals(8.5, value.remaining!!, 0.0)
+            assertEquals("USD", value.currency)
+        }
+        for (element in Json.parseToJsonElement(File(directory!!, "deepseek-status.json").readText()).jsonArray) {
+            val row = element.jsonObject
+            val value = io.github.theminionooo.tokenmonitor.data.network.summarizeServiceProvider(
+                io.github.theminionooo.tokenmonitor.data.network.deepseekStatusProvider, row["body"]!!.jsonPrimitive.content, 0)
+            assertEquals(row["health"]!!.jsonPrimitive.content, value.health.name.lowercase())
+            assertEquals(row["description"]!!.jsonPrimitive.content, value.description)
+            assertEquals(row["incidentCount"]!!.jsonPrimitive.int, value.incidentCount)
+            assertEquals(row["affectedComponents"]!!.jsonPrimitive.int, value.affectedComponents)
+        }
+    }
+
     @Test fun `released v085 hardware hints and Claude title consent reach Android`() {
         val directory = System.getenv("TOKEN_MONITOR_CONTRACT_DIR")
         assumeTrue("Run the pinned Hub contract harness to supply responses", !directory.isNullOrBlank())

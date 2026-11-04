@@ -2,12 +2,12 @@
 
 ## Version rule
 
-Android v0.85.0 r1 targets desktop tag `v0.85.0`, peeled commit
-`d7fd7db7eb13c912acf0a94b07f5b2baa64149ba`, in Gradle and `upstream.json`.
-I checked hardware hints, older-record retention and restored Claude title
-consent through the released Node Hub and Worker. Sessions tool filtering is
-local presentation and keeps whole conversation groups. Hardware detection,
-icon overrides and session-origin badges remain desktop responsibilities.
+The v0.86.0 r1 candidate targets desktop tag `v0.86.0`, peeled commit
+`5a8ddcdac963f0bb2d4b09631f902118048f1d97`, in Gradle and `upstream.json`.
+I checked the released DeepSeek feed summarizer with synthetic incidents and
+Command Code billing durations through the released Node Hub and Worker.
+Quota history stays local to desktop because it is not exported by the Hub.
+Android keeps its existing connection ownership and widget geometry.
 Earlier Kiro/Copilot and Manus/Muse checks and startup safeguards are retained.
 I checked Claude plan labels, weekly-only quotas and Trae credit summaries against
 the released Node and Worker Hubs. Proxy settings and browser credentials stay

@@ -1,0 +1,74 @@
+{
+  "limits": {
+    "updatedAt": "2026-11-04T19:53:06.648Z",
+    "providers": [
+      {
+        "provider": "commandcode",
+        "accountKey": "sha256:43205cfece046940a58b27ab31ade420250853b3643ad3dc3bdab1384d98a303",
+        "accountLabel": "Go",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "web",
+        "sourceDetail": "",
+        "updatedAt": "2026-11-04T19:53:04.804Z",
+        "windows": [
+          {
+            "kind": "session",
+            "label": "",
+            "used": 1.5,
+            "limit": 3,
+            "remaining": 1.5,
+            "usedPercent": 50,
+            "remainingPercent": 50,
+            "resetsAt": null,
+            "windowMinutes": 300,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          },
+          {
+            "kind": "weekly",
+            "label": "",
+            "used": 1.5,
+            "limit": 6,
+            "remaining": 4.5,
+            "usedPercent": 25,
+            "remainingPercent": 75,
+            "resetsAt": null,
+            "windowMinutes": 10080,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          },
+          {
+            "kind": "billing",
+            "metric": "credits",
+            "label": "Monthly",
+            "used": 1.5,
+            "limit": 10,
+            "remaining": 8.5,
+            "usedPercent": 15,
+            "remainingPercent": 85,
+            "resetsAt": "2026-11-19T08:00:00.000Z",
+            "windowMinutes": 44640,
+            "resetDescription": "",
+            "detail": "",
+            "currency": "USD",
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-billing-31",
+        "stale": false
+      }
+    ]
+  }
+}
