@@ -4,7 +4,7 @@ I compare Android with desktop tag `v0.86.0`, peeled commit
 `5a8ddcdac963f0bb2d4b09631f902118048f1d97`. Android remains a read-only
 dashboard; the desktop collects usage, signs in to providers and hosts the Hub.
 
-The **v0.86.0 r1 candidate** switches DeepSeek status to its official incident
+The latest published APK is **v0.86.0 r1**. It switches DeepSeek status to its official incident
 feed. Active and unknown-status incidents remain visible; invalid, empty or
 truncated responses show Unknown. Released-source checks cover Command Code
 billing durations without assuming every month has the same length.
