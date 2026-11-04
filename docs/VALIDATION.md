@@ -3,41 +3,40 @@
 I keep one record for each release. Emulator results and phone checks describe
 the builds and scenarios they name; neither establishes battery savings.
 
-## Current release: v0.85.0 r1
+## Current release: v0.86.0 r1
 
-I published source `52531a964c920429b224a21ebb9616d816e6ed69` from
-[PR #130](https://github.com/The-Minion-oOo/token-monitor-android/pull/130),
-with desktop v0.85.0 pinned at `d7fd7db7eb13c912acf0a94b07f5b2baa64149ba`.
+I published source `1e1f8fd19a7a3faccb4db4d773f9f9eeeba7bc0e` from
+[PR #135](https://github.com/The-Minion-oOo/token-monitor-android/pull/135),
+with desktop v0.86.0 pinned at `5a8ddcdac963f0bb2d4b09631f902118048f1d97`.
 All five required jobs passed on that exact main commit:
-[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/41672395527),
-[API 36/37 and optimized API 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/41672395619)
-and [released Hub/Worker contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/41672395525).
+[build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/41904718551),
+[API 36/37 and optimized API 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/41904718604)
+and [released Hub/Worker contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/41904718572).
 
-Checks passed **443 JVM tests**, **130 native tests on each CI API 36/37 emulator**,
-debug/release lint, preview/debug/test and signed R8 builds, 14 tooling tests,
-twelve language labels, documentation and release metadata. Reports have no
-failures or skips. The full local API 36 suite also passed, along with the four
-focused tests on each local API 36/37 emulator. I reviewed the full diff and
-inspected filter/group and Devices/Home hardware captures. The exact final
-signed APK passed the API 26 install/launch/resume check.
+Checks passed **457 JVM tests**, **132 native tests on each CI API 36/37 emulator**,
+debug/release lint, debug/test and signed R8 builds, 14 tooling tests,
+documentation and release metadata. Reports have no failures or skips. The full
+local API 36 suite passed; the corrected parser also passed focused Android
+tests. I reviewed the full diff and corrected IO parsing, XML namespace handling
+and public JSON status redirect compatibility. The exact final signed APK
+passed the API 26 install/launch/resume check.
 
-The APK is `token-monitor-android-v0.85.0-r1.apk`, **3,404,794 bytes**,
-package `io.github.theminionooo.tokenmonitor`, version code **850001**.
-SHA-256: `c3328752f40118561c5d802a6169c0f5361381aef18b0d4623526e4d7d63cd8e`.
+The APK is `token-monitor-android-v0.86.0-r1.apk`, **3,404,787 bytes**,
+package `io.github.theminionooo.tokenmonitor`, version code **860001**.
+SHA-256: `8bcfc560ba10b3b62f79c8089cc038983a6fd5b08a1f91acbea8ea683913cac5`.
 The signing certificate is
 `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c`.
 Draft and anonymous public downloads matched the APK, checksum and update
 manifest; anonymous Latest discovery identified r1.
-[Android v0.85.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.85.0-r1) is Latest.
+[Android v0.86.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.86.0-r1) is Latest.
 
-Released-source cases cover hardware kinds, older updates, generic resets and
-Claude title priority, rename/removal and off/on/revoked consent using only a
-synthetic scoped home. Android checks cover whole mixed-tool groups, unchanged
-totals, search combinations, missing selections and hidden-title search. The
-hidden-group match was reproduced before fixing it. Widget geometry and
-connection ownership are unchanged; no session origin is inferred.
-I haven't phone-tested this release or measured battery use. Earlier phone
-results apply only to their named builds. Follow-ups remain in
+I updated my phone from v0.84.1 without uninstalling and installed the exact
+final APK before publication. Saved pairing and layout survived. I checked fresh
+Tailscale data, reopen/resume, Sessions filtering and all four public service-status
+cards. The installed APK hash matched the release bundle. I used native device
+tools for these quick checks. They did not cover
+home-network handover, offline/HTTPS recovery, widget Live/expiry, natural
+background scheduling or battery use. Follow-ups remain in
 [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94) and
 [#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
 
@@ -63,6 +62,7 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 
 | Release | Date | Desktop baseline | Main checks | Phone check |
 | --- | --- | --- | --- | --- |
+| v0.86.0 r1 | 2026-11-04 | v0.86.0 | Official DeepSeek feed and billing contract; 457 JVM / 132 per API 36/37; optimized API 26 | In-place upgrade, Tailscale, resume, filtering and status |
 | v0.85.0 r1 | 2026-11-03 | v0.85.0 | Session tool filter, hardware hints and title privacy; 443 JVM / 130 per API 36/37; optimized API 26 | Not phone-tested |
 | v0.84.1 r1 | 2026-11-02 | v0.84.1 | Kiro quota recovery and Copilot reset compatibility; 428 JVM / 126 per API 36/37; optimized API 26 | Not phone-tested |
 | v0.84.0 r1 | 2026-11-01 | v0.84.0 | Manus credits, Muse web/CLI products, throughput compatibility; 421 JVM / 124 per API 36/37; optimized API 26 | Not phone-tested; prior r2 phone results apply only to that build |
