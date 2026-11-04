@@ -1,0 +1,92 @@
+[
+  {
+    "name": "outage",
+    "body": "<feed xmlns=\"http://www.w3.org/2005/Atom\"><entry><title>API unavailable</title><updated>2026-11-04T10:00:00Z</updated><summary type=\"html\">&lt;p&gt;&lt;strong&gt;Status:&lt;/strong&gt; monitoring&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Affected components:&lt;/strong&gt; API, Web&lt;/p&gt;</summary></entry><entry><title>Old outage</title><updated>2026-11-03T10:00:00Z</updated><summary type=\"html\">&lt;p&gt;&lt;strong&gt;Status:&lt;/strong&gt; resolved&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Affected components:&lt;/strong&gt; API, Web&lt;/p&gt;</summary></entry></feed>",
+    "health": "outage",
+    "description": "API unavailable",
+    "affectedComponents": 2,
+    "incidentCount": 1,
+    "maintenanceCount": 0
+  },
+  {
+    "name": "resolved",
+    "body": "<feed xmlns=\"http://www.w3.org/2005/Atom\"><entry><title>Old incident</title><updated>2026-11-04T10:00:00Z</updated><summary type=\"html\">&lt;p&gt;&lt;strong&gt;Status:&lt;/strong&gt; resolved&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Affected components:&lt;/strong&gt; API, Web&lt;/p&gt;</summary></entry></feed>",
+    "health": "ok",
+    "description": "All Systems Operational",
+    "affectedComponents": 0,
+    "incidentCount": 0,
+    "maintenanceCount": 0
+  },
+  {
+    "name": "maintenance",
+    "body": "<feed xmlns=\"http://www.w3.org/2005/Atom\"><entry><title>Scheduled maintenance</title><updated>2026-11-04T10:00:00Z</updated><summary type=\"html\">&lt;p&gt;&lt;strong&gt;Status:&lt;/strong&gt; monitoring&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Affected components:&lt;/strong&gt; API, Web&lt;/p&gt;</summary></entry></feed>",
+    "health": "ok",
+    "description": "All Systems Operational",
+    "affectedComponents": 0,
+    "incidentCount": 0,
+    "maintenanceCount": 1
+  },
+  {
+    "name": "degraded",
+    "body": "<feed xmlns=\"http://www.w3.org/2005/Atom\"><entry><title>Slow responses</title><updated>2026-11-04T10:00:00Z</updated><summary type=\"html\">&lt;p&gt;&lt;strong&gt;Status:&lt;/strong&gt; investigating&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Affected components:&lt;/strong&gt; API, Web&lt;/p&gt;</summary></entry><entry><title>Scheduled maintenance</title><updated>2026-11-04T10:00:00Z</updated><summary type=\"html\">&lt;p&gt;&lt;strong&gt;Status:&lt;/strong&gt; monitoring&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Affected components:&lt;/strong&gt; API, Web&lt;/p&gt;</summary></entry></feed>",
+    "health": "degraded",
+    "description": "Slow responses",
+    "affectedComponents": 2,
+    "incidentCount": 1,
+    "maintenanceCount": 1
+  },
+  {
+    "name": "unknown-status",
+    "body": "<feed xmlns=\"http://www.w3.org/2005/Atom\"><entry><title>Incident</title><updated>2026-11-04T10:00:00Z</updated><summary type=\"html\">&lt;p&gt;&lt;strong&gt;Status:&lt;/strong&gt; ???&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Affected components:&lt;/strong&gt; API, Web&lt;/p&gt;</summary></entry></feed>",
+    "health": "degraded",
+    "description": "Incident",
+    "affectedComponents": 2,
+    "incidentCount": 1,
+    "maintenanceCount": 0
+  },
+  {
+    "name": "chinese",
+    "body": "<feed xmlns=\"http://www.w3.org/2005/Atom\"><entry><title>API 部分中断</title><updated>2026-11-04T10:00:00Z</updated><summary type=\"html\">&lt;p&gt;&lt;strong&gt;Status:&lt;/strong&gt; monitoring&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Affected components:&lt;/strong&gt; API, Web&lt;/p&gt;</summary></entry></feed>",
+    "health": "outage",
+    "description": "API 部分中断",
+    "affectedComponents": 2,
+    "incidentCount": 1,
+    "maintenanceCount": 0
+  },
+  {
+    "name": "sorted",
+    "body": "<feed xmlns=\"http://www.w3.org/2005/Atom\"><entry><title>Old</title><updated>2026-11-03T10:00:00Z</updated><summary type=\"html\">&lt;p&gt;&lt;strong&gt;Status:&lt;/strong&gt; investigating&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Affected components:&lt;/strong&gt; API, Web&lt;/p&gt;</summary></entry><entry><title>API &amp; Web</title><updated>2026-11-04T10:00:00Z</updated><summary type=\"html\">&lt;p&gt;&lt;strong&gt;Status:&lt;/strong&gt; monitoring&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Affected components:&lt;/strong&gt; API, Web&lt;/p&gt;</summary></entry></feed>",
+    "health": "degraded",
+    "description": "API & Web",
+    "affectedComponents": 2,
+    "incidentCount": 2,
+    "maintenanceCount": 0
+  },
+  {
+    "name": "empty",
+    "body": "<feed xmlns=\"http://www.w3.org/2005/Atom\"></feed>",
+    "health": "unknown",
+    "description": "Unable to check status",
+    "affectedComponents": 0,
+    "incidentCount": 0,
+    "maintenanceCount": 0
+  },
+  {
+    "name": "invalid",
+    "body": "<html>not a feed</html>",
+    "health": "unknown",
+    "description": "Unable to check status",
+    "affectedComponents": 0,
+    "incidentCount": 0,
+    "maintenanceCount": 0
+  },
+  {
+    "name": "truncated",
+    "body": "<feed xmlns=\"http://www.w3.org/2005/Atom\"><entry><title>Incident</title><updated>2026-11-04T10:00:00Z</updated><summary type=\"html\">&lt;p&gt;&lt;strong&gt;Status:&lt;/strong&gt; resolved&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Affected components:&lt;/strong&gt; API, Web&lt;/p&gt;</summary></entry></f",
+    "health": "unknown",
+    "description": "Unable to check status",
+    "affectedComponents": 0,
+    "incidentCount": 0,
+    "maintenanceCount": 0
+  }
+]

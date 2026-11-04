@@ -120,6 +120,10 @@ Two optional connection features operate only within private address ranges:
 The Status view separately reads public service-health endpoints for Claude,
 OpenAI, Cursor, and DeepSeek. Those requests do not include Hub credentials
 or Token Monitor usage data.
+DeepSeek uses the official Atom incident feed, with a 1 MiB response cap and
+bounded XML depth/entry count. DTD and entity declarations are rejected before
+parsing; the reader cannot load external entities. DeepSeek requests refuse
+redirects. An invalid feed reports Unknown rather than healthy.
 
 Opening App updates checks this app's latest published GitHub release. A
 download starts only after the user taps Download and install. These HTTPS

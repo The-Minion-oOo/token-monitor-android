@@ -1,13 +1,18 @@
-# Desktop parity for v0.85.0
+# Desktop parity for v0.86.0
 
-I compare the Android companion with released desktop source, rather than
-unreleased desktop changes. The baseline is tag `v0.85.0`, commit
-`d7fd7db7eb13c912acf0a94b07f5b2baa64149ba`. Android remains a read-only
-dashboard: the desktop collects usage, signs in to providers and hosts the Hub.
+I compare Android with desktop tag `v0.86.0`, peeled commit
+`5a8ddcdac963f0bb2d4b09631f902118048f1d97`. Android remains a read-only
+dashboard; the desktop collects usage, signs in to providers and hosts the Hub.
 
-The latest published APK is **v0.85.0 r1**, with a local Sessions tool filter,
-reported hardware icons and restored-title consent checks. Desktop icon overrides and session
-origin badges are not synchronized preferences or new session fields.
+The **v0.86.0 r1 candidate** switches DeepSeek status to its official incident
+feed. Active and unknown-status incidents remain visible; invalid, empty or
+truncated responses show Unknown. Released-source checks cover Command Code
+billing durations without assuming every month has the same length.
+
+Quota history is local to desktop and is not uploaded to the Hub. Android does
+not recreate that history, launch Claude CLI probes, or copy desktop window and
+proxy settings. The Sessions tool filter, hardware hints and title privacy from
+v0.85.0 remain available.
 
 I also checked restored Kiro readings and Copilot reset details against the
 released collectors, Node Hub and Worker. Android continues to omit absent reset lines.

@@ -17,6 +17,8 @@ import { checkV083Limits } from "./check-v083-limits.mjs";
 import { checkV084Limits } from "./check-v084-limits.mjs";
 import { checkV0841Limits } from "./check-v0841-limits.mjs";
 import { checkV085Data } from "./check-v085-data.mjs";
+import { checkV086Limits } from "./check-v086-limits.mjs";
+import { checkV086Status } from "./check-v086-status.mjs";
 
 const script = fileURLToPath(import.meta.url);
 const root = resolve(dirname(script), "..");
@@ -645,8 +647,10 @@ async function isolatedContract(source, output, upstream) {
         const v084 = await checkV084Limits(require, { createHub, source, secret, device, now });
         const v0841 = await checkV0841Limits(require, { createHub, source, secret, device, now });
         const v085 = await checkV085Data(require, { createHub, source, secret, device, now });
-        Object.assign(limitChecks.cases, v081.cases, v082.cases, v083.cases, v084.cases, v0841.cases, v085.cases);
-        Object.assign(responses, limitChecks.responses, v081.responses, v082.responses, v083.responses, v084.responses, v0841.responses, v085.responses);
+        const v086 = await checkV086Limits(require, { createHub, source, secret, device, now });
+        responses["deepseek-status.json"] = checkV086Status(require);
+        Object.assign(limitChecks.cases, v081.cases, v082.cases, v083.cases, v084.cases, v0841.cases, v085.cases, v086.cases);
+        Object.assign(responses, limitChecks.responses, v081.responses, v082.responses, v083.responses, v084.responses, v0841.responses, v085.responses, v086.responses);
         await checkV081Streams(require, source, output, upstream);
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) await writeFile(join(output, name), `${JSON.stringify(value, null, 2)}\n`);
@@ -675,7 +679,7 @@ if (workerSource) {
     const directory = await mkdtemp(join(tmpdir(), "token-monitor-hub-contract-"));
     try {
         // Export committed Hub/shared files only; never use the working tree, collectors, data, or .env.
-        const archive = execFileSync("git", ["-C", repository, "archive", "--format=tar", approved, "package.json", "src/hub", "src/shared", "worker/package.json", "worker/src"], { maxBuffer: 32 * 1024 * 1024 });
+        const archive = execFileSync("git", ["-C", repository, "archive", "--format=tar", approved, "package.json", "src/hub", "src/shared", "src/electron/serviceStatus.js", "worker/package.json", "worker/src"], { maxBuffer: 32 * 1024 * 1024 });
         execFileSync("tar", ["-xf", "-", "-C", directory], { input: archive });
         await writeFile(join(directory, "contract-upstream.json"), JSON.stringify(upstream));
         const env = Object.fromEntries(["PATH", "Path", "SystemRoot", "SYSTEMROOT", "WINDIR", "TEMP", "TMP"]

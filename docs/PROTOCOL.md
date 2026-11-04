@@ -12,7 +12,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.80.0**, released 2026-10-26.
+The verified baseline is upstream Token Monitor **v0.86.0**, released 2026-11-04.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -52,7 +52,7 @@ write, or device deletion endpoints.
 
 ## Cloudflare Worker
 
-I also exercise `worker/src/index.js` from the same pinned v0.78.0 commit locally.
+I also exercise `worker/src/index.js` from the same pinned v0.86.0 commit locally.
 Its five read routes use the same Bearer authentication and unauthenticated Hub
 identity check. Stream-v2 negotiates the same `snapshot`, complete `stats` and
 compact `freshness` envelopes. Ingest changes may produce freshness-only events;
@@ -519,3 +519,19 @@ currency and meter choice while retaining the full wire snapshot in its cache.
 Zero total has no inferred percentage, overdrawn credits
 remain exhausted, and the collector does not invent a reset date. Cookie exchange
 and desktop proxy settings do not add phone credentials, requests or permissions.
+
+## Desktop v0.86.0
+
+The read endpoints and v4 stream shape are unchanged. Released-source fixtures
+check Command Code billing windows with actual 28–31-day durations and missing,
+invalid or reversed period starts. Android preserves the reported balance,
+currency, reset and meter; it does not use the optional duration to invent quota
+history. Desktop quota-history observations remain local and are not sent to
+either Hub.
+
+DeepSeek service status is separate from the Hub. Android reads the official
+`https://status.deepseek.com/feed.atom` feed instead of the retired mirror.
+Synthetic feed cases are compared with the exact released desktop summarizer.
+Responses remain capped at 1 MiB, DeepSeek redirects are refused, and XML declarations
+that could load external entities are rejected. Empty, truncated or invalid
+feeds show Unknown; unknown incident statuses remain active.
