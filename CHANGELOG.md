@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## v0.86.0 r1 (candidate)
+## v0.86.0 r1 — 2026-11-04
 
 - Updated desktop compatibility to v0.86.0.
 - Switched DeepSeek status to the official incident feed; invalid feeds show Unknown rather than healthy.
