@@ -113,8 +113,15 @@ Run `node tools/check-locales.mjs` after changing resources. It checks all twelv
 packs for complete keys, matching format placeholders and unresolved markers.
 Keep proper names and sample-only resources marked non-translatable. Do not use
 translated labels as saved keys. The language interaction test captures the
-production Home screen and all four Pages widget renders for every language,
-using synthetic showcase data. Review narrow layouts and platform font fallback;
+production Home screen, Large responsive widget and all four Pages widget renders
+for every language, using synthetic showcase data. It also writes
+`files/locale-widget-labels.tsv` in the test app's private storage with resource,
+reference-TextView and rendered-widget code points. The responsive Limits label
+must match an independent TextView using the same style. The reference must
+preserve the resource exactly or append a single non-breaking space, as observed
+with Indic text on some devices; other changes still fail. Do not broadly trim
+or normalize the label to make an assertion pass.
+Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
 The interaction suite now contains **132 tests** per emulator. The report checker
