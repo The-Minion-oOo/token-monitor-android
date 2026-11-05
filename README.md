@@ -233,10 +233,12 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 I checked the released Node Hub and Worker, automated tests and emulators. I
 updated my phone in place and checked saved pairing, fresh Tailscale data,
-resume, Sessions filtering and all four service-status cards. Battery use and
-natural background scheduling remain separate checks.
-[Validation](docs/VALIDATION.md) records the scope and follow-up in
-[#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94) and
+resume, Sessions filtering and all four service-status cards. I also completed
+the broader phone feature/widget follow-up in
+[#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94).
+[Validation](docs/VALIDATION.md) records the build-specific scope and limits of
+the short battery observations. The intermittent unplugged startup/failover
+investigation remains open in
 [#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
 
 Android-only updates increment the release revision while keeping the verified

@@ -36,8 +36,16 @@ Tailscale data, reopen/resume, Sessions filtering and all four public service-st
 cards. The installed APK hash matched the release bundle. I used native device
 tools for these quick checks. They did not cover
 home-network handover, offline/HTTPS recovery, widget Live/expiry, natural
-background scheduling or battery use. Follow-ups remain in
-[#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94) and
+background scheduling or battery use.
+
+After publication, I completed the broader feature/widget follow-up in
+[#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94): language
+checks, natural periodic refresh, available reset-credit details, HTTPS checks
+with a release-source preview, and equal unplugged live-rate windows. The
+short whole-phone charge-counter comparison does not establish feature overhead
+or battery savings. Real payment/renewal records were unavailable, and automatic
+one-hour Live expiry was not timed. The remaining unplugged idle/Tailscale
+failover investigation stays open in
 [#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
 
 ## Release checks and limits

@@ -31,11 +31,13 @@ record cannot be prepared as another draft.
 
 ## Release checks
 
-For v0.79.0 r2, the physical-phone follow-up is tracked in
+The v0.79.0 r2 feature follow-up is completed in
 [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94).
-It is nonblocking once the automated and emulator gates pass. The release notes
-must still state that r2 was not phone-tested; earlier phone evidence does not
-validate the new language, payment or currency behaviour.
+The later checks name the builds and scenarios tested. The original r2 release
+notes must still state that it was not phone-tested at publication; later phone
+evidence does not retroactively validate that APK. The separate unplugged
+idle/startup investigation remains open in
+[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
 
 Before publishing:
 
