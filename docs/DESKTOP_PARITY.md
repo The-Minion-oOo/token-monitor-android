@@ -92,7 +92,10 @@ equivalent. The phone uses native screens and launcher widgets.
 Versioned fixtures and the pinned Node/Worker Hub contract cover the external
 protocol. Emulator checks cover UI behaviour and local settings. Physical-phone
 results apply only to the build named in [Validation](VALIDATION.md).
-The broader v0.79.0 r2 feature follow-up remains [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94).
+The broader feature follow-up is completed in
+[#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94).
+The intermittent unplugged idle/startup investigation remains open in
+[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
 
 See [Architecture](ARCHITECTURE.md), [Protocol](PROTOCOL.md),
 [Languages](LANGUAGES.md) and [Upstream sync](UPSTREAM_SYNC.md).
