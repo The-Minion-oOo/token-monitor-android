@@ -94,8 +94,10 @@ protocol. Emulator checks cover UI behaviour and local settings. Physical-phone
 results apply only to the build named in [Validation](VALIDATION.md).
 The broader feature follow-up is completed in
 [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94).
-The intermittent unplugged idle/startup investigation remains open in
-[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
+I closed the startup complaint in
+[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115)
+after normal phone use no longer showed lag. The original transient stall's
+underlying cause remains unconfirmed.
 
 See [Architecture](ARCHITECTURE.md), [Protocol](PROTOCOL.md),
 [Languages](LANGUAGES.md) and [Upstream sync](UPSTREAM_SYNC.md).

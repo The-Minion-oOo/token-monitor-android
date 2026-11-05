@@ -35,9 +35,10 @@ The v0.79.0 r2 feature follow-up is completed in
 [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94).
 The later checks name the builds and scenarios tested. The original r2 release
 notes must still state that it was not phone-tested at publication; later phone
-evidence does not retroactively validate that APK. The separate unplugged
-idle/startup investigation remains open in
-[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
+evidence does not retroactively validate that APK. I closed the separate startup
+complaint in [#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115)
+after normal phone use no longer showed lag. Its original transient tunnel
+condition remains unconfirmed; reopen the investigation if the symptom returns.
 
 Before publishing:
 
