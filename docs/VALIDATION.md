@@ -44,9 +44,11 @@ checks, natural periodic refresh, available reset-credit details, HTTPS checks
 with a release-source preview, and equal unplugged live-rate windows. The
 short whole-phone charge-counter comparison does not establish feature overhead
 or battery savings. Real payment/renewal records were unavailable, and automatic
-one-hour Live expiry was not timed. The remaining unplugged idle/Tailscale
-failover investigation stays open in
-[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
+one-hour Live expiry was not timed on my phone. Later Wi-Fi and mobile idle
+checks refreshed normally, and I closed
+[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115)
+after normal use no longer showed the startup lag. The original transient
+stall and its underlying tunnel condition were not reproduced.
 
 ## Release checks and limits
 

@@ -359,7 +359,7 @@ All 24 measured openings published fresh data and opened the stream without
 request failures. These are initial-fetch timings from a small sample, before
 decoding and display; mobile-data and battery comparisons remain unmeasured.
 The original intermittent multi-second wait did not recur in that connected
-comparison. A later unplugged test captured it (below); it remains open in
+comparison. A later unplugged test captured it (below), recorded in
 [#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
 The exact public APK was restored without clearing data, the helper was removed,
 and debugging was turned off. Wi-Fi and Tailscale were left as selected.
@@ -422,8 +422,10 @@ not an exact five-minute comparison with the Wi-Fi sample.
 These are individual state-publication timings, not display-frame or battery
 measurements. Neither reproduced the original stalled health connection, so
 they do not prove the shorter timeout's fallback recovery or explain the tunnel
-condition. That investigation remains open in
-[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
+condition. I subsequently closed the complaint in
+[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115)
+after normal phone use no longer showed the lag. The underlying cause remains
+unconfirmed; the investigation can reopen if the symptom returns.
 The exact public APK was restored with pairing retained, Wi-Fi restored, the
 test helper removed and debugging turned off. No release was published.
 
@@ -507,7 +509,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 132 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 134 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.

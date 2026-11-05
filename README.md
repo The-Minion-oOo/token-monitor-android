@@ -237,9 +237,10 @@ resume, Sessions filtering and all four service-status cards. I also completed
 the broader phone feature/widget follow-up in
 [#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94).
 [Validation](docs/VALIDATION.md) records the build-specific scope and limits of
-the short battery observations. The intermittent unplugged startup/failover
-investigation remains open in
-[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
+the short battery observations. I closed
+[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115)
+after normal phone use no longer showed the startup lag. The original transient
+stall's underlying cause remains unconfirmed.
 
 Android-only updates increment the release revision while keeping the verified
 desktop version. [Upstream pin](upstream.json) · [Release notes](CHANGELOG.md)
