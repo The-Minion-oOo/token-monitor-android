@@ -2,7 +2,10 @@ package io.github.theminionooo.tokenmonitor
 
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.os.LocaleList
+import android.view.View
+import android.widget.TextView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -113,6 +116,9 @@ class DesktopParityInteractionTest {
     @Test fun everyLanguageRendersDashboardAndKeepsStableViewKeys() {
         fun asset(name: String) = instrumentation.context.assets.open("showcase/$name.json").bufferedReader().use { it.readText() }
         val snapshot = HubProtocolParser.decodeSnapshot(asset("health"), asset("stats"), asset("devices"), asset("history"), asset("subscriptions"), 1, false)
+        val labelReport = java.io.File(context.filesDir, "locale-widget-labels.tsv").apply {
+            writeText("language\tresource\treference\twidget\n")
+        }
         var tag by mutableStateOf("en")
         content { key(tag) { Column {
             Text(displayLabel("Home"), color = Ink)
@@ -129,7 +135,28 @@ class DesktopParityInteractionTest {
                 val responsive = io.github.theminionooo.tokenmonitor.widget.UsageWidgetProvider.render(localized, snapshot,
                     InterfaceTheme.Default, io.github.theminionooo.tokenmonitor.widget.WidgetLayout.Large)
                     .apply(context, android.widget.FrameLayout(context))
-                assertEquals(localized.getString(R.string.widget_limits), responsive.findViewById<android.widget.TextView>(R.id.widget_limits_title).text.toString())
+                val title = responsive.findViewById<TextView>(R.id.widget_limits_title)
+                val label = localized.getString(R.string.widget_limits)
+                // Device TextViews can append one NBSP to Indic text. Compare with an
+                // independent styled TextView; do not trim away meaningful characters.
+                val reference = TextView(title.context, null, 0, R.style.WidgetSection).apply { text = label }.text.toString()
+                val actual = title.text.toString()
+                fun codePoints(text: String) = text.codePoints().toArray().joinToString(" ") { "U+%04X".format(it) }
+                labelReport.appendText("$language\t${codePoints(label)}\t${codePoints(reference)}\t${codePoints(actual)}\n")
+                assertTrue("Unexpected platform label transformation for $language", reference == label || reference == "$label\u00A0")
+                assertEquals("Localized widget label for $language", reference, actual)
+
+                val density = context.resources.displayMetrics.density
+                val layout = io.github.theminionooo.tokenmonitor.widget.WidgetLayout.Large
+                val width = (layout.width * density).toInt()
+                val height = (layout.height * density).toInt()
+                responsive.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY))
+                responsive.layout(0, 0, width, height)
+                val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                responsive.draw(Canvas(bitmap))
+                context.openFileOutput("locale-responsive-$language.png", 0).use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+                bitmap.recycle()
             }
             context.openFileOutput("locale-$language.png", 0).use {
                 compose.onRoot().captureToImage().asAndroidBitmap().compress(Bitmap.CompressFormat.PNG, 100, it)
