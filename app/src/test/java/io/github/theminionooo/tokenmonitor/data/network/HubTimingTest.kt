@@ -12,6 +12,52 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class HubTimingTest {
+    @Test fun `health decision records only fixed facts and the budget actually selected`() {
+        val samples = mutableListOf<HubTimingSample>()
+        val recorder = HubTimingRecorder(true, sink = samples::add)
+        val tailscale = "http://100.64.0.1:17321"
+        val home = "http://192.168.1.2:17321"
+        val routes = listOf(tailscale, home)
+        val wifi = PhoneNetworks(true, true)
+        recorder.healthBudget(3, 0, tailscale, routes, wifi, true, HubHealthConnectBudget.FastHomeFallback)
+        recorder.healthBudget(3, 1, tailscale, routes, wifi, false, HubHealthConnectBudget.Normal)
+        recorder.healthBudget(4, 0, tailscale, routes, PhoneNetworks(false, true), true, HubHealthConnectBudget.Normal)
+        recorder.healthBudget(5, 0, "https://hub.example.com", listOf("https://hub.example.com"), wifi, true,
+            HubHealthConnectBudget.Normal)
+        recorder.healthBudget(6, 0, tailscale, listOf(home, tailscale), wifi, true, HubHealthConnectBudget.Normal)
+        assertEquals(HubTimingBudget(2000, true, true, true, true, true, true), samples.first().budget)
+        assertEquals(listOf(2000, 10000, 10000, 10000, 10000), samples.map { it.budget?.connectMs })
+        assertFalse(samples[1].budget!!.firstDashboardAttempt)
+        assertFalse(samples[2].budget!!.lan)
+        assertFalse(samples[3].budget!!.plainHttp)
+        assertFalse(samples[3].budget!!.homeRemains)
+        assertFalse(samples[4].budget!!.firstCandidate)
+        assertEquals(3, samples[1].run)
+        assertEquals(1, samples[1].attempt)
+        assertTrue(samples.all { it.stage == HubTimingStage.HEALTH_BUDGET && it.endpoint == HubTimingEndpoint.HEALTH })
+        val text = samples.joinToString { it.line() }
+        assertTrue(text.contains("connect_ms=2000 first_dashboard=true lan=true tailscale_vpn=true"))
+        assertFalse(text.contains("100.64.0.1"))
+        assertFalse(text.contains("192.168.1.2"))
+        assertFalse(text.contains("hub.example.com"))
+    }
+
+    @Test fun `disabled and exhausted budget markers never inspect route lists or read clocks`() {
+        val routes = object : AbstractList<String>() {
+            override val size: Int get() = error("No route reads")
+            override fun get(index: Int): String = error("No route reads")
+        }
+        val disabled = HubTimingRecorder(false, clock = { error("No clock") }, sink = { error("No sink") })
+        disabled.healthBudget(1, 0, "private", routes, PhoneNetworks(true, true), true, HubHealthConnectBudget.Normal)
+        val samples = mutableListOf<HubTimingSample>()
+        val bounded = HubTimingRecorder(true, sink = samples::add, maxEvents = 1)
+        bounded.mark(HubTimingStage.ACTIVITY_RESUME)
+        bounded.healthBudget(1, 0, "private", routes, PhoneNetworks(true, true), true, HubHealthConnectBudget.Normal)
+        assertEquals(1, samples.size)
+        HubTimingRecorder(true, sink = { error("No sink") }).healthBudget(1, 0, "http://100.64.0.1",
+            emptyList(), PhoneNetworks(false, true), true, HubHealthConnectBudget.Normal)
+    }
+
     @Test fun `disabled diagnostics do not read clocks or invoke the sink`() {
         val recorder = HubTimingRecorder(false, clock = { error("Clock must not be read") }, sink = { error("No events") })
         assertEquals(42, recorder.measure(HubTimingStage.REQUEST) { 42 })

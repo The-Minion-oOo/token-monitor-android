@@ -475,6 +475,7 @@ internal class HubRepository(
                                     timing.mark(HubTimingStage.ROUTE_SELECTED, run, route = { HubTimingRoute.fromUrl(it) }, attempt = attempt)
                                     val budget = HubStartupTimeouts.healthBudget(it, routes.urls, routes.networks,
                                         firstDashboardAttempt = firstDashboardAttempt)
+                                    timing.healthBudget(run, attempt, it, routes.urls, routes.networks, firstDashboardAttempt, budget)
                                     api.loadSnapshot(saved.copy(baseUrl = it), budget)
                                 }
                             }

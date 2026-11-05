@@ -289,8 +289,16 @@ physical display.
 Nested request/snapshot timings include the diagnostic logging overhead.
 
 The same option also records Activity create/resume/pause, dashboard ownership,
-work start/stop/end, selected route kind, Android network-change callbacks,
-failed attempts and retry waits. `run` is a process-local connection-run counter,
+and `health_budget` decisions with the selected connection milliseconds,
+first-dashboard-attempt flag, physical LAN and Tailscale VPN presence, first
+candidate flag, plain-HTTP flag and remaining eligible Home candidate flag.
+These reuse the facts captured for route selection; they add no network probe.
+The selected budget is logged before the health request and grouped by `run`
+and `attempt`. A remaining Home candidate alone does not enable the shorter
+budget: all of the policy's other conditions must also hold.
+
+Lifecycle timings include work start/stop/end, selected route kind, Android
+network-change callbacks, failed attempts and retry waits. `run` is a process-local connection-run counter,
 shared by its request, snapshot, decode, publication and stream-open entries;
 Activity and cache entries can use zero. Route kinds are fixed labels such as
 `tailscale`, `home` and `internet_https`, never an address. Reasons are fixed
@@ -325,6 +333,14 @@ does not establish real Tailscale handover behavior. The phone follow-up uses
 manual reopens after screen-locked idle, stable Wi-Fi and mobile data as separate
 conditions, and network switching as its own case. Retain the first reopening
 after idle. Pairing, security checks, update frequency and animations stay intact.
+
+Further cases repeat network changes while snapshot reads are delayed, release
+the last dashboard owner, and verify that only a final reopened run publishes.
+A stream closed immediately after its headers must reconnect in the same run
+without treating the retry as its first dashboard attempt. These cases assert
+the new budget markers through the real repository; the local fixture is a Home
+route and does not simulate a genuine Tailscale VPN. `HubStartupTimeoutsTest`
+separately checks the eligibility matrix, including mobile-only and HTTPS.
 
 #### Phone comparison, 2026-10-30
 
@@ -383,6 +399,33 @@ neither run needed Home fallback. These samples check normal operation and do
 not verify recovery from the original stalled connection. Mobile-only idle and
 battery savings remain unmeasured. I restored the public APK without clearing
 pairing, removed helpers and turned debugging off after the comparison.
+
+#### Idle diagnostic checks, 2026-11-05
+
+I checked an updated, signed v0.86.0 diagnostic on my phone after the JVM,
+lint/build and API 36/37 startup/failover checks passed. The diagnostic adds
+connection-budget context without changing routing, timeouts or update frequency.
+
+| Idle condition | Resume to fresh state publication | Selected health TCP budget |
+| --- | ---: | ---: |
+| Home Wi-Fi + Tailscale, screen off/unplugged over five minutes | 216 ms | 2 seconds |
+| Mobile data + Tailscale, final uninterrupted screen-off span about 7 minutes 49 seconds | 534 ms | 10 seconds |
+
+Both successful openings used Tailscale, with no retry or Home fallback, and I
+noticed no delay. Wi-Fi was disabled before and after the mobile sample; the
+Wi-Fi controller history had no intervening toggle, and the request's captured
+physical-LAN flag was false. The mobile window included an earlier brief screen
+wake with two immediately cancelled runs; those did not publish and are retained
+separately from the later sustained reopening. This was a longer idle window,
+not an exact five-minute comparison with the Wi-Fi sample.
+
+These are individual state-publication timings, not display-frame or battery
+measurements. Neither reproduced the original stalled health connection, so
+they do not prove the shorter timeout's fallback recovery or explain the tunnel
+condition. That investigation remains open in
+[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115).
+The exact public APK was restored with pairing retained, Wi-Fi restored, the
+test helper removed and debugging turned off. No release was published.
 
 ### Synthetic performance baseline
 
