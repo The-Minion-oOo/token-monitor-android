@@ -169,6 +169,53 @@ class HubStartupTimingTest {
         writeSamples("network-restart", samples)
     }
 
+    @Test fun repeatedNetworkAndOwnerChangesCannotPublishObsoleteReads() = withHub(statsDelayMs = 900) { server, hub, samples ->
+        val owner = Any()
+        instrumentation.runOnMainSync { hub.setDashboardVisible(owner, true) }
+        repeat(3) { transition ->
+            await { server.started.count { it == "/api/stats" } >= transition + 1 }
+            instrumentation.runOnMainSync {
+                hub.networkChanged(if (transition % 2 == 0) HubNetworkChange.LOST else HubNetworkChange.AVAILABLE)
+            }
+        }
+        await { server.started.count { it == "/api/stats" } >= 4 }
+        instrumentation.runOnMainSync { hub.setDashboardVisible(owner, false) }
+        // The last owner leaving must stop work, including a delayed obsolete response.
+        Thread.sleep(1100)
+        assertNull(hub.state.value.snapshot)
+        assertFalse(samples.any { it.stage == HubTimingStage.PUBLISH })
+        val stoppedCount = server.started.size
+        Thread.sleep(200)
+        assertEquals(stoppedCount, server.started.size)
+        instrumentation.runOnMainSync { hub.setDashboardVisible(owner, true) }
+        await { hub.state.value.streamActive }
+        val runs = samples.filter { it.stage == HubTimingStage.WORK_START }.map { it.run }
+        assertEquals(5, runs.size)
+        assertEquals(runs.last(), samples.single { it.stage == HubTimingStage.PUBLISH }.run)
+        await { samples.count { it.stage == HubTimingStage.WORK_END && it.outcome == HubTimingOutcome.CANCELLED } == 4 }
+        val budgets = samples.filter { it.stage == HubTimingStage.HEALTH_BUDGET }
+        assertEquals(runs.toSet(), budgets.map { it.run }.toSet())
+        assertTrue(budgets.all { it.budget!!.firstDashboardAttempt && it.budget.connectMs == 10000 })
+        assertNoPrivateData(samples, server)
+        writeSamples("repeated-network-owner-restart", samples)
+    }
+
+    @Test fun closedStreamRetriesInTheSameRunWithoutReusingTheFirstAttemptBudget() = withHub(faults = Faults(streamCloses = 1)) { server, hub, samples ->
+        instrumentation.runOnMainSync { hub.setDashboardVisible(Any(), true) }
+        await { server.started.count { it == "/api/stats/stream" } == 2 && hub.state.value.streamActive }
+        val budgets = samples.filter { it.stage == HubTimingStage.HEALTH_BUDGET }
+        assertEquals(listOf(true, false), budgets.map { it.budget!!.firstDashboardAttempt })
+        assertEquals(listOf(0, 1), budgets.map { it.attempt })
+        assertTrue(budgets.all { it.budget!!.connectMs == 10000 })
+        assertEquals(1, samples.count { it.stage == HubTimingStage.WORK_START })
+        assertEquals(2, samples.count { it.stage == HubTimingStage.PUBLISH })
+        assertEquals(1234L, hub.state.value.snapshot?.today?.totalTokens)
+        assertTrue(samples.any { it.stage == HubTimingStage.RETRY_WAIT && it.outcome == HubTimingOutcome.OK })
+        assertTrue(server.healthWasAnonymous)
+        assertNoPrivateData(samples, server)
+        writeSamples("closed-stream-recovery", samples)
+    }
+
     private fun withHub(historyDelayMs: Long = 0, statsDelayMs: Long = 0, healthStatus: Int = 200,
                         latencyMs: Long = 0, rejectDevices: Boolean = false,
                         faults: Faults = Faults(),
@@ -212,7 +259,8 @@ class HubStartupTimingTest {
         assertTrue("Fixture did not reach its expected state", condition())
     }
 
-    private data class Faults(val healthHeaderDelayMs: Long = 0, val statsBodyDelayMs: Long = 0, val healthFailures: Int = 0)
+    private data class Faults(val healthHeaderDelayMs: Long = 0, val statsBodyDelayMs: Long = 0, val healthFailures: Int = 0,
+                              val streamCloses: Int = 0)
 
     private class FixtureHub(private val historyDelayMs: Long, private val statsDelayMs: Long, private val healthStatus: Int,
                              private val latencyMs: Long, private val rejectDevices: Boolean, private val faults: Faults) : AutoCloseable {
@@ -224,6 +272,7 @@ class HubStartupTimingTest {
         private val activeWork = AtomicInteger()
         val peakWork = AtomicInteger()
         private val healthReads = AtomicInteger()
+        private val streams = AtomicInteger()
         private val sockets = ConcurrentHashMap.newKeySet<Socket>()
         private val acceptor = thread(isDaemon = true) {
             while (!server.isClosed) {
@@ -252,6 +301,7 @@ class HubStartupTimingTest {
             if (path == "/api/stats/stream") {
                 output.write("HTTP/1.1 200 OK\r\nContent-Type: text/event-stream\r\n\r\n".toByteArray())
                 output.flush()
+                if (streams.getAndIncrement() < faults.streamCloses) return
                 while (!server.isClosed) { output.write(": heartbeat\n\n".toByteArray()); output.flush(); Thread.sleep(200) }
                 return
             }
