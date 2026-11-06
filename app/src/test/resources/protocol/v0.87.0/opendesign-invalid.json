@@ -1,0 +1,27 @@
+{
+  "limits": {
+    "updatedAt": "2026-11-06T14:40:07.311Z",
+    "providers": [
+      {
+        "provider": "opendesign",
+        "accountKey": "sha256:11073c1084d06fcdff74d692cbeaa9258c78726d7aa8df2931be00ce91c5cbb8",
+        "accountLabel": "",
+        "planLabel": "",
+        "accountName": "Synthetic workspace",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "unavailable",
+        "source": "web",
+        "sourceDetail": "",
+        "updatedAt": "2026-11-06T14:40:06.601Z",
+        "windows": [],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "opendesign-invalid",
+        "stale": false
+      }
+    ]
+  }
+}

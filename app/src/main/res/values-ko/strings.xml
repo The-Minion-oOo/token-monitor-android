@@ -315,7 +315,7 @@
     <string name="ui_running_73989">실행 중</string>
     <string name="ui_waiting_for_you_e235e">응답 대기 중</string>
     <string name="ui_finished_355bc">완료됨</string>
-    <string name="ui_checking_claude_openai_cursor_and_deepseek_c4aea">Claude, OpenAI, Cursor 및 DeepSeek 확인 중...</string>
+    <string name="ui_checking_service_status">서비스 상태 확인 중…</string>
     <string name="ui_service_status_is_unavailable_right_now_06e2d">현재 서비스를 이용할 수 없는 상태입니다.</string>
     <string name="ui_operational_8459f">정상</string>
     <string name="ui_degraded_13c27">성능 저하</string>

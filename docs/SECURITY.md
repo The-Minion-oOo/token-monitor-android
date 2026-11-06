@@ -117,9 +117,9 @@ Two optional connection features operate only within private address ranges:
   unauthenticated `/api/health` endpoint. It runs only when tapped, never sends
   the secret, and stops as soon as one Hub answers.
 
-The Status view separately reads public service-health endpoints for Claude,
-OpenAI, Cursor, and DeepSeek. Those requests do not include Hub credentials
-or Token Monitor usage data.
+The Status view reads public service-health feeds while it is visible, with
+up to four requests in flight. The requests carry neither Hub credentials
+nor Token Monitor usage data.
 DeepSeek uses the official Atom incident feed, with a 1 MiB response cap and
 bounded XML depth/entry count. DTD and entity declarations are rejected before
 parsing; the reader cannot load external entities. DeepSeek requests refuse

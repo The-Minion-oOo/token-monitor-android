@@ -2,17 +2,17 @@
 
 ## Version rule
 
-Android v0.86.0 r1 targets desktop tag `v0.86.0`, peeled commit
-`5a8ddcdac963f0bb2d4b09631f902118048f1d97`, in Gradle and `upstream.json`.
-I checked the released DeepSeek feed summarizer with synthetic incidents and
-Command Code billing durations through the released Node Hub and Worker.
-Quota history stays local to desktop because it is not exported by the Hub.
-Android keeps its existing connection ownership and widget geometry.
+The v0.87.0 r1 candidate targets desktop tag `v0.87.0`, peeled commit
+`b3dd5e25bd9ab89620eb6380c863e335d8b8751e`, in Gradle and `upstream.json`.
+I compared the expanded Status catalog and summaries with the released desktop
+code. The contract exercises OpenDesign limits and reads after desktop delta
+uploads on both the Node Hub and Worker.
 Earlier Kiro/Copilot and Manus/Muse checks and startup safeguards are retained.
 I checked Claude plan labels, weekly-only quotas and Trae credit summaries against
 the released Node and Worker Hubs. Proxy settings and browser credentials stay
-on desktop. The r2 revision adds the initial Home fallback timeout; the intermittent
-tunnel condition remains under investigation in #115.
+on desktop. The v0.83.0 r2 revision adds the initial Home fallback timeout. I closed
+[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115) after
+normal phone use no longer showed the startup lag.
 Earlier checks cover archive reconciliation, observed model components and the removal of
 Codex cache-expiry estimates against the released source. Android reads the
 reported breakdown maps and keeps unknown evidence unclassified.

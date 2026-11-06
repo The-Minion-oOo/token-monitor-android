@@ -509,7 +509,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 134 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 135 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.
@@ -650,3 +650,12 @@ exercise Command Code billing periods with synthetic HTTP responses through Node
 and Worker. Versioned fixtures retain reported balances and resets alongside
 optional cycle durations. JVM and native tests exercise the bounded Android XML
 reader, unknown statuses, malformed feeds and external-entity rejection.
+
+### Desktop v0.87.0 checks
+
+The pinned-source harness runs the OpenDesign collector with synthetic workspace
+and quota responses. The resulting windows go through Node and Worker before
+Android parses them. The upload check applies a desktop delta with an explicit
+zero and a history correction, rejects a stale revision and checks the subsequent
+reads. Status cases use the released catalog and summarizers for OpenCode, Zed
+and Copilot, including malformed responses and unrelated GitHub incidents.

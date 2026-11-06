@@ -12,7 +12,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.86.0**, released 2026-11-04.
+The verified baseline is upstream Token Monitor **v0.87.0**, released 2026-11-06 UTC.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -44,7 +44,7 @@ never prints it.
 | `GET /api/devices` | Bearer secret | Device periods, platform metadata, tracked tools, cadence, and retained per-device history. |
 | `GET /api/history` | Bearer secret | Daily/monthly totals and per-tool/per-model trend attribution. |
 | `GET /api/subscriptions` | Bearer secret | Subscription dashboard. |
-| `GET /api/stats/stream` | Bearer secret | SSE `snapshot`, `stats`, and v2 `freshness` frames while a dashboard is visible. |
+| `GET /api/stats/stream` | Bearer secret | SSE snapshots, complete updates, freshness and v4 deltas during active Live use. |
 
 The Hub also accepts `X-Token-Monitor-Secret`; this app intentionally uses one
 authentication style only. It does not call the Hub's ingest, subscription
@@ -52,7 +52,7 @@ write, or device deletion endpoints.
 
 ## Cloudflare Worker
 
-I also exercise `worker/src/index.js` from the same pinned v0.86.0 commit locally.
+I also exercise `worker/src/index.js` from the same pinned v0.87.0 commit locally.
 Its five read routes use the same Bearer authentication and unauthenticated Hub
 identity check. Stream-v2 negotiates the same `snapshot`, complete `stats` and
 compact `freshness` envelopes. Ingest changes may produce freshness-only events;
@@ -535,3 +535,20 @@ Synthetic feed cases are compared with the exact released desktop summarizer.
 Responses remain capped at 1 MiB, DeepSeek redirects are refused, and XML declarations
 that could load external entities are rejected. Empty, truncated or invalid
 feeds show Unknown; unknown incident statuses remain active.
+
+## Desktop v0.87.0
+
+OpenDesign sends workspace-scoped allowances as session and weekly quota windows.
+Android displays the reported plan, remaining percentages and reset times. A
+missing window or reset remains absent. The desktop keeps the sign-in cookie
+and sends the normalized quota readings to the Hub.
+
+The desktop can negotiate upload revisions and write a delta to
+`/api/ingest/delta`. I tested the resulting Android reads on Node and Worker
+with zero totals, a corrected past day and a rejected stale revision. Android
+uses the existing GET endpoints and v4 stream.
+
+The Status screen checks 12 public service entries. OpenCode uses its JSON
+feed and Zed uses Instatus. Copilot health, incidents and maintenance are
+scoped to the Copilot and Copilot AI Model Providers components on GitHub's
+status page.

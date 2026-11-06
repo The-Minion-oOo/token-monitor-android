@@ -1,0 +1,426 @@
+{
+  "providers": [
+    {
+      "id": "claude",
+      "label": "Claude",
+      "pageUrl": "https://status.claude.com",
+      "summaryUrl": "https://status.claude.com/api/v2/summary.json"
+    },
+    {
+      "id": "openai",
+      "label": "OpenAI",
+      "pageUrl": "https://status.openai.com",
+      "summaryUrl": "https://status.openai.com/api/v2/summary.json"
+    },
+    {
+      "id": "opencode",
+      "label": "OpenCode",
+      "pageUrl": "https://status.opencode.ai",
+      "summaryUrl": "https://status.opencode.ai/api/status",
+      "summaryFormat": "opencode-json"
+    },
+    {
+      "id": "cursor",
+      "label": "Cursor",
+      "pageUrl": "https://status.cursor.com",
+      "summaryUrl": "https://status.cursor.com/api/v2/summary.json"
+    },
+    {
+      "id": "factory",
+      "label": "Factory Droid",
+      "pageUrl": "https://status.factory.ai",
+      "summaryUrl": "https://status.factory.ai/api/v2/summary.json"
+    },
+    {
+      "id": "kimi",
+      "label": "Kimi",
+      "pageUrl": "https://status.moonshot.cn",
+      "summaryUrl": "https://status.moonshot.cn/api/v2/summary.json"
+    },
+    {
+      "id": "github",
+      "label": "Copilot",
+      "pageUrl": "https://www.githubstatus.com",
+      "summaryUrl": "https://www.githubstatus.com/api/v2/summary.json",
+      "componentIds": [
+        "pjmpxvq2cmr2",
+        "cnnb39dkkk82"
+      ]
+    },
+    {
+      "id": "zed",
+      "label": "Zed",
+      "pageUrl": "https://status.zed.dev",
+      "summaryUrl": "https://status.zed.dev/v3/summary.json",
+      "summaryFormat": "instatus"
+    },
+    {
+      "id": "deepseek",
+      "label": "DeepSeek",
+      "pageUrl": "https://status.deepseek.com",
+      "summaryUrl": "https://status.deepseek.com/feed.atom",
+      "summaryFormat": "atom-feed"
+    },
+    {
+      "id": "devin",
+      "label": "Devin",
+      "pageUrl": "https://www.devinstatus.com",
+      "summaryUrl": "https://www.devinstatus.com/api/v2/summary.json"
+    },
+    {
+      "id": "minimax",
+      "label": "MiniMax (China)",
+      "pageUrl": "https://status.minimaxi.com",
+      "summaryUrl": "https://status.minimaxi.com/api/v2/summary.json"
+    },
+    {
+      "id": "minimax-intl",
+      "label": "MiniMax (International)",
+      "pageUrl": "https://status.minimax.io",
+      "summaryUrl": "https://status.minimax.io/api/v2/summary.json"
+    }
+  ],
+  "cases": [
+    {
+      "id": "github",
+      "name": "unrelated",
+      "body": {
+        "status": {
+          "indicator": "critical"
+        },
+        "components": [
+          {
+            "id": "pjmpxvq2cmr2",
+            "name": "pjmpxvq2cmr2",
+            "status": "operational"
+          },
+          {
+            "id": "cnnb39dkkk82",
+            "name": "cnnb39dkkk82",
+            "status": "operational"
+          },
+          {
+            "id": "actions",
+            "name": "actions",
+            "status": "major_outage"
+          }
+        ],
+        "incidents": [
+          {
+            "name": "Actions is down",
+            "status": "investigating",
+            "impact": "critical",
+            "components": [
+              {
+                "id": "actions"
+              }
+            ]
+          }
+        ]
+      },
+      "health": "ok",
+      "description": "All Systems Operational",
+      "affectedComponents": 0,
+      "incidentCount": 0,
+      "maintenanceCount": 0
+    },
+    {
+      "id": "github",
+      "name": "missing",
+      "body": {
+        "status": {
+          "indicator": "critical"
+        },
+        "components": [
+          {
+            "id": "pjmpxvq2cmr2",
+            "name": "pjmpxvq2cmr2",
+            "status": "operational"
+          }
+        ],
+        "incidents": [
+          {
+            "name": "Actions is down",
+            "status": "investigating",
+            "impact": "critical",
+            "components": [
+              {
+                "id": "actions"
+              }
+            ]
+          }
+        ]
+      },
+      "health": "unknown",
+      "description": "Unable to check status",
+      "affectedComponents": 0,
+      "incidentCount": 0,
+      "maintenanceCount": 0
+    },
+    {
+      "id": "github",
+      "name": "scoped-outage",
+      "body": {
+        "status": {
+          "indicator": "critical"
+        },
+        "components": [
+          {
+            "id": "pjmpxvq2cmr2",
+            "name": "pjmpxvq2cmr2",
+            "status": "operational"
+          },
+          {
+            "id": "cnnb39dkkk82",
+            "name": "cnnb39dkkk82",
+            "status": "operational"
+          },
+          {
+            "id": "actions",
+            "name": "actions",
+            "status": "major_outage"
+          }
+        ],
+        "incidents": [
+          {
+            "name": "Actions is down",
+            "status": "investigating",
+            "impact": "critical",
+            "components": [
+              {
+                "id": "actions"
+              }
+            ]
+          },
+          {
+            "name": "Model availability",
+            "status": "monitoring",
+            "impact": "major",
+            "components": [
+              {
+                "id": "cnnb39dkkk82"
+              }
+            ]
+          }
+        ]
+      },
+      "health": "outage",
+      "description": "Model availability",
+      "affectedComponents": 0,
+      "incidentCount": 1,
+      "maintenanceCount": 0
+    },
+    {
+      "id": "github",
+      "name": "maintenance",
+      "body": {
+        "status": {
+          "indicator": "critical"
+        },
+        "components": [
+          {
+            "id": "pjmpxvq2cmr2",
+            "name": "pjmpxvq2cmr2",
+            "status": "operational"
+          },
+          {
+            "id": "cnnb39dkkk82",
+            "name": "cnnb39dkkk82",
+            "status": "operational"
+          },
+          {
+            "id": "actions",
+            "name": "actions",
+            "status": "major_outage"
+          }
+        ],
+        "incidents": [
+          {
+            "name": "Actions is down",
+            "status": "investigating",
+            "impact": "critical",
+            "components": [
+              {
+                "id": "actions"
+              }
+            ]
+          }
+        ],
+        "scheduled_maintenances": [
+          {
+            "status": "in_progress",
+            "components": [
+              {
+                "id": "pjmpxvq2cmr2"
+              }
+            ]
+          },
+          {
+            "status": "in_progress",
+            "components": [
+              {
+                "id": "actions"
+              }
+            ]
+          }
+        ]
+      },
+      "health": "ok",
+      "description": "All Systems Operational",
+      "affectedComponents": 0,
+      "incidentCount": 0,
+      "maintenanceCount": 1
+    },
+    {
+      "id": "zed",
+      "name": "healthy",
+      "body": {
+        "page": {
+          "status": "UP"
+        }
+      },
+      "health": "ok",
+      "description": "All Systems Operational",
+      "affectedComponents": 0,
+      "incidentCount": 0,
+      "maintenanceCount": 0
+    },
+    {
+      "id": "zed",
+      "name": "maintenance",
+      "body": {
+        "page": {
+          "status": "UNDERMAINTENANCE"
+        },
+        "activeMaintenances": [
+          {}
+        ]
+      },
+      "health": "ok",
+      "description": "All Systems Operational",
+      "affectedComponents": 0,
+      "incidentCount": 0,
+      "maintenanceCount": 1
+    },
+    {
+      "id": "zed",
+      "name": "unnamed-issue",
+      "body": {
+        "page": {
+          "status": "HASISSUES"
+        }
+      },
+      "health": "degraded",
+      "description": "Degraded Performance",
+      "affectedComponents": 0,
+      "incidentCount": 0,
+      "maintenanceCount": 0
+    },
+    {
+      "id": "zed",
+      "name": "major-incident",
+      "body": {
+        "page": {
+          "status": "HASISSUES"
+        },
+        "activeIncidents": [
+          {
+            "impact": "MAJOROUTAGE",
+            "name": "Requests failing"
+          }
+        ]
+      },
+      "health": "outage",
+      "description": "Requests failing",
+      "affectedComponents": 0,
+      "incidentCount": 1,
+      "maintenanceCount": 0
+    },
+    {
+      "id": "zed",
+      "name": "broken",
+      "body": {
+        "page": {
+          "status": "UP"
+        },
+        "activeIncidents": {}
+      },
+      "health": "unknown",
+      "description": "Unable to check status",
+      "affectedComponents": 0,
+      "incidentCount": 0,
+      "maintenanceCount": 0
+    },
+    {
+      "id": "opencode",
+      "name": "operational",
+      "body": {
+        "status": "operational"
+      },
+      "health": "ok",
+      "description": "All Systems Operational",
+      "affectedComponents": 0,
+      "incidentCount": 0,
+      "maintenanceCount": 0
+    },
+    {
+      "id": "opencode",
+      "name": "upstream-outage",
+      "body": {
+        "status": "operational",
+        "components": [
+          {
+            "service": "API",
+            "status": "partial_outage",
+            "reason": "upstream"
+          }
+        ]
+      },
+      "health": "outage",
+      "description": "Upstream provider issues",
+      "affectedComponents": 1,
+      "incidentCount": 0,
+      "maintenanceCount": 0
+    },
+    {
+      "id": "opencode",
+      "name": "mixed-cause",
+      "body": {
+        "status": "operational",
+        "components": [
+          {
+            "service": "API",
+            "status": "degraded",
+            "reason": "upstream"
+          },
+          {
+            "service": "Web",
+            "status": "unfamiliar"
+          }
+        ]
+      },
+      "health": "degraded",
+      "description": "Degraded Performance",
+      "affectedComponents": 2,
+      "incidentCount": 0,
+      "maintenanceCount": 0
+    },
+    {
+      "id": "opencode",
+      "name": "malformed-component",
+      "body": {
+        "status": "operational",
+        "components": [
+          {
+            "service": "API"
+          }
+        ]
+      },
+      "health": "unknown",
+      "description": "Unable to check status",
+      "affectedComponents": 0,
+      "incidentCount": 0,
+      "maintenanceCount": 0
+    }
+  ]
+}

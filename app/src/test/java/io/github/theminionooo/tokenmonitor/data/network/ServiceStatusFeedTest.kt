@@ -12,7 +12,7 @@ class ServiceStatusFeedTest {
 
     @Test fun `DeepSeek uses only the official Atom endpoint`() {
         assertEquals("https://status.deepseek.com/feed.atom", deepseekStatusProvider.summaryUrl)
-        assertTrue(deepseekStatusProvider.atomFeed)
+        assertEquals(ServiceStatusFormat.Atom, deepseekStatusProvider.format)
     }
     @Test fun `active outage wins over resolved incidents and deduplicates components`() {
         val value = parse(feed(entry("API unavailable", "monitoring"), entry("Web degraded", "investigating"), entry("Old outage", "resolved")))

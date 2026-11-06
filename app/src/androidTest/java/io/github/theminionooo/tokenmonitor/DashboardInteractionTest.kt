@@ -1,10 +1,12 @@
 package io.github.theminionooo.tokenmonitor
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.semantics.SemanticsActions
@@ -12,6 +14,8 @@ import androidx.compose.ui.unit.Density
 import androidx.test.platform.app.InstrumentationRegistry
 import io.github.theminionooo.tokenmonitor.data.HubRepositoryState
 import io.github.theminionooo.tokenmonitor.data.network.WireHubSnapshot
+import io.github.theminionooo.tokenmonitor.data.network.serviceStatusProviders
+import io.github.theminionooo.tokenmonitor.data.network.summarizeServiceProvider
 import io.github.theminionooo.tokenmonitor.data.protocol.HubProtocolParser
 import io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions
 import io.github.theminionooo.tokenmonitor.data.storage.SnapshotCache
@@ -47,6 +51,31 @@ class DashboardInteractionTest {
         compose.onNodeWithText("claude-sonnet-4-5").assertDoesNotExist()
         compose.runOnIdle { destination = DashboardDestination.Sessions }
         compose.onNodeWithText("MiniMax Code · minimax-m2.5").assertIsDisplayed()
+    }
+
+    @Test fun serviceStatusScrollsToBothMiniMaxRegionsAndOpensTheSelectedPage() {
+        val providers = serviceStatusProviders.map { provider ->
+            summarizeServiceProvider(provider, """{"status":{"indicator":"none"}}""", 0)
+        }
+        val status = ServiceStatusState(snapshot = ServiceStatusSnapshot(providers, 0))
+        var openedPage = ""
+        compose.setContent {
+            MaterialTheme {
+                LazyColumn(Modifier.fillMaxSize().testTag("service-status")) {
+                    statusItems(HubSnapshot(), HubRepositoryState(), status) { openedPage = it }
+                }
+            }
+        }
+        compose.onNodeWithText("Claude").assertIsDisplayed()
+        val list = compose.onNodeWithTag("service-status")
+        for ((label, page) in listOf(
+            "MiniMax (China)" to "https://status.minimaxi.com",
+            "MiniMax (International)" to "https://status.minimax.io",
+        )) {
+            list.performScrollToNode(hasText(label))
+            compose.onNodeWithText(label).assertIsDisplayed().performClick()
+            compose.runOnIdle { assertEquals(page, openedPage) }
+        }
     }
 
     private fun metricSession() = SessionUsage("metrics", "Private planning title", "codex", "Example", 100, 1.0,

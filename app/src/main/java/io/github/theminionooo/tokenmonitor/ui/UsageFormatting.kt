@@ -213,6 +213,7 @@ internal val Int.absoluteValue: Int get() = if (this == Int.MIN_VALUE) 0 else ko
 
 /** Limit and subscription providers: the desktop shows `Claude`, not `Claude Code`, but keeps labels such as `OpenCode`. */
 private val providerLabels = mapOf(
+    "opendesign" to "OpenDesign",
     "claude" to "Claude",
     "factory" to "Factory Droid",
     "grok" to "Grok",
