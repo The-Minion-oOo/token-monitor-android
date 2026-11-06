@@ -1,0 +1,58 @@
+{
+  "limits": {
+    "updatedAt": "2026-11-06T14:40:07.308Z",
+    "providers": [
+      {
+        "provider": "opendesign",
+        "accountKey": "sha256:11073c1084d06fcdff74d692cbeaa9258c78726d7aa8df2931be00ce91c5cbb8",
+        "accountLabel": "",
+        "planLabel": "Pro",
+        "accountName": "Synthetic workspace",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "web",
+        "sourceDetail": "",
+        "updatedAt": "2026-11-06T14:40:06.601Z",
+        "windows": [
+          {
+            "kind": "session",
+            "label": "Session",
+            "used": 0,
+            "limit": 20,
+            "remaining": 20,
+            "usedPercent": 0,
+            "remainingPercent": 100,
+            "resetsAt": "2026-11-06T16:00:00.000Z",
+            "windowMinutes": 300,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          },
+          {
+            "kind": "weekly",
+            "label": "Weekly",
+            "used": 15,
+            "limit": 60,
+            "remaining": 45,
+            "usedPercent": 25,
+            "remainingPercent": 75,
+            "resetsAt": null,
+            "windowMinutes": 10080,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "opendesign-windows",
+        "stale": false
+      }
+    ]
+  }
+}

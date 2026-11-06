@@ -20,6 +20,7 @@ import io.github.theminionooo.tokenmonitor.data.storage.TextScale
 import io.github.theminionooo.tokenmonitor.data.storage.TokenNumberAnimation
 import io.github.theminionooo.tokenmonitor.domain.ServiceStatusSnapshot
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -265,6 +266,7 @@ internal class DashboardViewModel(application: Application) : AndroidViewModel(a
         _serviceStatus.value = _serviceStatus.value.copy(loading = true)
         serviceStatusJob = viewModelScope.launch {
             val snapshot = runCatching { serviceStatusClient.load() }.getOrNull()
+            ensureActive()
             if (resumed && _destination.value == DashboardDestination.Status) {
                 _serviceStatus.value = ServiceStatusState(loading = false, snapshot = snapshot ?: current, failed = snapshot == null && current == null)
             }

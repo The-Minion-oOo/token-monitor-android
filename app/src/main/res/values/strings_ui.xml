@@ -315,7 +315,7 @@
     <string name="ui_running_73989">Running</string>
     <string name="ui_waiting_for_you_e235e">Waiting for you</string>
     <string name="ui_finished_355bc">Finished</string>
-    <string name="ui_checking_claude_openai_cursor_and_deepseek_c4aea">Checking Claude, OpenAI, Cursor, and DeepSeek…</string>
+    <string name="ui_checking_service_status">Checking service status…</string>
     <string name="ui_service_status_is_unavailable_right_now_06e2d">Service status is unavailable right now.</string>
     <string name="ui_operational_8459f">Operational</string>
     <string name="ui_degraded_13c27">Degraded</string>

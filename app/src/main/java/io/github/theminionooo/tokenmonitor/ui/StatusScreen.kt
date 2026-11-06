@@ -111,7 +111,7 @@ internal fun LazyListScope.statusItems(
     onOpenServicePage: (String) -> Unit,
 ) {
     if (serviceStatus.loading && serviceStatus.snapshot == null) {
-        item { MutedCopy(appText(R.string.ui_checking_claude_openai_cursor_and_deepseek_c4aea, "Checking Claude, OpenAI, Cursor, and DeepSeek…"), modifier = Modifier.padding(vertical = 8.dp)) }
+        item { MutedCopy(appText(R.string.ui_checking_service_status, "Checking service status…"), modifier = Modifier.padding(vertical = 8.dp)) }
     } else if (serviceStatus.failed) {
         item { MutedCopy(appText(R.string.ui_service_status_is_unavailable_right_now_06e2d, "Service status is unavailable right now."), modifier = Modifier.padding(vertical = 8.dp)) }
     }

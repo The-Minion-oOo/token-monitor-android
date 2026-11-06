@@ -1,18 +1,16 @@
-# Desktop parity for v0.86.0
+# Desktop parity for v0.87.0
 
-I compare Android with desktop tag `v0.86.0`, peeled commit
-`5a8ddcdac963f0bb2d4b09631f902118048f1d97`. Android remains a read-only
-dashboard; the desktop collects usage, signs in to providers and hosts the Hub.
+I compare Android with desktop tag `v0.87.0`, peeled commit `b3dd5e25bd9ab89620eb6380c863e335d8b8751e`.
+Android reads the Hub while the desktop collects usage and manages provider
+sign-in.
 
-The latest published APK is **v0.86.0 r1**. It switches DeepSeek status to its official incident
-feed. Active and unknown-status incidents remain visible; invalid, empty or
-truncated responses show Unknown. Released-source checks cover Command Code
-billing durations without assuming every month has the same length.
+The **v0.87.0 r1 candidate** displays reported OpenDesign session and weekly
+limits. Status adds OpenCode, Factory Droid, Kimi, Copilot, Zed, Devin and
+both MiniMax regions. Copilot only reflects its own GitHub status components.
 
-Quota history is local to desktop and is not uploaded to the Hub. Android does
-not recreate that history, launch Claude CLI probes, or copy desktop window and
-proxy settings. The Sessions tool filter, hardware hints and title privacy from
-v0.85.0 remain available.
+I checked that both released Hubs preserve explicit zero usage and corrected
+history after a desktop delta upload. Android continues to use the Hub read
+endpoints and live stream.
 
 I also checked restored Kiro readings and Copilot reset details against the
 released collectors, Node Hub and Worker. Android continues to omit absent reset lines.
@@ -64,7 +62,7 @@ spacing, hover and session-summary changes remain desktop-only.
 | Projects and sessions | Search, expandable tool/model shares, reported titles and session relationships. Codex/T3 continuations and subagents are grouped; forks and side chats stay separate |
 | Session context | Reported Running/Waiting/Idle state, context-window use, cache-hit percentage and optional prompt-cache estimates |
 | History | Overview cards, daily heatmap, period comparisons, model/tool exploration, bars and K-line ranges; missing days stay missing |
-| Service status | Claude, OpenAI, Cursor and DeepSeek status, incidents and status-page links |
+| Service status | Public health, incidents and links for 12 service entries, including Copilot and both MiniMax regions |
 | Appearance | Desktop TM1/TM2 themes, independent chart colour, light/dark following, tool marks, compact totals, text size, reduced motion and number animations |
 | Widgets | Responsive Usage widget and fixed four-page Pages widget; saved snapshots, one-shot Refresh, bounded one-hour Live and optional 30/60-minute background refresh |
 | Connections | Recommended Tailscale, optional home Wi-Fi/failover and separate opt-in public DNS HTTPS with system-CA TLS |

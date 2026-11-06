@@ -16,9 +16,8 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runInterruptible
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.serialization.json.jsonObject
 
 internal data class ServiceStatusProvider(
@@ -26,18 +25,25 @@ internal data class ServiceStatusProvider(
     val label: String,
     val pageUrl: String,
     val summaryUrl: String,
-    val atomFeed: Boolean = false,
+    val format: ServiceStatusFormat = ServiceStatusFormat.Statuspage,
+    val componentIds: Set<String> = emptySet(),
 )
 
-/** Reads public status summaries and DeepSeek's official incident feed. */
+internal enum class ServiceStatusFormat { Statuspage, Atom, Instatus, OpenCode }
+
+/** Reads public status feeds while the Status screen is visible. */
 internal class ServiceStatusClient {
+    private val requestSlots = Semaphore(4)
+
     suspend fun load(): ServiceStatusSnapshot = coroutineScope {
         val checkedAt = System.currentTimeMillis()
-        val results = providers.map { provider ->
+        val results = serviceStatusProviders.map { provider ->
             async {
                 try {
-                    runInterruptible(Dispatchers.IO) {
-                        summarizeServiceProvider(provider, fetch(provider), checkedAt)
+                    requestSlots.withPermit {
+                        runInterruptible(Dispatchers.IO) {
+                            summarizeServiceProvider(provider, fetch(provider), checkedAt)
+                        }
                     }
                 } catch (cancelled: CancellationException) {
                     throw cancelled
@@ -56,8 +62,8 @@ internal class ServiceStatusClient {
             connection.connectTimeout = timeoutMs
             connection.readTimeout = timeoutMs
             connection.useCaches = true
-            connection.instanceFollowRedirects = !provider.atomFeed
-            connection.setRequestProperty("Accept", if (provider.atomFeed) "application/atom+xml" else "application/json")
+            connection.instanceFollowRedirects = provider.format != ServiceStatusFormat.Atom
+            connection.setRequestProperty("Accept", if (provider.format == ServiceStatusFormat.Atom) "application/atom+xml" else "application/json")
             connection.setRequestProperty("User-Agent", "Token-Monitor-Android/${BuildConfig.VERSION_NAME}")
             if (connection.responseCode !in 200..299) error("Status endpoint returned HTTP ${connection.responseCode}")
             readBounded(connection.inputStream)
@@ -85,57 +91,39 @@ internal class ServiceStatusClient {
     private companion object {
         const val timeoutMs = 5_000
         const val maxResponseBytes = 1 * 1024 * 1024
-        val providers = listOf(
-            ServiceStatusProvider("claude", "Claude", "https://status.claude.com", "https://status.claude.com/api/v2/summary.json"),
-            ServiceStatusProvider("openai", "OpenAI", "https://status.openai.com", "https://status.openai.com/api/v2/summary.json"),
-            ServiceStatusProvider("cursor", "Cursor", "https://status.cursor.com", "https://status.cursor.com/api/v2/summary.json"),
-            deepseekStatusProvider,
-        )
     }
 }
 
 internal val deepseekStatusProvider = ServiceStatusProvider(
-    "deepseek", "DeepSeek", "https://status.deepseek.com", "https://status.deepseek.com/feed.atom", atomFeed = true,
+    "deepseek", "DeepSeek", "https://status.deepseek.com", "https://status.deepseek.com/feed.atom", ServiceStatusFormat.Atom,
 )
+
+// Public provider endpoints from the desktop v0.87.0 Status catalog.
+internal val serviceStatusProviders = listOf(
+    statuspage("claude", "Claude", "https://status.claude.com"),
+    statuspage("openai", "OpenAI", "https://status.openai.com"),
+    ServiceStatusProvider("opencode", "OpenCode", "https://status.opencode.ai", "https://status.opencode.ai/api/status", ServiceStatusFormat.OpenCode),
+    statuspage("cursor", "Cursor", "https://status.cursor.com"),
+    statuspage("factory", "Factory Droid", "https://status.factory.ai"),
+    statuspage("kimi", "Kimi", "https://status.moonshot.cn"),
+    statuspage("github", "Copilot", "https://www.githubstatus.com", setOf("pjmpxvq2cmr2", "cnnb39dkkk82")),
+    ServiceStatusProvider("zed", "Zed", "https://status.zed.dev", "https://status.zed.dev/v3/summary.json", ServiceStatusFormat.Instatus),
+    deepseekStatusProvider,
+    statuspage("devin", "Devin", "https://www.devinstatus.com"),
+    statuspage("minimax", "MiniMax (China)", "https://status.minimaxi.com"),
+    statuspage("minimax-intl", "MiniMax (International)", "https://status.minimax.io"),
+)
+
+private fun statuspage(id: String, label: String, pageUrl: String, componentIds: Set<String> = emptySet()) =
+    ServiceStatusProvider(id, label, pageUrl, "$pageUrl/api/v2/summary.json", componentIds = componentIds)
 
 internal fun summarizeServiceProvider(provider: ServiceStatusProvider, body: String, checkedAt: Long): ServiceProviderStatus =
     try {
-        if (provider.atomFeed) summarizeAtomFeedProvider(provider, body, checkedAt)
-        else summarizeStatuspageProvider(provider, Json.parseToJsonElement(body).jsonObject, checkedAt)
+        if (provider.format == ServiceStatusFormat.Atom) summarizeAtomFeedProvider(provider, body, checkedAt)
+        else summarizeJsonStatus(provider, Json.parseToJsonElement(body).jsonObject, checkedAt)
     } catch (_: Exception) {
         unknownProvider(provider, checkedAt)
     }
-
-internal fun summarizeStatuspageProvider(
-    provider: ServiceStatusProvider,
-    payload: JsonObject,
-    checkedAt: Long,
-): ServiceProviderStatus {
-    val status = payload.objectAt("status")
-    val indicator = status.stringAt("indicator").lowercase()
-    val components = payload.arrayAt("components").objects()
-    val incidents = payload.arrayAt("incidents").objects().filterNot { it.stringAt("status").lowercase() in inactiveIncidentStatuses }
-    val maintenance = payload.arrayAt("scheduled_maintenances").objects().filterNot { it.stringAt("status").lowercase() in inactiveMaintenanceStatuses }
-    val affected = components.count { it.stringAt("status").lowercase() !in nonIssueComponentStatuses }
-    val incidentTitle = incidents.firstOrNull()?.stringAt("name").orEmpty()
-    val description = incidentTitle.ifBlank { status.stringAt("description").ifBlank { "Unknown" } }
-    return ServiceProviderStatus(
-        id = provider.id,
-        label = provider.label,
-        pageUrl = provider.pageUrl,
-        health = when (indicator) {
-            "none" -> ServiceHealth.Ok
-            "minor" -> ServiceHealth.Degraded
-            "major", "critical" -> ServiceHealth.Outage
-            else -> ServiceHealth.Unknown
-        },
-        description = description,
-        affectedComponents = affected,
-        incidentCount = incidents.size,
-        maintenanceCount = maintenance.size,
-        checkedAt = checkedAt,
-    )
-}
 
 internal fun unknownProvider(provider: ServiceStatusProvider, checkedAt: Long) = ServiceProviderStatus(
     id = provider.id,
@@ -148,12 +136,3 @@ internal fun unknownProvider(provider: ServiceStatusProvider, checkedAt: Long) =
     maintenanceCount = 0,
     checkedAt = checkedAt,
 )
-
-private fun JsonObject.objectAt(key: String): JsonObject = this[key] as? JsonObject ?: JsonObject(emptyMap())
-private fun JsonObject.arrayAt(key: String): JsonArray = this[key] as? JsonArray ?: JsonArray(emptyList())
-private fun JsonObject.stringAt(key: String): String = (this[key] as? JsonPrimitive)?.content.orEmpty().trim()
-private fun JsonArray.objects(): List<JsonObject> = mapNotNull { it as? JsonObject }
-
-private val nonIssueComponentStatuses = setOf("operational", "under_maintenance")
-private val inactiveIncidentStatuses = setOf("resolved", "completed", "postmortem")
-private val inactiveMaintenanceStatuses = setOf("completed", "canceled")

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## v0.87.0 r1 (candidate)
+
+- Display OpenDesign's reported session and weekly allowances in Limits.
+- Add public Status entries for OpenCode, Factory Droid, Kimi, Copilot, Zed, Devin and both MiniMax regions. Copilot reflects its own components.
+- Verify that desktop delta uploads preserve zero totals and history corrections in Node Hub and Worker reads.
+
 ## v0.86.0 r1 — 2026-11-04
 
 - Updated desktop compatibility to v0.86.0.

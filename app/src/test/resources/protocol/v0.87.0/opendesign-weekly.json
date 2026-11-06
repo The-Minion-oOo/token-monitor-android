@@ -1,0 +1,43 @@
+{
+  "limits": {
+    "updatedAt": "2026-11-06T14:40:07.309Z",
+    "providers": [
+      {
+        "provider": "opendesign",
+        "accountKey": "sha256:b8ac0b01f90d17a846bf4cc163ad4fef31415caa7dd9d6e288cca8985ee879ae",
+        "accountLabel": "",
+        "planLabel": "Pro",
+        "accountName": "Synthetic workspace",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "web",
+        "sourceDetail": "",
+        "updatedAt": "2026-11-06T14:40:06.601Z",
+        "windows": [
+          {
+            "kind": "weekly",
+            "label": "Weekly",
+            "used": 15,
+            "limit": 60,
+            "remaining": 45,
+            "usedPercent": 25,
+            "remainingPercent": 75,
+            "resetsAt": null,
+            "windowMinutes": 10080,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "opendesign-weekly",
+        "stale": false
+      }
+    ]
+  }
+}

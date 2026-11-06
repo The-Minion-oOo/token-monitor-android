@@ -19,6 +19,7 @@ import { checkV0841Limits } from "./check-v0841-limits.mjs";
 import { checkV085Data } from "./check-v085-data.mjs";
 import { checkV086Limits } from "./check-v086-limits.mjs";
 import { checkV086Status } from "./check-v086-status.mjs";
+import { checkV087DeltaReads, checkV087Limits, checkV087Status } from "./check-v087-contract.mjs";
 
 const script = fileURLToPath(import.meta.url);
 const root = resolve(dirname(script), "..");
@@ -48,7 +49,7 @@ async function isolatedContract(source, output, upstream) {
     const secret = "isolated-contract-secret";
     const hub = createHub({ port: 0, host: "127.0.0.1", secret, dataFile: join(source, "synthetic-data.json"), broadcastDelayMs: 5,
         logger: { error: error => { throw error; } } });
-    // This setup populates only the temporary test Hub. Every HTTP request below is a GET.
+    // All requests below target the isolated loopback Hub with synthetic records.
     hub.ingest(device);
     let stream;
     const frames = [], pending = [];
@@ -651,6 +652,15 @@ async function isolatedContract(source, output, upstream) {
         responses["deepseek-status.json"] = checkV086Status(require);
         Object.assign(limitChecks.cases, v081.cases, v082.cases, v083.cases, v084.cases, v0841.cases, v085.cases, v086.cases);
         Object.assign(responses, limitChecks.responses, v081.responses, v082.responses, v083.responses, v084.responses, v0841.responses, v085.responses, v086.responses);
+        const v087 = await checkV087Limits(require, { createHub, source, secret, device, now });
+        Object.assign(limitChecks.cases, v087.cases);
+        Object.assign(responses, v087.responses);
+        responses["service-status.json"] = checkV087Status(require);
+        const uploadRequest = (name, authenticated = true, init = {}) => fetch(`${base}/api/${name}`, {
+            ...init, redirect: "error", signal: AbortSignal.timeout(5000),
+            headers: { ...(authenticated ? { Authorization: `Bearer ${secret}` } : {}), ...init.headers },
+        });
+        Object.assign(responses, await checkV087DeltaReads(uploadRequest, device.deviceId, upstream.version));
         await checkV081Streams(require, source, output, upstream);
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) await writeFile(join(output, name), `${JSON.stringify(value, null, 2)}\n`);

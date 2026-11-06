@@ -317,7 +317,7 @@
     <string name="ui_running_73989">ஓடுகிறது</string>
     <string name="ui_waiting_for_you_e235e">உங்களுக்காக காத்திருக்கிறது</string>
     <string name="ui_finished_355bc">முடிந்தது</string>
-    <string name="ui_checking_claude_openai_cursor_and_deepseek_c4aea">Claude, OpenAI, Cursor மற்றும் DeepSeek ஆகியவற்றைச் சரிபார்க்கிறது…</string>
+    <string name="ui_checking_service_status">சேவை நிலையைச் சரிபார்க்கிறது…</string>
     <string name="ui_service_status_is_unavailable_right_now_06e2d">சேவை நிலை இப்போது கிடைக்கவில்லை.</string>
     <string name="ui_operational_8459f">செயல்பாட்டு</string>
     <string name="ui_degraded_13c27">தாழ்த்தப்பட்டது</string>
