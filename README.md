@@ -16,7 +16,7 @@
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/github/actions/workflow/status/The-Minion-oOo/token-monitor-android/android.yml?branch=main&style=flat-square&logo=githubactions&logoColor=10221c&label=Android%20checks"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.86.0" src="https://img.shields.io/badge/Desktop-v0.86.0-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.87.0" src="https://img.shields.io/badge/Desktop-v0.87.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/releases"><img alt="Total GitHub release asset downloads" src="https://img.shields.io/github/downloads/The-Minion-oOo/token-monitor-android/total?label=Downloads&style=flat-square&color=73bdf5"></a>
@@ -28,10 +28,10 @@
 
 ## The desktop dashboard, made mobile
 
-**New in v0.86.0 r1:** DeepSeek status now reads current incidents from the
-official feed. Command Code billing periods are checked against the released
-Hub; desktop quota history remains local to desktop.
-[Release notes](docs/releases/android-v0.86.0-r1.md).
+**New in v0.87.0 r1:** Check OpenDesign's five-hour and weekly allowances in
+Limits. Status adds OpenCode, Factory Droid, Kimi, Copilot, Zed, Devin and
+both MiniMax regions. Copilot shows incidents specific to Copilot.
+[Release notes](docs/releases/android-v0.87.0-r1.md).
 
 **Also included:** smaller live updates through the released v4 Hub stream,
 session reasoning effort and personal Volcengine quotas. Muse and Ollama
@@ -71,9 +71,6 @@ supplied by the Hub.
   separate.
 - **Share less when troubleshooting:** preview an allowlisted diagnostic report
   before copying or sharing it. Addresses, secrets and conversation text stay out.
-
-These features are available in v0.86.0 r1. Pairing still uses the same read-only
-Hub API; the dashboard update frequency and widget layout stay unchanged.
 
 <table>
   <tr>
@@ -227,20 +224,13 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 | | |
 | --- | --- |
-| Current release | [Android v0.86.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.86.0-r1) (`860001`) |
-| Desktop baseline | [Token Monitor v0.86.0](https://github.com/Javis603/token-monitor/releases/tag/v0.86.0) |
+| Current release | [Android v0.87.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.87.0-r1) (`870001`) |
+| Desktop baseline | [Token Monitor v0.87.0](https://github.com/Javis603/token-monitor/releases/tag/v0.87.0) |
 | Minimum Android version | Android 8.0 |
 
-I checked the released Node Hub and Worker, automated tests and emulators. I
-updated my phone in place and checked saved pairing, fresh Tailscale data,
-resume, Sessions filtering and all four service-status cards. I also completed
-the broader phone feature/widget follow-up in
-[#94](https://github.com/The-Minion-oOo/token-monitor-android/issues/94).
-[Validation](docs/VALIDATION.md) records the build-specific scope and limits of
-the short battery observations. I closed
-[#115](https://github.com/The-Minion-oOo/token-monitor-android/issues/115)
-after normal phone use no longer showed the startup lag. The original transient
-stall's underlying cause remains unconfirmed.
+I checked this release against the released Node Hub and Worker, including reads
+after desktop delta uploads. [Validation](docs/VALIDATION.md) covers the emulator
+checks and earlier phone results.
 
 Android-only updates increment the release revision while keeping the verified
 desktop version. [Upstream pin](upstream.json) · [Release notes](CHANGELOG.md)

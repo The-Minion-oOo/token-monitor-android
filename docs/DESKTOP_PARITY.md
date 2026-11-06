@@ -4,7 +4,7 @@ I compare Android with desktop tag `v0.87.0`, peeled commit `b3dd5e25bd9ab89620e
 Android reads the Hub while the desktop collects usage and manages provider
 sign-in.
 
-The **v0.87.0 r1 candidate** displays reported OpenDesign session and weekly
+**Android v0.87.0 r1** displays reported OpenDesign session and weekly
 limits. Status adds OpenCode, Factory Droid, Kimi, Copilot, Zed, Devin and
 both MiniMax regions. Copilot only reflects its own GitHub status components.
 

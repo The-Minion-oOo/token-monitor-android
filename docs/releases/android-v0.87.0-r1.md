@@ -18,6 +18,6 @@ Use **Settings → App updates**, or install the signed APK over the current
 copy. Android 8 or newer is required.
 [Install and update](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md).
 
-I checked the released Hub and Worker with synthetic data. Release checks are
-in progress.
+I checked the released Hub and Worker, automated tests and API 26, 36 and 37
+emulators. I haven't tested this build on my phone.
 [Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md).

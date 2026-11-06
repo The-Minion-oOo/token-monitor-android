@@ -2,7 +2,7 @@
 
 ## Version rule
 
-The v0.87.0 r1 candidate targets desktop tag `v0.87.0`, peeled commit
+Android v0.87.0 r1 targets desktop tag `v0.87.0`, peeled commit
 `b3dd5e25bd9ab89620eb6380c863e335d8b8751e`, in Gradle and `upstream.json`.
 I compared the expanded Status catalog and summaries with the released desktop
 code. The contract exercises OpenDesign limits and reads after desktop delta
@@ -29,7 +29,7 @@ The v0.81.0 r2 release introduced Android-only route, stream and
 background-refresh hardening from #106. Those protections are retained.
 
 The latest published release is
-[`android-v0.86.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.86.0-r1),
+[`android-v0.87.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.87.0-r1),
 recorded with its source commit in `release.json`.
 It retains opt-in HTTPS, optional background widget refresh and the
 r5 physical-network check underneath Tailscale. Earlier phone evidence applies
