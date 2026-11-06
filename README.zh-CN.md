@@ -9,11 +9,10 @@
 
 ## 近期更新
 
-当前版本为 **v0.86.0 r1**：DeepSeek 服务状态改为读取官方事件源，
-避免旧镜像遗漏新故障。Command Code 的实际账期已通过正式 Node Hub 和
-Worker 验证；额度历史仍保存在桌面本地。我已在手机上原位升级，检查配对、
-Tailscale 实时数据、恢复前台、会话筛选和服务状态。电池与自然后台刷新仍需
-单独验证。[版本说明](docs/releases/android-v0.86.0-r1.md)。
+当前版本为 **v0.87.0 r1**。额度页面会显示 OpenDesign 的五小时和每周额度，
+服务状态新增 OpenCode、Factory Droid、Kimi、Copilot、Zed、Devin 和 MiniMax
+的中国及国际站。我用 Node Hub 和 Worker 验证了桌面增量上传后的用量和历史记录。
+[版本说明](docs/releases/android-v0.87.0-r1.md)。
 
 继续支持 v4 增量实时更新、会话推理强度和火山引擎个人套餐额度。
 以下语言、付款和显示功能继续保留。

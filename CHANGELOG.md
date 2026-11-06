@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## v0.87.0 r1 (candidate)
+## v0.87.0 r1 — 2026-11-06
 
 - Display OpenDesign's reported session and weekly allowances in Limits.
 - Add public Status entries for OpenCode, Factory Droid, Kimi, Copilot, Zed, Devin and both MiniMax regions. Copilot reflects its own components.
