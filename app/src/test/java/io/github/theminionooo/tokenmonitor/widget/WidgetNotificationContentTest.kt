@@ -139,6 +139,68 @@ class WidgetNotificationContentTest {
         assertTrue(notification.headline.endsWith("today"))
     }
 
+    @Test fun `conversations beat a critical quota and collapse continuations and subagents`() {
+        val parent = activeSession("main", "running").copy(nativeSessionId = "conversation")
+        val continuation = parent.copy(id = "continuation")
+        val child = activeSession("child", "running").copy(parentSessionId = "main")
+        val waiting = activeSession("waiting", "waiting")
+        val snapshot = quotaSnapshot().copy(stats = quotaSnapshot().stats.copy(periods = mapOf(
+            "today" to UsagePeriod(sessions = listOf(parent, continuation, child, waiting)))))
+        val value = content(WidgetSession(enabled = true, connected = true, snapshot = snapshot), 10_000)
+        assertEquals("1 running · 1 waiting", value.headline)
+        assertEquals("2", value.shortText)
+        assertTrue(value.detail.contains("5% left"))
+    }
+
+    @Test fun `critical quota beats usage even after the first two providers`() {
+        val value = content(quotaSnapshot())
+        assertTrue(value.headline.contains("5% left"))
+        assertEquals("5%", value.shortText)
+        assertTrue(value.detail.contains("42 tokens"))
+        val offline = content(WidgetSession(enabled = true, snapshot = quotaSnapshot()), 1)
+        assertTrue(offline.headline.startsWith("Saved"))
+        assertEquals("Offline", offline.shortText)
+    }
+
+    @Test fun `notification grace bridges the polling boundary without keeping expired activity forever`() {
+        val session = activeSession("main", "running")
+        val snapshot = HubSnapshot(stats = HubStats(periods = mapOf("today" to UsagePeriod(sessions = listOf(session)))))
+        fun reading(now: Long) = notificationSessions(snapshot, now)
+        assertEquals(NotificationSessions(1, 0), reading(29_999))
+        assertEquals(reading(29_999), reading(30_001))
+        assertEquals(NotificationSessions(1, 0), reading(59_999))
+        assertEquals(NotificationSessions(), reading(60_000))
+        assertEquals(io.github.theminionooo.tokenmonitor.ui.SessionActivityState.Finished,
+            io.github.theminionooo.tokenmonitor.ui.sessionActivityState(session, 30_001))
+        val idle = snapshot.copy(stats = snapshot.stats.copy(periods = mapOf("today" to UsagePeriod(
+            sessions = listOf(session.copy(liveActivity = io.github.theminionooo.tokenmonitor.domain.LiveActivity("idle", "1970-01-01T00:00:30Z")))))))
+        assertEquals(NotificationSessions(), notificationSessions(idle, 30_001))
+    }
+
+    @Test fun `current today observations override an older month copy and cached data never claims activity`() {
+        val current = activeSession("main", "waiting")
+        val snapshot = HubSnapshot(stats = HubStats(periods = mapOf("today" to UsagePeriod(sessions = listOf(current)),
+            "month" to UsagePeriod(sessions = listOf(current.copy(liveActivity = null))))))
+        assertEquals(NotificationSessions(0, 1), notificationSessions(snapshot, 10_000))
+        val value = content(WidgetSession(enabled = true, connected = true, snapshot = snapshot.copy(fromCache = true)), 10_000)
+        assertTrue(value.headline.startsWith("Saved"))
+        assertEquals("Offline", value.shortText)
+    }
+
+    private fun activeSession(id: String, state: String) = io.github.theminionooo.tokenmonitor.domain.SessionUsage(
+        id, client = "codex", projectLabel = "Synthetic project", totalTokens = 1, costUsd = 0.0,
+        modelNames = emptyList(), messageCount = 0, startedAt = "1970-01-01T00:00:00Z", lastUsedAt = "1970-01-01T00:00:00Z",
+        turnEnded = true, liveActivity = io.github.theminionooo.tokenmonitor.domain.LiveActivity(state, "1970-01-01T00:00:00Z"))
+
+    private fun quotaSnapshot(): HubSnapshot {
+        fun account(provider: String, left: Double) = io.github.theminionooo.tokenmonitor.domain.LimitAccount(
+            provider, "", "", "", "ok", "", "", listOf(io.github.theminionooo.tokenmonitor.domain.LimitWindow(
+                "session", "Session", null, left, null, "", "percent", "", "", true)))
+        return HubSnapshot(stats = HubStats(periods = mapOf("today" to UsagePeriod(totalTokens = 42)),
+            limits = io.github.theminionooo.tokenmonitor.domain.HubLimits(providers = listOf(
+                account("claude", 80.0), account("codex", 60.0), account("mcode", 5.0)))))
+    }
+
     private fun content(snapshot: HubSnapshot) = content(
         WidgetSession(enabled = true, connected = true, expiresAt = 3_600_000, snapshot = snapshot),
     )

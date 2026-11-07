@@ -106,9 +106,9 @@ private val liveActivityClients = setOf("claude", "codex")
  * at most 30 seconds old and not clearly from the future) wins unless it is `unknown`; otherwise the transcript
  * decides: a finished turn, a Codex question waiting for an answer, recent writing, or quiet.
  */
-internal fun sessionActivityState(session: SessionUsage, now: Long): SessionActivityState {
+internal fun sessionActivityState(session: SessionUsage, now: Long, observationGraceMs: Long = 0): SessionActivityState {
     if (session.archived) return SessionActivityState.Idle
-    liveActivityState(session, now)?.let { return it }
+    liveActivityState(session, now, observationGraceMs)?.let { return it }
     val lastUsed = runCatching { Instant.parse(session.lastUsedAt).toEpochMilli() }.getOrNull()
         ?: return SessionActivityState.Idle
     val recent = now - lastUsed <= SESSION_RUNNING_WINDOW_MS
@@ -121,11 +121,11 @@ internal fun sessionActivityState(session: SessionUsage, now: Long): SessionActi
     }
 }
 
-private fun liveActivityState(session: SessionUsage, now: Long): SessionActivityState? {
+private fun liveActivityState(session: SessionUsage, now: Long, observationGraceMs: Long): SessionActivityState? {
     if (session.client !in liveActivityClients) return null
     val reading = session.liveActivity ?: return null
     val observedAt = runCatching { Instant.parse(reading.observedAt).toEpochMilli() }.getOrNull() ?: return null
-    if (observedAt > now + LIVE_ACTIVITY_CLOCK_SLACK_MS || observedAt + LIVE_ACTIVITY_TTL_MS <= now) return null
+    if (observedAt > now + LIVE_ACTIVITY_CLOCK_SLACK_MS || now - observedAt >= LIVE_ACTIVITY_TTL_MS + observationGraceMs) return null
     return when (reading.state) {
         "running" -> SessionActivityState.Running
         "waiting" -> SessionActivityState.Waiting

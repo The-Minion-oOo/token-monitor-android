@@ -202,8 +202,8 @@ internal fun searchSessionRows(rows: List<SessionRow>, searching: Boolean, match
     }
 
 /** Running beats waiting, which beats the first member's own state: a group is as busy as its busiest member. */
-internal fun sessionRowActivity(row: SessionRow, now: Long): SessionActivityState {
-    val states = row.sessions.map { sessionActivityState(it, now) }
+internal fun sessionRowActivity(row: SessionRow, now: Long, observationGraceMs: Long = 0): SessionActivityState {
+    val states = row.sessions.map { sessionActivityState(it, now, observationGraceMs) }
     return listOf(SessionActivityState.Running, SessionActivityState.Waiting).firstOrNull { it in states }
         ?: states.firstOrNull() ?: SessionActivityState.Idle
 }

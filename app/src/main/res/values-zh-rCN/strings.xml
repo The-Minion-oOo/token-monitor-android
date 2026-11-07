@@ -603,4 +603,6 @@
     <string name="ui_additional_tokens">额外 Token</string>
     <string name="ui_all_tools">所有工具</string>
     <string name="ui_hub_reconnecting">正在重新连接 Hub。显示上次成功获取的数据。</string>
+    <string name="ui_notification_live_until">实时更新至 %1$s</string>
+    <string name="ui_notification_session_ends">会话于 %1$s 结束</string>
 </resources>
