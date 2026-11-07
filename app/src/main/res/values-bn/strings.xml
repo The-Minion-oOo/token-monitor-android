@@ -601,4 +601,5 @@
     <string name="label_coverage_ends">মেয়াদ শেষ</string>
     <string name="ui_additional_tokens">অতিরিক্ত টোকেন</string>
     <string name="ui_all_tools">সব টুল</string>
+    <string name="ui_hub_reconnecting">Hub-এর সাথে আবার সংযোগ করা হচ্ছে। শেষবার পাওয়া ডেটা দেখানো হচ্ছে।</string>
 </resources>

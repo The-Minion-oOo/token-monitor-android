@@ -601,4 +601,5 @@
     <string name="label_coverage_ends">અવધિ પૂર્ણ</string>
     <string name="ui_additional_tokens">વધારાના ટોકન</string>
     <string name="ui_all_tools">બધાં ટૂલ</string>
+    <string name="ui_hub_reconnecting">Hub સાથે ફરી જોડાઈ રહ્યા છીએ. છેલ્લે સફળતાપૂર્વક મળેલો ડેટા બતાવવામાં આવે છે.</string>
 </resources>

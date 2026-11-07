@@ -601,4 +601,5 @@
     <string name="label_coverage_ends">వ్యవధి ముగింపు</string>
     <string name="ui_additional_tokens">అదనపు టోకెన్లు</string>
     <string name="ui_all_tools">అన్ని సాధనాలు</string>
+    <string name="ui_hub_reconnecting">Hubకి మళ్లీ కనెక్ట్ అవుతోంది. చివరిసారి అందిన డేటా చూపబడుతోంది.</string>
 </resources>
