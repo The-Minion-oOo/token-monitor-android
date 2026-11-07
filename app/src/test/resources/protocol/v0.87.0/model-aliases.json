@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "version": 1,
+  "revision": 1,
+  "updatedAt": "2026-11-07T03:56:59.148Z",
+  "value": {
+    "modelAliases": {
+      "gpt-5": "GPT Five",
+      "provider/gpt-5": "GPT Five"
+    },
+    "modelAliasGrouping": "duplicates"
+  }
+}

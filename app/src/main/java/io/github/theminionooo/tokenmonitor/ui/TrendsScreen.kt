@@ -41,6 +41,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.theminionooo.tokenmonitor.domain.HistoryPoint
 import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
+import io.github.theminionooo.tokenmonitor.domain.ModelNames
 import java.time.LocalDate
 import java.util.Locale
 import kotlin.math.max
@@ -98,10 +99,10 @@ private class OverviewSummary(
     val tokensByTool: Map<String, Long>,
 )
 
-private fun summarizeOverview(history: List<HistoryPoint>, today: LocalDate, currency: io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency): OverviewSummary {
+private fun summarizeOverview(history: List<HistoryPoint>, today: LocalDate, currency: io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency, names: ModelNames): OverviewSummary {
     val totalTokens = history.sumOf { it.tokens }
     val unpricedTokens = history.sumOf { it.unpricedTokens }
-    val tokensByModel = history.flatMap { it.perModel.entries }.groupingBy { it.key }.fold(0L) { sum, entry -> sum + entry.value.tokens }
+    val tokensByModel = names.fold(history.flatMap { it.perModel.entries }.groupingBy { it.key }.fold(0L) { sum, entry -> sum + entry.value.tokens }, Long::plus)
     val tokensByTool = history.flatMap { it.perClient.entries }.groupingBy { it.key }.fold(0L) { sum, entry -> sum + entry.value.tokens }
     val topModel = tokensByModel.maxByOrNull { it.value }?.key.orEmpty()
     val stats = listOf(
@@ -111,7 +112,7 @@ private fun summarizeOverview(history: List<HistoryPoint>, today: LocalDate, cur
         appText(R.string.ui_current_streak_54d92, "CURRENT STREAK") to currentStreak(history, today).toString(),
         appText(R.string.ui_active_time_4dd80, "ACTIVE TIME") to formatActiveDuration(history.sumOf { it.activeTimeMs }),
         appText(R.string.ui_peak_day_07d84, "PEAK DAY") to formatCompactTokens(history.maxOfOrNull { it.tokens } ?: 0L),
-        appText(R.string.ui_top_model_890fc, "TOP MODEL") to topModel.displayName().ifBlank { "—" },
+        appText(R.string.ui_top_model_890fc, "TOP MODEL") to topModel.ifBlank { "—" },
         appText(R.string.ui_messages_85cda, "MESSAGES") to formatCompactTokens(history.sumOf { it.messages }),
     )
     return OverviewSummary(stats, unpricedTokens, totalTokens, tokensByModel, tokensByTool)
@@ -127,7 +128,8 @@ private fun UsageOverview(history: List<HistoryPoint>) {
     }
     val today = currentPresentationDate()
     val currency = LocalUsageCurrency.current
-    val overview = remember(history, today, currency) { summarizeOverview(history, today, currency) }
+    val names = LocalModelNames.current
+    val overview = remember(history, today, currency, names) { summarizeOverview(history, today, currency, names) }
     val heatmap = remember(history, activityMetric, today) { buildActivityHeatmap(history, endDate = today, metric = activityMetric) }
     val unpricedTokens = overview.unpricedTokens
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -176,7 +178,7 @@ private fun OverviewBreakdown(title: String, values: Map<String, Long>, totalTok
                     if (modelRows) ModelMark(name, accentFor(name), size = 8.dp)
                     else UpstreamToolMark(name, accentFor(name), size = 8.dp)
                     Spacer(Modifier.width(7.dp))
-                    Text(name.displayName(), color = Ink, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(if (modelRows) name else name.displayName(), color = Ink, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Text(formatCompactTokens(tokens), color = Ink, style = MaterialTheme.typography.bodySmall)
                     Text(String.format(Locale.US, "  %.1f%%", tokens.toDouble() / totalTokens.coerceAtLeast(1L) * 100.0), color = Muted, style = MaterialTheme.typography.bodySmall)
                 }

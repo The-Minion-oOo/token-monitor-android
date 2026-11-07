@@ -1,5 +1,8 @@
 package io.github.theminionooo.tokenmonitor.widget
 
+import io.github.theminionooo.tokenmonitor.domain.ModelNames
+import io.github.theminionooo.tokenmonitor.data.protocol.decodeModelAliases
+
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.res.Configuration
@@ -17,7 +20,7 @@ internal data class WidgetDeckRenderState(
     val size: SizeF,
 )
 
-internal data class WidgetSnapshot(val session: WidgetSession, val snapshot: HubSnapshot?)
+internal data class WidgetSnapshot(val session: WidgetSession, val snapshot: HubSnapshot?, val modelNames: ModelNames = ModelNames())
 
 /** Read and decode at most once for a batch of launcher updates. */
 internal fun loadWidgetSnapshot(context: Context): WidgetSnapshot {
@@ -45,7 +48,11 @@ internal fun loadWidgetSnapshot(context: Context): WidgetSnapshot {
     // use STALE rather than retaining an unrelated process-local OFFLINE message.
     val settled = snapshot != null && (failed.successAt >= snapshot.capturedAt || failed.stale(snapshot.capturedAt))
     val displayedSession = if (settled && !session.enabled && !session.refreshing) session.copy(note = null) else session
-    return WidgetSnapshot(displayedSession, snapshot)
+    val names = snapshot?.let { current ->
+        io.github.theminionooo.tokenmonitor.data.storage.SecureConnectionStore(context).readModelAliases()
+            ?.let(::decodeModelAliases)?.takeIf { it.revision == current.stats.modelAliasRevision }?.resolver(current)
+    } ?: ModelNames()
+    return WidgetSnapshot(displayedSession, snapshot, names)
 }
 
 internal fun loadWidgetDeck(context: Context, widgetId: Int): WidgetDeckRenderState =
@@ -56,7 +63,7 @@ internal fun loadWidgetDeck(context: Context, widgetId: Int, source: WidgetSnaps
     val systemDark = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
     val theme = resolveInterfaceTheme(display.themeCode, display.followSystemTheme, systemDark)
     return WidgetDeckRenderState(
-        data = prepareWidgetDeck(source.snapshot, source.session, displayOptions = display),
+        data = prepareWidgetDeck(source.snapshot, source.session, displayOptions = display, modelNames = source.modelNames),
         theme = theme,
         size = widgetDeckSize(context, widgetId),
     )

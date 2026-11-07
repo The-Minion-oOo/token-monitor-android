@@ -173,6 +173,7 @@ internal data class HubStatsDto(
     val limits: List<HubLimitAccountDto> = emptyList(),
     val historyPreview: HubHistoryDto = HubHistoryDto(),
     val subscriptionsUpdatedAt: String = "",
+    val modelAliasRevision: Long? = null,
     val staleAfterMs: Long? = null,
 )
 

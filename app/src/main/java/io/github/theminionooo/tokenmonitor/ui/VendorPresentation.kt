@@ -132,8 +132,9 @@ internal fun UpstreamToolMark(name: String, color: Color, size: Dp) {
 
 @Composable
 internal fun ModelMark(name: String, color: Color, size: Dp) {
-    val sourceAsset = if (LocalToolIcons.current) upstreamToolAsset(name) ?: R.drawable.view_model else null
-    val resolvedColor = if (LocalColorfulToolMarks.current) originalToolColor(name, color) else Ink
+    val source = LocalModelNames.current.source(name)
+    val sourceAsset = if (LocalToolIcons.current) upstreamToolAsset(source) ?: R.drawable.view_model else null
+    val resolvedColor = if (LocalColorfulToolMarks.current) originalToolColor(source, color) else Ink
     if (sourceAsset == null) {
         StatusDot(resolvedColor, size)
     } else {

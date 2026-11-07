@@ -1,13 +1,15 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+import io.github.theminionooo.tokenmonitor.domain.ModelNames
+
 import io.github.theminionooo.tokenmonitor.domain.ProjectUsage
 import io.github.theminionooo.tokenmonitor.domain.SessionUsage
 import java.util.Locale
 
-internal fun SessionUsage.matchesSearch(query: String, showTitles: Boolean): Boolean {
+internal fun SessionUsage.matchesSearch(query: String, showTitles: Boolean, names: ModelNames = ModelNames()): Boolean {
     val text = query.trim()
     if (text.isEmpty()) return true
-    val fields = listOf(id, projectLabel, client, client.displayName()) + modelNames +
+    val fields = listOf(id, projectLabel, client, client.displayName()) + modelNames + modelNames.map(names::name) +
         if (showTitles) listOf(title) else emptyList()
     return fields.any { it.contains(text, ignoreCase = true) }
 }

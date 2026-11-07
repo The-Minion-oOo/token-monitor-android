@@ -1,3 +1,4 @@
+import { checkModelAliasReads, checkModelAliasResolver } from "./check-model-aliases.mjs";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
@@ -661,6 +662,8 @@ async function isolatedContract(source, output, upstream) {
             headers: { ...(authenticated ? { Authorization: `Bearer ${secret}` } : {}), ...init.headers },
         });
         Object.assign(responses, await checkV087DeltaReads(uploadRequest, device.deviceId, upstream.version));
+        Object.assign(responses, await checkModelAliasReads(hub, uploadRequest));
+        responses["model-alias-resolver.json"] = checkModelAliasResolver(require);
         await checkV081Streams(require, source, output, upstream);
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) await writeFile(join(output, name), `${JSON.stringify(value, null, 2)}\n`);
@@ -689,7 +692,7 @@ if (workerSource) {
     const directory = await mkdtemp(join(tmpdir(), "token-monitor-hub-contract-"));
     try {
         // Export committed Hub/shared files only; never use the working tree, collectors, data, or .env.
-        const archive = execFileSync("git", ["-C", repository, "archive", "--format=tar", approved, "package.json", "src/hub", "src/shared", "src/electron/serviceStatus.js", "worker/package.json", "worker/src"], { maxBuffer: 32 * 1024 * 1024 });
+        const archive = execFileSync("git", ["-C", repository, "archive", "--format=tar", approved, "package.json", "src/hub", "src/shared", "src/electron/serviceStatus.js", "src/electron/renderer/modelAliases.js", "worker/package.json", "worker/src"], { maxBuffer: 32 * 1024 * 1024 });
         execFileSync("tar", ["-xf", "-", "-C", directory], { input: archive });
         await writeFile(join(directory, "contract-upstream.json"), JSON.stringify(upstream));
         const env = Object.fromEntries(["PATH", "Path", "SystemRoot", "SYSTEMROOT", "WINDIR", "TEMP", "TMP"]

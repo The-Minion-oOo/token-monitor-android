@@ -166,7 +166,7 @@ internal fun DesktopUsageRow(
             if (modelRow) ModelMark(name, accentFor(name), size = 10.dp)
             else UpstreamToolMark(name, accentFor(name), size = 10.dp)
             Spacer(Modifier.width(8.dp))
-            Text(name.displayName(), color = Ink, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(if (modelRow) name else name.displayName(), color = Ink, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
             Spacer(Modifier.width(10.dp))
             Column(horizontalAlignment = Alignment.End) {
                 RowTokenValue(totalTokens)

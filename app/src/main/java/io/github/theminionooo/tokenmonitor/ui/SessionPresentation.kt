@@ -1,5 +1,7 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+import io.github.theminionooo.tokenmonitor.domain.ModelNames
+
 import io.github.theminionooo.tokenmonitor.R
 import io.github.theminionooo.tokenmonitor.domain.SessionUsage
 import java.time.Instant
@@ -18,8 +20,8 @@ internal data class SessionContext(
 
 internal data class SessionRowLabels(val title: String, val meta: String)
 
-internal fun sessionModelMetadata(session: SessionUsage): String = listOfNotNull(
-    session.modelNames.firstOrNull(), session.reasoningEffort,
+internal fun sessionModelMetadata(session: SessionUsage, names: ModelNames = ModelNames()): String = listOfNotNull(
+    session.modelNames.firstOrNull()?.let(names::name), session.reasoningEffort,
 ).joinToString(" · ")
 
 private val ompTitleCode = Regex("^[A-Z0-9]{1,6}: \\S")
@@ -36,15 +38,15 @@ internal fun sessionTitleForDisplay(session: SessionUsage): String {
     return if (ompTitleCode.containsMatchIn(rest)) rest else title
 }
 
-internal fun sessionRowLabels(session: SessionUsage, showTitles: Boolean = true): SessionRowLabels {
+internal fun sessionRowLabels(session: SessionUsage, showTitles: Boolean = true, names: ModelNames = ModelNames()): SessionRowLabels {
     val client = session.client.displayName()
     val reportedTitle = if (showTitles) sessionTitleForDisplay(session) else ""
     val title = reportedTitle.ifBlank {
-        listOf(client, sessionModelMetadata(session)).filter { it.isNotBlank() }.joinToString(" · ")
+        listOf(client, sessionModelMetadata(session, names)).filter { it.isNotBlank() }.joinToString(" · ")
     }.ifBlank { appText(R.string.ui_session_f7f19, "Session") }
     val meta = listOf(
         client.takeIf { reportedTitle.isNotBlank() }.orEmpty(),
-        sessionModelMetadata(session).takeIf { reportedTitle.isNotBlank() && session.reasoningEffort != null }.orEmpty(),
+        sessionModelMetadata(session, names).takeIf { reportedTitle.isNotBlank() && session.reasoningEffort != null }.orEmpty(),
         session.lastUsedAt.shortClockTime(),
         session.projectLabel,
         session.messageCount.takeIf { it > 0 }?.let { appText(R.string.ui_1_s_messages_d4b92, "%1\$s messages", it) }.orEmpty(),

@@ -354,7 +354,8 @@ internal fun DashboardScaffold(
             )
         } else {
             // A period switch replaces every reading at once, so rolling totals sweep instead of ticking.
-            CompositionLocalProvider(LocalTokenRollPeriod provides period) {
+            CompositionLocalProvider(LocalTokenRollPeriod provides period,
+                LocalModelNames provides rememberModelNames(state.snapshot, state.modelAliases)) {
                 DashboardContent(
                     modifier = Modifier.padding(padding),
                     state = state,
