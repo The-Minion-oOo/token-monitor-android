@@ -4,6 +4,8 @@
 
 - Follow desktop model aliases and grouping in model/session displays and saved widget Breakdown rows.
 - Keep saved data visible during reconnects and wait three seconds before showing a stable reconnect notice.
+  Certificate, route, permission and other lasting errors keep their specific message.
+- Retry a failed desktop model-name read on a later update instead of keeping raw names until the app restarts.
 - Lead the Live notification with active conversations, then critical quota, then usage, with bounded observation grace between polls.
 - Declare Android’s required Live promotion permission and request promotion only for explicit Live sessions on supported versions.
 
