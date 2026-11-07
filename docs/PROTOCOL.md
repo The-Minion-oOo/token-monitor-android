@@ -562,7 +562,9 @@ an authenticated GET settings envelope with `ok`, `version`, `revision`,
 `modelAliasGrouping`. An empty Hub returns revision 0 and `value: null`.
 Android reads a positive advertised revision and applies only a matching response.
 Missing or invalid markers, 404 responses and unknown settings versions fall back
-to raw names. Unknown additive fields are ignored.
+to raw names. Unknown additive fields are ignored. A read that fails in transit,
+or answers for another revision, is retried on a later stats update after at least
+60 seconds; a rejected secret stops work as for any other authenticated read.
 
 Manual names are matched using the released resolver’s case, whitespace, dot,
 underscore and hyphen normalization. Direct aliases take precedence and resolve

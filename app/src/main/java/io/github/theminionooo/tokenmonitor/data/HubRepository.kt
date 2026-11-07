@@ -192,9 +192,11 @@ internal class HubRepository(
     private var subscriptionJob: Job? = null
     private val reconnectDelay = ReconnectDelay()
     private var reconnectNoticeJob: Job? = null
+    private var reconnectCause: String? = null
+    private var reconnectNoticeShown = false
     private var aliasJob: Job? = null
     private var aliasRecord: ModelAliasSettings? = null
-    private var attemptedAliasRevision: Long? = null
+    private val aliasReads = AliasReadGate()
     private val streamUpdates = StreamUpdateCoalescer()
     private val streamApplyLock = Mutex()
     private var streamFlushJob: Job? = null
@@ -416,7 +418,7 @@ internal class HubRepository(
             connectionStore.save(candidate, resetAliases = changedHub)
             if (changedHub) {
                 aliasRecord = null
-                attemptedAliasRevision = null
+                aliasReads.reset()
             }
             connection = candidate
             activeUrl = url
@@ -450,7 +452,7 @@ internal class HubRepository(
         connectionStore.clear()
         aliasLoadJob?.cancel()
         aliasRecord = null
-        attemptedAliasRevision = null
+        aliasReads.reset()
         widgetRefresh.clearRecord()
         WidgetRefreshScheduler.reconcileAsync(appContext)
         diskQueue.enqueue { cache.clear(); WidgetUpdateCoordinator.refresh(appContext) }
@@ -577,9 +579,9 @@ internal class HubRepository(
                             _state.update { it.copy(message = error.presentation) }
                             break
                         }
-                        scheduleReconnectNotice(token, if (_state.value.snapshot == null) {
-                            if (error is HubApiException) error.presentation else hubTlsMessage(error)
-                        } else null)
+                        // Without a saved snapshot the generic notice cannot be true, so a temporary HTTP error is named too.
+                        scheduleReconnectNotice(token, reconnectNoticeCause(error)
+                            ?: (error as? HubApiException)?.presentation?.takeIf { _state.value.snapshot == null })
                         // A dropped stream on a route that just answered is retried there first; only a failed
                         // connection moves the other saved address to the front.
                         if (!connected) activeUrl = EndpointFailover.candidates(saved, activeUrl).getOrNull(1) ?: activeUrl
@@ -615,7 +617,8 @@ internal class HubRepository(
         activeTimingRun = 0
         subscriptionJob?.cancel()
         subscriptionJob = null
-        if (aliasJob?.isActive == true) attemptedAliasRevision = null
+        // A read cancelled with its run never answered, so the next visible run may ask again.
+        if (aliasJob?.isActive == true) aliasReads.reset()
         aliasJob?.cancel()
         aliasJob = null
         cancelStreamFlush()
@@ -774,20 +777,38 @@ internal class HubRepository(
         }
     }
 
-    private fun scheduleReconnectNotice(token: Long, initialError: String? = null) {
+    /**
+     * Every failure joins the current outage. After the three-second delay the notice names the latest cause
+     * that retrying alone cannot fix, or stays generic. Transient retries never replace a known cause, so the
+     * text changes only when a different lasting cause is reported.
+     */
+    private fun scheduleReconnectNotice(token: Long, cause: String? = null) {
         reconnectDelay.failed(SystemClock.elapsedRealtime())
+        if (cause != null) reconnectCause = cause
+        if (reconnectNoticeShown) {
+            val notice = reconnectNotice()
+            if (_state.value.message != notice) _state.update { it.copy(message = notice) }
+            return
+        }
         if (_state.value.message != null || reconnectNoticeJob?.isActive == true) return
         reconnectNoticeJob = scope.launch {
             delay(reconnectDelay.remainingMillis(SystemClock.elapsedRealtime()) ?: return@launch)
-            if (generation == token) _state.update { it.copy(message = initialError ?:
-                io.github.theminionooo.tokenmonitor.ui.appText(io.github.theminionooo.tokenmonitor.R.string.ui_hub_reconnecting,
-                    "Hub reconnecting. Showing the last successful snapshot.")) }
+            if (generation == token) {
+                reconnectNoticeShown = true
+                _state.update { it.copy(message = reconnectNotice()) }
+            }
         }
     }
+
+    private fun reconnectNotice(): String = reconnectCause
+        ?: io.github.theminionooo.tokenmonitor.ui.appText(io.github.theminionooo.tokenmonitor.R.string.ui_hub_reconnecting,
+            "Hub reconnecting. Showing the last successful snapshot.")
 
     private fun clearReconnectNotice() {
         reconnectNoticeJob?.cancel()
         reconnectNoticeJob = null
+        reconnectCause = null
+        reconnectNoticeShown = false
         reconnectDelay.recovered()
     }
 
@@ -796,7 +817,7 @@ internal class HubRepository(
         if (desiredWorkMode != HubWorkMode.DashboardStreaming || generation != token) return
         val revision = _state.value.snapshot?.stats?.modelAliasRevision
         if (revision == null || revision == 0L) {
-            attemptedAliasRevision = null
+            aliasReads.reset()
             if (aliasRecord != null) {
                 aliasRecord = null
                 connectionStore.saveModelAliases(null)
@@ -804,8 +825,9 @@ internal class HubRepository(
             }
             return
         }
-        if (aliasRecord?.revision == revision || attemptedAliasRevision == revision || aliasJob?.isActive == true) return
-        attemptedAliasRevision = revision
+        if (aliasRecord?.revision == revision || aliasJob?.isActive == true ||
+            !aliasReads.shouldRead(revision, SystemClock.elapsedRealtime())) return
+        aliasReads.started(revision)
         val route = activeUrl ?: saved.baseUrl
         aliasJob = scope.launch {
             try {
@@ -826,7 +848,11 @@ internal class HubRepository(
                     connectionStore.saveModelAliases(result.first)
                     _state.update { it.copy(modelAliases = result.second) }
                     diskQueue.enqueue { WidgetUpdateCoordinator.refreshSaved(appContext) }
+                } else if (result != null && result.second.revision != revision) {
+                    // The settings answered for another revision; ask again later rather than keep raw names.
+                    aliasReads.failed(SystemClock.elapsedRealtime())
                 }
+                // A missing route or unsupported settings settle this revision with raw model names.
             } catch (cancelled: CancellationException) { throw cancelled }
             catch (error: Exception) {
                 if (generation == token && error is HubApiException && error.statusCode == 401) {
@@ -834,8 +860,10 @@ internal class HubRepository(
                     widgetRefresh.failure(System.currentTimeMillis(), true)
                     WidgetRefreshScheduler.reconcileAsync(appContext)
                     _state.update { it.copy(secretRejected = true, message = error.presentation) }
+                } else {
+                    // Raw model names stay visible, and a later stats update may retry after the throttle.
+                    aliasReads.failed(SystemClock.elapsedRealtime())
                 }
-                // Other optional-settings failures leave raw model names visible.
             }
             finally {
                 if (generation == token) {

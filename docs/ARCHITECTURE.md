@@ -151,8 +151,12 @@ When a dashboard becomes visible the repository:
    Complete frames use their received text length for the size budget. Deltas
    and freshness retain incremental size accounting.
 3. On a recoverable failure, keeps the current snapshot and waits three seconds
-   before showing one localized reconnect notice. Retries retain that notice until
-   fresh data arrives. A rejected secret still stops retries and reports immediately.
+   before showing one reconnect notice. Failures that retrying alone cannot fix,
+   such as TLS, route, permission, redirect and missing-endpoint errors, name their
+   cause; brief HTTP 5xx/408/429 errors, timeouts and drops keep the generic notice.
+   Retries retain that notice until fresh data arrives, and it changes only when a
+   different lasting cause is reported. A rejected secret still stops retries and
+   reports immediately.
    `BackoffPolicy` keeps its bounded exponential delay and jitter while the
    dashboard is visible.
    An initial snapshot does not reset the retry count. A later stats/delta event
@@ -426,8 +430,10 @@ the widget coordinator lock. No hierarchy is attached to a window.
 The visible dashboard reads `GET /api/sync/settings/modelAliases` only after a
 verified snapshot advertises a positive `syncSettingsRevisions.modelAliases`.
 A matching saved revision avoids another request. An unseen revision gets one
-optional read, and stream events with the same revision do not repeat it. Missing
-routes, missing revision markers and unsupported settings keep raw model names.
+optional read, and stream events with the same revision do not repeat it. A read
+that fails in transit, or answers for another revision, may run again on a later
+stats update after at least 60 seconds. Missing routes, missing revision markers
+and unsupported settings settle the revision with raw model names.
 The single repository owns that request with its existing generation, route,
 identity, redirect and credential checks.
 
