@@ -124,7 +124,7 @@ class WidgetBackgroundRunTest {
                             val rejected = path == "/api/stats" && mode.reject
                             val body = when (path) {
                                 "/api/health" -> """{"ok":true,"role":"hub"}"""
-                                "/api/stats" -> """{"periods":{"today":{"totalTokens":42}}}"""
+                                "/api/stats" -> """{"syncSettingsRevisions":{"modelAliases":1},"periods":{"today":{"totalTokens":42}}}"""
                                 else -> "{}"
                             }.toByteArray()
                             it.getOutputStream().write(("HTTP/1.1 ${if (rejected) "401 Unauthorized" else "200 OK"}\r\n" +

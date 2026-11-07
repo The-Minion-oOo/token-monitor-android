@@ -99,13 +99,37 @@ the saved timestamp. Figures come from the snapshot date, which may be older tha
 today when the phone has been offline; Live does not invent intermediate readings,
 and the count rolls only when the total actually changes.
 
-While a session runs, its notification carries the figure, cost, and the
-tightest window per provider with its reset. It labels reconnecting sessions and
-shows the age of saved data, avoiding a Today label for an older snapshot. It is
-updated only when visible content changes. On
-Android 16 it is a promoted ongoing notification, which is what One UI shows under
-"Live notifications" and on the lock screen, with a status bar chip carrying the
-compact figure. Tap it to open the app; Stop ends the session.
+While a Live session runs, its notification leads with running and waiting
+conversation counts. Continuations and subagents count under their conversation,
+using the same grouping as Home. With no active conversations it shows the tightest
+visible quota at 15 percent or less, then the snapshot date’s usage when no quota
+is critical. Expanded content retains usage, cost and quota details. Reconnecting
+sessions label the figures as saved and show their age. Session titles and IDs
+stay out of the notification.
+
+A Live notification allows one polling interval of observation grace. A reported
+30-second activity observation can therefore remain eligible for up to 60 seconds
+from its reported time, bridging the 30-second stats polling boundary. A new idle
+reading replaces it immediately. Dashboard activity keeps its existing 30-second
+rule. Preparation uses each received snapshot and the existing expiry check.
+The notification is re-posted only when its
+visible text changes. Tap it to open the app, or Stop to end the session.
+
+On Android 16.1 and newer, explicit Live sessions request promotion for the lock
+screen and status-bar chip. `POST_PROMOTED_NOTIFICATIONS` is required by Android,
+and promotion also depends on notification permission, system settings and the
+launcher or phone software. Android 16.0 and older retain the ordinary ongoing
+notification with Stop. Only explicit Live sessions request promotion. I checked
+both `canPostPromotedNotifications()` and `hasPromotableCharacteristics()` on the
+API 37 emulator, then verified the posted `FLAG_PROMOTED_ONGOING`. The physical-phone
+check is still open in [#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146).
+See [Android’s Live Updates requirements](https://developer.android.com/develop/ui/views/notifications/live-update).
+
+The Pages Breakdown uses model aliases saved by the visible dashboard when they
+match the snapshot’s `syncSettingsRevisions.modelAliases`. Missing settings or a
+missing/mismatched revision uses raw model names. Live, Refresh, periodic jobs and
+page changes use that saved copy. Desktop grouping combines reported model
+tokens and costs for display while keeping the Hub totals and cached wire data.
 
 The widget is also eligible for the lock screen on launchers that offer third-party
 widgets there. Whether yours does depends on the launcher, not the app.

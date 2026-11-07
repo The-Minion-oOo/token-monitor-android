@@ -44,6 +44,7 @@ never prints it.
 | `GET /api/devices` | Bearer secret | Device periods, platform metadata, tracked tools, cadence, and retained per-device history. |
 | `GET /api/history` | Bearer secret | Daily/monthly totals and per-tool/per-model trend attribution. |
 | `GET /api/subscriptions` | Bearer secret | Subscription dashboard. |
+| `GET /api/sync/settings/modelAliases` | Bearer secret | Optional revisioned desktop display settings, fetched only by the visible dashboard. |
 | `GET /api/stats/stream` | Bearer secret | SSE snapshots, complete updates, freshness and v4 deltas during active Live use. |
 
 The Hub also accepts `X-Token-Monitor-Secret`; this app intentionally uses one
@@ -53,7 +54,7 @@ write, or device deletion endpoints.
 ## Cloudflare Worker
 
 I also exercise `worker/src/index.js` from the same pinned v0.87.0 commit locally.
-Its five read routes use the same Bearer authentication and unauthenticated Hub
+Its snapshot read routes use the same Bearer authentication and unauthenticated Hub
 identity check. Stream-v2 negotiates the same `snapshot`, complete `stats` and
 compact `freshness` envelopes. Ingest changes may produce freshness-only events;
 forced broadcasts such as subscription changes send complete stats. Heartbeats
@@ -552,3 +553,26 @@ The Status screen checks 12 public service entries. OpenCode uses its JSON
 feed and Zed uses Instatus. Copilot health, incidents and maintenance are
 scoped to the Copilot and Copilot AI Model Providers components on GitHub's
 status page.
+
+## Model alias settings
+
+Released desktop v0.87.0 supplies `syncSettingsRevisions.modelAliases` in stats and
+an authenticated GET settings envelope with `ok`, `version`, `revision`,
+`updatedAt` and `value`. Version 1’s value contains `modelAliases` and
+`modelAliasGrouping`. An empty Hub returns revision 0 and `value: null`.
+Android reads a positive advertised revision and applies only a matching response.
+Missing or invalid markers, 404 responses and unknown settings versions fall back
+to raw names. Unknown additive fields are ignored.
+
+Manual names are matched using the released resolver’s case, whitespace, dot,
+underscore and hyphen normalization. Direct aliases take precedence and resolve
+one hop. `duplicates` infers a shared leaf only for equivalent IDs present together,
+while `prefix` permits a single prefixed ID. Vendor-specific suffixes remain
+separate without a manual alias. Display folding sums the Hub’s reported token,
+cost and unpriced amounts, preserving original session IDs, totals and wire data.
+Display sums use reported prices. Widgets use the saved matching settings.
+
+`model-aliases*.json` and `model-alias-resolver.json` under `protocol/v0.87.0/`
+come from the pinned Node Hub, Worker and desktop resolver. The isolated harness
+seeds synthetic settings through each disposable Hub’s internal setter, then
+checks authenticated GETs and the stats revision. These checks run locally with synthetic data.
