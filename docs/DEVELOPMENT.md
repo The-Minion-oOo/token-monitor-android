@@ -509,7 +509,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 135 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 144 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.
@@ -659,3 +659,72 @@ Android parses them. The upload check applies a desktop delta with an explicit
 zero and a history correction, rejects a stale revision and checks the subsequent
 reads. Status cases use the released catalog and summarizers for OpenCode, Zed
 and Copilot, including malformed responses and unrelated GitHub incidents.
+
+## Desktop model names and Live status
+
+For [#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146),
+I checked the released desktop v0.87.0 alias route and resolver from the commit in
+`upstream.json`. The contract exports the renderer’s alias resolver with the Hub
+and Worker into an isolated directory. Synthetic settings are seeded internally,
+then authenticated GET responses and resolver expectations feed Android tests.
+
+The local matrix covers 475 JVM tests, lint, a debug build, all 144 native tests
+on each of API 36 and API 37, all 12 locale packs, documentation links, release
+metadata and 14 Node tooling tests. The Node and Worker contract checks use
+synthetic data. API 26 optimized startup is also a required CI check.
+
+I reviewed the full diff and fixed rejected-alias-secret handling and repeated
+alias preparation across widgets. Focused tests cover revision changes, restored
+settings, older Hubs, GET-only behavior, redirect rejection, secret rejection,
+saved widget names, short and extended reconnects, conversation priority and Stop.
+The screenshot pass also caught raw names in history drill-downs. I applied
+the shared display projection during off-thread history preparation.
+The extended screenshot test initially selected a grouped-row control on a single
+session. I corrected that selector and reran the gallery on both emulators.
+
+Only emulators were available. Promotion, reconnects and a normal Live session on
+my phone remain open in #146.
+
+### Promotion check
+
+On API 37, I inspected the actual posted notification before and after adding the
+permission required by Android. The promotion pair below compares the baseline
+APK with the permission-only build. Final content has its own captures.
+
+| Reading | Baseline | With permission |
+| --- | --- | --- |
+| `canPostPromotedNotifications()` | false | true |
+| `hasPromotableCharacteristics()` | true | true |
+| Posted `FLAG_PROMOTED_ONGOING` | false | true |
+
+### Synthetic comparisons
+
+The app and widget pairs render the same synthetic snapshot with raw names first,
+then the desktop settings. Reconnect captures render the old notice, the quiet
+initial state and the held notice. The repository fixture separately tests the
+three-second timing gate with real sockets. Notification content uses synthetic
+100-token snapshots for sessions, critical quota and usage.
+
+| Surface | Before | After |
+| --- | --- | --- |
+| Models | ![Before Models](images/issue146/names-models-before.png) | ![After Models](images/issue146/names-models-after.png) |
+| Sessions | ![Before Sessions](images/issue146/names-sessions-before.png) | ![After Sessions](images/issue146/names-sessions-after.png) |
+| Session details | ![Before Session details](images/issue146/names-members-before.png) | ![After Session details](images/issue146/names-members-after.png) |
+| Home | ![Before Home](images/issue146/names-home-before.png) | ![After Home](images/issue146/names-home-after.png) |
+| Device models | ![Before Device models](images/issue146/names-device-before.png) | ![After Device models](images/issue146/names-device-after.png) |
+| Project models | ![Before Project models](images/issue146/names-project-before.png) | ![After Project models](images/issue146/names-project-after.png) |
+| History models | ![Before History models](images/issue146/names-history-before.png) | ![After History models](images/issue146/names-history-after.png) |
+| Pages Breakdown | ![Before Pages Breakdown](images/issue146/names-widget-before.png) | ![After Pages Breakdown](images/issue146/names-widget-after.png) |
+| Promotion eligibility | ![Before Promotion eligibility](images/issue146/promotion-before.png) | ![After Promotion eligibility](images/issue146/promotion-after.png) |
+
+| Reconnect state | Capture |
+| --- | --- |
+| Previous immediate notice | ![Previous notice](images/issue146/reconnect-before.png) |
+| First three seconds | ![Quiet reconnect](images/issue146/reconnect-quiet.png) |
+| Extended interruption | ![Held notice](images/issue146/reconnect-notice.png) |
+
+| Notification priority | Capture |
+| --- | --- |
+| Running and waiting conversations | ![Sessions](images/issue146/live-sessions.png) |
+| Quota at 15 percent or less | ![Quota](images/issue146/live-quota.png) |
+| Usage | ![Usage](images/issue146/live-usage.png) |

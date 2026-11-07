@@ -1,3 +1,4 @@
+import { checkModelAliasReads } from "./check-model-aliases.mjs";
 import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
@@ -98,6 +99,7 @@ export async function checkWorkerContract(source, output, upstream, limitCases =
         await hub.broadcast("subscriptions");
         const forced = await waitForFrame();
         assert.equal(forced.event, "stats", "Non-ingest changes require complete stats");
+        Object.assign(responses, await checkModelAliasReads(hub, request));
         for (const [name, fixture] of Object.entries(limitCases)) {
             const caseRecords = new Map();
             const caseHub = new HubDO({ storage: {

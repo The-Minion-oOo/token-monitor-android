@@ -130,8 +130,8 @@ internal fun DesktopHeader(
                 state.snapshot?.stale == true -> appText(R.string.ui_saved_snapshot_1_s_94588, "Saved snapshot · %1\$s", formatCapturedAt(state.snapshot.capturedAt))
                 // Name the route that is answering, so Tailscale gets a label the way home Wi-Fi does.
                 state.streamActive -> displayLabel(HubAddressValidator.routeLabel(state.activeUrl ?: state.connectionUrl, state.fallbackUrl))
-                state.refreshing -> appText(R.string.ui_refreshing_505dd, "Refreshing")
                 state.message != null -> state.message
+                state.refreshing -> appText(R.string.ui_refreshing_505dd, "Refreshing")
                 else -> null
             }
             if (status != null) Text(status, color = if (state.snapshot?.stale == true) OrangeText else Muted, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)

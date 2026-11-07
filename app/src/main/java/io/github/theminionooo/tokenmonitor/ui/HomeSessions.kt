@@ -91,9 +91,9 @@ internal fun HomeSessionsModule(
                     }
                     Column {
                         HomeListRow(
-                            name = sessionRowPresentation(row, LocalSessionTitles.current).title,
+                            name = sessionRowPresentation(row, LocalSessionTitles.current, LocalModelNames.current).title,
                             primary = formatCompactTokens(row.totalTokens),
-                            secondary = listOfNotNull(session.client.displayName(), sessionModelMetadata(session).takeIf { session.reasoningEffort != null }, sessionActivityLabel(state).ifBlank { appText(R.string.ui_idle_cc1eb, "Idle") }, members, age, session.projectLabel)
+                            secondary = listOfNotNull(session.client.displayName(), sessionModelMetadata(session, LocalModelNames.current).takeIf { session.reasoningEffort != null }, sessionActivityLabel(state).ifBlank { appText(R.string.ui_idle_cc1eb, "Idle") }, members, age, session.projectLabel)
                                 .filter { it.isNotBlank() }.joinToString(" · "),
                             color = when (state) {
                                 SessionActivityState.Running -> Success

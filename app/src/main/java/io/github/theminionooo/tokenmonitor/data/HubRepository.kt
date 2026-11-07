@@ -1,5 +1,8 @@
 package io.github.theminionooo.tokenmonitor.data
 
+import io.github.theminionooo.tokenmonitor.domain.ModelAliasSettings
+import io.github.theminionooo.tokenmonitor.data.protocol.decodeModelAliases
+
 import android.content.Context
 import android.os.SystemClock
 import io.github.theminionooo.tokenmonitor.data.network.BackoffPolicy
@@ -83,6 +86,7 @@ internal data class HubRepositoryState(
     val streamActive: Boolean = false,
     val widgetLiveActive: Boolean = false,
     val message: String? = null,
+    val modelAliases: ModelAliasSettings? = null,
     /** The Hub answered 401; retrying cannot help until the pairing changes. */
     val secretRejected: Boolean = false,
 )
@@ -186,6 +190,11 @@ internal class HubRepository(
     private var activeWorkMode = HubWorkMode.Idle
     private var activeTimingRun = 0
     private var subscriptionJob: Job? = null
+    private val reconnectDelay = ReconnectDelay()
+    private var reconnectNoticeJob: Job? = null
+    private var aliasJob: Job? = null
+    private var aliasRecord: ModelAliasSettings? = null
+    private var attemptedAliasRevision: Long? = null
     private val streamUpdates = StreamUpdateCoalescer()
     private val streamApplyLock = Mutex()
     private var streamFlushJob: Job? = null
@@ -299,6 +308,18 @@ internal class HubRepository(
         }
     }
 
+    private val aliasLoadJob = connection?.let { saved ->
+        scope.launch {
+            val stored = withContext(Dispatchers.IO) {
+                connectionStore.readModelAliases()?.let { decodeModelAliases(it) }
+            }
+            if (connection === saved && aliasRecord == null) {
+                aliasRecord = stored
+                _state.update { it.copy(modelAliases = stored) }
+            }
+        }
+    }
+
     fun setDashboardVisible(owner: Any, visible: Boolean) {
         updateDashboardOwner(owner, visible)
         val reason = if (visible) HubTimingReason.OWNER_VISIBLE else HubTimingReason.OWNER_HIDDEN
@@ -391,7 +412,12 @@ internal class HubRepository(
             if (generation != token) return "Connection check cancelled. Try again."
             val snapshot = withContext(Dispatchers.IO) { parse(wire) }
             if (generation != token) return "Connection check cancelled. Try again."
-            connectionStore.save(candidate)
+            val changedHub = connection?.let { it.baseUrl != candidate.baseUrl || it.secret != candidate.secret } != false
+            connectionStore.save(candidate, resetAliases = changedHub)
+            if (changedHub) {
+                aliasRecord = null
+                attemptedAliasRevision = null
+            }
             connection = candidate
             activeUrl = url
             applySuccess(wire, snapshot)
@@ -406,7 +432,7 @@ internal class HubRepository(
     fun disablePublicHttps() {
         val saved = connection?.takeIf { it.allowPublicHttps } ?: return
         val privateOnly = saved.copy(allowPublicHttps = false)
-        connectionStore.save(privateOnly)
+        connectionStore.save(privateOnly, resetAliases = false)
         stopForegroundWork()
         connection = privateOnly
         _state.update { it.copy(allowPublicHttps = false, message = "Internet Hub access is off. Use Tailscale or update the connection settings.") }
@@ -422,6 +448,9 @@ internal class HubRepository(
         pendingCacheWrite = null
         decodedBodies.clear()
         connectionStore.clear()
+        aliasLoadJob?.cancel()
+        aliasRecord = null
+        attemptedAliasRevision = null
         widgetRefresh.clearRecord()
         WidgetRefreshScheduler.reconcileAsync(appContext)
         diskQueue.enqueue { cache.clear(); WidgetUpdateCoordinator.refresh(appContext) }
@@ -465,7 +494,7 @@ internal class HubRepository(
                     var connected = false
                     var streamHealth: StreamConnectionHealth? = null
                     try {
-                        _state.update { it.copy(refreshing = true, message = null, secretRejected = false) }
+                        _state.update { it.copy(refreshing = true, secretRejected = false) }
                         val firstDashboardAttempt = mode == HubWorkMode.DashboardStreaming && initialSnapshot
                         initialSnapshot = false
                         val (url, wire) = withContext(Dispatchers.IO) {
@@ -486,6 +515,7 @@ internal class HubRepository(
                         if (generation != token) break
                         activeUrl = url
                         timing.measure(HubTimingStage.PUBLISH, run = run) { applySuccess(wire, snapshot) }
+                        if (mode == HubWorkMode.DashboardStreaming) refreshModelAliases(saved, api, token)
                         connected = true
                         when (mode) {
                             HubWorkMode.DashboardStreaming -> try {
@@ -502,6 +532,7 @@ internal class HubRepository(
                                                 applyStreamEvents(ready, token)
                                                 scheduleStreamFlush(saved, api, token)
                                                 refreshSubscriptions(saved, api, token)
+                                                refreshModelAliases(saved, api, token)
                                             }
                                         } },
                                     )
@@ -527,7 +558,10 @@ internal class HubRepository(
                             }
                             HubWorkMode.Idle -> Unit
                         }
-                        if (generation == token) _state.update { it.copy(streamActive = false, widgetLiveActive = false, message = "Live updates paused. Retrying...") }
+                        if (generation == token) {
+                            _state.update { it.copy(streamActive = false, widgetLiveActive = false) }
+                            scheduleReconnectNotice(token)
+                        }
                     } catch (cancelled: CancellationException) { throw cancelled }
                     catch (error: Exception) {
                         if (generation != token) break
@@ -537,9 +571,15 @@ internal class HubRepository(
                             widgetRefresh.failure(System.currentTimeMillis(), true)
                             WidgetRefreshScheduler.reconcileAsync(appContext)
                         }
-                        _state.update { it.copy(refreshing = false, streamActive = false, widgetLiveActive = false, secretRejected = rejected,
-                            message = if (error is HubApiException) error.presentation else hubTlsMessage(error) ?: "Hub unavailable. Showing the last successful snapshot; retrying...") }
-                        if (rejected) break
+                        _state.update { it.copy(refreshing = false, streamActive = false, widgetLiveActive = false, secretRejected = rejected) }
+                        if (rejected) {
+                            clearReconnectNotice()
+                            _state.update { it.copy(message = error.presentation) }
+                            break
+                        }
+                        scheduleReconnectNotice(token, if (_state.value.snapshot == null) {
+                            if (error is HubApiException) error.presentation else hubTlsMessage(error)
+                        } else null)
                         // A dropped stream on a route that just answered is retried there first; only a failed
                         // connection moves the other saved address to the front.
                         if (!connected) activeUrl = EndpointFailover.candidates(saved, activeUrl).getOrNull(1) ?: activeUrl
@@ -566,6 +606,7 @@ internal class HubRepository(
         if (activeApi != null || foregroundJob != null) timing.mark(HubTimingStage.WORK_STOP, activeTimingRun, reason)
         cancelWidgetBackgroundRefresh()
         generation++
+        clearReconnectNotice()
         activeApi?.close()
         activeApi = null
         foregroundJob?.cancel()
@@ -574,6 +615,9 @@ internal class HubRepository(
         activeTimingRun = 0
         subscriptionJob?.cancel()
         subscriptionJob = null
+        if (aliasJob?.isActive == true) attemptedAliasRevision = null
+        aliasJob?.cancel()
+        aliasJob = null
         cancelStreamFlush()
         _state.update { it.copy(refreshing = false, streamActive = false, widgetLiveActive = false) }
         pendingCacheWrite?.let { persist(it, force = true) }
@@ -623,6 +667,7 @@ internal class HubRepository(
     }
 
     private fun applySuccess(wire: WireHubSnapshot, snapshot: HubSnapshot) {
+        clearReconnectNotice()
         widgetRefresh.success(wire.capturedAt)
         WidgetRefreshScheduler.reconcileAsync(appContext)
         lastWireSnapshot = wire
@@ -632,6 +677,7 @@ internal class HubRepository(
             fallbackUrl = connection?.fallbackUrl, activeUrl = activeUrl,
             allowLocalNetwork = connection?.allowLocalNetwork ?: false,
             allowPublicHttps = connection?.allowPublicHttps ?: false, snapshot = snapshot,
+            modelAliases = aliasRecord?.takeIf { it.revision == snapshot.stats.modelAliasRevision },
             localNetworkPermissionRequired = needsLocalPermission(),
         )
     }
@@ -656,6 +702,7 @@ internal class HubRepository(
             if (generation != token) return@launch
             applyStreamEvents(streamUpdates.drain(SystemClock.elapsedRealtime()), token)
             refreshSubscriptions(saved, api, token)
+            refreshModelAliases(saved, api, token)
             // An update that arrived while this one was decoding is held; schedule it before finishing.
             streamFlushJob = null
             scheduleStreamFlush(saved, api, token)
@@ -697,7 +744,9 @@ internal class HubRepository(
         val updatedWire = parsed.first.copy(subscriptions = lastWireSnapshot?.subscriptions)
         val next = parsed.second.copy(subscriptions = _state.value.snapshot?.subscriptions ?: parsed.second.subscriptions)
         lastWireSnapshot = updatedWire
-        _state.update { it.copy(snapshot = next, message = null) }
+        clearReconnectNotice()
+        _state.update { it.copy(snapshot = next, message = null,
+            modelAliases = aliasRecord?.takeIf { record -> record.revision == next.stats.modelAliasRevision }) }
         persist(updatedWire, false)
         return true
     }
@@ -722,6 +771,78 @@ internal class HubRepository(
                 lastWireSnapshot?.copy(subscriptions = raw)?.let { lastWireSnapshot = it; persist(it, true) }
             } catch (cancelled: CancellationException) { throw cancelled }
             catch (_: Exception) { /* Keep the last good list; retry the same version after a minute. */ }
+        }
+    }
+
+    private fun scheduleReconnectNotice(token: Long, initialError: String? = null) {
+        reconnectDelay.failed(SystemClock.elapsedRealtime())
+        if (_state.value.message != null || reconnectNoticeJob?.isActive == true) return
+        reconnectNoticeJob = scope.launch {
+            delay(reconnectDelay.remainingMillis(SystemClock.elapsedRealtime()) ?: return@launch)
+            if (generation == token) _state.update { it.copy(message = initialError ?:
+                io.github.theminionooo.tokenmonitor.ui.appText(io.github.theminionooo.tokenmonitor.R.string.ui_hub_reconnecting,
+                    "Hub reconnecting. Showing the last successful snapshot.")) }
+        }
+    }
+
+    private fun clearReconnectNotice() {
+        reconnectNoticeJob?.cancel()
+        reconnectNoticeJob = null
+        reconnectDelay.recovered()
+    }
+
+    /** Optional dashboard metadata. Widget modes never enter this request path. */
+    private fun refreshModelAliases(saved: HubConnection, api: HubApiClient, token: Long) {
+        if (desiredWorkMode != HubWorkMode.DashboardStreaming || generation != token) return
+        val revision = _state.value.snapshot?.stats?.modelAliasRevision
+        if (revision == null || revision == 0L) {
+            attemptedAliasRevision = null
+            if (aliasRecord != null) {
+                aliasRecord = null
+                connectionStore.saveModelAliases(null)
+                _state.update { it.copy(modelAliases = null) }
+            }
+            return
+        }
+        if (aliasRecord?.revision == revision || attemptedAliasRevision == revision || aliasJob?.isActive == true) return
+        attemptedAliasRevision = revision
+        val route = activeUrl ?: saved.baseUrl
+        aliasJob = scope.launch {
+            try {
+                aliasLoadJob?.join()
+                if (aliasRecord?.revision == revision) {
+                    _state.update { it.copy(modelAliases = aliasRecord) }
+                    return@launch
+                }
+                val result = withContext(Dispatchers.IO) {
+                    val raw = api.getModelAliases(saved.copy(baseUrl = route)) ?: return@withContext null
+                    decodeModelAliases(raw)?.let { raw to it }
+                }
+                ensureActive()
+                if (generation != token || desiredWorkMode != HubWorkMode.DashboardStreaming) return@launch
+                if (result != null && result.second.revision == revision &&
+                    _state.value.snapshot?.stats?.modelAliasRevision == revision) {
+                    aliasRecord = result.second
+                    connectionStore.saveModelAliases(result.first)
+                    _state.update { it.copy(modelAliases = result.second) }
+                    diskQueue.enqueue { WidgetUpdateCoordinator.refreshSaved(appContext) }
+                }
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (error: Exception) {
+                if (generation == token && error is HubApiException && error.statusCode == 401) {
+                    stopForegroundWork()
+                    widgetRefresh.failure(System.currentTimeMillis(), true)
+                    WidgetRefreshScheduler.reconcileAsync(appContext)
+                    _state.update { it.copy(secretRejected = true, message = error.presentation) }
+                }
+                // Other optional-settings failures leave raw model names visible.
+            }
+            finally {
+                if (generation == token) {
+                    aliasJob = null
+                    refreshModelAliases(saved, api, token)
+                }
+            }
         }
     }
 

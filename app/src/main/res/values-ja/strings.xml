@@ -603,4 +603,7 @@
     <string name="label_coverage_ends">利用期間終了</string>
     <string name="ui_additional_tokens">追加トークン</string>
     <string name="ui_all_tools">すべてのツール</string>
+    <string name="ui_hub_reconnecting">Hub に再接続中です。最後に取得したデータを表示しています。</string>
+    <string name="ui_notification_live_until">%1$s までライブ更新</string>
+    <string name="ui_notification_session_ends">%1$s にセッション終了</string>
 </resources>

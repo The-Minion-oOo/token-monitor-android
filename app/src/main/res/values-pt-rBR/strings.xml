@@ -601,4 +601,7 @@
     <string name="label_coverage_ends">Fim da cobertura</string>
     <string name="ui_additional_tokens">Tokens adicionais</string>
     <string name="ui_all_tools">Todas as ferramentas</string>
+    <string name="ui_hub_reconnecting">Reconectando ao Hub. Exibindo os últimos dados recebidos.</string>
+    <string name="ui_notification_live_until">Ao vivo até %1$s</string>
+    <string name="ui_notification_session_ends">A sessão termina às %1$s</string>
 </resources>

@@ -256,6 +256,7 @@ data class HubStats(
     val limits: HubLimits = HubLimits(),
     val historyPreview: HubHistory = HubHistory(),
     val subscriptionsUpdatedAt: String = "",
+    val modelAliasRevision: Long? = null,
     val staleAfterMs: Long? = null,
 )
 

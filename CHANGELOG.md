@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Follow desktop model aliases and grouping in model/session displays and saved widget Breakdown rows.
+- Keep saved data visible during reconnects and wait three seconds before showing a stable reconnect notice.
+- Lead the Live notification with active conversations, then critical quota, then usage, with bounded observation grace between polls.
+- Declare Android’s required Live promotion permission and request promotion only for explicit Live sessions on supported versions.
+
 ## v0.87.0 r1 — 2026-11-06
 
 - Display OpenDesign's reported session and weekly allowances in Limits.

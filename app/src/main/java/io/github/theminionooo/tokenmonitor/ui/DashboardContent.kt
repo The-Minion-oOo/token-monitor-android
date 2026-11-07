@@ -128,14 +128,19 @@ internal fun DashboardContent(
         return
     }
     // Direct periods already have shared decoded data; no whole-snapshot comparison is needed.
-    val usage = if (period.statsKey != null) period.usage(snapshot)
+    val names = LocalModelNames.current
+    val rawUsage = if (period.statsKey != null) period.usage(snapshot)
         else remember(snapshot, period) { period.usage(snapshot) }
-    val trendHistory = if (destination == DashboardDestination.Trends) rememberUsageHistory(snapshot) else null
+    val aliasInputs = ModelAliasInputs(snapshot)
+    val usage = remember(aliasInputs, period, names) { names.usage(rawUsage) }
+    val trendHistory = if (destination == DashboardDestination.Trends) rememberUsageHistory(snapshot, LocalModelNames.current) else null
     BackHandler(destination == DashboardDestination.Models && modelFilter != null) {
         onChoose(DashboardDestination.Tools)
     }
     val filteredTool = modelFilter
-    val modelUsage = filteredTool?.let { usage.modelsForTool(it) } ?: usage
+    val modelUsage = if (filteredTool == null) usage else remember(aliasInputs, period, filteredTool, names) {
+        names.usage(rawUsage.modelsForTool(filteredTool))
+    }
     val listState = rememberSaveable(destination, modelFilter, saver = LazyListState.Saver) { LazyListState() }
     var search by rememberSaveable(destination) { mutableStateOf("") }
     var sessionTool by rememberSaveable(destination) { mutableStateOf("") }
@@ -221,10 +226,11 @@ internal fun DashboardContent(
             DashboardDestination.Sessions -> sessionItems(
                 usage.sessions, period, search.isNotBlank() || selectedSessionTool.isNotEmpty(),
                 evidence = snapshot.today.sessions + snapshot.month.sessions,
-                matches = { it.matchesSearch(search, showSessionTitles) },
+                matches = { it.matchesSearch(search, showSessionTitles, names) },
                 query = search,
                 toolFilter = selectedSessionTool,
                 showTitles = showSessionTitles,
+                names = names,
             )
             DashboardDestination.Limits -> limitItems(snapshot, displayOptions)
             DashboardDestination.Trends -> if (trendHistory == null) item { MutedCopy(appText(R.string.ui_loading_activity_4c959, "Loading activity…")) }

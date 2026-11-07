@@ -150,9 +150,11 @@ When a dashboard becomes visible the repository:
    patch insertion depth and deferred serialization enforce the same limit.
    Complete frames use their received text length for the size budget. Deltas
    and freshness retain incremental size accounting.
-3. On stream failure, reports "Live updates paused", waits according to
-   `BackoffPolicy` (bounded exponential with jitter), and reconnects while the
-   dashboard is still visible.
+3. On a recoverable failure, keeps the current snapshot and waits three seconds
+   before showing one localized reconnect notice. Retries retain that notice until
+   fresh data arrives. A rejected secret still stops retries and reports immediately.
+   `BackoffPolicy` keeps its bounded exponential delay and jitter while the
+   dashboard is visible.
    An initial snapshot does not reset the retry count. A later stats/delta event
    or a connection lasting at least 30 seconds establishes a healthy stream.
 
@@ -418,3 +420,39 @@ sizes across widget instances, then discards the cache. Background refreshes use
 a private measurement Looper that is stopped and joined when the batch ends,
 including on failure; measurement never waits for the main thread while holding
 the widget coordinator lock. No hierarchy is attached to a window.
+
+## Desktop model names and Live status
+
+The visible dashboard reads `GET /api/sync/settings/modelAliases` only after a
+verified snapshot advertises a positive `syncSettingsRevisions.modelAliases`.
+A matching saved revision avoids another request. An unseen revision gets one
+optional read, and stream events with the same revision do not repeat it. Missing
+routes, missing revision markers and unsupported settings keep raw model names.
+The single repository owns that request with its existing generation, route,
+identity, redirect and credential checks.
+
+`ModelAliasSettings` follows the released desktop resolver. Manual aliases take
+precedence, `off` disables inferred grouping, `duplicates` groups equivalent names
+present together, and `prefix` also shortens a lone provider-prefixed name. Model
+maps are folded into display copies using reported tokens and costs. Sessions
+resolve labels while keeping source identities for grouping and search. View data derives
+from the original wire cache, Hub totals and reported prices. Daily per-model
+attribution is folded once during shared off-thread history preparation, so the
+overview, charts, model explorer and day details share that projection.
+Resolver preparation runs on Default
+with reference-based Compose keys. Existing aliases remain visible while a new
+snapshot’s discovered-model set is prepared.
+
+The saved settings share the pairing’s private preference store and backup
+exclusions. A new Hub or secret clears them. Widgets read the saved, matching
+revision once per batch of launcher updates. Vendor marks retain a source model separately
+from its display label. The renderer places folded rows using `WidgetDeckGrid`.
+
+Widget Live computes conversation counts off the main thread from the existing
+snapshot. It gives activity observations one 30-second polling interval of grace,
+then falls back to the existing transcript rules. Quota priority uses the tightest
+visible window at 15 percent or less. The notification keeps its one-hour deadline,
+Stop action and visible-text equality check. Android requires the normal
+`POST_PROMOTED_NOTIFICATIONS` manifest permission before eligible explicit Live
+notifications can be promoted on Android 16.1+. Android applies the permission
+and controls promotion through system policy.

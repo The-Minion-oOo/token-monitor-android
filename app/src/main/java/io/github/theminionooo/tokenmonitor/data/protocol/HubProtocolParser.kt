@@ -143,6 +143,8 @@ object HubProtocolParser {
                 .orEmpty(),
             historyPreview = objectField("historyPreview")?.toHistoryDto() ?: HubHistoryDto(),
             subscriptionsUpdatedAt = string("subscriptionsUpdatedAt"),
+            modelAliasRevision = (objectField("syncSettingsRevisions")?.get("modelAliases") as? JsonPrimitive)?.takeUnless { it.isString }?.longOrNull
+                ?.takeIf { it in 0..9_007_199_254_740_991L },
             staleAfterMs = long("staleAfterMs"),
         )
     }
@@ -439,6 +441,7 @@ object HubProtocolParser {
         limits = HubLimits(limitsUpdatedAt, limits.map { it.toDomain() }),
         historyPreview = historyPreview.toDomain(),
         subscriptionsUpdatedAt = subscriptionsUpdatedAt,
+        modelAliasRevision = modelAliasRevision,
         staleAfterMs = staleAfterMs,
     )
 

@@ -263,7 +263,7 @@ private class DeckCanvas(
             text(value, g.STATS_X, top + g.STAT_VALUE_OFFSET, stat, ink, maxWidth = statsWidth)
             text(name, g.STATS_X, top + g.STAT_CAPTION_OFFSET, caption, muted, maxWidth = statsWidth)
         }
-        val tools = data.tools.take(3).mapIndexed { index, row -> row to vendorColor(row.name, index) }
+        val tools = data.tools.take(3).mapIndexed { index, row -> row to vendorColor(row.sourceName, index) }
         drawSegmentedBar(RectF(left, g.BAR_TOP, right, g.BAR_BOTTOM), tools.map { it.first.share to it.second })
         val slot = (right - left) / 3f
         tools.forEachIndexed { index, (row, color) ->
@@ -325,8 +325,8 @@ private class DeckCanvas(
         text(displayLabel("Models"), g.MODELS_X, g.SECTION_BASELINE, section, label)
         if (data.tools.size <= 1 && data.models.size <= 1) {
             data.tools.firstOrNull()?.let { row ->
-                val color = vendorColor(row.name, 0)
-                drawMark(row.name, left, g.SPARSE_MARK_TOP, g.SPARSE_MARK_SIZE, color, R.drawable.view_tool)
+                val color = vendorColor(row.sourceName, 0)
+                drawMark(row.sourceName, left, g.SPARSE_MARK_TOP, g.SPARSE_MARK_SIZE, color, R.drawable.view_tool)
                 text(row.name.displayName(), g.SPARSE_TOOL_NAME_X, g.SPARSE_IDENTITY_BASELINE, bodyStrong, ink, maxWidth = g.TOOL_RIGHT - g.SPARSE_TOOL_NAME_X)
                 fitText(compactFigure(row.tokens), left, g.SPARSE_VALUE_BASELINE, figure, Type.STAT, ink, 72f)
                 text(sharePercent(row.share), g.TOOL_RIGHT, g.SPARSE_VALUE_BASELINE, figure, ink, Paint.Align.RIGHT, 68f)
@@ -336,8 +336,8 @@ private class DeckCanvas(
                 if (row.costUsd > 0 || row.unpricedTokens > 0) text(appText(R.string.ui_1_s_estimated_cost_bf81a, "%1\$s estimated cost", formatUsageCost(row.costUsd, row.unpricedTokens, compact = true, currency = currency)), left, g.SPARSE_COST_BASELINE, secondary, muted)
             }
             data.models.firstOrNull()?.let { row ->
-                val color = vendorColor(row.name, 0)
-                drawMark(row.name, g.MODELS_X, g.SPARSE_MARK_TOP, g.SPARSE_MARK_SIZE, color, R.drawable.view_model)
+                val color = vendorColor(row.sourceName, 0)
+                drawMark(row.sourceName, g.MODELS_X, g.SPARSE_MARK_TOP, g.SPARSE_MARK_SIZE, color, R.drawable.view_model)
                 text(row.name, g.SPARSE_MODEL_NAME_X, g.SPARSE_IDENTITY_BASELINE, bodyStrong, ink, maxWidth = right - g.SPARSE_MODEL_NAME_X)
                 fitText(compactFigure(row.tokens), g.MODELS_X, g.SPARSE_VALUE_BASELINE, figure, Type.STAT, ink, 72f)
                 text(sharePercent(row.share), right, g.SPARSE_VALUE_BASELINE, figure, ink, Paint.Align.RIGHT, 68f)
@@ -356,8 +356,8 @@ private class DeckCanvas(
         val g = WidgetDeckGrid.Breakdown
         rows.take(g.ROW_TOPS.size).forEachIndexed { index, row ->
             val top = g.ROW_TOPS[index]
-            val color = vendorColor(row.name, index)
-            drawMark(row.name, columnLeft, top + g.MARK_OFFSET, g.MARK_SIZE, color, fallbackMark)
+            val color = vendorColor(row.sourceName, index)
+            drawMark(row.sourceName, columnLeft, top + g.MARK_OFFSET, g.MARK_SIZE, color, fallbackMark)
             val shareWidth = text(sharePercent(row.share), columnRight, top + g.NAME_BASELINE_OFFSET, bodyStrong, ink, Paint.Align.RIGHT)
             text(label(row.name), nameX, top + g.NAME_BASELINE_OFFSET, body, ink, maxWidth = columnRight - shareWidth - g.SHARE_GAP - nameX)
             val detail = compactFigure(row.tokens) + if (row.costUsd > 0 || row.unpricedTokens > 0) " · ${formatUsageCost(row.costUsd, row.unpricedTokens, compact = true, currency = currency)}" else ""

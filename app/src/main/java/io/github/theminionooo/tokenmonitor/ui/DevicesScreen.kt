@@ -110,7 +110,7 @@ internal fun LazyListScope.deviceItems(devices: List<DeviceUsage>, period: Dashb
         val values = devices.associateWith { device -> period.usage(device).totalTokens }
         val maximum = values.values.maxOrNull()?.coerceAtLeast(1L) ?: 1L
         items(devices, key = { it.id }) { device ->
-            val usage = period.usage(device)
+            val usage = LocalModelNames.current.usage(period.usage(device))
             val operatingSystem = listOf(device.osName.ifBlank { device.platform.displayName() }, device.osVersion)
                 .filter { it.isNotBlank() }
                 .joinToString(" ")
@@ -187,7 +187,7 @@ internal fun DeviceUsageRow(
                     Row(modifier = Modifier.padding(start = 20.dp, top = 3.dp, bottom = 3.dp), verticalAlignment = Alignment.CenterVertically) {
                         ModelMark(model, accentFor(model), size = 8.dp)
                         Spacer(Modifier.width(7.dp))
-                        Text(model.displayName(), color = Ink, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Text(model, color = Ink, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                         Text(formatCompactTokens(tokens), color = Ink, style = MaterialTheme.typography.bodySmall)
                     }
                 }

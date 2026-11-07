@@ -1,5 +1,7 @@
 package io.github.theminionooo.tokenmonitor.widget
 
+import io.github.theminionooo.tokenmonitor.domain.ModelNames
+
 import io.github.theminionooo.tokenmonitor.ui.appText
 import io.github.theminionooo.tokenmonitor.R
 import io.github.theminionooo.tokenmonitor.domain.HistoryPoint
@@ -26,6 +28,7 @@ internal data class WidgetDeckUsageRow(
     val costUsd: Double,
     val share: Double,
     val unpricedTokens: Long = 0,
+    val sourceName: String = name,
 )
 
 internal data class WidgetDeckLimitRow(
@@ -69,6 +72,7 @@ internal fun prepareWidgetDeck(
     zoneId: ZoneId = ZoneId.systemDefault(),
     locale: Locale = io.github.theminionooo.tokenmonitor.ui.AppLanguage.locale(),
     displayOptions: io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions = io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions(),
+    modelNames: ModelNames = ModelNames(),
 ): WidgetDeckData {
     val liveEnabled = session.enabled && session.expiresAt > now
     val age = snapshot?.capturedAt?.takeIf { it > 0 }?.let { (now - it).coerceAtLeast(0) }
@@ -103,13 +107,14 @@ internal fun prepareWidgetDeck(
         runCatching { LocalDate.parse(point.label.take(10)) }.getOrNull()?.let { !it.isBefore(weekStart) && !it.isAfter(date) } == true
     }
     val today = history.lastOrNull { it.label.take(10) == date.toString() }
-    val period = snapshot?.today
+    val period = snapshot?.today?.let(modelNames::usage)
     fun rows(tokens: Map<String, Long>, costs: Map<String, Double>, unpriced: Map<String, Long>, limit: Int, tools: Boolean = false): List<WidgetDeckUsageRow> {
         val total = tokens.values.sum().toDouble()
         if (total <= 0) return emptyList()
         val entries = if (tools) io.github.theminionooo.tokenmonitor.data.storage.orderedTools(tokens, costs, displayOptions) else tokens.entries.sortedByDescending { it.value }
         return entries.take(limit).map { (name, value) ->
-            WidgetDeckUsageRow(name, value, costs[name] ?: 0.0, value / total, unpriced[name] ?: 0)
+            WidgetDeckUsageRow(name, value, costs[name] ?: 0.0, value / total, unpriced[name] ?: 0,
+                sourceName = if (tools) name else modelNames.source(name))
         }
     }
     val limitsByProvider = io.github.theminionooo.tokenmonitor.data.storage.visibleLimitAccounts(snapshot?.stats?.limits?.providers.orEmpty(), displayOptions).map { account ->

@@ -602,4 +602,7 @@
     <string name="label_coverage_ends">이용 종료</string>
     <string name="ui_additional_tokens">추가 토큰</string>
     <string name="ui_all_tools">모든 도구</string>
+    <string name="ui_hub_reconnecting">Hub에 다시 연결하는 중입니다. 마지막으로 받은 데이터를 표시합니다.</string>
+    <string name="ui_notification_live_until">%1$s까지 실시간 업데이트</string>
+    <string name="ui_notification_session_ends">세션 종료 %1$s</string>
 </resources>

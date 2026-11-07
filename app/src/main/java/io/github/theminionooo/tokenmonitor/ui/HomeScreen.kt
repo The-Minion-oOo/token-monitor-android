@@ -119,7 +119,7 @@ internal fun LazyListScope.homeItems(
             "Models" -> item { DesktopModule(appText(R.string.ui_models_441ba, "MODELS"), DashboardDestination.Models, onChoose) { HomeBreakdown(usage.models, usage.modelCosts, displayOptions.rankingMetric, modelRows = true, unpriced = usage.modelUnpricedTokens, count = displayOptions.homeListCount("Models")) } }
             "Sessions" -> item { HomeSessionsModule(HomeSessionInputs(snapshot.month.sessions, snapshot.today.sessions), displayOptions.homeListCount("Sessions"), onChoose) }
             "Activity" -> item {
-                val history = rememberUsageHistory(snapshot)
+                val history = rememberUsageHistory(snapshot, LocalModelNames.current)
                 val date = currentPresentationDate()
                 val activity = remember(history, date) { history?.let { buildActivityHeatmap(it, date) } }
                 DesktopModule(
@@ -289,7 +289,7 @@ internal fun HomeListRow(
         }
         Spacer(Modifier.width(8.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text(if (literalName) name else name.displayName(), color = Ink, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(if (literalName || modelRow) name else name.displayName(), color = Ink, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
             if (secondary.isNotBlank()) Text(secondary, color = Muted, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
         Text(primary, color = Ink, style = MaterialTheme.typography.bodySmall, maxLines = 1)

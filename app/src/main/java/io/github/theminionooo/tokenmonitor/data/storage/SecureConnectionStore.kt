@@ -27,9 +27,10 @@ internal class SecureConnectionStore(context: Context) {
         decode(cleartext)
     }.getOrNull()
 
-    fun save(connection: HubConnection) {
+    fun save(connection: HubConnection, resetAliases: Boolean = true) {
         val encrypted = encrypt(encode(connection))
         preferences.edit(commit = true) {
+            if (resetAliases) remove("model_aliases")
             putString(ivKey, encrypted.iv)
             putString(ciphertextKey, encrypted.ciphertext)
         }
@@ -37,6 +38,13 @@ internal class SecureConnectionStore(context: Context) {
 
     fun clear() {
         preferences.edit(commit = true) { clear() }
+    }
+
+    /** Shares pairing lifetime and backup exclusions, but contains display settings only. */
+    fun readModelAliases(): String? = preferences.getString("model_aliases", null)
+
+    fun saveModelAliases(raw: String?) {
+        preferences.edit { putString("model_aliases", raw) }
     }
 
     private fun encrypt(value: String): EncryptedValue {

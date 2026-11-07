@@ -1,14 +1,16 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+import io.github.theminionooo.tokenmonitor.domain.ModelNames
+
 import io.github.theminionooo.tokenmonitor.R
 import io.github.theminionooo.tokenmonitor.domain.ProjectUsage
 
 internal data class ProjectShare(val name: String, val tokens: Long, val unknown: Boolean = false)
 
 /** Bound each reported map to the project total; missing attribution stays unknown, never estimated. */
-internal fun projectShares(project: ProjectUsage, models: Boolean): List<ProjectShare> {
+internal fun projectShares(project: ProjectUsage, models: Boolean, names: ModelNames = ModelNames()): List<ProjectShare> {
     var remaining = project.totalTokens.coerceAtLeast(0)
-    val shares = (if (models) project.models else project.clients).toSortedMap().mapNotNull { (name, value) ->
+    val shares = (if (models) names.fold(project.models, Long::plus) else project.clients).toSortedMap().mapNotNull { (name, value) ->
         val tokens = value.coerceIn(0, remaining)
         if (name.isBlank() || tokens == 0L) null else ProjectShare(name, tokens).also { remaining -= tokens }
     }

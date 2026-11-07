@@ -1,5 +1,7 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+import io.github.theminionooo.tokenmonitor.domain.ModelNames
+
 import android.graphics.Paint
 import android.graphics.Typeface
 import androidx.compose.animation.AnimatedContent
@@ -162,7 +164,7 @@ internal fun ProjectUsageRow(project: ProjectUsage, ratio: Float) {
                     selected = if (modelShares) "models" else "tools",
                     onSelect = { modelShares = it == "models" },
                 )
-                projectShares(project, modelShares).forEach { share ->
+                projectShares(project, modelShares, LocalModelNames.current).forEach { share ->
                     Row(modifier = Modifier.padding(start = 20.dp), verticalAlignment = Alignment.CenterVertically) {
                         if (share.unknown) StatusDot(Muted, size = 8.dp)
                         else if (modelShares) ModelMark(share.name, Purple, size = 8.dp)
@@ -192,8 +194,9 @@ internal fun LazyListScope.sessionItems(
     query: String = "",
     toolFilter: String = "",
     showTitles: Boolean = true,
+    names: ModelNames = ModelNames(),
 ) {
-    val ranked = searchSessionRows(filterSessionRows(groupSessions(sessions, evidence), toolFilter), searching, matches, query, showTitles)
+    val ranked = searchSessionRows(filterSessionRows(groupSessions(sessions, evidence), toolFilter), searching, matches, query, showTitles, names)
         .sortedByDescending { it.totalTokens }
     if (ranked.isEmpty()) item { MutedCopy(usageListEmptyMessage(true, period, searching), modifier = Modifier.padding(vertical = 12.dp)) }
     else {
@@ -202,7 +205,7 @@ internal fun LazyListScope.sessionItems(
         itemsIndexed(ranked, key = { index, _ -> keys[index] }) { _, row ->
             val ratio = row.totalTokens.toFloat() / maximum
             if (row.grouped) SessionGroupUsageRow(row, ratio)
-            else sessionRowPresentation(row, LocalSessionTitles.current).let { SessionUsageRow(row.display, it.title, it.meta, ratio) }
+            else sessionRowPresentation(row, LocalSessionTitles.current, LocalModelNames.current).let { SessionUsageRow(row.display, it.title, it.meta, ratio) }
         }
     }
 }
@@ -215,7 +218,7 @@ internal fun SessionGroupUsageRow(row: SessionRow, ratio: Float) {
     val now = LocalNow.current
     // The desktop Sessions list shows activity on conversation groups, not on summary rows.
     val activity = if (row.kind == SessionGroupKind.Conversation) sessionRowActivity(row, now) else SessionActivityState.Idle
-    val labels = sessionRowPresentation(row, LocalSessionTitles.current)
+    val labels = sessionRowPresentation(row, LocalSessionTitles.current, LocalModelNames.current)
     val client = row.display.client
     Column(
         modifier = Modifier.fillMaxWidth().clickable { expanded = !expanded }.padding(vertical = 4.dp),
@@ -261,7 +264,7 @@ internal fun SessionGroupUsageRow(row: SessionRow, ratio: Float) {
 @Composable
 private fun SessionMemberLine(member: SessionMember, kind: SessionGroupKind?, now: Long) {
     val session = member.session
-    val labels = sessionRowLabels(session, LocalSessionTitles.current)
+    val labels = sessionRowLabels(session, LocalSessionTitles.current, LocalModelNames.current)
     val role = if (kind == SessionGroupKind.Conversation) (if (member.main) appText(R.string.ui_main_session_36cd7, "Main session") else appText(R.string.ui_subagent_b639a, "Subagent")) else ""
     Row(verticalAlignment = Alignment.CenterVertically) {
         UpstreamToolMark(session.client, accentFor(session.client), size = 8.dp)
@@ -366,7 +369,7 @@ internal fun SessionUsageRow(session: SessionUsage, title: String, meta: String,
             Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
                 if (session.projectLabel.isNotBlank()) DetailLine(appText(R.string.ui_project_f6f4d, "Project"), session.projectLabel)
                 if (session.startedAt.isNotBlank()) DetailLine(appText(R.string.ui_started_faa9e, "Started"), session.startedAt.shortTime())
-                if (session.modelNames.isNotEmpty()) DetailLine("Models", session.modelNames.joinToString { it.displayName() })
+                if (session.modelNames.isNotEmpty()) DetailLine("Models", session.modelNames.map(LocalModelNames.current::name).distinct().joinToString())
                 DetailLine(appText(R.string.ui_session_f7f19, "Session"), session.id)
                 if (session.dotsObservedOnly) Text(
                     appText(R.string.ui_dots_usage_covers_observations_while_the_desktop_was_91afa, "Dots usage covers observations while the desktop was connected, not complete history."),

@@ -111,7 +111,7 @@ private fun summarizeOverview(history: List<HistoryPoint>, today: LocalDate, cur
         appText(R.string.ui_current_streak_54d92, "CURRENT STREAK") to currentStreak(history, today).toString(),
         appText(R.string.ui_active_time_4dd80, "ACTIVE TIME") to formatActiveDuration(history.sumOf { it.activeTimeMs }),
         appText(R.string.ui_peak_day_07d84, "PEAK DAY") to formatCompactTokens(history.maxOfOrNull { it.tokens } ?: 0L),
-        appText(R.string.ui_top_model_890fc, "TOP MODEL") to topModel.displayName().ifBlank { "—" },
+        appText(R.string.ui_top_model_890fc, "TOP MODEL") to topModel.ifBlank { "—" },
         appText(R.string.ui_messages_85cda, "MESSAGES") to formatCompactTokens(history.sumOf { it.messages }),
     )
     return OverviewSummary(stats, unpricedTokens, totalTokens, tokensByModel, tokensByTool)
@@ -176,7 +176,7 @@ private fun OverviewBreakdown(title: String, values: Map<String, Long>, totalTok
                     if (modelRows) ModelMark(name, accentFor(name), size = 8.dp)
                     else UpstreamToolMark(name, accentFor(name), size = 8.dp)
                     Spacer(Modifier.width(7.dp))
-                    Text(name.displayName(), color = Ink, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(if (modelRows) name else name.displayName(), color = Ink, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Text(formatCompactTokens(tokens), color = Ink, style = MaterialTheme.typography.bodySmall)
                     Text(String.format(Locale.US, "  %.1f%%", tokens.toDouble() / totalTokens.coerceAtLeast(1L) * 100.0), color = Muted, style = MaterialTheme.typography.bodySmall)
                 }
@@ -249,7 +249,7 @@ private fun TrendsPanel(history: List<HistoryPoint>) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     StatusDot(if (series.name == null) Muted else trendSeriesColor(LocalPalette.current, index), size = 8.dp)
                     Spacer(Modifier.width(7.dp))
-                    Text(series.name?.let { if (series.other) it else it.displayName() } ?: appText(R.string.ui_unattributed_61047, "Unattributed"), color = Ink, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(series.name?.let { if (series.other || group == TrendGroup.Model) it else it.displayName() } ?: appText(R.string.ui_unattributed_61047, "Unattributed"), color = Ink, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Text(formatCompactTokens(value), color = Ink, style = MaterialTheme.typography.bodySmall)
                     Text(String.format(Locale.US, "  %.1f%%", value.toDouble() / total * 100.0), color = Muted, style = MaterialTheme.typography.bodySmall)
                 }

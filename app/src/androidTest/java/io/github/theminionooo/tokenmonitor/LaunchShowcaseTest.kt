@@ -46,9 +46,18 @@ class LaunchShowcaseTest {
     @Test fun settingsGallery() = dashboardGallery(DashboardDestination.Settings)
     @Test fun filteredModelsGallery() = dashboardGallery(DashboardDestination.Tools)
 
-    private fun dashboardGallery(initial: DashboardDestination) {
+    @Test fun desktopNamesAndReconnectGallery() = dashboardGallery(DashboardDestination.Models, compareNames = true)
+
+    private fun dashboardGallery(initial: DashboardDestination, compareNames: Boolean = false) {
         check(context.packageName.endsWith(".preview"))
-        val state = HubRepositoryState(hasConnection = true, snapshot = snapshot(), streamActive = true)
+        val source = snapshot().let { sample ->
+            if (!compareNames) sample else sample.copy(stats = sample.stats.copy(modelAliasRevision = 1,
+                periods = sample.stats.periods.mapValues { (_, period) -> period.copy(
+                    sessions = period.sessions.map { it.copy(title = "", reasoningEffort = "high") },
+                    projects = period.projects.map { it.copy(models = mapOf("gpt-5.6-sol" to it.totalTokens / 2,
+                        "gpt-5.6-terra" to it.totalTokens - it.totalTokens / 2)) }) }))
+        }
+        var state by mutableStateOf(HubRepositoryState(hasConnection = true, snapshot = source, streamActive = true))
         var destination by mutableStateOf(initial)
         val palette = Palette.from(InterfaceTheme.Default)
         var captureWindow: android.view.Window? = null
@@ -97,7 +106,71 @@ class LaunchShowcaseTest {
             save(name, bitmap)
             bitmap.recycle()
         }
-        if (initial == DashboardDestination.Tools) {
+        if (compareNames) {
+            val aliases = io.github.theminionooo.tokenmonitor.domain.ModelAliasSettings(1,
+                mapOf("gpt-5-6-sol" to "GPT 5.6", "gpt-5-6-terra" to "GPT 5.6"),
+                io.github.theminionooo.tokenmonitor.domain.ModelAliasGrouping.Duplicates)
+            capture("names-models-before")
+            compose.runOnIdle { state = state.copy(modelAliases = aliases) }
+            compose.waitUntil(10_000) { compose.onAllNodesWithText("GPT 5.6").fetchSemanticsNodes().isNotEmpty() }
+            capture("names-models-after")
+            compose.onNodeWithText("GPT 5.6").assertIsDisplayed()
+            compose.runOnIdle { destination = DashboardDestination.Sessions; state = state.copy(modelAliases = null) }
+            capture("names-sessions-before")
+            compose.runOnIdle { state = state.copy(modelAliases = aliases) }
+            compose.waitUntil(10_000) { compose.onAllNodesWithText("GPT 5.6", substring = true).fetchSemanticsNodes().isNotEmpty() }
+            capture("names-sessions-after")
+            fun compareView(view: DashboardDestination, label: String, prepare: () -> Unit = {}) {
+                compose.runOnIdle { destination = view; state = state.copy(modelAliases = null) }
+                compose.waitForIdle()
+                prepare()
+                capture("names-$label-before")
+                compose.runOnIdle { state = state.copy(modelAliases = aliases) }
+                capture("names-$label-after")
+                if (view == DashboardDestination.Trends) {
+                    compose.onNodeWithText("gpt-5.6-sol").assertDoesNotExist()
+                    compose.onNodeWithText("GPT 5.6").assertExists()
+                }
+            }
+            compareView(DashboardDestination.Sessions, "members") {
+                compose.onAllNodesWithContentDescription("Expand session details").onFirst().performClick()
+            }
+            compareView(DashboardDestination.Home, "home")
+            compareView(DashboardDestination.Devices, "device") {
+                compose.onNodeWithText("Studio Workstation").performClick()
+                compose.onNodeWithText("TOP MODELS ON THIS DEVICE").performScrollTo()
+            }
+            compareView(DashboardDestination.Projects, "project") {
+                compose.onNodeWithText("Mobile Companion").performClick()
+                compose.onNodeWithText("MODELS").performClick()
+            }
+            compareView(DashboardDestination.Trends, "history") {
+                compose.waitUntil(10_000) { compose.onAllNodesWithText("BY MODEL · AVAILABLE HISTORY").fetchSemanticsNodes().isNotEmpty() }
+                compose.onNodeWithText("BY MODEL · AVAILABLE HISTORY").performScrollTo()
+                compose.onAllNodes(hasScrollAction()).onFirst().performTouchInput { swipeUp() }
+            }
+            compose.runOnIdle { destination = DashboardDestination.Home; state = state.copy(streamActive = false, message = "Live updates paused. Retrying...") }
+            capture("reconnect-before")
+            compose.runOnIdle { state = state.copy(message = null) }
+            capture("reconnect-quiet")
+            compose.runOnIdle { state = state.copy(message = context.getString(R.string.ui_hub_reconnecting)) }
+            capture("reconnect-notice")
+            instrumentation.runOnMainSync {
+                for ((label, names) in listOf("before" to io.github.theminionooo.tokenmonitor.domain.ModelNames(), "after" to aliases.resolver(source))) {
+                    val data = prepareWidgetDeck(source, WidgetSession(), captured, modelNames = names)
+                    val view = WidgetDeckRenderer.render(context, WidgetDeckPage.Breakdown, data, InterfaceTheme.Default, android.util.SizeF(360f, 220f))
+                        .apply(context, FrameLayout(context))
+                    val width = (360 * context.resources.displayMetrics.density).toInt()
+                    val height = (220 * context.resources.displayMetrics.density).toInt()
+                    view.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY))
+                    view.layout(0, 0, width, height)
+                    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                    drawWidget(view, bitmap)
+                    save("names-widget-$label", bitmap)
+                    bitmap.recycle()
+                }
+            }
+        } else if (initial == DashboardDestination.Tools) {
             compose.onNodeWithText("Codex").performClick()
             compose.onNodeWithText("Codex · Models").assertIsDisplayed()
             capture("filtered-models")

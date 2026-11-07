@@ -94,9 +94,14 @@ request cannot move the bearer secret to another host.
   Activity instance state. Home-address repair reads the existing encrypted
   pairing and does not expose its secret back to the form.
 
+Desktop model aliases are saved in the same app-private preferences as the
+pairing, excluded from backup and transfer. Their display labels may be private.
+They share the pairing lifetime and are cleared with a changed Hub or secret.
+Presentation folding derives view data from the saved usage responses.
+
 ## Read-only API use
 
-The app calls only:
+Hub access uses these reads.
 
 - `GET /api/health`
 - `GET /api/stats`
@@ -104,6 +109,7 @@ The app calls only:
 - `GET /api/history`
 - `GET /api/subscriptions`
 - `GET /api/stats/stream`
+- `GET /api/sync/settings/modelAliases` while the dashboard is visible
 
 It does not call ingest, subscription mutation, or device deletion routes.
 
@@ -194,3 +200,20 @@ Hub response may still contain titles; hiding them does not delete stored data.
 ## Reporting a problem
 
 Do not include a Hub secret, unredacted account email, raw Hub response, or private tailnet address in a public issue. Reproduce with the sanitized fixture Hub when possible.
+
+## Model names and promoted Live notifications
+
+The optional `GET /api/sync/settings/modelAliases` belongs only to the visible
+dashboard. It uses the same authenticated HTTP client, route/consent guard,
+redirect rejection and cancellation generation as other reads. A rejected secret
+stops active work immediately. Missing support leaves raw names visible. Widget
+Live, manual Refresh and periodic jobs use the saved settings. Display sums use
+the Hub’s reported costs.
+
+`POST_PROMOTED_NOTIFICATIONS` is a normal manifest permission required by
+[Android’s Live Updates API](https://developer.android.com/develop/ui/views/notifications/live-update).
+It lets the system consider an eligible ongoing Live notification for promotion.
+Android applies it as a normal permission. Notification permission, the system
+promotion setting, an explicit start, the one-hour expiry and Stop govern Live. Session notification
+content contains counts and quota/usage readings, without titles, identifiers,
+account emails or pairing credentials.

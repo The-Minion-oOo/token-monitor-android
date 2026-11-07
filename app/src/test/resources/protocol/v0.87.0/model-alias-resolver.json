@@ -1,0 +1,275 @@
+[
+  {
+    "grouping": "off",
+    "aliases": {},
+    "ids": [
+      "provider/gpt-5",
+      "gpt-5",
+      "OTHER/GPT.5",
+      "vendor/solo",
+      "vendor/gpt-5-cc",
+      "gpt--5",
+      "a/b/Claude_Sonnet",
+      "claude-sonnet",
+      "provider/gpt 5",
+      "﻿gpt-5﻿"
+    ],
+    "expected": [
+      "provider/gpt-5",
+      "gpt-5",
+      "OTHER/GPT.5",
+      "vendor/solo",
+      "vendor/gpt-5-cc",
+      "gpt--5",
+      "a/b/Claude_Sonnet",
+      "claude-sonnet",
+      "provider/gpt 5",
+      "﻿gpt-5﻿"
+    ]
+  },
+  {
+    "grouping": "off",
+    "aliases": {
+      "gpt-5": "GPT Five",
+      "provider/gpt-5": "Private name",
+      "GPT Five": "One hop only"
+    },
+    "ids": [
+      "provider/gpt-5",
+      "gpt-5",
+      "OTHER/GPT.5",
+      "vendor/solo",
+      "vendor/gpt-5-cc",
+      "gpt--5",
+      "a/b/Claude_Sonnet",
+      "claude-sonnet",
+      "provider/gpt 5",
+      "﻿gpt-5﻿"
+    ],
+    "expected": [
+      "Private name",
+      "GPT Five",
+      "OTHER/GPT.5",
+      "vendor/solo",
+      "vendor/gpt-5-cc",
+      "GPT Five",
+      "a/b/Claude_Sonnet",
+      "claude-sonnet",
+      "Private name",
+      "GPT Five"
+    ]
+  },
+  {
+    "grouping": "off",
+    "aliases": {
+      "claude-sonnet": "Sonnet",
+      "vendor/solo": "Solo"
+    },
+    "ids": [
+      "provider/gpt-5",
+      "gpt-5",
+      "OTHER/GPT.5",
+      "vendor/solo",
+      "vendor/gpt-5-cc",
+      "gpt--5",
+      "a/b/Claude_Sonnet",
+      "claude-sonnet",
+      "provider/gpt 5",
+      "﻿gpt-5﻿"
+    ],
+    "expected": [
+      "provider/gpt-5",
+      "gpt-5",
+      "OTHER/GPT.5",
+      "Solo",
+      "vendor/gpt-5-cc",
+      "gpt--5",
+      "a/b/Claude_Sonnet",
+      "Sonnet",
+      "provider/gpt 5",
+      "﻿gpt-5﻿"
+    ]
+  },
+  {
+    "grouping": "duplicates",
+    "aliases": {},
+    "ids": [
+      "provider/gpt-5",
+      "gpt-5",
+      "OTHER/GPT.5",
+      "vendor/solo",
+      "vendor/gpt-5-cc",
+      "gpt--5",
+      "a/b/Claude_Sonnet",
+      "claude-sonnet",
+      "provider/gpt 5",
+      "﻿gpt-5﻿"
+    ],
+    "expected": [
+      "gpt-5",
+      "gpt-5",
+      "gpt-5",
+      "vendor/solo",
+      "vendor/gpt-5-cc",
+      "gpt-5",
+      "claude-sonnet",
+      "claude-sonnet",
+      "gpt-5",
+      "gpt-5"
+    ]
+  },
+  {
+    "grouping": "duplicates",
+    "aliases": {
+      "gpt-5": "GPT Five",
+      "provider/gpt-5": "Private name",
+      "GPT Five": "One hop only"
+    },
+    "ids": [
+      "provider/gpt-5",
+      "gpt-5",
+      "OTHER/GPT.5",
+      "vendor/solo",
+      "vendor/gpt-5-cc",
+      "gpt--5",
+      "a/b/Claude_Sonnet",
+      "claude-sonnet",
+      "provider/gpt 5",
+      "﻿gpt-5﻿"
+    ],
+    "expected": [
+      "Private name",
+      "GPT Five",
+      "GPT Five",
+      "vendor/solo",
+      "vendor/gpt-5-cc",
+      "GPT Five",
+      "claude-sonnet",
+      "claude-sonnet",
+      "Private name",
+      "GPT Five"
+    ]
+  },
+  {
+    "grouping": "duplicates",
+    "aliases": {
+      "claude-sonnet": "Sonnet",
+      "vendor/solo": "Solo"
+    },
+    "ids": [
+      "provider/gpt-5",
+      "gpt-5",
+      "OTHER/GPT.5",
+      "vendor/solo",
+      "vendor/gpt-5-cc",
+      "gpt--5",
+      "a/b/Claude_Sonnet",
+      "claude-sonnet",
+      "provider/gpt 5",
+      "﻿gpt-5﻿"
+    ],
+    "expected": [
+      "gpt-5",
+      "gpt-5",
+      "gpt-5",
+      "Solo",
+      "vendor/gpt-5-cc",
+      "gpt-5",
+      "Sonnet",
+      "Sonnet",
+      "gpt-5",
+      "gpt-5"
+    ]
+  },
+  {
+    "grouping": "prefix",
+    "aliases": {},
+    "ids": [
+      "provider/gpt-5",
+      "gpt-5",
+      "OTHER/GPT.5",
+      "vendor/solo",
+      "vendor/gpt-5-cc",
+      "gpt--5",
+      "a/b/Claude_Sonnet",
+      "claude-sonnet",
+      "provider/gpt 5",
+      "﻿gpt-5﻿"
+    ],
+    "expected": [
+      "gpt-5",
+      "gpt-5",
+      "gpt-5",
+      "solo",
+      "gpt-5-cc",
+      "gpt-5",
+      "claude-sonnet",
+      "claude-sonnet",
+      "gpt-5",
+      "gpt-5"
+    ]
+  },
+  {
+    "grouping": "prefix",
+    "aliases": {
+      "gpt-5": "GPT Five",
+      "provider/gpt-5": "Private name",
+      "GPT Five": "One hop only"
+    },
+    "ids": [
+      "provider/gpt-5",
+      "gpt-5",
+      "OTHER/GPT.5",
+      "vendor/solo",
+      "vendor/gpt-5-cc",
+      "gpt--5",
+      "a/b/Claude_Sonnet",
+      "claude-sonnet",
+      "provider/gpt 5",
+      "﻿gpt-5﻿"
+    ],
+    "expected": [
+      "Private name",
+      "GPT Five",
+      "GPT Five",
+      "solo",
+      "gpt-5-cc",
+      "GPT Five",
+      "claude-sonnet",
+      "claude-sonnet",
+      "Private name",
+      "GPT Five"
+    ]
+  },
+  {
+    "grouping": "prefix",
+    "aliases": {
+      "claude-sonnet": "Sonnet",
+      "vendor/solo": "Solo"
+    },
+    "ids": [
+      "provider/gpt-5",
+      "gpt-5",
+      "OTHER/GPT.5",
+      "vendor/solo",
+      "vendor/gpt-5-cc",
+      "gpt--5",
+      "a/b/Claude_Sonnet",
+      "claude-sonnet",
+      "provider/gpt 5",
+      "﻿gpt-5﻿"
+    ],
+    "expected": [
+      "gpt-5",
+      "gpt-5",
+      "gpt-5",
+      "Solo",
+      "gpt-5-cc",
+      "gpt-5",
+      "Sonnet",
+      "Sonnet",
+      "gpt-5",
+      "gpt-5"
+    ]
+  }
+]

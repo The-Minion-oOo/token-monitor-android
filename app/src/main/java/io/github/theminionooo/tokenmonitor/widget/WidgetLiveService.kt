@@ -65,11 +65,12 @@ internal fun widgetNotificationContent(
     locale: Locale = io.github.theminionooo.tokenmonitor.ui.AppLanguage.locale(),
     currency: io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency = io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency(),
     displayOptions: io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions = io.github.theminionooo.tokenmonitor.data.storage.DisplayOptions(),
+    sessions: NotificationSessions = notificationSessions(session.snapshot, now),
 ): WidgetNotificationContent {
     val snapshot = session.snapshot
     val connected = session.connected && snapshot?.fromCache != true && session.note == null
     val clock = DateTimeFormatter.ofPattern("HH:mm", locale).withZone(zoneId)
-    val headline = snapshot?.let {
+    val totalsHeadline = snapshot?.let {
         val totals = appText(R.string.ui_1_s_tokens_2_s_8aebf, "%1\$s tokens · %2\$s", widgetTokens(it.today.totalTokens), formatUsageCost(it.today.costUsd, it.today.unpricedTokens, currency = currency))
         val day = snapshotDate(it, zoneId)
         when {
@@ -80,6 +81,23 @@ internal fun widgetNotificationContent(
         }
     }
         ?: if (live) appText(R.string.ui_waiting_for_the_hub_43049, "Waiting for the Hub") else appText(R.string.ui_fetching_a_fresh_hub_snapshot_cda7e, "Fetching a fresh Hub snapshot")
+    val critical = snapshot?.takeIf { live && connected }?.let { current ->
+        io.github.theminionooo.tokenmonitor.data.storage.visibleLimitAccounts(current.stats.limits.providers, displayOptions)
+            .flatMap { account -> account.windows.mapNotNull { window -> remainingPercent(window)?.let {
+                QuotaRow(io.github.theminionooo.tokenmonitor.ui.limitDisplayProvider(account), window, it, account.windows)
+            } } }
+            .filter { it.remainingPercent <= 15 }
+            .minByOrNull { it.remainingPercent }
+    }
+    val sessionHeadline = if (live && connected && sessions.active > 0) listOf(
+        appText(R.string.ui_1_s_running_0175a, "%1\$s running", sessions.running),
+        appText(R.string.ui_1_s_waiting_837d2, "%1\$s waiting", sessions.waiting),
+    ).joinToString(" · ") else null
+    val criticalHeadline = critical?.let {
+        appText(R.string.ui_1_s_2_s_3_s_left_f1c0b, "%1\$s %2\$s %3\$s%% left", it.provider.providerLabel(),
+            windowTitle(it.window, it.siblings), it.remainingPercent.toInt())
+    }
+    val headline = sessionHeadline ?: criticalHeadline ?: totalsHeadline
     val lastUpdated = snapshot?.takeUnless { connected }?.let {
         if (it.capturedAt <= 0) appText(R.string.ui_last_update_time_unavailable_fac67, "Last update time unavailable") else {
             val age = (now - it.capturedAt).coerceAtLeast(0L)
@@ -92,7 +110,9 @@ internal fun widgetNotificationContent(
             if (reset.isNotBlank()) " · $reset" else ""
     }
     val until = when {
-        live && session.expiresAt > 0 -> "${if (connected) "Live until" else "Session ends"} ${clock.format(Instant.ofEpochMilli(session.expiresAt))}"
+        live && session.expiresAt > 0 -> if (connected)
+            appText(R.string.ui_notification_live_until, "Live until %1\$s", clock.format(Instant.ofEpochMilli(session.expiresAt)))
+        else appText(R.string.ui_notification_session_ends, "Session ends %1\$s", clock.format(Instant.ofEpochMilli(session.expiresAt)))
         live -> appText(R.string.ui_widget_updates_for_one_hour_f38cd, "Widget updates for one hour")
         else -> null
     }
@@ -104,9 +124,11 @@ internal fun widgetNotificationContent(
             else -> appText(R.string.ui_token_monitor_connecting_c6cd1, "Token Monitor · Connecting")
         },
         headline = headline,
-        detail = listOfNotNull(headline, lastUpdated, windows.ifBlank { null }, until).joinToString("\n"),
+        detail = listOfNotNull(headline, totalsHeadline.takeIf { it != headline }, criticalHeadline, lastUpdated, windows.ifBlank { null }, until).distinct().joinToString("\n"),
         subtext = until,
         shortText = when {
+            sessionHeadline != null -> sessions.active.toString()
+            critical != null -> "${critical.remainingPercent.toInt()}%"
             connected && snapshot != null -> formatCompactTokens(snapshot.today.totalTokens)
             snapshot != null -> appText(R.string.ui_offline_e01fa, "Offline")
             else -> appText(R.string.ui_waiting_33d30, "Waiting")
@@ -127,7 +149,7 @@ class WidgetLiveService : Service() {
     private var shownNotification: WidgetNotificationContent? = null
     private val wakeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            if (intent.action == Intent.ACTION_SCREEN_ON && !expireIfNeeded()) showNotification()
+            if (intent.action == Intent.ACTION_SCREEN_ON && !expireIfNeeded()) scope.launch { showNotification() }
         }
     }
 
@@ -155,7 +177,7 @@ class WidgetLiveService : Service() {
         deadline = activeDeadline
         WidgetRuntime.session = WidgetRuntime.session.copy(enabled = live, refreshing = true, expiresAt = activeDeadline.displayExpiresAt, note = null)
         try {
-            val content = notificationContent(WidgetRuntime.session, live)
+            val content = shownNotification?.takeIf { alreadyLive } ?: notificationContent(WidgetRuntime.session, live)
             shownNotification = content
             enterForeground(content)
         } catch (_: RuntimeException) {
@@ -228,13 +250,12 @@ class WidgetLiveService : Service() {
 
     /**
      * The notification that keeps the service alive doubles as the lock-screen and status-bar view of
-     * the session: the figure and the tightest windows, refreshed whenever the snapshot changes. On
-     * Android 16 it asks to be promoted, which is what puts it on the lock screen and in the status
-     * bar chip for the hour it runs.
+     * the session. Android 16.1+ may promote explicit Live sessions when system policy permits it.
+     * Session preparation runs off the main thread, and only visible text changes are posted.
      */
-    private fun notificationContent(session: WidgetSession, live: Boolean): WidgetNotificationContent {
+    private fun notificationContent(session: WidgetSession, live: Boolean, sessions: NotificationSessions = NotificationSessions()): WidgetNotificationContent {
         val options = io.github.theminionooo.tokenmonitor.data.storage.DisplayPreferences(this).options.value
-        return widgetNotificationContent(session, live, currency = io.github.theminionooo.tokenmonitor.data.storage.usageCurrency(options), displayOptions = options)
+        return widgetNotificationContent(session, live, currency = io.github.theminionooo.tokenmonitor.data.storage.usageCurrency(options), displayOptions = options, sessions = sessions)
     }
 
     private fun notification(content: WidgetNotificationContent = notificationContent(WidgetRuntime.session, live)): Notification {
@@ -251,13 +272,18 @@ class WidgetLiveService : Service() {
         content.subtext?.let(builder::setSubText)
         // Promotion (lock screen, status bar chip) arrived in the Android 16 minor release, so check the full version.
         if (Build.VERSION.SDK_INT >= 36) builder.setShortCriticalText(content.shortText)
-        if (Build.VERSION.SDK_INT >= 36 && Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.BAKLAVA_1) builder.setRequestPromotedOngoing(true)
+        if (live && Build.VERSION.SDK_INT >= 36 && Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.BAKLAVA_1) {
+            builder.setRequestPromotedOngoing(true)
+        }
         return builder.build()
     }
 
     /** Re-posts the notification only when its text would change, so the shade never flickers. */
-    private fun showNotification() {
-        val content = notificationContent(WidgetRuntime.session, live)
+    private suspend fun showNotification() {
+        val session = WidgetRuntime.session
+        val sessions = withContext(Dispatchers.Default) { notificationSessions(session.snapshot, System.currentTimeMillis()) }
+        if (WidgetRuntime.session !== session) return
+        val content = notificationContent(session, live, sessions)
         if (content == shownNotification || finishing) return
         shownNotification = content
         runCatching { getSystemService(NotificationManager::class.java).notify(NOTIFICATION_ID, notification(content)) }

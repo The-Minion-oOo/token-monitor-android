@@ -178,6 +178,16 @@ class WidgetControlsTest {
             fun start(action: String) = context.startForegroundService(Intent(context, WidgetLiveService::class.java).setAction(action))
             start(WidgetLiveService.ACTION_LIVE)
             await { WidgetRuntime.session.connected && WidgetRuntime.session.snapshot != null }
+            if (android.os.Build.VERSION.SDK_INT >= 36 &&
+                android.os.Build.VERSION.SDK_INT_FULL >= android.os.Build.VERSION_CODES_FULL.BAKLAVA_1) {
+                val manager = context.getSystemService(android.app.NotificationManager::class.java)
+                await { manager.activeNotifications.any { it.id == 71 } }
+                val notification = manager.activeNotifications.single { it.id == 71 }.notification
+                assertTrue("The manifest permits Live promotion", manager.canPostPromotedNotifications())
+                assertTrue("The Live notification meets platform promotion requirements", notification.hasPromotableCharacteristics())
+                assertTrue("The emulator posts a promoted Live notification", notification.flags and android.app.Notification.FLAG_PROMOTED_ONGOING != 0)
+            }
+            if (InstrumentationRegistry.getArguments().getString("capture_live") != null) captureLive()
             assertTrue(WidgetRuntime.session.enabled)
             assertEquals("Widget Live should not open SSE while the dashboard is closed", 0, opened.get())
             assertEquals("The initial snapshot should read stats once", 1, statsReads.get())
@@ -217,5 +227,23 @@ class WidgetControlsTest {
         val deadline = System.nanoTime() + 10_000_000_000L
         while (!condition() && System.nanoTime() < deadline) Thread.sleep(30)
         assertTrue("Widget condition did not become true within ten seconds", condition())
+    }
+
+    private fun captureLive() {
+        val manager = context.getSystemService(android.app.NotificationManager::class.java)
+        await { manager.activeNotifications.any { it.id == 71 } }
+        val notification = manager.activeNotifications.single { it.id == 71 }.notification
+        if (android.os.Build.VERSION.SDK_INT >= 36) {
+            android.util.Log.i("LivePromotionCheck",
+                "canPost=${manager.canPostPromotedNotifications()} characteristics=${notification.hasPromotableCharacteristics()} " +
+                    "promoted=${notification.flags and android.app.Notification.FLAG_PROMOTED_ONGOING != 0}")
+        }
+        val automation = instrumentation.uiAutomation
+        automation.executeShellCommand("cmd statusbar expand-notifications").close()
+        Thread.sleep(1200)
+        val bitmap = checkNotNull(automation.takeScreenshot())
+        context.openFileOutput("live-notification.png", 0).use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+        bitmap.recycle()
+        automation.executeShellCommand("cmd statusbar collapse").close()
     }
 }

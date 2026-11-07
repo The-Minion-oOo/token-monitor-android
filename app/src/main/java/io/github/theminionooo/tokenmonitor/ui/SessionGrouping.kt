@@ -1,5 +1,7 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+import io.github.theminionooo.tokenmonitor.domain.ModelNames
+
 import io.github.theminionooo.tokenmonitor.domain.SessionUsage
 import java.time.Instant
 
@@ -194,36 +196,37 @@ private fun combinedModels(sessions: List<SessionUsage>): Map<String, Long> =
     sessions.flatMap { it.modelTokens.entries }.groupBy({ it.key }, { it.value }).mapValues { (_, tokens) -> tokens.sum() }
 
 /** Keeps rows with any matching member, or a group whose own label matches, so a match keeps its whole group. */
-internal fun searchSessionRows(rows: List<SessionRow>, searching: Boolean, matches: (SessionUsage) -> Boolean, query: String, showTitles: Boolean = true): List<SessionRow> =
+internal fun searchSessionRows(rows: List<SessionRow>, searching: Boolean, matches: (SessionUsage) -> Boolean, query: String, showTitles: Boolean = true, names: ModelNames = ModelNames()): List<SessionRow> =
     if (!searching) rows else rows.filter { row ->
-        row.sessions.any(matches) || (row.grouped && query.isNotBlank() && sessionRowPresentation(row, showTitles).title.contains(query.trim(), ignoreCase = true))
+        row.sessions.any(matches) || (row.grouped && query.isNotBlank() && sessionRowPresentation(row, showTitles, names).title.contains(query.trim(), ignoreCase = true))
     }
 
 /** Running beats waiting, which beats the first member's own state: a group is as busy as its busiest member. */
-internal fun sessionRowActivity(row: SessionRow, now: Long): SessionActivityState {
-    val states = row.sessions.map { sessionActivityState(it, now) }
+internal fun sessionRowActivity(row: SessionRow, now: Long, observationGraceMs: Long = 0): SessionActivityState {
+    val states = row.sessions.map { sessionActivityState(it, now, observationGraceMs) }
     return listOf(SessionActivityState.Running, SessionActivityState.Waiting).firstOrNull { it in states }
         ?: states.firstOrNull() ?: SessionActivityState.Idle
 }
 
 /** The row's name and meta line, matching the desktop's group labels. */
-internal fun sessionRowPresentation(row: SessionRow, showTitles: Boolean = true): SessionRowLabels = when (row.kind) {
+internal fun sessionRowPresentation(row: SessionRow, showTitles: Boolean = true, names: ModelNames = ModelNames()): SessionRowLabels = when (row.kind) {
     SessionGroupKind.AutoReview -> SessionRowLabels("Codex Auto Review", "${row.members.size} background runs")
     SessionGroupKind.GrokBot -> SessionRowLabels("Grok Bot", "${row.members.size} activity records")
     SessionGroupKind.Conversation -> {
         val latest = row.sessions.maxByOrNull(::sessionSortTime) ?: row.display
-        val labels = sessionRowLabels(row.display.copy(modelNames = topModelFirst(row), lastUsedAt = latest.lastUsedAt.ifBlank { latest.startedAt },
+        val labels = sessionRowLabels(row.display.copy(modelNames = topModelFirst(row, names), lastUsedAt = latest.lastUsedAt.ifBlank { latest.startedAt },
             messageCount = 0), showTitles)
         val count = row.subagentCount.takeIf { it > 0 }?.let { if (it == 1) "1 subagent" else "$it subagents" }
         // The count leads, so a narrow row shortens the project rather than hiding how many subagents ran.
         val messages = row.usageMetrics.messageCount.takeIf { it > 0 }?.let { "$it messages" }
         SessionRowLabels(labels.title, listOfNotNull(count, "Subagent".takeIf { row.subagent }, labels.meta, messages).joinToString(" · "))
     }
-    null -> sessionRowLabels(row.display, showTitles).let { labels ->
+    null -> sessionRowLabels(row.display, showTitles, names).let { labels ->
         if (row.subagent) labels.copy(meta = "Subagent · ${labels.meta}") else labels
     }
 }
 
 /** An untitled group is named by its client and the model behind most of its tokens. */
-private fun topModelFirst(row: SessionRow): List<String> =
-    row.modelTokens.entries.sortedByDescending { it.value }.map { it.key }.ifEmpty { row.display.modelNames }
+private fun topModelFirst(row: SessionRow, names: ModelNames): List<String> =
+    names.fold(row.modelTokens, Long::plus).entries.sortedByDescending { it.value }.map { it.key }
+        .ifEmpty { row.display.modelNames.map(names::name).distinct() }

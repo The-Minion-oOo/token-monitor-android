@@ -516,4 +516,7 @@
     <string name="ui_refresh_timed_out_c439a">Refresh timed out</string>
     <string name="ui_android_paused_live_tap_to_retry_a217f">Android paused Live. Tap to retry.</string>
     <string name="ui_stop_9e253">Stop</string>
+    <string name="ui_hub_reconnecting">Hub reconnecting. Showing the last successful snapshot.</string>
+    <string name="ui_notification_live_until">Live until %1$s</string>
+    <string name="ui_notification_session_ends">Session ends %1$s</string>
 </resources>
