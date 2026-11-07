@@ -133,7 +133,7 @@ internal fun DashboardContent(
         else remember(snapshot, period) { period.usage(snapshot) }
     val aliasInputs = ModelAliasInputs(snapshot)
     val usage = remember(aliasInputs, period, names) { names.usage(rawUsage) }
-    val trendHistory = if (destination == DashboardDestination.Trends) rememberUsageHistory(snapshot) else null
+    val trendHistory = if (destination == DashboardDestination.Trends) rememberUsageHistory(snapshot, LocalModelNames.current) else null
     BackHandler(destination == DashboardDestination.Models && modelFilter != null) {
         onChoose(DashboardDestination.Tools)
     }

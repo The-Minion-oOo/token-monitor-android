@@ -102,6 +102,24 @@ internal data class ModelNames(
         return folded
     }
 
+    fun history(points: List<HistoryPoint>): List<HistoryPoint> {
+        if (manual.isEmpty() && automatic.isEmpty()) return points
+        return points.map { point ->
+            val models = fold(point.perModel) { first, second ->
+                HistoryAttribution(
+                    tokens = first.tokens + second.tokens,
+                    costUsd = first.costUsd + second.costUsd,
+                    cacheReadTokens = first.cacheReadTokens + second.cacheReadTokens,
+                    cacheWriteTokens = first.cacheWriteTokens + second.cacheWriteTokens,
+                    outputTokens = first.outputTokens + second.outputTokens,
+                    unclassifiedTokens = first.unclassifiedTokens + second.unclassifiedTokens,
+                    unpricedTokens = first.unpricedTokens + second.unpricedTokens,
+                )
+            }
+            if (models === point.perModel) point else point.copy(perModel = models)
+        }
+    }
+
     fun usage(period: UsagePeriod): UsagePeriod {
         if (manual.isEmpty() && automatic.isEmpty()) return period
         return period.copy(

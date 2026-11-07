@@ -41,7 +41,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.theminionooo.tokenmonitor.domain.HistoryPoint
 import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
-import io.github.theminionooo.tokenmonitor.domain.ModelNames
 import java.time.LocalDate
 import java.util.Locale
 import kotlin.math.max
@@ -99,10 +98,10 @@ private class OverviewSummary(
     val tokensByTool: Map<String, Long>,
 )
 
-private fun summarizeOverview(history: List<HistoryPoint>, today: LocalDate, currency: io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency, names: ModelNames): OverviewSummary {
+private fun summarizeOverview(history: List<HistoryPoint>, today: LocalDate, currency: io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency): OverviewSummary {
     val totalTokens = history.sumOf { it.tokens }
     val unpricedTokens = history.sumOf { it.unpricedTokens }
-    val tokensByModel = names.fold(history.flatMap { it.perModel.entries }.groupingBy { it.key }.fold(0L) { sum, entry -> sum + entry.value.tokens }, Long::plus)
+    val tokensByModel = history.flatMap { it.perModel.entries }.groupingBy { it.key }.fold(0L) { sum, entry -> sum + entry.value.tokens }
     val tokensByTool = history.flatMap { it.perClient.entries }.groupingBy { it.key }.fold(0L) { sum, entry -> sum + entry.value.tokens }
     val topModel = tokensByModel.maxByOrNull { it.value }?.key.orEmpty()
     val stats = listOf(
@@ -128,8 +127,7 @@ private fun UsageOverview(history: List<HistoryPoint>) {
     }
     val today = currentPresentationDate()
     val currency = LocalUsageCurrency.current
-    val names = LocalModelNames.current
-    val overview = remember(history, today, currency, names) { summarizeOverview(history, today, currency, names) }
+    val overview = remember(history, today, currency) { summarizeOverview(history, today, currency) }
     val heatmap = remember(history, activityMetric, today) { buildActivityHeatmap(history, endDate = today, metric = activityMetric) }
     val unpricedTokens = overview.unpricedTokens
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -251,7 +249,7 @@ private fun TrendsPanel(history: List<HistoryPoint>) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     StatusDot(if (series.name == null) Muted else trendSeriesColor(LocalPalette.current, index), size = 8.dp)
                     Spacer(Modifier.width(7.dp))
-                    Text(series.name?.let { if (series.other) it else it.displayName() } ?: appText(R.string.ui_unattributed_61047, "Unattributed"), color = Ink, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(series.name?.let { if (series.other || group == TrendGroup.Model) it else it.displayName() } ?: appText(R.string.ui_unattributed_61047, "Unattributed"), color = Ink, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Text(formatCompactTokens(value), color = Ink, style = MaterialTheme.typography.bodySmall)
                     Text(String.format(Locale.US, "  %.1f%%", value.toDouble() / total * 100.0), color = Muted, style = MaterialTheme.typography.bodySmall)
                 }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import io.github.theminionooo.tokenmonitor.domain.HistoryPoint
 import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
+import io.github.theminionooo.tokenmonitor.domain.ModelNames
 import io.github.theminionooo.tokenmonitor.domain.usageHistory
 import io.github.theminionooo.tokenmonitor.domain.usageHistoryInput
 import java.time.Instant
@@ -19,10 +20,10 @@ internal fun currentPresentationDate(): LocalDate =
 
 /** Keep the last prepared history while changed usage is merged off the UI thread. */
 @Composable
-internal fun rememberUsageHistory(snapshot: HubSnapshot): List<HistoryPoint>? {
+internal fun rememberUsageHistory(snapshot: HubSnapshot, names: ModelNames = ModelNames()): List<HistoryPoint>? {
     val input = usageHistoryInput(snapshot)
-    val history by produceState<List<HistoryPoint>?>(null, input) {
-        value = withContext(Dispatchers.Default) { usageHistory(input) }
+    val history by produceState<List<HistoryPoint>?>(null, input, names) {
+        value = withContext(Dispatchers.Default) { names.history(usageHistory(input)) }
     }
     return history
 }

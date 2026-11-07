@@ -67,6 +67,23 @@ class ModelAliasTest {
         assertSame(period, ModelNames().usage(period))
     }
 
+    @Test fun `history views fold every reported component once and retain original points`() {
+        val names = ModelAliasSettings(1, mapOf("a" to "Display", "b" to "Display", "display" to "One hop"), ModelAliasGrouping.Off)
+            .resolver(emptyList())
+        val first = HistoryAttribution(40, 2.0, 1, 2, 3, 4, 5)
+        val second = HistoryAttribution(60, 3.0, 5, 4, 3, 2, 1)
+        val point = HistoryPoint("2026-11-06", 100, 5.0, messages = 7, unpricedTokens = 6,
+            perModel = mapOf("a" to first, "b" to second))
+        val display = names.history(listOf(point)).single()
+        assertEquals(mapOf("Display" to HistoryAttribution(100, 5.0, 6, 6, 6, 6, 6)), display.perModel)
+        assertEquals(point.tokens, display.tokens)
+        assertEquals(point.costUsd, display.costUsd, 0.0)
+        assertEquals(point.messages, display.messages)
+        assertEquals(point.unpricedTokens, display.unpricedTokens)
+        assertEquals(setOf("a", "b"), point.perModel.keys)
+        assertSame(first, point.perModel["a"])
+    }
+
     @Test fun `conversation labels fold models once while preserving grouping and source search`() {
         val names = ModelAliasSettings(1, mapOf("gpt-5" to "GPT Five", "gpt-five" to "One hop only"), ModelAliasGrouping.Off)
             .resolver(emptyList())
