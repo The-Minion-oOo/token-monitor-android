@@ -251,7 +251,9 @@ class WidgetLiveService : Service() {
         content.subtext?.let(builder::setSubText)
         // Promotion (lock screen, status bar chip) arrived in the Android 16 minor release, so check the full version.
         if (Build.VERSION.SDK_INT >= 36) builder.setShortCriticalText(content.shortText)
-        if (Build.VERSION.SDK_INT >= 36 && Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.BAKLAVA_1) builder.setRequestPromotedOngoing(true)
+        if (live && Build.VERSION.SDK_INT >= 36 && Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.BAKLAVA_1) {
+            builder.setRequestPromotedOngoing(true)
+        }
         return builder.build()
     }
 
