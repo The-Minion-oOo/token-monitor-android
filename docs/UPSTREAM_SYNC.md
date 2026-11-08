@@ -2,7 +2,7 @@
 
 ## Version rule
 
-The v0.88.0 r1 candidate targets desktop tag `v0.88.0`, peeled commit
+Android v0.88.0 r1 targets desktop tag `v0.88.0`, peeled commit
 `4fcba817885568eca31b39e585f4346e9af5245a`, in Gradle and `upstream.json`.
 I checked the new client labels, Mistral allowances and MiniMax Code/API readings
 with the released collectors and both Hub adapters.
@@ -30,7 +30,7 @@ The v0.81.0 r2 release introduced Android-only route, stream and
 background-refresh hardening from #106. Those protections are retained.
 
 The latest published release is
-[`android-v0.87.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.87.0-r1),
+[`android-v0.88.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.88.0-r1),
 recorded with its source commit in `release.json`.
 It retains opt-in HTTPS, optional background widget refresh and the
 r5 physical-network check underneath Tailscale. Earlier phone evidence applies

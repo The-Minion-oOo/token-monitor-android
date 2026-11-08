@@ -21,7 +21,14 @@ Use **Settings → App updates**, or install the signed APK over the current cop
 Android 8 or newer is required.
 [Install and update](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md).
 
-Release checks are in progress. The remaining phone checks for model names and
-Live status are tracked in
-[#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146).
+I checked the released Hub and Worker, automated tests and emulators. I also
+installed the signed APK over v0.87.0 r1 on my phone. Saved pairing and settings
+survived. Fresh data worked over Tailscale and the Home Wi-Fi fallback, all four
+Pages views rendered, and Live showed the running count and stopped correctly.
+
+Android marked the Live notification promoted, but the status-bar chip did not
+appear. I am keeping
+[#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146)
+open for that behaviour and the remaining phone checks. Battery use and
+automatic one-hour expiry were not measured.
 [Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md).
