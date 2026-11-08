@@ -2,11 +2,12 @@
 
 ## Version rule
 
-Android v0.87.0 r1 targets desktop tag `v0.87.0`, peeled commit
-`b3dd5e25bd9ab89620eb6380c863e335d8b8751e`, in Gradle and `upstream.json`.
-I compared the expanded Status catalog and summaries with the released desktop
-code. The contract exercises OpenDesign limits and reads after desktop delta
-uploads on both the Node Hub and Worker.
+The v0.88.0 r1 candidate targets desktop tag `v0.88.0`, peeled commit
+`4fcba817885568eca31b39e585f4346e9af5245a`, in Gradle and `upstream.json`.
+I checked the new client labels, Mistral allowances and MiniMax Code/API readings
+with the released collectors and both Hub adapters.
+The merged model-name and Live-status work is also included. Its remaining
+phone checks are tracked in [#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146).
 Earlier Kiro/Copilot and Manus/Muse checks and startup safeguards are retained.
 I checked Claude plan labels, weekly-only quotas and Trae credit summaries against
 the released Node and Worker Hubs. Proxy settings and browser credentials stay

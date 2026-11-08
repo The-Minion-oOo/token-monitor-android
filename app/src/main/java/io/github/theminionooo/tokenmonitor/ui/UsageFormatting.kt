@@ -159,6 +159,7 @@ internal fun shortDate(value: String): String = runCatching {
 
 /** The desktop renderer's tool labels, keyed by the Hub's client id. */
 private val toolLabels = mapOf(
+    "mistral" to "Mistral Vibe", "prime-agent" to "Prime Agent", "jcode" to "Jcode",
     "claude" to "Claude Code", "codex" to "Codex", "hermes" to "Hermes Agent", "gemini" to "Gemini", "cursor" to "Cursor",
     "opencode" to "OpenCode", "openclaw" to "OpenClaw", "antigravity" to "Antigravity", "cline" to "Cline", "kimi" to "Kimi",
     "amp" to "Amp", "droid" to "Factory Droid", "qwen" to "Qwen", "grok" to "Grok Build", "copilot" to "GitHub Copilot",
@@ -213,6 +214,7 @@ internal val Int.absoluteValue: Int get() = if (this == Int.MIN_VALUE) 0 else ko
 
 /** Limit and subscription providers: the desktop shows `Claude`, not `Claude Code`, but keeps labels such as `OpenCode`. */
 private val providerLabels = mapOf(
+    "mistral" to "Mistral", "minimax-code" to "MiniMax Code", "minimax-api" to "MiniMax API",
     "opendesign" to "OpenDesign",
     "claude" to "Claude",
     "factory" to "Factory Droid",
@@ -238,9 +240,15 @@ internal fun String.providerLabel(): String {
 
 /** Display products separately while saved visibility choices retain the Hub's provider id. */
 internal fun limitDisplayProvider(account: io.github.theminionooo.tokenmonitor.domain.LimitAccount): String =
-    if (account.provider == "muse") {
-        if (account.source == "web") "muse-web" else "muse-code"
-    } else account.provider
+    when (account.provider) {
+        "muse" -> if (account.source == "web") "muse-web" else "muse-code"
+        "minimax" -> when (account.source) {
+            "oauth" -> "minimax-code"
+            "api" -> "minimax-api"
+            else -> account.provider
+        }
+        else -> account.provider
+    }
 
 /**
  * Lazy list keys must be unique, but Hub ids can repeat (two devices each reporting the same signed-out provider).

@@ -12,7 +12,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.87.0**, released 2026-11-06 UTC.
+The verified baseline is upstream Token Monitor **v0.88.0**, released 2026-11-08 UTC.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -53,7 +53,7 @@ write, or device deletion endpoints.
 
 ## Cloudflare Worker
 
-I also exercise `worker/src/index.js` from the same pinned v0.87.0 commit locally.
+I also exercise `worker/src/index.js` from the same pinned v0.88.0 commit locally.
 Its snapshot read routes use the same Bearer authentication and unauthenticated Hub
 identity check. Stream-v2 negotiates the same `snapshot`, complete `stats` and
 compact `freshness` envelopes. Ingest changes may produce freshness-only events;
@@ -578,3 +578,25 @@ Display sums use reported prices. Widgets use the saved matching settings.
 come from the pinned Node Hub, Worker and desktop resolver. The isolated harness
 seeds synthetic settings through each disposable Hub’s internal setter, then
 checks authenticated GETs and the stats revision. These checks run locally with synthetic data.
+
+
+## Desktop v0.88.0
+
+The released catalog adds `mistral` (Mistral Vibe), `prime-agent` and `jcode`.
+Android displays the Hub totals directly. The desktop includes Jcode reasoning
+in its reported output and total.
+
+Mistral sends separate Included API and Included Vibe Code allowances plus an
+optional credit balance. Windows retain their currency, reported percentages and
+reset times. Zero and negative balances survive independently of missing quotas.
+
+MiniMax `oauth` rows identify Code points and plan windows, while `api` rows
+identify API billing. Points use `CREDITS`; API money keeps its reported currency.
+Account hashes preserve multiple API accounts and failed-account rows. Android
+shows each product separately. The optional `relatedAccountKey` peer hint is
+unused by Android's list layout.
+
+MiniMax API `balance` spend fields map to the existing provider spend rows.
+The authenticated reads retain those amounts while public reads omit account
+identity. Plugin quota modules are desktop presentation data outside the
+registered Hub provider catalog.

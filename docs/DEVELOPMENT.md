@@ -509,7 +509,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 144 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 145 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.
@@ -728,3 +728,16 @@ three-second timing gate with real sockets. Notification content uses synthetic
 | Running and waiting conversations | ![Sessions](images/issue146/live-sessions.png) |
 | Quota at 15 percent or less | ![Quota](images/issue146/live-quota.png) |
 | Usage | ![Usage](images/issue146/live-usage.png) |
+
+
+### Desktop v0.88.0 checks
+
+The contract executes the released Mistral and MiniMax collectors using synthetic
+HTTP, credentials and isolated MiniMax auth files. It checks balances at zero
+and below zero, missing allowances, Code points, plan windows, multiple API
+accounts and failed-account retention through both Node and Worker.
+
+Android parses those responses alongside the new client usage. The native
+Limits check scrolls between MiniMax API and Code headings and verifies the
+points amount. Existing model-name, reconnect and Live tests cover the merged
+work included in this release.

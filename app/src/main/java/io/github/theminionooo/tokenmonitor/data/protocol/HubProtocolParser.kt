@@ -296,7 +296,8 @@ object HubProtocolParser {
             when (string("provider")) {
                 // Older labels can identify an account; only recognized Claude plan names belong here.
                 "claude" -> string("accountLabel").takeIf { it in CLAUDE_PLAN_LABELS }.orEmpty()
-                "typesafe", "stepfun", "minimax", "ollama", "codex" -> string("accountLabel")
+                "minimax" -> string("accountLabel").takeUnless { it == "MiniMax Code" }.orEmpty()
+                "typesafe", "stepfun", "ollama", "codex" -> string("accountLabel")
                 else -> ""
             }
         },
@@ -309,6 +310,7 @@ object HubProtocolParser {
             it in setOf("Console", "Desktop Membership", "Membership")
         }.orEmpty() else "",
         spend = if (string("provider") == "mimo" ||
+            (string("provider") == "minimax" && string("source") == "api") ||
             (string("provider") == "thirdparty" && string("adapterId") == "newapi-account")) objectField("balance")?.let { balance ->
             val currency = balance.string("currency").uppercase(java.util.Locale.US)
             if (!currency.matches(Regex("[A-Z]{3}"))) null else HubLimitSpendDto(

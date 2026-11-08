@@ -1,0 +1,44 @@
+{
+  "limits": {
+    "updatedAt": "2026-11-08T16:22:01.247Z",
+    "providers": [
+      {
+        "provider": "mistral",
+        "accountKey": "",
+        "accountLabel": "",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "web",
+        "sourceDetail": "",
+        "updatedAt": "2026-11-08T16:21:59.000Z",
+        "windows": [
+          {
+            "kind": "billing",
+            "metric": "credits",
+            "label": "Balance",
+            "used": null,
+            "limit": null,
+            "remaining": -2,
+            "usedPercent": null,
+            "remainingPercent": null,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": "EUR",
+            "showMeter": false
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "mistral-negative0",
+        "stale": false
+      }
+    ]
+  }
+}

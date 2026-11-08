@@ -1,3 +1,4 @@
+import { checkV088Data } from "./check-v088-contract.mjs";
 import { checkModelAliasReads, checkModelAliasResolver } from "./check-model-aliases.mjs";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
@@ -664,6 +665,9 @@ async function isolatedContract(source, output, upstream) {
         Object.assign(responses, await checkV087DeltaReads(uploadRequest, device.deviceId, upstream.version));
         Object.assign(responses, await checkModelAliasReads(hub, uploadRequest));
         responses["model-alias-resolver.json"] = checkModelAliasResolver(require);
+        const v088 = await checkV088Data(require, { createHub, source, secret, device, now });
+        Object.assign(limitChecks.cases, v088.cases);
+        Object.assign(responses, v088.responses);
         await checkV081Streams(require, source, output, upstream);
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) await writeFile(join(output, name), `${JSON.stringify(value, null, 2)}\n`);
