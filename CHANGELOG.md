@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## v0.88.0 r2 — 2026-11-08
+
+- Show the native Live status chip on eligible unlocked Samsung phones running Android 17 or newer.
+- Keep Token Monitor's name, icon and Stop action in the expanded card.
+- Use the ordinary notification while locked and when promotion is unavailable or disabled.
+- Recheck the card on screen and notification-setting changes without extending Live or requesting more Hub data.
+
 ## v0.88.0 r1 — 2026-11-08
 
 - Show Mistral Vibe, Prime Agent and Jcode with their desktop names.
