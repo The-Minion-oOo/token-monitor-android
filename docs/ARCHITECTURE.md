@@ -463,12 +463,20 @@ Stop action and notification equality check. Android requires the normal
 notifications can be promoted on Android 16.1+. Android applies the permission
 and controls promotion through system policy.
 
-The Samsung chip candidate keeps the standard BigText notification and adds only
-`android.ongoingActivityNoti.automation` and its `automationPackage` companion,
-using the app's own package. These undocumented fields address Samsung's separate
-Now bar admission path. They are restricted to explicit Live sessions on Samsung,
-Android 16.1+, with app notifications and promotion allowed and the channel at
-least Low. Other devices, Refresh and blocked promotion omit them. The existing
-snapshot, expiry and screen-on checks compare promotion eligibility as well as
-visible text, so settings changes can remove the bridge without new polling.
-I still need to check its actual display and dismissal behaviour on my phone.
+On an unlocked Samsung phone with Android 17+, an eligible explicit Live session
+uses the native card. Undocumented `ongoingActivityNoti` extras supply its icon, headline,
+app name, expiry and the existing Stop action. The initial two-field automation
+approach displayed a chip but Samsung labelled its expanded notification
+"Gemini Intelligence". The card path avoids that heading. The standard BigText
+views are rendered through public Builder methods before adding those extras,
+so fallback notifications also retain the app's own identity and full details.
+Samsung promotion is separate from Android's promoted flag for this card.
+
+The card requires app notifications and promotion to be allowed and the channel
+at least Low. Screen-off immediately withdraws the Samsung fields using prepared
+text; the lock screen uses the ordinary notification. Samsung otherwise applies
+assistant branding when its automation card is tapped there. Screen-on and unlock
+events recheck eligibility without extending the deadline or requesting Hub data.
+Earlier Samsung versions, other phone brands, Refresh and blocked promotion keep
+the ordinary Android path. Existing snapshot and expiry checks compare eligibility
+as well as visible text. The extras may change with phone software.

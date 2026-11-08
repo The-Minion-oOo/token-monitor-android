@@ -147,7 +147,14 @@ class WidgetLiveService : Service() {
     private var shownPromotion: WidgetLivePromotion? = null
     private val wakeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            if (intent.action == Intent.ACTION_SCREEN_ON && !expireIfNeeded()) scope.launch { showNotification() }
+            if (expireIfNeeded()) return
+            if (intent.action == Intent.ACTION_SCREEN_OFF) {
+                // Withdraw Samsung automation before the lock screen is shown. Reuse
+                // prepared text here instead of waiting for session grouping.
+                shownNotification?.let(::postNotification)
+            } else if (intent.action == Intent.ACTION_SCREEN_ON || intent.action == Intent.ACTION_USER_PRESENT) {
+                scope.launch { showNotification() }
+            }
         }
     }
 
@@ -214,7 +221,11 @@ class WidgetLiveService : Service() {
             }
         }
         if (!observingWake && !finishing) {
-            ContextCompat.registerReceiver(this, wakeReceiver, IntentFilter(Intent.ACTION_SCREEN_ON), ContextCompat.RECEIVER_NOT_EXPORTED)
+            val screenEvents = IntentFilter(Intent.ACTION_SCREEN_ON).apply {
+                addAction(Intent.ACTION_SCREEN_OFF)
+                addAction(Intent.ACTION_USER_PRESENT)
+            }
+            ContextCompat.registerReceiver(this, wakeReceiver, screenEvents, ContextCompat.RECEIVER_NOT_EXPORTED)
             observingWake = true
         }
         expiry?.cancel()
@@ -264,6 +275,10 @@ class WidgetLiveService : Service() {
         val sessions = withContext(Dispatchers.Default) { notificationSessions(session.snapshot, System.currentTimeMillis()) }
         if (WidgetRuntime.session !== session) return
         val content = notificationContent(session, live, sessions)
+        postNotification(content)
+    }
+
+    private fun postNotification(content: WidgetNotificationContent) {
         val promotion = widgetLivePromotion(this, CHANNEL, live)
         if (finishing || content == shownNotification && promotion == shownPromotion) return
         runCatching {

@@ -1,12 +1,15 @@
 package io.github.theminionooo.tokenmonitor.widget
 
 import android.app.Notification
+import android.app.KeyguardManager
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.PowerManager
 import android.os.Bundle
+import android.graphics.drawable.Icon
 import io.github.theminionooo.tokenmonitor.MainActivity
 import io.github.theminionooo.tokenmonitor.R
 import io.github.theminionooo.tokenmonitor.ui.appText
@@ -20,10 +23,14 @@ internal fun widgetLivePromotion(
     manufacturer: String = Build.MANUFACTURER,
 ): WidgetLivePromotion {
     val supported = Build.VERSION.SDK_INT >= 36 && Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.BAKLAVA_1
-    val allowed = supported && runCatching {
+    // Samsung's lock-screen automation surface substitutes its assistant identity,
+    // even with an explicit icon. Only use the card while the phone is unlocked.
+    val allowed = Build.VERSION.SDK_INT >= 37 && runCatching {
         val manager = context.getSystemService(NotificationManager::class.java)
         manager.canPostPromotedNotifications() && manager.areNotificationsEnabled() &&
-            (manager.getNotificationChannel(channel)?.importance ?: NotificationManager.IMPORTANCE_NONE) >= NotificationManager.IMPORTANCE_LOW
+            (manager.getNotificationChannel(channel)?.importance ?: NotificationManager.IMPORTANCE_NONE) >= NotificationManager.IMPORTANCE_LOW &&
+            context.getSystemService(PowerManager::class.java).isInteractive &&
+            !context.getSystemService(KeyguardManager::class.java).isKeyguardLocked
     }.getOrDefault(false)
     return widgetLivePromotion(live, supported, manufacturer, allowed)
 }
@@ -58,15 +65,33 @@ internal fun widgetLiveNotification(
     if (Build.VERSION.SDK_INT >= 36) builder.setShortCriticalText(content.shortText)
     if (Build.VERSION.SDK_INT >= 36 && Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.BAKLAVA_1) {
         builder.setRequestPromotedOngoing(promotion.requested)
-        if (promotion.samsungBridge) {
-            // One UI has a separate Now bar eligibility path. These undocumented extras
-            // bridge a standard promoted notification into it; a private `style` would
-            // instead select Samsung's restricted custom-card path. See DEVELOPMENT.md.
-            builder.addExtras(Bundle().apply {
-                putBoolean("android.ongoingActivityNoti.automation", true)
-                putString("android.ongoingActivityNoti.automationPackage", context.packageName)
-            })
-        }
     }
-    return builder.build()
+    val notification = builder.build()
+    if (Build.VERSION.SDK_INT >= 37 && promotion.samsungBridge) {
+        // Render the platform's own layouts BEFORE adding automation. Samsung otherwise
+        // replaces the app heading with "Gemini Intelligence". No custom layout or
+        // hidden method is used. The Samsung card is a separate promotion path; these
+        // pre-rendered views intentionally fall back to a normal Android notification.
+        @Suppress("DEPRECATION")
+        notification.contentView = builder.createContentView()
+        @Suppress("DEPRECATION")
+        notification.bigContentView = builder.createBigContentView()
+        @Suppress("DEPRECATION")
+        notification.headsUpContentView = builder.createHeadsUpContentView()
+        notification.extras.putAll(Bundle().apply {
+            putBoolean("android.ongoingActivityNoti.automation", true)
+            putString("android.ongoingActivityNoti.automationPackage", context.packageName)
+            putInt("android.ongoingActivityNoti.style", 1)
+            putInt("android.ongoingActivityNoti.actionType", 1)
+            putString("android.ongoingActivityNoti.primaryInfo", content.headline)
+            putString("android.ongoingActivityNoti.secondaryInfo", listOfNotNull(context.getString(R.string.app_name), content.subtext).joinToString("\n"))
+            putString("android.ongoingActivityNoti.chipExpandedText", content.shortText)
+            putString("android.ongoingActivityNoti.nowbarPrimaryInfo", content.headline)
+            putString("android.ongoingActivityNoti.nowbarSecondaryInfo", content.subtext.orEmpty())
+            putParcelable("android.ongoingActivityNoti.nowbarIcon", Icon.createWithResource(context, R.mipmap.ic_launcher))
+            putParcelable("android.ongoingActivityNoti.chipIcon", Icon.createWithResource(context, R.drawable.ic_widget_notification))
+            putInt("android.ongoingActivityNoti.chipBgColor", 0xff1e6cff.toInt())
+        })
+    }
+    return notification
 }

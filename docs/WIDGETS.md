@@ -127,13 +127,19 @@ stopped correctly. The status-bar chip did not appear. I am keeping
 [#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146) open.
 See [Android’s Live Updates requirements](https://developer.android.com/develop/ui/views/notifications/live-update).
 
-I am testing a Samsung compatibility change for that missing chip. On supported
-Android versions, an allowed Live notification also supplies Samsung's two
-Now bar bridge fields. Refresh and other phone brands use the standard Android
-path. Turning off app notifications or Live promotion, or minimizing the channel,
-disables the bridge; the existing Live checks pick up those settings changes.
-The fields are undocumented and may stop working after a phone software update.
-I have not yet confirmed this change on my phone, so it is not a verified chip fix.
+The Samsung compatibility change uses a native card while an Android 17 or newer
+phone is unlocked. Its chip shows the same priority reading; opening it shows the headline,
+Token Monitor's name, the session end time and Stop. The ordinary notification
+keeps the full usage and quota details. Earlier Samsung versions, Refresh and
+other phone brands retain the standard Android path. Turning off notifications
+or promotion, or minimizing the channel, disables the card. Existing Live checks
+pick up eligibility changes within their normal 30-second interval, or on wake.
+Locking the phone immediately restores the ordinary notification. This avoids
+Samsung's assistant branding on its lock-screen automation surface. Unlocking can
+restore the chip during the same Live session, with the same end time. I checked
+the chip, its app identity, notification settings and Stop on my phone, including
+Stop from the ordinary lock-screen notification.
+The Samsung fields are undocumented and may change after a phone software update.
 
 The Pages Breakdown uses model aliases saved by the visible dashboard when they
 match the snapshot’s `syncSettingsRevisions.modelAliases`. Missing settings or a
