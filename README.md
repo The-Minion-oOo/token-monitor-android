@@ -28,11 +28,11 @@
 
 ## The desktop dashboard, made mobile
 
-**New in v0.88.0 r1:** Read Mistral Vibe, Prime Agent and Jcode usage, check
-Mistral allowances, and keep MiniMax Code points separate from API billing.
-Desktop model names now appear in Android, brief reconnects stay quiet, and
-Live leads with active conversations or a critical quota.
-[Release notes](docs/releases/android-v0.88.0-r1.md).
+**New in v0.88.0 r2:** Live can show a native status-bar chip on supported,
+unlocked Samsung phones running Android 17 or newer. The expanded card keeps
+Token Monitor's identity, end time and Stop action; locking the phone uses the
+ordinary notification. Notification and promotion settings control availability.
+[Release notes](docs/releases/android-v0.88.0-r2.md).
 
 **Also included:** smaller live updates through the released v4 Hub stream,
 session reasoning effort and personal Volcengine quotas. Muse and Ollama
@@ -225,15 +225,15 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 | | |
 | --- | --- |
-| Current release | [Android v0.88.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.88.0-r1) (`880001`) |
+| Current release | [Android v0.88.0 r2](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.88.0-r2) (`880002`) |
 | Desktop baseline | [Token Monitor v0.88.0](https://github.com/Javis603/token-monitor/releases/tag/v0.88.0) |
 | Minimum Android version | Android 8.0 |
 
-I checked this release against the released Node Hub and Worker, automated tests
-and emulators. I installed the signed APK over v0.87.0 r1 on my phone.
+I checked the released Hub and Worker, automated tests and emulators.
+I installed the signed r2 APK over r1 on my phone and checked fresh Home Wi-Fi
+data, the Live chip and the lock-screen notification.
 [Validation](docs/VALIDATION.md) records the checks and remaining
-[#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146)
-phone coverage.
+[#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146) phone coverage.
 
 Android-only updates increment the release revision while keeping the verified
 desktop version. [Upstream pin](upstream.json) · [Release notes](CHANGELOG.md)
