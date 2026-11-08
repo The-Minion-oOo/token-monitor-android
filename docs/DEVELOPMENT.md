@@ -264,6 +264,33 @@ stream reducer. Gradle tracks the supplied directory as a test input. Without
 `TOKEN_MONITOR_CONTRACT_DIR`, those tests are skipped; the versioned fixture
 tests still run normally. The contract workflow supplies it explicitly.
 
+### Samsung Live chip investigation
+
+I traced the missing chip to a difference between Android's promotion flag and
+Samsung's Now bar admission. The released APK posted the Android flag on my phone,
+but Samsung reported no promotion and drew an ordinary notification icon.
+
+The candidate in `WidgetLiveNotification.kt` adds the minimal Samsung bridge to
+the existing notification. The reference is the
+[IslandCheck implementation at 2dd30fb](https://github.com/tigerduck-app/android-dynamic-island-test/blob/2dd30fb8b6e04675282a0f1e801bcfa87ad29cf2/app/src/main/java/com/test/island/dynamic/android/MainActivity.kt).
+Its author reports successful phone checks and explains the separate Samsung
+eligibility path. This is implementation evidence from another project, not a
+Samsung-supported API. I kept out its custom-card fields, reflection, privileged
+permissions, developer settings and package impersonation.
+
+Three native tests cover the minimal bridge, standard content and Stop action,
+non-Samsung fallback, blocked promotion, unsupported versions and Refresh.
+The settings test changes the emulator's actual promotion app-op, restores its
+previous value, and checks both Low and minimized notification channels.
+The existing Live integration test now sends the notification's actual Stop
+action and checks that both the notification and session end. Emulator assertions
+can verify fields and Android eligibility; they cannot verify Samsung's display.
+
+The phone check is still pending: compare the released APK with the candidate,
+start Live, leave the app, and check the status-bar chip and lock screen. I also
+need to check promotion off, channel minimization, temporary dismissal, Stop and
+expiry. I will keep #146 open until those results establish what works.
+
 ### First dashboard refresh timings
 
 Build a local diagnostic copy with timing enabled explicitly:
@@ -509,7 +536,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 145 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 148 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.

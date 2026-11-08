@@ -1,10 +1,8 @@
 package io.github.theminionooo.tokenmonitor.widget
 
 import io.github.theminionooo.tokenmonitor.ui.appText
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -18,7 +16,6 @@ import androidx.core.content.ContextCompat
 import io.github.theminionooo.tokenmonitor.R
 import io.github.theminionooo.tokenmonitor.data.HubRepository
 import io.github.theminionooo.tokenmonitor.data.HubRepositoryPool
-import io.github.theminionooo.tokenmonitor.MainActivity
 import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
 import io.github.theminionooo.tokenmonitor.domain.snapshotDate
 import io.github.theminionooo.tokenmonitor.ui.formatCompactTokens
@@ -147,6 +144,7 @@ class WidgetLiveService : Service() {
     private var live = false
     private var finishing = false
     private var shownNotification: WidgetNotificationContent? = null
+    private var shownPromotion: WidgetLivePromotion? = null
     private val wakeReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action == Intent.ACTION_SCREEN_ON && !expireIfNeeded()) scope.launch { showNotification() }
@@ -178,7 +176,6 @@ class WidgetLiveService : Service() {
         WidgetRuntime.session = WidgetRuntime.session.copy(enabled = live, refreshing = true, expiresAt = activeDeadline.displayExpiresAt, note = null)
         try {
             val content = shownNotification?.takeIf { alreadyLive } ?: notificationContent(WidgetRuntime.session, live)
-            shownNotification = content
             enterForeground(content)
         } catch (_: RuntimeException) {
             finishSession(appText(R.string.ui_live_unavailable_tap_to_retry_e2d5b, "Live unavailable. Tap to retry."))
@@ -233,9 +230,12 @@ class WidgetLiveService : Service() {
     }
 
     private fun enterForeground(content: WidgetNotificationContent) {
-        val notification = notification(content)
+        val promotion = widgetLivePromotion(this, CHANNEL, live)
+        val notification = widgetLiveNotification(this, CHANNEL, content, promotion)
         if (Build.VERSION.SDK_INT >= 29) startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
         else startForeground(NOTIFICATION_ID, notification)
+        shownNotification = content
+        shownPromotion = promotion
     }
 
     private fun expireIfNeeded(): Boolean {
@@ -251,42 +251,26 @@ class WidgetLiveService : Service() {
     /**
      * The notification that keeps the service alive doubles as the lock-screen and status-bar view of
      * the session. Android 16.1+ may promote explicit Live sessions when system policy permits it.
-     * Session preparation runs off the main thread, and only visible text changes are posted.
+     * Session preparation runs off the main thread; text or eligibility changes trigger a post.
      */
     private fun notificationContent(session: WidgetSession, live: Boolean, sessions: NotificationSessions = NotificationSessions()): WidgetNotificationContent {
         val options = io.github.theminionooo.tokenmonitor.data.storage.DisplayPreferences(this).options.value
         return widgetNotificationContent(session, live, currency = io.github.theminionooo.tokenmonitor.data.storage.usageCurrency(options), displayOptions = options, sessions = sessions)
     }
 
-    private fun notification(content: WidgetNotificationContent = notificationContent(WidgetRuntime.session, live)): Notification {
-        val stop = PendingIntent.getBroadcast(this, 21, Intent(this, WidgetStopReceiver::class.java), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-        val open = PendingIntent.getActivity(this, 22, Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-        val builder = Notification.Builder(this, CHANNEL)
-            .setSmallIcon(R.drawable.ic_widget_notification)
-            .setContentTitle(content.title)
-            .setContentText(content.headline)
-            .setStyle(Notification.BigTextStyle().bigText(content.detail))
-            .setContentIntent(open)
-            .setOngoing(true).setOnlyAlertOnce(true)
-            .addAction(Notification.Action.Builder(null, appText(R.string.ui_stop_9e253, "Stop"), stop).build())
-        content.subtext?.let(builder::setSubText)
-        // Promotion (lock screen, status bar chip) arrived in the Android 16 minor release, so check the full version.
-        if (Build.VERSION.SDK_INT >= 36) builder.setShortCriticalText(content.shortText)
-        if (live && Build.VERSION.SDK_INT >= 36 && Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.BAKLAVA_1) {
-            builder.setRequestPromotedOngoing(true)
-        }
-        return builder.build()
-    }
-
-    /** Re-posts the notification only when its text would change, so the shade never flickers. */
+    /** Re-posts only for changed text or promotion settings, using the existing Live checks. */
     private suspend fun showNotification() {
         val session = WidgetRuntime.session
         val sessions = withContext(Dispatchers.Default) { notificationSessions(session.snapshot, System.currentTimeMillis()) }
         if (WidgetRuntime.session !== session) return
         val content = notificationContent(session, live, sessions)
-        if (content == shownNotification || finishing) return
-        shownNotification = content
-        runCatching { getSystemService(NotificationManager::class.java).notify(NOTIFICATION_ID, notification(content)) }
+        val promotion = widgetLivePromotion(this, CHANNEL, live)
+        if (finishing || content == shownNotification && promotion == shownPromotion) return
+        runCatching {
+            getSystemService(NotificationManager::class.java).notify(NOTIFICATION_ID, widgetLiveNotification(this, CHANNEL, content, promotion))
+            shownNotification = content
+            shownPromotion = promotion
+        }
     }
 
     private fun finishSession(note: String? = null) {

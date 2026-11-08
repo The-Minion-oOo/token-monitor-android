@@ -217,3 +217,10 @@ Android applies it as a normal permission. Notification permission, the system
 promotion setting, an explicit start, the one-hour expiry and Stop govern Live. Session notification
 content contains counts and quota/usage readings, without titles, identifiers,
 account emails or pairing credentials.
+
+The Samsung chip candidate adds two undocumented notification extras only when
+the app's notifications, channel and promotion setting allow it. They contain a
+Boolean and the app's own package name. They add no permission, system-setting
+write, connection or background work. The standard ongoing notification and Stop
+remain available when the bridge is omitted. Phone checks of Samsung display and
+dismissal are still pending.

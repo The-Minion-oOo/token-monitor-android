@@ -112,8 +112,8 @@ A Live notification allows one polling interval of observation grace. A reported
 from its reported time, bridging the 30-second stats polling boundary. A new idle
 reading replaces it immediately. Dashboard activity keeps its existing 30-second
 rule. Preparation uses each received snapshot and the existing expiry check.
-The notification is re-posted only when its
-visible text changes. Tap it to open the app, or Stop to end the session.
+The notification is re-posted only when its visible text or promotion eligibility
+changes. Tap it to open the app, or Stop to end the session.
 
 On Android 16.1 and newer, explicit Live sessions request promotion for the lock
 screen and status-bar chip. `POST_PROMOTED_NOTIFICATIONS` is required by Android,
@@ -126,6 +126,14 @@ v0.88.0 r1 APK also posted that flag on my phone, showed the running count and
 stopped correctly. The status-bar chip did not appear. I am keeping
 [#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146) open.
 See [Android’s Live Updates requirements](https://developer.android.com/develop/ui/views/notifications/live-update).
+
+I am testing a Samsung compatibility change for that missing chip. On supported
+Android versions, an allowed Live notification also supplies Samsung's two
+Now bar bridge fields. Refresh and other phone brands use the standard Android
+path. Turning off app notifications or Live promotion, or minimizing the channel,
+disables the bridge; the existing Live checks pick up those settings changes.
+The fields are undocumented and may stop working after a phone software update.
+I have not yet confirmed this change on my phone, so it is not a verified chip fix.
 
 The Pages Breakdown uses model aliases saved by the visible dashboard when they
 match the snapshot’s `syncSettingsRevisions.modelAliases`. Missing settings or a

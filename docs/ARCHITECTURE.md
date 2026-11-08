@@ -458,7 +458,17 @@ Widget Live computes conversation counts off the main thread from the existing
 snapshot. It gives activity observations one 30-second polling interval of grace,
 then falls back to the existing transcript rules. Quota priority uses the tightest
 visible window at 15 percent or less. The notification keeps its one-hour deadline,
-Stop action and visible-text equality check. Android requires the normal
+Stop action and notification equality check. Android requires the normal
 `POST_PROMOTED_NOTIFICATIONS` manifest permission before eligible explicit Live
 notifications can be promoted on Android 16.1+. Android applies the permission
 and controls promotion through system policy.
+
+The Samsung chip candidate keeps the standard BigText notification and adds only
+`android.ongoingActivityNoti.automation` and its `automationPackage` companion,
+using the app's own package. These undocumented fields address Samsung's separate
+Now bar admission path. They are restricted to explicit Live sessions on Samsung,
+Android 16.1+, with app notifications and promotion allowed and the channel at
+least Low. Other devices, Refresh and blocked promotion omit them. The existing
+snapshot, expiry and screen-on checks compare promotion eligibility as well as
+visible text, so settings changes can remove the bridge without new polling.
+I still need to check its actual display and dismissal behaviour on my phone.
