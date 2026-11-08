@@ -1,16 +1,21 @@
-# Desktop parity for v0.87.0
+# Desktop parity for v0.88.0
 
-I compare Android with desktop tag `v0.87.0`, peeled commit `b3dd5e25bd9ab89620eb6380c863e335d8b8751e`.
-Android reads the Hub while the desktop collects usage and manages provider
-sign-in.
+I compare Android with desktop tag `v0.88.0`, peeled commit
+`4fcba817885568eca31b39e585f4346e9af5245a`. Android reads the usage collected by desktop.
 
-**Android v0.87.0 r1** displays reported OpenDesign session and weekly
-limits. Status adds OpenCode, Factory Droid, Kimi, Copilot, Zed, Devin and
-both MiniMax regions. Copilot only reflects its own GitHub status components.
+The **v0.88.0 r1 candidate** names Mistral Vibe, Prime Agent and Jcode usage
+and displays Mistral API/Vibe allowances and balances. MiniMax Code points and
+plan windows appear separately from API balances and spend, preserving each
+account's reported currency.
 
-I checked that both released Hubs preserve explicit zero usage and corrected
-history after a desktop delta upload. Android continues to use the Hub read
-endpoints and live stream.
+Desktop model aliases and grouping now carry into Models, Sessions and saved
+Pages Breakdown rows. Reconnect notices wait three seconds and keep specific
+connection errors. The Live notification prioritizes active conversations,
+then a critical quota, then today's usage. I am tracking the remaining phone
+checks in [#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146).
+
+Desktop plugin quotas and OpenAI Platform credits use desktop plugin surfaces.
+The current Hub provider catalog does not export those plugin modules.
 
 I also checked restored Kiro readings and Copilot reset details against the
 released collectors, Node Hub and Worker. Android continues to omit absent reset lines.

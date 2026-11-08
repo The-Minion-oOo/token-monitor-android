@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## v0.88.0 r1 (candidate)
+
+- Show Mistral Vibe, Prime Agent and Jcode with their desktop names.
+- Display Mistral allowances and credit balances.
+- Separate MiniMax Code points and plan quotas from API billing and spend.
+
 - Follow desktop model aliases and grouping in model/session displays and saved widget Breakdown rows.
 - Keep saved data visible during reconnects and wait three seconds before showing a stable reconnect notice.
   Certificate, route, permission and other lasting errors keep their specific message.
