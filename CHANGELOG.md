@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## v0.88.0 r1 (candidate)
+## v0.88.0 r1 — 2026-11-08
 
 - Show Mistral Vibe, Prime Agent and Jcode with their desktop names.
 - Display Mistral allowances and credit balances.

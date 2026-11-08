@@ -121,8 +121,10 @@ and promotion also depends on notification permission, system settings and the
 launcher or phone software. Android 16.0 and older retain the ordinary ongoing
 notification with Stop. Only explicit Live sessions request promotion. I checked
 both `canPostPromotedNotifications()` and `hasPromotableCharacteristics()` on the
-API 37 emulator, then verified the posted `FLAG_PROMOTED_ONGOING`. The physical-phone
-check is still open in [#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146).
+API 37 emulator, then verified the posted `FLAG_PROMOTED_ONGOING`. The signed
+v0.88.0 r1 APK also posted that flag on my phone, showed the running count and
+stopped correctly. The status-bar chip did not appear. I am keeping
+[#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146) open.
 See [Android’s Live Updates requirements](https://developer.android.com/develop/ui/views/notifications/live-update).
 
 The Pages Breakdown uses model aliases saved by the visible dashboard when they

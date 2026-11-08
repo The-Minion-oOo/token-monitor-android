@@ -3,7 +3,7 @@
 I compare Android with desktop tag `v0.88.0`, peeled commit
 `4fcba817885568eca31b39e585f4346e9af5245a`. Android reads the usage collected by desktop.
 
-The **v0.88.0 r1 candidate** names Mistral Vibe, Prime Agent and Jcode usage
+**Android v0.88.0 r1** names Mistral Vibe, Prime Agent and Jcode usage
 and displays Mistral API/Vibe allowances and balances. MiniMax Code points and
 plan windows appear separately from API balances and spend, preserving each
 account's reported currency.

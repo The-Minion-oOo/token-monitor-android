@@ -3,31 +3,32 @@
 I keep one record for each release. Emulator results and phone checks describe
 the builds and scenarios they name; neither establishes battery savings.
 
-## Current release: v0.87.0 r1
+## Current release: v0.88.0 r1
 
-I published source `c32fd7ed1c9a503c6ab8ebc45f307a1f1627972e` from
-[PR #144](https://github.com/The-Minion-oOo/token-monitor-android/pull/144), with desktop v0.87.0 pinned at `b3dd5e25bd9ab89620eb6380c863e335d8b8751e`.
+I published source `00dc73168dabf16c48e7387a4140152145a6ff2f` from
+[PR #150](https://github.com/The-Minion-oOo/token-monitor-android/pull/150), with desktop v0.88.0 pinned at
+`4fcba817885568eca31b39e585f4346e9af5245a`.
 All five required jobs passed on the tagged commit.
-[Build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/42238709320) ·
-[API 36, 37 and 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/42238709357) ·
-[Hub and Worker contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/42238709608).
+[Build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/42500940078) ·
+[API 36, 37 and 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/42500940069) ·
+[Hub and Worker contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/42500940129).
 
-I checked 461 JVM tests with the released contract responses, 135 native tests
+I checked 481 JVM tests with the released contract responses, 145 native tests
 on each CI API 36 and 37 emulator, debug and release lint, and the signed build.
-The exact signed APK installed over v0.86.0 r1, opened and resumed on an API 26
-emulator. I haven't tested this release on my phone.
+The exact signed APK passed the API 26 install, launch and resume check.
+I installed the exact APK over v0.87.0 r1 on my phone. Pairing, display settings and the widget survived. I checked fresh Tailscale and Home Wi-Fi fallback data, resume, all four Pages views, the running notification and Stop. Android marked Live promoted, but the status-bar chip did not appear. Custom desktop aliases, the isolated Tailscale error notice and lock-screen appearance remain unverified in [#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146). Battery use and one-hour expiry were not measured.
 
 | Release asset | Value |
 | --- | --- |
-| APK | `token-monitor-android-v0.87.0-r1.apk` |
-| Package and version code | `io.github.theminionooo.tokenmonitor` · `870001` |
-| Size | 3,388,187 bytes |
-| APK SHA-256 | `02c63e91a513dc0e588c385ec25c1b98826fa2d6f602971c0816047c6e737374` |
+| APK | `token-monitor-android-v0.88.0-r1.apk` |
+| Package and version code | `io.github.theminionooo.tokenmonitor` · `880001` |
+| Size | 3,408,683 bytes |
+| APK SHA-256 | `42da3648ae670be816963ca42dc3c8117a8c7ec69b793653ab6b608a06d7dc8e` |
 | Signing certificate SHA-256 | `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c` |
 
-I verified the APK, checksum and update manifest from the draft and public
-downloads, and confirmed that the update endpoint returns this release.
-[Android v0.87.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.87.0-r1).
+Draft and public downloads of the APK, checksum and update manifest matched the
+signed bundle. The update endpoint returns
+[Android v0.88.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.88.0-r1).
 
 ## Release checks and limits
 
@@ -51,6 +52,7 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 
 | Release | Date | Desktop baseline | Main checks | Phone check |
 | --- | --- | --- | --- | --- |
+| v0.88.0 r1 | 2026-11-08 | v0.88.0 | New tools, Mistral/MiniMax quotas, model names and Live status; 481 JVM, 145 per API 36 and 37, signed API 26 smoke | Signed upgrade in place; see current release and #146 |
 | v0.87.0 r1 | 2026-11-06 | v0.87.0 | OpenDesign, expanded Status and delta-upload reads. 461 JVM, 135 per API 36 and 37, signed API 26 smoke | No |
 | v0.86.0 r1 | 2026-11-04 | v0.86.0 | Official DeepSeek feed and billing contract; 457 JVM / 132 per API 36/37; optimized API 26 | In-place upgrade, Tailscale, resume, filtering and status |
 | v0.85.0 r1 | 2026-11-03 | v0.85.0 | Session tool filter, hardware hints and title privacy; 443 JVM / 130 per API 36/37; optimized API 26 | Not phone-tested |

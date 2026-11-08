@@ -9,10 +9,11 @@
 
 ## 近期更新
 
-当前版本为 **v0.87.0 r1**。额度页面会显示 OpenDesign 的五小时和每周额度，
-服务状态新增 OpenCode、Factory Droid、Kimi、Copilot、Zed、Devin 和 MiniMax
-的中国及国际站。我用 Node Hub 和 Worker 验证了桌面增量上传后的用量和历史记录。
-[版本说明](docs/releases/android-v0.87.0-r1.md)。
+当前版本为 **v0.88.0 r1**。新增 Mistral Vibe、Prime Agent 和 Jcode 工具名称，
+显示 Mistral 额度，并将 MiniMax Code 积分与 API 账单分开。Android 会使用桌面
+设置的模型名称，短暂断线会等待三秒再提示，Live 通知优先显示活跃会话或紧张的额度。
+我已在手机上原位安装正式签名 APK。
+[版本说明](docs/releases/android-v0.88.0-r1.md)。
 
 继续支持 v4 增量实时更新、会话推理强度和火山引擎个人套餐额度。
 以下语言、付款和显示功能继续保留。
