@@ -127,7 +127,7 @@ stopped correctly. The status-bar chip did not appear. I am keeping
 [#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146) open.
 See [Android’s Live Updates requirements](https://developer.android.com/develop/ui/views/notifications/live-update).
 
-The Samsung compatibility change uses a native card while an Android 17 or newer
+Android v0.88.0 r2 uses a native Samsung card while an Android 17 or newer
 phone is unlocked. Its chip shows the same priority reading; opening it shows the headline,
 Token Monitor's name, the session end time and Stop. The ordinary notification
 keeps the full usage and quota details. Earlier Samsung versions, Refresh and
@@ -137,7 +137,7 @@ pick up eligibility changes within their normal 30-second interval, or on wake.
 Locking the phone immediately restores the ordinary notification. This avoids
 Samsung's assistant branding on its lock-screen automation surface. Unlocking can
 restore the chip during the same Live session, with the same end time. I checked
-the chip, its app identity, notification settings and Stop on my phone, including
+the signed r2 APK on my phone: the chip, app identity and Stop worked, including
 Stop from the ordinary lock-screen notification.
 The Samsung fields are undocumented and may change after a phone software update.
 

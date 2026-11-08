@@ -306,9 +306,9 @@ The phone comparison uses a separate preview package and preserves the published
 app. I checked the actual chip, app identity, notification permission and promotion
 opt-outs, the lock-screen fallback, and Stop from both surfaces. The three focused
 native cases also pass on my phone. The card displays a compact summary; the ordinary
-notification retains full details. I keep #146 open for the remaining checks and
-publication. An hour of physical expiry and battery use require longer observation
-than this chip check.
+notification retains full details. I keep #146 open for the remaining model-alias
+and reconnect phone checks. Automatic one-hour expiry and battery use require
+longer observation than this chip check.
 
 ### First dashboard refresh timings
 

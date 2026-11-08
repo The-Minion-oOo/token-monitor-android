@@ -14,6 +14,9 @@ connection errors. The Live notification prioritizes active conversations,
 then a critical quota, then today's usage. I am tracking the remaining phone
 checks in [#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146).
 
+Android v0.88.0 r2 adds the native Live chip on eligible unlocked Samsung
+phones running Android 17 or newer, with the ordinary notification while locked.
+
 Desktop plugin quotas and OpenAI Platform credits use desktop plugin surfaces.
 The current Hub provider catalog does not export those plugin modules.
 

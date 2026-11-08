@@ -21,7 +21,8 @@ Use **Settings → App updates**, or install the signed APK over the current cop
 Android 8 or newer is required.
 [Install and update](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md).
 
-I checked the chip, app branding, notification settings and Stop on my phone with
-the preview build, including Stop from the lock screen. The signed r2 APK has not
-been phone-tested yet. Battery use and automatic one-hour expiry were not measured.
+I installed this APK over r1 on my phone. Saved pairing, visible settings and the
+widget survived. I checked fresh Home Wi-Fi data, the unlocked chip, app branding
+and Stop from both the chip and ordinary lock-screen notification.
+Battery use and automatic one-hour expiry were not measured.
 [Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md).
