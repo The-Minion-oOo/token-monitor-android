@@ -178,6 +178,8 @@ class ModelAliasesReconnectTest {
             await { headline().contains("100 tokens") }
             capture("usage")
             assertEquals("Live never requests aliases", 0, server.aliasReads.get())
+            notification()!!.actions.single { it.title == "Stop" }.actionIntent.send()
+            await { notification() == null && !io.github.theminionooo.tokenmonitor.widget.WidgetRuntime.session.enabled }
         } finally {
             instrumentation.runOnMainSync { io.github.theminionooo.tokenmonitor.widget.WidgetLiveService.stop(context) }
         }

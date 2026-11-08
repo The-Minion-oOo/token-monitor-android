@@ -458,7 +458,25 @@ Widget Live computes conversation counts off the main thread from the existing
 snapshot. It gives activity observations one 30-second polling interval of grace,
 then falls back to the existing transcript rules. Quota priority uses the tightest
 visible window at 15 percent or less. The notification keeps its one-hour deadline,
-Stop action and visible-text equality check. Android requires the normal
+Stop action and notification equality check. Android requires the normal
 `POST_PROMOTED_NOTIFICATIONS` manifest permission before eligible explicit Live
 notifications can be promoted on Android 16.1+. Android applies the permission
 and controls promotion through system policy.
+
+On an unlocked Samsung phone with Android 17+, an eligible explicit Live session
+uses the native card. Undocumented `ongoingActivityNoti` extras supply its icon, headline,
+app name, expiry and the existing Stop action. The initial two-field automation
+approach displayed a chip but Samsung labelled its expanded notification
+"Gemini Intelligence". The card path avoids that heading. The standard BigText
+views are rendered through public Builder methods before adding those extras,
+so fallback notifications also retain the app's own identity and full details.
+Samsung promotion is separate from Android's promoted flag for this card.
+
+The card requires app notifications and promotion to be allowed and the channel
+at least Low. Screen-off immediately withdraws the Samsung fields using prepared
+text; the lock screen uses the ordinary notification. Samsung otherwise applies
+assistant branding when its automation card is tapped there. Screen-on and unlock
+events recheck eligibility without extending the deadline or requesting Hub data.
+Earlier Samsung versions, other phone brands, Refresh and blocked promotion keep
+the ordinary Android path. Existing snapshot and expiry checks compare eligibility
+as well as visible text. The extras may change with phone software.

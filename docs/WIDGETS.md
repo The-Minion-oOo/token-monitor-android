@@ -112,8 +112,8 @@ A Live notification allows one polling interval of observation grace. A reported
 from its reported time, bridging the 30-second stats polling boundary. A new idle
 reading replaces it immediately. Dashboard activity keeps its existing 30-second
 rule. Preparation uses each received snapshot and the existing expiry check.
-The notification is re-posted only when its
-visible text changes. Tap it to open the app, or Stop to end the session.
+The notification is re-posted only when its visible text or promotion eligibility
+changes. Tap it to open the app, or Stop to end the session.
 
 On Android 16.1 and newer, explicit Live sessions request promotion for the lock
 screen and status-bar chip. `POST_PROMOTED_NOTIFICATIONS` is required by Android,
@@ -126,6 +126,20 @@ v0.88.0 r1 APK also posted that flag on my phone, showed the running count and
 stopped correctly. The status-bar chip did not appear. I am keeping
 [#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146) open.
 See [Android’s Live Updates requirements](https://developer.android.com/develop/ui/views/notifications/live-update).
+
+The Samsung compatibility change uses a native card while an Android 17 or newer
+phone is unlocked. Its chip shows the same priority reading; opening it shows the headline,
+Token Monitor's name, the session end time and Stop. The ordinary notification
+keeps the full usage and quota details. Earlier Samsung versions, Refresh and
+other phone brands retain the standard Android path. Turning off notifications
+or promotion, or minimizing the channel, disables the card. Existing Live checks
+pick up eligibility changes within their normal 30-second interval, or on wake.
+Locking the phone immediately restores the ordinary notification. This avoids
+Samsung's assistant branding on its lock-screen automation surface. Unlocking can
+restore the chip during the same Live session, with the same end time. I checked
+the chip, its app identity, notification settings and Stop on my phone, including
+Stop from the ordinary lock-screen notification.
+The Samsung fields are undocumented and may change after a phone software update.
 
 The Pages Breakdown uses model aliases saved by the visible dashboard when they
 match the snapshot’s `syncSettingsRevisions.modelAliases`. Missing settings or a

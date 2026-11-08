@@ -264,6 +264,52 @@ stream reducer. Gradle tracks the supplied directory as a test input. Without
 `TOKEN_MONITOR_CONTRACT_DIR`, those tests are skipped; the versioned fixture
 tests still run normally. The contract workflow supplies it explicitly.
 
+### Samsung Live chip investigation
+
+I traced the missing chip to Samsung's separate Now bar allowlist. The released
+APK posted the Android flag on my phone but drew an ordinary notification icon.
+The `mIsPromotion` field in the notification-service dump is unrelated content
+classification; it is not a Live chip verdict. I use actual captures and the
+SystemUI ongoing-activity state to verify display.
+
+The initial reference was the
+[IslandCheck implementation at 2dd30fb](https://github.com/tigerduck-app/android-dynamic-island-test/blob/2dd30fb8b6e04675282a0f1e801bcfa87ad29cf2/app/src/main/java/com/test/island/dynamic/android/MainActivity.kt).
+Its author reports successful phone checks and explains Samsung's eligibility
+path. On my phone, its two-field approach showed a chip but Samsung replaced the
+expanded heading with "Gemini Intelligence". I inspected the phone's framework
+and SystemUI notification code to confirm that behaviour before replacing it.
+
+`WidgetLiveNotification.kt` supplies the native Samsung card on unlocked Android 17+ phones,
+including the existing status, app identity, deadline and Stop action. Public
+Builder methods render the standard notification views before adding vendor
+fields, preserving the correct name in fallback views. The Samsung path does not
+rely on Android's promoted flag. Other devices and earlier Samsung versions keep
+the standard Android path. No reflection, privileged permission, developer setting
+or package impersonation is used. Samsung also substitutes its assistant icon
+when its lock-screen automation card is tapped. The card is therefore limited to
+an awake, unlocked phone. Screen-off posts the ordinary notification immediately;
+unlock restores eligibility within the same session. These events do not read the
+Hub or extend the deadline. The Samsung fields remain undocumented.
+
+Three native tests cover card fields, inflated app identity and Stop controls,
+non-Samsung fallback, blocked promotion, unsupported versions and Refresh.
+The settings test changes the emulator's actual promotion app-op, restores its
+previous value, and checks both Low and minimized notification channels.
+On emulators it also sleeps and wakes the device, checking that the Samsung card
+is withheld while asleep and eligible again after unlock. It never tries to
+dismiss a secure phone's keyguard.
+The existing Live integration test now sends the notification's actual Stop
+action and checks that both the notification and session end. Emulator assertions
+can verify fields and Android eligibility; they cannot verify Samsung's display.
+
+The phone comparison uses a separate preview package and preserves the published
+app. I checked the actual chip, app identity, notification permission and promotion
+opt-outs, the lock-screen fallback, and Stop from both surfaces. The three focused
+native cases also pass on my phone. The card displays a compact summary; the ordinary
+notification retains full details. I keep #146 open for the remaining checks and
+publication. An hour of physical expiry and battery use require longer observation
+than this chip check.
+
 ### First dashboard refresh timings
 
 Build a local diagnostic copy with timing enabled explicitly:
@@ -509,7 +555,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 145 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 148 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.

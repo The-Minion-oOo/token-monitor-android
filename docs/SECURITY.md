@@ -217,3 +217,14 @@ Android applies it as a normal permission. Notification permission, the system
 promotion setting, an explicit start, the one-hour expiry and Stop govern Live. Session notification
 content contains counts and quota/usage readings, without titles, identifiers,
 account emails or pairing credentials.
+
+The Samsung card on Android 17+ adds undocumented notification extras only while
+the phone is awake and unlocked and notification settings allow it. They contain
+the app's own package and icon, the existing status headline, app name and expiry,
+plus native card options. The system uses the same Stop PendingIntent. The card
+adds no permission, system-setting write, connection or background work. Earlier
+versions, locked phones and disabled promotion use the ordinary notification.
+Native fallback views are rendered before adding Samsung fields to retain the
+correct app name. The session receiver observes screen-off, screen-on and unlock,
+and is unregistered when the service ends. Reading screen/keyguard state needs
+no new permission, wake lock or battery exemption.
