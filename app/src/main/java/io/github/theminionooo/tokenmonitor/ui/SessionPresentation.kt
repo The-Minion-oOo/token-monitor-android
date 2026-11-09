@@ -18,11 +18,18 @@ internal data class SessionContext(
     val percentLeft: Int,
 )
 
-internal data class SessionRowLabels(val title: String, val meta: String)
+internal data class SessionRowLabels(val title: String, val meta: String, val modelMetadata: String? = null)
 
-internal fun sessionModelMetadata(session: SessionUsage, names: ModelNames = ModelNames()): String = listOfNotNull(
-    session.modelNames.firstOrNull()?.let(names::name), session.reasoningEffort,
-).joinToString(" · ")
+internal fun sessionModelMetadata(session: SessionUsage, names: ModelNames = ModelNames()): String {
+    val latest = session.latestModel?.let(names::name)
+    val model = if (latest == null) {
+        session.modelNames.firstOrNull()?.let(names::name)
+    } else {
+        val others = session.modelTokens.keys.map(names::name).distinct().count { it != latest }
+        if (others == 0) latest else "$latest +$others"
+    }
+    return listOfNotNull(model, session.reasoningEffort).joinToString(" · ")
+}
 
 private val ompTitleCode = Regex("^[A-Z0-9]{1,6}: \\S")
 
@@ -41,17 +48,21 @@ internal fun sessionTitleForDisplay(session: SessionUsage): String {
 internal fun sessionRowLabels(session: SessionUsage, showTitles: Boolean = true, names: ModelNames = ModelNames()): SessionRowLabels {
     val client = session.client.displayName()
     val reportedTitle = if (showTitles) sessionTitleForDisplay(session) else ""
+    val model = sessionModelMetadata(session, names)
+    val modelMetadata = model.takeIf {
+        reportedTitle.isNotBlank() && (session.latestModel != null || session.reasoningEffort != null)
+    }
     val title = reportedTitle.ifBlank {
-        listOf(client, sessionModelMetadata(session, names)).filter { it.isNotBlank() }.joinToString(" · ")
+        listOf(client, model).filter { it.isNotBlank() }.joinToString(" · ")
     }.ifBlank { appText(R.string.ui_session_f7f19, "Session") }
     val meta = listOf(
         client.takeIf { reportedTitle.isNotBlank() }.orEmpty(),
-        sessionModelMetadata(session, names).takeIf { reportedTitle.isNotBlank() && session.reasoningEffort != null }.orEmpty(),
+        modelMetadata.orEmpty(),
         session.lastUsedAt.shortClockTime(),
         session.projectLabel,
         session.messageCount.takeIf { it > 0 }?.let { appText(R.string.ui_1_s_messages_d4b92, "%1\$s messages", it) }.orEmpty(),
     ).filter { it.isNotBlank() }.joinToString(" · ").ifBlank { session.id }
-    return SessionRowLabels(title, meta)
+    return SessionRowLabels(title, meta, modelMetadata)
 }
 
 /** Session-average output speed; absence of timed output is not zero speed. */

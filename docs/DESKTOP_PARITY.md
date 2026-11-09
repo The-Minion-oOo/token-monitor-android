@@ -1,7 +1,12 @@
-# Desktop parity for v0.88.0
+# Desktop parity for v0.89.0
 
-I compare Android with desktop tag `v0.88.0`, peeled commit
-`4fcba817885568eca31b39e585f4346e9af5245a`. Android reads the usage collected by desktop.
+I compare Android with desktop tag `v0.89.0`, peeled commit
+`e2a4f9911c34bac5a31eb8806cd2d53b36b7e944`. Android reads the usage collected by desktop.
+
+**Android v0.89.0 r1** shows Gemini CLI usage and the last-used model reported for
+Codex and Claude sessions. Groups use the latest main continuation while retaining
+the full usage breakdown. The desktop sets usage-day boundaries and handles
+quota history, plugin modules and local collection.
 
 **Android v0.88.0 r1** names Mistral Vibe, Prime Agent and Jcode usage
 and displays Mistral API/Vibe allowances and balances. MiniMax Code points and

@@ -1,3 +1,4 @@
+import { checkV089Data } from "./check-v089-contract.mjs";
 import { checkV088Data } from "./check-v088-contract.mjs";
 import { checkModelAliasReads, checkModelAliasResolver } from "./check-model-aliases.mjs";
 import assert from "node:assert/strict";
@@ -668,6 +669,9 @@ async function isolatedContract(source, output, upstream) {
         const v088 = await checkV088Data(require, { createHub, source, secret, device, now });
         Object.assign(limitChecks.cases, v088.cases);
         Object.assign(responses, v088.responses);
+        const v089 = await checkV089Data(require, { createHub, source, secret, device, now });
+        Object.assign(limitChecks.cases, v089.cases);
+        Object.assign(responses, v089.responses);
         await checkV081Streams(require, source, output, upstream);
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) await writeFile(join(output, name), `${JSON.stringify(value, null, 2)}\n`);

@@ -110,6 +110,8 @@ data class SessionUsage(
     val grokBotSession: Boolean? = null,
     /** Reported turn setting; independent of reasoning-token usage or activity expiry. */
     val reasoningEffort: String? = null,
+    /** Reported main-session model, independent of per-model token counts. */
+    val latestModel: String? = null,
 )
 
 /** A provider-specific estimate, not a guaranteed server-side expiry. */

@@ -35,6 +35,7 @@ internal data class ModelAliasSettings(
             period.sessions.forEach {
                 add(it.modelNames)
                 add(it.modelTokens.keys)
+                it.latestModel?.let { model -> add(listOf(model)) }
             }
         }
         snapshot.stats.periods.values.forEach(::collect)

@@ -10,6 +10,7 @@ internal fun SessionUsage.matchesSearch(query: String, showTitles: Boolean, name
     val text = query.trim()
     if (text.isEmpty()) return true
     val fields = listOf(id, projectLabel, client, client.displayName()) + modelNames + modelNames.map(names::name) +
+        listOfNotNull(latestModel, latestModel?.let(names::name)) +
         if (showTitles) listOf(title) else emptyList()
     return fields.any { it.contains(text, ignoreCase = true) }
 }
