@@ -787,3 +787,12 @@ Android parses those responses alongside the new client usage. The native
 Limits check scrolls between MiniMax API and Code headings and verifies the
 points amount. Existing model-name, reconnect and Live tests cover the merged
 work included in this release.
+
+### Desktop v0.89.0 checks
+
+The new fixtures come from authenticated reads of the released Node and Worker
+Hubs. They cover a last-used Codex model before token attribution, a newer
+subagent, archived Claude usage and omitted or null model observations. The
+Android tests check group totals, model aliases, search and the legacy label
+fallback. Native tests cover the model label on Home and Sessions with session
+titles visible or hidden. Gemini CLI reasoning is included in the Hub totals.

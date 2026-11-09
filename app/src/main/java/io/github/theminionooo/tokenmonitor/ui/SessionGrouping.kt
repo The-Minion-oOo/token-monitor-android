@@ -214,19 +214,23 @@ internal fun sessionRowPresentation(row: SessionRow, showTitles: Boolean = true,
     SessionGroupKind.GrokBot -> SessionRowLabels("Grok Bot", "${row.members.size} activity records")
     SessionGroupKind.Conversation -> {
         val latest = row.sessions.maxByOrNull(::sessionSortTime) ?: row.display
-        val labels = sessionRowLabels(row.display.copy(modelNames = topModelFirst(row, names), lastUsedAt = latest.lastUsedAt.ifBlank { latest.startedAt },
-            messageCount = 0), showTitles)
+        val models = names.fold(row.modelTokens, Long::plus)
+        val modelNames = models.entries.sortedByDescending { it.value }.map { it.key }
+            .ifEmpty { row.display.modelNames.map(names::name).distinct() }
+        // The display session is the latest main continuation. Child activity can update the row's time.
+        val labels = sessionRowLabels(row.display.copy(
+            modelNames = modelNames,
+            modelTokens = models,
+            latestModel = row.display.latestModel?.let(names::name),
+            lastUsedAt = latest.lastUsedAt.ifBlank { latest.startedAt },
+            messageCount = 0,
+        ), showTitles)
         val count = row.subagentCount.takeIf { it > 0 }?.let { if (it == 1) "1 subagent" else "$it subagents" }
         // The count leads, so a narrow row shortens the project rather than hiding how many subagents ran.
         val messages = row.usageMetrics.messageCount.takeIf { it > 0 }?.let { "$it messages" }
-        SessionRowLabels(labels.title, listOfNotNull(count, "Subagent".takeIf { row.subagent }, labels.meta, messages).joinToString(" · "))
+        labels.copy(meta = listOfNotNull(count, "Subagent".takeIf { row.subagent }, labels.meta, messages).joinToString(" · "))
     }
     null -> sessionRowLabels(row.display, showTitles, names).let { labels ->
         if (row.subagent) labels.copy(meta = "Subagent · ${labels.meta}") else labels
     }
 }
-
-/** An untitled group is named by its client and the model behind most of its tokens. */
-private fun topModelFirst(row: SessionRow, names: ModelNames): List<String> =
-    names.fold(row.modelTokens, Long::plus).entries.sortedByDescending { it.value }.map { it.key }
-        .ifEmpty { row.display.modelNames.map(names::name).distinct() }

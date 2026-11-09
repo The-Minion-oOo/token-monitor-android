@@ -81,7 +81,8 @@ class DashboardInteractionTest {
     private fun metricSession() = SessionUsage("metrics", "Private planning title", "codex", "Example", 100, 1.0,
         listOf("gpt-6-sol"), 1, "", "2026-10-02T11:59:00Z",
         inputTokens = 20, outputTokens = 100, cacheReadTokens = 60, cacheWriteTokens = 20,
-        timedOutputTokens = 80, timedDurationMs = 1000, promptCache = PromptCache("2026-10-02T11:59:00Z", 300))
+        timedOutputTokens = 80, timedDurationMs = 1000, promptCache = PromptCache("2026-10-02T11:59:00Z", 300),
+        modelTokens = mapOf("gpt-6-sol" to 100), latestModel = "gpt-6-terra")
 
     @Test fun homeSessionsCanHideTitlesAndKeepCacheUsageAndSpeed() {
         val now = java.time.Instant.parse("2026-10-02T12:00:00Z").toEpochMilli()
@@ -92,11 +93,12 @@ class DashboardInteractionTest {
         } } }
         compose.waitUntil(5_000) { compose.onAllNodesWithText("Private planning title").fetchSemanticsNodes().isNotEmpty() }
         compose.onNodeWithText("Private planning title").assertIsDisplayed()
+        compose.onNodeWithText("gpt-6-terra +1", substring = true).assertIsDisplayed()
         compose.onNodeWithText("Cache hit 60% · 80 tok/s").assertIsDisplayed()
         compose.onNodeWithText("Cache estimate", substring = true).assertDoesNotExist()
         compose.runOnIdle { showTitles = false }
         compose.onNodeWithText("Private planning title").assertDoesNotExist()
-        compose.onNodeWithText("Codex · gpt-6-sol").assertIsDisplayed()
+        compose.onNodeWithText("Codex · gpt-6-terra +1").assertIsDisplayed()
     }
 
     @Test fun sessionsUseTheSamePrivacyChoiceAndMetrics() {
@@ -105,7 +107,7 @@ class DashboardInteractionTest {
             androidx.compose.foundation.lazy.LazyColumn { sessionItems(listOf(metricSession()), DashboardPeriod.Today) }
         } } }
         compose.onNodeWithText("Private planning title").assertDoesNotExist()
-        compose.onNodeWithText("Codex · gpt-6-sol").assertIsDisplayed()
+        compose.onNodeWithText("Codex · gpt-6-terra +1").assertIsDisplayed()
         compose.onNodeWithText("Cache hit 60% · 80 tok/s").assertIsDisplayed()
         compose.onNodeWithText("Cache estimate", substring = true).assertDoesNotExist()
     }

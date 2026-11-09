@@ -245,6 +245,7 @@ object HubProtocolParser {
         },
         waitingForInput = strictBoolean("waitingForInput"),
         grokBotSession = strictBoolean("grokBotSession"),
+        latestModel = text("latestModel").takeIf { it.length in 1..256 && it.none(Char::isISOControl) },
         reasoningEffort = text("reasoningEffort").trim().takeIf {
             string("client") in setOf("codex", "claude") && it.matches(Regex("[a-zA-Z][a-zA-Z0-9_-]{0,31}")) && !it.equals("unknown", true)
         },
@@ -527,6 +528,7 @@ object HubProtocolParser {
         parentClient = parentClient,
         liveActivity = liveActivity?.let { LiveActivity(it.state, it.observedAt) },
         reasoningEffort = reasoningEffort,
+        latestModel = latestModel,
         waitingForInput = waitingForInput,
         grokBotSession = grokBotSession,
     )

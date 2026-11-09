@@ -160,7 +160,7 @@ internal fun shortDate(value: String): String = runCatching {
 /** The desktop renderer's tool labels, keyed by the Hub's client id. */
 private val toolLabels = mapOf(
     "mistral" to "Mistral Vibe", "prime-agent" to "Prime Agent", "jcode" to "Jcode",
-    "claude" to "Claude Code", "codex" to "Codex", "hermes" to "Hermes Agent", "gemini" to "Gemini", "cursor" to "Cursor",
+    "claude" to "Claude Code", "codex" to "Codex", "hermes" to "Hermes Agent", "gemini" to "Gemini CLI", "cursor" to "Cursor",
     "opencode" to "OpenCode", "openclaw" to "OpenClaw", "antigravity" to "Antigravity", "cline" to "Cline", "kimi" to "Kimi",
     "amp" to "Amp", "droid" to "Factory Droid", "qwen" to "Qwen", "grok" to "Grok Build", "copilot" to "GitHub Copilot",
     "pi" to "Pi", "omp" to "Oh My Pi", "senpi" to "OmO Native", "zed" to "Zed", "kilo" to "Kilo", "kilocode" to "Kilo Code", "commandcode" to "Command Code",

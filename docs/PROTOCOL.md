@@ -12,7 +12,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.88.0**, released 2026-11-08 UTC.
+The verified baseline is upstream Token Monitor **v0.89.0**, released 2026-11-09 UTC.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -53,7 +53,7 @@ write, or device deletion endpoints.
 
 ## Cloudflare Worker
 
-I also exercise `worker/src/index.js` from the same pinned v0.88.0 commit locally.
+I also exercise `worker/src/index.js` from the same pinned v0.89.0 commit locally.
 Its snapshot read routes use the same Bearer authentication and unauthenticated Hub
 identity check. Stream-v2 negotiates the same `snapshot`, complete `stats` and
 compact `freshness` envelopes. Ingest changes may produce freshness-only events;
@@ -600,3 +600,18 @@ MiniMax API `balance` spend fields map to the existing provider spend rows.
 The authenticated reads retain those amounts while public reads omit account
 identity. Plugin quota modules are desktop presentation data outside the
 registered Hub provider catalog.
+
+## Desktop v0.89.0
+
+The Hub may report `latestModel` for a session. Android accepts a bounded model
+string and uses it for the row label and search. A missing, null or invalid value
+keeps the earlier label fallback. The Hub resolves conflicts across observations.
+For grouped conversations, Android reads the latest main continuation's model
+and still sums attributed tokens across the whole group. A model can be reported
+before its first tokens are counted.
+
+The desktop catalog names the existing `gemini` client Gemini CLI. Its collector
+counts reasoning separately from generated output. Android displays the Hub's
+reported totals directly. Usage-day boundaries are set by the desktop collector
+and arrive as date keys in history. Plugin quota modules are rendered by the
+desktop app.

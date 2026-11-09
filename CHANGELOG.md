@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## v0.89.0 r1
+
+- Show the last-used model reported for Codex and Claude in Home and Sessions,
+  including the latest main continuation in a grouped conversation.
+- Display Gemini CLI usage under its desktop name with the reported reasoning
+  tokens included in the Hub's totals.
+
 ## v0.88.0 r2 — 2026-11-08
 
 - Show the native Live status chip on eligible unlocked Samsung phones running Android 17 or newer.
