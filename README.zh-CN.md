@@ -9,9 +9,9 @@
 
 ## 近期更新
 
-当前版本为 **v0.89.0 r1**。首页和会话列表会显示 Codex 与 Claude 最近使用的模型。
-分组会话采用最新主会话的模型，同时保留各模型的用量明细。Gemini CLI 用量使用桌面端名称。
-[版本说明](docs/releases/android-v0.89.0-r1.md)。
+当前版本为 **v0.90.0 r1**。Android 现在显示 Hark 每日和每月额度，并将 Qoder 个人与团队额度分开显示。
+当 Hub 提供完整历史记录时，首页会显示累计活跃天数。Inkling 模型使用 Thinking Machines 图标。
+[版本说明](docs/releases/android-v0.90.0-r1.md)。
 
 继续支持 v4 增量实时更新、会话推理强度和火山引擎个人套餐额度。
 以下语言、付款和显示功能继续保留。
