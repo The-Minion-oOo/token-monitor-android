@@ -141,6 +141,20 @@ export async function checkWorkerContract(source, output, upstream, limitCases =
                 if (fixture.throughput) {
                     for (const [key, value] of Object.entries(fixture.throughput)) assert.equal(stats.periods.today[key], value);
                 }
+                if (fixture.historySummary) {
+                    const result = await caseHub.fetch(new Request("https://hub.example.com/api/history", {
+                        headers: { Authorization: `Bearer ${secret}` },
+                    }));
+                    assert.equal(result.status, 200);
+                    const history = await result.json();
+                    for (const [key, value] of Object.entries(fixture.historySummary)) {
+                        assert.equal(stats.historyPreview.summary[key], value);
+                        assert.equal(history.summary[key], value);
+                    }
+                    assert.equal(history.dailyTotals?.length,
+                        fixture.historySummary.activeDaysComplete ? fixture.historySummary.activeDays : undefined);
+                    responses[`${name}-history.json`] = history;
+                }
                 responses[`${name}.json`] = stats;
             } finally {
                 if (caseHub.broadcastTimer) clearTimeout(caseHub.broadcastTimer);

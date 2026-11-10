@@ -14,6 +14,7 @@ import java.util.Locale
 
 private val modelVendorRules = listOf(
     Regex("^(cursor-)?auto$") to "cursor",
+    Regex("inkling|thinking[ -]?machines") to "thinkingmachines",
     Regex("claude|anthropic|sonnet|opus|haiku") to "claude",
     Regex("gpt|openai|codex|^o[134](?:-|$)|o[134]-(mini|pro|preview)|chatgpt") to "openai",
     Regex("gemini|gemma|google|antigravity") to "gemini",
@@ -44,6 +45,7 @@ internal fun vendorOf(name: String): String? {
     if (key == "fx") return "fx"
     if (key == "goose" || key == "notion") return key
     if (key == "manus") return "manus"
+    if (key == "hark") return "hark"
     if (key == "mcode") return "minimax"
     if (key in setOf("muse", "muse code", "muse-code", "muse-web")) return "meta"
     if (key == "openrouter" || key.startsWith("openrouter/")) return "openrouter"
@@ -106,6 +108,8 @@ internal fun upstreamToolAsset(name: String): Int? = when (vendorOf(name)) {
     "goose" -> R.drawable.upstream_logo_goose
     "notion" -> R.drawable.upstream_logo_notion
     "manus" -> R.drawable.upstream_logo_manus
+    "hark" -> R.drawable.upstream_logo_hark
+    "thinkingmachines" -> R.drawable.upstream_logo_thinkingmachines
     else -> null
 }
 

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Show Hark daily and monthly quotas, with reported top-up spend on a separate line.
+- Keep Qoder personal and team credits and their reset times separate.
+- Show lifetime active days in Home when the Hub confirms complete history.
+- Use the Thinking Machines mark for Inkling models.
+
 ## v0.89.0 r1 — 2026-11-10
 
 - Show the last-used model reported for Codex and Claude in Home and Sessions,

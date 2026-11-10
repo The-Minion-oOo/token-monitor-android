@@ -93,6 +93,7 @@ object HubProtocolParser {
         val history = HubHistory(
             daily = mergeHistory(savedHistory.daily, stats.historyPreview.daily),
             monthly = mergeHistory(savedHistory.monthly, stats.historyPreview.monthly),
+            lifetimeActiveDays = stats.historyPreview.lifetimeActiveDays,
         )
         return HubSnapshot(
             health = decodeHealth(healthRaw),
@@ -344,6 +345,7 @@ object HubProtocolParser {
 
     private fun JsonObject.toLimitWindowDto() = HubLimitWindowDto(
         used = double("used")?.takeIf { it.isFinite() && it >= 0 },
+        limit = double("limit")?.takeIf { it.isFinite() && it > 0 },
         kind = string("kind"),
         label = string("label"),
         usedPercent = double("usedPercent"),
@@ -361,6 +363,12 @@ object HubProtocolParser {
     private fun JsonObject.toHistoryDto() = HubHistoryDto(
         daily = array("daily").mapNotNull { it.objectOrNull()?.toHistoryPointDto("date") },
         monthly = array("monthly").mapNotNull { it.objectOrNull()?.toHistoryPointDto("month") },
+        lifetimeActiveDays = objectField("summary")?.let { summary ->
+            // A rolling or malformed summary cannot establish a lifetime count.
+            summary["activeDays"].numberOrNull()?.takeUnless { it.isString }?.longOrNull
+                ?.takeIf { it in 0..Int.MAX_VALUE.toLong() && summary.strictBoolean("activeDaysComplete") == true }
+                ?.toInt()
+        },
     )
 
     private fun JsonObject.toHistoryPointDto(labelField: String) = HubHistoryPointDto(
@@ -579,6 +587,7 @@ object HubProtocolParser {
 
     private fun HubLimitWindowDto.toDomain() = LimitWindow(
         used = used,
+        limit = limit,
         resetDescription = resetDescription,
         kind = kind,
         label = label,
@@ -596,6 +605,7 @@ object HubProtocolParser {
     private fun HubHistoryDto.toDomain() = HubHistory(
         daily = daily.map { it.toDomain() },
         monthly = monthly.map { it.toDomain() },
+        lifetimeActiveDays = lifetimeActiveDays,
     )
 
     private fun HubHistoryPointDto.toDomain() = HistoryPoint(

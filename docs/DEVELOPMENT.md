@@ -555,7 +555,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 148 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 149 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.
@@ -796,3 +796,12 @@ subagent, archived Claude usage and omitted or null model observations. The
 Android tests check group totals, model aliases, search and the legacy label
 fallback. Native tests cover the model label on Home and Sessions with session
 titles visible or hidden. Gemini CLI reasoning is included in the Hub totals.
+
+### Desktop v0.90.0 checks
+
+I run the released Hark and Qoder collectors with synthetic responses, then
+exercise both Hub implementations. The fixtures cover daily and monthly Hark
+counters, USD top-up spend, separate Qoder reset times and an omitted zero-cap
+allowance. The history cases cover overlapping dates, a day outside the
+detailed history window and an incomplete contributor. Android tests check
+the lifetime count, its fallback and the rendered Home and Limits readings.

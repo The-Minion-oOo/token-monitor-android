@@ -12,7 +12,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.89.0**, released 2026-11-09 UTC.
+The verified baseline is upstream Token Monitor **v0.90.0**, released 2026-11-10 UTC.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -53,7 +53,7 @@ write, or device deletion endpoints.
 
 ## Cloudflare Worker
 
-I also exercise `worker/src/index.js` from the same pinned v0.89.0 commit locally.
+I also exercise `worker/src/index.js` from the same pinned v0.90.0 commit locally.
 Its snapshot read routes use the same Bearer authentication and unauthenticated Hub
 identity check. Stream-v2 negotiates the same `snapshot`, complete `stats` and
 compact `freshness` envelopes. Ingest changes may produce freshness-only events;
@@ -615,3 +615,17 @@ counts reasoning separately from generated output. Android displays the Hub's
 reported totals directly. Usage-day boundaries are set by the desktop collector
 and arrive as date keys in history. Plugin quota modules are rendered by the
 desktop app.
+
+## Desktop v0.90.0
+
+The released Hubs return Hark's daily and monthly counters as windows with
+`used`, `remaining` and `limit`. A top-up is a separate USD spend window with
+`showMeter: false`. Qoder personal and team credits are separate windows with
+their own reset times. A zero-cap allowance is omitted by the collector.
+
+Home trusts a nonnegative integer `historyPreview.summary.activeDays` when
+the current stats also report `activeDaysComplete: true`. Older and mixed
+Hubs can supply the recent activity grid without a lifetime count. A cached
+full-history response cannot restore a count that the current preview no
+longer confirms. The Hub deduplicates dates across devices. Android uses the
+summary for the lifetime figure and the existing detailed days for the grid.

@@ -213,6 +213,7 @@
     <string name="ui_models_441ba">মডেল</string>
     <string name="ui_activity_15c51">কার্যকলাপ</string>
     <string name="ui_1_s_active_day_2_s_e995e">সক্রিয় দিন: %1$s</string>
+    <string name="ui_lifetime_active_days">মোট সক্রিয় দিন: %1$s</string>
     <string name="ui_open_1_s_416b5">%1$s খুলুন</string>
     <string name="ui_no_account_limits_available_9054f">কোনো অ্যাকাউন্ট সীমা উপলব্ধ নেই</string>
     <string name="ui_provider_7ceee">প্রদানকারী</string>

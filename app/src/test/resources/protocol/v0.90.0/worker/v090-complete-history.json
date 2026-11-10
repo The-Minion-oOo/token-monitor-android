@@ -1,0 +1,48 @@
+{
+  "daily": [
+    {
+      "date": "2026-11-10",
+      "tokens": 20,
+      "cost": 0,
+      "messages": 0,
+      "activeTimeMs": 0,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "outputTokens": 0,
+      "unclassifiedTokens": 20,
+      "tokenComponentsAvailable": false,
+      "perClient": {},
+      "perModel": {},
+      "tokenIntensity": 4,
+      "costIntensity": 0,
+      "intensity": 0
+    }
+  ],
+  "dailyTotals": [
+    {
+      "date": "2025-06-28",
+      "tokens": 10,
+      "cost": 0,
+      "activeTimeMs": 0
+    },
+    {
+      "date": "2026-11-10",
+      "tokens": 20,
+      "cost": 0,
+      "activeTimeMs": 0
+    }
+  ],
+  "monthly": [],
+  "summary": {
+    "totalTokens": 0,
+    "totalCost": 0,
+    "activeDays": 2,
+    "activeDaysComplete": true,
+    "currentStreak": 1,
+    "longestStreak": 1,
+    "peakDayTokens": 20,
+    "favoriteModel": "",
+    "messages": 0,
+    "activeTimeMs": 0
+  }
+}

@@ -213,6 +213,7 @@
     <string name="ui_models_441ba">模型</string>
     <string name="ui_activity_15c51">活動</string>
     <string name="ui_1_s_active_day_2_s_e995e">活躍天數：%1$s</string>
+    <string name="ui_lifetime_active_days">累計活躍天數：%1$s</string>
     <string name="ui_open_1_s_416b5">開啟%1$s</string>
     <string name="ui_no_account_limits_available_9054f">沒有帳戶限制</string>
     <string name="ui_provider_7ceee">服務商</string>
