@@ -28,11 +28,10 @@
 
 ## The desktop dashboard, made mobile
 
-**New in v0.88.0 r2:** Live can show a native status-bar chip on supported,
-unlocked Samsung phones running Android 17 or newer. The expanded card keeps
-Token Monitor's identity, end time and Stop action; locking the phone uses the
-ordinary notification. Notification and promotion settings control availability.
-[Release notes](docs/releases/android-v0.88.0-r2.md).
+**New in v0.89.0 r1:** Home and Sessions show the last-used model reported for
+Codex and Claude. Grouped conversations follow the latest main continuation
+and keep the full model usage breakdown. Gemini CLI usage appears under its
+desktop name. [Release notes](docs/releases/android-v0.89.0-r1.md).
 
 **Also included:** smaller live updates through the released v4 Hub stream,
 session reasoning effort and personal Volcengine quotas. Muse and Ollama
@@ -114,7 +113,9 @@ that reflows as you resize it. Both widgets follow the app's theme.
 
 - **Refresh** fetches one update.
 - **Live** checks stats every 30 seconds for up to one hour, with a Stop control
-  on the widget and its notification.
+  on the widget and its notification. Supported unlocked Samsung phones on
+  Android 17 or newer can show a status-bar chip. The lock screen uses the
+  ordinary notification.
 - **Background refresh** optionally checks every 30 or 60 minutes. It starts
   **Off**, with **Wi-Fi only** on, and shows no notification. Android may delay
   runs while the phone sleeps.
@@ -225,15 +226,12 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 | | |
 | --- | --- |
-| Current release | [Android v0.88.0 r2](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.88.0-r2) (`880002`) |
+| Current release | [Android v0.89.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.89.0-r1) (`890001`) |
 | Desktop baseline | [Token Monitor v0.89.0](https://github.com/Javis603/token-monitor/releases/tag/v0.89.0) |
 | Minimum Android version | Android 8.0 |
 
-I checked the released Hub and Worker, automated tests and emulators.
-I installed the signed r2 APK over r1 on my phone and checked fresh Home Wi-Fi
-data, the Live chip and the lock-screen notification.
-[Validation](docs/VALIDATION.md) records the checks and remaining
-[#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146) phone coverage.
+I checked the released Node and Worker Hubs and the signed upgrade from
+v0.88.0 r2 on an Android 8 emulator. [Validation](docs/VALIDATION.md).
 
 Android-only updates increment the release revision while keeping the verified
 desktop version. [Upstream pin](upstream.json) · [Release notes](CHANGELOG.md)
