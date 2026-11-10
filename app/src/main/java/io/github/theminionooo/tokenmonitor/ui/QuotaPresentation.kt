@@ -37,6 +37,14 @@ internal fun limitReportedAmount(provider: String, window: LimitWindow): Double?
     else -> null
 }
 
+internal fun harkQuotaCount(account: LimitAccount, window: LimitWindow, showUsed: Boolean): String? {
+    if (account.provider != "hark" || window.metric == "spend" ||
+        (window.kind != "daily" && window.kind != "billing")) return null
+    val limit = window.limit?.takeIf { it.isFinite() && it > 0 } ?: return null
+    val amount = (if (showUsed) window.used else window.remaining)?.takeIf { it.isFinite() && it >= 0 } ?: return null
+    return "${formatCompactTokens(amount.toLong())} / ${formatCompactTokens(limit.toLong())}"
+}
+
 /** This rounded website label is presentation text, never a measured token counter. */
 internal fun museAdditionalTokens(account: LimitAccount, window: LimitWindow): String? =
     window.resetDescription.takeIf {

@@ -126,7 +126,11 @@ internal fun LazyListScope.homeItems(
                     title = appText(R.string.ui_activity_15c51, "ACTIVITY"),
                     destination = DashboardDestination.Trends,
                     onChoose = onChoose,
-                    meta = activity?.let { appText(R.string.ui_1_s_active_day_2_s_e995e, "Active days: %1\$s", it.activeDays, if (it.activeDays == 1) "" else "s") },
+                    meta = snapshot.history.lifetimeActiveDays?.let {
+                        appText(R.string.ui_lifetime_active_days, "Lifetime active days: %1\$s", it)
+                    } ?: activity?.let {
+                        appText(R.string.ui_1_s_active_day_2_s_e995e, "Active days: %1\$s", it.activeDays, if (it.activeDays == 1) "" else "s")
+                    },
                 ) {
                     if (activity == null || history == null) MutedCopy(appText(R.string.ui_loading_activity_4c959, "Loading activity…"))
                     else HomeActivity(activity, history)
@@ -194,6 +198,7 @@ internal fun HomeLimits(accounts: List<LimitAccount>, displayOptions: DisplayOpt
                                 Text(limitWindowTitle(account, window), color = Muted, style = MaterialTheme.typography.labelSmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                                 val remainingPercent = quotaRemainingPercent(window)
                                 val amount = museAdditionalTokens(account, window)
+                                    ?: harkQuotaCount(account, window, showUsed = false)
                                     ?: limitReportedAmount(account.provider, window)?.let { formatWindowAmount(it, window.currency) }
                                     ?: quotaPercentLeft(window)?.let { appText(R.string.ui_1_s_left_e96f9, "%1\$s%% left", it) }
                                     ?: window.remaining?.let { formatWindowAmount(it, window.currency) }

@@ -213,6 +213,7 @@
     <string name="ui_models_441ba">మోడల్స్</string>
     <string name="ui_activity_15c51">కార్యాచరణ</string>
     <string name="ui_1_s_active_day_2_s_e995e">క్రియాశీల రోజులు: %1$s</string>
+    <string name="ui_lifetime_active_days">మొత్తం క్రియాశీల రోజులు: %1$s</string>
     <string name="ui_open_1_s_416b5">%1$s తెరవండి</string>
     <string name="ui_no_account_limits_available_9054f">ఖాతా పరిమితులు అందుబాటులో లేవు</string>
     <string name="ui_provider_7ceee">ప్రొవైడర్</string>

@@ -214,6 +214,7 @@
     <string name="ui_models_441ba">மாடல்கள்</string>
     <string name="ui_activity_15c51">செயல்பாடு</string>
     <string name="ui_1_s_active_day_2_s_e995e">செயலில் உள்ள நாட்கள்: %1$s</string>
+    <string name="ui_lifetime_active_days">மொத்த செயலில் இருந்த நாட்கள்: %1$s</string>
     <string name="ui_open_1_s_416b5">%1$sஐத் திறக்கவும்</string>
     <string name="ui_no_account_limits_available_9054f">கணக்கு வரம்புகள் இல்லை</string>
     <string name="ui_provider_7ceee">வழங்குபவர்</string>

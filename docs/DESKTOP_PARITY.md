@@ -1,7 +1,12 @@
-# Desktop parity for v0.89.0
+# Desktop parity for v0.90.0
 
-I compare Android with desktop tag `v0.89.0`, peeled commit
-`e2a4f9911c34bac5a31eb8806cd2d53b36b7e944`. Android reads the usage collected by desktop.
+I compare Android with desktop tag `v0.90.0`, peeled commit
+`e13f9fab69493730453bfbada37b141bc1085a46`. Android reads the usage collected by desktop.
+
+**Android v0.90.0 r1** shows Hark allowances and top-up spend and recognizes
+Inkling models as Thinking Machines. Qoder personal and team credits keep
+their own reset times. Home shows lifetime active days when the Hub reports
+complete history, alongside the recent activity grid.
 
 **Android v0.89.0 r1** shows Gemini CLI usage and the last-used model reported for
 Codex and Claude sessions. Groups use the latest main continuation while retaining

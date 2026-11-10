@@ -2,8 +2,10 @@
 
 ## Version rule
 
-Android v0.89.0 r1 targets desktop tag `v0.89.0`, peeled commit
-`e2a4f9911c34bac5a31eb8806cd2d53b36b7e944`, in Gradle and `upstream.json`.
+Android v0.90.0 r1 targets desktop tag `v0.90.0`, peeled commit
+`e13f9fab69493730453bfbada37b141bc1085a46`, in Gradle and `upstream.json`.
+I checked Hark quotas, separate Qoder allowances and complete lifetime
+active-day counts with the released Node and Worker Hubs.
 I checked last-used session models and Gemini CLI totals with the released
 Node and Worker Hubs, alongside earlier Mistral and MiniMax readings.
 The merged model-name and Live-status work is also included. Its remaining

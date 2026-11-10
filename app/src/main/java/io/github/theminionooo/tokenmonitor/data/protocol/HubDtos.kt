@@ -131,6 +131,7 @@ internal data class HubLimitWindowDto(
     val boundaryKind: String = "",
     val used: Double? = null,
     val resetDescription: String = "",
+    val limit: Double? = null,
 )
 
 internal data class HubLimitAccountDto(
@@ -207,6 +208,7 @@ internal data class HubHistoryAttributionDto(
 internal data class HubHistoryDto(
     val daily: List<HubHistoryPointDto> = emptyList(),
     val monthly: List<HubHistoryPointDto> = emptyList(),
+    val lifetimeActiveDays: Int? = null,
 )
 
 internal data class HubSubscriptionDto(

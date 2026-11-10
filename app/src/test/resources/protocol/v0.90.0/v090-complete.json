@@ -1,0 +1,670 @@
+{
+  "updatedAt": "2026-11-10T13:51:55.385Z",
+  "periods": {
+    "today": {
+      "capabilities": {
+        "tokenComponents": false,
+        "throughput": false
+      },
+      "totalTokens": 20,
+      "costUsd": 0,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "outputTokens": 0,
+      "unclassifiedTokens": 20,
+      "timedTokens": 0,
+      "timedOutputTokens": 0,
+      "timedDurationMs": 0,
+      "clients": {
+        "codex": 20
+      },
+      "clientCosts": {},
+      "clientCacheReads": {},
+      "clientCacheWrites": {},
+      "clientOutputs": {},
+      "clientUnclassifiedTokens": {
+        "codex": 20
+      },
+      "models": {
+        "inkling-test": 20
+      },
+      "modelCosts": {},
+      "modelCacheReads": {},
+      "modelCacheWrites": {},
+      "modelOutputs": {},
+      "modelUnclassifiedTokens": {
+        "inkling-test": 20
+      },
+      "clientModels": {},
+      "clientModelCosts": {},
+      "projects": {},
+      "sessions": {}
+    },
+    "month": {
+      "capabilities": {
+        "tokenComponents": false,
+        "throughput": false
+      },
+      "totalTokens": 20,
+      "costUsd": 0,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "outputTokens": 0,
+      "unclassifiedTokens": 20,
+      "timedTokens": 0,
+      "timedOutputTokens": 0,
+      "timedDurationMs": 0,
+      "clients": {
+        "codex": 20
+      },
+      "clientCosts": {},
+      "clientCacheReads": {},
+      "clientCacheWrites": {},
+      "clientOutputs": {},
+      "clientUnclassifiedTokens": {
+        "codex": 20
+      },
+      "models": {
+        "inkling-test": 20
+      },
+      "modelCosts": {},
+      "modelCacheReads": {},
+      "modelCacheWrites": {},
+      "modelOutputs": {},
+      "modelUnclassifiedTokens": {
+        "inkling-test": 20
+      },
+      "clientModels": {},
+      "clientModelCosts": {},
+      "projects": {},
+      "sessions": {}
+    },
+    "allTime": {
+      "capabilities": {
+        "tokenComponents": false,
+        "throughput": false
+      },
+      "totalTokens": 20,
+      "costUsd": 0,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "outputTokens": 0,
+      "unclassifiedTokens": 20,
+      "timedTokens": 0,
+      "timedOutputTokens": 0,
+      "timedDurationMs": 0,
+      "clients": {
+        "codex": 20
+      },
+      "clientCosts": {},
+      "clientCacheReads": {},
+      "clientCacheWrites": {},
+      "clientOutputs": {},
+      "clientUnclassifiedTokens": {
+        "codex": 20
+      },
+      "models": {
+        "inkling-test": 20
+      },
+      "modelCosts": {},
+      "modelCacheReads": {},
+      "modelCacheWrites": {},
+      "modelOutputs": {},
+      "modelUnclassifiedTokens": {
+        "inkling-test": 20
+      },
+      "clientModels": {},
+      "clientModelCosts": {},
+      "projects": {},
+      "sessions": {}
+    }
+  },
+  "devices": [
+    {
+      "deviceId": "synthetic-v090-first",
+      "hostname": "Synthetic desktop",
+      "platform": "linux",
+      "agentVersion": "0.90.0",
+      "agentRuntime": "",
+      "updatedAt": "2026-11-10T13:51:54.600Z",
+      "receivedAt": "2026-11-10T13:51:55.382Z",
+      "ageMs": 3,
+      "stale": false,
+      "trackedClients": [
+        "codex"
+      ],
+      "periods": {
+        "today": {
+          "capabilities": {
+            "tokenComponents": false,
+            "throughput": false
+          },
+          "totalTokens": 10,
+          "costUsd": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 0,
+          "unclassifiedTokens": 10,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "clients": {
+            "codex": 10
+          },
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {},
+          "clientUnclassifiedTokens": {
+            "codex": 10
+          },
+          "models": {
+            "inkling-test": 10
+          },
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {},
+          "modelUnclassifiedTokens": {
+            "inkling-test": 10
+          },
+          "clientModels": {},
+          "clientModelCosts": {},
+          "projects": {},
+          "sessions": {}
+        },
+        "month": {
+          "capabilities": {
+            "tokenComponents": false,
+            "throughput": false
+          },
+          "totalTokens": 10,
+          "costUsd": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 0,
+          "unclassifiedTokens": 10,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "clients": {
+            "codex": 10
+          },
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {},
+          "clientUnclassifiedTokens": {
+            "codex": 10
+          },
+          "models": {
+            "inkling-test": 10
+          },
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {},
+          "modelUnclassifiedTokens": {
+            "inkling-test": 10
+          },
+          "clientModels": {},
+          "clientModelCosts": {},
+          "projects": {},
+          "sessions": {}
+        },
+        "allTime": {
+          "capabilities": {
+            "tokenComponents": false,
+            "throughput": false
+          },
+          "totalTokens": 10,
+          "costUsd": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 0,
+          "unclassifiedTokens": 10,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "clients": {
+            "codex": 10
+          },
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {},
+          "clientUnclassifiedTokens": {
+            "codex": 10
+          },
+          "models": {
+            "inkling-test": 10
+          },
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {},
+          "modelUnclassifiedTokens": {
+            "inkling-test": 10
+          },
+          "clientModels": {},
+          "clientModelCosts": {},
+          "projects": {},
+          "sessions": {}
+        }
+      },
+      "limits": {
+        "updatedAt": null,
+        "refreshMs": 300000,
+        "providers": [
+          {
+            "provider": "hark",
+            "accountKey": "sha256:d5eafd715d647089eab4dbca24458dfc022390114d4cce34cb4b2702211033d5",
+            "accountLabel": "",
+            "planLabel": "Hark Pro",
+            "accountName": "",
+            "accountEmail": "",
+            "workspaceKind": "",
+            "status": "ok",
+            "source": "web",
+            "sourceDetail": "managed",
+            "updatedAt": "2026-11-10T13:51:55.381Z",
+            "windows": [
+              {
+                "kind": "daily",
+                "label": "Daily",
+                "used": 80000,
+                "limit": 100000,
+                "remaining": 20000,
+                "usedPercent": 80,
+                "remainingPercent": 20,
+                "resetsAt": "2026-11-11T13:51:54.600Z",
+                "windowMinutes": null,
+                "resetDescription": "",
+                "detail": "",
+                "currency": null,
+                "showMeter": true
+              },
+              {
+                "kind": "billing",
+                "label": "Monthly",
+                "used": 500000,
+                "limit": 1000000,
+                "remaining": 500000,
+                "usedPercent": 50,
+                "remainingPercent": 50,
+                "resetsAt": "2026-12-10T13:51:54.600Z",
+                "windowMinutes": null,
+                "resetDescription": "",
+                "detail": "",
+                "currency": null,
+                "showMeter": true
+              },
+              {
+                "kind": "billing",
+                "metric": "spend",
+                "label": "Top-up",
+                "used": 1.25,
+                "limit": null,
+                "remaining": null,
+                "usedPercent": null,
+                "remainingPercent": null,
+                "resetsAt": null,
+                "windowMinutes": null,
+                "resetDescription": "",
+                "detail": "",
+                "currency": "USD",
+                "showMeter": false
+              }
+            ],
+            "balanceUsd": null,
+            "balance": null,
+            "resetCredits": null,
+            "region": ""
+          },
+          {
+            "provider": "qoder",
+            "accountKey": "sha256:c3db60e1207dfa2c89fd4893264765ffd2c6960eba55bdb45bf9e749e06ec228",
+            "accountLabel": "Teams",
+            "planLabel": "",
+            "accountName": "",
+            "accountEmail": "",
+            "workspaceKind": "",
+            "status": "ok",
+            "source": "web",
+            "sourceDetail": "",
+            "updatedAt": "2026-11-10T13:51:55.381Z",
+            "windows": [
+              {
+                "kind": "billing",
+                "label": "Credits",
+                "used": 25,
+                "limit": 100,
+                "remaining": 75,
+                "usedPercent": 25,
+                "remainingPercent": 75,
+                "resetsAt": "2026-11-17T13:51:54.600Z",
+                "windowMinutes": null,
+                "resetDescription": "",
+                "detail": "",
+                "currency": null,
+                "showMeter": true
+              },
+              {
+                "kind": "billing",
+                "label": "Team credits",
+                "used": 10,
+                "limit": 50,
+                "remaining": 40,
+                "usedPercent": 20,
+                "remainingPercent": 80,
+                "resetsAt": "2026-11-24T13:51:54.600Z",
+                "windowMinutes": null,
+                "resetDescription": "",
+                "detail": "",
+                "currency": null,
+                "showMeter": true
+              }
+            ],
+            "balanceUsd": null,
+            "balance": null,
+            "resetCredits": null,
+            "region": "global"
+          }
+        ]
+      }
+    },
+    {
+      "deviceId": "synthetic-v090-second",
+      "hostname": "Synthetic desktop",
+      "platform": "linux",
+      "agentVersion": "0.90.0",
+      "agentRuntime": "",
+      "updatedAt": "2026-11-10T13:51:54.600Z",
+      "receivedAt": "2026-11-10T13:51:55.383Z",
+      "ageMs": 2,
+      "stale": false,
+      "trackedClients": [
+        "codex"
+      ],
+      "periods": {
+        "today": {
+          "capabilities": {
+            "tokenComponents": false,
+            "throughput": false
+          },
+          "totalTokens": 10,
+          "costUsd": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 0,
+          "unclassifiedTokens": 10,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "clients": {
+            "codex": 10
+          },
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {},
+          "clientUnclassifiedTokens": {
+            "codex": 10
+          },
+          "models": {
+            "inkling-test": 10
+          },
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {},
+          "modelUnclassifiedTokens": {
+            "inkling-test": 10
+          },
+          "clientModels": {},
+          "clientModelCosts": {},
+          "projects": {},
+          "sessions": {}
+        },
+        "month": {
+          "capabilities": {
+            "tokenComponents": false,
+            "throughput": false
+          },
+          "totalTokens": 10,
+          "costUsd": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 0,
+          "unclassifiedTokens": 10,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "clients": {
+            "codex": 10
+          },
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {},
+          "clientUnclassifiedTokens": {
+            "codex": 10
+          },
+          "models": {
+            "inkling-test": 10
+          },
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {},
+          "modelUnclassifiedTokens": {
+            "inkling-test": 10
+          },
+          "clientModels": {},
+          "clientModelCosts": {},
+          "projects": {},
+          "sessions": {}
+        },
+        "allTime": {
+          "capabilities": {
+            "tokenComponents": false,
+            "throughput": false
+          },
+          "totalTokens": 10,
+          "costUsd": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 0,
+          "unclassifiedTokens": 10,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "clients": {
+            "codex": 10
+          },
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {},
+          "clientUnclassifiedTokens": {
+            "codex": 10
+          },
+          "models": {
+            "inkling-test": 10
+          },
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {},
+          "modelUnclassifiedTokens": {
+            "inkling-test": 10
+          },
+          "clientModels": {},
+          "clientModelCosts": {},
+          "projects": {},
+          "sessions": {}
+        }
+      },
+      "limits": {
+        "updatedAt": null,
+        "refreshMs": 300000,
+        "providers": []
+      }
+    }
+  ],
+  "projectsIncomplete": false,
+  "limits": {
+    "updatedAt": "2026-11-10T13:51:55.385Z",
+    "providers": [
+      {
+        "provider": "hark",
+        "accountKey": "sha256:d5eafd715d647089eab4dbca24458dfc022390114d4cce34cb4b2702211033d5",
+        "accountLabel": "",
+        "planLabel": "Hark Pro",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "web",
+        "sourceDetail": "managed",
+        "updatedAt": "2026-11-10T13:51:55.381Z",
+        "windows": [
+          {
+            "kind": "daily",
+            "label": "Daily",
+            "used": 80000,
+            "limit": 100000,
+            "remaining": 20000,
+            "usedPercent": 80,
+            "remainingPercent": 20,
+            "resetsAt": "2026-11-11T13:51:54.600Z",
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          },
+          {
+            "kind": "billing",
+            "label": "Monthly",
+            "used": 500000,
+            "limit": 1000000,
+            "remaining": 500000,
+            "usedPercent": 50,
+            "remainingPercent": 50,
+            "resetsAt": "2026-12-10T13:51:54.600Z",
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          },
+          {
+            "kind": "billing",
+            "metric": "spend",
+            "label": "Top-up",
+            "used": 1.25,
+            "limit": null,
+            "remaining": null,
+            "usedPercent": null,
+            "remainingPercent": null,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": "USD",
+            "showMeter": false
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-v090-first",
+        "stale": false
+      },
+      {
+        "provider": "qoder",
+        "accountKey": "sha256:c3db60e1207dfa2c89fd4893264765ffd2c6960eba55bdb45bf9e749e06ec228",
+        "accountLabel": "Teams",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "web",
+        "sourceDetail": "",
+        "updatedAt": "2026-11-10T13:51:55.381Z",
+        "windows": [
+          {
+            "kind": "billing",
+            "label": "Credits",
+            "used": 25,
+            "limit": 100,
+            "remaining": 75,
+            "usedPercent": 25,
+            "remainingPercent": 75,
+            "resetsAt": "2026-11-17T13:51:54.600Z",
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          },
+          {
+            "kind": "billing",
+            "label": "Team credits",
+            "used": 10,
+            "limit": 50,
+            "remaining": 40,
+            "usedPercent": 20,
+            "remainingPercent": 80,
+            "resetsAt": "2026-11-24T13:51:54.600Z",
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "global",
+        "sourceDeviceId": "synthetic-v090-first",
+        "stale": false
+      }
+    ]
+  },
+  "staleAfterMs": 600000,
+  "historyPreview": {
+    "daily": [
+      {
+        "date": "2026-11-10",
+        "tokens": 20,
+        "cost": 0,
+        "activeTimeMs": 0
+      }
+    ],
+    "monthly": [],
+    "summary": {
+      "totalTokens": 0,
+      "totalCost": 0,
+      "activeDays": 2,
+      "activeDaysComplete": true,
+      "currentStreak": 1,
+      "longestStreak": 1,
+      "peakDayTokens": 20,
+      "favoriteModel": "",
+      "messages": 0,
+      "activeTimeMs": 0
+    }
+  },
+  "historyRevision": "7d0b056fd769e14b",
+  "deviceHistoryRevision": "4de2c1b83d011c0c",
+  "subscriptionsUpdatedAt": "",
+  "syncSettingsRevisions": {
+    "modelAliases": 0,
+    "customPricing": 0
+  }
+}

@@ -213,6 +213,7 @@
     <string name="ui_models_441ba">모델</string>
     <string name="ui_activity_15c51">활동</string>
     <string name="ui_1_s_active_day_2_s_e995e">활동일: %1$s</string>
+    <string name="ui_lifetime_active_days">전체 활동 일수: %1$s</string>
     <string name="ui_open_1_s_416b5">%1$s 열기</string>
     <string name="ui_no_account_limits_available_9054f">계정 제한이 없습니다.</string>
     <string name="ui_provider_7ceee">제공업체</string>

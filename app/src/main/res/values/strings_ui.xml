@@ -213,6 +213,7 @@
     <string name="ui_models_441ba">MODELS</string>
     <string name="ui_activity_15c51">ACTIVITY</string>
     <string name="ui_1_s_active_day_2_s_e995e">Active days: %1$s</string>
+    <string name="ui_lifetime_active_days">Lifetime active days: %1$s</string>
     <string name="ui_open_1_s_416b5">Open %1$s</string>
     <string name="ui_no_account_limits_available_9054f">No account limits available</string>
     <string name="ui_provider_7ceee">Provider</string>

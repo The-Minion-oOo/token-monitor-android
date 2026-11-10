@@ -152,6 +152,7 @@ data class LimitWindow(
     val boundaryKind: String = "",
     val used: Double? = null,
     val resetDescription: String = "",
+    val limit: Double? = null,
 )
 
 data class LimitAccount(
@@ -222,6 +223,7 @@ data class HistoryPoint(
 data class HubHistory(
     val daily: List<HistoryPoint> = emptyList(),
     val monthly: List<HistoryPoint> = emptyList(),
+    val lifetimeActiveDays: Int? = null,
 )
 
 data class Subscription(

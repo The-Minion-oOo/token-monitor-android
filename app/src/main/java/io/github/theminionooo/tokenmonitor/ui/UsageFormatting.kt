@@ -223,6 +223,7 @@ private val providerLabels = mapOf(
     "zai" to "GLM",
     "zaiteam" to "GLM Team",
     "qoder" to "Qoder",
+    "hark" to "Hark",
     "devin" to "Devin",
     "typesafe" to "TypeSafe",
     "volcengine" to "Volcengine",
