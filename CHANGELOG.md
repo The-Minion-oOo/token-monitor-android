@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## v0.89.0 r1
+## v0.89.0 r1 — 2026-11-10
 
 - Show the last-used model reported for Codex and Claude in Home and Sessions,
   including the latest main continuation in a grouped conversation.

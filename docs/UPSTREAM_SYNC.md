@@ -30,7 +30,7 @@ The v0.81.0 r2 release introduced Android-only route, stream and
 background-refresh hardening from #106. Those protections are retained.
 
 The latest published release is
-[`android-v0.88.0-r2`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.88.0-r2),
+[`android-v0.89.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.89.0-r1),
 recorded with its source commit in `release.json`.
 It retains opt-in HTTPS, optional background widget refresh and the
 r5 physical-network check underneath Tailscale. Earlier phone evidence applies

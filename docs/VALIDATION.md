@@ -3,42 +3,30 @@
 I keep one record for each release. Emulator results and phone checks describe
 the builds and scenarios they name; neither establishes battery savings.
 
-## Current release: v0.88.0 r2
+## Current release: v0.89.0 r1
 
-I published source `e7ce86fdb098ef835831421eb397cf70935cac51` from
-[PR #153](https://github.com/The-Minion-oOo/token-monitor-android/pull/153), retaining desktop v0.88.0 at
-`4fcba817885568eca31b39e585f4346e9af5245a`.
+I published source `8d39265112aee5dccf8deea960616fd0d2e6e0ec` from [PR #157](https://github.com/The-Minion-oOo/token-monitor-android/pull/157),
+with desktop v0.89.0 pinned at `e2a4f9911c34bac5a31eb8806cd2d53b36b7e944`.
 All five required jobs passed on the tagged commit.
-[Build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/42523232264) ·
-[API 36, 37 and 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/42523231830) ·
-[Hub and Worker contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/42523231824).
+[Build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/42723900752) ·
+[API 36, 37 and 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/42723900677) ·
+[Hub and Worker contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/42723900713).
 
-The checks cover 481 JVM tests with released contract responses, all 148 native
-tests on each CI API 36 and 37 emulator, lint, debug assembly and the signed build.
-The exact signed APK upgraded r1 in place, launched and resumed on API 26.
-
-I installed the exact signed APK over r1 on my phone and verified the installed
-hash. Saved pairing, visible language/currency/throughput settings and the widget
-survived. Hub status showed current Home Wi-Fi data. I checked the actual unlocked
-chip and expanded app identity, then Stop from the chip and ordinary lock-screen
-notification. The preview and test copies are absent, Live is stopped and USB
-debugging is off. Notification opt-outs were checked with the earlier preview;
-Tailscale and offline resume were not retested for r2.
-Custom desktop aliases and isolated reconnect checks remain open in
-[#146](https://github.com/The-Minion-oOo/token-monitor-android/issues/146).
-Battery use and automatic one-hour expiry were not measured.
+The checks cover 484 JVM tests with released contract responses, 148 native
+cases on each API 36 and 37 emulator, lint, and the debug and release builds.
+I checked the exact signed APK over v0.88.0 r2 on API 26, including launch and
+resume. I haven't phone-tested this build.
 
 | Release asset | Value |
 | --- | --- |
-| APK | `token-monitor-android-v0.88.0-r2.apk` |
-| Package and version code | `io.github.theminionooo.tokenmonitor` · `880002` |
-| Size | 3,408,686 bytes |
-| APK SHA-256 | `7c3b1df2feb413537084a66aa281e27c7defea32399346f8640bc6e067f48808` |
+| APK | `token-monitor-android-v0.89.0-r1.apk` |
+| Package and version code | `io.github.theminionooo.tokenmonitor` · `890001` |
+| Size | 3,408,682 bytes |
+| APK SHA-256 | `a11ddc488edc74f6ce84d3e979f3ab015d0e77e10f40c876268c4b132a3df427` |
 | Signing certificate SHA-256 | `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c` |
 
-Draft and public APK, checksum and update-manifest downloads matched the signed
-bundle. Latest and the update endpoint return
-[Android v0.88.0 r2](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.88.0-r2).
+The draft and public APK, checksum and update-manifest downloads matched the
+signed bundle. Latest and the update endpoint return [Android v0.89.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.89.0-r1).
 
 ## Release checks and limits
 
@@ -62,6 +50,7 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 
 | Release | Date | Desktop baseline | Main checks | Phone check |
 | --- | --- | --- | --- | --- |
+| v0.89.0 r1 | 2026-11-10 | v0.89.0 | Latest session model and Gemini CLI. 484 JVM, 148 per API 36 and 37, signed API 26 upgrade | No |
 | v0.88.0 r2 | 2026-11-08 | v0.88.0 | Samsung chip and lock-screen fallback; 481 JVM, 148 per API 36 and 37, signed API 26 upgrade | Signed upgrade; pairing/settings/widget, Home Wi-Fi, chip and lock-screen Stop |
 | v0.88.0 r1 | 2026-11-08 | v0.88.0 | New tools, Mistral/MiniMax quotas, model names and Live status; 481 JVM, 145 per API 36 and 37, signed API 26 smoke | Signed upgrade in place; chip absent, follow-up in #146 |
 | v0.87.0 r1 | 2026-11-06 | v0.87.0 | OpenDesign, expanded Status and delta-upload reads. 461 JVM, 135 per API 36 and 37, signed API 26 smoke | No |
