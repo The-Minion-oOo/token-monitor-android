@@ -28,10 +28,10 @@
 
 ## The desktop dashboard, made mobile
 
-**New in v0.90.0 r1:** See Hark’s daily and monthly quotas, plus separate
-Qoder personal and team credits. Home shows lifetime active days when the Hub
-has complete history, and Inkling models use the Thinking Machines mark.
-[Release notes](docs/releases/android-v0.90.0-r1.md).
+**New in v0.91.0 r1:** Choose AUD, CAD, CHF, GBP or SGD for estimated usage
+costs. Subscription amounts keep their recorded currency, and Cursor’s
+included quota shows its weekly or monthly period.
+[Release notes](docs/releases/android-v0.91.0-r1.md).
 
 **Also included:** smaller live updates through the released v4 Hub stream,
 session reasoning effort and personal Volcengine quotas. Muse and Ollama
@@ -226,13 +226,13 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 | | |
 | --- | --- |
-| Current release | [Android v0.90.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.90.0-r1) (`900001`) |
+| Current release | [Android v0.91.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.91.0-r1) (`910001`) |
 | Desktop baseline | [Token Monitor v0.91.0](https://github.com/Javis603/token-monitor/releases/tag/v0.91.0) |
 | Minimum Android version | Android 8.0 |
 
 I checked the released Node and Worker Hubs, Android tests and emulators.
-The signed APK upgraded v0.89.0 r1 in place on an Android 8 emulator.
-I haven’t tested v0.90.0 r1 on my phone. [Validation](docs/VALIDATION.md).
+The signed APK upgraded v0.90.0 r1 in place on an Android 8 emulator.
+I haven’t tested v0.91.0 r1 on my phone. [Validation](docs/VALIDATION.md).
 
 Android-only updates increment the release revision while keeping the verified
 desktop version. [Upstream pin](upstream.json) · [Release notes](CHANGELOG.md)
