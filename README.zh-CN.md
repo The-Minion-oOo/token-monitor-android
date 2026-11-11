@@ -9,9 +9,9 @@
 
 ## 近期更新
 
-当前版本为 **v0.90.0 r1**。Android 现在显示 Hark 每日和每月额度，并将 Qoder 个人与团队额度分开显示。
-当 Hub 提供完整历史记录时，首页会显示累计活跃天数。Inkling 模型使用 Thinking Machines 图标。
-[版本说明](docs/releases/android-v0.90.0-r1.md)。
+当前版本为 **v0.91.0 r1**。费用估算新增 AUD、CAD、CHF、GBP 和 SGD。
+订阅和充值保留原币种，JPY 和 KRW 显示整数。Cursor 的包含用量额度按实际周期显示为每周或每月。
+[版本说明](docs/releases/android-v0.91.0-r1.md)。
 
 继续支持 v4 增量实时更新、会话推理强度和火山引擎个人套餐额度。
 以下语言、付款和显示功能继续保留。
