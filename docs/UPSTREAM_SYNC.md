@@ -2,8 +2,11 @@
 
 ## Version rule
 
-Android v0.90.0 r1 targets desktop tag `v0.90.0`, peeled commit
-`e13f9fab69493730453bfbada37b141bc1085a46`, in Gradle and `upstream.json`.
+Android v0.91.0 r1 targets desktop tag `v0.91.0`, peeled commit
+`42bcf0ccf2387b89a03b87134ac72f01e43aba14`, in Gradle and `upstream.json`.
+I verified the expanded subscription currency list and larger desktop uploads
+against the released Node and Worker Hubs. The app’s dashboard labels Cursor’s
+included allowance using its reported period.
 I checked Hark quotas, separate Qoder allowances and complete lifetime
 active-day counts with the released Node and Worker Hubs.
 I checked last-used session models and Gemini CLI totals with the released

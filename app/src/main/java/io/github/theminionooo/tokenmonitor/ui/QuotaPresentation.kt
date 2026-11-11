@@ -54,7 +54,7 @@ internal fun museAdditionalTokens(account: LimitAccount, window: LimitWindow): S
 
 internal fun limitWindowTitle(account: LimitAccount, window: LimitWindow): String =
     if (museAdditionalTokens(account, window) != null) appText(R.string.ui_additional_tokens, "Additional tokens")
-    else windowTitle(window, account.windows)
+    else windowTitle(window, account.windows, account.provider)
 
 internal fun prioritizeAvailableLimits(providers: List<LimitAccount>): List<LimitAccount> = providers.withIndex()
     .sortedWith(compareBy<IndexedValue<LimitAccount>> { it.value.windows.isEmpty() }

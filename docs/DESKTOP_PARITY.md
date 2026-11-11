@@ -1,7 +1,11 @@
-# Desktop parity for v0.90.0
+# Desktop parity for v0.91.0
 
-I compare Android with desktop tag `v0.90.0`, peeled commit
-`e13f9fab69493730453bfbada37b141bc1085a46`. Android reads the usage collected by desktop.
+I compare Android with desktop tag `v0.91.0`, peeled commit
+`42bcf0ccf2387b89a03b87134ac72f01e43aba14`. Android reads the usage collected by desktop.
+
+**Android v0.91.0 r1** offers all 14 desktop display currencies and shows
+subscription and top-up amounts in their recorded currencies. Cursor’s
+included allowance is labeled Weekly or Monthly in the dashboard.
 
 **Android v0.90.0 r1** shows Hark allowances and top-up spend and recognizes
 Inkling models as Thinking Machines. Qoder personal and team credits keep
@@ -72,7 +76,7 @@ spacing, hover and session-summary changes remain desktop-only.
 | Limits | Provider windows, remaining/used bars, reset/expiry countdowns, plan, source and optional account email; native-currency balances and spend |
 | Provider details | **r2:** reset-credit counts, expiry and grant eligibility; reported TypeSafe period/today/week tokens, input/output, requests and estimated spend |
 | Recorded payments | **r2:** recurring intervals and renewal/end dates, account binding, notes and dated top-up ledgers. Top-ups are not monthly subscriptions |
-| Display currency | **r2:** USD, CNY, TWD, HKD, INR, EUR, JPY, KRW and BRL; saved automatic or manual rates. Provider balances and payments retain their reported currency |
+| Display currency | USD, AUD, BRL, CAD, CHF, CNY, EUR, GBP, HKD, INR, JPY, KRW, SGD and TWD with saved automatic or manual rates. Provider balances and payments retain their recorded currencies. |
 | Live speed and burn | **r2:** optional recent aggregate/per-model output tokens/s or tokens/min from matched cumulative counters. Off by default; separate from existing session-average speed |
 | Languages | **r2:** English, Simplified/Traditional Chinese, Korean, Japanese, Brazilian Portuguese, Spanish, Hindi, Gujarati, Bengali, Tamil and Telugu; follows the phone or an explicit app choice |
 | Diagnostics | **r2:** preview, copy or share an allowlisted report with versions and state flags; no addresses, secrets, account identities, conversation text or cached responses |

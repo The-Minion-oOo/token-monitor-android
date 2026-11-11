@@ -1,0 +1,343 @@
+{
+  "ok": true,
+  "version": 1,
+  "updatedAt": "2026-11-11T15:40:00.241Z",
+  "subscriptions": [
+    {
+      "id": "synthetic-usd",
+      "provider": "openai",
+      "kind": "subscription",
+      "binding": {
+        "profileName": "",
+        "accountKey": "",
+        "accountEmail": ""
+      },
+      "planName": "Synthetic USD plan",
+      "amountMinor": 1234,
+      "currency": "USD",
+      "interval": "month",
+      "intervalCount": 1,
+      "startDate": "2026-01-01",
+      "topUps": [],
+      "autoRenew": true,
+      "nextRenewalOverride": null,
+      "endDate": null,
+      "note": "",
+      "updatedAt": "2026-11-11T15:40:00.242Z"
+    },
+    {
+      "id": "synthetic-aud",
+      "provider": "openai",
+      "kind": "subscription",
+      "binding": {
+        "profileName": "",
+        "accountKey": "",
+        "accountEmail": ""
+      },
+      "planName": "Synthetic AUD plan",
+      "amountMinor": 1234,
+      "currency": "AUD",
+      "interval": "month",
+      "intervalCount": 1,
+      "startDate": "2026-01-01",
+      "topUps": [],
+      "autoRenew": true,
+      "nextRenewalOverride": null,
+      "endDate": null,
+      "note": "",
+      "updatedAt": "2026-11-11T15:40:00.242Z"
+    },
+    {
+      "id": "synthetic-brl",
+      "provider": "openai",
+      "kind": "subscription",
+      "binding": {
+        "profileName": "",
+        "accountKey": "",
+        "accountEmail": ""
+      },
+      "planName": "Synthetic BRL plan",
+      "amountMinor": 1234,
+      "currency": "BRL",
+      "interval": "month",
+      "intervalCount": 1,
+      "startDate": "2026-01-01",
+      "topUps": [],
+      "autoRenew": true,
+      "nextRenewalOverride": null,
+      "endDate": null,
+      "note": "",
+      "updatedAt": "2026-11-11T15:40:00.242Z"
+    },
+    {
+      "id": "synthetic-cad",
+      "provider": "openai",
+      "kind": "subscription",
+      "binding": {
+        "profileName": "",
+        "accountKey": "",
+        "accountEmail": ""
+      },
+      "planName": "Synthetic CAD plan",
+      "amountMinor": 1234,
+      "currency": "CAD",
+      "interval": "month",
+      "intervalCount": 1,
+      "startDate": "2026-01-01",
+      "topUps": [],
+      "autoRenew": true,
+      "nextRenewalOverride": null,
+      "endDate": null,
+      "note": "",
+      "updatedAt": "2026-11-11T15:40:00.242Z"
+    },
+    {
+      "id": "synthetic-chf",
+      "provider": "openai",
+      "kind": "subscription",
+      "binding": {
+        "profileName": "",
+        "accountKey": "",
+        "accountEmail": ""
+      },
+      "planName": "Synthetic CHF plan",
+      "amountMinor": 1234,
+      "currency": "CHF",
+      "interval": "month",
+      "intervalCount": 1,
+      "startDate": "2026-01-01",
+      "topUps": [],
+      "autoRenew": true,
+      "nextRenewalOverride": null,
+      "endDate": null,
+      "note": "",
+      "updatedAt": "2026-11-11T15:40:00.242Z"
+    },
+    {
+      "id": "synthetic-cny",
+      "provider": "openai",
+      "kind": "subscription",
+      "binding": {
+        "profileName": "",
+        "accountKey": "",
+        "accountEmail": ""
+      },
+      "planName": "Synthetic CNY plan",
+      "amountMinor": 1234,
+      "currency": "CNY",
+      "interval": "month",
+      "intervalCount": 1,
+      "startDate": "2026-01-01",
+      "topUps": [],
+      "autoRenew": true,
+      "nextRenewalOverride": null,
+      "endDate": null,
+      "note": "",
+      "updatedAt": "2026-11-11T15:40:00.242Z"
+    },
+    {
+      "id": "synthetic-eur",
+      "provider": "openai",
+      "kind": "subscription",
+      "binding": {
+        "profileName": "",
+        "accountKey": "",
+        "accountEmail": ""
+      },
+      "planName": "Synthetic EUR plan",
+      "amountMinor": 1234,
+      "currency": "EUR",
+      "interval": "month",
+      "intervalCount": 1,
+      "startDate": "2026-01-01",
+      "topUps": [],
+      "autoRenew": true,
+      "nextRenewalOverride": null,
+      "endDate": null,
+      "note": "",
+      "updatedAt": "2026-11-11T15:40:00.242Z"
+    },
+    {
+      "id": "synthetic-gbp",
+      "provider": "openai",
+      "kind": "subscription",
+      "binding": {
+        "profileName": "",
+        "accountKey": "",
+        "accountEmail": ""
+      },
+      "planName": "Synthetic GBP plan",
+      "amountMinor": 1234,
+      "currency": "GBP",
+      "interval": "month",
+      "intervalCount": 1,
+      "startDate": "2026-01-01",
+      "topUps": [],
+      "autoRenew": true,
+      "nextRenewalOverride": null,
+      "endDate": null,
+      "note": "",
+      "updatedAt": "2026-11-11T15:40:00.242Z"
+    },
+    {
+      "id": "synthetic-hkd",
+      "provider": "openai",
+      "kind": "subscription",
+      "binding": {
+        "profileName": "",
+        "accountKey": "",
+        "accountEmail": ""
+      },
+      "planName": "Synthetic HKD plan",
+      "amountMinor": 1234,
+      "currency": "HKD",
+      "interval": "month",
+      "intervalCount": 1,
+      "startDate": "2026-01-01",
+      "topUps": [],
+      "autoRenew": true,
+      "nextRenewalOverride": null,
+      "endDate": null,
+      "note": "",
+      "updatedAt": "2026-11-11T15:40:00.242Z"
+    },
+    {
+      "id": "synthetic-inr",
+      "provider": "openai",
+      "kind": "subscription",
+      "binding": {
+        "profileName": "",
+        "accountKey": "",
+        "accountEmail": ""
+      },
+      "planName": "Synthetic INR plan",
+      "amountMinor": 1234,
+      "currency": "INR",
+      "interval": "month",
+      "intervalCount": 1,
+      "startDate": "2026-01-01",
+      "topUps": [],
+      "autoRenew": true,
+      "nextRenewalOverride": null,
+      "endDate": null,
+      "note": "",
+      "updatedAt": "2026-11-11T15:40:00.242Z"
+    },
+    {
+      "id": "synthetic-jpy",
+      "provider": "openai",
+      "kind": "subscription",
+      "binding": {
+        "profileName": "",
+        "accountKey": "",
+        "accountEmail": ""
+      },
+      "planName": "Synthetic JPY plan",
+      "amountMinor": 1234500,
+      "currency": "JPY",
+      "interval": "month",
+      "intervalCount": 1,
+      "startDate": "2026-01-01",
+      "topUps": [],
+      "autoRenew": true,
+      "nextRenewalOverride": null,
+      "endDate": null,
+      "note": "",
+      "updatedAt": "2026-11-11T15:40:00.242Z"
+    },
+    {
+      "id": "synthetic-krw",
+      "provider": "openai",
+      "kind": "subscription",
+      "binding": {
+        "profileName": "",
+        "accountKey": "",
+        "accountEmail": ""
+      },
+      "planName": "Synthetic KRW plan",
+      "amountMinor": 1234500,
+      "currency": "KRW",
+      "interval": "month",
+      "intervalCount": 1,
+      "startDate": "2026-01-01",
+      "topUps": [],
+      "autoRenew": true,
+      "nextRenewalOverride": null,
+      "endDate": null,
+      "note": "",
+      "updatedAt": "2026-11-11T15:40:00.242Z"
+    },
+    {
+      "id": "synthetic-sgd",
+      "provider": "openai",
+      "kind": "subscription",
+      "binding": {
+        "profileName": "",
+        "accountKey": "",
+        "accountEmail": ""
+      },
+      "planName": "Synthetic SGD plan",
+      "amountMinor": 1234,
+      "currency": "SGD",
+      "interval": "month",
+      "intervalCount": 1,
+      "startDate": "2026-01-01",
+      "topUps": [],
+      "autoRenew": true,
+      "nextRenewalOverride": null,
+      "endDate": null,
+      "note": "",
+      "updatedAt": "2026-11-11T15:40:00.242Z"
+    },
+    {
+      "id": "synthetic-twd",
+      "provider": "openai",
+      "kind": "subscription",
+      "binding": {
+        "profileName": "",
+        "accountKey": "",
+        "accountEmail": ""
+      },
+      "planName": "Synthetic TWD plan",
+      "amountMinor": 1234,
+      "currency": "TWD",
+      "interval": "month",
+      "intervalCount": 1,
+      "startDate": "2026-01-01",
+      "topUps": [],
+      "autoRenew": true,
+      "nextRenewalOverride": null,
+      "endDate": null,
+      "note": "",
+      "updatedAt": "2026-11-11T15:40:00.242Z"
+    },
+    {
+      "id": "synthetic-krw-topup",
+      "provider": "openai",
+      "kind": "topup",
+      "binding": {
+        "profileName": "",
+        "accountKey": "",
+        "accountEmail": ""
+      },
+      "planName": "",
+      "amountMinor": 0,
+      "currency": "KRW",
+      "interval": "month",
+      "intervalCount": 1,
+      "startDate": "2026-01-01",
+      "topUps": [
+        {
+          "id": "synthetic-payment",
+          "date": "2026-01-02",
+          "amountMinor": 456700
+        }
+      ],
+      "autoRenew": true,
+      "nextRenewalOverride": null,
+      "endDate": null,
+      "note": "",
+      "updatedAt": "2026-11-11T15:40:00.242Z"
+    }
+  ]
+}

@@ -4,10 +4,10 @@
   "packageName": "io.github.theminionooo.tokenmonitor",
   "signingCertificateSha256": "eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c",
   "candidate": {
-    "status": "published",
-    "tag": "android-v0.90.0-r1",
-    "versionName": "v0.90.0",
-    "versionCode": 900001
+    "status": "candidate",
+    "tag": "android-v0.91.0-r1",
+    "versionName": "v0.91.0",
+    "versionCode": 910001
   },
   "published": {
     "tag": "android-v0.90.0-r1",
