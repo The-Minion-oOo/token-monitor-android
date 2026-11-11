@@ -6,9 +6,14 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.doubleOrNull
 
 internal data class UsageCurrency(val code: String = "USD", val rate: Double = 1.0)
-internal val usageCurrencies = listOf("USD", "CNY", "TWD", "HKD", "INR", "EUR", "JPY", "KRW", "BRL")
+internal val usageCurrencies = listOf(
+    "USD", "AUD", "BRL", "CAD", "CHF", "CNY", "EUR", "GBP", "HKD", "INR", "JPY", "KRW", "SGD", "TWD",
+)
 internal fun shouldRefreshRates(options: DisplayOptions, now: Long): Boolean {
     if (options.currencyCode == "USD" || options.manualCurrencyRate) return false
+    // A successful table saved before an upgrade can lack a newly supported currency.
+    if (options.exchangeRateFetchedAt >= options.exchangeRateAttemptedAt &&
+        options.currencyCode !in options.exchangeRates) return true
     val last = maxOf(options.exchangeRateFetchedAt, options.exchangeRateAttemptedAt)
     return last <= 0 || now < last || now - last >= 86_400_000
 }

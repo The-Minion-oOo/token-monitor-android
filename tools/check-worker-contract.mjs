@@ -6,6 +6,7 @@ import { pathToFileURL } from "node:url";
 
 import { usageProjection } from "./check-v082-usage.mjs";
 import { checkV087DeltaReads } from "./check-v087-contract.mjs";
+import { checkV091Reads } from "./check-v091-contract.mjs";
 
 /** Called only inside the disposable, pinned-source contract process. No sockets or deployment. */
 export async function checkWorkerContract(source, output, upstream, limitCases = {}) {
@@ -162,6 +163,7 @@ export async function checkWorkerContract(source, output, upstream, limitCases =
             }
         }
         Object.assign(responses, await checkV087DeltaReads(request, sample.deviceId, upstream.version));
+        Object.assign(responses, await checkV091Reads(request, upstream.version));
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) {
             assert.ok(!JSON.stringify(value).includes("NEVER_EXPORT"));

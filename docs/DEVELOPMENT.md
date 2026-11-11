@@ -805,3 +805,10 @@ counters, USD top-up spend, separate Qoder reset times and an omitted zero-cap
 allowance. The history cases cover overlapping dates, a day outside the
 detailed history window and an incomplete contributor. Android tests check
 the lifetime count, its fallback and the rendered Home and Limits readings.
+
+### Desktop v0.91.0 checks
+
+I seed the released Node Hub and Worker with subscriptions in all 14 currencies,
+including a KRW top-up, and read them back through the authenticated subscription
+endpoint. I also check the desktop ingest ceiling with synthetic requests and
+exercise the Android currency chooser and payment display on emulators.

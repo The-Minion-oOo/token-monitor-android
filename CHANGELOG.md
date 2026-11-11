@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Add AUD, CAD, CHF, GBP and SGD to Display currency.
+- Show subscription and top-up amounts with two decimals for currencies that use cents, and whole units for JPY and KRW.
+- Label Cursor’s included quota Weekly or Monthly in Home, Limits and display settings.
+
 ## v0.90.0 r1 — 2026-11-10
 
 - Show Hark daily and monthly quotas, with reported top-up spend on a separate line.

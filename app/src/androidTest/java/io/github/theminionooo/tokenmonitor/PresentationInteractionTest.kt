@@ -76,7 +76,8 @@ class PresentationInteractionTest {
             val bitmap = compose.onRoot().captureToImage().asAndroidBitmap()
             instrumentation.targetContext.openFileOutput(name, 0).use { bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it) }
         }
-        compose.onAllNodesWithText("Included Usage").assertCountEquals(3)
+        compose.onAllNodesWithText("Weekly").assertCountEquals(2)
+        compose.onNodeWithText("Monthly").assertIsDisplayed()
         compose.onNodeWithText("63% left").assertIsDisplayed()
         compose.onNodeWithText("Prepaid Balance").assertIsDisplayed()
         compose.onNodeWithText("$14.46").assertIsDisplayed()

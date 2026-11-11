@@ -1,6 +1,7 @@
 package io.github.theminionooo.tokenmonitor.ui
 
 import io.github.theminionooo.tokenmonitor.R
+import java.math.BigDecimal
 import java.text.NumberFormat
 import java.time.Instant
 import java.time.LocalDate
@@ -44,12 +45,17 @@ internal fun formatCompactTokens(tokens: Long): String {
 
 internal fun formatMoney(value: Double): String = currencyFormat.format(value)
 
+private fun currencyFractionDigits(code: String): Int = if (code == "JPY" || code == "KRW") 0 else 2
+
 /** A missing catalog price is not a zero rate. Keep the known subtotal explicit. */
 internal fun formatUsageCost(value: Double, unpricedTokens: Long = 0, compact: Boolean = false,
     currency: io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency = io.github.theminionooo.tokenmonitor.data.storage.UsageCurrency()): String {
     val converted = value * currency.rate
     val amount = if (currency.code == "USD") formatMoney(value) else if (converted.isFinite()) NumberFormat.getCurrencyInstance(Locale.US).apply {
         this.currency = java.util.Currency.getInstance(currency.code)
+        val digits = currencyFractionDigits(currency.code)
+        minimumFractionDigits = digits
+        maximumFractionDigits = digits
     }.format(converted) else appText(R.string.format_not_reported, "Not reported")
     if (unpricedTokens <= 0) return amount
     val known = if (value > 0) amount else "—"
@@ -58,10 +64,11 @@ internal fun formatUsageCost(value: Double, unpricedTokens: Long = 0, compact: B
     return if (value > 0) "$known + $missing" else "— ($missing)"
 }
 
-internal fun formatSubscriptionAmount(amountMinor: Long, currency: String): String = if (currency == "USD") {
-    formatMoney(amountMinor / 100.0)
-} else {
-    "$currency ${wholeNumberFormat.format(amountMinor / 100.0)}"
+internal fun formatSubscriptionAmount(amountMinor: Long, currency: String): String {
+    val units = BigDecimal.valueOf(amountMinor, 2)
+    if (currency == "USD") return currencyFormat.format(units)
+    val formatter = if (currencyFractionDigits(currency) == 0) wholeNumberFormat else twoDecimalFormat
+    return "$currency ${formatter.format(units)}"
 }
 
 /**
@@ -199,7 +206,13 @@ internal fun windowPeriodLabel(kind: String): String = when (kind.trim().lowerca
  * as two windows with the same label and different kinds, so when a label repeats within an
  * account the period is appended: `GPT-5.3-Codex-Spark · 5-hour` and `GPT-5.3-Codex-Spark · Weekly`.
  */
-internal fun windowTitle(window: io.github.theminionooo.tokenmonitor.domain.LimitWindow, siblings: List<io.github.theminionooo.tokenmonitor.domain.LimitWindow>): String {
+internal fun windowTitle(window: io.github.theminionooo.tokenmonitor.domain.LimitWindow, siblings: List<io.github.theminionooo.tokenmonitor.domain.LimitWindow>, provider: String = ""): String {
+    if (provider == "cursor" && window.label.trim() == "Included usage") {
+        when (window.kind) {
+            "weekly" -> return "Weekly"
+            "billing" -> return "Monthly"
+        }
+    }
     val base = window.label.ifBlank { window.kind.ifBlank { "Limit" } }.displayName()
     val shared = siblings.count { it !== window && it.label.ifBlank { it.kind.ifBlank { "Limit" } }.displayName() == base } > 0
     return if (shared && window.kind.isNotBlank()) "$base · ${windowPeriodLabel(window.kind)}" else base

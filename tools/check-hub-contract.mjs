@@ -1,4 +1,5 @@
 import { checkV090Data } from "./check-v090-contract.mjs";
+import { checkV091Reads } from "./check-v091-contract.mjs";
 import { checkV089Data } from "./check-v089-contract.mjs";
 import { checkV088Data } from "./check-v088-contract.mjs";
 import { checkModelAliasReads, checkModelAliasResolver } from "./check-model-aliases.mjs";
@@ -676,6 +677,7 @@ async function isolatedContract(source, output, upstream) {
         const v090 = await checkV090Data(require, { createHub, source, secret, device, now });
         Object.assign(limitChecks.cases, v090.cases);
         Object.assign(responses, v090.responses);
+        Object.assign(responses, await checkV091Reads(uploadRequest, upstream.version));
         await checkV081Streams(require, source, output, upstream);
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) await writeFile(join(output, name), `${JSON.stringify(value, null, 2)}\n`);

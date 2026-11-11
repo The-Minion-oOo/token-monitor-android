@@ -12,7 +12,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.90.0**, released 2026-11-10 UTC.
+The verified baseline is upstream Token Monitor **v0.91.0**, released 2026-11-11 UTC.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -53,7 +53,7 @@ write, or device deletion endpoints.
 
 ## Cloudflare Worker
 
-I also exercise `worker/src/index.js` from the same pinned v0.90.0 commit locally.
+I also exercise `worker/src/index.js` from the same pinned v0.91.0 commit locally.
 Its snapshot read routes use the same Bearer authentication and unauthenticated Hub
 identity check. Stream-v2 negotiates the same `snapshot`, complete `stats` and
 compact `freshness` envelopes. Ingest changes may produce freshness-only events;
@@ -629,3 +629,15 @@ Hubs can supply the recent activity grid without a lifetime count. A cached
 full-history response cannot restore a count that the current preview no
 longer confirms. The Hub deduplicates dates across devices. Android uses the
 summary for the lifetime figure and the existing detailed days for the grid.
+
+## Desktop v0.91.0
+
+The Hub preserves the 14 supported subscription currencies. Every payment amount
+is still stored in hundredths of a unit. Android displays JPY and KRW as whole
+units and keeps two decimals for the other currencies. Cursor’s wire label stays
+`Included usage`. Home and Limits display `weekly` as Weekly and `billing` as
+Monthly.
+
+The desktop producer can upload up to 2 MiB to updated Hubs. I checked
+acceptance of a synthetic upload above the old limit and rejection above the new
+limit on both implementations. Android reads the resulting stats and subscriptions.

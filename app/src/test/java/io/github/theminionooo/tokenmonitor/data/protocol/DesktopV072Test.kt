@@ -1,6 +1,7 @@
 package io.github.theminionooo.tokenmonitor.data.protocol
 
 import io.github.theminionooo.tokenmonitor.ui.groupSessions
+import io.github.theminionooo.tokenmonitor.ui.limitWindowTitle
 import io.github.theminionooo.tokenmonitor.ui.sessionRowMetricLabels
 import io.github.theminionooo.tokenmonitor.ui.sessionRowPresentation
 import org.junit.Assert.*
@@ -15,6 +16,7 @@ class DesktopV072Test {
         assertEquals(listOf("Premium", "Ultra", "Plus"), accounts.map { it.plan })
         val (included, prepaid) = accounts.first().windows
         assertEquals("Included usage", included.label)
+        assertEquals("Weekly", limitWindowTitle(accounts.first(), included))
         assertEquals("weekly", included.kind)
         assertEquals(63.0, included.remainingPercent!!, 0.0)
         assertEquals("2026-10-19T00:00:00.000Z", included.resetsAt)
@@ -27,6 +29,7 @@ class DesktopV072Test {
         assertNull(prepaid.remainingPercent)
         assertEquals("", prepaid.resetsAt)
         assertEquals("billing", accounts[1].windows.single().kind)
+        assertEquals("Monthly", limitWindowTitle(accounts[1], accounts[1].windows.single()))
         assertEquals("2026-11-01T00:00:00.000Z", accounts[1].windows.single().resetsAt)
         assertEquals("", accounts[2].windows.single().resetsAt)
         assertEquals(5400L, snapshot.today.totalTokens)

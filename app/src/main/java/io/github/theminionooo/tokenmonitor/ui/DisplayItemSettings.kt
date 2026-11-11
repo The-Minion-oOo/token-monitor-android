@@ -48,7 +48,9 @@ internal fun DisplayItemSettings(snapshot: HubSnapshot?, options: DisplayOptions
                 Text(provider.providerLabel(), color = Ink, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
                 Switch(provider !in options.hiddenProviders, { show -> onChange(options.copy(hiddenProviders = if (show) options.hiddenProviders - provider else options.hiddenProviders + provider)) })
             }
-            val windows = entries.flatMap { it.windows }.distinctBy { limitItemKey(provider, it) }.map { limitItemKey(provider, it) to windowTitle(it, entries.flatMap { account -> account.windows }) }
+            val accountWindows = entries.flatMap { it.windows }
+            val windows = accountWindows.distinctBy { limitItemKey(provider, it) }
+                .map { limitItemKey(provider, it) to windowTitle(it, accountWindows, provider) }
             val extras = buildList {
                 if (entries.any { it.resetCredits != null || it.usageSummary != null }) add(providerDetailKey(provider, "details") to appText(R.string.ui_quota_details_a9a13, "Quota details"))
                 if (entries.any { it.spend != null }) add(providerDetailKey(provider, "spend") to appText(R.string.ui_spend_14eee, "Spend"))

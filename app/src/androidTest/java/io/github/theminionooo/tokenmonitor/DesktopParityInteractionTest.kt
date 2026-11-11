@@ -79,17 +79,23 @@ class DesktopParityInteractionTest {
     }
 
     @Test fun manualCurrencyChangesUsageCostsWhilePaymentsKeepTheirCurrency() {
-        var options by mutableStateOf(DisplayOptions(currencyCode = "INR", manualCurrencyRate = true))
+        var options by mutableStateOf(DisplayOptions(manualCurrencyRate = true))
         content { LazyColumn { item { CurrencySettings(options) { options = it } }; item {
             Text(formatUsageCost(2.0, currency = usageCurrency(options)))
-            Text(formatSubscriptionAmount(200, "USD"))
+            Text(formatSubscriptionAmount(1234, "CHF"))
         } } }
         compose.onNodeWithText("DISPLAY CURRENCY").performClick()
-        compose.onNodeWithText("Currency units per USD").performTextInput("80")
+        compose.onNodeWithText("CAD").performClick()
+        val list = compose.onNode(hasScrollToIndexAction())
+        list.performScrollToNode(hasText("Currency units per USD"))
+        compose.onNodeWithText("Currency units per USD").performTextInput("1.4")
+        list.performScrollToNode(hasText("Save exchange rate"))
         compose.onNodeWithText("Save exchange rate").performClick()
-        compose.runOnIdle { assertEquals(80.0, options.manualRates["INR"]!!, 0.0) }
-        compose.onNodeWithText(formatUsageCost(2.0, currency = UsageCurrency("INR", 80.0))).assertIsDisplayed()
-        compose.onNodeWithText("$2.00").assertIsDisplayed()
+        compose.runOnIdle { assertEquals(1.4, options.manualRates["CAD"]!!, 0.0) }
+        val converted = formatUsageCost(2.0, currency = UsageCurrency("CAD", 1.4))
+        list.performScrollToNode(hasText("CHF 12.34"))
+        compose.onNodeWithText(converted).assertIsDisplayed()
+        compose.onNodeWithText("CHF 12.34").assertIsDisplayed()
     }
 
     @Test fun diagnosticsRequirePreviewAndDoNotIncludeRawConnectionText() {
