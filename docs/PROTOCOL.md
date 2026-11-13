@@ -12,7 +12,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.91.0**, released 2026-11-11 UTC.
+The verified baseline is upstream Token Monitor **v0.92.0**, released 2026-11-13 UTC.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -53,7 +53,7 @@ write, or device deletion endpoints.
 
 ## Cloudflare Worker
 
-I also exercise `worker/src/index.js` from the same pinned v0.91.0 commit locally.
+I also exercise `worker/src/index.js` from the same pinned v0.92.0 commit locally.
 Its snapshot read routes use the same Bearer authentication and unauthenticated Hub
 identity check. Stream-v2 negotiates the same `snapshot`, complete `stats` and
 compact `freshness` envelopes. Ingest changes may produce freshness-only events;
@@ -641,3 +641,19 @@ Monthly.
 The desktop producer can upload up to 2 MiB to updated Hubs. I checked
 acceptance of a synthetic upload above the old limit and rejection above the new
 limit on both implementations. Android reads the resulting stats and subscriptions.
+
+## Desktop v0.92.0
+
+The released Hubs keep distinct Copilot account keys even if one login expires.
+Android uses those keys for its Limits rows. Account management and per-account
+quota refresh run on desktop.
+
+The authenticated stats response can include `searchSpend` and `fetchSpend`
+in the DeepSeek balance. They are current-month fees in the balance currency.
+Android shows the reported amounts in Limits. The Hub omits these fields from
+public stats.
+
+The v4 Hub stream can queue small frames while a slow client receives a large
+frame. When the backlog exceeds its budget, the Hub sends a complete `stats`
+frame with the current revision. Android takes that revision as the baseline
+for the next delta.

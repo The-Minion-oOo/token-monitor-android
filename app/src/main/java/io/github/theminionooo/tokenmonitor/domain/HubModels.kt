@@ -187,6 +187,8 @@ data class LimitSpend(
     val allTime: Double? = null,
     val trackingSince: String = "",
     val locallyTracked: Boolean = true,
+    val searchSpend: Double? = null,
+    val fetchSpend: Double? = null,
 )
 
 data class HubLimits(

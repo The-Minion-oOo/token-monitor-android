@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Show Copilot account quotas and sign-in status in separate rows.
+- Show DeepSeek Search and Fetch fees in their reported currency when available.
+- Verify the released Hub’s revisioned recovery after stream backpressure.
+
 ## v0.91.0 r1 — 2026-11-11
 
 - Add AUD, CAD, CHF, GBP and SGD to Display currency.

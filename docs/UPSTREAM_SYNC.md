@@ -2,8 +2,10 @@
 
 ## Version rule
 
-Android v0.91.0 r1 targets desktop tag `v0.91.0`, peeled commit
-`42bcf0ccf2387b89a03b87134ac72f01e43aba14`, in Gradle and `upstream.json`.
+Android v0.92.0 r1 targets desktop tag `v0.92.0`, peeled commit
+`001f1d4710f6bdcaa1a56f8836335153ca5babf8`, in Gradle and `upstream.json`.
+I checked Copilot account retention, DeepSeek tool fees, and live stream
+recovery with the released Node and Worker Hubs.
 I verified the expanded subscription currency list and larger desktop uploads
 against the released Node and Worker Hubs. The app’s dashboard labels Cursor’s
 included allowance using its reported period.

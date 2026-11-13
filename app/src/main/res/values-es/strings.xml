@@ -605,4 +605,6 @@
     <string name="ui_hub_reconnecting">Reconectando al Hub. Mostrando los últimos datos recibidos.</string>
     <string name="ui_notification_live_until">En directo hasta %1$s</string>
     <string name="ui_notification_session_ends">La sesión termina a las %1$s</string>
+    <string name="ui_month_search_fees">Cargos de búsqueda este mes</string>
+    <string name="ui_month_fetch_fees">Cargos de recuperación este mes</string>
 </resources>

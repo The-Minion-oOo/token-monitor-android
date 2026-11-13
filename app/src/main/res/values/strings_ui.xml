@@ -520,4 +520,6 @@
     <string name="ui_hub_reconnecting">Hub reconnecting. Showing the last successful snapshot.</string>
     <string name="ui_notification_live_until">Live until %1$s</string>
     <string name="ui_notification_session_ends">Session ends %1$s</string>
+    <string name="ui_month_search_fees">Search fees this month</string>
+    <string name="ui_month_fetch_fees">Fetch fees this month</string>
 </resources>

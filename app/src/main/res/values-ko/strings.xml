@@ -606,4 +606,6 @@
     <string name="ui_hub_reconnecting">Hub에 다시 연결하는 중입니다. 마지막으로 받은 데이터를 표시합니다.</string>
     <string name="ui_notification_live_until">%1$s까지 실시간 업데이트</string>
     <string name="ui_notification_session_ends">세션 종료 %1$s</string>
+    <string name="ui_month_search_fees">이번 달 검색 요금</string>
+    <string name="ui_month_fetch_fees">이번 달 가져오기 요금</string>
 </resources>
