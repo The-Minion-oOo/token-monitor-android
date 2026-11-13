@@ -9,9 +9,9 @@
 
 ## 近期更新
 
-当前版本为 **v0.91.0 r1**。费用估算新增 AUD、CAD、CHF、GBP 和 SGD。
-订阅和充值保留原币种，JPY 和 KRW 显示整数。Cursor 的包含用量额度按实际周期显示为每周或每月。
-[版本说明](docs/releases/android-v0.91.0-r1.md)。
+当前版本为 **v0.92.0 r1**。额度页面分别显示各个 Copilot 账户。
+当 Hub 提供 DeepSeek 搜索和抓取费用时，Android 会以原币种显示这些费用。
+[版本说明](docs/releases/android-v0.92.0-r1.md)。
 
 继续支持 v4 增量实时更新、会话推理强度和火山引擎个人套餐额度。
 以下语言、付款和显示功能继续保留。
