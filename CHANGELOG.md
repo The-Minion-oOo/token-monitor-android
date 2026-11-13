@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.92.0 r1 — 2026-11-13
+
 - Show Copilot account quotas and sign-in status in separate rows.
 - Show DeepSeek Search and Fetch fees in their reported currency when available.
 - Verify the released Hub’s revisioned recovery after stream backpressure.

@@ -8,7 +8,7 @@ Android-only releases keep `versionName` and increment the final three digits of
 
 | Build | Version name | Version code | Tag |
 | --- | --- | --- | --- |
-| Published | v0.91.0 | 910001 | `android-v0.91.0-r1` |
+| Published | v0.92.0 | 920001 | `android-v0.92.0-r1` |
 
 For desktop `0.<minor>.<patch>`, the version code is
 `minor × 10000 + patch × 1000 + revision`. For example, v0.68.0 r1 is 680001
