@@ -1,5 +1,6 @@
 import { checkV090Data } from "./check-v090-contract.mjs";
 import { checkV091Reads } from "./check-v091-contract.mjs";
+import { checkV092Limits, checkV092WorkerRecovery } from "./check-v092-contract.mjs";
 import { checkV089Data } from "./check-v089-contract.mjs";
 import { checkV088Data } from "./check-v088-contract.mjs";
 import { checkModelAliasReads, checkModelAliasResolver } from "./check-model-aliases.mjs";
@@ -678,7 +679,11 @@ async function isolatedContract(source, output, upstream) {
         Object.assign(limitChecks.cases, v090.cases);
         Object.assign(responses, v090.responses);
         Object.assign(responses, await checkV091Reads(uploadRequest, upstream.version));
+        const v092 = await checkV092Limits(require, { createHub, source, secret, device, now });
+        limitChecks.cases["v092-limits"] = { records: v092.records, providers: v092.stats.limits.providers };
+        responses["v092-limits.json"] = v092.stats;
         await checkV081Streams(require, source, output, upstream);
+        await checkV092WorkerRecovery(require, source, output);
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) await writeFile(join(output, name), `${JSON.stringify(value, null, 2)}\n`);
         console.log(`Actual ${upstream.tag} Hub passed authenticated reads, snapshot, freshness and changed-stat checks. Synthetic responses: ${output}`);

@@ -16,7 +16,7 @@
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/github/actions/workflow/status/The-Minion-oOo/token-monitor-android/android.yml?branch=main&style=flat-square&logo=githubactions&logoColor=10221c&label=Android%20checks"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.91.0" src="https://img.shields.io/badge/Desktop-v0.91.0-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.92.0" src="https://img.shields.io/badge/Desktop-v0.92.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/releases"><img alt="Total GitHub release asset downloads" src="https://img.shields.io/github/downloads/The-Minion-oOo/token-monitor-android/total?label=Downloads&style=flat-square&color=73bdf5"></a>
@@ -227,7 +227,7 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 | | |
 | --- | --- |
 | Current release | [Android v0.91.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.91.0-r1) (`910001`) |
-| Desktop baseline | [Token Monitor v0.91.0](https://github.com/Javis603/token-monitor/releases/tag/v0.91.0) |
+| Desktop baseline | [Token Monitor v0.92.0](https://github.com/Javis603/token-monitor/releases/tag/v0.92.0) |
 | Minimum Android version | Android 8.0 |
 
 I checked the released Node and Worker Hubs, Android tests and emulators.

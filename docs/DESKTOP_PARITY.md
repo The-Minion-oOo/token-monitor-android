@@ -1,7 +1,11 @@
-# Desktop parity for v0.91.0
+# Desktop parity for v0.92.0
 
-I compare Android with desktop tag `v0.91.0`, peeled commit
-`42bcf0ccf2387b89a03b87134ac72f01e43aba14`. Android reads the usage collected by desktop.
+I compare Android with desktop tag `v0.92.0`, peeled commit
+`001f1d4710f6bdcaa1a56f8836335153ca5babf8`. Android reads the usage collected by desktop.
+
+**Android v0.92.0 r1** displays each reported Copilot account and its quota
+or sign-in status. DeepSeek Search and Fetch fees appear in Limits when the
+Hub reports them. I checked v4 recovery against the released Hub.
 
 **Android v0.91.0 r1** offers all 14 desktop display currencies and shows
 subscription and top-up amounts in their recorded currencies. Cursor’s

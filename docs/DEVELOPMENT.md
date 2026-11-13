@@ -555,7 +555,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 149 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 150 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.
@@ -812,3 +812,11 @@ I seed the released Node Hub and Worker with subscriptions in all 14 currencies,
 including a KRW top-up, and read them back through the authenticated subscription
 endpoint. I also check the desktop ingest ceiling with synthetic requests and
 exercise the Android currency chooser and payment display on emulators.
+
+### Desktop v0.92.0 checks
+
+I run the released Copilot and DeepSeek collectors with synthetic credentials
+and responses, then read the Node Hub and Worker. The fixtures cover a healthy
+and an expired Copilot login on the same device and the optional DeepSeek fees.
+I also stall a Worker stream writer, check the bounded queue and replay the
+recovery frames through Android’s receiver.

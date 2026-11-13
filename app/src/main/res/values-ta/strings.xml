@@ -607,4 +607,6 @@
     <string name="ui_hub_reconnecting">Hub உடன் மீண்டும் இணைக்கிறது. கடைசியாகப் பெற்ற தரவு காட்டப்படுகிறது.</string>
     <string name="ui_notification_live_until">%1$s வரை நேரலை</string>
     <string name="ui_notification_session_ends">அமர்வு %1$s மணிக்கு முடியும்</string>
+    <string name="ui_month_search_fees">இந்த மாதத் தேடல் கட்டணம்</string>
+    <string name="ui_month_fetch_fees">இந்த மாதத் தரவெடுப்புக் கட்டணம்</string>
 </resources>

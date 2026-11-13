@@ -606,4 +606,6 @@
     <string name="ui_hub_reconnecting">正在重新连接 Hub。显示上次成功获取的数据。</string>
     <string name="ui_notification_live_until">实时更新至 %1$s</string>
     <string name="ui_notification_session_ends">会话于 %1$s 结束</string>
+    <string name="ui_month_search_fees">本月搜索费用</string>
+    <string name="ui_month_fetch_fees">本月抓取费用</string>
 </resources>

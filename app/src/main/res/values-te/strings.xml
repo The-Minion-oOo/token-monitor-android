@@ -605,4 +605,6 @@
     <string name="ui_hub_reconnecting">Hubకి మళ్లీ కనెక్ట్ అవుతోంది. చివరిసారి అందిన డేటా చూపబడుతోంది.</string>
     <string name="ui_notification_live_until">%1$s వరకు లైవ్</string>
     <string name="ui_notification_session_ends">సెషన్ %1$sకి ముగుస్తుంది</string>
+    <string name="ui_month_search_fees">ఈ నెల శోధన రుసుము</string>
+    <string name="ui_month_fetch_fees">ఈ నెల ఫెచ్ రుసుము</string>
 </resources>

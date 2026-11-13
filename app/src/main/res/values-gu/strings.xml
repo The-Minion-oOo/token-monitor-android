@@ -605,4 +605,6 @@
     <string name="ui_hub_reconnecting">Hub સાથે ફરી જોડાઈ રહ્યા છીએ. છેલ્લે સફળતાપૂર્વક મળેલો ડેટા બતાવવામાં આવે છે.</string>
     <string name="ui_notification_live_until">%1$s સુધી લાઇવ</string>
     <string name="ui_notification_session_ends">સત્ર %1$s પર સમાપ્ત થશે</string>
+    <string name="ui_month_search_fees">આ મહિનાની શોધ ફી</string>
+    <string name="ui_month_fetch_fees">આ મહિનાની ફેચ ફી</string>
 </resources>

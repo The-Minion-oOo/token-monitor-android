@@ -311,20 +311,7 @@ object HubProtocolParser {
         productLabel = if (string("provider") == "mimo") string("accountLabel").takeIf {
             it in setOf("Console", "Desktop Membership", "Membership")
         }.orEmpty() else "",
-        spend = if (string("provider") == "mimo" ||
-            (string("provider") == "minimax" && string("source") == "api") ||
-            (string("provider") == "thirdparty" && string("adapterId") == "newapi-account")) objectField("balance")?.let { balance ->
-            val currency = balance.string("currency").uppercase(java.util.Locale.US)
-            if (!currency.matches(Regex("[A-Z]{3}"))) null else HubLimitSpendDto(
-                currency = currency,
-                today = balance.double("todaySpend")?.takeIf { it.isFinite() && it >= 0 },
-                week = balance.double("weekSpend")?.takeIf { it.isFinite() && it >= 0 },
-                month = balance.double("monthSpend")?.takeIf { it.isFinite() && it >= 0 },
-                allTime = balance.double("allTimeSpend")?.takeIf { it.isFinite() && it >= 0 },
-                trackingSince = balance.string("trackingSince"),
-                locallyTracked = string("provider") == "mimo",
-            )
-        } else null,
+        spend = toLimitSpendDto(),
         resetCredits = objectField("resetCredits")?.let { credits ->
             HubResetCreditsDto(
                 credits.long("availableCount")?.takeIf { it >= 0 }, credits.string("nextExpiresAt"),
@@ -342,6 +329,31 @@ object HubProtocolParser {
                 count("inputTokens"), count("outputTokens"), count("requests"), usage.double("standardCost")?.takeIf { it >= 0 })
         },
     )
+
+    private fun JsonObject.toLimitSpendDto(): HubLimitSpendDto? {
+        val provider = string("provider")
+        val balance = objectField("balance") ?: return null
+        val currency = balance.string("currency").uppercase(java.util.Locale.US)
+        if (!currency.matches(Regex("[A-Z]{3}"))) return null
+        fun amount(key: String) = balance.double(key)?.takeIf { it >= 0 }
+        if (provider == "deepseek") {
+            val search = amount("searchSpend")
+            val fetch = amount("fetchSpend")
+            if (search == null && fetch == null) return null
+            return HubLimitSpendDto(currency, locallyTracked = false, searchSpend = search, fetchSpend = fetch)
+        }
+        if (provider != "mimo" && (provider != "minimax" || string("source") != "api") &&
+            (provider != "thirdparty" || string("adapterId") != "newapi-account")) return null
+        return HubLimitSpendDto(
+            currency = currency,
+            today = amount("todaySpend"),
+            week = amount("weekSpend"),
+            month = amount("monthSpend"),
+            allTime = amount("allTimeSpend"),
+            trackingSince = balance.string("trackingSince"),
+            locallyTracked = provider == "mimo",
+        )
+    }
 
     private fun JsonObject.toLimitWindowDto() = HubLimitWindowDto(
         used = double("used")?.takeIf { it.isFinite() && it >= 0 },
@@ -574,6 +586,7 @@ object HubProtocolParser {
         spend = spend?.let {
             io.github.theminionooo.tokenmonitor.domain.LimitSpend(
                 it.currency, it.today, it.week, it.month, it.allTime, it.trackingSince, it.locallyTracked,
+                searchSpend = it.searchSpend, fetchSpend = it.fetchSpend,
             )
         },
         resetCredits = resetCredits?.let { credits -> io.github.theminionooo.tokenmonitor.domain.ResetCredits(
