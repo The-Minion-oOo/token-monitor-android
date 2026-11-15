@@ -101,9 +101,13 @@ downloaded release bundle with `--apk <path-to-named-apk>` without `--prepare`.
 
 ## Publishing
 
-I keep the release issue open until publication, documentation and public
-downloads are checked. The code and docs PRs reference it; I check each completed
-item and close the issue at the end.
+I start with the [Android release issue template](../.github/ISSUE_TEMPLATE/release.md)
+and keep its Testing checklist alongside the release steps. The code and docs
+PRs reference the issue. I check each item when I verify it for that release,
+link the CI runs and published release, and close the issue after checking
+publication, documentation and public downloads. I preserve existing items and
+their status when updating the issue. If a phone check is deferred, I record
+that separately from the completed emulator checks.
 
 The manually triggered **Android release** workflow runs only from `main`.
 Before restoring signing material, `tools/release-preflight.mjs` confirms that

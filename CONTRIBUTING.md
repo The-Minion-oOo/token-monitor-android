@@ -36,9 +36,15 @@ keep it that way.
 
 4. Exercise the change on an emulator or phone. For visual changes, capture a
    screenshot from the fixture Hub, never from a real Hub.
-5. Open a pull request against `main`. Describe what changed and why, what you
-   ran, and attach the screenshot for UI work. CI must be green before merge.
+5. Open a pull request against `main`. In **Summary**, describe the change and
+   why it matters, and link the related issue. In **Validation**, use the
+   checklist to track the checks that apply. Mark a check after it passes and
+   record the result and where it ran. Attach the test-data screenshot for UI
+   work. CI must be green before merge.
 6. Squash-merge. The pull request title becomes the commit subject.
+
+Use the [Android release issue template](.github/ISSUE_TEMPLATE/release.md) to
+track release checks that span the code PR, publishing and the docs PR.
 
 ## Commit messages and pull requests
 
@@ -58,6 +64,7 @@ does not explain the why. No ticket jargon or severity labels.
 ## Reporting problems
 
 Open an issue with the app version (Settings → App updates), the desktop
-Token Monitor version, what you expected, and what happened. Reproduce with
-the fixture Hub when you can. Do not paste a Hub secret, an unredacted account
-email, or a private network address into an issue.
+Token Monitor version, the shortest steps that show the problem, what you
+expected, and what happened. Reproduce with the fixture Hub when you can.
+Do not paste a Hub secret, an unredacted account email, or a private network
+address into an issue.

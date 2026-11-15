@@ -4,7 +4,7 @@ title: ""
 body:
   - type: markdown
     attributes:
-      value: "Please don't paste your Hub secret, private addresses, account email, or real device and project names. For vulnerabilities, read SECURITY.md."
+      value: "Please don't paste your Hub secret, private addresses, account email, or real device and project names. For vulnerabilities, see the [security policy](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/SECURITY.md)."
   - type: input
     id: version
     attributes:
@@ -16,17 +16,31 @@ body:
     id: device
     attributes:
       label: Phone, Android version and launcher
-      description: For widgets, include home-screen grid and text-size settings.
+      description: For widgets, include home-screen grid and text-size settings. For connection issues, include the connection type (Tailscale, home Wi-Fi or HTTPS).
     validations:
       required: true
   - type: textarea
     id: reproduce
     attributes:
-      label: Steps, expected result and actual result
+      label: Steps to reproduce
+      description: Give the shortest sequence that shows the issue. If it happens occasionally, say how often.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened?
+      description: Describe what you saw, including any error text or how long you waited.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
     validations:
       required: true
   - type: textarea
     id: evidence
     attributes:
-      label: Screenshot or test-data reproduction
-      description: Check the image before attaching it. Share no private connection details.
+      label: Evidence or related issues (optional)
+      description: Include a screenshot with private details removed, a test-data example or a link to a related issue.
