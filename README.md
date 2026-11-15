@@ -28,9 +28,9 @@
 
 ## The desktop dashboard, made mobile
 
-**New in v0.92.0 r1:** See each reported Copilot account in Limits. DeepSeek Search and Fetch fees
-appear in their reported currency when the Hub supplies them.
-[Release notes](docs/releases/android-v0.92.0-r1.md).
+**New in v0.93.0 r1:** See international Qoder and Qoder CN as separate tools with their own usage
+and sessions.
+[Release notes](docs/releases/android-v0.93.0-r1.md).
 
 **Also included:** smaller live updates through the released v4 Hub stream,
 session reasoning effort and personal Volcengine quotas. Muse and Ollama
@@ -225,13 +225,13 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 | | |
 | --- | --- |
-| Current release | [Android v0.92.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.92.0-r1) (`920001`) |
+| Current release | [Android v0.93.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.93.0-r1) (`930001`) |
 | Desktop baseline | [Token Monitor v0.93.0](https://github.com/Javis603/token-monitor/releases/tag/v0.93.0) |
 | Minimum Android version | Android 8.0 |
 
 I checked the released Node and Worker Hubs, Android tests and emulators.
-The signed APK upgraded v0.91.0 r1 in place on an Android 8 emulator.
-I haven’t tested v0.92.0 r1 on my phone. [Validation](docs/VALIDATION.md).
+The signed APK upgraded v0.92.0 r1 in place on an Android 8 emulator.
+I haven’t tested v0.93.0 r1 on my phone. [Validation](docs/VALIDATION.md).
 
 Android-only updates increment the release revision while keeping the verified
 desktop version. [Upstream pin](upstream.json) · [Release notes](CHANGELOG.md)

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.93.0 r1 — 2026-11-15
+
 - Show international Qoder and Qoder CN as separate tools with their own usage and sessions.
 - Verify that Android can read the replacement Worker’s snapshot after the old stream closes.
 
