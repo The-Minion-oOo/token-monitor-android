@@ -1,0 +1,688 @@
+{
+  "updatedAt": "2026-11-15T16:38:01.611Z",
+  "periods": {
+    "today": {
+      "capabilities": {
+        "tokenComponents": false,
+        "throughput": false
+      },
+      "totalTokens": 130,
+      "costUsd": 0,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "outputTokens": 0,
+      "unclassifiedTokens": 130,
+      "timedTokens": 0,
+      "timedOutputTokens": 0,
+      "timedDurationMs": 0,
+      "clients": {
+        "qoder": 90,
+        "qodercn": 40
+      },
+      "clientCosts": {},
+      "clientCacheReads": {},
+      "clientCacheWrites": {},
+      "clientOutputs": {},
+      "clientUnclassifiedTokens": {
+        "qoder": 90,
+        "qodercn": 40
+      },
+      "models": {},
+      "modelCosts": {},
+      "modelCacheReads": {},
+      "modelCacheWrites": {},
+      "modelOutputs": {},
+      "modelUnclassifiedTokens": {},
+      "clientModels": {},
+      "clientModelCosts": {},
+      "projects": {},
+      "sessions": {
+        "qoder:demo-global": {
+          "client": "qoder",
+          "sessionId": "demo-global",
+          "totalTokens": 90,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "demo-model": 90
+          },
+          "modelCosts": {},
+          "providers": {}
+        },
+        "qodercn:demo-cn": {
+          "client": "qodercn",
+          "sessionId": "demo-cn",
+          "totalTokens": 40,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "demo-model": 40
+          },
+          "modelCosts": {},
+          "providers": {}
+        }
+      }
+    },
+    "month": {
+      "capabilities": {
+        "tokenComponents": false,
+        "throughput": false
+      },
+      "totalTokens": 130,
+      "costUsd": 0,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "outputTokens": 0,
+      "unclassifiedTokens": 130,
+      "timedTokens": 0,
+      "timedOutputTokens": 0,
+      "timedDurationMs": 0,
+      "clients": {
+        "qoder": 90,
+        "qodercn": 40
+      },
+      "clientCosts": {},
+      "clientCacheReads": {},
+      "clientCacheWrites": {},
+      "clientOutputs": {},
+      "clientUnclassifiedTokens": {
+        "qoder": 90,
+        "qodercn": 40
+      },
+      "models": {},
+      "modelCosts": {},
+      "modelCacheReads": {},
+      "modelCacheWrites": {},
+      "modelOutputs": {},
+      "modelUnclassifiedTokens": {},
+      "clientModels": {},
+      "clientModelCosts": {},
+      "projects": {},
+      "sessions": {
+        "qoder:demo-global": {
+          "client": "qoder",
+          "sessionId": "demo-global",
+          "totalTokens": 90,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "demo-model": 90
+          },
+          "modelCosts": {},
+          "providers": {}
+        },
+        "qodercn:demo-cn": {
+          "client": "qodercn",
+          "sessionId": "demo-cn",
+          "totalTokens": 40,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "demo-model": 40
+          },
+          "modelCosts": {},
+          "providers": {}
+        }
+      }
+    },
+    "allTime": {
+      "capabilities": {
+        "tokenComponents": false,
+        "throughput": false
+      },
+      "totalTokens": 130,
+      "costUsd": 0,
+      "cacheReadTokens": 0,
+      "cacheWriteTokens": 0,
+      "outputTokens": 0,
+      "unclassifiedTokens": 130,
+      "timedTokens": 0,
+      "timedOutputTokens": 0,
+      "timedDurationMs": 0,
+      "clients": {
+        "qoder": 90,
+        "qodercn": 40
+      },
+      "clientCosts": {},
+      "clientCacheReads": {},
+      "clientCacheWrites": {},
+      "clientOutputs": {},
+      "clientUnclassifiedTokens": {
+        "qoder": 90,
+        "qodercn": 40
+      },
+      "models": {},
+      "modelCosts": {},
+      "modelCacheReads": {},
+      "modelCacheWrites": {},
+      "modelOutputs": {},
+      "modelUnclassifiedTokens": {},
+      "clientModels": {},
+      "clientModelCosts": {},
+      "projects": {},
+      "sessions": {
+        "qoder:demo-global": {
+          "client": "qoder",
+          "sessionId": "demo-global",
+          "totalTokens": 90,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "demo-model": 90
+          },
+          "modelCosts": {},
+          "providers": {}
+        },
+        "qodercn:demo-cn": {
+          "client": "qodercn",
+          "sessionId": "demo-cn",
+          "totalTokens": 40,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "",
+          "sessionKind": "",
+          "models": {
+            "demo-model": 40
+          },
+          "modelCosts": {},
+          "providers": {}
+        }
+      }
+    }
+  },
+  "devices": [
+    {
+      "deviceId": "synthetic-qoder-editions",
+      "hostname": "Synthetic desktop",
+      "platform": "linux",
+      "agentVersion": "0.93.0",
+      "agentRuntime": "",
+      "updatedAt": "2026-11-15T16:37:59.577Z",
+      "receivedAt": "2026-11-15T16:38:01.611Z",
+      "ageMs": 0,
+      "stale": false,
+      "trackedClients": [
+        "qoder",
+        "qodercn"
+      ],
+      "periods": {
+        "today": {
+          "capabilities": {
+            "tokenComponents": false,
+            "throughput": false
+          },
+          "totalTokens": 130,
+          "costUsd": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 0,
+          "unclassifiedTokens": 130,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "clients": {
+            "qoder": 90,
+            "qodercn": 40
+          },
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {},
+          "clientUnclassifiedTokens": {
+            "qoder": 90,
+            "qodercn": 40
+          },
+          "models": {},
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {},
+          "modelUnclassifiedTokens": {},
+          "clientModels": {},
+          "clientModelCosts": {},
+          "projects": {},
+          "sessions": {
+            "qoder:demo-global": {
+              "client": "qoder",
+              "sessionId": "demo-global",
+              "totalTokens": 90,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {
+                "demo-model": 90
+              },
+              "modelCosts": {},
+              "providers": {}
+            },
+            "qodercn:demo-cn": {
+              "client": "qodercn",
+              "sessionId": "demo-cn",
+              "totalTokens": 40,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {
+                "demo-model": 40
+              },
+              "modelCosts": {},
+              "providers": {}
+            }
+          }
+        },
+        "month": {
+          "capabilities": {
+            "tokenComponents": false,
+            "throughput": false
+          },
+          "totalTokens": 130,
+          "costUsd": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 0,
+          "unclassifiedTokens": 130,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "clients": {
+            "qoder": 90,
+            "qodercn": 40
+          },
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {},
+          "clientUnclassifiedTokens": {
+            "qoder": 90,
+            "qodercn": 40
+          },
+          "models": {},
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {},
+          "modelUnclassifiedTokens": {},
+          "clientModels": {},
+          "clientModelCosts": {},
+          "projects": {},
+          "sessions": {
+            "qoder:demo-global": {
+              "client": "qoder",
+              "sessionId": "demo-global",
+              "totalTokens": 90,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {
+                "demo-model": 90
+              },
+              "modelCosts": {},
+              "providers": {}
+            },
+            "qodercn:demo-cn": {
+              "client": "qodercn",
+              "sessionId": "demo-cn",
+              "totalTokens": 40,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {
+                "demo-model": 40
+              },
+              "modelCosts": {},
+              "providers": {}
+            }
+          }
+        },
+        "allTime": {
+          "capabilities": {
+            "tokenComponents": false,
+            "throughput": false
+          },
+          "totalTokens": 130,
+          "costUsd": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 0,
+          "unclassifiedTokens": 130,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "clients": {
+            "qoder": 90,
+            "qodercn": 40
+          },
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {},
+          "clientUnclassifiedTokens": {
+            "qoder": 90,
+            "qodercn": 40
+          },
+          "models": {},
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {},
+          "modelUnclassifiedTokens": {},
+          "clientModels": {},
+          "clientModelCosts": {},
+          "projects": {},
+          "sessions": {
+            "qoder:demo-global": {
+              "client": "qoder",
+              "sessionId": "demo-global",
+              "totalTokens": 90,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {
+                "demo-model": 90
+              },
+              "modelCosts": {},
+              "providers": {}
+            },
+            "qodercn:demo-cn": {
+              "client": "qodercn",
+              "sessionId": "demo-cn",
+              "totalTokens": 40,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {
+                "demo-model": 40
+              },
+              "modelCosts": {},
+              "providers": {}
+            }
+          }
+        }
+      },
+      "limits": {
+        "updatedAt": null,
+        "refreshMs": 300000,
+        "providers": [
+          {
+            "provider": "qoder",
+            "accountKey": "sha256:131ca9cb3449d69cec9e92e69adc05b3489d0c10619413197563e7ca039a2146",
+            "accountKeyAliases": [
+              "sha256:0e23ff94a9dcf61f7b7a9fcc5b45b274bd3ecf8a4fb1b8e7eb9fb8db8087e781"
+            ],
+            "accountLabel": "Teams",
+            "planLabel": "",
+            "accountName": "",
+            "accountEmail": "",
+            "workspaceKind": "",
+            "status": "ok",
+            "source": "web",
+            "sourceDetail": "",
+            "updatedAt": "2026-11-15T16:37:59.577Z",
+            "windows": [
+              {
+                "kind": "billing",
+                "label": "Credits",
+                "used": 25,
+                "limit": 100,
+                "remaining": 75,
+                "usedPercent": 25,
+                "remainingPercent": 75,
+                "resetsAt": null,
+                "windowMinutes": null,
+                "resetDescription": "",
+                "detail": "",
+                "currency": null,
+                "showMeter": true
+              }
+            ],
+            "balanceUsd": null,
+            "balance": null,
+            "resetCredits": null,
+            "region": "global"
+          }
+        ]
+      }
+    }
+  ],
+  "projectsIncomplete": false,
+  "limits": {
+    "updatedAt": "2026-11-15T16:38:01.611Z",
+    "providers": [
+      {
+        "provider": "qoder",
+        "accountKey": "sha256:131ca9cb3449d69cec9e92e69adc05b3489d0c10619413197563e7ca039a2146",
+        "accountKeyAliases": [
+          "sha256:0e23ff94a9dcf61f7b7a9fcc5b45b274bd3ecf8a4fb1b8e7eb9fb8db8087e781"
+        ],
+        "accountLabel": "Teams",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "web",
+        "sourceDetail": "",
+        "updatedAt": "2026-11-15T16:37:59.577Z",
+        "windows": [
+          {
+            "kind": "billing",
+            "label": "Credits",
+            "used": 25,
+            "limit": 100,
+            "remaining": 75,
+            "usedPercent": 25,
+            "remainingPercent": 75,
+            "resetsAt": null,
+            "windowMinutes": null,
+            "resetDescription": "",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "global",
+        "sourceDeviceId": "synthetic-qoder-editions",
+        "stale": false
+      }
+    ]
+  },
+  "staleAfterMs": 600000,
+  "historyPreview": {
+    "daily": [],
+    "monthly": [],
+    "summary": {
+      "totalTokens": 0,
+      "totalCost": 0,
+      "activeDays": 0,
+      "activeDaysComplete": false,
+      "currentStreak": 0,
+      "longestStreak": 0,
+      "peakDayTokens": 0,
+      "favoriteModel": "",
+      "messages": 0,
+      "activeTimeMs": 0
+    }
+  },
+  "historyRevision": "72ceb6485a00d09c",
+  "deviceHistoryRevision": "e61ff399abf2644d",
+  "subscriptionsUpdatedAt": "",
+  "syncSettingsRevisions": {
+    "modelAliases": 0,
+    "customPricing": 0
+  }
+}

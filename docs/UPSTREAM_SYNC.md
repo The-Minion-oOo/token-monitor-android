@@ -2,8 +2,10 @@
 
 ## Version rule
 
-Android v0.92.0 r1 targets desktop tag `v0.92.0`, peeled commit
-`001f1d4710f6bdcaa1a56f8836335153ca5babf8`, in Gradle and `upstream.json`.
+Android v0.93.0 r1 targets desktop tag `v0.93.0`, peeled commit
+`a88c69504b63f5fd7f36f87a32f4c762c7b36120`, in Gradle and `upstream.json`.
+I checked international and CN Qoder usage, quota identity across sign-ins,
+and stream replacement against the released Hubs.
 I checked Copilot account retention, DeepSeek tool fees, and live stream
 recovery with the released Node and Worker Hubs.
 I verified the expanded subscription currency list and larger desktop uploads

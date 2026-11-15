@@ -1,7 +1,11 @@
-# Desktop parity for v0.92.0
+# Desktop parity for v0.93.0
 
-I compare Android with desktop tag `v0.92.0`, peeled commit
-`001f1d4710f6bdcaa1a56f8836335153ca5babf8`. Android reads the usage collected by desktop.
+I compare Android with desktop tag `v0.93.0`, peeled commit
+`a88c69504b63f5fd7f36f87a32f4c762c7b36120`. Android reads the usage collected by desktop.
+
+**Android v0.93.0 r1** shows Qoder and Qoder CN as separate tools. Each
+edition keeps the usage and sessions the Hub assigns to it. Android reads one
+paired Hub. Saved Hub profiles and switching are available on desktop.
 
 **Android v0.92.0 r1** displays each reported Copilot account and its quota
 or sign-in status. DeepSeek Search and Fetch fees appear in Limits when the

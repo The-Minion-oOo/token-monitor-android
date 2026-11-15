@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Show international Qoder and Qoder CN as separate tools with their own usage and sessions.
+- Verify that Android can read the replacement Worker’s snapshot after the old stream closes.
+
 ## v0.92.0 r1 — 2026-11-13
 
 - Show Copilot account quotas and sign-in status in separate rows.
