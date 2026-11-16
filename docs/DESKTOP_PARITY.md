@@ -1,7 +1,9 @@
-# Desktop parity for v0.93.0
+# Desktop parity for v0.93.1
 
-I compare Android with desktop tag `v0.93.0`, peeled commit
-`a88c69504b63f5fd7f36f87a32f4c762c7b36120`. Android reads the usage collected by desktop.
+I compare Android with desktop tag `v0.93.1`, peeled commit
+`55cd6bfb0e404cac25ac2ba5590c8a82ca16acbb`. Android reads the usage collected by desktop.
+
+**Android v0.93.1 r1** shows the combined Projects total when desktop groups usage from a Git worktree with its parent repository. Project discovery and account setup run on desktop.
 
 **Android v0.93.0 r1** shows Qoder and Qoder CN as separate tools. Each
 edition keeps the usage and sessions the Hub assigns to it. Android reads one

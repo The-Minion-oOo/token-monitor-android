@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Verify desktop v0.93.1 usage grouped by parent project across linked Git worktrees.
+
 ## v0.93.0 r1 — 2026-11-15
 
 - Show international Qoder and Qoder CN as separate tools with their own usage and sessions.

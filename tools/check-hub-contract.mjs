@@ -1,3 +1,4 @@
+import { checkV0931Projects } from "./check-v0931-contract.mjs";
 import { checkV090Data } from "./check-v090-contract.mjs";
 import { checkV091Reads } from "./check-v091-contract.mjs";
 import { checkV092Limits, checkV092WorkerRecovery } from "./check-v092-contract.mjs";
@@ -690,6 +691,9 @@ async function isolatedContract(source, output, upstream) {
         };
         responses["v093-qoder.json"] = v093.stats;
         responses["v093-replacement.json"] = await checkV093WorkerReplacement(source);
+        const v0931 = await checkV0931Projects(require, { createHub, source, secret, device, now });
+        limitChecks.cases["v0931-projects"] = { records: [v0931.record], providers: [] };
+        responses["v0931-projects.json"] = v0931.stats;
         await checkV081Streams(require, source, output, upstream);
         await checkV092WorkerRecovery(require, source, output);
         await mkdir(output, { recursive: true });

@@ -821,6 +821,13 @@ and an expired Copilot login on the same device and the optional DeepSeek fees.
 I also stall a Worker stream writer, check the bounded queue and replay the
 recovery frames through Android’s receiver.
 
+### Desktop v0.93.1 checks
+
+The harness builds synthetic Git worktree metadata in an isolated source export,
+then calls the released desktop project resolver and project rollup. Android's
+fixtures verify that the Node and Worker responses contain one project with both
+tools' usage and retain both sessions.
+
 ### Desktop v0.93.0 checks
 
 I check both Qoder editions through the released Node Hub and Worker, verify
