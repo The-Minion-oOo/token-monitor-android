@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.93.1 r1 — 2026-11-16
+
 - Verify desktop v0.93.1 usage grouped by parent project across linked Git worktrees.
 
 ## v0.93.0 r1 — 2026-11-15
