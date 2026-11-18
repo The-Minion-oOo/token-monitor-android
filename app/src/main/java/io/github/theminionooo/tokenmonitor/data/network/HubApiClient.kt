@@ -127,6 +127,8 @@ internal class HubApiClient(
 
     fun getSubscriptions(connection: HubConnection): String = get(connection, "/api/subscriptions")
     fun getModelAliases(connection: HubConnection): String? = getOptional(connection, "/api/sync/settings/modelAliases")
+    fun getLimitAccountPresentation(connection: HubConnection): String? =
+        getOptional(connection, "/api/sync/settings/limitAccountPresentation")
 
     /** Reads the changing aggregate only; detailed history remains in the initial snapshot. */
     fun getStats(connection: HubConnection): String = get(connection, "/api/stats")

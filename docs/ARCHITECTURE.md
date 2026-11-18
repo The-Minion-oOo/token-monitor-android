@@ -51,6 +51,14 @@ formatting supplies the full warning in app rows and a compact marker in existin
 widget slots. Optional Dots coverage maps to a session flag; it does not introduce
 a phone collector, new permission or another connection owner.
 
+A visible dashboard reads the authenticated account-presentation document when
+stats advertise a new revision. Home uses the shared names, and Limits also
+follows the shared order within each provider. A missing document leaves the
+Hub's original account names and the app's quota ordering in place. The document
+is held in memory for the current pairing. Widgets do not request it. Android
+uses the aggregate account rows as reported and retains optional quota product
+IDs and Alibaba console variants for display.
+
 New API account billing periods map to the existing Limits spend rows. They keep
 their native currency and are distinguished from MiMo's locally tracked daily
 and weekly deltas. Missing or invalid values stay absent; reported zero is retained.

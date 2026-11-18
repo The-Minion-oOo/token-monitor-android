@@ -290,4 +290,6 @@ internal fun limitAccountIdentity(account: io.github.theminionooo.tokenmonitor.d
         listOf(account.accountName, account.accountEmail, account.productLabel).joinToString(":")
     } + if (account.provider == "muse") {
         if (account.source == "web") ":source:web" else ":device:${account.sourceDeviceId}"
+    } else if (account.provider == "alibaba" && account.region.isNotBlank()) {
+        ":region:${account.region}"
     } else ""

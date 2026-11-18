@@ -124,7 +124,7 @@ or normalize the label to make an assertion pass.
 Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite now contains **132 tests** per emulator. The report checker
+The interaction suite expects **153 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
 

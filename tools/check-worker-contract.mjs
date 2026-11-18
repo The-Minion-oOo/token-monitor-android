@@ -1,3 +1,4 @@
+import { checkLimitAccountReads } from "./check-limit-accounts.mjs";
 import { checkModelAliasReads } from "./check-model-aliases.mjs";
 import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
@@ -164,6 +165,7 @@ export async function checkWorkerContract(source, output, upstream, limitCases =
         }
         Object.assign(responses, await checkV087DeltaReads(request, sample.deviceId, upstream.version));
         Object.assign(responses, await checkV091Reads(request, upstream.version));
+        Object.assign(responses, await checkLimitAccountReads(hub, request, at(0)));
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) {
             assert.ok(!JSON.stringify(value).includes("NEVER_EXPORT"));

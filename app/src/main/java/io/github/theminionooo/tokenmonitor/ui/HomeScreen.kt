@@ -89,6 +89,7 @@ import io.github.theminionooo.tokenmonitor.domain.DeviceUsage
 import io.github.theminionooo.tokenmonitor.domain.HistoryPoint
 import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
 import io.github.theminionooo.tokenmonitor.domain.LimitAccount
+import io.github.theminionooo.tokenmonitor.domain.LimitAccountPresentation
 import io.github.theminionooo.tokenmonitor.domain.ProjectUsage
 import io.github.theminionooo.tokenmonitor.domain.SessionUsage
 import io.github.theminionooo.tokenmonitor.domain.ServiceHealth
@@ -110,10 +111,16 @@ internal fun LazyListScope.homeItems(
     period: DashboardPeriod,
     displayOptions: DisplayOptions,
     onChoose: (DashboardDestination) -> Unit,
+    presentation: LimitAccountPresentation?,
 ) {
     displayOptions.visibleHomeModules.forEach { module ->
         when (module) {
-            "Limits" -> item { DesktopModule(appText(R.string.ui_limits_83fa9, "LIMITS"), DashboardDestination.Limits, onChoose) { HomeLimits(snapshot.stats.limits.providers, displayOptions) } }
+            "Limits" -> item {
+                DesktopModule(appText(R.string.ui_limits_83fa9, "LIMITS"), DashboardDestination.Limits, onChoose) {
+                    val accounts = snapshot.stats.limits.providers
+                    HomeLimits(presentation?.applyNames(accounts) ?: accounts, displayOptions)
+                }
+            }
             "Tools" -> item { DesktopModule(appText(R.string.ui_tools_9d0e5, "TOOLS"), DashboardDestination.Tools, onChoose) { HomeBreakdown(usage.clients, usage.clientCosts, displayOptions.rankingMetric, unpriced = usage.clientUnpricedTokens, count = displayOptions.homeListCount("Tools")) } }
             "Devices" -> item { DesktopModule(appText(R.string.ui_devices_51f4a, "DEVICES"), DashboardDestination.Devices, onChoose) { HomeDevices(snapshot.stats.devices, period = period, aggregateUsage = usage, count = displayOptions.homeListCount("Devices")) } }
             "Models" -> item { DesktopModule(appText(R.string.ui_models_441ba, "MODELS"), DashboardDestination.Models, onChoose) { HomeBreakdown(usage.models, usage.modelCosts, displayOptions.rankingMetric, modelRows = true, unpriced = usage.modelUnpricedTokens, count = displayOptions.homeListCount("Models")) } }
@@ -184,7 +191,7 @@ internal fun HomeLimits(accounts: List<LimitAccount>, displayOptions: DisplayOpt
                 Column(modifier = Modifier.weight(1f)) {
                     Text(limitDisplayProvider(account).ifBlank { appText(R.string.ui_provider_7ceee, "Provider") }.providerLabel(), color = Ink, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
                     val email = account.accountEmail.takeIf { displayOptions.showAccountEmails }.orEmpty()
-                    val meta = listOf(account.productLabel, account.accountName, account.plan, email).filter { it.isNotBlank() }.joinToString(" · ")
+                    val meta = listOf(account.productLabel, account.accountName, account.plan, alibabaRegionLabel(account), email).filterNotNull().filter { it.isNotBlank() }.joinToString(" · ")
                     if (meta.isNotBlank()) Text(meta, color = Muted, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
             }
