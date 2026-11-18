@@ -555,7 +555,7 @@ ViewModel pass-through, and the control and collapsed summary in Settings.
 - **Android checks:** documentation links, release metadata, Node tooling tests,
   JVM tests, lint, and debug assembly on pull requests and pushes to `main`.
 - **Android interaction checks:** the full preview suite on API 36 and API 37
-  (SDK package `37.0`), with a JUnit report check requiring all 150 distinct tests
+  (SDK package `37.0`), with a JUnit report check requiring all 151 distinct tests
   and no failures or skips; and optimized APK install/launch/resume on API 26. Update
   the expected count when adding or removing instrumentation tests. The API 26
   build uses a disposable CI signing key and is not a distributable upgrade.
@@ -820,3 +820,17 @@ and responses, then read the Node Hub and Worker. The fixtures cover a healthy
 and an expired Copilot login on the same device and the optional DeepSeek fees.
 I also stall a Worker stream writer, check the bounded queue and replay the
 recovery frames through Android’s receiver.
+
+### Desktop v0.93.1 checks
+
+The harness builds synthetic Git worktree metadata in an isolated source export,
+then calls the released desktop project resolver and project rollup. Android's
+fixtures verify that the Node and Worker responses contain one project with both
+tools' usage and retain both sessions.
+
+### Desktop v0.93.0 checks
+
+I check both Qoder editions through the released Node Hub and Worker, verify
+that the Qoder collector keeps its account key after a simulated cookie
+rotation, and decode the resulting usage and quotas on Android. I also
+simulate a replaced Worker and feed its new snapshot to Android’s stream reader.

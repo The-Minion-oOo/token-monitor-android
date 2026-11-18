@@ -1,6 +1,8 @@
+import { checkV0931Projects } from "./check-v0931-contract.mjs";
 import { checkV090Data } from "./check-v090-contract.mjs";
 import { checkV091Reads } from "./check-v091-contract.mjs";
 import { checkV092Limits, checkV092WorkerRecovery } from "./check-v092-contract.mjs";
+import { checkV093Qoder, checkV093WorkerReplacement } from "./check-v093-contract.mjs";
 import { checkV089Data } from "./check-v089-contract.mjs";
 import { checkV088Data } from "./check-v088-contract.mjs";
 import { checkModelAliasReads, checkModelAliasResolver } from "./check-model-aliases.mjs";
@@ -18,7 +20,7 @@ import { checkV080Limits } from "./check-v080-limits.mjs";
 
 import { checkV081Limits, checkV081Streams } from "./check-v081-contract.mjs";
 
-import { checkV082Usage } from "./check-v082-usage.mjs";
+import { checkV082Usage, usageProjection } from "./check-v082-usage.mjs";
 import { checkV083Limits } from "./check-v083-limits.mjs";
 import { checkV084Limits } from "./check-v084-limits.mjs";
 import { checkV0841Limits } from "./check-v0841-limits.mjs";
@@ -682,6 +684,16 @@ async function isolatedContract(source, output, upstream) {
         const v092 = await checkV092Limits(require, { createHub, source, secret, device, now });
         limitChecks.cases["v092-limits"] = { records: v092.records, providers: v092.stats.limits.providers };
         responses["v092-limits.json"] = v092.stats;
+        const v093 = await checkV093Qoder(require, { createHub, source, secret, device, now });
+        limitChecks.cases["v093-qoder"] = {
+            records: v093.records, providers: v093.stats.limits.providers,
+            usage: usageProjection(v093.stats.periods),
+        };
+        responses["v093-qoder.json"] = v093.stats;
+        responses["v093-replacement.json"] = await checkV093WorkerReplacement(source);
+        const v0931 = await checkV0931Projects(require, { createHub, source, secret, device, now });
+        limitChecks.cases["v0931-projects"] = { records: [v0931.record], providers: [] };
+        responses["v0931-projects.json"] = v0931.stats;
         await checkV081Streams(require, source, output, upstream);
         await checkV092WorkerRecovery(require, source, output);
         await mkdir(output, { recursive: true });

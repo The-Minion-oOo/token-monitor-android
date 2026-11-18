@@ -2,8 +2,11 @@
 
 ## Version rule
 
-Android v0.92.0 r1 targets desktop tag `v0.92.0`, peeled commit
-`001f1d4710f6bdcaa1a56f8836335153ca5babf8`, in Gradle and `upstream.json`.
+Android v0.93.1 r1 targets desktop tag `v0.93.1`, peeled commit
+`55cd6bfb0e404cac25ac2ba5590c8a82ca16acbb`, in Gradle and `upstream.json`.
+I checked that the Projects totals and sessions from a repository and linked worktree agree on the released Node and Worker Hubs.
+I checked international and CN Qoder usage, quota identity across sign-ins,
+and stream replacement against the released Hubs.
 I checked Copilot account retention, DeepSeek tool fees, and live stream
 recovery with the released Node and Worker Hubs.
 I verified the expanded subscription currency list and larger desktop uploads
@@ -37,7 +40,7 @@ The v0.81.0 r2 release introduced Android-only route, stream and
 background-refresh hardening from #106. Those protections are retained.
 
 The latest published release is
-[`android-v0.92.0-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.92.0-r1),
+[`android-v0.93.1-r1`](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.93.1-r1),
 recorded with its source commit in `release.json`.
 It retains opt-in HTTPS, optional background widget refresh and the
 r5 physical-network check underneath Tailscale. Earlier phone evidence applies
