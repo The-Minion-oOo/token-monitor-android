@@ -1,8 +1,5 @@
 package io.github.theminionooo.tokenmonitor.data
 
-import io.github.theminionooo.tokenmonitor.domain.ModelAliasSettings
-import io.github.theminionooo.tokenmonitor.data.protocol.decodeModelAliases
-
 import android.content.Context
 import android.os.SystemClock
 import io.github.theminionooo.tokenmonitor.data.network.BackoffPolicy
@@ -28,6 +25,8 @@ import io.github.theminionooo.tokenmonitor.data.network.LocalNetworkAccess
 import io.github.theminionooo.tokenmonitor.data.network.prepareHomeAddressRepair
 import io.github.theminionooo.tokenmonitor.data.network.WireHubSnapshot
 import io.github.theminionooo.tokenmonitor.data.protocol.HubProtocolParser
+import io.github.theminionooo.tokenmonitor.data.protocol.decodeLimitAccountPresentation
+import io.github.theminionooo.tokenmonitor.data.protocol.decodeModelAliases
 import io.github.theminionooo.tokenmonitor.data.protocol.HubStreamProtocol
 import io.github.theminionooo.tokenmonitor.data.protocol.encodeStreamStats
 import io.github.theminionooo.tokenmonitor.data.storage.SecureConnectionStore
@@ -37,6 +36,8 @@ import io.github.theminionooo.tokenmonitor.domain.HubConnection
 import io.github.theminionooo.tokenmonitor.domain.HubHistory
 import io.github.theminionooo.tokenmonitor.domain.HubSubscriptions
 import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
+import io.github.theminionooo.tokenmonitor.domain.LimitAccountPresentation
+import io.github.theminionooo.tokenmonitor.domain.ModelAliasSettings
 import io.github.theminionooo.tokenmonitor.domain.HubStats
 import io.github.theminionooo.tokenmonitor.domain.DeviceUsage
 import kotlinx.coroutines.CancellationException
@@ -87,6 +88,7 @@ internal data class HubRepositoryState(
     val widgetLiveActive: Boolean = false,
     val message: String? = null,
     val modelAliases: ModelAliasSettings? = null,
+    val limitAccountPresentation: LimitAccountPresentation? = null,
     /** The Hub answered 401; retrying cannot help until the pairing changes. */
     val secretRejected: Boolean = false,
 )
@@ -197,6 +199,8 @@ internal class HubRepository(
     private var aliasJob: Job? = null
     private var aliasRecord: ModelAliasSettings? = null
     private val aliasReads = AliasReadGate()
+    private var limitPresentationJob: Job? = null
+    private val limitPresentationReads = AliasReadGate()
     private val streamUpdates = StreamUpdateCoalescer()
     private val streamApplyLock = Mutex()
     private var streamFlushJob: Job? = null
@@ -419,6 +423,8 @@ internal class HubRepository(
             if (changedHub) {
                 aliasRecord = null
                 aliasReads.reset()
+                limitPresentationReads.reset()
+                _state.update { it.copy(limitAccountPresentation = null) }
             }
             connection = candidate
             activeUrl = url
@@ -453,6 +459,7 @@ internal class HubRepository(
         aliasLoadJob?.cancel()
         aliasRecord = null
         aliasReads.reset()
+        limitPresentationReads.reset()
         widgetRefresh.clearRecord()
         WidgetRefreshScheduler.reconcileAsync(appContext)
         diskQueue.enqueue { cache.clear(); WidgetUpdateCoordinator.refresh(appContext) }
@@ -517,7 +524,10 @@ internal class HubRepository(
                         if (generation != token) break
                         activeUrl = url
                         timing.measure(HubTimingStage.PUBLISH, run = run) { applySuccess(wire, snapshot) }
-                        if (mode == HubWorkMode.DashboardStreaming) refreshModelAliases(saved, api, token)
+                        if (mode == HubWorkMode.DashboardStreaming) {
+                            refreshModelAliases(saved, api, token)
+                            refreshLimitAccountPresentation(saved, api, token)
+                        }
                         connected = true
                         when (mode) {
                             HubWorkMode.DashboardStreaming -> try {
@@ -535,6 +545,7 @@ internal class HubRepository(
                                                 scheduleStreamFlush(saved, api, token)
                                                 refreshSubscriptions(saved, api, token)
                                                 refreshModelAliases(saved, api, token)
+                                                refreshLimitAccountPresentation(saved, api, token)
                                             }
                                         } },
                                     )
@@ -621,6 +632,9 @@ internal class HubRepository(
         if (aliasJob?.isActive == true) aliasReads.reset()
         aliasJob?.cancel()
         aliasJob = null
+        if (limitPresentationJob?.isActive == true) limitPresentationReads.reset()
+        limitPresentationJob?.cancel()
+        limitPresentationJob = null
         cancelStreamFlush()
         _state.update { it.copy(refreshing = false, streamActive = false, widgetLiveActive = false) }
         pendingCacheWrite?.let { persist(it, force = true) }
@@ -681,6 +695,8 @@ internal class HubRepository(
             allowLocalNetwork = connection?.allowLocalNetwork ?: false,
             allowPublicHttps = connection?.allowPublicHttps ?: false, snapshot = snapshot,
             modelAliases = aliasRecord?.takeIf { it.revision == snapshot.stats.modelAliasRevision },
+            limitAccountPresentation = _state.value.limitAccountPresentation
+                ?.takeIf { it.revision == snapshot.stats.limitAccountPresentationRevision },
             localNetworkPermissionRequired = needsLocalPermission(),
         )
     }
@@ -706,6 +722,7 @@ internal class HubRepository(
             applyStreamEvents(streamUpdates.drain(SystemClock.elapsedRealtime()), token)
             refreshSubscriptions(saved, api, token)
             refreshModelAliases(saved, api, token)
+            refreshLimitAccountPresentation(saved, api, token)
             // An update that arrived while this one was decoding is held; schedule it before finishing.
             streamFlushJob = null
             scheduleStreamFlush(saved, api, token)
@@ -812,6 +829,59 @@ internal class HubRepository(
         reconnectDelay.recovered()
     }
 
+    private fun refreshLimitAccountPresentation(saved: HubConnection, api: HubApiClient, token: Long) {
+        if (desiredWorkMode != HubWorkMode.DashboardStreaming || generation != token) return
+        val revision = _state.value.snapshot?.stats?.limitAccountPresentationRevision
+        if (revision == null || revision == 0L) {
+            limitPresentationReads.reset()
+            if (_state.value.limitAccountPresentation != null) {
+                _state.update { it.copy(limitAccountPresentation = null) }
+            }
+            return
+        }
+        if (limitPresentationJob?.isActive == true ||
+            _state.value.limitAccountPresentation?.revision == revision ||
+            !limitPresentationReads.shouldRead(revision, SystemClock.elapsedRealtime())) return
+        limitPresentationReads.started(revision)
+        val route = activeUrl ?: saved.baseUrl
+        limitPresentationJob = scope.launch {
+            try {
+                val presentation = withContext(Dispatchers.IO) {
+                    api.getLimitAccountPresentation(saved.copy(baseUrl = route))?.let(::decodeLimitAccountPresentation)
+                }
+                ensureActive()
+                if (generation != token || desiredWorkMode != HubWorkMode.DashboardStreaming) return@launch
+                if (presentation != null && presentation.revision == revision &&
+                    _state.value.snapshot?.stats?.limitAccountPresentationRevision == revision) {
+                    _state.update { it.copy(limitAccountPresentation = presentation) }
+                } else if (presentation != null && presentation.revision != revision) {
+                    limitPresentationReads.failed(SystemClock.elapsedRealtime())
+                }
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (error: Exception) {
+                if (generation != token) return@launch
+                if (error is HubApiException && error.statusCode == 401) {
+                    rejectSettingsSecret(error)
+                } else if (error !is HubApiException || error.statusCode >= 500) {
+                    limitPresentationReads.failed(SystemClock.elapsedRealtime())
+                }
+            } finally {
+                if (generation == token) {
+                    limitPresentationJob = null
+                    refreshLimitAccountPresentation(saved, api, token)
+                }
+            }
+        }
+    }
+
+    private fun rejectSettingsSecret(error: HubApiException) {
+        stopForegroundWork()
+        widgetRefresh.failure(System.currentTimeMillis(), true)
+        WidgetRefreshScheduler.reconcileAsync(appContext)
+        _state.update { it.copy(secretRejected = true, message = error.presentation) }
+    }
+
     /** Optional dashboard metadata. Widget modes never enter this request path. */
     private fun refreshModelAliases(saved: HubConnection, api: HubApiClient, token: Long) {
         if (desiredWorkMode != HubWorkMode.DashboardStreaming || generation != token) return
@@ -856,10 +926,7 @@ internal class HubRepository(
             } catch (cancelled: CancellationException) { throw cancelled }
             catch (error: Exception) {
                 if (generation == token && error is HubApiException && error.statusCode == 401) {
-                    stopForegroundWork()
-                    widgetRefresh.failure(System.currentTimeMillis(), true)
-                    WidgetRefreshScheduler.reconcileAsync(appContext)
-                    _state.update { it.copy(secretRejected = true, message = error.presentation) }
+                    rejectSettingsSecret(error)
                 } else {
                     // Raw model names stay visible, and a later stats update may retry after the throttle.
                     aliasReads.failed(SystemClock.elapsedRealtime())

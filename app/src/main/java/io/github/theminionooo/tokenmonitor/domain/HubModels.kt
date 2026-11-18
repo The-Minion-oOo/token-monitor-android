@@ -153,6 +153,7 @@ data class LimitWindow(
     val used: Double? = null,
     val resetDescription: String = "",
     val limit: Double? = null,
+    val productId: String = "",
 )
 
 data class LimitAccount(
@@ -170,6 +171,7 @@ data class LimitAccount(
     val resetCredits: ResetCredits? = null,
     val usageSummary: LimitUsageSummary? = null,
     val source: String = "",
+    val region: String = "",
 )
 
 data class ResetCredits(val availableCount: Long?, val nextExpiresAt: String, val expirations: List<String>, val grants: List<ResetGrant>)
@@ -264,6 +266,7 @@ data class HubStats(
     val subscriptionsUpdatedAt: String = "",
     val modelAliasRevision: Long? = null,
     val staleAfterMs: Long? = null,
+    val limitAccountPresentationRevision: Long? = null,
 )
 
 data class HubSnapshot(

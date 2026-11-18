@@ -46,6 +46,45 @@ class ModelAliasesReconnectTest {
         assertEquals("GET is the only allowed fixture method", 0, server.writes.get())
     }
 
+    @Test fun accountPresentationUsesOnlyAuthenticatedDashboardReads() = withHub { hub, server, owner ->
+        server.presentationRevision = 1
+        instrumentation.runOnMainSync { hub.setDashboardVisible(owner, true) }
+        await { hub.state.value.limitAccountPresentation?.revision == 1L }
+        Thread.sleep(600)
+        assertEquals(1, server.presentationReads.get())
+
+        server.presentationRevision = 2
+        await(15_000) { hub.state.value.limitAccountPresentation?.revision == 2L }
+        assertEquals(2, server.presentationReads.get())
+
+        server.presentationRevision = 3
+        instrumentation.runOnMainSync {
+            hub.setDashboardVisible(owner, false)
+            hub.setWidgetActive(true, SystemClock.elapsedRealtime() + 60_000)
+        }
+        await { hub.state.value.widgetLiveActive && hub.state.value.snapshot?.stats?.limitAccountPresentationRevision == 3L }
+        assertEquals(2, server.presentationReads.get())
+
+        server.presentationStatus = 404
+        instrumentation.runOnMainSync {
+            hub.setWidgetActive(false)
+            hub.setDashboardVisible(owner, true)
+        }
+        await { hub.state.value.streamActive && server.presentationReads.get() == 3 }
+        Thread.sleep(600)
+        assertNull(hub.state.value.limitAccountPresentation)
+        assertNull(hub.state.value.message)
+        assertEquals(3, server.presentationReads.get())
+
+        server.presentationStatus = 401
+        server.presentationRevision = 4
+        await(15_000) { hub.state.value.secretRejected }
+        assertFalse(hub.state.value.streamActive)
+        assertEquals(4, server.presentationReads.get())
+        assertEquals(0, server.credentialErrors.get())
+        assertEquals(0, server.writes.get())
+    }
+
     @Test fun aRestoredAliasRevisionDoesNotTriggerAnotherGet() = withHub(cachedAliases = true) { hub, server, owner ->
         instrumentation.runOnMainSync { hub.setDashboardVisible(owner, true) }
         await { hub.state.value.streamActive && hub.state.value.modelAliases?.revision == 1L }
@@ -220,6 +259,7 @@ class ModelAliasesReconnectTest {
         private val server = ServerSocket(0)
         val port get() = server.localPort
         val aliasReads = AtomicInteger()
+        val presentationReads = AtomicInteger()
         val writes = AtomicInteger()
         val redirectedReads = AtomicInteger()
         val credentialErrors = AtomicInteger()
@@ -229,6 +269,8 @@ class ModelAliasesReconnectTest {
         @Volatile var aliasRoute = true
         @Volatile var aliasStatus = 200
         @Volatile var revision = 1
+        @Volatile var presentationRevision: Int? = null
+        @Volatile var presentationStatus = 200
         @Volatile var failReads = false
         @Volatile var drop = false
         @Volatile var reading = "today"
@@ -254,7 +296,12 @@ class ModelAliasesReconnectTest {
                         "\"liveActivity\":{\"state\":\"$state\",\"observedAt\":\"$now\"}}"
                 } else ""
             val limits = if (reading != "today") """"limits":{"providers":[{"provider":"codex","status":"ok","windows":[{"kind":"session","label":"Session","remainingPercent":5,"showMeter":true}]}]},""" else ""
-            return """{${if (marker) "\"syncSettingsRevisions\":{\"modelAliases\":$revision}," else ""}"updatedAt":"$now",$limits"periods":{"today":{"totalTokens":100,"models":{"provider/gpt-5":60,"gpt-5":40},"sessions":{$sessions}}}}"""
+            val revisions = listOfNotNull(
+                if (marker) "\"modelAliases\":$revision" else null,
+                presentationRevision?.let { "\"limitAccountPresentation\":$it" },
+            ).joinToString(",")
+            val markerJson = if (revisions.isEmpty()) "" else "\"syncSettingsRevisions\":{$revisions},"
+            return """{$markerJson"updatedAt":"$now",$limits"periods":{"today":{"totalTokens":100,"models":{"provider/gpt-5":60,"gpt-5":40},"sessions":{$sessions}}}}"""
         }
 
         private fun respond(socket: Socket) {
@@ -264,7 +311,7 @@ class ModelAliasesReconnectTest {
             if (request[0] != "GET") writes.incrementAndGet()
             val path = request[1]
             val headers = generateSequence { reader.readLine() }.takeWhile { it.isNotEmpty() }.toList()
-            if (path == "/api/sync/settings/modelAliases" && headers.none { it.equals("Authorization: Bearer synthetic-test", ignoreCase = true) }) credentialErrors.incrementAndGet()
+            if (path.startsWith("/api/sync/settings/") && headers.none { it.equals("Authorization: Bearer synthetic-test", ignoreCase = true) }) credentialErrors.incrementAndGet()
             if (path == "/api/redirect-target") redirectedReads.incrementAndGet()
             val out = socket.getOutputStream()
             if (path.endsWith("/stream")) {
@@ -286,6 +333,11 @@ class ModelAliasesReconnectTest {
             } else when (path) {
                 "/api/health" -> """{"ok":true,"role":"hub"}"""
                 "/api/stats" -> stats()
+                "/api/sync/settings/limitAccountPresentation" -> {
+                    presentationReads.incrementAndGet()
+                    status = presentationStatus
+                    """{"ok":true,"version":1,"revision":$presentationRevision,"value":{"deepseek":{"labels":{"demo":"Work"},"order":["demo"]}}}"""
+                }
                 "/api/sync/settings/modelAliases" -> {
                     aliasReads.incrementAndGet()
                     status = if (aliasRoute) aliasStatus else 404

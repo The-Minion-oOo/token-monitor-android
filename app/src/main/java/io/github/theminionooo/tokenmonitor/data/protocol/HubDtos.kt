@@ -132,6 +132,7 @@ internal data class HubLimitWindowDto(
     val used: Double? = null,
     val resetDescription: String = "",
     val limit: Double? = null,
+    val productId: String = "",
 )
 
 internal data class HubLimitAccountDto(
@@ -149,6 +150,7 @@ internal data class HubLimitAccountDto(
     val resetCredits: HubResetCreditsDto? = null,
     val usageSummary: HubLimitUsageSummaryDto? = null,
     val source: String = "",
+    val region: String = "",
 )
 
 internal data class HubResetCreditsDto(val availableCount: Long?, val nextExpiresAt: String, val expirations: List<String>, val grants: List<HubResetGrantDto>)
@@ -179,6 +181,7 @@ internal data class HubStatsDto(
     val subscriptionsUpdatedAt: String = "",
     val modelAliasRevision: Long? = null,
     val staleAfterMs: Long? = null,
+    val limitAccountPresentationRevision: Long? = null,
 )
 
 internal data class HubHistoryPointDto(

@@ -127,6 +127,8 @@ internal fun DashboardContent(
         EmptyDashboard(modifier, state.message, { onChoose(DashboardDestination.Settings) }, hasConnection = state.hasConnection)
         return
     }
+    val accountPresentation = state.limitAccountPresentation
+        ?.takeIf { it.revision == snapshot.stats.limitAccountPresentationRevision }
     // Direct periods already have shared decoded data; no whole-snapshot comparison is needed.
     val names = LocalModelNames.current
     val rawUsage = if (period.statsKey != null) period.usage(snapshot)
@@ -196,7 +198,7 @@ internal fun DashboardContent(
             item { SessionToolFilter(sessionTools, selectedSessionTool) { sessionTool = it } }
         }
         when (destination) {
-            DashboardDestination.Home -> homeItems(snapshot, usage, period, displayOptions, onChoose)
+            DashboardDestination.Home -> homeItems(snapshot, usage, period, displayOptions, onChoose, accountPresentation)
             DashboardDestination.Tools -> breakdownItems(
                 displayOptions = displayOptions,
                 tokens = usage.clients,
@@ -232,7 +234,7 @@ internal fun DashboardContent(
                 showTitles = showSessionTitles,
                 names = names,
             )
-            DashboardDestination.Limits -> limitItems(snapshot, displayOptions)
+            DashboardDestination.Limits -> limitItems(snapshot, displayOptions, accountPresentation)
             DashboardDestination.Trends -> if (trendHistory == null) item { MutedCopy(appText(R.string.ui_loading_activity_4c959, "Loading activity…")) }
                 else trendItems(snapshot, trendHistory)
             DashboardDestination.Settings -> Unit

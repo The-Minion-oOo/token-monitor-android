@@ -35,6 +35,7 @@ import kotlinx.serialization.json.longOrNull
  * Android client renders and intentionally ignores unknown fields.
  */
 object HubProtocolParser {
+    private val limitProductId = Regex("[a-z][a-z0-9-]{0,63}")
     private val deviceKinds = setOf("computer", "desktop", "laptop", "mini", "workstation", "server", "cloud", "linux")
     const val SUPPORTED_UPSTREAM_VERSION = BuildConfig.UPSTREAM_TAG
     private val CLAUDE_PLAN_LABELS = setOf("Free", "Pro", "Max", "Ultra", "Team", "Enterprise", "Max 5x", "Max 20x")
@@ -144,8 +145,8 @@ object HubProtocolParser {
                 .orEmpty(),
             historyPreview = objectField("historyPreview")?.toHistoryDto() ?: HubHistoryDto(),
             subscriptionsUpdatedAt = string("subscriptionsUpdatedAt"),
-            modelAliasRevision = (objectField("syncSettingsRevisions")?.get("modelAliases") as? JsonPrimitive)?.takeUnless { it.isString }?.longOrNull
-                ?.takeIf { it in 0..9_007_199_254_740_991L },
+            modelAliasRevision = settingsRevision(objectField("syncSettingsRevisions")?.get("modelAliases")),
+            limitAccountPresentationRevision = settingsRevision(objectField("syncSettingsRevisions")?.get("limitAccountPresentation")),
             staleAfterMs = long("staleAfterMs"),
         )
     }
@@ -308,6 +309,7 @@ object HubProtocolParser {
         updatedAt = string("updatedAt"),
         windows = array("windows").mapNotNull { it.objectOrNull()?.toLimitWindowDto() },
         accountKey = string("accountKey"),
+        region = string("region"),
         productLabel = if (string("provider") == "mimo") string("accountLabel").takeIf {
             it in setOf("Console", "Desktop Membership", "Membership")
         }.orEmpty() else "",
@@ -356,6 +358,8 @@ object HubProtocolParser {
     }
 
     private fun JsonObject.toLimitWindowDto() = HubLimitWindowDto(
+        productId = (this["productId"] as? JsonPrimitive)?.takeIf { it.isString }?.content
+            ?.trim()?.lowercase()?.takeIf(limitProductId::matches).orEmpty(),
         used = double("used")?.takeIf { it.isFinite() && it >= 0 },
         limit = double("limit")?.takeIf { it.isFinite() && it > 0 },
         kind = string("kind"),
@@ -465,6 +469,7 @@ object HubProtocolParser {
         historyPreview = historyPreview.toDomain(),
         subscriptionsUpdatedAt = subscriptionsUpdatedAt,
         modelAliasRevision = modelAliasRevision,
+        limitAccountPresentationRevision = limitAccountPresentationRevision,
         staleAfterMs = staleAfterMs,
     )
 
@@ -583,6 +588,7 @@ object HubProtocolParser {
         windows = windows.map { it.toDomain() },
         accountKey = accountKey,
         productLabel = productLabel,
+        region = region,
         spend = spend?.let {
             io.github.theminionooo.tokenmonitor.domain.LimitSpend(
                 it.currency, it.today, it.week, it.month, it.allTime, it.trackingSince, it.locallyTracked,
@@ -599,6 +605,7 @@ object HubProtocolParser {
     )
 
     private fun HubLimitWindowDto.toDomain() = LimitWindow(
+        productId = productId,
         used = used,
         limit = limit,
         resetDescription = resetDescription,
