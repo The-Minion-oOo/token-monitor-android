@@ -12,7 +12,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.93.1**, released 2026-11-16 UTC.
+The verified baseline is upstream Token Monitor **v0.94.0**, released 2026-11-19 UTC.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -53,7 +53,7 @@ write, or device deletion endpoints.
 
 ## Cloudflare Worker
 
-I also exercise `worker/src/index.js` from the same pinned v0.93.1 commit locally.
+I also exercise `worker/src/index.js` from the same pinned v0.94.0 commit locally.
 Its snapshot read routes use the same Bearer authentication and unauthenticated Hub
 identity check. Stream-v2 negotiates the same `snapshot`, complete `stats` and
 compact `freshness` envelopes. Ingest changes may produce freshness-only events;
@@ -657,6 +657,17 @@ The v4 Hub stream can queue small frames while a slow client receives a large
 frame. When the backlog exceeds its budget, the Hub sends a complete `stats`
 frame with the current revision. Android takes that revision as the baseline
 for the next delta.
+
+## Desktop v0.94.0
+
+The Hub keeps keyed quota accounts separate and exposes their shared names and
+order through `GET /api/sync/settings/limitAccountPresentation`. Android reads the
+document when the Hub advertises a revision. Home and Limits use the shared
+names, and Limits applies the order within each provider. When an older Hub has
+no document, Android uses the account details in its snapshot.
+
+OpenCode windows can carry a `productId` such as `go` or `zen`. Android uses it
+to label the window. Alibaba Cloud plan labels use the reported region and plan.
 
 ## Desktop v0.93.1
 
