@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.94.0 r1 — 2026-11-19
+
 - Show shared account names on Home and Limits, and follow the desktop account order within each provider on Limits.
 - Distinguish Alibaba Cloud's Bailian and Model Studio plans and label OpenCode Go and Zen quotas.
 
