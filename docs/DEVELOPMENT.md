@@ -821,6 +821,14 @@ and an expired Copilot login on the same device and the optional DeepSeek fees.
 I also stall a Worker stream writer, check the bounded queue and replay the
 recovery frames through Android’s receiver.
 
+### Desktop v0.94.0 checks
+
+The released-source contract checks that the Node and Worker Hubs require
+authentication for account presentation, keep separate quota rows, publish the
+settings revision, and return OpenCode product IDs. Android tests read the
+saved fixtures and live contract outputs for shared names and per-provider
+order. The dashboard tests also cover older Hubs and reconnects.
+
 ### Desktop v0.93.1 checks
 
 The harness builds synthetic Git worktree metadata in an isolated source export,

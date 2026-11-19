@@ -22,11 +22,11 @@ class LimitAccountPresentationInteractionTest {
 
     @Test fun limitsShowSharedNamesAndQuotaProducts() {
         val assets = InstrumentationRegistry.getInstrumentation().context.assets
-        fun fixture(name: String) = assets.open("protocol/upcoming-98603b6d/$name.json")
+        fun fixture(name: String) = assets.open("protocol/v0.94.0/$name.json")
             .bufferedReader().use { it.readText() }
         val state = HubRepositoryState(
-            snapshot = HubSnapshot(stats = HubProtocolParser.decodeStats(fixture("limits"))),
-            limitAccountPresentation = requireNotNull(decodeLimitAccountPresentation(fixture("presentation"))),
+            snapshot = HubSnapshot(stats = HubProtocolParser.decodeStats(fixture("limit-account-stats"))),
+            limitAccountPresentation = requireNotNull(decodeLimitAccountPresentation(fixture("limit-account-presentation"))),
         )
         val palette = Palette.from(InterfaceTheme.Default)
         compose.setContent {
