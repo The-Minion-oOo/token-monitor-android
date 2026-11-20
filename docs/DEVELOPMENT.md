@@ -124,7 +124,7 @@ or normalize the label to make an assertion pass.
 Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite now contains **132 tests** per emulator. The report checker
+The interaction suite expects **153 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
 
@@ -820,6 +820,14 @@ and responses, then read the Node Hub and Worker. The fixtures cover a healthy
 and an expired Copilot login on the same device and the optional DeepSeek fees.
 I also stall a Worker stream writer, check the bounded queue and replay the
 recovery frames through Android’s receiver.
+
+### Desktop v0.94.0 checks
+
+The released-source contract checks that the Node and Worker Hubs require
+authentication for account presentation, keep separate quota rows, publish the
+settings revision, and return OpenCode product IDs. Android tests read the
+saved fixtures and live contract outputs for shared names and per-provider
+order. The dashboard tests also cover older Hubs and reconnects.
 
 ### Desktop v0.93.1 checks
 

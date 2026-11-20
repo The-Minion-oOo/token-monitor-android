@@ -1,7 +1,12 @@
-# Desktop parity for v0.93.1
+# Desktop parity for v0.94.0
 
-I compare Android with desktop tag `v0.93.1`, peeled commit
-`55cd6bfb0e404cac25ac2ba5590c8a82ca16acbb`. Android reads the usage collected by desktop.
+I compare Android with desktop tag `v0.94.0`, peeled commit
+`5888563c2bc76c02bb3b6e74073daa000d7c1c47`. Android reads the usage collected by desktop.
+
+**Android v0.94.0 r1** shows shared account names on Home and Limits, and
+follows the desktop order within each provider on Limits. Alibaba Cloud
+identifies Bailian and Model Studio plans. OpenCode labels Go and Zen quotas
+when the Hub reports the product. Manage accounts and credentials on desktop.
 
 **Android v0.93.1 r1** shows the combined Projects total when desktop groups usage from a Git worktree with its parent repository. Project discovery and account setup run on desktop.
 

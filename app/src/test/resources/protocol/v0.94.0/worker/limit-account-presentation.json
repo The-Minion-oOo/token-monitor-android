@@ -1,0 +1,28 @@
+{
+  "ok": true,
+  "version": 1,
+  "revision": 1,
+  "updatedAt": "2026-11-19T18:57:05.293Z",
+  "value": {
+    "deepseek": {
+      "labels": {
+        "demo-personal": "Personal",
+        "demo-work": "Work"
+      },
+      "order": [
+        "demo-work",
+        "demo-personal"
+      ]
+    },
+    "factory": {
+      "labels": {
+        "factory-team": "Team",
+        "factory-solo": "Solo"
+      },
+      "order": [
+        "factory-solo",
+        "factory-team"
+      ]
+    }
+  }
+}

@@ -5,15 +5,15 @@
   "signingCertificateSha256": "eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c",
   "candidate": {
     "status": "published",
-    "tag": "android-v0.93.1-r1",
-    "versionName": "v0.93.1",
-    "versionCode": 931001
+    "tag": "android-v0.94.0-r1",
+    "versionName": "v0.94.0",
+    "versionCode": 940001
   },
   "published": {
-    "tag": "android-v0.93.1-r1",
-    "versionName": "v0.93.1",
-    "versionCode": 931001,
-    "sourceCommit": "c76a84d5994bcd1afc12d0cf98a57ab1e3e5612b"
+    "tag": "android-v0.94.0-r1",
+    "versionName": "v0.94.0",
+    "versionCode": 940001,
+    "sourceCommit": "5fe9a3d9be9a128af3ffdf958dfaaa84d6264840"
   },
   "requiredChecks": [
     {

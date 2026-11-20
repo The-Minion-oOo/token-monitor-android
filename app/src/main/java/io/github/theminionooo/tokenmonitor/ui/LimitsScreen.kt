@@ -90,6 +90,7 @@ import io.github.theminionooo.tokenmonitor.domain.DeviceUsage
 import io.github.theminionooo.tokenmonitor.domain.HistoryPoint
 import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
 import io.github.theminionooo.tokenmonitor.domain.LimitAccount
+import io.github.theminionooo.tokenmonitor.domain.LimitAccountPresentation
 import io.github.theminionooo.tokenmonitor.domain.ProjectUsage
 import io.github.theminionooo.tokenmonitor.domain.SessionUsage
 import io.github.theminionooo.tokenmonitor.domain.ServiceHealth
@@ -105,12 +106,17 @@ import kotlin.math.roundToLong
 /*
  * Limits and Subscriptions lists.
  */
-internal fun LazyListScope.limitItems(snapshot: HubSnapshot, displayOptions: DisplayOptions) {
+internal fun LazyListScope.limitItems(
+    snapshot: HubSnapshot,
+    displayOptions: DisplayOptions,
+    presentation: LimitAccountPresentation?,
+) {
     val visibleAccounts = io.github.theminionooo.tokenmonitor.data.storage.visibleLimitAccounts(snapshot.stats.limits.providers, displayOptions)
     item { LimitAttentionPanel(snapshot.copy(stats = snapshot.stats.copy(limits = snapshot.stats.limits.copy(providers = visibleAccounts)))) }
     if (snapshot.stats.limits.providers.isEmpty()) item { MutedCopy(appText(R.string.ui_no_account_limits_are_available_from_this_hub_yet_ed63e, "No account limits are available from this Hub yet."), modifier = Modifier.padding(vertical = 12.dp)) }
     else {
-        val providers = prioritizeAvailableLimits(visibleAccounts)
+        val prioritized = prioritizeAvailableLimits(visibleAccounts)
+        val providers = presentation?.applyNames(presentation.applyOrder(prioritized)) ?: prioritized
         val keys = uniqueKeys(providers, ::limitAccountIdentity)
         itemsIndexed(providers, key = { index, _ -> keys[index] }) { _, account ->
             LimitAccountRow(account, displayOptions)
@@ -147,7 +153,7 @@ internal fun LimitAccountRow(account: LimitAccount, displayOptions: DisplayOptio
                 val email = account.accountEmail.takeIf { displayOptions.showAccountEmails }.orEmpty()
                 val source = account.sourceDeviceId.takeIf { displayOptions.showLimitSource && it.isNotBlank() }?.let { appText(R.string.ui_source_1_s_ab512, "Source %1\$s", it.displayName()) }
                 val updated = account.updatedAt.relativeAge(LocalNow.current).takeIf { it.isNotBlank() }?.let { appText(R.string.ui_updated_1_s_62d23, "Updated %1\$s", it) }
-                val meta = listOf(account.productLabel, account.accountName, account.plan, email, source, updated).filterNotNull().filter { it.isNotBlank() }.joinToString(" · ")
+                val meta = listOf(account.productLabel, account.accountName, account.plan, alibabaRegionLabel(account), email, source, updated).filterNotNull().filter { it.isNotBlank() }.joinToString(" · ")
                 if (meta.isNotBlank()) Text(meta, color = Muted, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
             if (account.windows.isEmpty()) {

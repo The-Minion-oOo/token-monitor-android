@@ -210,6 +210,11 @@ stops active work immediately. Missing support leaves raw names visible. Widget
 Live, manual Refresh and periodic jobs use the saved settings. Display sums use
 the Hub’s reported costs.
 
+The visible dashboard can also read `GET /api/sync/settings/limitAccountPresentation`
+when the Hub advertises a revision. The same authentication, route and redirect
+checks apply. Android keeps the shared display names and order in memory for
+the current pairing. Widget runs do not request this document.
+
 `POST_PROMOTED_NOTIFICATIONS` is a normal manifest permission required by
 [Android’s Live Updates API](https://developer.android.com/develop/ui/views/notifications/live-update).
 It lets the system consider an eligible ongoing Live notification for promotion.

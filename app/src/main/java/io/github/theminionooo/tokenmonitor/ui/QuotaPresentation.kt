@@ -52,9 +52,28 @@ internal fun museAdditionalTokens(account: LimitAccount, window: LimitWindow): S
             it.endsWith(" tokens left") && it.removeSuffix(" tokens left").isNotBlank()
     }?.removeSuffix(" tokens left")
 
-internal fun limitWindowTitle(account: LimitAccount, window: LimitWindow): String =
-    if (museAdditionalTokens(account, window) != null) appText(R.string.ui_additional_tokens, "Additional tokens")
-    else windowTitle(window, account.windows, account.provider)
+internal fun limitWindowTitle(account: LimitAccount, window: LimitWindow): String {
+    if (museAdditionalTokens(account, window) != null) return appText(R.string.ui_additional_tokens, "Additional tokens")
+    val title = windowTitle(window, account.windows, account.provider)
+    val product = when {
+        account.provider == "opencode" && window.productId == "go" -> "Go"
+        account.provider == "opencode" && window.productId == "zen" -> "Zen"
+        else -> return title
+    }
+    return if (title.equals(product, ignoreCase = true) || title.startsWith("$product ", ignoreCase = true)) title
+    else "$product · $title"
+}
+
+internal fun alibabaRegionLabel(account: LimitAccount): String? {
+    if (account.provider != "alibaba") return null
+    return when (account.region) {
+        "cn" -> "Bailian Team"
+        "cn-personal" -> "Bailian Personal"
+        "intl" -> "Model Studio Team"
+        "intl-personal" -> "Model Studio Personal"
+        else -> null
+    }
+}
 
 internal fun prioritizeAvailableLimits(providers: List<LimitAccount>): List<LimitAccount> = providers.withIndex()
     .sortedWith(compareBy<IndexedValue<LimitAccount>> { it.value.windows.isEmpty() }

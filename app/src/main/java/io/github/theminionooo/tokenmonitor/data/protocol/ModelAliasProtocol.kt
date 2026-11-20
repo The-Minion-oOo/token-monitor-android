@@ -4,24 +4,14 @@ import io.github.theminionooo.tokenmonitor.domain.ModelAliasGrouping
 import io.github.theminionooo.tokenmonitor.domain.ModelAliasSettings
 import io.github.theminionooo.tokenmonitor.domain.modelMatchKey
 import io.github.theminionooo.tokenmonitor.domain.modelText
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.booleanOrNull
-import kotlinx.serialization.json.longOrNull
 
 internal fun decodeModelAliases(raw: String): ModelAliasSettings? {
-    val root = runCatching {
-        requireStreamJsonLimits(raw)
-        Json.parseToJsonElement(raw) as? JsonObject
-    }.getOrNull() ?: return null
-    if ((root["ok"] as? JsonPrimitive)?.booleanOrNull != true ||
-        (root["version"] as? JsonPrimitive)?.takeUnless { it.isString }?.longOrNull != 1L) return null
-    val revision = (root["revision"] as? JsonPrimitive)?.takeUnless { it.isString }?.longOrNull
-        ?.takeIf { it in 0..9_007_199_254_740_991L } ?: return null
-    if (root["value"] == JsonNull) return ModelAliasSettings(revision, emptyMap(), ModelAliasGrouping.Off)
-    val value = root["value"] as? JsonObject ?: return null
+    val (revision, document) = decodeSettingsDocument(raw) ?: return null
+    if (document == JsonNull) return ModelAliasSettings(revision, emptyMap(), ModelAliasGrouping.Off)
+    val value = document as? JsonObject ?: return null
     val mode = when ((value["modelAliasGrouping"] as? JsonPrimitive)?.content) {
         "off" -> ModelAliasGrouping.Off
         "duplicates" -> ModelAliasGrouping.Duplicates
