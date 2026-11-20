@@ -5,12 +5,13 @@ body:
     id: problem
     attributes:
       label: What task are you trying to complete?
+      description: Describe what you do today and where you get stuck.
     validations:
       required: true
   - type: textarea
     id: proposal
     attributes:
-      label: Suggested behavior
-      description: Explain the benefit and any relevant desktop Hub support.
+      label: What would make this work better for you?
+      description: Describe the result you want. Mention desktop Hub behavior if it affects the request.
     validations:
       required: true
