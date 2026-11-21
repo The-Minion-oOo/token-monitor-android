@@ -28,9 +28,9 @@
 
 ## The desktop dashboard, made mobile
 
-**New in v0.94.0 r1:** Home and Limits show account names shared by desktop. Limits also follows the
-desktop order within each provider and distinguishes Alibaba Cloud and OpenCode quota products.
-[Release notes](docs/releases/android-v0.94.0-r1.md).
+**New in v0.95.1 r1:** See Junie and OpenCodeReview in Tools. Limits distinguishes Qoder CN and keeps separate
+Qoder accounts and GLM Team projects as reported by the Hub.
+[Release notes](docs/releases/android-v0.95.1-r1.md).
 
 **Also included:** smaller live updates through the released v4 Hub stream,
 session reasoning effort and personal Volcengine quotas. Muse and Ollama
@@ -225,13 +225,13 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 | | |
 | --- | --- |
-| Current release | [Android v0.94.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.94.0-r1) (`940001`) |
+| Current release | [Android v0.95.1 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.95.1-r1) (`951001`) |
 | Desktop baseline | [Token Monitor v0.95.1](https://github.com/Javis603/token-monitor/releases/tag/v0.95.1) |
 | Minimum Android version | Android 8.0 |
 
 I checked the released Node and Worker Hubs, Android tests and emulators.
-The signed APK upgraded v0.93.1 r1 in place on an Android 8 emulator.
-I also upgraded on my phone and confirmed the saved Hub pairing still works. [Validation](docs/VALIDATION.md).
+The signed APK upgraded v0.94.0 r1 in place on an Android 8 emulator.
+I haven’t tested v0.95.1 r1 on my phone. [Validation](docs/VALIDATION.md).
 
 Android-only updates increment the release revision while keeping the verified
 desktop version. [Upstream pin](upstream.json) · [Release notes](CHANGELOG.md)
