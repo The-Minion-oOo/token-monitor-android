@@ -124,7 +124,7 @@ or normalize the label to make an assertion pass.
 Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite expects **153 tests** per emulator. The report checker
+The interaction suite expects **154 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
 
@@ -820,6 +820,14 @@ and responses, then read the Node Hub and Worker. The fixtures cover a healthy
 and an expired Copilot login on the same device and the optional DeepSeek fees.
 I also stall a Worker stream writer, check the bounded queue and replay the
 recovery frames through Android’s receiver.
+
+### Desktop v0.95.1 checks
+
+The released Node and Worker Hubs pass through Junie and OpenCodeReview usage
+and context readings from recent sessions. Two synthetic devices verify Qoder
+site and account separation, replacement of a matched cookie-only reading,
+and two GLM Team projects with a duplicate reading for one project. Android
+checks both response formats and renders the new tool names on the dashboard.
 
 ### Desktop v0.94.0 checks
 

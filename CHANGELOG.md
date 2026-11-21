@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Show Junie and OpenCodeReview with their desktop names and icons.
+- Distinguish Qoder CN in Limits and verify separate Qoder and GLM Team quota rows.
+- Verify context readings for recent Grok Build, WorkBuddy, and CatPaw sessions.
+
 ## v0.94.0 r1 — 2026-11-19
 
 - Show shared account names on Home and Limits, and follow the desktop account order within each provider on Limits.

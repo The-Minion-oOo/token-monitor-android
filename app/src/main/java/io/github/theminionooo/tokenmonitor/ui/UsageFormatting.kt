@@ -1,5 +1,7 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+// Source origin: tm-android-1fe514ceeabd3cccd77ffd1f
+
 import io.github.theminionooo.tokenmonitor.R
 import java.math.BigDecimal
 import java.text.NumberFormat
@@ -168,7 +170,7 @@ internal fun shortDate(value: String): String = runCatching {
 private val toolLabels = mapOf(
     "mistral" to "Mistral Vibe", "prime-agent" to "Prime Agent", "jcode" to "Jcode",
     "claude" to "Claude Code", "codex" to "Codex", "hermes" to "Hermes Agent", "gemini" to "Gemini CLI", "cursor" to "Cursor",
-    "opencode" to "OpenCode", "openclaw" to "OpenClaw", "antigravity" to "Antigravity", "cline" to "Cline", "kimi" to "Kimi",
+    "opencode" to "OpenCode", "opencodereview" to "OpenCodeReview", "junie" to "Junie", "openclaw" to "OpenClaw", "antigravity" to "Antigravity", "cline" to "Cline", "kimi" to "Kimi",
     "amp" to "Amp", "droid" to "Factory Droid", "qwen" to "Qwen", "grok" to "Grok Build", "copilot" to "GitHub Copilot",
     "pi" to "Pi", "omp" to "Oh My Pi", "senpi" to "OmO Native", "zed" to "Zed", "kilo" to "Kilo", "kilocode" to "Kilo Code", "commandcode" to "Command Code",
     "mimo" to "Xiaomi MiMo", "micode" to "Xiaomi MiMo", "zcode" to "ZCode", "kiro" to "Kiro", "codebuddy" to "CodeBuddy",
@@ -256,6 +258,7 @@ internal fun String.providerLabel(): String {
 /** Display products separately while saved visibility choices retain the Hub's provider id. */
 internal fun limitDisplayProvider(account: io.github.theminionooo.tokenmonitor.domain.LimitAccount): String =
     when (account.provider) {
+        "qoder" -> if (account.region == "cn") "qodercn" else "qoder"
         "muse" -> if (account.source == "web") "muse-web" else "muse-code"
         "minimax" -> when (account.source) {
             "oauth" -> "minimax-code"
@@ -290,6 +293,6 @@ internal fun limitAccountIdentity(account: io.github.theminionooo.tokenmonitor.d
         listOf(account.accountName, account.accountEmail, account.productLabel).joinToString(":")
     } + if (account.provider == "muse") {
         if (account.source == "web") ":source:web" else ":device:${account.sourceDeviceId}"
-    } else if (account.provider == "alibaba" && account.region.isNotBlank()) {
+    } else if (account.provider in setOf("alibaba", "qoder") && account.region.isNotBlank()) {
         ":region:${account.region}"
     } else ""

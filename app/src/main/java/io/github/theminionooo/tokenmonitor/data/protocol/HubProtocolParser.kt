@@ -1,5 +1,7 @@
 package io.github.theminionooo.tokenmonitor.data.protocol
 
+// Source origin: tm-android-1fe514ceeabd3cccd77ffd1f
+
 import io.github.theminionooo.tokenmonitor.BuildConfig
 import io.github.theminionooo.tokenmonitor.domain.DeviceUsage
 import io.github.theminionooo.tokenmonitor.domain.HubHealth

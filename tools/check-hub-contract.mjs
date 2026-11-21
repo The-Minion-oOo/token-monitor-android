@@ -1,3 +1,4 @@
+import { checkV0951Reads } from "./check-v0951-contract.mjs";
 import { checkLimitAccountReads } from "./check-limit-accounts.mjs";
 import { checkV0931Projects } from "./check-v0931-contract.mjs";
 import { checkV090Data } from "./check-v090-contract.mjs";
@@ -683,6 +684,7 @@ async function isolatedContract(source, output, upstream) {
         Object.assign(responses, v090.responses);
         Object.assign(responses, await checkV091Reads(uploadRequest, upstream.version));
         Object.assign(responses, await checkLimitAccountReads(hub, uploadRequest, now));
+        Object.assign(responses, await checkV0951Reads(uploadRequest, now));
         const v092 = await checkV092Limits(require, { createHub, source, secret, device, now });
         limitChecks.cases["v092-limits"] = { records: v092.records, providers: v092.stats.limits.providers };
         responses["v092-limits.json"] = v092.stats;

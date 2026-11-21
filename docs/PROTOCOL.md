@@ -12,7 +12,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.94.0**, released 2026-11-19 UTC.
+The verified baseline is upstream Token Monitor **v0.95.1**, released 2026-11-21 UTC.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -53,7 +53,7 @@ write, or device deletion endpoints.
 
 ## Cloudflare Worker
 
-I also exercise `worker/src/index.js` from the same pinned v0.94.0 commit locally.
+I also exercise `worker/src/index.js` from the same pinned v0.95.1 commit locally.
 Its snapshot read routes use the same Bearer authentication and unauthenticated Hub
 identity check. Stream-v2 negotiates the same `snapshot`, complete `stats` and
 compact `freshness` envelopes. Ingest changes may produce freshness-only events;
@@ -657,6 +657,16 @@ The v4 Hub stream can queue small frames while a slow client receives a large
 frame. When the backlog exceeds its budget, the Hub sends a complete `stats`
 frame with the current revision. Android takes that revision as the baseline
 for the next delta.
+
+## Desktop v0.95.1
+
+Junie and OpenCodeReview use the existing client and session fields. Android
+reads context counts and windows for recent Grok Build, WorkBuddy, and CatPaw
+sessions through the existing session adapter.
+
+The Hub aggregates Qoder quotas by account and site, and GLM Team quotas by
+organization and project. Android uses the rows the Hub sends and uses Qoder’s
+reported region to label CN quotas. Older Qoder rows can omit the region.
 
 ## Desktop v0.94.0
 

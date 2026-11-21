@@ -1,5 +1,7 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+// Source origin: tm-android-1fe514ceeabd3cccd77ffd1f
+
 import android.app.Activity
 import android.provider.Settings
 import androidx.compose.runtime.SideEffect

@@ -25,6 +25,12 @@
         android:localeConfig="@xml/locale_config"
         android:theme="@style/Theme.TokenMonitor"
         android:networkSecurityConfig="@xml/network_security_config">
+        <meta-data
+            android:name="io.github.theminionooo.tokenmonitor.SOURCE_REPOSITORY"
+            android:value="https://github.com/The-Minion-oOo/token-monitor-android" />
+        <meta-data
+            android:name="io.github.theminionooo.tokenmonitor.SOURCE_ORIGIN"
+            android:value="tm-android-1fe514ceeabd3cccd77ffd1f" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.updates"
