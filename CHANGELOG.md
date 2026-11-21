@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.95.1 r1 — 2026-11-21
+
 - Show Junie and OpenCodeReview with their desktop names and icons.
 - Distinguish Qoder CN in Limits and verify separate Qoder and GLM Team quota rows.
 - Verify context readings for recent Grok Build, WorkBuddy, and CatPaw sessions.
