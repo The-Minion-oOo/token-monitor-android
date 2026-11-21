@@ -50,7 +50,7 @@ internal fun vendorOf(name: String): String? {
     if (key in setOf("muse", "muse code", "muse-code", "muse-web")) return "meta"
     if (key == "openrouter" || key.startsWith("openrouter/")) return "openrouter"
     if (key == "zed" || key.startsWith("zed-")) return "zed"
-    if (key == "opencode") return "opencode"
+    if (key == "opencode" || key == "opencodereview" || key == "junie") return key
     if (key == "senpi" || key == "omo native") return "senpi"
     return modelVendorRules.firstOrNull { (pattern, _) -> pattern.containsMatchIn(key) }?.second
 }
@@ -74,6 +74,8 @@ internal fun originalToolColor(name: String, fallback: Color): Color = when (ven
     "hunyuan" -> Color(0xFF0053E0)
     "nvidia" -> Color(0xFF74B71B)
     "stepfun" -> fallback
+    "junie" -> Color(0xFF47E054)
+    "opencodereview" -> Color(0xFF2BDE5E)
     "openrouter" -> Color(0xFF6566F1)
     "zed" -> Color(0xFF4173E7)
     "senpi" -> Color(0xFF00D4FF)
@@ -101,6 +103,8 @@ internal fun upstreamToolAsset(name: String): Int? = when (vendorOf(name)) {
     "hunyuan" -> R.drawable.upstream_logo_hunyuan
     "nvidia" -> R.drawable.upstream_logo_nvidia
     "stepfun" -> R.drawable.upstream_logo_stepfun
+    "junie" -> R.drawable.upstream_logo_junie
+    "opencodereview" -> R.drawable.upstream_logo_opencodereview
     "opencode" -> R.drawable.upstream_logo_opencode
     "openrouter" -> R.drawable.upstream_logo_openrouter
     "zed" -> R.drawable.upstream_logo_zed

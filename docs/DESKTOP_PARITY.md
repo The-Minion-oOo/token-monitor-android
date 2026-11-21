@@ -1,7 +1,12 @@
-# Desktop parity for v0.94.0
+# Desktop parity for v0.95.1
 
-I compare Android with desktop tag `v0.94.0`, peeled commit
-`5888563c2bc76c02bb3b6e74073daa000d7c1c47`. Android reads the usage collected by desktop.
+I compare Android with desktop tag `v0.95.1`, peeled commit
+`b5483a45a603f6b12abfafe1a01e007bc27bf46e`. Android reads the usage collected by desktop.
+
+**Android v0.95.1 r1** shows Junie and OpenCodeReview as separate tools.
+Limits labels Qoder CN, and Qoder accounts and GLM Team projects follow the
+released Hub’s quota rows. Recent Grok Build, WorkBuddy, and CatPaw sessions
+can show context remaining when desktop reports a count and window.
 
 **Android v0.94.0 r1** shows shared account names on Home and Limits, and
 follows the desktop order within each provider on Limits. Alibaba Cloud
