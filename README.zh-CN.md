@@ -9,8 +9,8 @@
 
 ## 近期更新
 
-当前版本为 **v0.95.1 r1**。工具页面会分别显示 Junie 和 OpenCodeReview。额度页面会分别显示 Qoder 中国版、不同的 Qoder 账户和 GLM 团队项目。
-[版本说明](docs/releases/android-v0.95.1-r1.md)。
+当前版本为 **v0.97.0 r1**。会话支持按最近活动或令牌用量排序。额度页面分别显示 Notion AI 的 Standard 和 Select 积分。
+[版本说明](docs/releases/android-v0.97.0-r1.md)。
 
 继续支持 v4 增量实时更新、会话推理强度和火山引擎个人套餐额度。
 以下语言、付款和显示功能继续保留。
