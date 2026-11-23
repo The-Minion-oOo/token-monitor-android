@@ -37,11 +37,15 @@ internal fun limitReportedAmount(provider: String, window: LimitWindow): Double?
     else -> null
 }
 
-internal fun harkQuotaCount(account: LimitAccount, window: LimitWindow, showUsed: Boolean): String? {
-    if (account.provider != "hark" || window.metric == "spend" ||
-        (window.kind != "daily" && window.kind != "billing")) return null
+internal fun limitQuotaCount(account: LimitAccount, window: LimitWindow, showUsed: Boolean): String? {
+    if (window.metric == "spend") return null
+    val notionPool = account.provider == "notion" && window.kind == "billing" &&
+        (window.label == "Standard" || window.label == "Select")
+    val harkPool = account.provider == "hark" && (window.kind == "daily" || window.kind == "billing")
+    if (!notionPool && !harkPool) return null
     val limit = window.limit?.takeIf { it.isFinite() && it > 0 } ?: return null
     val amount = (if (showUsed) window.used else window.remaining)?.takeIf { it.isFinite() && it >= 0 } ?: return null
+    if (notionPool) return "${formatWindowAmount(amount, "CREDITS")} / ${formatWindowAmount(limit, "CREDITS")}"
     return "${formatCompactTokens(amount.toLong())} / ${formatCompactTokens(limit.toLong())}"
 }
 

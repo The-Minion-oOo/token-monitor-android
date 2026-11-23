@@ -608,4 +608,9 @@
     <string name="ui_notification_session_ends">세션 종료 %1$s</string>
     <string name="ui_month_search_fees">이번 달 검색 요금</string>
     <string name="ui_month_fetch_fees">이번 달 가져오기 요금</string>
+    <string name="ui_session_sort_most_tokens">토큰이 많은 순</string>
+    <string name="ui_session_sort_newest">최신순</string>
+    <string name="ui_hub_built_in">내장 Hub</string>
+    <string name="ui_hub_standalone">독립 실행형 Hub</string>
+    <string name="ui_hub_node_generic">Node Hub</string>
 </resources>

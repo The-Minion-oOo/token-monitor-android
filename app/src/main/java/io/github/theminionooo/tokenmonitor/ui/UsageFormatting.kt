@@ -144,6 +144,17 @@ internal fun formatPercent(value: Double): String = "${value.toInt()}%"
 
 internal fun formatLiveRate(value: Double): String = String.format(AppLanguage.locale(), "%.1f", value)
 
+internal fun hubRuntimeLabel(health: io.github.theminionooo.tokenmonitor.domain.HubHealth): String {
+    if (health.runtime != "node-hub") {
+        return health.runtime.ifBlank { appText(R.string.ui_not_reported_98e85, "Not reported") }
+    }
+    return when (health.deployment) {
+        "app" -> appText(R.string.ui_hub_built_in, "Built-in Hub")
+        "standalone" -> appText(R.string.ui_hub_standalone, "Standalone Hub")
+        else -> appText(R.string.ui_hub_node_generic, "Node Hub")
+    }
+}
+
 internal fun formatHubBuild(value: String): String {
     if (value.isBlank()) return appText(R.string.format_not_reported, "Not reported")
     val normalized = value.removePrefix("sha256:")

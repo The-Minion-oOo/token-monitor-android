@@ -2,8 +2,9 @@
 
 ## Version rule
 
-Android v0.95.1 r1 targets desktop tag `v0.95.1`, peeled commit
-`b5483a45a603f6b12abfafe1a01e007bc27bf46e`, in Gradle and `upstream.json`.
+Android v0.97.0 r1 targets desktop tag `v0.97.0`, peeled commit
+`9d745c106ac5030045dade55c0d1aea279cdcfd7`, in Gradle and `upstream.json`.
+I checked the reported Hub deployment and separate Notion credit pools.
 I checked Junie and OpenCodeReview attribution, session context, and Qoder
 and GLM Team quota rows on the released Node and Worker Hubs.
 I checked quota separation, shared names and ordering, and product labels on the

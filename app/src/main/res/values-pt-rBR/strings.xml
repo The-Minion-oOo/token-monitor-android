@@ -607,4 +607,9 @@
     <string name="ui_notification_session_ends">A sessão termina às %1$s</string>
     <string name="ui_month_search_fees">Taxas de pesquisa deste mês</string>
     <string name="ui_month_fetch_fees">Taxas de recuperação deste mês</string>
+    <string name="ui_session_sort_most_tokens">Mais tokens</string>
+    <string name="ui_session_sort_newest">Mais recentes</string>
+    <string name="ui_hub_built_in">Hub integrado</string>
+    <string name="ui_hub_standalone">Hub independente</string>
+    <string name="ui_hub_node_generic">Hub Node</string>
 </resources>

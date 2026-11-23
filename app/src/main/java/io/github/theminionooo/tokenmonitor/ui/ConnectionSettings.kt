@@ -340,7 +340,7 @@ internal fun ConnectionScreen(
                     StatusLine(appText(R.string.ui_connection_6512e, "Connection"), delivery, if (state.streamActive || state.widgetLiveActive) Success else Muted)
                     StatusLine(appText(R.string.ui_route_49995, "Route"), io.github.theminionooo.tokenmonitor.data.network.HubAddressValidator.routeLabel(state.activeUrl ?: state.connectionUrl, state.fallbackUrl))
                     StatusLine(appText(R.string.ui_hub_build_3bb17, "Hub build"), formatHubBuild(snapshot.health.hubBuild))
-                    StatusLine(appText(R.string.ui_runtime_c4740, "Runtime"), snapshot.health.runtime.ifBlank { appText(R.string.ui_not_reported_98e85, "Not reported") })
+                    StatusLine(appText(R.string.ui_runtime_c4740, "Runtime"), hubRuntimeLabel(snapshot.health))
                     StatusLine(appText(R.string.ui_collector_role_dbeda, "Collector role"), snapshot.health.role.ifBlank { appText(R.string.ui_not_reported_98e85, "Not reported") })
                     StatusLine("Devices", snapshot.health.deviceCount.toString())
                     StatusLine(appText(R.string.ui_last_read_c9ec8, "Last read"), formatRelativeAge(snapshot.capturedAt, LocalNow.current).ifBlank { appText(R.string.ui_unknown_bc781, "Unknown") })

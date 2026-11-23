@@ -607,4 +607,9 @@
     <string name="ui_notification_session_ends">सत्र %1$s पर समाप्त होगा</string>
     <string name="ui_month_search_fees">इस महीने के खोज शुल्क</string>
     <string name="ui_month_fetch_fees">इस महीने के फ़ेच शुल्क</string>
+    <string name="ui_session_sort_most_tokens">सबसे ज़्यादा टोकन</string>
+    <string name="ui_session_sort_newest">सबसे नए</string>
+    <string name="ui_hub_built_in">बिल्ट-इन Hub</string>
+    <string name="ui_hub_standalone">स्टैंडअलोन Hub</string>
+    <string name="ui_hub_node_generic">Node Hub</string>
 </resources>

@@ -12,6 +12,7 @@ internal data class HubHealthDto(
     val deviceCount: Int = 0,
     val secretRequired: Boolean = false,
     val now: String = "",
+    val deployment: String = "",
 )
 
 internal data class HubPeriodDto(

@@ -205,7 +205,7 @@ internal fun HomeLimits(accounts: List<LimitAccount>, displayOptions: DisplayOpt
                                 Text(limitWindowTitle(account, window), color = Muted, style = MaterialTheme.typography.labelSmall, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                                 val remainingPercent = quotaRemainingPercent(window)
                                 val amount = museAdditionalTokens(account, window)
-                                    ?: harkQuotaCount(account, window, showUsed = false)
+                                    ?: limitQuotaCount(account, window, showUsed = false)
                                     ?: limitReportedAmount(account.provider, window)?.let { formatWindowAmount(it, window.currency) }
                                     ?: quotaPercentLeft(window)?.let { appText(R.string.ui_1_s_left_e96f9, "%1\$s%% left", it) }
                                     ?: window.remaining?.let { formatWindowAmount(it, window.currency) }

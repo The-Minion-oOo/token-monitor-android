@@ -195,9 +195,12 @@ internal fun LazyListScope.sessionItems(
     toolFilter: String = "",
     showTitles: Boolean = true,
     names: ModelNames = ModelNames(),
+    sort: SessionSort = SessionSort.MostTokens,
 ) {
-    val ranked = searchSessionRows(filterSessionRows(groupSessions(sessions, evidence), toolFilter), searching, matches, query, showTitles, names)
-        .sortedByDescending { it.totalTokens }
+    val ranked = sortSessionRows(
+        searchSessionRows(filterSessionRows(groupSessions(sessions, evidence), toolFilter), searching, matches, query, showTitles, names),
+        sort,
+    )
     if (ranked.isEmpty()) item { MutedCopy(usageListEmptyMessage(true, period, searching), modifier = Modifier.padding(vertical = 12.dp)) }
     else {
         val maximum = ranked.maxOf { it.totalTokens }.coerceAtLeast(1L)

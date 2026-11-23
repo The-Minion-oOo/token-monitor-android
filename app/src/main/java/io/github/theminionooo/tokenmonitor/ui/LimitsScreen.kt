@@ -173,7 +173,7 @@ internal fun LimitAccountRow(account: LimitAccount, displayOptions: DisplayOptio
                                 Text(limitWindowTitle(account, window), color = Muted, style = MaterialTheme.typography.labelSmall, modifier = Modifier.weight(1f), maxLines = 1)
                                 val amount = limitReportedAmount(account.provider, window)
                                 val display = additionalTokens
-                                    ?: harkQuotaCount(account, window, displayOptions.limitBarMetric == LimitBarMetric.Used)
+                                    ?: limitQuotaCount(account, window, displayOptions.limitBarMetric == LimitBarMetric.Used)
                                     ?: amount?.let { formatWindowAmount(it, window.currency) } ?: (if (displayOptions.limitBarMetric == LimitBarMetric.Remaining) {
                                     quotaPercentLeft(window)?.let { appText(R.string.ui_1_s_left_e96f9, "%1\$s%% left", it) }
                                 } else {

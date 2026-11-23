@@ -1,7 +1,11 @@
-# Desktop parity for v0.95.1
+# Desktop parity for v0.97.0
 
-I compare Android with desktop tag `v0.95.1`, peeled commit
-`b5483a45a603f6b12abfafe1a01e007bc27bf46e`. Android reads the usage collected by desktop.
+I compare Android with desktop tag `v0.97.0`, peeled commit
+`9d745c106ac5030045dade55c0d1aea279cdcfd7`. Android reads the usage collected by desktop.
+
+**Android v0.97.0 r1** offers **Newest** and **Most tokens** in Sessions.
+Limits shows the reported Standard and Select Notion AI credit pools.
+Settings identifies built-in and standalone Node Hubs when reported.
 
 **Android v0.95.1 r1** shows Junie and OpenCodeReview as separate tools.
 Limits labels Qoder CN, and Qoder accounts and GLM Team projects follow the
