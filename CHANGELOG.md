@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.97.0 r1 — 2026-11-23
+
 - Sort Sessions by newest activity or most tokens.
 - Show Standard and Select Notion AI credits as separate pools.
 - Identify built-in and standalone Node Hubs in Settings.
