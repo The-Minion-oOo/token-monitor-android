@@ -1,3 +1,4 @@
+import { checkV097Notion } from "./check-v097-contract.mjs";
 import { checkV0951Reads } from "./check-v0951-contract.mjs";
 import { checkLimitAccountReads } from "./check-limit-accounts.mjs";
 import { checkV0931Projects } from "./check-v0931-contract.mjs";
@@ -57,7 +58,7 @@ async function isolatedContract(source, output, upstream) {
             perClient: { mcode: { tokens: 1234, cost: 0.42, unpricedTokens: 321 } },
             perModel: { "minimax-m2.5": { tokens: 1234, cost: 0.42, unpricedTokens: 321 } } }], monthly: [] } };
     const secret = "isolated-contract-secret";
-    const hub = createHub({ port: 0, host: "127.0.0.1", secret, dataFile: join(source, "synthetic-data.json"), broadcastDelayMs: 5,
+    const hub = createHub({ port: 0, host: "127.0.0.1", secret, deployment: "app", dataFile: join(source, "synthetic-data.json"), broadcastDelayMs: 5,
         logger: { error: error => { throw error; } } });
     // All requests below target the isolated loopback Hub with synthetic records.
     hub.ingest(device);
@@ -84,6 +85,7 @@ async function isolatedContract(source, output, upstream) {
             responses[`${name}.json`] = await response.json();
         }
         assert.equal(responses["health.json"].role, "hub");
+        assert.equal(responses["health.json"].deployment, "app");
         assert.equal(responses["health.json"].secretRequired, true);
         assert.equal(responses["stats.json"].periods.today.totalTokens, 1234);
         assert.equal(responses["stats.json"].periods.today.clients.mcode, 1234);
@@ -399,7 +401,10 @@ async function isolatedContract(source, output, upstream) {
             { label: "Gemini Flash", modelId: "gemini-flash", remainingFraction: 0 },
         ]);
         const antigravity = await fetchAntigravityLimits({}, { now: () => Date.parse(now),
-            antigravityProbe: async () => ({ accountPlan: "Pro", pools }) });
+            antigravityProbe: async () => ({ accountPlan: "Pro", windows: pools.map(pool => ({
+                kind: "weekly", name: pool.name, remainingFraction: pool.remainingFraction,
+                showMeter: Number.isFinite(pool.remainingFraction),
+            })) }) });
         const modernRows = [
             { client: "antigravity", model: "gemini-4-argon", sessionId: "sample-parent", input: 600, output: 100, project: "NEVER_EXPORT_PATH" },
             { client: "antigravity", model: "gemini-4-argon", sessionId: "sample-child", input: 100, output: 50 },
@@ -698,6 +703,10 @@ async function isolatedContract(source, output, upstream) {
         const v0931 = await checkV0931Projects(require, { createHub, source, secret, device, now });
         limitChecks.cases["v0931-projects"] = { records: [v0931.record], providers: [] };
         responses["v0931-projects.json"] = v0931.stats;
+        const v097 = await checkV097Notion(require, { createHub, source, secret, now });
+        limitChecks.cases["v097-notion"] = { records: [v097.record], providers: v097.stats.limits.providers };
+        responses["v097-notion.json"] = v097.stats;
+        responses["v097-standalone-health.json"] = v097.health;
         await checkV081Streams(require, source, output, upstream);
         await checkV092WorkerRecovery(require, source, output);
         await mkdir(output, { recursive: true });

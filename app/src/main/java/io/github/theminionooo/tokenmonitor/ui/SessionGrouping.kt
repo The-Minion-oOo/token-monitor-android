@@ -36,6 +36,13 @@ internal data class SessionRow(
     val usageMetrics: SessionMetrics = sessionMetrics(sessions)
 }
 
+internal enum class SessionSort { MostTokens, Newest }
+
+internal fun sortSessionRows(rows: List<SessionRow>, sort: SessionSort): List<SessionRow> = when (sort) {
+    SessionSort.MostTokens -> rows.sortedWith(compareByDescending<SessionRow> { it.totalTokens }.thenByDescending { it.sortTime })
+    SessionSort.Newest -> rows.sortedByDescending { it.sortTime }
+}
+
 internal fun sessionSortTime(session: SessionUsage): Long =
     runCatching { Instant.parse(session.lastUsedAt.ifBlank { session.startedAt }).toEpochMilli() }.getOrDefault(0L)
 

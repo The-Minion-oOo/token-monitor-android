@@ -522,4 +522,9 @@
     <string name="ui_notification_session_ends">Session ends %1$s</string>
     <string name="ui_month_search_fees">Search fees this month</string>
     <string name="ui_month_fetch_fees">Fetch fees this month</string>
+    <string name="ui_session_sort_most_tokens">Most tokens</string>
+    <string name="ui_session_sort_newest">Newest</string>
+    <string name="ui_hub_built_in">Built-in Hub</string>
+    <string name="ui_hub_standalone">Standalone Hub</string>
+    <string name="ui_hub_node_generic">Node Hub</string>
 </resources>

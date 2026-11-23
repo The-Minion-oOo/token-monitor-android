@@ -131,6 +131,7 @@ object HubProtocolParser {
         deviceCount = root.long("deviceCount").toIntSafely(),
         secretRequired = root.boolean("secretRequired") ?: false,
         now = root.string("now"),
+        deployment = root.string("deployment"),
     )
 
     private fun JsonObject.toStatsDto(): HubStatsDto {
@@ -461,6 +462,7 @@ object HubProtocolParser {
         deviceCount = deviceCount,
         secretRequired = secretRequired,
         now = now,
+        deployment = deployment,
     )
 
     private fun HubStatsDto.toDomain() = HubStats(

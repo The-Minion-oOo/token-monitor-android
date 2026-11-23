@@ -1,6 +1,6 @@
 package io.github.theminionooo.tokenmonitor.data.protocol
 
-import io.github.theminionooo.tokenmonitor.ui.harkQuotaCount
+import io.github.theminionooo.tokenmonitor.ui.limitQuotaCount
 import io.github.theminionooo.tokenmonitor.ui.limitReportedAmount
 import io.github.theminionooo.tokenmonitor.ui.vendorOf
 import java.io.File
@@ -55,10 +55,10 @@ class DesktopV090Test {
             val hark = complete.stats.limits.providers.single { it.provider == "hark" }
             val (daily, monthly, topUp) = hark.windows
             assertEquals(listOf("Daily", "Monthly", "Top-up"), hark.windows.map { it.label })
-            assertEquals("20.0K / 100.0K", harkQuotaCount(hark, daily, showUsed = false))
-            assertEquals("80.0K / 100.0K", harkQuotaCount(hark, daily, showUsed = true))
-            assertEquals("500.0K / 1.0M", harkQuotaCount(hark, monthly, showUsed = false))
-            assertNull(harkQuotaCount(hark, topUp, showUsed = false))
+            assertEquals("20.0K / 100.0K", limitQuotaCount(hark, daily, showUsed = false))
+            assertEquals("80.0K / 100.0K", limitQuotaCount(hark, daily, showUsed = true))
+            assertEquals("500.0K / 1.0M", limitQuotaCount(hark, monthly, showUsed = false))
+            assertNull(limitQuotaCount(hark, topUp, showUsed = false))
             assertEquals(1.25, limitReportedAmount(hark.provider, topUp))
             assertEquals("USD", topUp.currency)
             assertEquals(false, topUp.showMeter)

@@ -32,6 +32,29 @@ import java.time.LocalDate
 class DashboardInteractionTest {
     @get:Rule val compose = createComposeRule()
 
+    @Test fun sessionsCanSwitchBetweenNewestAndMostTokens() {
+        val newer = metricSession().copy(id = "small", title = "Recently active", client = "codex",
+            totalTokens = 200, lastUsedAt = "2026-11-23T14:00:00Z")
+        val older = newer.copy(id = "large", title = "Highest usage", totalTokens = 2000,
+            lastUsedAt = "2026-11-22T14:00:00Z")
+        val snapshot = HubSnapshot(stats = HubStats(periods = mapOf("today" to UsagePeriod(sessions = listOf(newer, older)))))
+        compose.setContent {
+            MaterialTheme {
+                CompositionLocalProvider(LocalInteractionMotion provides false, LocalSessionTitles provides true) {
+                    DashboardContent(Modifier.fillMaxSize(), HubRepositoryState(snapshot = snapshot),
+                        DashboardDestination.Sessions, DashboardPeriod.Today, {}, {}, false,
+                        ServiceStatusState(), DisplayOptions(), {})
+                }
+            }
+        }
+        fun rowTop(title: String) = compose.onNodeWithText(title).getUnclippedBoundsInRoot().top
+        assertTrue(rowTop("Highest usage") < rowTop("Recently active"))
+        compose.onNodeWithText("Newest").assertIsDisplayed().performClick()
+        assertTrue(rowTop("Recently active") < rowTop("Highest usage"))
+        compose.onNodeWithText("Most tokens").performClick()
+        assertTrue(rowTop("Highest usage") < rowTop("Recently active"))
+    }
+
     @Test fun miniMaxCodeFiltersModelsAndKeepsUntitledSessionFallback() {
         fun asset(name: String) = InstrumentationRegistry.getInstrumentation().context.assets
             .open("protocol/v0.66.0/$name").bufferedReader().use { it.readText() }

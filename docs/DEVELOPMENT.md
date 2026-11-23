@@ -124,7 +124,7 @@ or normalize the label to make an assertion pass.
 Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite expects **154 tests** per emulator. The report checker
+The interaction suite expects **155 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
 
@@ -820,6 +820,12 @@ and responses, then read the Node Hub and Worker. The fixtures cover a healthy
 and an expired Copilot login on the same device and the optional DeepSeek fees.
 I also stall a Worker stream writer, check the bounded queue and replay the
 recovery frames through Android’s receiver.
+
+### Desktop v0.97.0 checks
+
+The released-source harness checks built-in and standalone Node Hub health
+and sends synthetic Notion credit pools through Node and Worker. The Android
+suite verifies those responses and exercises both orders in Sessions.
 
 ### Desktop v0.95.1 checks
 

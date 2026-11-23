@@ -12,7 +12,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.95.1**, released 2026-11-21 UTC.
+The verified baseline is upstream Token Monitor **v0.97.0**, released 2026-11-23 UTC.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -53,7 +53,7 @@ write, or device deletion endpoints.
 
 ## Cloudflare Worker
 
-I also exercise `worker/src/index.js` from the same pinned v0.95.1 commit locally.
+I also exercise `worker/src/index.js` from the same pinned v0.97.0 commit locally.
 Its snapshot read routes use the same Bearer authentication and unauthenticated Hub
 identity check. Stream-v2 negotiates the same `snapshot`, complete `stats` and
 compact `freshness` envelopes. Ingest changes may produce freshness-only events;
@@ -657,6 +657,16 @@ The v4 Hub stream can queue small frames while a slow client receives a large
 frame. When the backlog exceeds its budget, the Hub sends a complete `stats`
 frame with the current revision. Android takes that revision as the baseline
 for the next delta.
+
+## Desktop v0.97.0
+
+Node Hub health can report `deployment: "app"` for built-in Host mode or
+`deployment: "standalone"`. Android shows the generic Node Hub label when
+this field is absent or unknown.
+
+Notion AI Standard and Select are separate billing windows with their own
+credit counts, allowance and reset. Android uses the existing limit windows
+and still reads Rolling and Monthly rows from older Hubs.
 
 ## Desktop v0.95.1
 

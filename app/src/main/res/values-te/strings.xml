@@ -607,4 +607,9 @@
     <string name="ui_notification_session_ends">సెషన్ %1$sకి ముగుస్తుంది</string>
     <string name="ui_month_search_fees">ఈ నెల శోధన రుసుము</string>
     <string name="ui_month_fetch_fees">ఈ నెల ఫెచ్ రుసుము</string>
+    <string name="ui_session_sort_most_tokens">ఎక్కువ టోకెన్‌లు</string>
+    <string name="ui_session_sort_newest">ఇటీవలి</string>
+    <string name="ui_hub_built_in">అంతర్నిర్మిత Hub</string>
+    <string name="ui_hub_standalone">స్వతంత్ర Hub</string>
+    <string name="ui_hub_node_generic">Node Hub</string>
 </resources>

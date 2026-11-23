@@ -607,4 +607,9 @@
     <string name="ui_notification_session_ends">সেশন %1$s-এ শেষ হবে</string>
     <string name="ui_month_search_fees">এই মাসের সার্চ ফি</string>
     <string name="ui_month_fetch_fees">এই মাসের ফেচ ফি</string>
+    <string name="ui_session_sort_most_tokens">সর্বাধিক টোকেন</string>
+    <string name="ui_session_sort_newest">সাম্প্রতিক</string>
+    <string name="ui_hub_built_in">অন্তর্নির্মিত Hub</string>
+    <string name="ui_hub_standalone">স্বতন্ত্র Hub</string>
+    <string name="ui_hub_node_generic">Node Hub</string>
 </resources>

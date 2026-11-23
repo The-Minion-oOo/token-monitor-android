@@ -1,0 +1,58 @@
+{
+  "limits": {
+    "updatedAt": "2026-11-23T18:51:11.242Z",
+    "providers": [
+      {
+        "provider": "notion",
+        "accountKey": "demo-v097-notion",
+        "accountLabel": "",
+        "planLabel": "",
+        "accountName": "",
+        "accountEmail": "",
+        "workspaceKind": "",
+        "status": "ok",
+        "source": "web",
+        "sourceDetail": "",
+        "updatedAt": "2026-11-23T18:51:08.905Z",
+        "windows": [
+          {
+            "kind": "billing",
+            "label": "Standard",
+            "used": 134.5,
+            "limit": 1500,
+            "remaining": 1365.5,
+            "usedPercent": 8.966666666666667,
+            "remainingPercent": 91.033,
+            "resetsAt": "2026-11-24T18:51:08.905Z",
+            "windowMinutes": null,
+            "resetDescription": "Monthly",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          },
+          {
+            "kind": "billing",
+            "label": "Select",
+            "used": 0,
+            "limit": 500,
+            "remaining": 500,
+            "usedPercent": 0,
+            "remainingPercent": 100,
+            "resetsAt": "2026-11-24T18:51:08.905Z",
+            "windowMinutes": null,
+            "resetDescription": "Monthly",
+            "detail": "",
+            "currency": null,
+            "showMeter": true
+          }
+        ],
+        "balanceUsd": null,
+        "balance": null,
+        "resetCredits": null,
+        "region": "",
+        "sourceDeviceId": "synthetic-v097-notion",
+        "stale": false
+      }
+    ]
+  }
+}
