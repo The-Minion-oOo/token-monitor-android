@@ -8,7 +8,7 @@ Read [Architecture](ARCHITECTURE.md) before changing runtime behavior and
 | Requirement | Version |
 | --- | --- |
 | JDK | 17 or newer |
-| Android SDK | Platform 37 (`37.0` in the SDK package feed) and current build tools |
+| Android SDK | Platform 37.1 (`platforms;android-37.1`) and current build tools |
 | Gradle | Wrapper included in the repository |
 | Node.js | 22.19.0 or newer for fixture, contract, and release tools |
 | Emulator | API 36 Google APIs image recommended |
