@@ -20,7 +20,11 @@ val hubTiming = providers.gradleProperty("tokenMonitorHubTiming").orNull == "tru
 
 android {
     namespace = "io.github.theminionooo.tokenmonitor"
-    compileSdk = 37
+    compileSdk {
+        version = release(37) {
+            minorApiLevel = 1
+        }
+    }
 
     defaultConfig {
         applicationId = "io.github.theminionooo.tokenmonitor"
