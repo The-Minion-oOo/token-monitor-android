@@ -17,7 +17,8 @@ Read [Architecture](ARCHITECTURE.md) before changing runtime behavior and
 
 Install the Node tooling dependencies once with `npm ci --prefix tools`. The
 image tools use Sharp and font tooling; the released-Hub contract harness uses
-Undici 8.12.3 to load the New API collector from the pinned desktop source.
+the Undici version pinned in `tools/package-lock.json` to load the New API
+collector from the pinned desktop source.
 The Node and Worker contract checks verify that source with the updated tooling
 dependency. Its network responses are stubbed; it never contacts a vendor account.
 
