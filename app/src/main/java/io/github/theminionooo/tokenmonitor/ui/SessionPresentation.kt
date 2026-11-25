@@ -45,21 +45,28 @@ internal fun sessionTitleForDisplay(session: SessionUsage): String {
     return if (ompTitleCode.containsMatchIn(rest)) rest else title
 }
 
-internal fun sessionRowLabels(session: SessionUsage, showTitles: Boolean = true, names: ModelNames = ModelNames()): SessionRowLabels {
+internal fun sessionRowLabels(
+    session: SessionUsage,
+    showTitles: Boolean = true,
+    names: ModelNames = ModelNames(),
+    useProjectFallback: Boolean = false,
+): SessionRowLabels {
     val client = session.client.displayName()
     val reportedTitle = if (showTitles) sessionTitleForDisplay(session) else ""
+    val project = session.projectLabel.trim()
+    val projectTitle = useProjectFallback && showTitles && reportedTitle.isBlank() && project.isNotBlank()
     val model = sessionModelMetadata(session, names)
     val modelMetadata = model.takeIf {
-        reportedTitle.isNotBlank() && (session.latestModel != null || session.reasoningEffort != null)
+        projectTitle || (reportedTitle.isNotBlank() && (session.latestModel != null || session.reasoningEffort != null))
     }
     val title = reportedTitle.ifBlank {
-        listOf(client, model).filter { it.isNotBlank() }.joinToString(" · ")
+        if (projectTitle) project else listOf(client, model).filter { it.isNotBlank() }.joinToString(" · ")
     }.ifBlank { appText(R.string.ui_session_f7f19, "Session") }
     val meta = listOf(
-        client.takeIf { reportedTitle.isNotBlank() }.orEmpty(),
+        client.takeIf { projectTitle || reportedTitle.isNotBlank() }.orEmpty(),
         modelMetadata.orEmpty(),
         session.lastUsedAt.shortClockTime(),
-        session.projectLabel,
+        project.takeUnless { projectTitle }.orEmpty(),
         session.messageCount.takeIf { it > 0 }?.let { appText(R.string.ui_1_s_messages_d4b92, "%1\$s messages", it) }.orEmpty(),
     ).filter { it.isNotBlank() }.joinToString(" · ").ifBlank { session.id }
     return SessionRowLabels(title, meta, modelMetadata)

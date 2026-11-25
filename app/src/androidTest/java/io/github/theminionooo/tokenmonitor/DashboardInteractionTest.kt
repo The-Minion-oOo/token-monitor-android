@@ -62,7 +62,8 @@ class DashboardInteractionTest {
             asset("devices.json"), asset("history.json"), asset("subscriptions.json"), 0)
         var destination by mutableStateOf(DashboardDestination.Tools)
         var modelFilter by mutableStateOf<String?>(null)
-        compose.setContent { MaterialTheme { CompositionLocalProvider(LocalInteractionMotion provides false) {
+        var showTitles by mutableStateOf(true)
+        compose.setContent { MaterialTheme { CompositionLocalProvider(LocalInteractionMotion provides false, LocalSessionTitles provides showTitles) {
             DashboardContent(Modifier.fillMaxSize(), HubRepositoryState(snapshot = snapshot), destination,
                 DashboardPeriod.Today, { destination = it }, {}, false, ServiceStatusState(), DisplayOptions(), {},
                 modelFilter = modelFilter,
@@ -73,6 +74,9 @@ class DashboardInteractionTest {
         compose.onNodeWithText("minimax-m2.5").assertIsDisplayed()
         compose.onNodeWithText("claude-sonnet-4-5").assertDoesNotExist()
         compose.runOnIdle { destination = DashboardDestination.Sessions }
+        compose.onNodeWithText("Example Project").assertIsDisplayed()
+        compose.onNodeWithText("MiniMax Code · minimax-m2.5", substring = true).assertIsDisplayed()
+        compose.runOnIdle { showTitles = false }
         compose.onNodeWithText("MiniMax Code · minimax-m2.5").assertIsDisplayed()
     }
 

@@ -822,6 +822,13 @@ and an expired Copilot login on the same device and the optional DeepSeek fees.
 I also stall a Worker stream writer, check the bounded queue and replay the
 recovery frames through Android’s receiver.
 
+### Desktop v0.98.0 checks
+
+The harness publishes a synthetic fixed-range revision to the released
+Node and Worker Hubs, then checks that ordinary authenticated stats still
+include the untitled session and its project. Android parses that response
+and uses the project label only when session titles are shown.
+
 ### Desktop v0.97.0 checks
 
 The released-source harness checks built-in and standalone Node Hub health

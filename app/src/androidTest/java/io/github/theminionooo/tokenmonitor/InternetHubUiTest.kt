@@ -95,7 +95,10 @@ class InternetHubUiTest {
 
     @Test fun savedInternetConsentAppearsInConnectionSettings() {
         screen(HubRepositoryState(hasConnection = true, connectionUrl = "https://hub.example.com", allowPublicHttps = true))
-        compose.onNodeWithText("CONNECTION", useUnmergedTree = true).performClick()
+        val connection = compose.onNode(hasText("CONNECTION") and hasText("Internet (HTTPS)"))
+        connection.assertIsDisplayed().assertHasClickAction()
+        capture("settings-cards")
+        connection.performClick().assertIsDisplayed()
         compose.onNodeWithContentDescription("Allow an internet Hub over HTTPS").performScrollTo().assertIsOn()
         compose.onNodeWithText("The Hub secret can also change data on the Hub.", substring = true).performScrollTo()
         compose.onNodeWithText("CHECK AND SAVE CONNECTION", useUnmergedTree = true).performScrollTo()

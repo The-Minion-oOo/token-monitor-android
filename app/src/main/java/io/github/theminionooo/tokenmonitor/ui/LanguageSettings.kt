@@ -14,7 +14,7 @@ internal fun LanguageSettings() {
     val context = LocalContext.current
     val selected = AppLanguage.selected(context)
     val system = appText(R.string.language_system, "Follow phone language")
-    SettingsGroup(appText(R.string.language_title, "App language"), summary = AppLanguage.choices[selected].takeUnless { selected.isBlank() } ?: system) {
+    SettingsGroup(appText(R.string.language_title, "App language"), icon = R.drawable.view_session, summary = AppLanguage.choices[selected].takeUnless { selected.isBlank() } ?: system) {
         Text(appText(R.string.language_help, "Choose a language for the app and widget labels. Tool names, reported titles and desktop notes stay as supplied by the Hub."), color = Muted, style = MaterialTheme.typography.bodySmall)
         AppLanguage.choices.forEach { (tag, label) ->
             TextButton(onClick = { if (tag != selected) AppLanguage.choose(context, tag) }, modifier = Modifier.fillMaxWidth()) {
