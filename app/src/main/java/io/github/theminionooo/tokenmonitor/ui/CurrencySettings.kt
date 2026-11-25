@@ -61,7 +61,7 @@ internal fun CurrencyRateEffect(options: DisplayOptions, onChange: (DisplayOptio
 
 @Composable
 internal fun CurrencySettings(options: DisplayOptions, onChange: (DisplayOptions) -> Unit) {
-    SettingsGroup(appText(R.string.ui_display_currency_fb2a7, "Display currency"), summary = options.currencyCode) {
+    SettingsGroup(appText(R.string.ui_display_currency_fb2a7, "Display currency"), icon = R.drawable.view_trends, summary = options.currencyCode) {
         Text(appText(R.string.ui_convert_estimated_usage_costs_only_provider_balances_0db89, "Convert estimated usage costs only. Provider balances and recorded payments keep their original currency."), color = Muted, style = MaterialTheme.typography.bodySmall)
         usageCurrencies.chunked(3).forEach { row -> ChoiceGroup(row.map { it to it }, options.currencyCode, { onChange(options.copy(currencyCode = it)) }) }
         if (options.currencyCode != "USD") {

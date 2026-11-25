@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Give Settings larger card headers with icons and a separate line for current values.
+- Use project names for untitled session rows when session titles are shown.
+- Verify desktop v0.98.0 Node and Worker stats when a desktop publishes a fixed-range revision.
+
 ## v0.97.0 r1 — 2026-11-23
 
 - Sort Sessions by newest activity or most tokens.

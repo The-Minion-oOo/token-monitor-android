@@ -1,7 +1,11 @@
-# Desktop parity for v0.97.0
+# Desktop parity for v0.98.0
 
-I compare Android with desktop tag `v0.97.0`, peeled commit
-`9d745c106ac5030045dade55c0d1aea279cdcfd7`. Android reads the usage collected by desktop.
+I compare Android with desktop tag `v0.98.0`, peeled commit
+`3ea0ec251a3724622fe21a81ad37eea74570617f`. Android reads the usage collected by desktop.
+
+**Android v0.98.0 r1** adapts the desktop’s Settings cards with icons,
+current-value summaries and larger tap targets. Untitled session rows can
+use the project label. Android derives date ranges from daily history.
 
 **Android v0.97.0 r1** offers **Newest** and **Most tokens** in Sessions.
 Limits shows the reported Standard and Select Notion AI credit pools.

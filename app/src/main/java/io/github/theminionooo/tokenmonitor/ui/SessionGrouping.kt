@@ -231,13 +231,13 @@ internal fun sessionRowPresentation(row: SessionRow, showTitles: Boolean = true,
             latestModel = row.display.latestModel?.let(names::name),
             lastUsedAt = latest.lastUsedAt.ifBlank { latest.startedAt },
             messageCount = 0,
-        ), showTitles)
+        ), showTitles, useProjectFallback = true)
         val count = row.subagentCount.takeIf { it > 0 }?.let { if (it == 1) "1 subagent" else "$it subagents" }
         // The count leads, so a narrow row shortens the project rather than hiding how many subagents ran.
         val messages = row.usageMetrics.messageCount.takeIf { it > 0 }?.let { "$it messages" }
         labels.copy(meta = listOfNotNull(count, "Subagent".takeIf { row.subagent }, labels.meta, messages).joinToString(" · "))
     }
-    null -> sessionRowLabels(row.display, showTitles, names).let { labels ->
+    null -> sessionRowLabels(row.display, showTitles, names, useProjectFallback = true).let { labels ->
         if (row.subagent) labels.copy(meta = "Subagent · ${labels.meta}") else labels
     }
 }

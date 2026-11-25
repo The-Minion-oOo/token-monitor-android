@@ -23,7 +23,7 @@ import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
 
 @Composable
 internal fun DisplayItemSettings(snapshot: HubSnapshot?, options: DisplayOptions, onChange: (DisplayOptions) -> Unit) {
-    SettingsGroup(appText(R.string.ui_tools_and_quotas_0b13a, "Tools and quotas"), summary = appText(R.string.ui_local_visibility_and_order_eb2af, "Local visibility and order")) {
+    SettingsGroup(appText(R.string.ui_tools_and_quotas_0b13a, "Tools and quotas"), icon = R.drawable.view_limits, summary = appText(R.string.ui_local_visibility_and_order_eb2af, "Local visibility and order")) {
         Text(appText(R.string.ui_these_choices_change_this_phone_s_display_collection_90959, "These choices change this phone's display. Collection and the Hub's totals stay the same."), color = Muted, style = MaterialTheme.typography.bodySmall)
         var query by rememberSaveable { mutableStateOf("") }
         OutlinedTextField(query, { query = it }, label = { Text(appText(R.string.ui_find_a_tool_or_provider_dc602, "Find a tool or provider")) }, modifier = Modifier.fillMaxWidth(), singleLine = true)

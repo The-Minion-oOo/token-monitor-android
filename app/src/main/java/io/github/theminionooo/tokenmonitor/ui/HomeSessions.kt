@@ -92,12 +92,11 @@ internal fun HomeSessionsModule(
                     Column {
                         val names = LocalModelNames.current
                         val labels = sessionRowPresentation(row, LocalSessionTitles.current, names)
-                        val model = if (session.latestModel != null) labels.modelMetadata
-                            else session.reasoningEffort?.let { sessionModelMetadata(session, names) }
+                        val model = labels.modelMetadata ?: session.reasoningEffort?.let { sessionModelMetadata(session, names) }
                         HomeListRow(
                             name = labels.title,
                             primary = formatCompactTokens(row.totalTokens),
-                            secondary = listOfNotNull(session.client.displayName(), model, sessionActivityLabel(state).ifBlank { appText(R.string.ui_idle_cc1eb, "Idle") }, members, age, session.projectLabel)
+                            secondary = listOfNotNull(session.client.displayName(), model, sessionActivityLabel(state).ifBlank { appText(R.string.ui_idle_cc1eb, "Idle") }, members, age, session.projectLabel.trim().takeUnless { it == labels.title })
                                 .filter { it.isNotBlank() }.joinToString(" · "),
                             color = when (state) {
                                 SessionActivityState.Running -> Success

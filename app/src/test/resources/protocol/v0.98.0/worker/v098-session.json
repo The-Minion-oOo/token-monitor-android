@@ -1,0 +1,36 @@
+{
+  "periods": {
+    "today": {
+      "sessions": {
+        "antigravity:v098-acp": {
+          "client": "antigravity",
+          "sessionId": "v098-acp",
+          "totalTokens": 120,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-11-25T15:34:44.568Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "Sample release",
+          "title": "",
+          "sessionKind": "",
+          "models": {},
+          "modelCosts": {},
+          "providers": {}
+        }
+      }
+    }
+  },
+  "fixedRangeRevisions": {
+    "synthetic-v098-desktop": "00000000-0000-0000-0000-000000000098"
+  }
+}

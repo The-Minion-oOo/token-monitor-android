@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -58,6 +60,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.window.Dialog
@@ -206,13 +210,13 @@ internal fun ConnectionScreen(
                 io.github.theminionooo.tokenmonitor.data.network.HubAddressValidator.routeLabel(state.connectionUrl) == "Internet (HTTPS)" -> "Internet (HTTPS)"
                 else -> state.connectionUrl.orEmpty().removePrefix("http://").removePrefix("https://").substringBefore(':')
             }
-            SettingsGroup(appText(R.string.ui_connection_6512e, "Connection"), summary = listOfNotNull(route, appText(R.string.ui_home_fallback_ba90d, "home fallback").takeIf { state.fallbackUrl != null && route != "Home Wi-Fi" }).joinToString(" · ")) {
+            SettingsGroup(appText(R.string.ui_connection_6512e, "Connection"), icon = R.drawable.view_device, summary = listOfNotNull(route, appText(R.string.ui_home_fallback_ba90d, "home fallback").takeIf { state.fallbackUrl != null && route != "Home Wi-Fi" }).joinToString(" · ")) {
                 Text(appText(R.string.ui_this_phone_only_reads_your_hub_it_cannot_control_the_654a0, "This phone only reads your Hub. It cannot control the desktop or access its files."), color = Muted, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
                 Text(appText(R.string.ui_repair_the_home_address_with_the_saved_pairing_or_en_07412, "Repair the home address with the saved pairing, or enter the secret again to replace the connection."), color = Accent, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
                 fields(appText(R.string.ui_check_and_save_connection_e118a, "CHECK AND SAVE CONNECTION"))
                 OutlinedButton(onClick = onDisconnect, modifier = Modifier.fillMaxWidth()) { Text(appText(R.string.ui_disconnect_this_phone_f8a16, "DISCONNECT THIS PHONE")) }
             }
-            SettingsGroup(appText(R.string.ui_pair_with_desktop_6759b, "Pair with desktop"), summary = appText(R.string.ui_3_steps_e5516, "3 steps")) {
+            SettingsGroup(appText(R.string.ui_pair_with_desktop_6759b, "Pair with desktop"), icon = R.drawable.view_device, summary = appText(R.string.ui_3_steps_e5516, "3 steps")) {
                 Text(appText(R.string.ui_1_install_tailscale_on_the_desktop_and_phone_then_us_9aa66, "1. Install Tailscale on the desktop and phone, then use the same tailnet."), color = Ink, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
                 Text(appText(R.string.ui_2_in_the_desktop_app_open_settings_multi_device_sync_69c49, "2. In the desktop app, open Settings → Multi-device Sync and choose Host Hub."), color = Ink, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
                 Text(appText(R.string.ui_3_type_the_address_that_starts_with_100_and_the_shar_009a9, "3. Type the address that starts with 100. and the shared secret from the desktop app into the fields above. Just the numbers are enough."), color = Ink, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
@@ -222,7 +226,7 @@ internal fun ConnectionScreen(
             val themeId = InterfaceTheme.idOf(currentTheme)
             var themeCodeInput by rememberSaveable(currentTheme.code) { mutableStateOf(currentTheme.code) }
             var themeCodeInvalid by remember { mutableStateOf(false) }
-            SettingsGroup(appText(R.string.ui_appearance_41def, "Appearance"), summary = "${if (displayOptions.followSystemTheme) "Follows phone" else themeId.replaceFirstChar { it.titlecase(Locale.US) }} · ${displayLabel(displayOptions.textScale.name)}") {
+            SettingsGroup(appText(R.string.ui_appearance_41def, "Appearance"), icon = R.drawable.action_settings, summary = "${if (displayOptions.followSystemTheme) "Follows phone" else themeId.replaceFirstChar { it.titlecase(Locale.US) }} · ${displayLabel(displayOptions.textScale.name)}") {
                 Text(appText(R.string.ui_interface_theme_f47f8, "Interface theme"), color = Ink, style = MaterialTheme.typography.bodyMedium)
                 ChoiceGroup(
                     options = InterfaceTheme.presets.keys.map { it.uppercase(Locale.US) to it },
@@ -278,7 +282,7 @@ internal fun ConnectionScreen(
                 )
                 Text(appText(R.string.ui_digit_roll_keeps_the_unchanged_leading_digits_and_ro_1d13c, "Digit roll keeps the unchanged leading digits and rolls the rest, like the desktop. Count up counts to the new total."), color = Muted, style = MaterialTheme.typography.labelSmall)
             }
-            SettingsGroup(appText(R.string.ui_main_dashboard_5eaea, "Main dashboard"), summary = appText(R.string.ui_1_s_2_s_views_3_s_8ed52, "%1\$s/%2\$s views · %3\$s", displayOptions.visibleViews.size, DisplayOptions.defaultViews.size, DashboardPeriod.entries.firstOrNull { it.name == displayOptions.defaultPeriod }?.let(::periodRangeLabel) ?: "Day")) {
+            SettingsGroup(appText(R.string.ui_main_dashboard_5eaea, "Main dashboard"), icon = R.drawable.view_home, summary = appText(R.string.ui_1_s_2_s_views_3_s_8ed52, "%1\$s/%2\$s views · %3\$s", displayOptions.visibleViews.size, DisplayOptions.defaultViews.size, DashboardPeriod.entries.firstOrNull { it.name == displayOptions.defaultPeriod }?.let(::periodRangeLabel) ?: "Day")) {
                 Text(appText(R.string.ui_default_usage_range_0d7b0, "Default usage range"), color = Ink, style = MaterialTheme.typography.bodyMedium)
                 DashboardPeriod.entries.chunked(3).forEach { row ->
                     ChoiceGroup(
@@ -313,7 +317,7 @@ internal fun ConnectionScreen(
                     }
                 }
             }
-            SettingsGroup(appText(R.string.ui_usage_presentation_bd842, "Usage presentation"), summary = "${displayLabel(displayOptions.rankingMetric.name)} · ${displayLabel(displayOptions.limitBarMetric.name)}") {
+            SettingsGroup(appText(R.string.ui_usage_presentation_bd842, "Usage presentation"), icon = R.drawable.view_trends, summary = "${displayLabel(displayOptions.rankingMetric.name)} · ${displayLabel(displayOptions.limitBarMetric.name)}") {
                 Text(appText(R.string.ui_model_and_tool_ranking_33668, "Model and tool ranking"), color = Ink, style = MaterialTheme.typography.bodyMedium)
                 ChoiceGroup(
                     options = listOf(appText(R.string.ui_tokens_00341, "TOKENS") to RankingMetric.Tokens.name, appText(R.string.ui_cost_75fde, "COST") to RankingMetric.Cost.name),
@@ -336,7 +340,7 @@ internal fun ConnectionScreen(
                     state.widgetLiveActive -> appText(R.string.ui_widget_live_bbe50, "Widget live")
                     else -> appText(R.string.ui_snapshot_b08ae, "Snapshot")
                 }
-                SettingsGroup(appText(R.string.ui_hub_status_5117a, "Hub status"), summary = delivery) {
+                SettingsGroup(appText(R.string.ui_hub_status_5117a, "Hub status"), icon = R.drawable.view_status, summary = delivery) {
                     StatusLine(appText(R.string.ui_connection_6512e, "Connection"), delivery, if (state.streamActive || state.widgetLiveActive) Success else Muted)
                     StatusLine(appText(R.string.ui_route_49995, "Route"), io.github.theminionooo.tokenmonitor.data.network.HubAddressValidator.routeLabel(state.activeUrl ?: state.connectionUrl, state.fallbackUrl))
                     StatusLine(appText(R.string.ui_hub_build_3bb17, "Hub build"), formatHubBuild(snapshot.health.hubBuild))
@@ -347,7 +351,7 @@ internal fun ConnectionScreen(
                     StatusLine(appText(R.string.ui_phone_data_b89f2, "Phone data"), if (snapshot.fromCache || snapshot.stale) appText(R.string.ui_saved_snapshot_c3933, "Saved snapshot") else appText(R.string.ui_current_4fc0e, "Current"))
                 }
             }
-            SettingsGroup(appText(R.string.ui_home_screen_widget_c1c9a, "Home-screen widget"), summary = appText(R.string.ui_live_controls_resizable_0fae1, "Live controls · resizable")) {
+            SettingsGroup(appText(R.string.ui_home_screen_widget_c1c9a, "Home-screen widget"), icon = R.drawable.view_home, summary = appText(R.string.ui_live_controls_resizable_0fae1, "Live controls · resizable")) {
                 WidgetBackgroundSettings()
                 val widgetContext = androidx.compose.ui.platform.LocalContext.current
                 val widgets = android.appwidget.AppWidgetManager.getInstance(widgetContext)
@@ -365,12 +369,12 @@ internal fun ConnectionScreen(
             DisplayItemSettings(state.snapshot, displayOptions, LocalDisplayChange.current)
             CurrencySettings(displayOptions, LocalDisplayChange.current)
             LiveRateSettings(displayOptions, LocalDisplayChange.current)
-            SettingsGroup("Compatibility", summary = "Desktop v${BuildConfig.UPSTREAM_VERSION}") {
+            SettingsGroup("Compatibility", icon = R.drawable.view_status, summary = "Desktop v${BuildConfig.UPSTREAM_VERSION}") {
                 StatusLine("Android app", BuildConfig.VERSION_NAME)
                 StatusLine("Desktop baseline", "Token Monitor v${BuildConfig.UPSTREAM_VERSION}")
                 Text(appText(R.string.ui_protocol_changes_are_reviewed_against_versioned_fixt_b6c04, "Protocol changes are reviewed against versioned fixtures before this baseline moves forward."), color = Muted, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
             }
-            SettingsGroup("App updates", summary = "${BuildConfig.VERSION_NAME} r${BuildConfig.VERSION_CODE % 1000}") {
+            SettingsGroup("App updates", icon = R.drawable.action_settings, summary = "${BuildConfig.VERSION_NAME} r${BuildConfig.VERSION_CODE % 1000}") {
                 AppUpdatesPanel(onOpenReleasePage)
             }
             Text(appText(R.string.ui_the_dashboard_streams_immediately_while_visible_widg_cb815, "The dashboard streams immediately while visible. Widget Live uses a lighter 30-second refresh and stops after one hour."), color = Muted, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
@@ -507,7 +511,7 @@ private fun WelcomeSetup(modifier: Modifier, fields: @Composable ColumnScope.(St
             Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { fields(appText(R.string.ui_connect_6e288, "CONNECT")) }
         }
         Text(appText(R.string.ui_connect_privately_with_tailscale_recommended_or_enab_6df72, "Connect privately with Tailscale (recommended), or enable an existing internet Hub over HTTPS. App update checks contact GitHub."), color = Muted, style = MaterialTheme.typography.labelSmall, lineHeight = 15.sp)
-        SettingsGroup("App updates", summary = "${BuildConfig.VERSION_NAME} r${BuildConfig.VERSION_CODE % 1000}") {
+        SettingsGroup("App updates", icon = R.drawable.action_settings, summary = "${BuildConfig.VERSION_NAME} r${BuildConfig.VERSION_CODE % 1000}") {
             AppUpdatesPanel(onOpenReleasePage)
         }
     }
@@ -531,6 +535,7 @@ internal fun SettingsGroup(
     title: String,
     summary: String? = null,
     collapsible: Boolean = true,
+    @androidx.annotation.DrawableRes icon: Int? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val openSection = LocalOpenSettingsSection.current
@@ -540,26 +545,42 @@ internal fun SettingsGroup(
         if (collapsible && openSection != null) openSection.value = if (expanded) null else title else standaloneExpanded = !standaloneExpanded
     }
     val motionEnabled = LocalInteractionMotion.current
-    Surface(color = Recessed.copy(alpha = 0.76f), border = BorderStroke(1.dp, Line), shape = MaterialTheme.shapes.medium, modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Surface(
+        color = Recessed.copy(alpha = 0.76f),
+        border = BorderStroke(1.dp, if (expanded && collapsible) Accent.copy(alpha = 0.44f) else Line),
+        shape = MaterialTheme.shapes.medium,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column {
+            val header = Modifier.fillMaxWidth()
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = if (collapsible) Modifier.fillMaxWidth().clickable(onClick = toggle).padding(vertical = 2.dp) else Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = (if (collapsible) header.clickable(role = Role.Button, onClick = toggle) else header)
+                    .heightIn(min = 60.dp)
+                    .padding(horizontal = 12.dp, vertical = 10.dp),
             ) {
-                Text(title.uppercase(Locale.US), color = Ink, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold)
-                Spacer(Modifier.width(10.dp))
-                if (summary != null && !expanded) {
-                    Text(summary, color = Muted, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.End, modifier = Modifier.weight(1f))
-                } else {
-                    Spacer(Modifier.weight(1f))
+                if (icon != null) {
+                    Box(
+                        modifier = Modifier.size(34.dp)
+                            .background(Accent.copy(alpha = if (expanded) 0.16f else 0.09f), MaterialTheme.shapes.small),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(painterResource(icon), contentDescription = null, modifier = Modifier.size(18.dp), tint = Accent)
+                    }
+                }
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                    Text(title.uppercase(Locale.US), color = Ink, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.SemiBold)
+                    if (!summary.isNullOrBlank()) {
+                        Text(summary, color = Muted, style = MaterialTheme.typography.labelMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                    }
                 }
                 if (collapsible) {
-                    Spacer(Modifier.width(8.dp))
                     Icon(
                         imageVector = Icons.Outlined.KeyboardArrowDown,
                         contentDescription = if (expanded) appText(R.string.ui_collapse_1_s_369a4, "Collapse %1\$s", title) else appText(R.string.ui_expand_1_s_642c8, "Expand %1\$s", title),
-                        tint = Muted,
-                        modifier = Modifier.size(16.dp).rotate(rememberChevronRotation(expanded)),
+                        tint = if (expanded) Accent else Muted,
+                        modifier = Modifier.size(20.dp).rotate(rememberChevronRotation(expanded)),
                     )
                 }
             }
@@ -568,7 +589,10 @@ internal fun SettingsGroup(
                 enter = fadeIn(tween(if (motionEnabled) 160 else 0)) + expandVertically(tween(if (motionEnabled) 240 else 0, easing = DesktopEaseOut)),
                 exit = fadeOut(tween(if (motionEnabled) 100 else 0)) + shrinkVertically(tween(if (motionEnabled) 180 else 0, easing = DesktopEaseOut)),
             ) {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { content() }
+                Column(Modifier.padding(start = 12.dp, end = 12.dp, bottom = 12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    HorizontalDivider(color = Line)
+                    content()
+                }
             }
         }
     }
