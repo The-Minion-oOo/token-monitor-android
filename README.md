@@ -14,12 +14,12 @@
 <p align="center"><a href="README.zh-CN.md">简体中文</a> · <a href="docs/LANGUAGES.md">Languages / भाषाएँ / ભાષાઓ / భాషలు</a></p>
 
 <p align="center">
-  <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://img.shields.io/github/actions/workflow/status/The-Minion-oOo/token-monitor-android/android.yml?branch=main&style=flat-square&logo=githubactions&logoColor=10221c&label=Android%20checks"></a>
+  <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml/badge.svg?branch=main"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
   <img alt="Desktop baseline v0.99.0" src="https://img.shields.io/badge/Desktop-v0.99.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
-  <a href="https://github.com/The-Minion-oOo/token-monitor-android/releases"><img alt="Total GitHub release asset downloads" src="https://img.shields.io/github/downloads/The-Minion-oOo/token-monitor-android/total?label=Downloads&style=flat-square&color=73bdf5"></a>
+  <a href="https://github.com/The-Minion-oOo/token-monitor-android/releases"><img alt="Public release asset downloads (dated snapshot)" src="docs/images/downloads-badge.svg"></a>
 </p>
 
 <p>
