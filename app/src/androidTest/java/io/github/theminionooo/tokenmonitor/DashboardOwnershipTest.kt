@@ -133,7 +133,7 @@ class DashboardOwnershipTest {
         check(context.packageName.endsWith(".preview"))
         grantFixtureNetworkAccess()
         FixtureHub(requiredSecret = "fixture-one", tokenBase = 100).use { first ->
-            FixtureHub(requiredSecret = "fixture-two", tokenBase = 900).use { second ->
+            FixtureHub(requiredSecret = "fixture-two", tokenBase = 900, sendSingleStatsUpdate = true).use { second ->
                 val address = NetworkInterface.getNetworkInterfaces().toList().flatMap { it.inetAddresses.toList() }
                     .filterIsInstance<Inet4Address>().first { it.isSiteLocalAddress }.hostAddress
                 val store = SecureConnectionStore(context)
@@ -152,7 +152,8 @@ class DashboardOwnershipTest {
                     instrumentation.runOnMainSync { assertTrue(hub.switchHubProfile(secondId)) }
                     await { first.streams.get() == 0 && second.streams.get() == 1 && hub.state.value.streamActive }
                     assertEquals(secondId, hub.state.value.activeProfileId)
-                    assertTrue(checkNotNull(hub.state.value.snapshot).today.totalTokens >= 900)
+                    // The new Hub sends one queued stats update and then only comments.
+                    await { hub.state.value.snapshot?.today?.totalTokens == 902L }
                     assertEquals(1, first.opened.get())
                     assertEquals(1, second.opened.get())
                 } finally {
@@ -189,7 +190,11 @@ class DashboardOwnershipTest {
         assertTrue("Dashboard condition did not become true within ten seconds", condition())
     }
 
-    private inner class FixtureHub(private val requiredSecret: String? = null, private val tokenBase: Int = 100) : AutoCloseable {
+    private inner class FixtureHub(
+        private val requiredSecret: String? = null,
+        private val tokenBase: Int = 100,
+        private val sendSingleStatsUpdate: Boolean = false,
+    ) : AutoCloseable {
         private val server = ServerSocket(0)
         val port get() = server.localPort
         val requests = AtomicInteger()
@@ -235,8 +240,14 @@ class DashboardOwnershipTest {
                 opened.incrementAndGet()
                 try {
                     output.write("HTTP/1.1 200 OK\r\nContent-Type: text/event-stream\r\n\r\n".toByteArray())
+                    if (sendSingleStatsUpdate) {
+                        output.write("event: snapshot\ndata: {\"stats\":${stats(tokenBase + 1)}}\n\n".toByteArray())
+                        output.write("event: stats\ndata: {\"stats\":${stats(tokenBase + 2)}}\n\n".toByteArray())
+                    }
                     while (!server.isClosed) {
-                        output.write("event: snapshot\ndata: {\"stats\":${stats(tokens.incrementAndGet())}}\n\n".toByteArray())
+                        val frame = if (sendSingleStatsUpdate) ": keepalive\n\n"
+                        else "event: snapshot\ndata: {\"stats\":${stats(tokens.incrementAndGet())}}\n\n"
+                        output.write(frame.toByteArray())
                         output.flush()
                         Thread.sleep(50)
                     }
