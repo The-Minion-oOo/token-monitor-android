@@ -148,6 +148,18 @@ resolve, so every link in `docs/releases/*.md` must be an absolute
 URL; `tools/check-docs.mjs` enforces this. Link to Install and update
 (`.../docs/INSTALL.md`) instead of repeating the full procedure.
 
+When updating the published release docs, refresh the dated
+[Downloads badge](images/downloads-badge.svg) from GitHub's public release asset
+counts. In PowerShell:
+
+```powershell
+gh api --paginate 'repos/The-Minion-oOo/token-monitor-android/releases?per_page=100' --jq '.[] | select(.draft | not) | .assets[].download_count' |
+  Measure-Object -Sum | Select-Object -ExpandProperty Sum
+```
+
+Update the count and date in both the SVG's title and visible text. The total
+covers all public release asset downloads, including checksums and manifests.
+
 Batch related work and publish when the APK is worth reinstalling. Documentation,
 marketing-image placement, and other non-app changes do not need a new Android
 revision.
