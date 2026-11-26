@@ -1,3 +1,4 @@
+import { checkV099Reads } from "./check-v099-contract.mjs";
 import { checkV098Reads } from "./check-v098-contract.mjs";
 import { checkV097Notion } from "./check-v097-contract.mjs";
 import { checkV0951Reads } from "./check-v0951-contract.mjs";
@@ -709,6 +710,7 @@ async function isolatedContract(source, output, upstream) {
         responses["v097-notion.json"] = v097.stats;
         responses["v097-standalone-health.json"] = v097.health;
         Object.assign(responses, await checkV098Reads(uploadRequest, now));
+        Object.assign(responses, await checkV099Reads(uploadRequest, now, source));
         await checkV081Streams(require, source, output, upstream);
         await checkV092WorkerRecovery(require, source, output);
         await mkdir(output, { recursive: true });

@@ -1,0 +1,68 @@
+{
+  "periods": {
+    "today": {
+      "sessions": {
+        "antigravity:v099-acp": {
+          "client": "antigravity",
+          "sessionId": "v099-acp",
+          "totalTokens": 100,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-11-26T17:52:21.634Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "Sample project",
+          "title": "",
+          "sessionKind": "",
+          "models": {},
+          "modelCosts": {},
+          "providers": {},
+          "turnEnded": false,
+          "liveActivity": {
+            "state": "running",
+            "observedAt": "2026-11-26T18:07:21.634Z"
+          },
+          "t3ThreadId": "fixture-t3"
+        },
+        "kiro:v099-kiro": {
+          "client": "kiro",
+          "sessionId": "v099-kiro",
+          "totalTokens": 20,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-11-26T17:52:21.634Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "",
+          "sessionKind": "",
+          "models": {},
+          "modelCosts": {},
+          "providers": {},
+          "t3ThreadId": "fixture-t3"
+        }
+      }
+    }
+  },
+  "fixedRangeRevisions": {
+    "synthetic-v099-desktop": "b6815847-8a11-4373-a689-b4cd5738cbc2"
+  }
+}

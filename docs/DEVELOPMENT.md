@@ -125,7 +125,7 @@ or normalize the label to make an assertion pass.
 Review narrow layouts and platform font fallback;
 native-speaker wording review remains a separate contribution.
 
-The interaction suite expects **155 tests** per emulator. The report checker
+The interaction suite expects **156 tests** per emulator. The report checker
 expects one emulator report per directory in CI. When running two local emulators
 together, call its exported `verifyInstrumentationReport` for each XML report.
 
@@ -821,6 +821,14 @@ and responses, then read the Node Hub and Worker. The fixtures cover a healthy
 and an expired Copilot login on the same device and the optional DeepSeek fees.
 I also stall a Worker stream writer, check the bounded queue and replay the
 recovery frames through Android’s receiver.
+
+### Desktop v0.99.0 checks
+
+The released Node and Worker contract checks read Antigravity activity and
+T3 Code session identities after a synthetic compact upload. The fixture
+checks that the Hub restores the activity calendar and keeps the same inline
+session detail and omission flags. Android tests verify session grouping,
+the activity indicator and its expiry.
 
 ### Desktop v0.98.0 checks
 

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Use fresh Antigravity activity from the Hub in Home and Sessions.
+- Verify T3 Code session grouping and the activity calendar after compact uploads.
+
 ## v0.98.0 r1 — 2026-11-25
 
 - Give Settings larger card headers with icons and a separate line for current values.
