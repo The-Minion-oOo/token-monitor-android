@@ -629,4 +629,13 @@
     <string name="hub_profile_remove_confirm">移除 %1$s 的已儲存連線？</string>
     <string name="hub_profile_save">儲存</string>
     <string name="hub_profile_error">無法更新已儲存的 Hub。請再試一次。</string>
+    <string name="quota_alert_title">額度提醒</string>
+    <string name="quota_alert_description">應用程式或小工具更新時，使用目前 Hub 的最新資料發出提醒。</string>
+    <string name="quota_alert_low">額度不足</string>
+    <string name="quota_alert_low_description">使用量達 %1$d%% 時提醒。</string>
+    <string name="quota_alert_reset">額度重設</string>
+    <string name="quota_alert_reset_description">Hub 回報使用量降低且重設時間更新時提醒。</string>
+    <string name="quota_alert_permission">請在 Android 設定中允許通知，以接收額度提醒。</string>
+    <string name="quota_alert_low_notice">一項使用額度即將用盡。</string>
+    <string name="quota_alert_reset_notice">一項使用額度已重設。</string>
 </resources>

@@ -628,4 +628,13 @@
     <string name="hub_profile_remove_confirm">%1$s కోసం సేవ్ చేసిన కనెక్షన్‌ను తీసివేయాలా?</string>
     <string name="hub_profile_save">సేవ్ చేయండి</string>
     <string name="hub_profile_error">సేవ్ చేసిన Hubలను అప్‌డేట్ చేయలేకపోయాము. మళ్లీ ప్రయత్నించండి.</string>
+    <string name="quota_alert_title">కోటా హెచ్చరికలు</string>
+    <string name="quota_alert_description">యాప్ లేదా విడ్జెట్ అప్‌డేట్ అవుతున్నప్పుడు యాక్టివ్ Hub తాజా డేటాతో హెచ్చరికలు వస్తాయి.</string>
+    <string name="quota_alert_low">కోటా తక్కువగా ఉంది</string>
+    <string name="quota_alert_low_description">వినియోగం %1$d%% చేరినప్పుడు హెచ్చరికను పొందండి.</string>
+    <string name="quota_alert_reset">కోటా రీసెట్</string>
+    <string name="quota_alert_reset_description">తక్కువ వినియోగం, కొత్త రీసెట్ సమయాన్ని Hub నివేదించినప్పుడు హెచ్చరికను పొందండి.</string>
+    <string name="quota_alert_permission">కోటా హెచ్చరికలను స్వీకరించడానికి Android సెట్టింగ్‌లలో నోటిఫికేషన్‌లను అనుమతించండి.</string>
+    <string name="quota_alert_low_notice">ఒక వినియోగ కోటా దాదాపు నిండింది.</string>
+    <string name="quota_alert_reset_notice">ఒక వినియోగ కోటా రీసెట్ అయింది.</string>
 </resources>

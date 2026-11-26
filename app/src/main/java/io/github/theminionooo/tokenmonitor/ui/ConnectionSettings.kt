@@ -398,6 +398,7 @@ internal fun ConnectionScreen(
                     StatusLine(appText(R.string.ui_phone_data_b89f2, "Phone data"), if (snapshot.fromCache || snapshot.stale) appText(R.string.ui_saved_snapshot_c3933, "Saved snapshot") else appText(R.string.ui_current_4fc0e, "Current"))
                 }
             }
+            QuotaAlertSettings()
             SettingsGroup(appText(R.string.ui_home_screen_widget_c1c9a, "Home-screen widget"), icon = R.drawable.view_home, summary = appText(R.string.ui_live_controls_resizable_0fae1, "Live controls · resizable")) {
                 WidgetBackgroundSettings(state.activeProfileId)
                 val widgetContext = androidx.compose.ui.platform.LocalContext.current

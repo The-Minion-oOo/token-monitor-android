@@ -628,4 +628,13 @@
     <string name="hub_profile_remove_confirm">%1$s-এর সংরক্ষিত সংযোগ সরাবেন?</string>
     <string name="hub_profile_save">সংরক্ষণ করুন</string>
     <string name="hub_profile_error">সংরক্ষিত Hub আপডেট করা যায়নি। আবার চেষ্টা করুন।</string>
+    <string name="quota_alert_title">কোটা সতর্কতা</string>
+    <string name="quota_alert_description">অ্যাপ বা উইজেট আপডেট হওয়ার সময় সক্রিয় Hub-এর নতুন তথ্য থেকে সতর্কতা আসে।</string>
+    <string name="quota_alert_low">কোটা প্রায় শেষ</string>
+    <string name="quota_alert_low_description">ব্যবহার %1$d%%-এ পৌঁছালে সতর্কতা পান।</string>
+    <string name="quota_alert_reset">কোটা রিসেট</string>
+    <string name="quota_alert_reset_description">Hub কম ব্যবহার ও নতুন রিসেটের সময় জানালে সতর্কতা পান।</string>
+    <string name="quota_alert_permission">কোটা সতর্কতা পেতে Android সেটিংসে বিজ্ঞপ্তির অনুমতি দিন।</string>
+    <string name="quota_alert_low_notice">একটি ব্যবহারের কোটা প্রায় শেষ।</string>
+    <string name="quota_alert_reset_notice">একটি ব্যবহারের কোটা রিসেট হয়েছে।</string>
 </resources>

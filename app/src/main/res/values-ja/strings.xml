@@ -630,4 +630,13 @@
     <string name="hub_profile_remove_confirm">%1$s の保存済み接続を削除しますか？</string>
     <string name="hub_profile_save">保存</string>
     <string name="hub_profile_error">保存済みの Hub を更新できませんでした。もう一度お試しください。</string>
+    <string name="quota_alert_title">利用枠の通知</string>
+    <string name="quota_alert_description">アプリやウィジェットの更新中に、使用中の Hub の最新データを使って通知します。</string>
+    <string name="quota_alert_low">利用枠の残りわずか</string>
+    <string name="quota_alert_low_description">使用量が上限の %1$d%% に達したときに通知します。</string>
+    <string name="quota_alert_reset">利用枠のリセット</string>
+    <string name="quota_alert_reset_description">Hub から使用量の低下と新しいリセット時刻が報告されたときに通知します。</string>
+    <string name="quota_alert_permission">利用枠の通知を受け取るには、Android の設定で通知を許可してください。</string>
+    <string name="quota_alert_low_notice">利用枠の上限に近づいています。</string>
+    <string name="quota_alert_reset_notice">利用枠がリセットされました。</string>
 </resources>

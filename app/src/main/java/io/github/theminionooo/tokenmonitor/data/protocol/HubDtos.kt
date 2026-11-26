@@ -152,6 +152,7 @@ internal data class HubLimitAccountDto(
     val usageSummary: HubLimitUsageSummaryDto? = null,
     val source: String = "",
     val region: String = "",
+    val stale: Boolean = false,
 )
 
 internal data class HubResetCreditsDto(val availableCount: Long?, val nextExpiresAt: String, val expirations: List<String>, val grants: List<HubResetGrantDto>)
