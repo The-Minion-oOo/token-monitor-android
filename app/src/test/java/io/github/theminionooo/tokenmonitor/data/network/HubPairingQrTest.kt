@@ -10,20 +10,23 @@ import org.junit.Test
 
 class HubPairingQrTest {
     @Test fun pairingCodeCarriesTheCanonicalAddressAndRequiredConsent() {
-        val tailscale = checkNotNull(decodeHubPairingQr(code("http://100.70.10.5")))
+        val tailscale = checkNotNull(decodeHubPairingQr(code("http://100.70.10.5"))?.confirm(false))
         assertEquals("http://100.70.10.5:17321", tailscale.baseUrl)
         assertEquals("synthetic-qr-secret", tailscale.secret)
         assertFalse(tailscale.allowLocalNetwork)
         assertFalse(tailscale.allowPublicHttps)
 
-        val local = checkNotNull(decodeHubPairingQr(code("http://10.0.2.2:17647")))
+        val local = checkNotNull(decodeHubPairingQr(code("http://10.0.2.2:17647"))?.confirm(false))
         assertTrue(local.allowLocalNetwork)
         assertFalse(local.allowPublicHttps)
 
-        val internet = checkNotNull(decodeHubPairingQr(code("https://hub.example.org/")))
+        val candidate = checkNotNull(decodeHubPairingQr(code("https://hub.example.org/")))
+        assertTrue(candidate.requiresInternetConsent)
+        assertEquals("https://hub.example.org", candidate.baseUrl)
+        assertNull(candidate.confirm(false))
+        val internet = checkNotNull(candidate.confirm(true))
         assertFalse(internet.allowLocalNetwork)
         assertTrue(internet.allowPublicHttps)
-        assertEquals("https://hub.example.org", internet.baseUrl)
     }
 
     @Test fun scannerRejectsUnrecognizedCodesAndUnsafeDestinations() {
@@ -34,6 +37,9 @@ class HubPairingQrTest {
             good.replace("\"version\":1", "\"version\":2"),
             good.replace("\"version\":1", "\"version\":\"1\""),
             code("http://hub.example.org"),
+            code("hub.example.org"),
+            code("https://203.0.113.8"),
+            code("https://[2001:db8::8]"),
             code("http://10.0.2.2/api/stats"),
             code("https://user@hub.example.org"),
             code("https://hub.example.org?secret=synthetic"),

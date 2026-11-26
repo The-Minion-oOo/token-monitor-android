@@ -16,8 +16,19 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 
-/** A pairing QR is untrusted input. Its destination still goes through the normal connection checks. */
-internal fun decodeHubPairingQr(raw: String): HubConnection? {
+/** A validated destination awaiting review. Decoding a public address does not authorize a connection. */
+internal class HubPairingQrCandidate(private val destination: HubConnection) {
+    val baseUrl get() = destination.baseUrl
+    val isLocalNetwork get() = destination.allowLocalNetwork
+    val requiresInternetConsent get() = destination.allowPublicHttps
+
+    fun confirm(internetAllowed: Boolean): HubConnection? {
+        if (requiresInternetConsent && !internetAllowed) return null
+        return destination
+    }
+}
+
+internal fun decodeHubPairingQr(raw: String): HubPairingQrCandidate? {
     if (raw.length > 4096) return null
     val payload = runCatching {
         requireStreamJsonLimits(raw)
@@ -28,10 +39,12 @@ internal fun decodeHubPairingQr(raw: String): HubConnection? {
     val url = payload.text("url")?.takeIf { it.length in 1..512 && it.none(Char::isISOControl) } ?: return null
     val secret = payload.text("secret")?.takeIf { it.length in 1..512 && it.none { char -> char < ' ' || char == '\u007f' } }
         ?: return null
-    // Test whether this route could be used. The review screen obtains consent before connecting.
     val local = HubAddressValidator.isLocalAddress(url)
     val internet = !local && !HubAddressValidator.isTailscaleRoute(url)
-    return (HubAddressValidator.validate(url, secret, local, internet) as? HubAddressValidation.Allowed)?.connection
+    if (internet && !url.startsWith("https://", ignoreCase = true)) return null
+    // Validation only determines eligibility. Confirm converts the candidate into an authorized connection.
+    val allowed = HubAddressValidator.validate(url, secret, local, internet) as? HubAddressValidation.Allowed
+    return allowed?.connection?.let(::HubPairingQrCandidate)
 }
 
 private fun JsonObject.text(key: String) = (get(key) as? JsonPrimitive)?.takeIf { it.isString }?.content
@@ -39,7 +52,7 @@ private fun JsonObject.text(key: String) = (get(key) as? JsonPrimitive)?.takeIf 
 private const val MAX_IMAGE_EDGE = 2048
 
 /** Reads only the selected image and bounds both the bitmap and the decoder's pixel buffer. */
-internal fun decodeHubPairingImage(resolver: ContentResolver, uri: Uri): HubConnection? {
+internal fun decodeHubPairingImage(resolver: ContentResolver, uri: Uri): HubPairingQrCandidate? {
     if (uri.scheme != ContentResolver.SCHEME_CONTENT) return null
     return try {
         val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }

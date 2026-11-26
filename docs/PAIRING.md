@@ -117,7 +117,11 @@ When desktop Token Monitor shows **Pair phone**, choose the Hub address your
 phone can reach and save or crop the QR as an image. On Android, choose
 **Choose QR image** during setup or in **Saved Hubs → Add Hub**, then pick the
 image. Review the displayed address and tap **Connect** to verify and save it.
-The normal manual fields are available on the same screen.
+For a public HTTPS address, turn on **Allow an internet Hub over HTTPS** in the
+review before tapping **Connect**. The switch starts off each time. Only
+**Connect** contacts the Hub, and cancelling keeps the previous pairing and
+internet access setting. The normal manual fields are available on the same
+screen.
 
 Treat the QR image like the Hub secret. Transfer it privately and delete copies
 after pairing. Android decodes the selected image on the phone.

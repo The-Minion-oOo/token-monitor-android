@@ -5,10 +5,13 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -17,10 +20,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import io.github.theminionooo.tokenmonitor.R
+import io.github.theminionooo.tokenmonitor.data.network.HubPairingQrCandidate
 import io.github.theminionooo.tokenmonitor.data.network.decodeHubPairingImage
 import io.github.theminionooo.tokenmonitor.domain.HubConnection
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +37,7 @@ import kotlinx.coroutines.withContext
 internal fun HubPairingQrEntry(enabled: Boolean, onConnect: (HubConnection) -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    var importedHub by remember { mutableStateOf<HubConnection?>(null) }
+    var importedHub by remember { mutableStateOf<HubPairingQrCandidate?>(null) }
     var invalidCode by remember { mutableStateOf(false) }
     var reading by remember { mutableStateOf(false) }
     val pick = rememberLauncherForActivityResult(PickVisualMedia()) { image ->
@@ -60,18 +66,26 @@ internal fun HubPairingQrEntry(enabled: Boolean, onConnect: (HubConnection) -> U
             color = DangerText, style = MaterialTheme.typography.bodySmall)
     }
     importedHub?.let { hub ->
-        HubPairingQrReview(hub, onDismiss = { importedHub = null }, onConnect = {
-            importedHub = null
-            if (enabled) onConnect(hub)
+        HubPairingQrReview(hub, enabled, onDismiss = { importedHub = null }, onConnect = { connection ->
+            if (importedHub === hub) {
+                importedHub = null
+                onConnect(connection)
+            }
         })
     }
 }
 
 @Composable
-internal fun HubPairingQrReview(hub: HubConnection, onDismiss: () -> Unit, onConnect: () -> Unit) {
+internal fun HubPairingQrReview(
+    hub: HubPairingQrCandidate,
+    enabled: Boolean,
+    onDismiss: () -> Unit,
+    onConnect: (HubConnection) -> Unit,
+) {
+    var internetAllowed by remember(hub) { mutableStateOf(false) }
     val explanation = when {
-        hub.allowLocalNetwork -> appText(R.string.pairing_qr_local, "Connect allows access to this Hub on your private network.")
-        hub.allowPublicHttps -> appText(R.string.pairing_qr_internet, "Connect allows encrypted access to this Hub over the internet.")
+        hub.isLocalNetwork -> appText(R.string.pairing_qr_local, "Connect allows access to this Hub on your private network.")
+        hub.requiresInternetConsent -> appText(R.string.pairing_qr_internet, "Connect allows encrypted access to this Hub over the internet.")
         else -> appText(R.string.pairing_qr_tailscale, "Connect uses Tailscale to reach this Hub.")
     }
     AlertDialog(
@@ -81,9 +95,32 @@ internal fun HubPairingQrReview(hub: HubConnection, onDismiss: () -> Unit, onCon
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(hub.baseUrl)
                 Text(explanation)
+                if (hub.requiresInternetConsent) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().toggleable(
+                            value = internetAllowed,
+                            enabled = enabled,
+                            role = Role.Switch,
+                            onValueChange = { internetAllowed = it },
+                        ),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        Text(
+                            appText(R.string.ui_allow_an_internet_hub_over_https_fcbdd, "Allow an internet Hub over HTTPS"),
+                            modifier = Modifier.weight(1f),
+                        )
+                        Switch(checked = internetAllowed, onCheckedChange = null, enabled = enabled)
+                    }
+                }
             }
         },
-        confirmButton = { TextButton(onClick = onConnect) { Text(appText(R.string.ui_connect_6e288, "Connect")) } },
+        confirmButton = {
+            TextButton(
+                enabled = enabled && (!hub.requiresInternetConsent || internetAllowed),
+                onClick = { if (enabled) hub.confirm(internetAllowed)?.let(onConnect) },
+            ) { Text(appText(R.string.ui_connect_6e288, "Connect")) }
+        },
         dismissButton = { TextButton(onClick = onDismiss) { Text(appText(R.string.ui_cancel_77dfd, "Cancel")) } },
     )
 }
