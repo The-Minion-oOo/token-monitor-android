@@ -184,6 +184,15 @@ uses outbound desktop connections; a public reverse proxy deliberately exposes
 its Hub. Use a long random secret: it can also change Hub data. If the phone is
 lost, change that secret on the Hub and every connected desktop.
 
+### QR pairing
+
+On Android, use **Scan QR code** or **Choose QR image** in first-time setup or
+**Saved Hubs → Add Hub**. Camera permission is optional and requested only when
+you choose to scan. The camera runs while the in-app scanner is open in the
+foreground. The scanner closes after reading a pairing code, and no frames are
+saved or uploaded. The image picker remains available if you decline camera
+permission or your phone has no camera.
+
 [Installation and updates](docs/INSTALL.md) · [Pairing and connection options](docs/PAIRING.md)
 
 ## What it shows

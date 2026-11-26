@@ -24,6 +24,20 @@ tool ordering do not change Hub settings or provider credentials. Payment notes
 and account bindings remain local snapshot content and may be private; they are
 not included in diagnostic reports or widget labels.
 
+## Pairing QR privacy
+
+Camera permission is optional and requested only from **Scan QR code**. The
+in-app scanner uses the camera while open in the foreground. It decodes frames
+on the phone, releases the camera before the address review and never saves or
+uploads frames. The preview window uses Android's secure flag to keep the live
+QR out of screenshots, screen recordings and the recent-apps preview.
+**Choose QR image** remains available without camera permission.
+
+Both inputs display the destination and keep the secret hidden. The app reaches
+the Hub only after **Connect**. Public HTTPS QR review also requires an explicit
+internet opt-in for that pairing. A pairing QR carries the shared Hub secret.
+Keep it private and remove copies after pairing.
+
 ## Network boundary
 
 The app accepts Tailscale addresses by default and recommends that route. Private
