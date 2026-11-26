@@ -628,4 +628,13 @@
     <string name="hub_profile_remove_confirm">Remover a conexão salva de %1$s?</string>
     <string name="hub_profile_save">Salvar</string>
     <string name="hub_profile_error">Não foi possível atualizar os Hubs salvos. Tente novamente.</string>
+    <string name="quota_alert_title">Alertas de cota</string>
+    <string name="quota_alert_description">Os alertas usam dados recentes do Hub ativo enquanto o app ou widget está sendo atualizado.</string>
+    <string name="quota_alert_low">Cota quase esgotada</string>
+    <string name="quota_alert_low_description">Avise quando o uso de uma cota chegar a %1$d%%.</string>
+    <string name="quota_alert_reset">Renovação da cota</string>
+    <string name="quota_alert_reset_description">Avise quando o Hub informar uma redução no uso e um novo horário de renovação.</string>
+    <string name="quota_alert_permission">Permita notificações nas configurações do Android para receber alertas de cota.</string>
+    <string name="quota_alert_low_notice">Uma cota de uso está quase esgotada.</string>
+    <string name="quota_alert_reset_notice">Uma cota de uso foi renovada.</string>
 </resources>

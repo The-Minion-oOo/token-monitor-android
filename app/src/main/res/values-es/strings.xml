@@ -628,4 +628,13 @@
     <string name="hub_profile_remove_confirm">¿Quitar la conexión guardada de %1$s?</string>
     <string name="hub_profile_save">Guardar</string>
     <string name="hub_profile_error">No se pudieron actualizar los Hubs guardados. Vuelve a intentarlo.</string>
+    <string name="quota_alert_title">Alertas de cuota</string>
+    <string name="quota_alert_description">Las alertas usan datos recientes del Hub activo mientras se actualiza la app o el widget.</string>
+    <string name="quota_alert_low">Cuota casi agotada</string>
+    <string name="quota_alert_low_description">Avisa cuando el consumo alcanza el %1$d%% de una cuota.</string>
+    <string name="quota_alert_reset">Renovación de cuota</string>
+    <string name="quota_alert_reset_description">Avisa cuando el Hub informa de un menor consumo y una nueva hora de renovación.</string>
+    <string name="quota_alert_permission">Permite las notificaciones en los ajustes de Android para recibir alertas de cuota.</string>
+    <string name="quota_alert_low_notice">Una cuota de uso está casi agotada.</string>
+    <string name="quota_alert_reset_notice">Se ha renovado una cuota de uso.</string>
 </resources>

@@ -630,4 +630,13 @@
     <string name="hub_profile_remove_confirm">%1$s-க்காகச் சேமித்த இணைப்பை அகற்றவா?</string>
     <string name="hub_profile_save">சேமி</string>
     <string name="hub_profile_error">சேமித்த Hub-களைப் புதுப்பிக்க முடியவில்லை. மீண்டும் முயலவும்.</string>
+    <string name="quota_alert_title">ஒதுக்கீட்டு விழிப்பூட்டல்கள்</string>
+    <string name="quota_alert_description">செயலி அல்லது விட்ஜெட் புதுப்பிக்கப்படும்போது, செயலில் உள்ள Hub-இன் புதிய தரவின் அடிப்படையில் விழிப்பூட்டல்கள் வரும்.</string>
+    <string name="quota_alert_low">ஒதுக்கீடு குறைவு</string>
+    <string name="quota_alert_low_description">பயன்பாடு %1$d%% அடையும்போது விழிப்பூட்டலைப் பெறுங்கள்.</string>
+    <string name="quota_alert_reset">ஒதுக்கீடு மீட்டமைப்பு</string>
+    <string name="quota_alert_reset_description">பயன்பாடு குறைந்ததையும் புதிய மீட்டமைப்பு நேரத்தையும் Hub தெரிவிக்கும்போது விழிப்பூட்டலைப் பெறுங்கள்.</string>
+    <string name="quota_alert_permission">ஒதுக்கீட்டு விழிப்பூட்டல்களைப் பெற Android அமைப்புகளில் அறிவிப்புகளை அனுமதிக்கவும்.</string>
+    <string name="quota_alert_low_notice">பயன்பாட்டு ஒதுக்கீடு கிட்டத்தட்ட தீர்ந்துவிட்டது.</string>
+    <string name="quota_alert_reset_notice">பயன்பாட்டு ஒதுக்கீடு மீட்டமைக்கப்பட்டது.</string>
 </resources>

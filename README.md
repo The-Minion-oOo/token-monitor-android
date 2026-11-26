@@ -115,7 +115,7 @@ that reflows as you resize it. Both widgets follow the app's theme.
   Android 17 or newer can show a status-bar chip. The lock screen uses the
   ordinary notification.
 - **Background refresh** optionally checks every 30 or 60 minutes. It starts
-  **Off**, with **Wi-Fi only** on, and shows no notification. Android may delay
+  **Off**, with **Wi-Fi only** on. The job has no progress notification. Android may delay
   runs while the phone sleeps.
 
 Choose background refresh under **Settings → Home-screen widget**. Failed reads

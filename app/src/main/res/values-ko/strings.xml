@@ -629,4 +629,13 @@
     <string name="hub_profile_remove_confirm">%1$s의 저장된 연결을 삭제할까요?</string>
     <string name="hub_profile_save">저장</string>
     <string name="hub_profile_error">저장된 Hub를 업데이트할 수 없습니다. 다시 시도하세요.</string>
+    <string name="quota_alert_title">한도 알림</string>
+    <string name="quota_alert_description">앱이나 위젯이 업데이트될 때 현재 Hub의 최신 정보로 알림을 보냅니다.</string>
+    <string name="quota_alert_low">한도 임박</string>
+    <string name="quota_alert_low_description">사용량이 한도의 %1$d%%에 도달하면 알림을 보냅니다.</string>
+    <string name="quota_alert_reset">한도 초기화</string>
+    <string name="quota_alert_reset_description">Hub가 줄어든 사용량과 새 초기화 시간을 보고하면 알림을 보냅니다.</string>
+    <string name="quota_alert_permission">한도 알림을 받으려면 Android 설정에서 알림을 허용하세요.</string>
+    <string name="quota_alert_low_notice">사용량이 한도에 가까워졌습니다.</string>
+    <string name="quota_alert_reset_notice">사용 한도가 초기화되었습니다.</string>
 </resources>

@@ -313,6 +313,7 @@ object HubProtocolParser {
         windows = array("windows").mapNotNull { it.objectOrNull()?.toLimitWindowDto() },
         accountKey = string("accountKey"),
         region = string("region"),
+        stale = boolean("stale") == true,
         productLabel = if (string("provider") == "mimo") string("accountLabel").takeIf {
             it in setOf("Console", "Desktop Membership", "Membership")
         }.orEmpty() else "",
@@ -593,6 +594,7 @@ object HubProtocolParser {
         accountKey = accountKey,
         productLabel = productLabel,
         region = region,
+        stale = stale,
         spend = spend?.let {
             io.github.theminionooo.tokenmonitor.domain.LimitSpend(
                 it.currency, it.today, it.week, it.month, it.allTime, it.trackingSince, it.locallyTracked,

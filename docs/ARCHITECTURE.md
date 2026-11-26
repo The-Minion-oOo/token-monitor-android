@@ -301,6 +301,15 @@ See [Android widget layouts](https://developer.android.com/develop/ui/views/appw
 
 ## Presentation
 
+Quota alerts are off by default. When enabled, the repository compares fresh
+quota readings from the dashboard, Widget Live or an opted-in periodic
+refresh. An initial reading establishes the baseline. A low-quota alert
+requires a crossing of 85 percent, and a reset requires a newer provider
+measurement with lower usage and a new reset time. App-private preferences keep
+each Hub's baseline across process restarts, using hashed window keys, dates
+and percentages. Android notification permission and the app's notification
+setting both apply. Alert text contains the alert type only.
+
 `DashboardViewModel` owns the current destination, the return destination for
 Settings, the connection form state, the display preferences, provider status
 loading, and Wi-Fi discovery. It exposes everything as `StateFlow`s.

@@ -628,4 +628,13 @@
     <string name="hub_profile_remove_confirm">%1$s का सेव किया गया कनेक्शन हटाएँ?</string>
     <string name="hub_profile_save">सेव करें</string>
     <string name="hub_profile_error">सेव किए गए Hub अपडेट नहीं हो सके। फिर से कोशिश करें।</string>
+    <string name="quota_alert_title">कोटा अलर्ट</string>
+    <string name="quota_alert_description">ऐप या विजेट अपडेट होने के दौरान सक्रिय Hub के नए डेटा से अलर्ट भेजे जाते हैं।</string>
+    <string name="quota_alert_low">कोटा कम है</string>
+    <string name="quota_alert_low_description">इस्तेमाल %1$d%% तक पहुँचने पर अलर्ट पाएँ।</string>
+    <string name="quota_alert_reset">कोटा रीसेट</string>
+    <string name="quota_alert_reset_description">जब Hub कम इस्तेमाल और नया रीसेट समय बताए, तो अलर्ट पाएँ।</string>
+    <string name="quota_alert_permission">कोटा अलर्ट पाने के लिए Android की सेटिंग में सूचनाओं की अनुमति दें।</string>
+    <string name="quota_alert_low_notice">इस्तेमाल का कोटा लगभग पूरा हो गया है।</string>
+    <string name="quota_alert_reset_notice">इस्तेमाल का कोटा रीसेट हो गया है।</string>
 </resources>

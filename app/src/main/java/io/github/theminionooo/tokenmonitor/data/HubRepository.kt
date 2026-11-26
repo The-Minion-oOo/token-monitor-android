@@ -209,6 +209,7 @@ internal class HubRepository(
     private var aliasJob: Job? = null
     private var aliasRecord: ModelAliasSettings? = null
     private val aliasReads = AliasReadGate()
+    private val quotaNotifications = QuotaNotifications(appContext)
     private var limitPresentationJob: Job? = null
     private val limitPresentationReads = AliasReadGate()
     private val streamUpdates = StreamUpdateCoalescer()
@@ -282,7 +283,7 @@ internal class HubRepository(
                         ensureActive()
                         if (token == generation && connection === saved && !dashboardVisible && !widgetActive) {
                             activeUrl = url
-                            applySuccess(wire, snapshot)
+                            applySuccess(wire, snapshot, evaluateQuotaAlerts = true)
                             // The disk queue drains when the last owner closes. Network success no longer waits for it.
                             run.applied()
                         }
@@ -489,6 +490,7 @@ internal class HubRepository(
         }
         if (savedProfiles.entries.none { it.id == id }) return
         savedProfiles = connectionStore.remove(id)
+        quotaNotifications.forgetProfile(id)
         WidgetRefreshPreferences(appContext, id).clear()
         val removedCache = SnapshotCache(appContext, id)
         diskQueue.enqueue { removedCache.clear() }
@@ -506,6 +508,7 @@ internal class HubRepository(
     private fun adoptProfile(next: SavedHubProfiles, deletePreviousCache: Boolean = false, hydrate: Boolean) {
         val previousCache = cache
         val previousWidgetRefresh = widgetRefresh
+        val previousProfileId = savedProfiles.activeId
         cacheLoadJob?.cancel()
         aliasLoadJob?.cancel()
         savedProfiles = next
@@ -522,6 +525,8 @@ internal class HubRepository(
         aliasRecord = null
         aliasReads.reset()
         limitPresentationReads.reset()
+        quotaNotifications.resetForHubChange()
+        if (deletePreviousCache) previousProfileId?.let(quotaNotifications::forgetProfile)
         if (deletePreviousCache) previousWidgetRefresh.clear()
         widgetActive = false
         widgetDeadline = null
@@ -595,7 +600,7 @@ internal class HubRepository(
                         val snapshot = withContext(Dispatchers.IO) { timing.measure(HubTimingStage.DECODE, run = run) { parse(wire) } }
                         if (generation != token) break
                         activeUrl = url
-                        timing.measure(HubTimingStage.PUBLISH, run = run) { applySuccess(wire, snapshot) }
+                        timing.measure(HubTimingStage.PUBLISH, run = run) { applySuccess(wire, snapshot, evaluateQuotaAlerts = true) }
                         if (mode == HubWorkMode.DashboardStreaming) {
                             refreshModelAliases(saved, api, token)
                             refreshLimitAccountPresentation(saved, api, token)
@@ -756,7 +761,7 @@ internal class HubRepository(
         return AvailableRoutes(urls, networks)
     }
 
-    private fun applySuccess(wire: WireHubSnapshot, snapshot: HubSnapshot) {
+    private fun applySuccess(wire: WireHubSnapshot, snapshot: HubSnapshot, evaluateQuotaAlerts: Boolean = false) {
         clearReconnectNotice()
         widgetRefresh.success(wire.capturedAt)
         WidgetRefreshScheduler.reconcileAsync(appContext)
@@ -768,6 +773,11 @@ internal class HubRepository(
             limitAccountPresentation = _state.value.limitAccountPresentation
                 ?.takeIf { it.revision == snapshot.stats.limitAccountPresentationRevision },
         )
+        if (evaluateQuotaAlerts) observeQuotaAlerts(snapshot)
+    }
+
+    private fun observeQuotaAlerts(snapshot: HubSnapshot) {
+        savedProfiles.activeId?.let { quotaNotifications.observe(it, snapshot.stats.limits) }
     }
 
     /** The held update and a newly arrived one never decode at the same time. */
@@ -837,6 +847,7 @@ internal class HubRepository(
         _state.update { it.copy(snapshot = next, message = null,
             modelAliases = aliasRecord?.takeIf { record -> record.revision == next.stats.modelAliasRevision }) }
         persist(updatedWire, false)
+        if (streamEventType != "freshness") observeQuotaAlerts(next)
         return true
     }
 

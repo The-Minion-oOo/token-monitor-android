@@ -543,4 +543,13 @@
     <string name="hub_profile_remove_confirm">Remove the saved connection for %1$s?</string>
     <string name="hub_profile_save">Save</string>
     <string name="hub_profile_error">Could not update saved Hubs. Try again.</string>
+    <string name="quota_alert_title">Quota alerts</string>
+    <string name="quota_alert_description">Alerts use fresh readings from the active Hub while the app or widget is updating.</string>
+    <string name="quota_alert_low">Low quota</string>
+    <string name="quota_alert_low_description">Alert when a usage window reaches %1$d%% used.</string>
+    <string name="quota_alert_reset">Quota resets</string>
+    <string name="quota_alert_reset_description">Alert when the Hub reports lower usage and a new reset time.</string>
+    <string name="quota_alert_permission">Allow notifications in Android settings to receive quota alerts.</string>
+    <string name="quota_alert_low_notice">A usage quota is nearly full.</string>
+    <string name="quota_alert_reset_notice">A usage quota has reset.</string>
 </resources>

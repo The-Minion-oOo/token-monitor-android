@@ -173,6 +173,7 @@ data class LimitAccount(
     val usageSummary: LimitUsageSummary? = null,
     val source: String = "",
     val region: String = "",
+    val stale: Boolean = false,
 )
 
 data class ResetCredits(val availableCount: Long?, val nextExpiresAt: String, val expirations: List<String>, val grants: List<ResetGrant>)

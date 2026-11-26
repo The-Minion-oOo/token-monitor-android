@@ -628,4 +628,13 @@
     <string name="hub_profile_remove_confirm">%1$s માટે સાચવેલું કનેક્શન દૂર કરવું છે?</string>
     <string name="hub_profile_save">સાચવો</string>
     <string name="hub_profile_error">સાચવેલા Hub અપડેટ થઈ શક્યા નહીં. ફરી પ્રયાસ કરો.</string>
+    <string name="quota_alert_title">ક્વોટા સૂચનાઓ</string>
+    <string name="quota_alert_description">ઍપ અથવા વિજેટ અપડેટ થાય ત્યારે સક્રિય Hubના તાજા ડેટા પરથી સૂચનાઓ મળે છે.</string>
+    <string name="quota_alert_low">ક્વોટા ઓછો છે</string>
+    <string name="quota_alert_low_description">વપરાશ %1$d%% સુધી પહોંચે ત્યારે સૂચના મેળવો.</string>
+    <string name="quota_alert_reset">ક્વોટા રીસેટ</string>
+    <string name="quota_alert_reset_description">Hub ઓછો વપરાશ અને નવો રીસેટ સમય જણાવે ત્યારે સૂચના મેળવો.</string>
+    <string name="quota_alert_permission">ક્વોટા સૂચનાઓ મેળવવા માટે Android સેટિંગ્સમાં સૂચનાઓને મંજૂરી આપો.</string>
+    <string name="quota_alert_low_notice">એક વપરાશ ક્વોટા લગભગ પૂરો થઈ ગયો છે.</string>
+    <string name="quota_alert_reset_notice">એક વપરાશ ક્વોટા રીસેટ થયો છે.</string>
 </resources>
