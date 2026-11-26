@@ -100,6 +100,17 @@ Desktop Token Monitor's Hub settings list the addresses and shared secret.
 Copy those into Android for the first connection. Treat the secret as a password;
 do not post it in screenshots or support requests.
 
+## Saved Hubs
+
+Open **Settings → Saved Hubs → Add Hub**, enter its address and secret, then
+connect. A name is optional. **Switch** opens the selected Hub on the dashboard.
+Use **Edit** to rename or remove a profile. Removing the active Hub returns to
+setup, where you can switch to another saved Hub.
+
+The widget follows the selected Hub. Switching ends Widget Live. Each Hub keeps
+its own saved usage and background refresh settings. Your existing pairing
+appears in Saved Hubs after updating.
+
 ## Troubleshooting
 
 - **The address labeled "Tailscale" starts with `169.254`:** the desktop address list can pick up a Windows placeholder address on an adapter with no real address. A Tailscale address always starts with `100.`; use the one shown in the Tailscale app or by `ipconfig`.

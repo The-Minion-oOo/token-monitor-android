@@ -129,6 +129,45 @@ class DashboardOwnershipTest {
         }
     }
 
+    @Test fun switchingProfilesClosesTheOldStreamAndUsesTheSelectedSecret() {
+        check(context.packageName.endsWith(".preview"))
+        grantFixtureNetworkAccess()
+        FixtureHub(requiredSecret = "fixture-one", tokenBase = 100).use { first ->
+            FixtureHub(requiredSecret = "fixture-two", tokenBase = 900).use { second ->
+                val address = NetworkInterface.getNetworkInterfaces().toList().flatMap { it.inetAddresses.toList() }
+                    .filterIsInstance<Inet4Address>().first { it.isSiteLocalAddress }.hostAddress
+                val store = SecureConnectionStore(context)
+                val firstId = requireNotNull(store.save(HubConnection("http://$address:${first.port}", "fixture-one", true)).activeId)
+                val secondId = requireNotNull(store.save(HubConnection("http://$address:${second.port}", "fixture-two", true), addedName = "Second").activeId)
+                store.activate(firstId)
+                val owner = Any()
+                lateinit var hub: io.github.theminionooo.tokenmonitor.data.HubRepository
+                instrumentation.runOnMainSync {
+                    hub = HubRepositoryPool.acquire(context)
+                    hub.setDashboardVisible(owner, true)
+                }
+                try {
+                    await { first.streams.get() == 1 && hub.state.value.streamActive }
+                    assertEquals(0, second.opened.get())
+                    instrumentation.runOnMainSync { assertTrue(hub.switchHubProfile(secondId)) }
+                    await { first.streams.get() == 0 && second.streams.get() == 1 && hub.state.value.streamActive }
+                    assertEquals(secondId, hub.state.value.activeProfileId)
+                    assertTrue(checkNotNull(hub.state.value.snapshot).today.totalTokens >= 900)
+                    assertEquals(1, first.opened.get())
+                    assertEquals(1, second.opened.get())
+                } finally {
+                    instrumentation.runOnMainSync {
+                        hub.setDashboardVisible(owner, false)
+                        HubRepositoryPool.release(hub)
+                    }
+                    SnapshotCache(context, firstId).clear()
+                    SnapshotCache(context, secondId).clear()
+                    store.clear()
+                }
+            }
+        }
+    }
+
     private fun withHub(test: (FixtureHub) -> Unit) {
         check(context.packageName.endsWith(".preview"))
         grantFixtureNetworkAccess()
@@ -150,14 +189,14 @@ class DashboardOwnershipTest {
         assertTrue("Dashboard condition did not become true within ten seconds", condition())
     }
 
-    private inner class FixtureHub : AutoCloseable {
+    private inner class FixtureHub(private val requiredSecret: String? = null, private val tokenBase: Int = 100) : AutoCloseable {
         private val server = ServerSocket(0)
         val port get() = server.localPort
         val requests = AtomicInteger()
         val statsReads = AtomicInteger()
         val streams = AtomicInteger()
         val opened = AtomicInteger()
-        private val tokens = AtomicInteger(100)
+        private val tokens = AtomicInteger(tokenBase)
         private val sockets = ConcurrentHashMap.newKeySet<Socket>()
         private val acceptor = thread(isDaemon = true) {
             while (!server.isClosed) {
@@ -177,9 +216,20 @@ class DashboardOwnershipTest {
             socket.soTimeout = 5_000
             val reader = socket.getInputStream().bufferedReader()
             val path = reader.readLine().split(' ')[1]
-            while (!reader.readLine().isNullOrEmpty()) { /* Consume headers. */ }
+            var authorization: String? = null
+            while (true) {
+                val header = reader.readLine()?.takeUnless { it.isEmpty() } ?: break
+                if (header.substringBefore(':').equals("Authorization", ignoreCase = true)) {
+                    authorization = header.substringAfter(':').trim()
+                }
+            }
             requests.incrementAndGet()
             val output = socket.getOutputStream()
+            if (path != "/api/health" && requiredSecret != null && authorization != "Bearer $requiredSecret") {
+                output.write("HTTP/1.1 401 Unauthorized\r\nContent-Length: 0\r\nConnection: close\r\n\r\n".toByteArray())
+                output.flush()
+                return
+            }
             if (path == "/api/stats/stream") {
                 streams.incrementAndGet()
                 opened.incrementAndGet()
@@ -195,7 +245,7 @@ class DashboardOwnershipTest {
                 if (path == "/api/stats") statsReads.incrementAndGet()
                 val body = when (path) {
                     "/api/health" -> "{\"ok\":true,\"role\":\"hub\"}"
-                    "/api/stats" -> stats(100)
+                    "/api/stats" -> stats(tokenBase)
                     else -> "{}"
                 }.toByteArray()
                 output.write("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: ${body.size}\r\nConnection: close\r\n\r\n".toByteArray())

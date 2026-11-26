@@ -26,8 +26,13 @@ internal data class WidgetRefreshRecord(
 }
 
 /** Non-secret consent and run metadata; no URLs, credentials or response bodies. */
-internal class WidgetRefreshPreferences(context: Context) {
-    val preferences = context.applicationContext.getSharedPreferences("widget_refresh", Context.MODE_PRIVATE)
+internal class WidgetRefreshPreferences(
+    context: Context,
+    profileId: String = SecureConnectionStore(context.applicationContext).localActiveId() ?: LEGACY_HUB_PROFILE,
+) {
+    init { require(validHubProfileId(profileId)) }
+    private val name = if (profileId == LEGACY_HUB_PROFILE) "widget_refresh" else "widget_refresh_$profileId"
+    val preferences = context.applicationContext.getSharedPreferences(name, Context.MODE_PRIVATE)
     val settings get() = WidgetRefreshSettings(
         WidgetRefreshInterval.fromMinutes(preferences.getInt("minutes", 0)),
         preferences.getBoolean("wifi_only", true),
@@ -54,4 +59,5 @@ internal class WidgetRefreshPreferences(context: Context) {
     fun clearRecord() = preferences.edit(commit = true) {
         remove("success_at"); remove("failure_at"); remove("rejected"); remove("received_bytes"); remove("completed")
     }
+    fun clear() = preferences.edit(commit = true) { clear() }
 }

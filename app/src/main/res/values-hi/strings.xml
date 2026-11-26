@@ -618,4 +618,14 @@
     <string name="usage_report_cached">सहेजे गए Hub डेटा पर आधारित।</string>
     <string name="usage_report_share_failed">रिपोर्ट शेयर नहीं हो सकी। फिर से कोशिश करें।</string>
     <string name="usage_report_coverage">%2$s में से %1$s दिन दर्ज हैं</string>
+    <string name="hub_profile_title">सेव किए गए Hub</string>
+    <string name="hub_profile_active">सक्रिय Hub</string>
+    <string name="hub_profile_switch">बदलें</string>
+    <string name="hub_profile_edit">संपादित करें</string>
+    <string name="hub_profile_add">Hub जोड़ें</string>
+    <string name="hub_profile_name">Hub का नाम (वैकल्पिक)</string>
+    <string name="hub_profile_remove">Hub हटाएँ</string>
+    <string name="hub_profile_remove_confirm">%1$s का सेव किया गया कनेक्शन हटाएँ?</string>
+    <string name="hub_profile_save">सेव करें</string>
+    <string name="hub_profile_error">सेव किए गए Hub अपडेट नहीं हो सके। फिर से कोशिश करें।</string>
 </resources>

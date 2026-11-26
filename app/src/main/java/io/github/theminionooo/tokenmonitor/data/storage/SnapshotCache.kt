@@ -21,12 +21,13 @@ import java.util.zip.GZIPOutputStream
  * SharedPreferences string would. Writes go through [AtomicFile], so a crash
  * mid-write leaves the previous snapshot intact.
  */
-internal class SnapshotCache(context: Context) {
-    private val file = AtomicFile(File(context.filesDir, fileName))
+internal class SnapshotCache(context: Context, private val profileId: String = SecureConnectionStore(context).localActiveId() ?: LEGACY_HUB_PROFILE) {
+    init { require(validHubProfileId(profileId)) }
+    private val file = AtomicFile(File(context.filesDir, if (profileId == LEGACY_HUB_PROFILE) fileName else "hub-$profileId.bin"))
     private val legacyPreferences = context.getSharedPreferences(legacyPreferencesName, Context.MODE_PRIVATE)
 
     fun read(): WireHubSnapshot? = synchronized(ioLock) {
-        runCatching { readFile() }.getOrNull() ?: migrateLegacy()
+        runCatching { readFile() }.getOrNull() ?: if (profileId == LEGACY_HUB_PROFILE) migrateLegacy() else null
     }
 
     fun save(snapshot: WireHubSnapshot): Unit = synchronized(ioLock) {
@@ -61,7 +62,7 @@ internal class SnapshotCache(context: Context) {
 
     fun clear() = synchronized(ioLock) {
         file.delete()
-        legacyPreferences.edit { clear() }
+        if (profileId == LEGACY_HUB_PROFILE) legacyPreferences.edit { clear() }
     }
 
     private fun readFile(): WireHubSnapshot? {

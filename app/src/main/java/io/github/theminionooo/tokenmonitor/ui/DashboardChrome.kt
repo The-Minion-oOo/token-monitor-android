@@ -125,6 +125,9 @@ internal fun DesktopHeader(
                     StatusDot(if (state.streamActive) Success else if (state.snapshot?.stale == true) Orange else Muted, size = 5.dp)
                 }
             }
+            state.profiles.firstOrNull { it.id == state.activeProfileId && it.name.isNotEmpty() }?.let {
+                Text(it.name, color = Ink, style = MaterialTheme.typography.labelSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
             val status = when {
                 settingsOpen -> displayLabel(HubAddressValidator.routeLabel(state.activeUrl ?: state.connectionUrl, state.fallbackUrl))
                 state.snapshot?.stale == true -> appText(R.string.ui_saved_snapshot_1_s_94588, "Saved snapshot · %1\$s", formatCapturedAt(state.snapshot.capturedAt))

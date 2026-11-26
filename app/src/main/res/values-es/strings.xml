@@ -618,4 +618,14 @@
     <string name="usage_report_cached">Basado en los datos guardados del Hub.</string>
     <string name="usage_report_share_failed">No se pudo compartir el informe. Inténtalo de nuevo.</string>
     <string name="usage_report_coverage">%1$s de %2$s días registrados</string>
+    <string name="hub_profile_title">Hubs guardados</string>
+    <string name="hub_profile_active">Hub activo</string>
+    <string name="hub_profile_switch">Cambiar</string>
+    <string name="hub_profile_edit">Editar</string>
+    <string name="hub_profile_add">Añadir Hub</string>
+    <string name="hub_profile_name">Nombre del Hub (opcional)</string>
+    <string name="hub_profile_remove">Quitar Hub</string>
+    <string name="hub_profile_remove_confirm">¿Quitar la conexión guardada de %1$s?</string>
+    <string name="hub_profile_save">Guardar</string>
+    <string name="hub_profile_error">No se pudieron actualizar los Hubs guardados. Vuelve a intentarlo.</string>
 </resources>

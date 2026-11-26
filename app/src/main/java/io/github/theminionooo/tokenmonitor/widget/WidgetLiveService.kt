@@ -38,6 +38,7 @@ internal data class WidgetSession(
     val expiresAt: Long = 0,
     val snapshot: HubSnapshot? = null,
     val note: String? = null,
+    val profileId: String? = null,
 )
 
 /** Deliberately process-local: a killed process never advertises a surviving Live session. */
@@ -212,6 +213,7 @@ class WidgetLiveService : Service() {
                 WidgetRuntime.session = WidgetRuntime.session.copy(
                     connected = state.streamActive || state.widgetLiveActive, refreshing = state.refreshing,
                     snapshot = state.snapshot, note = if (state.message != null) appText(R.string.ui_hub_offline_retrying_a9d88, "Hub offline · retrying") else null,
+                    profileId = state.activeProfileId,
                 )
                 withContext(Dispatchers.IO) { WidgetUpdateCoordinator.refresh(this@WidgetLiveService) }
                 showNotification()
