@@ -31,14 +31,18 @@ internal object WidgetRefreshScheduler {
 
     @Synchronized fun reconcile(context: Context) {
         val scheduler = context.getSystemService(JobScheduler::class.java) ?: return
-        val prefs = WidgetRefreshPreferences(context)
-        val settings = prefs.settings
-        if (settings.interval == WidgetRefreshInterval.Off || !WidgetUpdateCoordinator.hasWidgets(context) || prefs.record.secretRejected) {
+        val store = SecureConnectionStore(context)
+        val id = store.localActiveId()
+        if (id == null) {
             scheduler.cancel(JOB_ID)
             return
         }
-        val decision = widgetRefreshDecision(settings.interval, WidgetUpdateCoordinator.hasWidgets(context),
-            SecureConnectionStore(context).read() != null, prefs.record.secretRejected)
+        val prefs = WidgetRefreshPreferences(context, id)
+        val settings = prefs.settings
+        val hasWidgets = settings.interval != WidgetRefreshInterval.Off && WidgetUpdateCoordinator.hasWidgets(context)
+        val rejected = hasWidgets && prefs.record.secretRejected
+        val paired = hasWidgets && !rejected && store.read() != null && store.localActiveId() == id
+        val decision = widgetRefreshDecision(settings.interval, hasWidgets, paired, rejected)
         if (decision == WidgetRefreshDecision.Cancel) {
             scheduler.cancel(JOB_ID)
             return

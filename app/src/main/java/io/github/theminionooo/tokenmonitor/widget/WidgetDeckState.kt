@@ -9,7 +9,9 @@ import android.content.res.Configuration
 import android.util.SizeF
 import io.github.theminionooo.tokenmonitor.data.protocol.HubProtocolParser
 import io.github.theminionooo.tokenmonitor.data.storage.DisplayPreferences
+import io.github.theminionooo.tokenmonitor.data.storage.SecureConnectionStore
 import io.github.theminionooo.tokenmonitor.data.storage.SnapshotCache
+import io.github.theminionooo.tokenmonitor.data.storage.WidgetRefreshPreferences
 import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
 import io.github.theminionooo.tokenmonitor.ui.InterfaceTheme
 import io.github.theminionooo.tokenmonitor.ui.resolveInterfaceTheme
@@ -24,9 +26,11 @@ internal data class WidgetSnapshot(val session: WidgetSession, val snapshot: Hub
 
 /** Read and decode at most once for a batch of launcher updates. */
 internal fun loadWidgetSnapshot(context: Context): WidgetSnapshot {
-    val session = WidgetRuntime.session
+    val store = SecureConnectionStore(context)
+    val profileId = store.profiles().activeId ?: return WidgetSnapshot(WidgetSession(), null)
+    val session = WidgetRuntime.session.takeIf { it.profileId == profileId } ?: WidgetSession()
     // During a Live or refresh session the in-memory snapshot is the newest one; skip decoding the disk cache on every frame.
-    val cached = if ((session.enabled || session.refreshing) && session.snapshot != null) null else SnapshotCache(context).read()?.let { wire ->
+    val cached = if ((session.enabled || session.refreshing) && session.snapshot != null) null else SnapshotCache(context, profileId).read()?.let { wire ->
         runCatching {
             HubProtocolParser.decodeSnapshot(
                 wire.health,
@@ -40,7 +44,7 @@ internal fun loadWidgetSnapshot(context: Context): WidgetSnapshot {
         }.getOrNull()
     }
     val latest = listOfNotNull(session.snapshot, cached).maxByOrNull { it.capturedAt }
-    val failed = io.github.theminionooo.tokenmonitor.data.storage.WidgetRefreshPreferences(context).record
+    val failed = WidgetRefreshPreferences(context, profileId).record
     // Dashboard cache reads are always "stale" until network verification. Widgets instead
     // use the saved timestamp plus the persisted refresh outcome, as before this feature.
     val snapshot = latest?.let { it.copy(stale = failed.stale(it.capturedAt)) }
@@ -49,10 +53,11 @@ internal fun loadWidgetSnapshot(context: Context): WidgetSnapshot {
     val settled = snapshot != null && (failed.successAt >= snapshot.capturedAt || failed.stale(snapshot.capturedAt))
     val displayedSession = if (settled && !session.enabled && !session.refreshing) session.copy(note = null) else session
     val names = snapshot?.let { current ->
-        io.github.theminionooo.tokenmonitor.data.storage.SecureConnectionStore(context).readModelAliases()
+        store.readModelAliases(profileId)
             ?.let(::decodeModelAliases)?.takeIf { it.revision == current.stats.modelAliasRevision }?.resolver(current)
     } ?: ModelNames()
-    return WidgetSnapshot(displayedSession, snapshot, names)
+    return if (store.localActiveId() == profileId) WidgetSnapshot(displayedSession, snapshot, names)
+        else WidgetSnapshot(WidgetSession(), null)
 }
 
 internal fun loadWidgetDeck(context: Context, widgetId: Int): WidgetDeckRenderState =

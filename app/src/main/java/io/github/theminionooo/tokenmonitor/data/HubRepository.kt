@@ -32,6 +32,9 @@ import io.github.theminionooo.tokenmonitor.data.protocol.decodeModelAliases
 import io.github.theminionooo.tokenmonitor.data.protocol.HubStreamProtocol
 import io.github.theminionooo.tokenmonitor.data.protocol.encodeStreamStats
 import io.github.theminionooo.tokenmonitor.data.storage.SecureConnectionStore
+import io.github.theminionooo.tokenmonitor.data.storage.HubProfileSummary
+import io.github.theminionooo.tokenmonitor.data.storage.SavedHubProfiles
+import io.github.theminionooo.tokenmonitor.data.storage.LEGACY_HUB_PROFILE
 import io.github.theminionooo.tokenmonitor.data.storage.SerialDiskQueue
 import io.github.theminionooo.tokenmonitor.data.storage.SnapshotCache
 import io.github.theminionooo.tokenmonitor.domain.HubConnection
@@ -66,6 +69,7 @@ import io.github.theminionooo.tokenmonitor.widget.WidgetRefreshDecision
 import io.github.theminionooo.tokenmonitor.widget.WidgetRefreshRun
 import io.github.theminionooo.tokenmonitor.widget.widgetRefreshDecision
 import io.github.theminionooo.tokenmonitor.widget.WidgetRuntime
+import io.github.theminionooo.tokenmonitor.widget.WidgetLiveService
 import io.github.theminionooo.tokenmonitor.data.storage.WidgetRefreshPreferences
 import io.github.theminionooo.tokenmonitor.data.network.widgetRefreshWifiAvailable
 import kotlinx.coroutines.coroutineScope
@@ -93,6 +97,8 @@ internal data class HubRepositoryState(
     val limitAccountPresentation: LimitAccountPresentation? = null,
     /** The Hub answered 401; retrying cannot help until the pairing changes. */
     val secretRejected: Boolean = false,
+    val activeProfileId: String? = null,
+    val profiles: List<HubProfileSummary> = emptyList(),
 )
 
 internal fun retainDeviceHistory(streamed: HubStats, previous: List<DeviceUsage>): HubStats = streamed.copy(
@@ -172,18 +178,20 @@ internal class HubRepository(
     context: Context,
     private val timing: HubTimingRecorder = HubTimings.recorder,
     private val saveCache: (SnapshotCache, WireHubSnapshot) -> Unit = { cache, wire -> cache.save(wire) },
-    loadCache: (SnapshotCache) -> WireHubSnapshot? = { it.read() },
+    private val loadCache: (SnapshotCache) -> WireHubSnapshot? = { it.read() },
 ) {
     private val appContext = context.applicationContext
     private val connectionStore = SecureConnectionStore(appContext)
-    private val cache = SnapshotCache(appContext)
+    private var savedProfiles = connectionStore.profiles()
+    private var cache = SnapshotCache(appContext, savedProfiles.activeId ?: LEGACY_HUB_PROFILE)
+    private var widgetRefresh = WidgetRefreshPreferences(appContext, savedProfiles.activeId ?: LEGACY_HUB_PROFILE)
     private val decodedBodies = DecodedBodies()
     private val backoff = BackoffPolicy()
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val diskScope = CoroutineScope(SupervisorJob() + Dispatchers.IO.limitedParallelism(1))
     private val diskQueue = SerialDiskQueue(diskScope)
     private val network = HubNetworkObserver(appContext) { change -> scope.launch { networkChanged(change) } }
-    private var connection: HubConnection? = connectionStore.read()
+    private var connection: HubConnection? = savedProfiles.active?.connection
     private var activeUrl: String? = connection?.baseUrl
     private var lastWireSnapshot: WireHubSnapshot? = null
     private val _state = MutableStateFlow(initialState())
@@ -216,7 +224,6 @@ internal class HubRepository(
     @Volatile private var generation = 0L
     private var lastSubscriptionAttemptAt = 0L
     private var attemptedSubscriptionVersion = ""
-    private val widgetRefresh = WidgetRefreshPreferences(appContext)
     private var backgroundApi: HubApiClient? = null
     internal val backgroundRefreshBusy: Boolean get() = dashboardVisible || widgetActive || activeApi != null || backgroundApi != null
 
@@ -226,9 +233,10 @@ internal class HubRepository(
 
     /** Main-thread admission and generation checks prevent a scheduled read competing with visible work. */
     suspend fun refreshWidgetInBackground() {
-        val settings = widgetRefresh.settings
+        val refreshPreferences = widgetRefresh
+        val settings = refreshPreferences.settings
         val decision = widgetRefreshDecision(settings.interval, WidgetUpdateCoordinator.hasWidgets(appContext),
-            connection != null, widgetRefresh.record.secretRejected, dashboardVisible,
+            connection != null, refreshPreferences.record.secretRejected, dashboardVisible,
             WidgetRuntime.session.enabled || WidgetRuntime.session.refreshing || widgetActive,
             activeApi != null || backgroundApi != null)
         if (decision == WidgetRefreshDecision.Cancel) { WidgetRefreshScheduler.reconcileAsync(appContext); return }
@@ -239,7 +247,7 @@ internal class HubRepository(
         val run = WidgetRefreshRun(deadline)
         val api = HubApiClient(timing) { route ->
             if (token != generation || dashboardVisible || widgetActive ||
-                widgetRefresh.settings != settings || widgetRefresh.record.secretRejected || !WidgetUpdateCoordinator.hasWidgets(appContext)) {
+                refreshPreferences.settings != settings || refreshPreferences.record.secretRejected || !WidgetUpdateCoordinator.hasWidgets(appContext)) {
                 throw CancellationException("Scheduled widget refresh ended")
             }
             run.beforeRequest(SystemClock.elapsedRealtime(), !settings.wifiOnly || widgetRefreshWifiAvailable(appContext))
@@ -289,7 +297,7 @@ internal class HubRepository(
         } finally {
             api.close()
             if (observing) manager.unregisterNetworkCallback(callback)
-            widgetRefresh.traffic(api.receivedBytes, run.completed)
+            if (refreshPreferences === widgetRefresh) refreshPreferences.traffic(api.receivedBytes, run.completed)
             if (backgroundApi === api) backgroundApi = null
         }
     }
@@ -301,11 +309,17 @@ internal class HubRepository(
         diskQueue.enqueue { WidgetUpdateCoordinator.refreshSaved(appContext) }
     }
 
-    internal val cacheLoadJob: Job? = connection?.let { saved ->
+    internal var cacheLoadJob: Job? = hydrateCache()
+        private set
+
+    private var aliasLoadJob: Job? = hydrateAliases()
+
+    private fun hydrateCache(): Job? = connection?.let { saved ->
+        val selectedCache = cache
         scope.launch {
             val cached = withContext(Dispatchers.IO) {
                 runCatching {
-                    timing.measure(HubTimingStage.CACHE_DECODE) { loadCache(cache)?.let { it to parse(it, cached = true) } }
+                    timing.measure(HubTimingStage.CACHE_DECODE) { loadCache(selectedCache)?.let { it to parse(it, cached = true) } }
                 }.getOrNull()
             } ?: return@launch
             // A network response or a pairing change always wins over a delayed disk read.
@@ -316,10 +330,11 @@ internal class HubRepository(
         }
     }
 
-    private val aliasLoadJob = connection?.let { saved ->
+    private fun hydrateAliases(): Job? = connection?.let { saved ->
+        val id = savedProfiles.activeId
         scope.launch {
             val stored = withContext(Dispatchers.IO) {
-                connectionStore.readModelAliases()?.let { decodeModelAliases(it) }
+                connectionStore.readModelAliases(id)?.let { decodeModelAliases(it) }
             }
             if (connection === saved && aliasRecord == null) {
                 aliasRecord = stored
@@ -379,7 +394,11 @@ internal class HubRepository(
         if (connection != null && workAllowed) reconcileWork(forceRefresh = true, reason = reason)
     }
 
-    suspend fun validateAndSave(rawUrl: String, rawFallbackUrl: String, secret: String, allowLocalNetwork: Boolean, allowPublicHttps: Boolean = false): String? {
+    suspend fun validateAndSave(
+        rawUrl: String, rawFallbackUrl: String, secret: String,
+        allowLocalNetwork: Boolean, allowPublicHttps: Boolean = false,
+        addedName: String? = null,
+    ): String? {
         val primary = when (val result = HubAddressValidator.validate(rawUrl, secret, allowLocalNetwork, allowPublicHttps)) {
             is HubAddressValidation.Allowed -> result.connection
             is HubAddressValidation.Rejected -> return result.reason
@@ -391,7 +410,7 @@ internal class HubRepository(
             }
         }
         val candidate = primary.copy(fallbackUrl = fallback?.takeIf { it != primary.baseUrl })
-        return verifyAndSave(candidate)
+        return verifyAndSave(candidate, addedName = addedName)
     }
 
     suspend fun repairHomeAddress(rawAddress: String): String? {
@@ -404,7 +423,7 @@ internal class HubRepository(
         return verifyAndSave(candidate, candidate.fallbackUrl ?: candidate.baseUrl)
     }
 
-    private suspend fun verifyAndSave(candidate: HubConnection, testAddress: String? = null): String? {
+    private suspend fun verifyAndSave(candidate: HubConnection, testAddress: String? = null, addedName: String? = null): String? {
         stopForegroundWork(HubTimingReason.VERIFY)
         val token = generation
         val api = HubApiClient(timing, timing.nextRun()) { route ->
@@ -421,14 +440,14 @@ internal class HubRepository(
             val snapshot = withContext(Dispatchers.IO) { parse(wire) }
             if (generation != token) return "Connection check cancelled. Try again."
             val changedHub = connection?.let { it.baseUrl != candidate.baseUrl || it.secret != candidate.secret } != false
-            connectionStore.save(candidate, resetAliases = changedHub)
-            if (changedHub) {
-                aliasRecord = null
-                aliasReads.reset()
-                limitPresentationReads.reset()
-                _state.update { it.copy(limitAccountPresentation = null) }
+            val saved = connectionStore.save(candidate, resetAliases = changedHub, addedName = addedName, newCacheIdentity = changedHub)
+            if (saved.activeId != savedProfiles.activeId) {
+                val replaced = addedName == null && savedProfiles.activeId != null
+                adoptProfile(saved, deletePreviousCache = replaced, hydrate = false)
+            } else {
+                savedProfiles = saved
+                connection = candidate
             }
-            connection = candidate
             activeUrl = url
             applySuccess(wire, snapshot)
             null
@@ -442,30 +461,79 @@ internal class HubRepository(
     fun disablePublicHttps() {
         val saved = connection?.takeIf { it.allowPublicHttps } ?: return
         val privateOnly = saved.copy(allowPublicHttps = false)
-        connectionStore.save(privateOnly, resetAliases = false)
+        savedProfiles = connectionStore.save(privateOnly, resetAliases = false)
         stopForegroundWork()
         connection = privateOnly
         _state.update { it.copy(allowPublicHttps = false, message = "Internet Hub access is off. Use Tailscale or update the connection settings.") }
         reconcileWork()
     }
 
+    fun switchHubProfile(id: String): Boolean {
+        if (id == savedProfiles.activeId) return true
+        val selected = connectionStore.activate(id) ?: return false
+        stopForegroundWork()
+        adoptProfile(selected, hydrate = true)
+        reconcileWork()
+        return true
+    }
+
+    fun renameHubProfile(id: String, name: String) {
+        savedProfiles = connectionStore.rename(id, name)
+        _state.update { it.copy(profiles = savedProfiles.summaries()) }
+    }
+
+    fun removeHubProfile(id: String) {
+        if (id == savedProfiles.activeId) {
+            disconnect()
+            return
+        }
+        if (savedProfiles.entries.none { it.id == id }) return
+        savedProfiles = connectionStore.remove(id)
+        WidgetRefreshPreferences(appContext, id).clear()
+        val removedCache = SnapshotCache(appContext, id)
+        diskQueue.enqueue { removedCache.clear() }
+        _state.update { it.copy(profiles = savedProfiles.summaries()) }
+    }
+
     fun disconnect() {
-        cacheLoadJob?.cancel()
+        val id = savedProfiles.activeId ?: return
+        val remaining = connectionStore.remove(id)
         stopForegroundWork(HubTimingReason.DISCONNECT)
-        connection = null
-        activeUrl = null
+        adoptProfile(remaining, deletePreviousCache = true, hydrate = false)
+        reconcileWork()
+    }
+
+    private fun adoptProfile(next: SavedHubProfiles, deletePreviousCache: Boolean = false, hydrate: Boolean) {
+        val previousCache = cache
+        val previousWidgetRefresh = widgetRefresh
+        cacheLoadJob?.cancel()
+        aliasLoadJob?.cancel()
+        savedProfiles = next
+        connection = next.active?.connection
+        activeUrl = connection?.baseUrl
+        cache = SnapshotCache(appContext, next.activeId ?: LEGACY_HUB_PROFILE)
+        widgetRefresh = WidgetRefreshPreferences(appContext, next.activeId ?: LEGACY_HUB_PROFILE)
         lastWireSnapshot = null
         pendingCacheWrite = null
+        lastCacheWriteAt = 0L
+        lastSubscriptionAttemptAt = 0L
+        attemptedSubscriptionVersion = ""
         decodedBodies.clear()
-        connectionStore.clear()
-        aliasLoadJob?.cancel()
         aliasRecord = null
         aliasReads.reset()
         limitPresentationReads.reset()
-        widgetRefresh.clearRecord()
+        if (deletePreviousCache) previousWidgetRefresh.clear()
+        widgetActive = false
+        widgetDeadline = null
+        _state.value = initialState()
+        WidgetLiveService.stop(appContext)
         WidgetRefreshScheduler.reconcileAsync(appContext)
-        diskQueue.enqueue { cache.clear(); WidgetUpdateCoordinator.refresh(appContext) }
-        _state.value = HubRepositoryState()
+        diskQueue.enqueue {
+            if (deletePreviousCache) previousCache.clear()
+            WidgetUpdateCoordinator.refresh(appContext)
+        }
+        cacheLoadJob = if (hydrate) hydrateCache() else null
+        aliasLoadJob = if (hydrate) hydrateAliases() else null
     }
 
     fun close() {
@@ -483,6 +551,8 @@ internal class HubRepository(
         allowLocalNetwork = connection?.allowLocalNetwork ?: false,
         allowPublicHttps = connection?.allowPublicHttps ?: false,
         localNetworkPermissionRequired = needsLocalPermission(),
+        activeProfileId = savedProfiles.activeId,
+        profiles = savedProfiles.summaries(),
     )
 
     private fun startForegroundWork(mode: HubWorkMode = desiredWorkMode, reason: HubTimingReason = HubTimingReason.MODE_CHANGE) {
@@ -647,8 +717,9 @@ internal class HubRepository(
         if (force || now - lastCacheWriteAt >= 60_000L) {
             pendingCacheWrite = null
             lastCacheWriteAt = now
+            val selectedCache = cache
             diskQueue.enqueue {
-                saveCache(cache, wire)
+                saveCache(selectedCache, wire)
                 WidgetUpdateCoordinator.refreshSaved(appContext)
             }
         } else pendingCacheWrite = wire
@@ -691,15 +762,11 @@ internal class HubRepository(
         WidgetRefreshScheduler.reconcileAsync(appContext)
         lastWireSnapshot = wire
         persist(wire, true)
-        _state.value = HubRepositoryState(
-            hasConnection = connection != null, connectionUrl = connection?.baseUrl,
-            fallbackUrl = connection?.fallbackUrl, activeUrl = activeUrl,
-            allowLocalNetwork = connection?.allowLocalNetwork ?: false,
-            allowPublicHttps = connection?.allowPublicHttps ?: false, snapshot = snapshot,
+        _state.value = initialState().copy(
+            snapshot = snapshot,
             modelAliases = aliasRecord?.takeIf { it.revision == snapshot.stats.modelAliasRevision },
             limitAccountPresentation = _state.value.limitAccountPresentation
                 ?.takeIf { it.revision == snapshot.stats.limitAccountPresentationRevision },
-            localNetworkPermissionRequired = needsLocalPermission(),
         )
     }
 

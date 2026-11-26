@@ -618,4 +618,14 @@
     <string name="usage_report_cached">সংরক্ষিত Hub ডেটার ভিত্তিতে।</string>
     <string name="usage_report_share_failed">প্রতিবেদন শেয়ার করা যায়নি। আবার চেষ্টা করুন।</string>
     <string name="usage_report_coverage">%2$s দিনের মধ্যে %1$s দিনের রেকর্ড আছে</string>
+    <string name="hub_profile_title">সংরক্ষিত Hub</string>
+    <string name="hub_profile_active">সক্রিয় Hub</string>
+    <string name="hub_profile_switch">বদলান</string>
+    <string name="hub_profile_edit">সম্পাদনা করুন</string>
+    <string name="hub_profile_add">Hub যোগ করুন</string>
+    <string name="hub_profile_name">Hub-এর নাম (ঐচ্ছিক)</string>
+    <string name="hub_profile_remove">Hub সরান</string>
+    <string name="hub_profile_remove_confirm">%1$s-এর সংরক্ষিত সংযোগ সরাবেন?</string>
+    <string name="hub_profile_save">সংরক্ষণ করুন</string>
+    <string name="hub_profile_error">সংরক্ষিত Hub আপডেট করা যায়নি। আবার চেষ্টা করুন।</string>
 </resources>

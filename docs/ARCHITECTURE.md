@@ -257,13 +257,21 @@ explicit test-and-save action is the boundary between discovery and persistence.
 
 | Store | Content | Mechanism |
 | --- | --- | --- |
-| `SecureConnectionStore` | Addresses, secret, private-network choice | AES-GCM with a non-exportable Android Keystore key; ciphertext in app-private preferences |
-| `SnapshotCache` | Last successful wire snapshot | One gzip file in private storage, written atomically; migrates the first release's preferences store on first read |
+| `SecureConnectionStore` | Saved Hub names, addresses, secrets and route choices | AES-GCM with a non-exportable Android Keystore key and ciphertext in app-private preferences |
+| `SnapshotCache` | Last successful wire snapshot for each saved Hub | Private gzip files written atomically, with the original cache retained for the migrated pairing |
 | `DisplayPreferences` | Non-secret display choices | Plain app-private preferences, exposed as a `StateFlow` |
-| `WidgetRefreshPreferences` | Background consent, interval, Wi-Fi choice and run metadata | Plain app-private preferences; no Hub addresses, credentials or response contents |
+| `WidgetRefreshPreferences` | Background consent, interval, Wi-Fi choice and run metadata for each saved Hub | App-private preferences containing scheduling values only |
 
 Backup and device-transfer rules exclude all four, so a phone migration does
 not carry the pairing with it.
+
+An existing single pairing reads as the first saved Hub and keeps its cache,
+model aliases and widget refresh settings. A profile mutation commits the registry
+as one encrypted record. A non-secret active profile ID selects local cache and
+job preferences before opening credentials. Selecting a different Hub closes
+the old clients, ends Widget Live, clears the displayed snapshot and gives the
+existing dashboard owner the new connection. Queued writes keep the cache
+that belonged to the Hub when the write was enqueued.
 
 Cache writes during foreground updates are coalesced to at most one per minute,
 plus one when the app pauses. `SerialDiskQueue` preserves their order and keeps

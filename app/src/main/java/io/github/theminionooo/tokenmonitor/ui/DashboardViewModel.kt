@@ -45,6 +45,7 @@ internal data class ConnectionFormState(
     val saving: Boolean = false,
     val result: String? = null,
     val successful: Boolean = false,
+    val profileUpdateFailed: Boolean = false,
 )
 
 internal data class ServiceStatusState(
@@ -172,11 +173,42 @@ internal class DashboardViewModel(application: Application) : AndroidViewModel(a
     fun moveHomeModule(module: String, offset: Int) = displayPreferences.moveHomeModule(module, offset)
     fun setHomeListCount(module: String, count: Int) = displayPreferences.setHomeListCount(module, count)
 
-    fun saveConnection(url: String, fallbackUrl: String, secret: String, allowLocalNetwork: Boolean, allowPublicHttps: Boolean = false) {
-        checkConnection(returnHome = true) { repository.validateAndSave(url, fallbackUrl, secret, allowLocalNetwork, allowPublicHttps) }
+    fun saveConnection(url: String, fallbackUrl: String, secret: String, allowLocalNetwork: Boolean, allowPublicHttps: Boolean = false, addedName: String? = null) {
+        checkConnection(returnHome = true) { repository.validateAndSave(url, fallbackUrl, secret, allowLocalNetwork, allowPublicHttps, addedName) }
     }
 
-    fun disablePublicHttps() {
+    fun switchHubProfile(id: String) = changeProfile {
+        if (repository.switchHubProfile(id)) {
+            resetConnectionEditor()
+            choose(DashboardDestination.Home)
+        } else error("Hub profile is no longer available")
+    }
+
+    fun renameHubProfile(id: String, name: String) = changeProfile { repository.renameHubProfile(id, name) }
+
+    fun removeHubProfile(id: String) = changeProfile {
+        repository.removeHubProfile(id)
+        if (!hubState.value.hasConnection) {
+            resetConnectionEditor()
+            choose(DashboardDestination.Settings)
+        }
+    }
+
+    fun resetConnectionEditor() {
+        discoveryJob?.cancel()
+        _connectionForm.value = ConnectionFormState()
+        _discovery.value = HubDiscoveryState()
+    }
+
+    private fun changeProfile(operation: () -> Unit) {
+        if (_connectionForm.value.saving) return
+        _connectionForm.value = ConnectionFormState()
+        runCatching(operation).onFailure {
+            _connectionForm.value = ConnectionFormState(profileUpdateFailed = true)
+        }
+    }
+
+    fun disablePublicHttps() = changeProfile {
         WidgetLiveService.stop(getApplication())
         repository.setWidgetActive(false)
         repository.disablePublicHttps()
@@ -222,7 +254,13 @@ internal class DashboardViewModel(application: Application) : AndroidViewModel(a
         if (discoveryJob?.isActive == true) return
         _discovery.value = HubDiscoveryState(searching = true)
         discoveryJob = viewModelScope.launch {
-            val found = runCatching { hubDiscovery.findOnLocalNetwork() }.getOrNull()
+            val found = try {
+                hubDiscovery.findOnLocalNetwork()
+            } catch (cancelled: kotlinx.coroutines.CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                null
+            }
             _discovery.value = HubDiscoveryState(
                 found = found,
                 message = if (found != null) appText(R.string.ui_found_a_hub_test_and_save_this_address_to_use_it_7681b, "Found a Hub. Test and save this address to use it.")
@@ -232,11 +270,12 @@ internal class DashboardViewModel(application: Application) : AndroidViewModel(a
     }
 
     fun disconnect() {
-        WidgetLiveService.stop(getApplication())
-        repository.setWidgetActive(false)
-        repository.disconnect()
-        choose(DashboardDestination.Settings)
-        _connectionForm.value = ConnectionFormState(result = appText(R.string.ui_the_saved_hub_connection_was_removed_from_this_phone_9bbae, "The saved Hub connection was removed from this phone."), successful = true)
+        changeProfile {
+            repository.disconnect()
+            resetConnectionEditor()
+            choose(DashboardDestination.Settings)
+            _connectionForm.value = ConnectionFormState(result = appText(R.string.ui_the_saved_hub_connection_was_removed_from_this_phone_9bbae, "The saved Hub connection was removed from this phone."), successful = true)
+        }
     }
 
     override fun onCleared() {

@@ -618,4 +618,14 @@
     <string name="usage_report_cached">సేవ్ చేసిన Hub డేటా ఆధారంగా.</string>
     <string name="usage_report_share_failed">నివేదికను షేర్ చేయలేకపోయాము. మళ్లీ ప్రయత్నించండి.</string>
     <string name="usage_report_coverage">%2$s రోజుల్లో %1$s రోజులు నమోదయ్యాయి</string>
+    <string name="hub_profile_title">సేవ్ చేసిన Hubలు</string>
+    <string name="hub_profile_active">యాక్టివ్ Hub</string>
+    <string name="hub_profile_switch">మార్చండి</string>
+    <string name="hub_profile_edit">సవరించండి</string>
+    <string name="hub_profile_add">Hub జోడించండి</string>
+    <string name="hub_profile_name">Hub పేరు (ఐచ్ఛికం)</string>
+    <string name="hub_profile_remove">Hub తీసివేయండి</string>
+    <string name="hub_profile_remove_confirm">%1$s కోసం సేవ్ చేసిన కనెక్షన్‌ను తీసివేయాలా?</string>
+    <string name="hub_profile_save">సేవ్ చేయండి</string>
+    <string name="hub_profile_error">సేవ్ చేసిన Hubలను అప్‌డేట్ చేయలేకపోయాము. మళ్లీ ప్రయత్నించండి.</string>
 </resources>

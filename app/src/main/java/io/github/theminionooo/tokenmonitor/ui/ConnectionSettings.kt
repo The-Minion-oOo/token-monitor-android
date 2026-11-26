@@ -1,5 +1,7 @@
 package io.github.theminionooo.tokenmonitor.ui
 
+import androidx.activity.compose.BackHandler
+
 import io.github.theminionooo.tokenmonitor.R
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -122,15 +124,18 @@ internal fun ConnectionScreen(
     onTokenNumberAnimationChange: (TokenNumberAnimation) -> Unit = {},
     onHomeListCountChange: (String, Int) -> Unit = { _, _ -> },
     onDisablePublicHttps: () -> Unit = {},
+    profileActions: HubProfileActions? = null,
 ) {
     val hasConnection = state.hasConnection
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
-    var hubUrl by rememberSaveable(state.connectionUrl) { mutableStateOf(state.connectionUrl.orEmpty()) }
-    var fallbackUrl by rememberSaveable(state.fallbackUrl) { mutableStateOf(state.fallbackUrl.orEmpty()) }
-    var secret by remember { mutableStateOf("") }
-    var allowLocalNetwork by rememberSaveable(state.allowLocalNetwork) { mutableStateOf(state.allowLocalNetwork) }
-    var allowPublicHttps by rememberSaveable(state.allowPublicHttps) { mutableStateOf(state.allowPublicHttps) }
+    var addingProfile by rememberSaveable(state.activeProfileId) { mutableStateOf(false) }
+    var profileName by rememberSaveable(state.activeProfileId, addingProfile) { mutableStateOf("") }
+    var hubUrl by rememberSaveable(state.activeProfileId, state.connectionUrl, addingProfile) { mutableStateOf(if (addingProfile) "" else state.connectionUrl.orEmpty()) }
+    var fallbackUrl by rememberSaveable(state.activeProfileId, state.fallbackUrl, addingProfile) { mutableStateOf(if (addingProfile) "" else state.fallbackUrl.orEmpty()) }
+    var secret by remember(state.activeProfileId, addingProfile) { mutableStateOf("") }
+    var allowLocalNetwork by rememberSaveable(state.activeProfileId, state.allowLocalNetwork, addingProfile) { mutableStateOf(!addingProfile && state.allowLocalNetwork) }
+    var allowPublicHttps by rememberSaveable(state.activeProfileId, state.allowPublicHttps, addingProfile) { mutableStateOf(!addingProfile && state.allowPublicHttps) }
     var confirmInternetOff by rememberSaveable(state.connectionUrl, state.allowPublicHttps, state.hasConnection) { mutableStateOf(false) }
     if (confirmInternetOff) {
         InternetAccessOffDialog(
@@ -143,8 +148,8 @@ internal fun ConnectionScreen(
         )
     }
     // A discovery result fills the home address once. Recreating the screen must not put an old result over what was typed since.
-    var appliedDiscovery by rememberSaveable { mutableStateOf(discovery.found) }
-    LaunchedEffect(discovery.found) {
+    var appliedDiscovery by rememberSaveable(state.activeProfileId, addingProfile) { mutableStateOf(discovery.found) }
+    LaunchedEffect(discovery.found, addingProfile) {
         val found = discovery.found
         if (found != appliedDiscovery) {
             appliedDiscovery = found
@@ -152,6 +157,15 @@ internal fun ConnectionScreen(
         }
     }
     val fields: @Composable ColumnScope.(String) -> Unit = { saveLabel ->
+        if (profileActions != null && (addingProfile || !hasConnection)) {
+            OutlinedTextField(
+                value = profileName,
+                onValueChange = { profileName = it },
+                label = { Text(appText(R.string.hub_profile_name, "Hub name (optional)")) },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
         if (state.localNetworkPermissionRequired || form.result == io.github.theminionooo.tokenmonitor.data.network.LocalNetworkAccess.deniedMessage) {
             Text(appText(R.string.ui_android_needs_your_permission_to_reach_the_home_wi_f_66823, "Android needs your permission to reach the home Wi-Fi Hub. Tailscale can still be used when available."), color = Muted, style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = onAllowLocalNetwork, modifier = Modifier.fillMaxWidth()) { Text(appText(R.string.ui_allow_home_wi_fi_access_411c0, "ALLOW HOME WI-FI ACCESS")) }
@@ -172,31 +186,57 @@ internal fun ConnectionScreen(
             onAllowLocalNetworkChange = { allowLocalNetwork = it },
             allowPublicHttps = allowPublicHttps,
             onAllowPublicHttpsChange = {
-                if (!it && state.hasConnection && state.allowPublicHttps &&
+                if (!addingProfile && !it && state.hasConnection && state.allowPublicHttps &&
                     HubAddressValidator.routeLabel(state.connectionUrl) == "Internet (HTTPS)") {
                     focusManager.clearFocus()
                     keyboardController?.hide()
                     confirmInternetOff = true
                 } else {
                     allowPublicHttps = it
-                    if (!it && state.allowPublicHttps) onDisablePublicHttps()
+                    if (!addingProfile && !it && state.allowPublicHttps) onDisablePublicHttps()
                 }
             },
             saving = form.saving,
             saveLabel = saveLabel,
             result = form.result,
             resultSuccessful = form.successful,
-            onSave = { onSaveConnection(hubUrl, fallbackUrl, secret, allowLocalNetwork, allowPublicHttps) },
+            onSave = {
+                if ((addingProfile || !hasConnection) && profileActions != null) {
+                    profileActions.add(hubUrl, fallbackUrl, secret, allowLocalNetwork, allowPublicHttps, profileName)
+                } else onSaveConnection(hubUrl, fallbackUrl, secret, allowLocalNetwork, allowPublicHttps)
+            },
             discovery = discovery,
             onFindHomeHub = onFindHomeHub,
-            canRepairHomeAddress = hasConnection && fallbackUrl.isNotBlank() && fallbackUrl != state.fallbackUrl,
+            canRepairHomeAddress = !addingProfile && hasConnection && fallbackUrl.isNotBlank() && fallbackUrl != state.fallbackUrl,
             onRepairHomeAddress = { onRepairHomeAddress(fallbackUrl) },
         )
         DiagnosticActions(state, displayOptions)
         if (!hasConnection) LanguageSettings()
     }
     if (!hasConnection) {
-        WelcomeSetup(modifier = modifier, fields = fields, onOpenReleasePage = onOpenReleasePage)
+        WelcomeSetup(modifier = modifier, fields = fields, onOpenReleasePage = onOpenReleasePage, savedHubs = {
+            if (profileActions != null && state.profiles.isNotEmpty()) {
+                HubProfilesPanel(state, form, profileActions, onAdd = null)
+            }
+        })
+        return
+    }
+    if (addingProfile) {
+        val cancelAdd = {
+            profileActions?.resetEditor?.invoke()
+            addingProfile = false
+        }
+        BackHandler(enabled = !form.saving, onBack = cancelAdd)
+        Column(
+            modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Text(appText(R.string.hub_profile_add, "Add Hub"), color = Ink, style = MaterialTheme.typography.titleMedium)
+            fields(appText(R.string.ui_connect_6e288, "CONNECT"))
+            TextButton(onClick = cancelAdd, enabled = !form.saving) {
+                Text(appText(R.string.ui_cancel_77dfd, "Cancel"))
+            }
+        }
         return
     }
     val openSection = rememberSaveable { mutableStateOf<String?>(null) }
@@ -205,6 +245,10 @@ internal fun ConnectionScreen(
             modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 14.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
+            if (profileActions != null) HubProfilesPanel(state, form, profileActions) {
+                profileActions.resetEditor()
+                addingProfile = true
+            }
             val route = when {
                 state.fallbackUrl != null && state.activeUrl == state.fallbackUrl -> "Home Wi-Fi"
                 io.github.theminionooo.tokenmonitor.data.network.HubAddressValidator.routeLabel(state.connectionUrl) == "Internet (HTTPS)" -> "Internet (HTTPS)"
@@ -214,13 +258,16 @@ internal fun ConnectionScreen(
                 Text(appText(R.string.ui_this_phone_only_reads_your_hub_it_cannot_control_the_654a0, "This phone only reads your Hub. It cannot control the desktop or access its files."), color = Muted, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
                 Text(appText(R.string.ui_repair_the_home_address_with_the_saved_pairing_or_en_07412, "Repair the home address with the saved pairing, or enter the secret again to replace the connection."), color = Accent, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
                 fields(appText(R.string.ui_check_and_save_connection_e118a, "CHECK AND SAVE CONNECTION"))
-                OutlinedButton(onClick = onDisconnect, modifier = Modifier.fillMaxWidth()) { Text(appText(R.string.ui_disconnect_this_phone_f8a16, "DISCONNECT THIS PHONE")) }
+                if (profileActions == null || state.profiles.isEmpty()) {
+                    OutlinedButton(onClick = onDisconnect, modifier = Modifier.fillMaxWidth()) {
+                        Text(appText(R.string.ui_disconnect_this_phone_f8a16, "DISCONNECT THIS PHONE"))
+                    }
+                }
             }
             SettingsGroup(appText(R.string.ui_pair_with_desktop_6759b, "Pair with desktop"), icon = R.drawable.view_device, summary = appText(R.string.ui_3_steps_e5516, "3 steps")) {
                 Text(appText(R.string.ui_1_install_tailscale_on_the_desktop_and_phone_then_us_9aa66, "1. Install Tailscale on the desktop and phone, then use the same tailnet."), color = Ink, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
                 Text(appText(R.string.ui_2_in_the_desktop_app_open_settings_multi_device_sync_69c49, "2. In the desktop app, open Settings → Multi-device Sync and choose Host Hub."), color = Ink, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
                 Text(appText(R.string.ui_3_type_the_address_that_starts_with_100_and_the_shar_009a9, "3. Type the address that starts with 100. and the shared secret from the desktop app into the fields above. Just the numbers are enough."), color = Ink, style = MaterialTheme.typography.bodySmall, lineHeight = 18.sp)
-                Text(appText(R.string.language_no_pairing_qr, "The v%1\$s desktop app does not generate a pairing QR code.", BuildConfig.UPSTREAM_VERSION), color = Muted, style = MaterialTheme.typography.labelSmall, lineHeight = 16.sp)
             }
             val currentTheme = displayOptions.themeCode?.let(InterfaceTheme::fromCode) ?: InterfaceTheme.Default
             val themeId = InterfaceTheme.idOf(currentTheme)
@@ -352,7 +399,7 @@ internal fun ConnectionScreen(
                 }
             }
             SettingsGroup(appText(R.string.ui_home_screen_widget_c1c9a, "Home-screen widget"), icon = R.drawable.view_home, summary = appText(R.string.ui_live_controls_resizable_0fae1, "Live controls · resizable")) {
-                WidgetBackgroundSettings()
+                WidgetBackgroundSettings(state.activeProfileId)
                 val widgetContext = androidx.compose.ui.platform.LocalContext.current
                 val widgets = android.appwidget.AppWidgetManager.getInstance(widgetContext)
                 Text(appText(R.string.ui_a_widget_in_your_app_theme_with_the_full_token_count_b19ca, "A widget in your app theme with the full token count, tool marks, quota windows, and a seven-day chart as you make it taller. Reduce Motion also applies to the widget."), color = Muted, style = MaterialTheme.typography.bodySmall)
@@ -489,7 +536,12 @@ private fun ColumnScope.ConnectionFields(
 }
 
 @Composable
-private fun WelcomeSetup(modifier: Modifier, fields: @Composable ColumnScope.(String) -> Unit, onOpenReleasePage: () -> Unit) {
+private fun WelcomeSetup(
+    modifier: Modifier,
+    fields: @Composable ColumnScope.(String) -> Unit,
+    onOpenReleasePage: () -> Unit,
+    savedHubs: @Composable () -> Unit,
+) {
     Column(
         modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()).statusBarsPadding().padding(horizontal = 20.dp, vertical = 28.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -504,6 +556,7 @@ private fun WelcomeSetup(modifier: Modifier, fields: @Composable ColumnScope.(St
             Text(appText(R.string.ui_your_desktop_dashboard_live_on_your_phone_2b760, "Your desktop dashboard, live on your phone."), color = Muted, style = MaterialTheme.typography.bodyMedium, lineHeight = 18.sp)
         }
         SampleUsageButton()
+        savedHubs()
         Text(appText(R.string.ui_pair_with_your_desktop_e4ea0, "PAIR WITH YOUR DESKTOP"), color = Ink, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 6.dp))
         WelcomeStep(1, appText(R.string.ui_install_tailscale_on_the_desktop_and_this_phone_11bc0, "Install Tailscale on the desktop and this phone"), appText(R.string.ui_sign_both_into_the_same_tailnet_personal_use_is_free_27772, "Sign both into the same tailnet. Personal use is free."))
         WelcomeStep(2, appText(R.string.ui_host_the_hub_on_the_desktop_23e47, "Host the Hub on the desktop"), appText(R.string.ui_token_monitor_settings_multi_device_sync_host_hub_708d1, "Token Monitor → Settings → Multi-device Sync → Host Hub."))

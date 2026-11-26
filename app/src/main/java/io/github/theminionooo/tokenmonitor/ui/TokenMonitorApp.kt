@@ -219,6 +219,17 @@ internal fun TokenMonitorApp(viewModel: DashboardViewModel) {
                     onTokenNumberAnimationChange = viewModel::setTokenNumberAnimation,
                     onHomeListCountChange = viewModel::setHomeListCount,
                     onDisablePublicHttps = viewModel::disablePublicHttps,
+                    profileActions = HubProfileActions(
+                        add = { url, fallback, secret, local, internet, name ->
+                            withLocalNetworkAccess(HubAddressValidator.isLocalAddress(url) || HubAddressValidator.isLocalAddress(fallback)) {
+                                viewModel.saveConnection(url, fallback, secret, local, internet, addedName = name)
+                            }
+                        },
+                        select = viewModel::switchHubProfile,
+                        rename = viewModel::renameHubProfile,
+                        remove = viewModel::removeHubProfile,
+                        resetEditor = viewModel::resetConnectionEditor,
+                    ),
                 )
             }
         }
@@ -264,6 +275,7 @@ internal fun DashboardScaffold(
     onTokenNumberAnimationChange: (TokenNumberAnimation) -> Unit = {},
     onHomeListCountChange: (String, Int) -> Unit = { _, _ -> },
     onDisablePublicHttps: () -> Unit = {},
+    profileActions: HubProfileActions? = null,
 ) {
     var periodName by rememberSaveable { mutableStateOf(displayOptions.defaultPeriod) }
     // The default steers the period only when the setting changes; a rotation or theme switch must keep the period picked in the header.
@@ -327,6 +339,7 @@ internal fun DashboardScaffold(
                 displayOptions = displayOptions,
                 onSaveConnection = onSaveConnection,
                 onDisablePublicHttps = onDisablePublicHttps,
+                profileActions = profileActions,
                 onColorfulToolMarksChange = onColorfulToolMarksChange,
                 onCompactTokenTotalChange = onCompactTokenTotalChange,
                 onReduceMotionChange = onReduceMotionChange,

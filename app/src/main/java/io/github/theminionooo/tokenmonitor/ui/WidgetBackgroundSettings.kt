@@ -14,15 +14,18 @@ import io.github.theminionooo.tokenmonitor.data.storage.WidgetRefreshPreferences
 import io.github.theminionooo.tokenmonitor.data.storage.WidgetRefreshSettings
 import io.github.theminionooo.tokenmonitor.data.storage.WidgetRefreshRecord
 import io.github.theminionooo.tokenmonitor.data.storage.WidgetRefreshInterval
+import io.github.theminionooo.tokenmonitor.data.storage.LEGACY_HUB_PROFILE
 import io.github.theminionooo.tokenmonitor.widget.WidgetRefreshScheduler
 import java.util.Locale
 
 @Composable
-internal fun WidgetBackgroundSettings() {
+internal fun WidgetBackgroundSettings(profileId: String? = null) {
     val context = LocalContext.current
-    val store = remember(context) { WidgetRefreshPreferences(context) }
-    var settings by remember { mutableStateOf(store.settings) }
-    var record by remember { mutableStateOf(store.record) }
+    val store = remember(context, profileId) {
+        WidgetRefreshPreferences(context, profileId ?: LEGACY_HUB_PROFILE)
+    }
+    var settings by remember(store) { mutableStateOf(store.settings) }
+    var record by remember(store) { mutableStateOf(store.record) }
     DisposableEffect(store) {
         val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
             settings = store.settings

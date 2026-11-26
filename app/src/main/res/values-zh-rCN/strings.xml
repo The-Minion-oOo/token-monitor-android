@@ -619,4 +619,14 @@
     <string name="usage_report_cached">基于已保存的 Hub 数据。</string>
     <string name="usage_report_share_failed">无法分享报告。请重试。</string>
     <string name="usage_report_coverage">已记录 %1$s 天，共 %2$s 天</string>
+    <string name="hub_profile_title">已保存的 Hub</string>
+    <string name="hub_profile_active">当前 Hub</string>
+    <string name="hub_profile_switch">切换</string>
+    <string name="hub_profile_edit">编辑</string>
+    <string name="hub_profile_add">添加 Hub</string>
+    <string name="hub_profile_name">Hub 名称（选填）</string>
+    <string name="hub_profile_remove">移除 Hub</string>
+    <string name="hub_profile_remove_confirm">移除 %1$s 的已保存连接？</string>
+    <string name="hub_profile_save">保存</string>
+    <string name="hub_profile_error">无法更新已保存的 Hub。请重试。</string>
 </resources>
