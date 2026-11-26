@@ -111,6 +111,17 @@ The widget follows the selected Hub. Switching ends Widget Live. Each Hub keeps
 its own saved usage and background refresh settings. Your existing pairing
 appears in Saved Hubs after updating.
 
+## Pairing from a QR image
+
+When desktop Token Monitor shows **Pair phone**, choose the Hub address your
+phone can reach and save or crop the QR as an image. On Android, choose
+**Choose QR image** during setup or in **Saved Hubs → Add Hub**, then pick the
+image. Review the displayed address and tap **Connect** to verify and save it.
+The normal manual fields are available on the same screen.
+
+Treat the QR image like the Hub secret. Transfer it privately and delete copies
+after pairing. Android decodes the selected image on the phone.
+
 ## Troubleshooting
 
 - **The address labeled "Tailscale" starts with `169.254`:** the desktop address list can pick up a Windows placeholder address on an adapter with no real address. A Tailscale address always starts with `100.`; use the one shown in the Tailscale app or by `ipconfig`.

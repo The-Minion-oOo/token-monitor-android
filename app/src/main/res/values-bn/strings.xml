@@ -637,4 +637,10 @@
     <string name="quota_alert_permission">কোটা সতর্কতা পেতে Android সেটিংসে বিজ্ঞপ্তির অনুমতি দিন।</string>
     <string name="quota_alert_low_notice">একটি ব্যবহারের কোটা প্রায় শেষ।</string>
     <string name="quota_alert_reset_notice">একটি ব্যবহারের কোটা রিসেট হয়েছে।</string>
+    <string name="pairing_qr_invalid">এই Hub পেয়ারিং QR সমর্থিত নয়। অন্য কোড চেষ্টা করুন অথবা নিচে তথ্য লিখুন।</string>
+    <string name="pairing_qr_review">এই Hub-এ সংযুক্ত করবেন?</string>
+    <string name="pairing_qr_local">সংযোগ করলে ব্যক্তিগত নেটওয়ার্কে এই Hub অ্যাক্সেসের অনুমতি দেওয়া হয়।</string>
+    <string name="pairing_qr_internet">সংযোগ করলে ইন্টারনেটে এই Hub-এ এনক্রিপ্ট করা অ্যাক্সেসের অনুমতি দেওয়া হয়।</string>
+    <string name="pairing_qr_tailscale">এই Hub-এ সংযোগ করতে Tailscale ব্যবহার করা হবে।</string>
+    <string name="pairing_qr_pick_image">QR ছবি বেছে নিন</string>
 </resources>

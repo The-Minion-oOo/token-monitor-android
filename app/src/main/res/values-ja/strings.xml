@@ -639,4 +639,10 @@
     <string name="quota_alert_permission">利用枠の通知を受け取るには、Android の設定で通知を許可してください。</string>
     <string name="quota_alert_low_notice">利用枠の上限に近づいています。</string>
     <string name="quota_alert_reset_notice">利用枠がリセットされました。</string>
+    <string name="pairing_qr_invalid">この Hub ペアリング QR コードには対応していません。別のコードを試すか、下に接続情報を入力してください。</string>
+    <string name="pairing_qr_review">この Hub に接続しますか？</string>
+    <string name="pairing_qr_local">接続するとプライベートネットワーク経由でこの Hub にアクセスできます。</string>
+    <string name="pairing_qr_internet">接続すると暗号化した通信でインターネット経由でこの Hub にアクセスできます。</string>
+    <string name="pairing_qr_tailscale">接続には Tailscale を使用します。</string>
+    <string name="pairing_qr_pick_image">QR画像を選択</string>
 </resources>

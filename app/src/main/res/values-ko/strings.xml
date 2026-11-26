@@ -638,4 +638,10 @@
     <string name="quota_alert_permission">한도 알림을 받으려면 Android 설정에서 알림을 허용하세요.</string>
     <string name="quota_alert_low_notice">사용량이 한도에 가까워졌습니다.</string>
     <string name="quota_alert_reset_notice">사용 한도가 초기화되었습니다.</string>
+    <string name="pairing_qr_invalid">지원하지 않는 Hub 페어링 QR입니다. 다른 코드를 스캔하거나 아래에 정보를 입력하세요.</string>
+    <string name="pairing_qr_review">이 Hub에 연결할까요?</string>
+    <string name="pairing_qr_local">연결하면 사설 네트워크에서 이 Hub에 접근할 수 있습니다.</string>
+    <string name="pairing_qr_internet">연결하면 인터넷을 통해 이 Hub에 암호화된 방식으로 접근할 수 있습니다.</string>
+    <string name="pairing_qr_tailscale">Tailscale을 사용하여 이 Hub에 연결합니다.</string>
+    <string name="pairing_qr_pick_image">QR 이미지 선택</string>
 </resources>

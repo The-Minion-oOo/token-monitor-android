@@ -638,4 +638,10 @@
     <string name="quota_alert_permission">請在 Android 設定中允許通知，以接收額度提醒。</string>
     <string name="quota_alert_low_notice">一項使用額度即將用盡。</string>
     <string name="quota_alert_reset_notice">一項使用額度已重設。</string>
+    <string name="pairing_qr_invalid">此 Hub 配對 QR 碼不受支援。請掃描其他 QR 碼或在下方輸入連線資訊。</string>
+    <string name="pairing_qr_review">連線到此 Hub？</string>
+    <string name="pairing_qr_local">連線後可透過私人網路存取此 Hub。</string>
+    <string name="pairing_qr_internet">連線後可透過網際網路加密存取此 Hub。</string>
+    <string name="pairing_qr_tailscale">連線將使用 Tailscale 存取此 Hub。</string>
+    <string name="pairing_qr_pick_image">選擇二維碼圖片</string>
 </resources>

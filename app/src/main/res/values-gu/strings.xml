@@ -637,4 +637,10 @@
     <string name="quota_alert_permission">ક્વોટા સૂચનાઓ મેળવવા માટે Android સેટિંગ્સમાં સૂચનાઓને મંજૂરી આપો.</string>
     <string name="quota_alert_low_notice">એક વપરાશ ક્વોટા લગભગ પૂરો થઈ ગયો છે.</string>
     <string name="quota_alert_reset_notice">એક વપરાશ ક્વોટા રીસેટ થયો છે.</string>
+    <string name="pairing_qr_invalid">આ Hub પેરિંગ QR સમર્થિત નથી. બીજો કોડ અજમાવો અથવા નીચે વિગતો દાખલ કરો.</string>
+    <string name="pairing_qr_review">આ Hub સાથે કનેક્ટ કરવું છે?</string>
+    <string name="pairing_qr_local">કનેક્ટ કરવાથી ખાનગી નેટવર્ક પર આ Hubની ઍક્સેસ મળે છે.</string>
+    <string name="pairing_qr_internet">કનેક્ટ કરવાથી ઇન્ટરનેટ પર આ Hubની એન્ક્રિપ્ટેડ ઍક્સેસ મળે છે.</string>
+    <string name="pairing_qr_tailscale">આ Hub સાથે કનેક્ટ કરવા Tailscaleનો ઉપયોગ થાય છે.</string>
+    <string name="pairing_qr_pick_image">QR છબી પસંદ કરો</string>
 </resources>

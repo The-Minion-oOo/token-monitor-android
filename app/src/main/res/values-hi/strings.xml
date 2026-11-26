@@ -637,4 +637,10 @@
     <string name="quota_alert_permission">कोटा अलर्ट पाने के लिए Android की सेटिंग में सूचनाओं की अनुमति दें।</string>
     <string name="quota_alert_low_notice">इस्तेमाल का कोटा लगभग पूरा हो गया है।</string>
     <string name="quota_alert_reset_notice">इस्तेमाल का कोटा रीसेट हो गया है।</string>
+    <string name="pairing_qr_invalid">यह Hub पेयरिंग QR समर्थित नहीं है। दूसरा कोड आज़माएँ या नीचे जानकारी भरें।</string>
+    <string name="pairing_qr_review">इस Hub से कनेक्ट करें?</string>
+    <string name="pairing_qr_local">कनेक्ट करने पर निजी नेटवर्क से इस Hub तक पहुँच की अनुमति मिलती है।</string>
+    <string name="pairing_qr_internet">कनेक्ट करने पर इंटरनेट से इस Hub तक एन्क्रिप्टेड पहुँच की अनुमति मिलती है।</string>
+    <string name="pairing_qr_tailscale">इस Hub से कनेक्ट करने के लिए Tailscale का इस्तेमाल होगा।</string>
+    <string name="pairing_qr_pick_image">QR इमेज चुनें</string>
 </resources>
