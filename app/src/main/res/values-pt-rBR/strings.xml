@@ -612,4 +612,10 @@
     <string name="ui_hub_built_in">Hub integrado</string>
     <string name="ui_hub_standalone">Hub independente</string>
     <string name="ui_hub_node_generic">Hub Node</string>
+    <string name="usage_report_weekly">Relatório semanal de uso</string>
+    <string name="usage_report_sample">Dados de exemplo</string>
+    <string name="usage_report_try_sample">Experimentar dados de exemplo</string>
+    <string name="usage_report_cached">Com base nos dados salvos do Hub.</string>
+    <string name="usage_report_share_failed">Não foi possível compartilhar o relatório. Tente novamente.</string>
+    <string name="usage_report_coverage">%1$s de %2$s dias registrados</string>
 </resources>

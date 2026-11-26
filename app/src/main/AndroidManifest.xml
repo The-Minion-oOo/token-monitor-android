@@ -38,6 +38,13 @@
             android:grantUriPermissions="true">
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/update_file_paths" />
         </provider>
+        <provider
+            android:name=".data.UsageReportFileProvider"
+            android:authorities="${applicationId}.reports"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/usage_report_file_paths" />
+        </provider>
         <service android:name=".widget.WidgetLiveService" android:exported="false" android:foregroundServiceType="dataSync" />
         <service android:name=".widget.WidgetRefreshJobService" android:exported="true" android:permission="android.permission.BIND_JOB_SERVICE" />
         <receiver android:name=".widget.WidgetStopReceiver" android:exported="false" />

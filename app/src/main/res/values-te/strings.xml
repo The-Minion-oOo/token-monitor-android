@@ -612,4 +612,10 @@
     <string name="ui_hub_built_in">అంతర్నిర్మిత Hub</string>
     <string name="ui_hub_standalone">స్వతంత్ర Hub</string>
     <string name="ui_hub_node_generic">Node Hub</string>
+    <string name="usage_report_weekly">వారపు వినియోగ నివేదిక</string>
+    <string name="usage_report_sample">నమూనా డేటా</string>
+    <string name="usage_report_try_sample">నమూనా డేటాను ప్రయత్నించండి</string>
+    <string name="usage_report_cached">సేవ్ చేసిన Hub డేటా ఆధారంగా.</string>
+    <string name="usage_report_share_failed">నివేదికను షేర్ చేయలేకపోయాము. మళ్లీ ప్రయత్నించండి.</string>
+    <string name="usage_report_coverage">%2$s రోజుల్లో %1$s రోజులు నమోదయ్యాయి</string>
 </resources>

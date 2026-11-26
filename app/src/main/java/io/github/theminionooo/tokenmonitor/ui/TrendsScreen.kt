@@ -54,6 +54,7 @@ private enum class TrendRange(val label: String, val days: Int?) {
 
 /** [history] is the Hub's daily history, built once per snapshot by the caller and shared by every panel here. */
 internal fun LazyListScope.trendItems(snapshot: HubSnapshot, history: List<HistoryPoint>) {
+    item { WeeklyUsageReportButton(history, cached = snapshot.fromCache || snapshot.stale) }
     item { UsageDashboardPanel(history) }
     item { UsageComparisonPanel(history) }
     item { UsageExplorer(history) }
@@ -118,7 +119,7 @@ private fun summarizeOverview(history: List<HistoryPoint>, today: LocalDate, cur
 }
 
 @Composable
-private fun UsageOverview(history: List<HistoryPoint>) {
+internal fun UsageOverview(history: List<HistoryPoint>) {
     var activityMetricName by rememberSaveable { mutableStateOf(ActivityMetric.Cost.name) }
     val activityMetric = ActivityMetric.entries.firstOrNull { it.name == activityMetricName } ?: ActivityMetric.Cost
     if (history.isEmpty()) {
@@ -317,5 +318,5 @@ internal fun CandleTrendChart(trend: TrendPresentation, height: androidx.compose
     }
 }
 
-private fun trendSeriesColor(palette: Palette, index: Int): Color =
+internal fun trendSeriesColor(palette: Palette, index: Int): Color =
     listOf(Color(0xFF4FA6B5), Color(0xFFCF7C5C), Color(0xFF8B8B87), palette.purple, palette.yellow, palette.blue, palette.success, palette.danger)[index % 8]

@@ -614,4 +614,10 @@
     <string name="ui_hub_built_in">உள்ளமைந்த Hub</string>
     <string name="ui_hub_standalone">தனித்த Hub</string>
     <string name="ui_hub_node_generic">Node Hub</string>
+    <string name="usage_report_weekly">வாராந்திரப் பயன்பாட்டு அறிக்கை</string>
+    <string name="usage_report_sample">மாதிரித் தரவு</string>
+    <string name="usage_report_try_sample">மாதிரித் தரவை முயற்சிக்கவும்</string>
+    <string name="usage_report_cached">சேமிக்கப்பட்ட Hub தரவின் அடிப்படையில்.</string>
+    <string name="usage_report_share_failed">அறிக்கையைப் பகிர முடியவில்லை. மீண்டும் முயற்சிக்கவும்.</string>
+    <string name="usage_report_coverage">%2$s நாட்களில் %1$s நாட்கள் பதிவாகியுள்ளன</string>
 </resources>

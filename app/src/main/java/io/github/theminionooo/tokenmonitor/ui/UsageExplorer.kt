@@ -162,7 +162,12 @@ internal fun CompactSearchField(value: String, onValueChange: (String) -> Unit, 
 }
 
 @Composable
-private fun UsageDetailDialog(title: String, onDismiss: () -> Unit, content: @Composable () -> Unit) {
+internal fun UsageDetailDialog(
+    title: String,
+    onDismiss: () -> Unit,
+    actions: @Composable RowScope.() -> Unit = {},
+    content: @Composable () -> Unit,
+) {
     val containerHeight = LocalWindowInfo.current.containerSize.height
     val maxHeight = with(LocalDensity.current) { containerHeight.toDp() * 0.85f }
     Dialog(onDismissRequest = onDismiss) {
@@ -172,7 +177,10 @@ private fun UsageDetailDialog(title: String, onDismiss: () -> Unit, content: @Co
                 HorizontalDivider(color = Line)
                 Column(Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState())) { content() }
                 HorizontalDivider(color = Line)
-                TextButton(onClick = onDismiss, modifier = Modifier.align(Alignment.End)) { Text(appText(R.string.ui_close_dbc87, "CLOSE"), color = Accent, style = MaterialTheme.typography.labelMedium) }
+                Row(Modifier.align(Alignment.End), verticalAlignment = Alignment.CenterVertically) {
+                    TextButton(onClick = onDismiss) { Text(appText(R.string.ui_close_dbc87, "CLOSE"), color = Accent, style = MaterialTheme.typography.labelMedium) }
+                    actions()
+                }
             }
         }
     }

@@ -612,4 +612,10 @@
     <string name="ui_hub_built_in">অন্তর্নির্মিত Hub</string>
     <string name="ui_hub_standalone">স্বতন্ত্র Hub</string>
     <string name="ui_hub_node_generic">Node Hub</string>
+    <string name="usage_report_weekly">সাপ্তাহিক ব্যবহারের প্রতিবেদন</string>
+    <string name="usage_report_sample">নমুনা ডেটা</string>
+    <string name="usage_report_try_sample">নমুনা ডেটা দিয়ে দেখুন</string>
+    <string name="usage_report_cached">সংরক্ষিত Hub ডেটার ভিত্তিতে।</string>
+    <string name="usage_report_share_failed">প্রতিবেদন শেয়ার করা যায়নি। আবার চেষ্টা করুন।</string>
+    <string name="usage_report_coverage">%2$s দিনের মধ্যে %1$s দিনের রেকর্ড আছে</string>
 </resources>
