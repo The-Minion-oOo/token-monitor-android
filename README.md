@@ -28,9 +28,8 @@
 
 ## The desktop dashboard, made mobile
 
-**New in v0.98.0 r1:** Settings cards are easier to scan and tap. Home and Sessions use the project name
-for untitled conversations when session titles are shown.
-[Release notes](docs/releases/android-v0.98.0-r1.md).
+**New in v0.99.0 r1:** Home and Sessions show fresh Antigravity activity from the Hub, including turns that continue between token updates.
+[Release notes](docs/releases/android-v0.99.0-r1.md).
 
 **Also included:** smaller live updates through the released v4 Hub stream,
 session reasoning effort and personal Volcengine quotas. Muse and Ollama
@@ -225,13 +224,13 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 | | |
 | --- | --- |
-| Current release | [Android v0.98.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.98.0-r1) (`980001`) |
+| Current release | [Android v0.99.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.99.0-r1) (`990001`) |
 | Desktop baseline | [Token Monitor v0.99.0](https://github.com/Javis603/token-monitor/releases/tag/v0.99.0) |
 | Minimum Android version | Android 8.0 |
 
 I checked the released Node and Worker Hubs, Android tests and emulators.
-The signed APK upgraded v0.97.0 r1 in place on an Android 8 emulator.
-I haven’t tested v0.98.0 r1 on my phone. [Validation](docs/VALIDATION.md).
+The signed APK upgraded v0.98.0 r1 in place on an Android 8 emulator.
+I haven’t tested v0.99.0 r1 on my phone. [Validation](docs/VALIDATION.md).
 
 Android-only updates increment the release revision while keeping the verified
 desktop version. [Upstream pin](upstream.json) · [Release notes](CHANGELOG.md)

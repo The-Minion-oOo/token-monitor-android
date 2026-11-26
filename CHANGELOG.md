@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.99.0 r1 — 2026-11-26
+
 - Use fresh Antigravity activity from the Hub in Home and Sessions.
 - Verify T3 Code session grouping and the activity calendar after compact uploads.
 
