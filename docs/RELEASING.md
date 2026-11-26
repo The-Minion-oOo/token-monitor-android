@@ -157,8 +157,9 @@ gh api --paginate 'repos/The-Minion-oOo/token-monitor-android/releases?per_page=
   Measure-Object -Sum | Select-Object -ExpandProperty Sum
 ```
 
-Update the count and date in both the SVG's title and visible text. The total
-covers all public release asset downloads, including checksums and manifests.
+Update the visible count and keep the count and snapshot date in the SVG title
+current. The total covers all public release asset downloads, including
+checksums and manifests.
 
 Batch related work and publish when the APK is worth reinstalling. Documentation,
 marketing-image placement, and other non-app changes do not need a new Android
