@@ -629,8 +629,9 @@ internal class HubRepository(
                                 }
                             } finally {
                                 if (streamHealth?.healthy(SystemClock.elapsedRealtime()) == true) attempt = 0
-                                // A reconnect starts with a complete snapshot; an update held from this stream is stale.
-                                cancelStreamFlush()
+                                // A reconnect starts with a complete snapshot. Older streams can finish closing
+                                // after a Hub switch, when the flush already belongs to the new stream.
+                                if (generation == token) cancelStreamFlush()
                             }
                             HubWorkMode.WidgetPolling -> {
                                 _state.update { it.copy(streamActive = false, widgetLiveActive = true) }
