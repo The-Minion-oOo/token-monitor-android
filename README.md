@@ -125,6 +125,12 @@ keep the last snapshot and mark it stale; changing pages never starts a fetch.
 
 ## Get started
 
+In the development build, choose **Try sample data** on the welcome screen to explore a week of example
+usage before pairing. Open **Weekly usage report** in Trends to preview a PNG
+of the last seven days and share it through Android. The report shows aggregate
+usage, estimated cost and history coverage. It labels sample and saved readings
+and groups unrecognized tool labels under unattributed usage.
+
 Your desktop usage, wherever you check it. Choose how your phone reaches the
 [Token Monitor](https://github.com/Javis603/token-monitor) Hub:
 

@@ -503,6 +503,7 @@ private fun WelcomeSetup(modifier: Modifier, fields: @Composable ColumnScope.(St
             Text("Token Monitor", color = Ink, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             Text(appText(R.string.ui_your_desktop_dashboard_live_on_your_phone_2b760, "Your desktop dashboard, live on your phone."), color = Muted, style = MaterialTheme.typography.bodyMedium, lineHeight = 18.sp)
         }
+        SampleUsageButton()
         Text(appText(R.string.ui_pair_with_your_desktop_e4ea0, "PAIR WITH YOUR DESKTOP"), color = Ink, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, modifier = Modifier.padding(top = 6.dp))
         WelcomeStep(1, appText(R.string.ui_install_tailscale_on_the_desktop_and_this_phone_11bc0, "Install Tailscale on the desktop and this phone"), appText(R.string.ui_sign_both_into_the_same_tailnet_personal_use_is_free_27772, "Sign both into the same tailnet. Personal use is free."))
         WelcomeStep(2, appText(R.string.ui_host_the_hub_on_the_desktop_23e47, "Host the Hub on the desktop"), appText(R.string.ui_token_monitor_settings_multi_device_sync_host_hub_708d1, "Token Monitor → Settings → Multi-device Sync → Host Hub."))

@@ -198,9 +198,10 @@ private val toolLabels = mapOf(
  * Tool ids get the desktop's label, model ids stay exactly as the Hub reports them
  * (the desktop prints `gpt-5.6-sol`, not `Gpt-5.6-sol`), and anything else is title-cased.
  */
+internal fun String.knownToolLabel(): String? = toolLabels[trim().lowercase(Locale.US)]
+
 internal fun String.displayName(): String {
-    val key = trim().lowercase(Locale.US)
-    toolLabels[key]?.let { return it }
+    knownToolLabel()?.let { return it }
     if (any { it.isDigit() } || contains('/')) return trim()
     return providerName()
 }

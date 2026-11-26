@@ -613,4 +613,10 @@
     <string name="ui_hub_built_in">内置 Hub</string>
     <string name="ui_hub_standalone">独立 Hub</string>
     <string name="ui_hub_node_generic">Node Hub</string>
+    <string name="usage_report_weekly">每周用量报告</string>
+    <string name="usage_report_sample">示例数据</string>
+    <string name="usage_report_try_sample">试用示例数据</string>
+    <string name="usage_report_cached">基于已保存的 Hub 数据。</string>
+    <string name="usage_report_share_failed">无法分享报告。请重试。</string>
+    <string name="usage_report_coverage">已记录 %1$s 天，共 %2$s 天</string>
 </resources>

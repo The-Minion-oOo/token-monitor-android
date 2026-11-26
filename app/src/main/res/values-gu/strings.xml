@@ -612,4 +612,10 @@
     <string name="ui_hub_built_in">બિલ્ટ-ઇન Hub</string>
     <string name="ui_hub_standalone">અલગ Hub</string>
     <string name="ui_hub_node_generic">Node Hub</string>
+    <string name="usage_report_weekly">સાપ્તાહિક વપરાશ રિપોર્ટ</string>
+    <string name="usage_report_sample">નમૂનાનો ડેટા</string>
+    <string name="usage_report_try_sample">નમૂનાનો ડેટા અજમાવો</string>
+    <string name="usage_report_cached">સાચવેલા Hub ડેટા પર આધારિત.</string>
+    <string name="usage_report_share_failed">રિપોર્ટ શેર કરી શકાયો નથી. ફરી પ્રયાસ કરો.</string>
+    <string name="usage_report_coverage">%2$s માંથી %1$s દિવસ નોંધાયા</string>
 </resources>

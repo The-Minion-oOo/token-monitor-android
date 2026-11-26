@@ -527,4 +527,10 @@
     <string name="ui_hub_built_in">Built-in Hub</string>
     <string name="ui_hub_standalone">Standalone Hub</string>
     <string name="ui_hub_node_generic">Node Hub</string>
+    <string name="usage_report_weekly">Weekly usage report</string>
+    <string name="usage_report_sample">Sample data</string>
+    <string name="usage_report_try_sample">Try sample data</string>
+    <string name="usage_report_cached">Based on saved Hub readings.</string>
+    <string name="usage_report_share_failed">The report could not be shared. Try again.</string>
+    <string name="usage_report_coverage">%1$s of %2$s days recorded</string>
 </resources>
