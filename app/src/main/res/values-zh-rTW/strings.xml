@@ -644,4 +644,10 @@
     <string name="pairing_qr_internet">連線後可透過網際網路加密存取此 Hub。</string>
     <string name="pairing_qr_tailscale">連線將使用 Tailscale 存取此 Hub。</string>
     <string name="pairing_qr_pick_image">選擇二維碼圖片</string>
+    <string name="pairing_qr_scan_code">掃描 QR 碼</string>
+    <string name="pairing_qr_camera_note">Token Monitor 只會在讀取 Hub 配對 QR 碼時使用相機。讀取完成或離開掃描畫面後，相機會立即關閉。不會儲存或上傳任何內容。</string>
+    <string name="pairing_qr_camera_aim">請將 Hub 配對 QR 碼放入框內。</string>
+    <string name="pairing_qr_camera_denied">相機存取已關閉。你仍可選擇 QR 圖片。</string>
+    <string name="pairing_qr_camera_unavailable">無法使用相機。請選擇 QR 圖片或再試一次。</string>
+    <string name="pairing_qr_camera_settings">開啟 Android 設定</string>
 </resources>

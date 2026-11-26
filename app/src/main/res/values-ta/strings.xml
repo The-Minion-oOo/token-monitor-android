@@ -645,4 +645,10 @@
     <string name="pairing_qr_internet">இணைப்பது இணையம் வழியாக இந்த Hub ஐ குறியாக்கத்துடன் அணுக அனுமதிக்கும்.</string>
     <string name="pairing_qr_tailscale">இந்த Hub உடன் இணைக்க Tailscale பயன்படுத்தப்படும்.</string>
     <string name="pairing_qr_pick_image">QR படத்தைத் தேர்வு செய்</string>
+    <string name="pairing_qr_scan_code">QR குறியீட்டை ஸ்கேன் செய்</string>
+    <string name="pairing_qr_camera_note">Hub இணைப்பு QR குறியீட்டைப் படிக்க மட்டுமே Token Monitor கேமராவைப் பயன்படுத்துகிறது. குறியீட்டைப் படித்ததும் அல்லது ஸ்கேனரிலிருந்து வெளியேறியதும் கேமரா அணைக்கப்படும். எதுவும் சேமிக்கப்படவோ பதிவேற்றப்படவோ மாட்டாது.</string>
+    <string name="pairing_qr_camera_aim">Hub இணைப்பு QR குறியீட்டைச் சட்டத்திற்குள் வைக்கவும்.</string>
+    <string name="pairing_qr_camera_denied">கேமரா அணுகல் முடக்கப்பட்டுள்ளது. QR படத்தை இன்னும் தேர்ந்தெடுக்கலாம்.</string>
+    <string name="pairing_qr_camera_unavailable">கேமரா கிடைக்கவில்லை. QR படத்தைத் தேர்ந்தெடுக்கவும் அல்லது மீண்டும் முயலவும்.</string>
+    <string name="pairing_qr_camera_settings">Android அமைப்புகளைத் திற</string>
 </resources>

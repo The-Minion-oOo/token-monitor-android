@@ -643,4 +643,10 @@
     <string name="pairing_qr_internet">कनेक्ट करने पर इंटरनेट से इस Hub तक एन्क्रिप्टेड पहुँच की अनुमति मिलती है।</string>
     <string name="pairing_qr_tailscale">इस Hub से कनेक्ट करने के लिए Tailscale का इस्तेमाल होगा।</string>
     <string name="pairing_qr_pick_image">QR इमेज चुनें</string>
+    <string name="pairing_qr_scan_code">QR कोड स्कैन करें</string>
+    <string name="pairing_qr_camera_note">Token Monitor कैमरे का इस्तेमाल सिर्फ़ Hub पेयरिंग QR कोड पढ़ने के लिए करता है। कोड पढ़ते ही या स्कैनर से बाहर निकलते ही कैमरा बंद हो जाता है। कुछ भी सेव या अपलोड नहीं किया जाता।</string>
+    <string name="pairing_qr_camera_aim">Hub पेयरिंग QR कोड को फ़्रेम के अंदर रखें।</string>
+    <string name="pairing_qr_camera_denied">कैमरे का ऐक्सेस बंद है। आप अभी भी QR इमेज चुन सकते हैं।</string>
+    <string name="pairing_qr_camera_unavailable">कैमरा उपलब्ध नहीं है। QR इमेज चुनें या फिर कोशिश करें।</string>
+    <string name="pairing_qr_camera_settings">Android सेटिंग खोलें</string>
 </resources>

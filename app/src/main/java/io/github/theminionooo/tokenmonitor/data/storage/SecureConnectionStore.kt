@@ -76,6 +76,14 @@ internal class SecureConnectionStore(context: Context) {
         write(SavedHubProfiles(id, entries), replaced?.id?.takeIf { resetAliases || it != id })
     }
 
+    fun updateVerifiedProfile(id: String, connection: HubConnection): SavedHubProfiles = synchronized(storeLock) {
+        val current = profiles()
+        val previous = current.entries.firstOrNull { it.id == id }
+            ?: throw IOException("Hub profile is no longer available.")
+        val updated = current.entries.map { if (it.id == id) it.copy(connection = connection) else it }
+        write(SavedHubProfiles(id, updated), id.takeIf { previous.connection.secret != connection.secret })
+    }
+
     fun activate(id: String): SavedHubProfiles? = synchronized(storeLock) {
         val current = profiles()
         if (current.entries.none { it.id == id }) return@synchronized null

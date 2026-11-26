@@ -644,4 +644,10 @@
     <string name="pairing_qr_internet">连接后可通过互联网加密访问此 Hub。</string>
     <string name="pairing_qr_tailscale">连接将使用 Tailscale 访问此 Hub。</string>
     <string name="pairing_qr_pick_image">选择二维码图片</string>
+    <string name="pairing_qr_scan_code">扫描二维码</string>
+    <string name="pairing_qr_camera_note">Token Monitor 只在读取 Hub 配对二维码时使用相机。读取完成或离开扫描界面后，相机会立即关闭。不会保存或上传任何内容。</string>
+    <string name="pairing_qr_camera_aim">请将 Hub 配对二维码放入框内。</string>
+    <string name="pairing_qr_camera_denied">相机权限已关闭。你仍然可以选择二维码图片。</string>
+    <string name="pairing_qr_camera_unavailable">无法使用相机。请选择二维码图片或重试。</string>
+    <string name="pairing_qr_camera_settings">打开 Android 设置</string>
 </resources>

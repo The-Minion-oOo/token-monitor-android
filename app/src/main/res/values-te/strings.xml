@@ -643,4 +643,10 @@
     <string name="pairing_qr_internet">కనెక్ట్ చేస్తే ఇంటర్నెట్ ద్వారా ఈ Hubను ఎన్‌క్రిప్షన్‌తో యాక్సెస్ చేయవచ్చు.</string>
     <string name="pairing_qr_tailscale">ఈ Hubకు కనెక్ట్ చేయడానికి Tailscale ఉపయోగిస్తుంది.</string>
     <string name="pairing_qr_pick_image">QR చిత్రాన్ని ఎంచుకోండి</string>
+    <string name="pairing_qr_scan_code">QR కోడ్‌ను స్కాన్ చేయండి</string>
+    <string name="pairing_qr_camera_note">Token Monitor కెమెరాను Hub పెయిరింగ్ QR కోడ్‌ను చదవడానికి మాత్రమే ఉపయోగిస్తుంది. కోడ్ చదివిన వెంటనే లేదా మీరు స్కానర్ నుండి బయటకు వెళ్లగానే కెమెరా ఆఫ్ అవుతుంది. ఏదీ సేవ్ లేదా అప్‌లోడ్ చేయబడదు.</string>
+    <string name="pairing_qr_camera_aim">Hub పెయిరింగ్ QR కోడ్‌ను ఫ్రేమ్‌లో ఉంచండి.</string>
+    <string name="pairing_qr_camera_denied">కెమెరా యాక్సెస్ ఆఫ్‌లో ఉంది. అయినా మీరు QR చిత్రాన్ని ఎంచుకోవచ్చు.</string>
+    <string name="pairing_qr_camera_unavailable">కెమెరా అందుబాటులో లేదు. QR చిత్రాన్ని ఎంచుకోండి లేదా మళ్లీ ప్రయత్నించండి.</string>
+    <string name="pairing_qr_camera_settings">Android సెట్టింగ్‌లను తెరవండి</string>
 </resources>

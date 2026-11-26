@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,8 +41,9 @@ internal fun HubPairingQrEntry(enabled: Boolean, onConnect: (HubConnection) -> U
     var importedHub by remember { mutableStateOf<HubPairingQrCandidate?>(null) }
     var invalidCode by remember { mutableStateOf(false) }
     var reading by remember { mutableStateOf(false) }
+    var picking by rememberSaveable { mutableStateOf(false) }
     val pick = rememberLauncherForActivityResult(PickVisualMedia()) { image ->
-        if (image != null) {
+        if (picking && image != null) {
             reading = true
             scope.launch {
                 try {
@@ -52,13 +54,22 @@ internal fun HubPairingQrEntry(enabled: Boolean, onConnect: (HubConnection) -> U
                 }
             }
         }
+        picking = false
     }
+    val canChoose = enabled && !picking && !reading && importedHub == null
+    HubQrCameraAction(enabled = canChoose, onRead = { candidate ->
+        if (enabled && !picking && !reading && importedHub == null) {
+            invalidCode = false
+            importedHub = candidate
+        }
+    })
     OutlinedButton(
         onClick = {
             invalidCode = false
+            picking = true
             pick.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
         },
-        enabled = enabled && !reading,
+        enabled = canChoose,
         modifier = Modifier.fillMaxWidth(),
     ) { Text(appText(R.string.pairing_qr_pick_image, "Choose QR image")) }
     if (invalidCode) {
