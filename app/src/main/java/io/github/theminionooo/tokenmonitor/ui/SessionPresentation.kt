@@ -117,12 +117,11 @@ private const val SESSION_RUNNING_WINDOW_MS = 10 * 60_000L
 private const val LIVE_ACTIVITY_TTL_MS = 30_000L
 /** The dashboard clock ([LocalNow]) ticks every 30 seconds; a fresh observation may be that far ahead of it. */
 private const val LIVE_ACTIVITY_CLOCK_SLACK_MS = 30_000L
-private val liveActivityClients = setOf("claude", "codex")
+private val liveActivityClients = setOf("claude", "codex", "antigravity")
 
 /**
- * Desktop v0.69's order: an archived session is idle; a fresh provider observation (Claude Code and Codex,
- * at most 30 seconds old and not clearly from the future) wins unless it is `unknown`; otherwise the transcript
- * decides: a finished turn, a Codex question waiting for an answer, recent writing, or quiet.
+ * An archived session is idle. A fresh observation from Claude Code, Codex, or Antigravity
+ * takes priority. Otherwise the last activity and reported turn state determine the label.
  */
 internal fun sessionActivityState(session: SessionUsage, now: Long, observationGraceMs: Long = 0): SessionActivityState {
     if (session.archived) return SessionActivityState.Idle

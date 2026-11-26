@@ -80,6 +80,35 @@ class DashboardInteractionTest {
         compose.onNodeWithText("MiniMax Code · minimax-m2.5").assertIsDisplayed()
     }
 
+    @Test fun antigravityShowsFreshHubActivityBetweenTokenUpdates() {
+        val fixture = InstrumentationRegistry.getInstrumentation().context.assets
+            .open("protocol/v0.99.0/v099-session.json").bufferedReader().use { it.readText() }
+        val sessions = HubProtocolParser.decodeStats(fixture).periods.getValue("today").sessions
+        val antigravity = sessions.single { it.client == "antigravity" }
+        val observedAt = java.time.Instant.parse(requireNotNull(antigravity.liveActivity).observedAt).toEpochMilli()
+        var now by mutableStateOf(observedAt)
+        var showHome by mutableStateOf(true)
+        compose.setContent {
+            MaterialTheme {
+                CompositionLocalProvider(LocalNow provides now, LocalInteractionMotion provides false) {
+                    if (showHome) {
+                        HomeSessionsModule(HomeSessionInputs(sessions, sessions)) {}
+                    } else {
+                        androidx.compose.foundation.lazy.LazyColumn { sessionItems(sessions, DashboardPeriod.Today) }
+                    }
+                }
+            }
+        }
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithText("Running", substring = true).fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.onNodeWithText("Running", substring = true).assertIsDisplayed()
+        compose.runOnIdle { showHome = false }
+        compose.onNodeWithText("Running", substring = true).assertIsDisplayed()
+        compose.runOnIdle { now += 30_000 }
+        compose.onNodeWithText("Running", substring = true).assertDoesNotExist()
+    }
+
     @Test fun serviceStatusScrollsToBothMiniMaxRegionsAndOpensTheSelectedPage() {
         val providers = serviceStatusProviders.map { provider ->
             summarizeServiceProvider(provider, """{"status":{"indicator":"none"}}""", 0)

@@ -2,8 +2,9 @@
 
 ## Version rule
 
-Android v0.98.0 r1 targets desktop tag `v0.98.0`, peeled commit
-`3ea0ec251a3724622fe21a81ad37eea74570617f`, in Gradle and `upstream.json`.
+Android v0.99.0 r1 targets desktop tag `v0.99.0`, peeled commit
+`49831523e3bbb3ec57ad6d30001306390592c59b`, in Gradle and `upstream.json`.
+I checked Antigravity activity and compact-upload reads on both released Hubs.
 I checked the ordinary Node and Worker stats responses when a desktop publishes
 an optional fixed-range revision.
 I checked the reported Hub deployment and separate Notion credit pools.

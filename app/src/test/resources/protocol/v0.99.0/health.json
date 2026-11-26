@@ -1,0 +1,18 @@
+{
+  "ok": true,
+  "role": "hub",
+  "runtime": "node-hub",
+  "deployment": "app",
+  "version": 1,
+  "hubBuild": {
+    "schemaVersion": 1,
+    "runtime": "node-hub",
+    "coreRevision": 149,
+    "coreBuildId": "sha256:b8f26dcb13b2e431f9a5cb4211a952d55bc1587d620c9eb8396034fcbf201121",
+    "runtimeRevision": 17,
+    "runtimeBuildId": "sha256:92bd3fac76f51b371dcf96d56ef5643ee1bf251912de0a9f19ebe6342a8b8701"
+  },
+  "deviceCount": 1,
+  "secretRequired": true,
+  "now": "2026-11-26T18:07:21.659Z"
+}

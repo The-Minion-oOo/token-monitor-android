@@ -1,0 +1,296 @@
+{
+  "devices": [
+    {
+      "deviceId": "synthetic-v099-desktop",
+      "hostname": "",
+      "platform": "",
+      "updatedAt": "2026-11-26T18:07:23.517Z",
+      "receivedAt": "2026-11-26T18:07:23.929Z",
+      "agentVersion": "",
+      "agentRuntime": "",
+      "periods": {
+        "today": {
+          "capabilities": {
+            "tokenComponents": false,
+            "throughput": false
+          },
+          "totalTokens": 125,
+          "costUsd": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 0,
+          "unclassifiedTokens": 125,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "clients": {
+            "antigravity": 100,
+            "kiro": 20,
+            "claude": 5
+          },
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {},
+          "clientUnclassifiedTokens": {
+            "antigravity": 100,
+            "kiro": 20,
+            "claude": 5
+          },
+          "models": {},
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {},
+          "modelUnclassifiedTokens": {},
+          "clientModels": {},
+          "clientModelCosts": {},
+          "projects": {
+            "sample project": {
+              "label": "Sample project",
+              "tokens": 100,
+              "costUsd": 0,
+              "clients": {
+                "antigravity": 100
+              }
+            }
+          },
+          "sessions": {
+            "antigravity:v099-acp": {
+              "client": "antigravity",
+              "sessionId": "v099-acp",
+              "totalTokens": 100,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-11-26T17:52:23.517Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "Sample project",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "turnEnded": false,
+              "liveActivity": {
+                "state": "running",
+                "observedAt": "2026-11-26T18:07:23.517Z"
+              },
+              "t3ThreadId": "fixture-t3"
+            },
+            "kiro:v099-kiro": {
+              "client": "kiro",
+              "sessionId": "v099-kiro",
+              "totalTokens": 20,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-11-26T17:52:23.517Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "t3ThreadId": "fixture-t3"
+            }
+          }
+        },
+        "month": {
+          "capabilities": {
+            "tokenComponents": false,
+            "throughput": false
+          },
+          "totalTokens": 125,
+          "costUsd": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 0,
+          "unclassifiedTokens": 125,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "clients": {
+            "antigravity": 100,
+            "kiro": 20,
+            "claude": 5
+          },
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {},
+          "clientUnclassifiedTokens": {
+            "antigravity": 100,
+            "kiro": 20,
+            "claude": 5
+          },
+          "models": {},
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {},
+          "modelUnclassifiedTokens": {},
+          "clientModels": {},
+          "clientModelCosts": {},
+          "projects": {
+            "sample project": {
+              "label": "Sample project",
+              "tokens": 100,
+              "costUsd": 0,
+              "clients": {
+                "antigravity": 100
+              }
+            }
+          },
+          "sessions": {
+            "antigravity:v099-acp": {
+              "client": "antigravity",
+              "sessionId": "v099-acp",
+              "totalTokens": 100,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-11-26T17:52:23.517Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "Sample project",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "turnEnded": false,
+              "liveActivity": {
+                "state": "running",
+                "observedAt": "2026-11-26T18:07:23.517Z"
+              },
+              "t3ThreadId": "fixture-t3"
+            },
+            "kiro:v099-kiro": {
+              "client": "kiro",
+              "sessionId": "v099-kiro",
+              "totalTokens": 20,
+              "costUsd": 0,
+              "messageCount": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "reasoningTokens": 0,
+              "timedOutputTokens": 0,
+              "timedDurationMs": 0,
+              "startedAt": "",
+              "lastUsedAt": "2026-11-26T17:52:23.517Z",
+              "contextTokens": 0,
+              "contextWindow": 0,
+              "projectId": "",
+              "projectLabel": "",
+              "title": "",
+              "sessionKind": "",
+              "models": {},
+              "modelCosts": {},
+              "providers": {},
+              "t3ThreadId": "fixture-t3"
+            }
+          }
+        },
+        "allTime": {
+          "capabilities": {
+            "tokenComponents": false,
+            "throughput": false
+          },
+          "totalTokens": 125,
+          "costUsd": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "outputTokens": 0,
+          "unclassifiedTokens": 125,
+          "timedTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "clients": {},
+          "clientCosts": {},
+          "clientCacheReads": {},
+          "clientCacheWrites": {},
+          "clientOutputs": {},
+          "clientUnclassifiedTokens": {},
+          "models": {},
+          "modelCosts": {},
+          "modelCacheReads": {},
+          "modelCacheWrites": {},
+          "modelOutputs": {},
+          "modelUnclassifiedTokens": {},
+          "clientModels": {},
+          "clientModelCosts": {},
+          "projects": {},
+          "sessions": {}
+        }
+      },
+      "limits": {
+        "updatedAt": null,
+        "refreshMs": 300000,
+        "providers": []
+      },
+      "sessionDetailsOmitted": {
+        "today": 1,
+        "month": 1
+      },
+      "history": {
+        "daily": [
+          {
+            "date": "2026-11-25",
+            "tokens": 17,
+            "cost": 0
+          }
+        ],
+        "monthly": [],
+        "summary": {
+          "activeDays": 1,
+          "activeDaysComplete": true
+        },
+        "dailyTotals": [
+          {
+            "date": "2026-11-25",
+            "tokens": 17,
+            "cost": 0
+          }
+        ],
+        "dailyTotalsRevision": "dc17d3261671da67d0f6562ee1097459b241f7d5ab3af8aa2c8d7cfc84bef85e"
+      },
+      "periodWindows": {
+        "today": {
+          "endsAt": "2026-11-27T00:00:00.000Z",
+          "key": "2026-11-26"
+        },
+        "timeZone": "UTC"
+      }
+    }
+  ]
+}
