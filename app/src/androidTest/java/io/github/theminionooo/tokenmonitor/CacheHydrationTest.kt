@@ -151,6 +151,7 @@ class CacheHydrationTest {
         val second = HubConnection("https://hub.example.com", "synthetic-second", false, allowPublicHttps = true)
         val originalSession = WidgetRuntime.session
         val legacyCache = SnapshotCache(context, LEGACY_HUB_PROFILE)
+        val allowLegacyHydration = CountDownLatch(1)
         var secondCache: SnapshotCache? = null
         var repository: HubRepository? = null
         try {
@@ -192,7 +193,15 @@ class CacheHydrationTest {
                 profileId = LEGACY_HUB_PROFILE)
             assertEquals(77L, loadWidgetSnapshot(context).snapshot?.today?.totalTokens)
 
-            instrumentation.runOnMainSync { repository = HubRepository(context) }
+            instrumentation.runOnMainSync {
+                repository = HubRepository(context) { cache ->
+                    val snapshot = cache.read()
+                    if (snapshot?.capturedAt == wire.capturedAt) {
+                        check(allowLegacyHydration.await(10, TimeUnit.SECONDS))
+                    }
+                    snapshot
+                }
+            }
             val hub = requireNotNull(repository)
             runBlocking { withTimeout(10_000) { requireNotNull(hub.cacheLoadJob).join() } }
             assertEquals(77L, hub.state.value.snapshot?.today?.totalTokens)
@@ -200,6 +209,7 @@ class CacheHydrationTest {
                 assertTrue(hub.switchHubProfile(LEGACY_HUB_PROFILE))
                 assertNull(hub.state.value.snapshot)
             }
+            allowLegacyHydration.countDown()
             runBlocking { withTimeout(10_000) { requireNotNull(hub.cacheLoadJob).join() } }
             assertEquals(42L, hub.state.value.snapshot?.today?.totalTokens)
             assertEquals(old, SecureConnectionStore(context).read())
@@ -216,6 +226,7 @@ class CacheHydrationTest {
             assertEquals("Office ✓", store.profiles().entries.single().name)
             assertEquals(77L, HubProtocolParser.decodeStats(requireNotNull(savedCache.read()).stats).periods.getValue("today").totalTokens)
         } finally {
+            allowLegacyHydration.countDown()
             instrumentation.runOnMainSync { repository?.close() }
             WidgetRuntime.session = originalSession
             store.clear()
