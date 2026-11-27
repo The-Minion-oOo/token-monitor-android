@@ -33,6 +33,7 @@ import io.github.theminionooo.tokenmonitor.data.protocol.HubStreamProtocol
 import io.github.theminionooo.tokenmonitor.data.protocol.encodeStreamStats
 import io.github.theminionooo.tokenmonitor.data.storage.SecureConnectionStore
 import io.github.theminionooo.tokenmonitor.data.storage.HubProfileSummary
+import io.github.theminionooo.tokenmonitor.data.storage.SavedHubProfile
 import io.github.theminionooo.tokenmonitor.data.storage.SavedHubProfiles
 import io.github.theminionooo.tokenmonitor.data.storage.LEGACY_HUB_PROFILE
 import io.github.theminionooo.tokenmonitor.data.storage.SerialDiskQueue
@@ -414,6 +415,47 @@ internal class HubRepository(
         return verifyAndSave(candidate, addedName = addedName)
     }
 
+    suspend fun pairFromQr(connection: HubConnection, name: String): String? {
+        val scanned = when (val validation = HubAddressValidator.validate(
+            connection.baseUrl, connection.secret, connection.allowLocalNetwork, connection.allowPublicHttps,
+        )) {
+            is HubAddressValidation.Allowed -> validation.connection
+            is HubAddressValidation.Rejected -> return validation.reason
+        }
+        val directMatches = savedProfiles.entries.filter {
+            canonicalPairingAddress(it.connection.baseUrl, it.connection.secret) == scanned.baseUrl
+        }
+        val direct = directMatches.firstOrNull { it.id == savedProfiles.activeId } ?: directMatches.firstOrNull()
+        if (direct != null) {
+            val candidate = direct.connection.copy(
+                baseUrl = scanned.baseUrl,
+                secret = scanned.secret,
+                allowLocalNetwork = direct.connection.allowLocalNetwork || scanned.allowLocalNetwork,
+                allowPublicHttps = direct.connection.allowPublicHttps || scanned.allowPublicHttps,
+            )
+            return verifyAndSave(candidate, testAddress = scanned.baseUrl, updateProfile = direct)
+        }
+
+        // A configured fallback is a known alternate address only if its credential also matches.
+        val fallback = savedProfiles.entries.singleOrNull { profile ->
+            val saved = profile.connection
+            saved.secret == scanned.secret && saved.fallbackUrl?.let {
+                canonicalPairingAddress(it, saved.secret)
+            } == scanned.baseUrl
+        }
+        if (fallback != null) {
+            return verifyAndSave(
+                fallback.connection.copy(fallbackUrl = scanned.baseUrl),
+                testAddress = scanned.baseUrl,
+                updateProfile = fallback,
+            )
+        }
+        return verifyAndSave(scanned, addedName = name)
+    }
+
+    private fun canonicalPairingAddress(url: String, secret: String): String? =
+        (HubAddressValidator.validate(url, secret, true, true) as? HubAddressValidation.Allowed)?.connection?.baseUrl
+
     suspend fun repairHomeAddress(rawAddress: String): String? {
         val saved = connection
         val candidate = when (val result = prepareHomeAddressRepair(saved, rawAddress)) {
@@ -424,7 +466,12 @@ internal class HubRepository(
         return verifyAndSave(candidate, candidate.fallbackUrl ?: candidate.baseUrl)
     }
 
-    private suspend fun verifyAndSave(candidate: HubConnection, testAddress: String? = null, addedName: String? = null): String? {
+    private suspend fun verifyAndSave(
+        candidate: HubConnection,
+        testAddress: String? = null,
+        addedName: String? = null,
+        updateProfile: SavedHubProfile? = null,
+    ): String? {
         stopForegroundWork(HubTimingReason.VERIFY)
         val token = generation
         val api = HubApiClient(timing, timing.nextRun()) { route ->
@@ -441,9 +488,11 @@ internal class HubRepository(
             val snapshot = withContext(Dispatchers.IO) { parse(wire) }
             if (generation != token) return "Connection check cancelled. Try again."
             val changedHub = connection?.let { it.baseUrl != candidate.baseUrl || it.secret != candidate.secret } != false
-            val saved = connectionStore.save(candidate, resetAliases = changedHub, addedName = addedName, newCacheIdentity = changedHub)
-            if (saved.activeId != savedProfiles.activeId) {
-                val replaced = addedName == null && savedProfiles.activeId != null
+            val saved = if (updateProfile != null) connectionStore.updateVerifiedProfile(updateProfile.id, candidate)
+                else connectionStore.save(candidate, resetAliases = changedHub, addedName = addedName, newCacheIdentity = changedHub)
+            val credentialChanged = updateProfile != null && updateProfile.connection.secret != candidate.secret
+            if (saved.activeId != savedProfiles.activeId || credentialChanged) {
+                val replaced = updateProfile == null && addedName == null && savedProfiles.activeId != null
                 adoptProfile(saved, deletePreviousCache = replaced, hydrate = false)
             } else {
                 savedProfiles = saved

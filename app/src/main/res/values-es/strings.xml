@@ -643,4 +643,10 @@
     <string name="pairing_qr_internet">Al conectar, permites el acceso cifrado a este Hub por internet.</string>
     <string name="pairing_qr_tailscale">La conexión a este Hub usa Tailscale.</string>
     <string name="pairing_qr_pick_image">Elegir imagen QR</string>
+    <string name="pairing_qr_scan_code">Escanear código QR</string>
+    <string name="pairing_qr_camera_note">Token Monitor usa la cámara solo para leer un código QR de vinculación del Hub. La cámara se apaga al leer el código o al salir del escáner. No se guarda ni se sube nada.</string>
+    <string name="pairing_qr_camera_aim">Coloca el código QR de vinculación del Hub dentro del marco.</string>
+    <string name="pairing_qr_camera_denied">El acceso a la cámara está desactivado. Puedes elegir una imagen QR.</string>
+    <string name="pairing_qr_camera_unavailable">La cámara no está disponible. Elige una imagen QR o inténtalo de nuevo.</string>
+    <string name="pairing_qr_camera_settings">Abrir los ajustes de Android</string>
 </resources>

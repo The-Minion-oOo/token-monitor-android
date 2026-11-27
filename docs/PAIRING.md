@@ -111,20 +111,24 @@ The widget follows the selected Hub. Switching ends Widget Live. Each Hub keeps
 its own saved usage and background refresh settings. Your existing pairing
 appears in Saved Hubs after updating.
 
-## Pairing from a QR image
+## Pairing with a QR code
 
 When desktop Token Monitor shows **Pair phone**, choose the Hub address your
-phone can reach and save or crop the QR as an image. On Android, choose
-**Choose QR image** during setup or in **Saved Hubs → Add Hub**, then pick the
-image. Review the displayed address and tap **Connect** to verify and save it.
-For a public HTTPS address, turn on **Allow an internet Hub over HTTPS** in the
-review before tapping **Connect**. The switch starts off each time. Only
-**Connect** contacts the Hub, and cancelling keeps the previous pairing and
-internet access setting. The normal manual fields are available on the same
-screen.
+phone can reach. Use **Scan QR code** during Android setup or in **Saved Hubs →
+Add Hub** and point the camera at that code. The app requests camera permission
+only when you choose to scan and closes the scanner when it reads a pairing
+code. You can also transfer a saved image and use **Choose QR image**. The image
+picker works without camera permission, and manual pairing is available on the
+same screen.
 
-Treat the QR image like the Hub secret. Transfer it privately and delete copies
-after pairing. Android decodes the selected image on the phone.
+Review the displayed address. For a public HTTPS Hub, turn on **Allow an
+internet Hub over HTTPS** in the review. The switch starts off each time. Only
+**Connect** contacts the Hub, and cancelling keeps the previous pairing and
+internet access setting. A confirmed QR for an existing Hub address reuses
+that profile after verification.
+
+Treat the QR like the Hub secret. Transfer it privately and delete copies after
+pairing. Android decodes camera frames and selected images on the phone.
 
 ## Troubleshooting
 

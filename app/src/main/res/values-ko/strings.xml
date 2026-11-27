@@ -644,4 +644,10 @@
     <string name="pairing_qr_internet">연결하면 인터넷을 통해 이 Hub에 암호화된 방식으로 접근할 수 있습니다.</string>
     <string name="pairing_qr_tailscale">Tailscale을 사용하여 이 Hub에 연결합니다.</string>
     <string name="pairing_qr_pick_image">QR 이미지 선택</string>
+    <string name="pairing_qr_scan_code">QR 코드 스캔</string>
+    <string name="pairing_qr_camera_note">Token Monitor는 Hub 페어링 QR 코드를 읽을 때만 카메라를 사용합니다. 코드를 읽거나 스캐너를 닫으면 카메라가 즉시 꺼집니다. 저장하거나 업로드하는 내용은 없습니다.</string>
+    <string name="pairing_qr_camera_aim">Hub 페어링 QR 코드를 프레임 안에 맞추세요.</string>
+    <string name="pairing_qr_camera_denied">카메라 액세스가 꺼져 있습니다. QR 이미지는 선택할 수 있습니다.</string>
+    <string name="pairing_qr_camera_unavailable">카메라를 사용할 수 없습니다. QR 이미지를 선택하거나 다시 시도하세요.</string>
+    <string name="pairing_qr_camera_settings">Android 설정 열기</string>
 </resources>

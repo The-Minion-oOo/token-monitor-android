@@ -18,6 +18,7 @@ import io.github.theminionooo.tokenmonitor.data.storage.RankingMetric
 import io.github.theminionooo.tokenmonitor.data.storage.ReduceMotionMode
 import io.github.theminionooo.tokenmonitor.data.storage.TextScale
 import io.github.theminionooo.tokenmonitor.data.storage.TokenNumberAnimation
+import io.github.theminionooo.tokenmonitor.domain.HubConnection
 import io.github.theminionooo.tokenmonitor.domain.ServiceStatusSnapshot
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
@@ -175,6 +176,10 @@ internal class DashboardViewModel(application: Application) : AndroidViewModel(a
 
     fun saveConnection(url: String, fallbackUrl: String, secret: String, allowLocalNetwork: Boolean, allowPublicHttps: Boolean = false, addedName: String? = null) {
         checkConnection(returnHome = true) { repository.validateAndSave(url, fallbackUrl, secret, allowLocalNetwork, allowPublicHttps, addedName) }
+    }
+
+    fun pairFromQr(connection: HubConnection, name: String) {
+        checkConnection(returnHome = true) { repository.pairFromQr(connection, name) }
     }
 
     fun switchHubProfile(id: String) = changeProfile {

@@ -159,12 +159,7 @@ internal fun ConnectionScreen(
     val quickPair: @Composable () -> Unit = {
         if (profileActions != null) HubPairingQrEntry(enabled = !form.saving) { pairing ->
             profileActions.resetEditor()
-            hubUrl = pairing.baseUrl
-            fallbackUrl = ""
-            secret = pairing.secret
-            allowLocalNetwork = pairing.allowLocalNetwork
-            allowPublicHttps = pairing.allowPublicHttps
-            profileActions.add(hubUrl, fallbackUrl, secret, allowLocalNetwork, allowPublicHttps, profileName)
+            profileActions.pairQr(pairing, profileName)
         }
     }
     val fields: @Composable ColumnScope.(String) -> Unit = { saveLabel ->

@@ -16,6 +16,9 @@ import java.net.Socket
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.concurrent.thread
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -165,6 +168,49 @@ class DashboardOwnershipTest {
                     SnapshotCache(context, secondId).clear()
                     store.clear()
                 }
+            }
+        }
+    }
+
+    @Test fun rescanningAnExistingHubVerifiesAndUpdatesTheSameProfile() {
+        check(context.packageName.endsWith(".preview"))
+        grantFixtureNetworkAccess()
+        FixtureHub(requiredSecret = "fixture-rotated").use { server ->
+            val address = NetworkInterface.getNetworkInterfaces().toList().flatMap { it.inetAddresses.toList() }
+                .filterIsInstance<Inet4Address>().first { it.isSiteLocalAddress }.hostAddress
+            val url = "http://$address:${server.port}"
+            val store = SecureConnectionStore(context)
+            val targetId = requireNotNull(store.save(HubConnection(url, "fixture-old", true), addedName = "Existing").activeId)
+            val otherId = requireNotNull(
+                store.save(HubConnection("http://$address:17654", "fixture-other", true), addedName = "Other").activeId,
+            )
+            lateinit var hub: io.github.theminionooo.tokenmonitor.data.HubRepository
+            instrumentation.runOnMainSync { hub = HubRepositoryPool.acquire(context) }
+            try {
+                runBlocking {
+                    val rejected = withContext(Dispatchers.Main) {
+                        hub.pairFromQr(HubConnection("$url/", "fixture-wrong", true), "Ignored")
+                    }
+                    assertTrue(rejected != null)
+                    assertEquals(otherId, store.profiles().activeId)
+                    assertEquals("fixture-old", store.profiles().entries.single { it.id == targetId }.connection.secret)
+
+                    val failure = withContext(Dispatchers.Main) {
+                        hub.pairFromQr(HubConnection("$url/", "fixture-rotated", true), "Ignored")
+                    }
+                    assertEquals(null, failure)
+                    val saved = store.profiles()
+                    assertEquals(listOf(targetId, otherId), saved.entries.map { it.id })
+                    assertEquals(targetId, saved.activeId)
+                    assertEquals("Existing", saved.active?.name)
+                    assertEquals("fixture-rotated", saved.active?.connection?.secret)
+                    assertEquals(targetId, hub.state.value.activeProfileId)
+                }
+            } finally {
+                instrumentation.runOnMainSync { HubRepositoryPool.release(hub) }
+                SnapshotCache(context, targetId).clear()
+                SnapshotCache(context, otherId).clear()
+                store.clear()
             }
         }
     }

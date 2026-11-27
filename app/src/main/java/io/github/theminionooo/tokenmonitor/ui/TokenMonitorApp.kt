@@ -225,6 +225,11 @@ internal fun TokenMonitorApp(viewModel: DashboardViewModel) {
                                 viewModel.saveConnection(url, fallback, secret, local, internet, addedName = name)
                             }
                         },
+                        pairQr = { connection, name ->
+                            withLocalNetworkAccess(connection.allowLocalNetwork) {
+                                viewModel.pairFromQr(connection, name)
+                            }
+                        },
                         select = viewModel::switchHubProfile,
                         rename = viewModel::renameHubProfile,
                         remove = viewModel::removeHubProfile,

@@ -243,6 +243,20 @@ the Activity is resumed. Each HTTP request rechecks permission and run ownership
 Home-address repair verifies only the proposed address with the stored secret,
 then saves that fallback while preserving the rest of the pairing.
 
+### Pairing with a QR code
+
+First-time setup and Add Hub share a local QR parser and address review for the
+image picker and the in-app camera scanner. The camera action is available on
+devices with a camera and requests permission when tapped. CameraX preview and
+luminance analysis run only while the protected scanner is visible in the
+foreground. No frame is saved. ZXing reads the QR and the scanner closes before
+review. The image picker needs only access to the selected image.
+
+Review shows the canonical address. A public HTTPS route requires the separate
+internet switch, which starts off. Connect then reuses route validation, the
+unauthenticated Hub identity check and encrypted profile storage. Rescanning a
+known address verifies and selects or updates its saved Hub profile.
+
 ### Finding a Hub on Wi-Fi
 
 `HubDiscovery` enumerates the phone's private IPv4 addresses, derives up to two

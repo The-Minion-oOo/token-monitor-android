@@ -22,9 +22,11 @@ import androidx.compose.ui.unit.dp
 import io.github.theminionooo.tokenmonitor.R
 import io.github.theminionooo.tokenmonitor.data.HubRepositoryState
 import io.github.theminionooo.tokenmonitor.data.storage.HubProfileSummary
+import io.github.theminionooo.tokenmonitor.domain.HubConnection
 
 internal class HubProfileActions(
     val add: (String, String, String, Boolean, Boolean, String) -> Unit,
+    val pairQr: (HubConnection, String) -> Unit,
     val select: (String) -> Unit,
     val rename: (String, String) -> Unit,
     val remove: (String) -> Unit,
