@@ -637,4 +637,10 @@
     <string name="quota_alert_permission">Permite las notificaciones en los ajustes de Android para recibir alertas de cuota.</string>
     <string name="quota_alert_low_notice">Una cuota de uso está casi agotada.</string>
     <string name="quota_alert_reset_notice">Se ha renovado una cuota de uso.</string>
+    <string name="pairing_qr_invalid">Este QR de vinculación del Hub no es compatible. Prueba otro código o introduce los datos abajo.</string>
+    <string name="pairing_qr_review">¿Conectar a este Hub?</string>
+    <string name="pairing_qr_local">Al conectar, permites el acceso a este Hub en tu red privada.</string>
+    <string name="pairing_qr_internet">Al conectar, permites el acceso cifrado a este Hub por internet.</string>
+    <string name="pairing_qr_tailscale">La conexión a este Hub usa Tailscale.</string>
+    <string name="pairing_qr_pick_image">Elegir imagen QR</string>
 </resources>

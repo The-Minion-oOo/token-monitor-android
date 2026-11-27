@@ -639,4 +639,10 @@
     <string name="quota_alert_permission">ஒதுக்கீட்டு விழிப்பூட்டல்களைப் பெற Android அமைப்புகளில் அறிவிப்புகளை அனுமதிக்கவும்.</string>
     <string name="quota_alert_low_notice">பயன்பாட்டு ஒதுக்கீடு கிட்டத்தட்ட தீர்ந்துவிட்டது.</string>
     <string name="quota_alert_reset_notice">பயன்பாட்டு ஒதுக்கீடு மீட்டமைக்கப்பட்டது.</string>
+    <string name="pairing_qr_invalid">இந்த Hub இணைப்பு QR குறியீடு ஆதரிக்கப்படவில்லை. வேறு குறியீட்டை முயலவும் அல்லது கீழே விவரங்களை உள்ளிடவும்.</string>
+    <string name="pairing_qr_review">இந்த Hub உடன் இணைக்கவா?</string>
+    <string name="pairing_qr_local">இணைப்பது தனிப்பட்ட நெட்வொர்க்கில் இந்த Hub ஐ அணுக அனுமதிக்கும்.</string>
+    <string name="pairing_qr_internet">இணைப்பது இணையம் வழியாக இந்த Hub ஐ குறியாக்கத்துடன் அணுக அனுமதிக்கும்.</string>
+    <string name="pairing_qr_tailscale">இந்த Hub உடன் இணைக்க Tailscale பயன்படுத்தப்படும்.</string>
+    <string name="pairing_qr_pick_image">QR படத்தைத் தேர்வு செய்</string>
 </resources>

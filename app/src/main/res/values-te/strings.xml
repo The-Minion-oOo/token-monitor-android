@@ -637,4 +637,10 @@
     <string name="quota_alert_permission">కోటా హెచ్చరికలను స్వీకరించడానికి Android సెట్టింగ్‌లలో నోటిఫికేషన్‌లను అనుమతించండి.</string>
     <string name="quota_alert_low_notice">ఒక వినియోగ కోటా దాదాపు నిండింది.</string>
     <string name="quota_alert_reset_notice">ఒక వినియోగ కోటా రీసెట్ అయింది.</string>
+    <string name="pairing_qr_invalid">ఈ Hub పెయిరింగ్ QRకు మద్దతు లేదు. మరో కోడ్ ప్రయత్నించండి లేదా కింద వివరాలను నమోదు చేయండి.</string>
+    <string name="pairing_qr_review">ఈ Hubకు కనెక్ట్ చేయాలా?</string>
+    <string name="pairing_qr_local">కనెక్ట్ చేస్తే మీ ప్రైవేట్ నెట్‌వర్క్‌లో ఈ Hubను యాక్సెస్ చేయవచ్చు.</string>
+    <string name="pairing_qr_internet">కనెక్ట్ చేస్తే ఇంటర్నెట్ ద్వారా ఈ Hubను ఎన్‌క్రిప్షన్‌తో యాక్సెస్ చేయవచ్చు.</string>
+    <string name="pairing_qr_tailscale">ఈ Hubకు కనెక్ట్ చేయడానికి Tailscale ఉపయోగిస్తుంది.</string>
+    <string name="pairing_qr_pick_image">QR చిత్రాన్ని ఎంచుకోండి</string>
 </resources>

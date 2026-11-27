@@ -637,4 +637,10 @@
     <string name="quota_alert_permission">Permita notificações nas configurações do Android para receber alertas de cota.</string>
     <string name="quota_alert_low_notice">Uma cota de uso está quase esgotada.</string>
     <string name="quota_alert_reset_notice">Uma cota de uso foi renovada.</string>
+    <string name="pairing_qr_invalid">Este QR de pareamento do Hub não é compatível. Tente outro código ou informe os dados abaixo.</string>
+    <string name="pairing_qr_review">Conectar a este Hub?</string>
+    <string name="pairing_qr_local">Ao conectar, você permite acesso a este Hub na rede privada.</string>
+    <string name="pairing_qr_internet">Ao conectar, você permite acesso criptografado a este Hub pela internet.</string>
+    <string name="pairing_qr_tailscale">A conexão com este Hub usa o Tailscale.</string>
+    <string name="pairing_qr_pick_image">Escolher imagem QR</string>
 </resources>

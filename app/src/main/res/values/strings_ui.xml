@@ -552,4 +552,10 @@
     <string name="quota_alert_permission">Allow notifications in Android settings to receive quota alerts.</string>
     <string name="quota_alert_low_notice">A usage quota is nearly full.</string>
     <string name="quota_alert_reset_notice">A usage quota has reset.</string>
+    <string name="pairing_qr_invalid">This is not a supported Hub pairing QR. Try another code or enter the details below.</string>
+    <string name="pairing_qr_review">Connect to this Hub?</string>
+    <string name="pairing_qr_local">Connect allows access to this Hub on your private network.</string>
+    <string name="pairing_qr_internet">Connect allows encrypted access to this Hub over the internet.</string>
+    <string name="pairing_qr_tailscale">Connect uses Tailscale to reach this Hub.</string>
+    <string name="pairing_qr_pick_image">Choose QR image</string>
 </resources>
