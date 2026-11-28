@@ -1,0 +1,34 @@
+{
+  "periods": {
+    "today": {
+      "sessions": {
+        "antigravity:v100-context": {
+          "client": "antigravity",
+          "sessionId": "v100-context",
+          "totalTokens": 90,
+          "costUsd": 0,
+          "messageCount": 0,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "cacheReadTokens": 0,
+          "cacheWriteTokens": 0,
+          "reasoningTokens": 0,
+          "timedOutputTokens": 0,
+          "timedDurationMs": 0,
+          "startedAt": "",
+          "lastUsedAt": "2026-11-28T05:38:22.468Z",
+          "contextTokens": 0,
+          "contextWindow": 0,
+          "projectId": "",
+          "projectLabel": "",
+          "title": "",
+          "sessionKind": "",
+          "models": {},
+          "modelCosts": {},
+          "providers": {},
+          "turnEnded": false
+        }
+      }
+    }
+  }
+}

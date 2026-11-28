@@ -2,9 +2,9 @@
 
 ## Version rule
 
-Android v0.99.0 r1 targets desktop tag `v0.99.0`, peeled commit
-`49831523e3bbb3ec57ad6d30001306390592c59b`, in Gradle and `upstream.json`.
-I checked Antigravity activity and compact-upload reads on both released Hubs.
+Android v0.100.0 r1 targets desktop tag `v0.100.0`, peeled commit
+`a56909cd7e33a26448cfc5cfdc2ae4112f3584f8`, in Gradle and `upstream.json`.
+I checked Antigravity context, Amp usage, and the reported Codex Work model on both released Hubs. The earlier Antigravity activity and compact-upload checks still run.
 I checked the ordinary Node and Worker stats responses when a desktop publishes
 an optional fixed-range revision.
 I checked the reported Hub deployment and separate Notion credit pools.

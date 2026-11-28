@@ -1,7 +1,12 @@
-# Desktop parity for v0.99.0
+# Desktop parity for v0.100.0
 
-I compare Android with desktop tag `v0.99.0`, peeled commit
-`49831523e3bbb3ec57ad6d30001306390592c59b`. Android reads the usage collected by desktop.
+I compare Android with desktop tag `v0.100.0`, peeled commit
+`a56909cd7e33a26448cfc5cfdc2ae4112f3584f8`. Android reads the usage collected by desktop.
+
+**Android v0.100.0 r1** reads Antigravity context for recent sessions when
+the Hub reports it. Amp collection runs on desktop. Android reads the
+resulting usage and Codex Work model from the same Hub endpoints. The
+standalone desktop dashboard, Live Flow and 3D view stay on desktop.
 
 **Android v0.99.0 r1** uses live Antigravity activity from the Hub in Home
 and Sessions. Related Antigravity and Kiro runs use the reported T3 Code

@@ -12,7 +12,7 @@ This Android app treats the desktop Hub as an external, read-only protocol.
 
 ## Verified baseline
 
-The verified baseline is upstream Token Monitor **v0.99.0**, released 2026-11-26 UTC.
+The verified baseline is upstream Token Monitor **v0.100.0**, released 2026-11-28 UTC.
 I check each release against the `Javis603/token-monitor` tag recorded in
 `upstream.json`; that tag, not a local checkout, is the protocol reference.
 
@@ -53,7 +53,7 @@ write, or device deletion endpoints.
 
 ## Cloudflare Worker
 
-I also exercise `worker/src/index.js` from the same pinned v0.99.0 commit locally.
+I also exercise `worker/src/index.js` from the same pinned v0.100.0 commit locally.
 Its snapshot read routes use the same Bearer authentication and unauthenticated Hub
 identity check. Stream-v2 negotiates the same `snapshot`, complete `stats` and
 compact `freshness` envelopes. Ingest changes may produce freshness-only events;
@@ -657,6 +657,14 @@ The v4 Hub stream can queue small frames while a slow client receives a large
 frame. When the backlog exceeds its budget, the Hub sends a complete `stats`
 frame with the current revision. Android takes that revision as the baseline
 for the next delta.
+
+## Desktop v0.100.0
+
+The released Node and Worker Hubs retain Antigravity's existing
+`contextTokens` and `contextWindow` fields. Android only shows context for a
+recent session with a positive count and window. The contract checks cover a
+reported reading, a cleared reading, Amp usage and the Codex Work model on
+both Hubs. Reasonix's native views do not cross the wire.
 
 ## Desktop v0.99.0
 
