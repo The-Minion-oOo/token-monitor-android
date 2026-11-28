@@ -637,4 +637,9 @@
     <string name="quota_alert_permission">কোটা সতর্কতা পেতে Android সেটিংসে বিজ্ঞপ্তির অনুমতি দিন।</string>
     <string name="quota_alert_low_notice">একটি ব্যবহারের কোটা প্রায় শেষ।</string>
     <string name="quota_alert_reset_notice">একটি ব্যবহারের কোটা রিসেট হয়েছে।</string>
+    <string name="ui_spending_cost_unavailable">খরচ জানানো হয়নি</string>
+    <string name="ui_spending_share_unavailable">খরচের অংশ পাওয়া যায়নি</string>
+    <string name="ui_spending_cost_share">জানা আনুমানিক খরচের %1$s</string>
+    <string name="ui_spending_cache_reads">ক্যাশ থেকে পড়া</string>
+    <string name="ui_spending_cache_writes">ক্যাশে লেখা</string>
 </resources>

@@ -638,4 +638,9 @@
     <string name="quota_alert_permission">请在 Android 设置中允许通知，以接收额度提醒。</string>
     <string name="quota_alert_low_notice">一项使用额度即将用尽。</string>
     <string name="quota_alert_reset_notice">一项使用额度已重置。</string>
+    <string name="ui_spending_cost_unavailable">未报告费用</string>
+    <string name="ui_spending_share_unavailable">无法计算费用占比</string>
+    <string name="ui_spending_cost_share">占已知预估费用的 %1$s</string>
+    <string name="ui_spending_cache_reads">缓存读取</string>
+    <string name="ui_spending_cache_writes">缓存写入</string>
 </resources>

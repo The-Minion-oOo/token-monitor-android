@@ -552,4 +552,9 @@
     <string name="quota_alert_permission">Allow notifications in Android settings to receive quota alerts.</string>
     <string name="quota_alert_low_notice">A usage quota is nearly full.</string>
     <string name="quota_alert_reset_notice">A usage quota has reset.</string>
+    <string name="ui_spending_cost_unavailable">Cost not reported</string>
+    <string name="ui_spending_share_unavailable">Cost share unavailable</string>
+    <string name="ui_spending_cost_share">%1$s of known estimated cost</string>
+    <string name="ui_spending_cache_reads">Cache reads</string>
+    <string name="ui_spending_cache_writes">Cache writes</string>
 </resources>

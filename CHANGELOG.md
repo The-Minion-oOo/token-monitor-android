@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- See a tool’s share of known estimated cost and its reported token breakdown when opening it from Tools.
+
 ## v0.100.0 r1 — 2026-11-28
 
 - Show Antigravity context when a recent Hub reading is available.
