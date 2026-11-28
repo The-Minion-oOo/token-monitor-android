@@ -109,6 +109,38 @@ class DashboardInteractionTest {
         compose.onNodeWithText("Running", substring = true).assertDoesNotExist()
     }
 
+    @Test fun antigravityContextShowsInHomeAndClearsInSessions() {
+        fun sessions(file: String) = InstrumentationRegistry.getInstrumentation().context.assets
+            .open("protocol/v0.100.0/$file.json").bufferedReader().use { it.readText() }
+            .let(HubProtocolParser::decodeStats).periods.getValue("today").sessions
+
+        var rows by mutableStateOf(sessions("v100-session").filter { it.contextWindow > 0 })
+        val now = java.time.Instant.parse(rows.single().lastUsedAt).toEpochMilli()
+        var showHome by mutableStateOf(true)
+        compose.setContent {
+            MaterialTheme {
+                CompositionLocalProvider(LocalNow provides now, LocalInteractionMotion provides false) {
+                    if (showHome) {
+                        HomeSessionsModule(HomeSessionInputs(rows, rows)) {}
+                    } else {
+                        androidx.compose.foundation.lazy.LazyColumn { sessionItems(rows, DashboardPeriod.Today) }
+                    }
+                }
+            }
+        }
+        compose.waitUntil(5_000) {
+            compose.onAllNodesWithText("Context 75% left").fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.onNodeWithText("Context 75% left").assertIsDisplayed()
+        compose.runOnIdle { showHome = false }
+        compose.onNodeWithText("Context 25% used").assertIsDisplayed()
+        compose.onNodeWithText("75% left").assertIsDisplayed()
+        val cleared = sessions("v100-cleared-context")
+        compose.runOnIdle { rows = cleared }
+        compose.onNodeWithText("Context 25% used").assertDoesNotExist()
+        compose.onNodeWithText("75% left").assertDoesNotExist()
+    }
+
     @Test fun serviceStatusScrollsToBothMiniMaxRegionsAndOpensTheSelectedPage() {
         val providers = serviceStatusProviders.map { provider ->
             summarizeServiceProvider(provider, """{"status":{"indicator":"none"}}""", 0)

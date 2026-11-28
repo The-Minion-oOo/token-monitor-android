@@ -1,3 +1,4 @@
+import { checkV100Reads } from "./check-v100-contract.mjs";
 import { checkV099Reads } from "./check-v099-contract.mjs";
 import { checkV098Reads } from "./check-v098-contract.mjs";
 import { checkV0951Reads } from "./check-v0951-contract.mjs";
@@ -172,6 +173,7 @@ export async function checkWorkerContract(source, output, upstream, limitCases =
         Object.assign(responses, await checkV0951Reads(request, at(0)));
         Object.assign(responses, await checkV098Reads(request, at(0)));
         Object.assign(responses, await checkV099Reads(request, at(0), source));
+        Object.assign(responses, await checkV100Reads(request, at(0), source));
         await mkdir(output, { recursive: true });
         for (const [name, value] of Object.entries(responses)) {
             assert.ok(!JSON.stringify(value).includes("NEVER_EXPORT"));

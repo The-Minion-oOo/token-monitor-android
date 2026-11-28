@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "role": "hub",
+  "runtime": "cloudflare-worker",
+  "version": 1,
+  "hubBuild": {
+    "schemaVersion": 1,
+    "runtime": "cloudflare-worker",
+    "coreRevision": 150,
+    "coreBuildId": "sha256:030d11adea72c43372fc09b7998d4f6d8490bc2a6af0fb19a3046be2dc857e26",
+    "runtimeRevision": 19,
+    "runtimeBuildId": "sha256:117a024e400ed8d14d4e549f40574256c786b389ac5482309221f20e58305714"
+  },
+  "deviceCount": 1,
+  "secretRequired": true,
+  "now": "2026-11-28T05:38:24.543Z"
+}
