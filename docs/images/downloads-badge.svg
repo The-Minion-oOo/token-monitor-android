@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="118" height="20" viewBox="0 0 118 20" role="img" aria-labelledby="title">
-  <title id="title">617 public GitHub release asset downloads as of November 26, 2026</title>
+  <title id="title">623 public GitHub release asset downloads as of November 28, 2026</title>
   <path fill="#555" d="M0 0h70v20H0z"/>
   <path fill="#73bdf5" d="M70 0h48v20H70z"/>
   <g font-family="Verdana, DejaVu Sans, sans-serif" font-size="11" text-anchor="middle">
     <text x="35" y="14" fill="#fff">Downloads</text>
-    <text x="94" y="14" fill="#10221c">617</text>
+    <text x="94" y="14" fill="#10221c">623</text>
   </g>
 </svg>

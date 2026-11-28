@@ -26,3 +26,8 @@ part of this release.
 Use **Settings → App updates**, or install the signed APK over your existing
 copy. There is no need to uninstall. See [Install and update](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/INSTALL.md)
 and [Validation](https://github.com/The-Minion-oOo/token-monitor-android/blob/main/docs/VALIDATION.md).
+
+I installed this APK over v0.99.0 r1 on my phone without re-pairing. Home Wi-Fi
+returned current data after I reopened the app. I checked the report preview
+and quota alert controls on my phone, and tested switching between two Hubs
+and notification delivery on the emulators.

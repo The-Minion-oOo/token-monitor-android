@@ -3,30 +3,33 @@
 I keep one record for each release. Emulator results and phone checks describe
 the builds and scenarios they name; neither establishes battery savings.
 
-## Current release: v0.99.0 r1
+## Current release: v0.100.0 r1
 
-I published source `d383fae7021970dd00e1d5b2ad3533169691d564` from [PR #200](https://github.com/The-Minion-oOo/token-monitor-android/pull/200),
-with desktop v0.99.0 pinned at `49831523e3bbb3ec57ad6d30001306390592c59b`.
+I published source `ff39bebe67716ecab359205c524ecfbd7595128e` from [PR #219](https://github.com/The-Minion-oOo/token-monitor-android/pull/219),
+with desktop v0.100.0 pinned at `a56909cd7e33a26448cfc5cfdc2ae4112f3584f8`.
 All five required jobs passed on the tagged commit.
-[Build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/45875262933) ·
-[API 36, 37 and 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/45875263037) ·
-[Hub and Worker contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/45875262832).
+[Build](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/46114142022) ·
+[API 36, 37 and 26](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/46114142019) ·
+[Hub and Worker contract](https://github.com/The-Minion-oOo/token-monitor-android/actions/runs/46114142044).
 
-The checks cover 508 JVM tests with released contract responses, 156 native
+The checks cover 517 JVM tests with released contract responses, 162 native
 cases on each API 36 and 37 emulator, lint, and the debug and release builds.
-I checked the exact signed APK over v0.98.0 r1 on API 26, including launch and
-resume. I haven’t tested this build on my phone.
+I installed the exact signed APK over v0.99.0 r1 on my phone and on API 26.
+My saved pairing survived the update. I reopened the app and it returned current
+data over Home Wi-Fi. I checked the weekly report preview and both quota alert
+controls on my phone, and checked two-Hub switching and test notifications on
+the emulators.
 
 | Release asset | Value |
 | --- | --- |
-| APK | `token-monitor-android-v0.99.0-r1.apk` |
-| Package and version code | `io.github.theminionooo.tokenmonitor` · `990001` |
-| Size | 3,465,056 bytes |
-| APK SHA-256 | `fd3764a0bb9c13e113b770fd711fa258613a246d11251c7f94082e5530e93087` |
+| APK | `token-monitor-android-v0.100.0-r1.apk` |
+| Package and version code | `io.github.theminionooo.tokenmonitor` · `1000001` |
+| Size | 3,511,698 bytes |
+| APK SHA-256 | `4318323fd070c5be9db45f3b03c609217fc14fc34fdad5e6c03bcd9d15fb5b40` |
 | Signing certificate SHA-256 | `eed5a820371ac158c038e5a55243b2e4e7f10ffdf764963b2808d152d3821c2c` |
 
-The draft and public APK, checksum and update-manifest downloads matched the
-signed bundle. Latest and the update endpoint return [Android v0.99.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.99.0-r1).
+The draft and public APK, checksum and update manifest matched the signed
+bundle. Latest and the update endpoint return [Android v0.100.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.100.0-r1).
 
 ## Release checks and limits
 
@@ -50,6 +53,7 @@ build on my phone. Builds before v0.60.0 r7 are recorded in the
 
 | Release | Date | Desktop baseline | Main checks | Phone check |
 | --- | --- | --- | --- | --- |
+| v0.100.0 r1 | 2026-11-28 | v0.100.0 | Antigravity context, weekly report, Saved Hubs and quota alerts. 517 JVM, 162 per API 36 and 37, signed API 26 upgrade | Yes, in-place update and saved pairing |
 | v0.99.0 r1 | 2026-11-26 | v0.99.0 | Antigravity activity and compact Hub history. 508 JVM, 156 per API 36 and 37, signed API 26 upgrade | No |
 | v0.98.0 r1 | 2026-11-25 | v0.98.0 | Settings cards, untitled session labels and Hub stats with fixed-range sync. 506 JVM, 155 per API 36 and 37, signed API 26 upgrade | No |
 | v0.97.0 r1 | 2026-11-23 | v0.97.0 | Sessions sort, Notion credits and Node Hub deployment. 504 JVM, 155 per API 36 and 37, signed API 26 upgrade | No |
