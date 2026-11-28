@@ -113,6 +113,7 @@ internal fun LazyListScope.breakdownItems(
     emptyMessage: String,
     rankingMetric: RankingMetric,
     modelRows: Boolean = false,
+    showMissingCost: Boolean = false,
     onToolSelected: ((String) -> Unit)? = null,
     unpriced: Map<String, Long> = emptyMap(),
     displayOptions: DisplayOptions = DisplayOptions(),
@@ -127,7 +128,12 @@ internal fun LazyListScope.breakdownItems(
             DesktopUsageRow(
                 name = name,
                 totalTokens = count,
-                detail = if (name in costs || (unpriced[name] ?: 0) > 0) displayUsageCost(costs[name] ?: 0.0, unpriced[name] ?: 0) else "",
+                detail = when {
+                    name in costs || (unpriced[name] ?: 0) > 0 ->
+                        displayUsageCost(costs[name] ?: 0.0, unpriced[name] ?: 0)
+                    showMissingCost -> appText(R.string.ui_spending_cost_unavailable, "Cost not reported")
+                    else -> ""
+                },
                 ratio = count.toFloat() / maximum,
                 cacheReadTokens = cacheReads[name] ?: 0L,
                 outputTokens = outputs[name] ?: 0L,

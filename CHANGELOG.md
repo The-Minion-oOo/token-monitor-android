@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- See a tool’s share of known estimated cost and its reported token breakdown when opening it from Tools.
 - See the longest recorded activity streak alongside the current streak in Trends.
 
 ## v0.100.0 r1 — 2026-11-28

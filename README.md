@@ -128,7 +128,12 @@ keep the last snapshot and mark it stale; changing pages never starts a fetch.
 ## Get started
 
 Choose **Try sample data** on the welcome screen to explore a week of example
-usage before pairing. Open **Weekly usage report** in Trends to preview a PNG
+usage before pairing. Tap a tool in **Tools** to see its share of known estimated
+cost, its reported token breakdown, and the costs attributed to its models for
+Day, Month, and Total. Rolling ranges show reported tool spending and explain
+when model detail is missing.
+
+Open **Weekly usage report** in Trends to preview a PNG
 of the last seven days and share it through Android. The report shows aggregate
 usage, estimated cost and history coverage. It labels sample and saved readings
 and groups unrecognized tool labels under unattributed usage.

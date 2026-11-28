@@ -639,4 +639,9 @@
     <string name="quota_alert_permission">ક્વોટા સૂચનાઓ મેળવવા માટે Android સેટિંગ્સમાં સૂચનાઓને મંજૂરી આપો.</string>
     <string name="quota_alert_low_notice">એક વપરાશ ક્વોટા લગભગ પૂરો થઈ ગયો છે.</string>
     <string name="quota_alert_reset_notice">એક વપરાશ ક્વોટા રીસેટ થયો છે.</string>
+    <string name="ui_spending_cost_unavailable">ખર્ચની જાણ નથી</string>
+    <string name="ui_spending_share_unavailable">ખર્ચનો હિસ્સો ઉપલબ્ધ નથી</string>
+    <string name="ui_spending_cost_share">જાણીતાં અંદાજિત ખર્ચનો %1$s</string>
+    <string name="ui_spending_cache_reads">કૅશમાંથી વાંચન</string>
+    <string name="ui_spending_cache_writes">કૅશમાં લેખન</string>
 </resources>

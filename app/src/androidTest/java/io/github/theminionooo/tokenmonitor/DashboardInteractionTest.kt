@@ -281,7 +281,17 @@ class DashboardInteractionTest {
     @Test fun toolsOpenOnlyTheirOwnModelsWithoutMotion() = checkToolNavigation(false)
 
     private fun checkToolNavigation(motion: Boolean) {
-        val usage = UsagePeriod(totalTokens = 900, clients = mapOf("codex" to 200, "opencode" to 700), models = mapOf("gpt-5" to 200, "gpt-4" to 700), clientModels = mapOf("codex" to mapOf("gpt-5" to 200), "opencode" to mapOf("gpt-4" to 700)))
+        // Use distinct tool totals, model totals, and components so each assertion
+        // identifies one value even when the breakdown is visible.
+        val usage = UsagePeriod(
+            totalTokens = 900,
+            costUsd = 10.0,
+            clients = mapOf("codex" to 200, "opencode" to 700),
+            clientCosts = mapOf("codex" to 2.0, "opencode" to 8.0),
+            clientOutputs = mapOf("codex" to 60, "opencode" to 80),
+            models = mapOf("gpt-5" to 180, "gpt-4" to 650),
+            clientModels = mapOf("codex" to mapOf("gpt-5" to 180), "opencode" to mapOf("gpt-4" to 650)),
+        )
         compose.setContent {
             var destination by remember { mutableStateOf(DashboardDestination.Tools) }
             MaterialTheme { CompositionLocalProvider(LocalInteractionMotion provides motion) {
@@ -300,19 +310,28 @@ class DashboardInteractionTest {
         compose.onNodeWithText("Codex").performClick()
         compose.onNodeWithText("Codex · Models").assertIsDisplayed()
         compose.onNodeWithText("gpt-5").assertIsDisplayed()
-        compose.onAllNodesWithText("200").assertCountEquals(2)
+        compose.onNodeWithText("200").assertIsDisplayed()
+        compose.onNodeWithText("180").assertIsDisplayed()
+        compose.onNodeWithText("20% of known estimated cost").assertIsDisplayed()
+        compose.onNodeWithText("60").assertIsDisplayed()
         compose.onNodeWithText("gpt-4").assertDoesNotExist()
         compose.onNodeWithText("900").assertDoesNotExist()
         compose.onNodeWithText("CLOSE").assertDoesNotExist()
         compose.onNodeWithText("TOTAL").performClick()
         compose.onNodeWithText("Codex · Models").assertIsDisplayed()
-        compose.onAllNodesWithText("200").assertCountEquals(2)
+        compose.onNodeWithText("200").assertIsDisplayed()
+        compose.onNodeWithText("180").assertIsDisplayed()
+        compose.onNodeWithText("20% of known estimated cost").assertIsDisplayed()
+        compose.onNodeWithText("60").assertIsDisplayed()
         compose.onNodeWithText("← Back to Tools").performClick()
         compose.onNodeWithText("OpenCode").performClick()
         compose.onNodeWithText("OpenCode · Models").assertIsDisplayed()
         compose.onNodeWithText("gpt-4").assertIsDisplayed()
         compose.onNodeWithText("gpt-5").assertDoesNotExist()
-        compose.onAllNodesWithText("700").assertCountEquals(2)
+        compose.onNodeWithText("700").assertIsDisplayed()
+        compose.onNodeWithText("650").assertIsDisplayed()
+        compose.onNodeWithText("80% of known estimated cost").assertIsDisplayed()
+        compose.onNodeWithText("80").assertIsDisplayed()
         compose.onNodeWithText("ALL MODELS").performClick()
         compose.onNodeWithText("900").assertIsDisplayed()
         compose.onNodeWithText("gpt-5").assertIsDisplayed()

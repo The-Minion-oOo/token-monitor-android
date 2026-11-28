@@ -139,7 +139,10 @@ internal fun DashboardContent(
     BackHandler(destination == DashboardDestination.Models && modelFilter != null) {
         onChoose(DashboardDestination.Tools)
     }
-    val filteredTool = modelFilter
+    val filteredTool = modelFilter.takeIf { destination == DashboardDestination.Models }
+    val spending = if (filteredTool != null) remember(aliasInputs, period, filteredTool) {
+        rawUsage.toolSpending(filteredTool, fromHistory = period.statsKey == null)
+    } else null
     val modelUsage = if (filteredTool == null) usage else remember(aliasInputs, period, filteredTool, names) {
         names.usage(rawUsage.modelsForTool(filteredTool))
     }
@@ -174,7 +177,13 @@ internal fun DashboardContent(
         contentPadding = PaddingValues(horizontal = 14.dp, vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(if (destination in listOf(DashboardDestination.Models, DashboardDestination.Projects, DashboardDestination.Tools)) 4.dp else 10.dp),
     ) {
-        item { TotalPanel(if (destination == DashboardDestination.Models) modelUsage else usage, displayOptions.compactTokenTotal) }
+        item {
+            TotalPanel(
+                if (spending != null) modelUsage else usage,
+                displayOptions.compactTokenTotal,
+                reportedCost = if (spending != null) spending.costUsd else usage.costUsd,
+            )
+        }
         if (displayOptions.liveRateMode != io.github.theminionooo.tokenmonitor.data.storage.LiveRateMode.Off) item {
             LiveRatePanel(snapshot, displayOptions, state.streamActive, state.connectionUrl)
         }
@@ -188,6 +197,7 @@ internal fun DashboardContent(
                 TextButton(onClick = { onChoose(DashboardDestination.Tools) }) { Text(appText(R.string.ui_back_to_tools_87019, "← Back to Tools")) }
             }
         }
+        if (spending != null) item { ToolSpendingPanel(spending) }
         if (state.message != null && !state.streamActive) item { StatusMessage(state.message, state.snapshot.stale) }
         if (destination != DashboardDestination.Home && homeReturnVisible && modelFilter == null) item { BackToHomeRow { onChoose(DashboardDestination.Home) } }
         if (destination == DashboardDestination.Sessions || destination == DashboardDestination.Projects) {
@@ -241,6 +251,7 @@ internal fun DashboardContent(
                 emptyMessage = if (modelFilter != null) appText(R.string.ui_no_tool_to_model_breakdown_was_supplied_for_this_per_7d538, "No tool-to-model breakdown was supplied for this period.") else appText(R.string.ui_no_model_activity_is_available_for_this_period_34210, "No model activity is available for this period."),
                 rankingMetric = displayOptions.rankingMetric,
                 modelRows = true,
+                showMissingCost = spending != null,
             )
             DashboardDestination.Projects -> projectItems(usage.projects.filter { it.matchesSearch(search) }, period, search.isNotBlank())
             DashboardDestination.Sessions -> sessionItems(
@@ -264,11 +275,11 @@ internal fun DashboardContent(
 }
 
 @Composable
-internal fun TotalPanel(usage: UsagePeriod, compact: Boolean) {
+internal fun TotalPanel(usage: UsagePeriod, compact: Boolean, reportedCost: Double? = usage.costUsd) {
     // Digit roll changes only the glyphs that differ; Count up keeps the earlier counting total and cost.
     val roll = LocalTokenNumberAnimation.current == TokenNumberAnimation.Roll
     val tokens = if (roll) usage.totalTokens else rememberRollingValue(usage.totalTokens.toDouble()).roundToLong()
-    val cost = if (roll) usage.costUsd else rememberRollingValue(usage.costUsd)
+    val cost = if (roll) reportedCost ?: 0.0 else rememberRollingValue(reportedCost ?: 0.0)
     Column(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
         Text(appText(R.string.ui_total_tokens_7ea54, "TOTAL TOKENS"), color = Muted, style = MaterialTheme.typography.labelMedium)
         RollingTokenText(
@@ -282,7 +293,9 @@ internal fun TotalPanel(usage: UsagePeriod, compact: Boolean) {
             fadeBottom = 4.dp,
             overflow = TextOverflow.Ellipsis,
         )
-        Text(displayUsageCost(cost, usage.unpricedTokens), color = Muted, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp))
+        val costText = if (reportedCost != null || usage.unpricedTokens > 0) displayUsageCost(cost, usage.unpricedTokens)
+            else appText(R.string.ui_spending_cost_unavailable, "Cost not reported")
+        Text(costText, color = Muted, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp))
     }
 }
 

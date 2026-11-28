@@ -639,4 +639,9 @@
     <string name="quota_alert_permission">కోటా హెచ్చరికలను స్వీకరించడానికి Android సెట్టింగ్‌లలో నోటిఫికేషన్‌లను అనుమతించండి.</string>
     <string name="quota_alert_low_notice">ఒక వినియోగ కోటా దాదాపు నిండింది.</string>
     <string name="quota_alert_reset_notice">ఒక వినియోగ కోటా రీసెట్ అయింది.</string>
+    <string name="ui_spending_cost_unavailable">ఖర్చు నివేదించబడలేదు</string>
+    <string name="ui_spending_share_unavailable">ఖర్చులో వాటా అందుబాటులో లేదు</string>
+    <string name="ui_spending_cost_share">తెలిసిన అంచనా ఖర్చులో %1$s</string>
+    <string name="ui_spending_cache_reads">కాష్ నుంచి చదివినవి</string>
+    <string name="ui_spending_cache_writes">కాష్‌లో రాసినవి</string>
 </resources>

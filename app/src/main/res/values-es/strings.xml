@@ -639,4 +639,9 @@
     <string name="quota_alert_permission">Permite las notificaciones en los ajustes de Android para recibir alertas de cuota.</string>
     <string name="quota_alert_low_notice">Una cuota de uso está casi agotada.</string>
     <string name="quota_alert_reset_notice">Se ha renovado una cuota de uso.</string>
+    <string name="ui_spending_cost_unavailable">Coste no informado</string>
+    <string name="ui_spending_share_unavailable">Proporción del coste no disponible</string>
+    <string name="ui_spending_cost_share">%1$s del coste estimado conocido</string>
+    <string name="ui_spending_cache_reads">Lecturas de caché</string>
+    <string name="ui_spending_cache_writes">Escrituras en caché</string>
 </resources>

@@ -639,4 +639,9 @@
     <string name="quota_alert_permission">कोटा अलर्ट पाने के लिए Android की सेटिंग में सूचनाओं की अनुमति दें।</string>
     <string name="quota_alert_low_notice">इस्तेमाल का कोटा लगभग पूरा हो गया है।</string>
     <string name="quota_alert_reset_notice">इस्तेमाल का कोटा रीसेट हो गया है।</string>
+    <string name="ui_spending_cost_unavailable">लागत की जानकारी नहीं है</string>
+    <string name="ui_spending_share_unavailable">लागत में हिस्सा उपलब्ध नहीं है</string>
+    <string name="ui_spending_cost_share">ज्ञात अनुमानित लागत का %1$s</string>
+    <string name="ui_spending_cache_reads">कैश से पढ़े गए टोकन</string>
+    <string name="ui_spending_cache_writes">कैश में लिखे गए टोकन</string>
 </resources>

@@ -641,4 +641,9 @@
     <string name="quota_alert_permission">利用枠の通知を受け取るには、Android の設定で通知を許可してください。</string>
     <string name="quota_alert_low_notice">利用枠の上限に近づいています。</string>
     <string name="quota_alert_reset_notice">利用枠がリセットされました。</string>
+    <string name="ui_spending_cost_unavailable">コストの報告なし</string>
+    <string name="ui_spending_share_unavailable">コストの割合を算出できません</string>
+    <string name="ui_spending_cost_share">把握できた推定コストの%1$s</string>
+    <string name="ui_spending_cache_reads">キャッシュ読み取り</string>
+    <string name="ui_spending_cache_writes">キャッシュ書き込み</string>
 </resources>
