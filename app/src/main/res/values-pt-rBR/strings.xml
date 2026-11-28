@@ -637,4 +637,9 @@
     <string name="quota_alert_permission">Permita notificações nas configurações do Android para receber alertas de cota.</string>
     <string name="quota_alert_low_notice">Uma cota de uso está quase esgotada.</string>
     <string name="quota_alert_reset_notice">Uma cota de uso foi renovada.</string>
+    <string name="ui_spending_cost_unavailable">Custo não informado</string>
+    <string name="ui_spending_share_unavailable">Parcela do custo indisponível</string>
+    <string name="ui_spending_cost_share">%1$s do custo estimado conhecido</string>
+    <string name="ui_spending_cache_reads">Leituras do cache</string>
+    <string name="ui_spending_cache_writes">Gravações no cache</string>
 </resources>

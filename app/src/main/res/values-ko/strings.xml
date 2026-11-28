@@ -638,4 +638,9 @@
     <string name="quota_alert_permission">한도 알림을 받으려면 Android 설정에서 알림을 허용하세요.</string>
     <string name="quota_alert_low_notice">사용량이 한도에 가까워졌습니다.</string>
     <string name="quota_alert_reset_notice">사용 한도가 초기화되었습니다.</string>
+    <string name="ui_spending_cost_unavailable">보고된 비용 없음</string>
+    <string name="ui_spending_share_unavailable">비용 비중을 계산할 수 없음</string>
+    <string name="ui_spending_cost_share">확인된 예상 비용의 %1$s</string>
+    <string name="ui_spending_cache_reads">캐시 읽기</string>
+    <string name="ui_spending_cache_writes">캐시 쓰기</string>
 </resources>
