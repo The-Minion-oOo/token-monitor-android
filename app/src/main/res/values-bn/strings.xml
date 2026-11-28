@@ -361,6 +361,8 @@
     <string name="ui_total_cost_b5ba2">মোট খরচ</string>
     <string name="ui_active_days_9ebaa">সক্রিয় দিন</string>
     <string name="ui_current_streak_54d92">বর্তমান ধারা</string>
+    <string name="ui_longest_recorded_streak">দীর্ঘতম ধারাবাহিকতা</string>
+    <string name="ui_streak_recorded_history">রেকর্ড করা ইতিহাস থেকে ধারাবাহিকতা গণনা করা হয়।</string>
     <string name="ui_active_time_4dd80">সক্রিয় সময়</string>
     <string name="ui_peak_day_07d84">পিক ডে</string>
     <string name="ui_top_model_890fc">শীর্ষ মডেল</string>

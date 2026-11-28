@@ -361,6 +361,8 @@
     <string name="ui_total_cost_b5ba2">మొత్తం ఖర్చు</string>
     <string name="ui_active_days_9ebaa">క్రియాశీల రోజులు</string>
     <string name="ui_current_streak_54d92">ప్రస్తుత స్ట్రీక్</string>
+    <string name="ui_longest_recorded_streak">అత్యధిక వరుస రోజులు</string>
+    <string name="ui_streak_recorded_history">నమోదైన చరిత్ర ఆధారంగా వరుస రోజులను లెక్కిస్తాం.</string>
     <string name="ui_active_time_4dd80">సక్రియ సమయం</string>
     <string name="ui_peak_day_07d84">పీక్ డే</string>
     <string name="ui_top_model_890fc">టాప్ మోడల్</string>

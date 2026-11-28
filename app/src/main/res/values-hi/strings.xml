@@ -361,6 +361,8 @@
     <string name="ui_total_cost_b5ba2">कुल लागत</string>
     <string name="ui_active_days_9ebaa">सक्रिय दिन</string>
     <string name="ui_current_streak_54d92">वर्तमान स्ट्रीक</string>
+    <string name="ui_longest_recorded_streak">सबसे लंबी स्ट्रीक</string>
+    <string name="ui_streak_recorded_history">लगातार दिनों की गिनती दर्ज इतिहास पर आधारित है।</string>
     <string name="ui_active_time_4dd80">सक्रिय समय</string>
     <string name="ui_peak_day_07d84">शिखर दिवस</string>
     <string name="ui_top_model_890fc">शीर्ष मॉडल</string>

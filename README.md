@@ -138,6 +138,9 @@ of the last seven days and share it through Android. The report shows aggregate
 usage, estimated cost and history coverage. It labels sample and saved readings
 and groups unrecognized tool labels under unattributed usage.
 
+In **Trends → Overview**, compare your current and longest recorded activity
+streaks. A day with no recorded activity breaks the streak.
+
 Your desktop usage, wherever you check it. Choose how your phone reaches the
 [Token Monitor](https://github.com/Javis603/token-monitor) Hub:
 

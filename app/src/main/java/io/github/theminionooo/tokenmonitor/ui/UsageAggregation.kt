@@ -5,6 +5,7 @@ import io.github.theminionooo.tokenmonitor.domain.HistoryAttribution
 import io.github.theminionooo.tokenmonitor.domain.HistoryPoint
 import io.github.theminionooo.tokenmonitor.domain.HubSnapshot
 import io.github.theminionooo.tokenmonitor.domain.UsagePeriod
+import io.github.theminionooo.tokenmonitor.domain.historyInRange
 import java.time.LocalDate
 import java.time.temporal.WeekFields
 import java.util.Locale
@@ -160,4 +161,20 @@ internal fun currentStreak(history: List<HistoryPoint>, today: LocalDate = Local
         cursor = cursor.minusDays(1)
     }
     return streak
+}
+
+/** The longest consecutive run in recorded daily usage, allowing a Hub one calendar day ahead. */
+internal fun longestRecordedStreak(history: List<HistoryPoint>, today: LocalDate): Int {
+    val recorded = historyInRange(history, LocalDate.MIN, today.plusDays(1))
+    var longest = 0
+    var run = 0
+    var previousActiveDay: Long? = null
+    for (point in recorded) {
+        if (point.tokens <= 0) continue
+        val day = LocalDate.parse(point.label.take(10)).toEpochDay()
+        run = if (previousActiveDay == day - 1) run + 1 else 1
+        longest = maxOf(longest, run)
+        previousActiveDay = day
+    }
+    return longest
 }

@@ -361,6 +361,8 @@
     <string name="ui_total_cost_b5ba2">કુલ ખર્ચ</string>
     <string name="ui_active_days_9ebaa">સક્રિય દિવસો</string>
     <string name="ui_current_streak_54d92">વર્તમાન દોર</string>
+    <string name="ui_longest_recorded_streak">સૌથી લાંબી સળંગ શ્રેણી</string>
+    <string name="ui_streak_recorded_history">સળંગ દિવસોની ગણતરી નોંધાયેલા ઇતિહાસ પરથી થાય છે.</string>
     <string name="ui_active_time_4dd80">સક્રિય સમય</string>
     <string name="ui_peak_day_07d84">પીક ડે</string>
     <string name="ui_top_model_890fc">ટોપ મોડલ</string>
