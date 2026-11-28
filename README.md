@@ -16,7 +16,7 @@
 <p align="center">
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml"><img alt="Android checks" src="https://github.com/The-Minion-oOo/token-monitor-android/actions/workflows/android.yml/badge.svg?branch=main"></a>
   <img alt="Android 8 or newer" src="https://img.shields.io/badge/Android-8%2B-6fa79b?style=flat-square&logo=android&logoColor=10221c">
-  <img alt="Desktop baseline v0.99.0" src="https://img.shields.io/badge/Desktop-v0.99.0-73bdf5?style=flat-square">
+  <img alt="Desktop baseline v0.100.0" src="https://img.shields.io/badge/Desktop-v0.100.0-73bdf5?style=flat-square">
   <img alt="Kotlin and Compose" src="https://img.shields.io/badge/Kotlin-Compose-ff9c72?style=flat-square&logo=kotlin&logoColor=white">
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-b39cff?style=flat-square"></a>
   <a href="https://github.com/The-Minion-oOo/token-monitor-android/releases"><img alt="Public release asset downloads (dated snapshot)" src="docs/images/downloads-badge.svg"></a>
@@ -28,8 +28,10 @@
 
 ## The desktop dashboard, made mobile
 
-**New in v0.99.0 r1:** Home and Sessions show fresh Antigravity activity from the Hub, including turns that continue between token updates.
-[Release notes](docs/releases/android-v0.99.0-r1.md).
+**New in v0.100.0 r1:** Preview and share the last seven days of usage from
+Trends, save more than one Hub in Settings, and opt in to low-quota and reset
+alerts. Home and Sessions show Antigravity context remaining when the Hub
+reports it. [Release notes](docs/releases/android-v0.100.0-r1.md).
 
 **Also included:** smaller live updates through the released v4 Hub stream,
 session reasoning effort and personal Volcengine quotas. Muse and Ollama
@@ -125,7 +127,7 @@ keep the last snapshot and mark it stale; changing pages never starts a fetch.
 
 ## Get started
 
-In the development build, choose **Try sample data** on the welcome screen to explore a week of example
+Choose **Try sample data** on the welcome screen to explore a week of example
 usage before pairing. Open **Weekly usage report** in Trends to preview a PNG
 of the last seven days and share it through Android. The report shows aggregate
 usage, estimated cost and history coverage. It labels sample and saved readings
@@ -230,13 +232,12 @@ phone; it does not erase the local snapshot cache or change desktop consent.
 
 | | |
 | --- | --- |
-| Current release | [Android v0.99.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.99.0-r1) (`990001`) |
-| Desktop baseline | [Token Monitor v0.99.0](https://github.com/Javis603/token-monitor/releases/tag/v0.99.0) |
+| Current release | [Android v0.100.0 r1](https://github.com/The-Minion-oOo/token-monitor-android/releases/tag/android-v0.100.0-r1) (`1000001`) |
+| Desktop baseline | [Token Monitor v0.100.0](https://github.com/Javis603/token-monitor/releases/tag/v0.100.0) |
 | Minimum Android version | Android 8.0 |
 
-I checked the released Node and Worker Hubs, Android tests and emulators.
-The signed APK upgraded v0.98.0 r1 in place on an Android 8 emulator.
-I haven’t tested v0.99.0 r1 on my phone. [Validation](docs/VALIDATION.md).
+I checked the released Node and Worker Hubs and the signed in-place update
+on my phone and an Android 8 emulator. [Validation](docs/VALIDATION.md).
 
 Android-only updates increment the release revision while keeping the verified
 desktop version. [Upstream pin](upstream.json) · [Release notes](CHANGELOG.md)

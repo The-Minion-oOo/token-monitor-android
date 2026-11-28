@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## v0.100.0 r1 — 2026-11-28
+
+- Show Antigravity context when a recent Hub reading is available.
+- Preview and share a seven-day usage report from Trends.
+- Save multiple Hubs and switch without re-entering credentials.
+- Opt in to low-quota and reset notifications during existing refreshes.
+
 ## v0.99.0 r1 — 2026-11-26
 
 - Use fresh Antigravity activity from the Hub in Home and Sessions.
