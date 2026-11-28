@@ -361,6 +361,8 @@
     <string name="ui_total_cost_b5ba2">전체 비용</string>
     <string name="ui_active_days_9ebaa">활성 일수</string>
     <string name="ui_current_streak_54d92">현재 연속</string>
+    <string name="ui_longest_recorded_streak">최장 연속 기록</string>
+    <string name="ui_streak_recorded_history">연속 기록은 저장된 활동 내역을 바탕으로 계산합니다.</string>
     <string name="ui_active_time_4dd80">활성 시간</string>
     <string name="ui_peak_day_07d84">최고 일</string>
     <string name="ui_top_model_890fc">상위 모델</string>

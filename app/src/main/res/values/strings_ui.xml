@@ -361,6 +361,8 @@
     <string name="ui_total_cost_b5ba2">TOTAL COST</string>
     <string name="ui_active_days_9ebaa">ACTIVE DAYS</string>
     <string name="ui_current_streak_54d92">CURRENT STREAK</string>
+    <string name="ui_longest_recorded_streak">LONGEST STREAK</string>
+    <string name="ui_streak_recorded_history">Streaks are based on recorded history.</string>
     <string name="ui_active_time_4dd80">ACTIVE TIME</string>
     <string name="ui_peak_day_07d84">PEAK DAY</string>
     <string name="ui_top_model_890fc">TOP MODEL</string>

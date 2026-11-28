@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- See the longest recorded activity streak alongside the current streak in Trends.
+
 ## v0.100.0 r1 — 2026-11-28
 
 - Show Antigravity context when a recent Hub reading is available.

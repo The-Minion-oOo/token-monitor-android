@@ -361,6 +361,8 @@
     <string name="ui_total_cost_b5ba2">Custo total</string>
     <string name="ui_active_days_9ebaa">Dias ativos</string>
     <string name="ui_current_streak_54d92">Sequência atual</string>
+    <string name="ui_longest_recorded_streak">MAIOR SEQUÊNCIA</string>
+    <string name="ui_streak_recorded_history">As sequências são calculadas com o histórico registrado.</string>
     <string name="ui_active_time_4dd80">Tempo ativo</string>
     <string name="ui_peak_day_07d84">Dia de pico</string>
     <string name="ui_top_model_890fc">Modelo mais usado</string>

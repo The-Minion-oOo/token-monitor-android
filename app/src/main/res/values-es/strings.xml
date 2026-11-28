@@ -361,6 +361,8 @@
     <string name="ui_total_cost_b5ba2">COSTO TOTAL</string>
     <string name="ui_active_days_9ebaa">DÍAS ACTIVOS</string>
     <string name="ui_current_streak_54d92">RACHA ACTUAL</string>
+    <string name="ui_longest_recorded_streak">RACHA MÁS LARGA</string>
+    <string name="ui_streak_recorded_history">Las rachas se calculan con el historial registrado.</string>
     <string name="ui_active_time_4dd80">TIEMPO ACTIVO</string>
     <string name="ui_peak_day_07d84">DÍA PICO</string>
     <string name="ui_top_model_890fc">MODELO SUPERIOR</string>

@@ -93,6 +93,8 @@ private fun UsageDashboardPanel(history: List<HistoryPoint>) {
 /** Everything the Overview tab derives from the whole history, so it is worked out once per history and not once per frame. */
 private class OverviewSummary(
     val stats: List<Pair<String, String>>,
+    val currentStreakDays: Int,
+    val longestStreakDays: Int,
     val unpricedTokens: Long,
     val totalTokens: Long,
     val tokensByModel: Map<String, Long>,
@@ -109,13 +111,20 @@ private fun summarizeOverview(history: List<HistoryPoint>, today: LocalDate, cur
         appText(R.string.ui_total_tokens_7ea54, "TOTAL TOKENS") to formatCompactTokens(totalTokens),
         (if (unpricedTokens > 0) appText(R.string.ui_known_cost_7f342, "KNOWN COST") else appText(R.string.ui_total_cost_b5ba2, "TOTAL COST")) to formatUsageCost(history.sumOf { it.costUsd }, unpricedTokens, compact = true, currency = currency),
         appText(R.string.ui_active_days_9ebaa, "ACTIVE DAYS") to history.count { it.tokens > 0 }.toString(),
-        appText(R.string.ui_current_streak_54d92, "CURRENT STREAK") to currentStreak(history, today).toString(),
         appText(R.string.ui_active_time_4dd80, "ACTIVE TIME") to formatActiveDuration(history.sumOf { it.activeTimeMs }),
         appText(R.string.ui_peak_day_07d84, "PEAK DAY") to formatCompactTokens(history.maxOfOrNull { it.tokens } ?: 0L),
-        appText(R.string.ui_top_model_890fc, "TOP MODEL") to topModel.ifBlank { "—" },
         appText(R.string.ui_messages_85cda, "MESSAGES") to formatCompactTokens(history.sumOf { it.messages }),
+        appText(R.string.ui_top_model_890fc, "TOP MODEL") to topModel.ifBlank { "—" },
     )
-    return OverviewSummary(stats, unpricedTokens, totalTokens, tokensByModel, tokensByTool)
+    return OverviewSummary(
+        stats = stats,
+        currentStreakDays = currentStreak(history, today),
+        longestStreakDays = longestRecordedStreak(history, today),
+        unpricedTokens = unpricedTokens,
+        totalTokens = totalTokens,
+        tokensByModel = tokensByModel,
+        tokensByTool = tokensByTool,
+    )
 }
 
 @Composable
@@ -132,10 +141,24 @@ internal fun UsageOverview(history: List<HistoryPoint>) {
     val heatmap = remember(history, activityMetric, today) { buildActivityHeatmap(history, endDate = today, metric = activityMetric) }
     val unpricedTokens = overview.unpricedTokens
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                OverviewStat(
+                    appText(R.string.ui_current_streak_54d92, "CURRENT STREAK"),
+                    formatTokens(overview.currentStreakDays.toLong()),
+                    Modifier.weight(1f),
+                )
+                OverviewStat(
+                    appText(R.string.ui_longest_recorded_streak, "LONGEST STREAK"),
+                    formatTokens(overview.longestStreakDays.toLong()),
+                    Modifier.weight(1f),
+                )
+            }
+            MutedCopy(appText(R.string.ui_streak_recorded_history, "Streaks are based on recorded history."))
+        }
         overview.stats.chunked(2).forEach { rowStats ->
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 rowStats.forEach { (label, value) -> OverviewStat(label, value, Modifier.weight(1f)) }
-                if (rowStats.size == 1) Spacer(Modifier.weight(1f))
             }
         }
         if (unpricedTokens > 0) {

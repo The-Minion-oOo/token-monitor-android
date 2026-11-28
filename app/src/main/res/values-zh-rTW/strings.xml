@@ -361,6 +361,8 @@
     <string name="ui_total_cost_b5ba2">累計成本</string>
     <string name="ui_active_days_9ebaa">活躍天數</string>
     <string name="ui_current_streak_54d92">連續天數</string>
+    <string name="ui_longest_recorded_streak">最長連續天數</string>
+    <string name="ui_streak_recorded_history">連續天數根據已記錄的歷史計算。</string>
     <string name="ui_active_time_4dd80">活躍時間</string>
     <string name="ui_peak_day_07d84">峰值單日</string>
     <string name="ui_top_model_890fc">常用模型</string>

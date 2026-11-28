@@ -363,6 +363,8 @@
     <string name="ui_total_cost_b5ba2">மொத்த செலவு</string>
     <string name="ui_active_days_9ebaa">செயலில் நாட்கள்</string>
     <string name="ui_current_streak_54d92">தற்போதைய ஸ்ட்ரீக்</string>
+    <string name="ui_longest_recorded_streak">மிக நீண்ட தொடர்</string>
+    <string name="ui_streak_recorded_history">பதிவான வரலாற்றின் அடிப்படையில் தொடர்ச்சியான நாட்கள் கணக்கிடப்படுகின்றன.</string>
     <string name="ui_active_time_4dd80">செயலில் உள்ள நேரம்</string>
     <string name="ui_peak_day_07d84">உச்ச நாள்</string>
     <string name="ui_top_model_890fc">சிறந்த மாடல்</string>

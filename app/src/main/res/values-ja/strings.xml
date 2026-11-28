@@ -361,6 +361,8 @@
     <string name="ui_total_cost_b5ba2">合計コスト</string>
     <string name="ui_active_days_9ebaa">アクティブ日数</string>
     <string name="ui_current_streak_54d92">現在の連続</string>
+    <string name="ui_longest_recorded_streak">最長連続日数</string>
+    <string name="ui_streak_recorded_history">連続日数は記録された履歴に基づきます。</string>
     <string name="ui_active_time_4dd80">アクティブ時間</string>
     <string name="ui_peak_day_07d84">ピーク日</string>
     <string name="ui_top_model_890fc">トップモデル</string>
